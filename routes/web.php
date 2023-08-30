@@ -26,7 +26,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/Dashboard/User/Index', 'App\Http\Controllers\UserController@index')->middleware('can:Dashboard.User.Index')->name('Dashboard.User.Index');
     Route::get('/Dashboard/User/Create', 'App\Http\Controllers\UserController@create')->middleware('can:Dashboard.User.Create')->name('Dashboard.User.Create');
     Route::post('/Dashboard/User/Store', 'App\Http\Controllers\UserController@store')->middleware('can:Dashboard.User.Store')->name('Dashboard.User.Store');
-    Route::post('/Dashboard/User/Password', 'App\Http\Controllers\UserController@updateuser')->middleware('can:Dashboard.User.Password')->name('Dashboard.User.Password');
+    Route::post('/Dashboard/User/Password', 'App\Http\Controllers\UserController@updatePassword')->middleware('can:Dashboard.User.Password')->name('Dashboard.User.Password');
     Route::get('/Dashboard/User/Edit/{id}', 'App\Http\Controllers\UserController@edit')->middleware('can:Dashboard.User.Edit')->name('Dashboard.User.Edit');
     Route::post('/Dashboard/User/Update/{id}', 'App\Http\Controllers\UserController@update')->middleware('can:Dashboard.User.Update')->name('Dashboard.User.Update');
     Route::get('/Dashboard/User/Show/Module/{id}', 'App\Http\Controllers\UserController@show_module')->middleware('can:Dashboard.User.Show.Module')->name('Dashboard.User.Show.Module');
@@ -99,4 +99,14 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/Dashboard/Enterprises/Hide/SubModules/{id}', 'App\Http\Controllers\EnterprisesController@hide_submodules')->middleware('can:Dashboard.Enterprises.Hide.SubModules')->name('Dashboard.Enterprises.Hide.SubModules');
     Route::post('/Dashboard/Enterprises/Hide/SubModule/allsubmodule', 'App\Http\Controllers\EnterprisesController@hide_allsubmodules')->middleware('can:Dashboard.Enterprises.Hide.SubModule.allsubmodules')->name('Dashboard.Enterprises.Hide.SubModule.allsubmodules');
     Route::post('/Dashboard/Enterprises/Unssign_submodules/{id}', 'App\Http\Controllers\EnterprisesController@enterprise_unssign_submodules')->middleware('can:Dashboard.Enterprises.Unssign_submodules')->name('Dashboard.Enterprises.Unssign_submodules');
+
+    Route::get('/403', function () {
+        return view('Dashboard/Exception/403');
+    });
+    Route::get('/404', function () {
+        return view('Dashboard/Exception/404');
+    });
+    Route::get('/500', function () {
+        return view('Dashboard/Exception/500');
+    });
 });

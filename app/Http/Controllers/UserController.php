@@ -40,30 +40,40 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
-        $validacion = Validator::make($request->all(),
+        $validator = Validator::make($request->all(),
         [
-           'name' => ['required', 'string', 'max:255'],
+            'name' => ['required', 'string', 'max:20'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed']
         ]);
-        if ($validacion->fails())
-        {
-            return redirect()->route('Dashboard.User.Create')->withErrors($validacion);
-        }
-        else{
-            $user = new User();
-            $user->name = $request->name;
-            $user->email = $request->email;
-            $user->password = bcrypt($request->password);
-            $user->enterprises_id = Auth::user()->enterprises_id;
-            $user->save();
 
-            $user_enterprise = new UserEnterprise();
-            $user_enterprise->user_id = $user->id;
-            $user_enterprise->enterprises_id = Auth::user()->enterprises_id;
-            $user_enterprise->save();
-            return redirect()->route('Dashboard.User.Index')->withSuccess('¡Usuario registrado satisfactoriamente!');
+        if ($validator->fails()){
+
+            $errors = [];
+            if ($validator->errors()->has('name')) {
+                $errors[] = '¡No se recibe el nombre o excede limite de caracteres!';
+            }
+            if ($validator->errors()->has('email')) {
+                $errors[] = '¡El correo ya esta asignado a otro usuario!';
+            }
+            if ($validator->errors()->has('password')) {
+                $errors[] = '¡La contraseña debe tener minimo 8 caracteres!';
+            }
+            return redirect()->route('Dashboard.User.Index')->withErrors($errors);
         }
+
+        $user = new User();
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->password = bcrypt($request->password);
+        $user->enterprises_id = Auth::user()->enterprises_id;
+        $user->save();
+        $user_enterprise = new UserEnterprise();
+        $user_enterprise->user_id = $user->id;
+        $user_enterprise->enterprises_id = Auth::user()->enterprises_id;
+        $user_enterprise->save();
+        return redirect()->route('Dashboard.User.Index')->withSuccess('¡Usuario registrado satisfactoriamente!');
+
     }
 
     public function edit($id)
@@ -77,34 +87,65 @@ class UserController extends Controller
 
     public function update(Request $request, $id)
     {
-        $validacion = Validator::make(['email' => $request->email],
+        $validator = Validator::make($request->all(),
         [
+            'name' => ['required', 'max:20'],
             'email' => ['required', Rule::unique('users')->ignore($id)]
         ]);
-        if($validacion->fails()){
-            return redirect()->route('Dashboard.User.Index')->withErrors('¡No se puede actualizar el usuario por que el correo ya existe!');
-        }else{
-            $user = User::with('roles')->where('id','=',$id)->firstOrFail(); 
-            $user->name = $request->name;
-            $user->email = $request->email;
-            $user->save();
-            if(isset($user->roles[0])){
-                if($user->roles[0]->name != $request->rol){
-                    UserModule::where('user_id', $user->id)
-                    ->whereNotIn('module_id', function ($query) use ($user, $request) {
-                        $query->select('id_module')
-                            ->from('rol_modules')
-                            ->join('roles', 'rol_modules.id_rol', '=', 'roles.id')
-                            ->where('roles.name', '=', $request->rol)
-                            ->where('rol_modules.id_rol', '=', $user->rol_id);
-                    })
-                    ->delete();
-                }
-                $user->removeRole($user->roles[0]->id);
+        if($validator->fails()){
+
+            $errors = [];
+            if ($validator->errors()->has('name')) {
+                $errors[] = '¡No se recibe el nombre o excede limite de caracteres!';
             }
-            $user->assignRole($request->rol);
-            return redirect()->route('Dashboard.User.Index')->withSuccess('¡Rol asignado al usuario satisfactoriamente!');
+            if ($validator->errors()->has('email')) {
+                $errors[] = '¡El correo ya esta asignado a otro usuario!';
+            }
+            return redirect()->route('Dashboard.User.Index')->withErrors($errors);
         }
+
+        $user = User::with('roles')->where('id','=',$id)->firstOrFail();
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->save();
+        if(isset($user->roles[0])){
+            if($user->roles[0]->name != $request->rol){
+                UserModule::where('user_id', $user->id)
+                ->whereNotIn('module_id', function ($query) use ($user, $request) {
+                    $query->select('id_module')
+                        ->from('rol_modules')
+                        ->join('roles', 'rol_modules.id_rol', '=', 'roles.id')
+                        ->where('roles.name', '=', $request->rol)
+                        ->where('rol_modules.id_rol', '=', $user->rol_id);
+                })
+                ->delete();
+            }
+            $user->removeRole($user->roles[0]->id);
+        }
+        $user->assignRole($request->rol);
+        return redirect()->route('Dashboard.User.Index')->withSuccess('¡Rol asignado al usuario satisfactoriamente!');
+
+    }
+
+    public function updatePassword(Request $request)
+    {
+        $validator = Validator::make($request->all(),
+        [
+            'password' => ['required', 'string', 'min:8']
+        ]);
+        if ($validator->fails()){
+
+            $errors = [];
+            if ($validator->errors()->has('password')) {
+                $errors[] = '¡La contraseña debe tener minimo 8 caracteres!';
+            }
+            return redirect()->route('Dashboard.User.Index')->withErrors($errors);
+        }
+
+        $user = User::find($request->id_user);
+        $user->password = Hash::make($request->password);
+        $user->save();
+        return back()->withSuccess('¡Contraseña cambiada satisfactoriamente!');
     }
 
     public function show_module($id)
@@ -170,7 +211,7 @@ class UserController extends Controller
 
     public function show_submodule($id)
     {
-        $user = User::where('id', '=', $id)->first();
+        $user = User::find($id);
         $modulesdata = UserModule::join('modules', 'user_modules.module_id', '=', 'modules.id')
         ->where('user_id','=', $id)
         ->select('modules.name_modules','modules.id')
@@ -196,7 +237,7 @@ class UserController extends Controller
         }catch(Exception $e){
             $subNot = [];
         }
-            
+
         return $subNot;
     }
 
@@ -261,7 +302,7 @@ class UserController extends Controller
 
     public function destroy($id)
     {
-        $user = User::find($id); 
+        $user = User::find($id);
         $user->delete();
         return back()->withSuccess('¡Usuario inactivado satisfactoriamente!');
     }
@@ -279,13 +320,5 @@ class UserController extends Controller
         return view('Dashboard.User.Index_Inactivos', compact('userse'));
     }
 
-    public function updateuser(Request $request)
-    {
-        $passHashed = Hash::make($request->password);
-        $idUser = $request->id_user;
-        $user = User::where('id','=',$idUser)->first();
-        $user->password = $passHashed;
-        $user->save();
-        return back()->withSuccess('¡Contraseña cambiada satisfactoriamente!');
-    }
+
 }

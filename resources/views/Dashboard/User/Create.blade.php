@@ -1,118 +1,103 @@
 @extends('Templates.Dashboard')
 
 @section('content')
-
-    <section class="content"
-        style="background: linear-gradient(to bottom, #090920, #345dbda9);position: relative;height:70vh;top:-35px; ">
-
-        <div class="authentication">
-            <div class="container">
-
-                <div class="row" style="position: relative;top:20px;">
-                    <div class="col-lg-4 col-sm-12">
-                        <form method="POST" action=" {{ route('Dashboard.User.Store') }} "
-                            class="card auth_form mt-4" name="formulario1">
-
-                            @csrf
-
-                            <div class="header">
-                                <img class="logo" src="{{ asset('images/icon_logo.png') }}"
-                                    style="position: relative;width:30%;" alt="">
-
-                            </div>
-                            <div class="body ">
-
-                                <div class="form-group form-float">
-                                    <label for="formGroupExampleInput" class="mb-1">Nombre
-                                        completo</label>
-                                    <input id="name" type="text" class="form-control @error('name') is-invalid @enderror"
-                                        name="name" value="{{ old('name') }}" autocomplete="name" autofocus
-                                        placeholder="Digite su nombre">
-
-                                    @error('name')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-
-                                </div>
-
-                                <div class="form-group form-float ">
-                                    <label for="formGroupExampleInput" class="mb-1">Correo
-                                        eletronico</label>
-                                    <input id="email" type="email" class="form-control @error('email') is-invalid @enderror"
-                                        name="email" value="{{ old('email') }}" autocomplete="email"
-                                        placeholder="Digite el correo">
-
-                                    @error('email')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-
-                                </div>
-
-
-                                <div class="form-group form-float">
-                                    <label for="formGroupExampleInput" class="mb-1">Contraseña</label>
-                                    <input id="password" type="password" name="password"
-                                        class="form-control @error('password') is-invalid @enderror"
-                                        autocomplete="new-password" placeholder="Ingrese Contraseña">
-
-                                    @error('password')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-
-                                </div>
-
-                                <div class="form-group form-float">
-                                    <label for="formGroupExampleInput" class="mb-1">Confirmar contraseña</label>
-                                    <input id="password-confirm" type="password" name="password_confirmation"
-                                        class="form-control" autocomplete="new-password"
-                                        placeholder="Confirmacion de contraseña">
-
-                                </div>
-
-                                <button type="submit" class="btn btn-primary btn-block waves-effect waves-light" id="save">
-                                    {{ __('Registrar') }}
-                                </button>
-
-                            </div>
-                        </form>
-
-                    </div>
-                   {{--  <div class="col-lg-8 col-sm-12">
-                        <div class="card">
-                            <img src="{{ asset('img/signup.svg') }}" alt="Sign Up" />
+    <section class="content">
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 class="m-0 text-dark">Registro Usuario</h1>
+                    </div><!-- /.col -->
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item">Dashboard</li>
+                            <li class="breadcrumb-item">User</li>
+                            <li class="breadcrumb-item">Create</li>
+                        </ol>
+                    </div><!-- /.col -->
+                </div><!-- /.row -->
+            </div><!-- /.container-fluid -->
+        </div>
+    </section>
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12" style="display: flex; justify-content: center; align-items: center;">
+                    <div class="register-box">
+                        <div class="register-logo">
+                            <a href="#"><b>Admin</b>LTE</a>
                         </div>
-                    </div> --}}
+                        <div class="card">
+                            <div class="card-body register-card-body">
+                                <p class="login-box-msg">Register a new membership</p>
+                                <form action="../../index.html" method="post">
+                                    <div class="input-group mb-3">
+                                        <input type="text" class="form-control" placeholder="Full name">
+                                        <div class="input-group-append">
+                                            <div class="input-group-text">
+                                                <span class="fas fa-user"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="input-group mb-3">
+                                        <input type="email" class="form-control" placeholder="Email">
+                                        <div class="input-group-append">
+                                            <div class="input-group-text">
+                                                <span class="fas fa-envelope"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="input-group mb-3">
+                                        <input type="password" class="form-control" placeholder="Password">
+                                        <div class="input-group-append">
+                                            <div class="input-group-text">
+                                                <span class="fas fa-lock"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="input-group mb-3">
+                                        <input type="password" class="form-control" placeholder="Retype password">
+                                        <div class="input-group-append">
+                                            <div class="input-group-text">
+                                                <span class="fas fa-lock"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-8">
+                                            <div class="icheck-primary">
+                                                <input type="checkbox" id="agreeTerms" name="terms" value="agree">
+                                                <label for="agreeTerms">
+                                                    I agree to the <a href="#">terms</a>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <!-- /.col -->
+                                        <div class="col-4">
+                                            <button type="submit" class="btn btn-primary btn-block">Register</button>
+                                        </div>
+                                        <!-- /.col -->
+                                    </div>
+                                </form>
+                                <div class="social-auth-links text-center">
+                                    <p>- OR -</p>
+                                    <a href="#" class="btn btn-block btn-primary">
+                                        <i class="fab fa-facebook mr-2"></i>
+                                        Sign up using Facebook
+                                    </a>
+                                    <a href="#" class="btn btn-block btn-danger">
+                                        <i class="fab fa-google-plus mr-2"></i>
+                                        Sign up using Google+
+                                    </a>
+                                </div>
+                                <a href="login.html" class="text-center">I already have a membership</a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-
-
             </div>
         </div>
-
-
     </section>
-
-    {{-- @if (count($errors) > 0)
-        <div class="alert alert-danger" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-            Corrige los siguientes errores:
-            <ul>
-                @foreach ($errors->all() as $message)
-                    <li>{{ $message }}</li>
-                @endforeach
-            </ul>
-
-        </div>
-    @endif --}}
-
-
 @endsection
 
 

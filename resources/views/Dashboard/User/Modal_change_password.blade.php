@@ -10,30 +10,32 @@
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
-            <div class="modal-body">
-                <form action="{{ route('Dashboard.User.Password')}}" method="POST" name="formuserupdate" id="formuserupdate">
-                    @csrf
+            <form action="{{ route('Dashboard.User.Password')}}" method="POST" name="formuserupdate"
+                id="formuserupdate" onsubmit="validateFormChangePassword(event, this)">
+                <div class="modal-body">
 
-                    <div class="form-group">
-                        <label for="formGroupExampleInput">Nombre del usuario</label>
-                        <input type="text" class="form-control" id="username" name="username" id="username" readonly>
-                    </div>
-                   
-                    <div class="form-group">
-                        <label for="formGroupExampleInput">Nueva contraseña</label>
-                        <input type="password" class="form-control" id="password" name="password">
-                    </div>
-                    
-                    <div class="form-group">
-                        <input type="hidden" class="form-control" id="id_user" name="id_user"
-                            placeholder="Example input" readonly="readonly" minlength="8">
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-primary" id="save_password">Guardar</button>
-            </div>
+                        @csrf
+
+                        <div class="form-group">
+                            <label for="formGroupExampleInput">Nombre del usuario</label>
+                            <input type="text" class="form-control" id="username" name="username" id="username" readonly>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="formGroupExampleInput">Nueva contraseña</label>
+                            <input type="password" class="form-control" id="password" name="password">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="hidden" class="form-control" id="id_user" name="id_user"
+                                placeholder="Example input" readonly="readonly" minlength="8">
+                        </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

@@ -64,7 +64,7 @@
                                                 </div>
                                                 <div class="form-group form-float" id="resultquery">
                                                     <label for="formGroupExampleInput" class="mb-1">Seleccione los submodulos a asignar</label>
-                                                    <select class="form-control show-tick ms select2 choices-multiple-remove-button" 
+                                                    <select class="form-control show-tick ms select2 choices-multiple-remove-button"
                                                     placeholder="Seleccione los submodulos que desea asignarle al modulo del usuario" id="sub_modules" name="sub_modules[]" multiple>
                                                     </select>
                                                 </div>
@@ -74,7 +74,7 @@
                                             <button type="button" class="btn btn-primary" id="savemodulsubm">Guardar</button>
                                         </div>
                                     </form>
-                                
+
                             </div>
                         </div>
                     </div>
@@ -103,6 +103,7 @@
                 id: idmodule,
                 id_user: iduser
             };
+            console.log(data)
             $.ajax({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -134,7 +135,7 @@
                         options_add += "<option value='"+response[i].id+"'>"+response[i].name_submodules+"</option>";
                     }
                     $("#resultquery").html(`<label for="formGroupExampleInput" class="mb-1">Seleccione los submodulos a asignar</label>
-                    <select class="form-control show-tick ms select2 choices-multiple-remove-button" id="sub_modules" name="sub_modules[]" 
+                    <select class="form-control show-tick ms select2 choices-multiple-remove-button" id="sub_modules" name="sub_modules[]"
                     placeholder="Seleccione los submodulos que desea asignarle al modulo del usuario" multiple>
                     `+options_add+`</select>`);
 
@@ -145,7 +146,7 @@
                     });
                 },
                 error: function(xhr, status, error) {
-
+                    console.error(error)
                     const Toast = Swal.mixin({
                         toast: true,
                         position: 'top-end',
