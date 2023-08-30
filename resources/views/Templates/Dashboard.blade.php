@@ -12,6 +12,10 @@
   <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
   <!-- Tempusdominus Bbootstrap 4 -->
   <link rel="stylesheet" href="{{ asset('css/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css') }}">
+  <!-- SweetAlert2 -->
+  <link rel="stylesheet" href="{{ asset('css/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css') }}">
+  <!-- Toastr -->
+  <link rel="stylesheet" href="{{ asset('css/plugins/toastr/toastr.min.css') }}">
   <!-- iCheck -->
   <link rel="stylesheet" href="{{ asset('css/plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
   <!-- JQVMap -->
@@ -22,6 +26,9 @@
   <link rel="stylesheet" href="{{ asset('css/plugins/overlayScrollbars/css/OverlayScrollbars.min.css') }}">
   <!-- Daterange picker -->
   <link rel="stylesheet" href="{{ asset('css/plugins/daterangepicker/daterangepicker.css') }}">
+  <!-- Chosen Choise -->
+  <link rel="stylesheet" href="{{ asset('css/plugins/chosen-choise/main_choices.css') }}">
+  <link rel="stylesheet" href="{{ asset('css/plugins/chosen-choise/chosen.min.css') }}">
   <!-- summernote -->
   <link rel="stylesheet" href="{{ asset('css/plugins/summernote/summernote-bs4.css') }}">
   <!-- Google Font: Source Sans Pro -->
@@ -315,8 +322,6 @@
 <!-- DataTables -->
 <script src="{{ asset('js/datatables/jquery.dataTables.js') }}"></script>
 <script src="{{ asset('js/datatables-bs4/js/dataTables.bootstrap4.js') }}"></script>
-{{-- <script src="{{ asset('js/dist/js/pages/dashboard2.js') }}"></script>
-<script src="{{ asset('js/dist/js/pages/dashboard3.js') }}"></script> --}}
 <!-- AdminLTE for demo purposes -->
 <script src="{{ asset('js/dist/js/demo.js') }}"></script>
 
@@ -339,7 +344,6 @@
 <script src="{{ asset('js/fullcalendar-timegrid/main.min.js') }}"></script>
 <script src="{{ asset('js/fullcalendar-interaction/main.min.js') }}"></script>
 <script src="{{ asset('js/fullcalendar-bootstrap/main.min.js') }}"></script>
-{{-- <script src="{{ asset('js/initialization/fullcalendar.js') }}"></script> --}}
 <!-- jquery-validation -->
 <script src="{{ asset('js/jquery-validation/jquery.validate.min.js') }}"></script>
 <script src="{{ asset('js/jquery-validation/additional-methods.min.js') }}"></script>
@@ -347,10 +351,13 @@
 <script src="{{ asset('js/sweetalert2/sweetalert2.min.js') }}"></script>
 <!-- Toastr -->
 <script src="{{ asset('js/toastr/toastr.min.js') }}"></script>
+<!-- Chosen Choise -->
+<script src="{{ asset('js/chosen-choise/chosen.jquery.min.js') }}"></script>
+<script src="{{ asset('js/chosen-choise/choices.min.js') }}"></script>
 
 <script src="{{ asset('js/ekko-lightbox/ekko-lightbox.min.js') }}"></script>
 <script src="{{ asset('js/filterizr/jquery.filterizr.min.js') }}"></script>
 @yield('script')
-{{-- <script src="{{ asset('js/initialization/gallery.js') }}"></script> --}}
+
 </body>
 </html>

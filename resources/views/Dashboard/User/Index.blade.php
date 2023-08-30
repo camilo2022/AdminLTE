@@ -20,6 +20,11 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-12">
+                <h2>
+                    <a href=" {{ route('Dashboard.User.Create') }} "
+                        class="btn btn-primary">Registrar usuario
+                    </a>
+                </h2>
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title">Listado de Usuarios Activos</h3>
@@ -103,12 +108,11 @@
             </div>
         </div>
     </div>
+    @include('Dashboard.User.Modal_change_password')
 </section>
 @endsection
 @section('script')
     <script>
-        $('#dur').not('.alert-important').delay(3000).fadeOut(350);
-
         $(function () {
             $("#example2").DataTable({
                 "responsive": true,
@@ -121,6 +125,22 @@
                 "retrieve": true,
             });
         });
+
+        @if(session('success'))
+            $(document).Toasts('create', {
+                class: 'bg-success', 
+                title: 'Accion Exitosa',
+                body: '{{ session("success") }}'
+            })
+        @endif
+
+        @if ($errors->any())
+            $(document).Toasts('create', {
+                class: 'bg-danger', 
+                title: 'Accion Fallida',
+                body: '{{ $errors->first() }}'
+            })
+        @endif
 
         function userinfo(data) {
             let id_user = $("#id_user").val(data.id);

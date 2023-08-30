@@ -3,7 +3,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header w-100">
-                <div class="card-header text-center w-100" style="background: white;">
+                <div class="text-center w-100" style="background: white;">
                     <label style="font-size:20px;font-weight:bold;">Cambiar Contraseña</label>
                 </div>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
