@@ -99,4 +99,14 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/Dashboard/Enterprises/Hide/SubModules/{id}', 'App\Http\Controllers\EnterprisesController@hide_submodules')->middleware('can:Dashboard.Enterprises.Hide.SubModules')->name('Dashboard.Enterprises.Hide.SubModules');
     Route::post('/Dashboard/Enterprises/Hide/SubModule/allsubmodule', 'App\Http\Controllers\EnterprisesController@hide_allsubmodules')->middleware('can:Dashboard.Enterprises.Hide.SubModule.allsubmodules')->name('Dashboard.Enterprises.Hide.SubModule.allsubmodules');
     Route::post('/Dashboard/Enterprises/Unssign_submodules/{id}', 'App\Http\Controllers\EnterprisesController@enterprise_unssign_submodules')->middleware('can:Dashboard.Enterprises.Unssign_submodules')->name('Dashboard.Enterprises.Unssign_submodules');
+
+    Route::get('/404', function () {
+        return view('Dashboard/Exceptions/404');
+    });
+    Route::get('/403', function () {
+        return view('Dashboard/Exceptions/403');
+    });
+    Route::get('/500', function () {
+        return view('Dashboard/Exceptions/500');
+    });
 });

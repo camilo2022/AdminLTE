@@ -4,7 +4,7 @@
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
-          <h1 class="m-0 text-dark">Configuracion</h1>
+          <h1 class="m-0 text-dark">Configuracion / Usuarios</h1>
         </div><!-- /.col -->
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
@@ -20,16 +20,17 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-12">
-                <h2>
+                {{-- <h2>
                     <a href=" {{ route('Dashboard.User.Create') }} "
                         class="btn btn-primary">Registrar usuario
                     </a>
-                </h2>
+                </h2> --}}
                 <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Listado de Usuarios Activos</h3>
+                    <div class="card-header p-2">
+                        <ul class="nav nav-pills">
+                            <li class="nav-item"><a class="nav-link active" href="{{ route('Dashboard.User.Create') }}">Registrar usuario</a></li>
+                        </ul>
                     </div>
-
                     <div class="card-body">
                         <div class="table-responsive">
                             <table id="example2" class="table table-bordered table-hover dataTable dtr-inline">
@@ -128,7 +129,7 @@
 
         @if(session('success'))
             $(document).Toasts('create', {
-                class: 'bg-success', 
+                class: 'bg-success',
                 title: 'Accion Exitosa',
                 body: '{{ session("success") }}'
             })
@@ -136,7 +137,7 @@
 
         @if ($errors->any())
             $(document).Toasts('create', {
-                class: 'bg-danger', 
+                class: 'bg-danger',
                 title: 'Accion Fallida',
                 body: '{{ $errors->first() }}'
             })
