@@ -1,81 +1,61 @@
 @extends('Templates.Dashboard')
 @section('content')
-    <section class="content">
-        <div class="body_scroll">
-            @if (session('success'))
-                <div class="text-center dur" id="dur"
-                    style="border:1px;border-radius:4px;background-color:rgb(21, 199, 21);color: white;position: relative;width:100%;height:60px;">
-                    <p style="position: relative;top:18px;font-size:14px;font-weight:bold;">{{ session('success') }}</p>
-                </div>
-            @endif
-
-            @if ($errors->any())
-                <div class="text-center dur" id="dur"
-                    style="border:1px;border-radius:4px;background-color:rgb(199, 21, 21);color: white;position: relative;width:100%;height:60px;">
-                    <p style="position: relative;top:18px;font-size:14px;font-weight:bold;">{{ $errors->first() }}</p>
-                </div>
-            @endif
-            <div class="block-header">
-                <div class="row">
-                    <div class="col-lg-7 col-md-6 col-sm-12">
-                        <h2>Remover SubModulo</h2>
-                        <ul class="breadcrumb">
-                            <li class="breadcrumb-item">
-                                <i class="zmdi zmdi-settings"></i>
-                                <a href="javascript:void(0);">Administracion</a>
-                            </li>
-                            <li class="breadcrumb-item active">Usuarios</li>
-                            <li class="breadcrumb-item active">Remover SubModulo</li>
-                        </ul>
-                        <button class="btn btn-primary btn-icon mobile_menu" type="button"><i
-                                class="zmdi zmdi-sort-amount-desc"></i></button>
-                    </div>
-                    <div class="col-lg-5 col-md-6 col-sm-12">
-                        <button class="btn btn-primary btn-icon float-right right_icon_toggle_btn" type="button"><i
-                                class="zmdi zmdi-arrow-right"></i></button>
-                    </div>
-                </div>
-            </div>
+<section class="content">
+        <div class="content-header">
             <div class="container-fluid">
-                <!-- Basic Examples -->
-                <div class="row clearfix">
-                    <div class="col-lg-12">
-                        <div class="card">
-                            <div class="body">
-                                    <form method="POST" action="{{ route('Dashboard.User.Unssign_submodule', $user->id) }}" name="formularioreset">
-                                        @csrf
-                                        <div class="col-md-12">
-                                            <h5>Usuario: <b><label>{{ $user->name }}</label></b></h5>
-                                        </div>
-
-                                        <div class="col-md-12">
-
-                                                <div class="form-group form-float">
-                                                    <label for="formGroupExampleInput" class="mb-1">Modulos Asignados</label>
-
-                                                        <select class="form-control show-tick ms select2 choices-remove-button" id="getmodule"
-                                                        name="module_id">
-                                                            <option value="moduleall" selected disabled>Seleccione</option>
-                                                            @foreach ($modulesdata as $modulesda)
-                                                                <option value="{{ $modulesda->id }}">{{ $modulesda->name_modules }}</option>
-                                                            @endforeach
-                                                        </select>
-
-                                                </div>
-                                                <div class="form-group form-float" id="resultquery">
-                                                    <label for="formGroupExampleInput" class="mb-1">Seleccione los submodulos a remover</label>
-                                                    <select class="form-control show-tick ms select2 choices-multiple-remove-button" 
-                                                    placeholder="Seleccione los submodulos que desea removerle al modulo del usuario" id="sub_modules" name="sub_modules[]" multiple>
-                                                    </select>
-                                                </div>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <a href="{{ route('Dashboard.User.Index') }}" class="btn btn-dark">Devolver</a>
-                                            <button type="button" class="btn btn-primary" id="savemodulsubm">Guardar</button>
-                                        </div>
-                                    </form>
-                                
-                            </div>
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                <h1 class="m-0 text-dark">Remover SubModulo</h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item">Dashboard</li>
+                    <li class="breadcrumb-item">User</li>
+                    <li class="breadcrumb-item">Remover SubModulo</li>
+                </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+            </div><!-- /.container-fluid -->
+        </div>
+    </section>
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Remover SubModulos de Usuario</h3>
+                        </div>
+                        <div class="card-body">
+                            <form method="POST" action="{{ route('Dashboard.User.Unssign_submodule', $user->id) }}" 
+                            name="formularioreset" id="formularioreset" onsubmit="validateUnsignSubModule(event, this)">
+                                @csrf
+                                <div class="col-md-12">
+                                    <h5>Usuario: <b><label>{{ $user->name }}</label></b></h5>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group form-float">
+                                        <label for="formGroupExampleInput" class="mb-1">Modulos Asignados</label>
+                                            <select class="form-control show-tick ms select2 choices-remove-button" id="getmodule"
+                                            name="module_id">
+                                                <option value="moduleall" selected disabled>Seleccione</option>
+                                                @foreach ($modulesdata as $modulesda)
+                                                    <option value="{{ $modulesda->id }}">{{ $modulesda->name_modules }}</option>
+                                                @endforeach
+                                            </select>
+                                    </div>
+                                    <div class="form-group form-float" id="resultquery">
+                                        <label for="formGroupExampleInput" class="mb-1">Seleccione los submodulos a remover</label>
+                                        <select class="form-control show-tick ms select2 choices-multiple-remove-button" 
+                                        placeholder="Seleccione los submodulos que desea removerle al modulo del usuario" id="sub_modules" name="sub_modules[]" multiple>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <a href="{{ route('Dashboard.User.Index') }}" class="btn btn-dark">Devolver</a>
+                                    <button type="submit" class="btn btn-primary">Guardar</button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -85,22 +65,36 @@
 @endsection
 @section('script')
     <script>
-        $('#dur').not('.alert-important').delay(3000).fadeOut(350);
-        $(document).ready(function() {
-            new Choices('.choices-remove-button', {
-                removeItemButton: false,
-            });
-
-            new Choices('.choices-multiple-remove-button', {
-                removeItemButton: true,
-            });
+        
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000
         });
-        //carga del modulo seleccionado
+
+        @if (session('success'))
+            $(document).Toasts('create', {
+                class: 'bg-success',
+                title: 'Accion Exitosa',
+                body: '{{ session('success') }}'
+            })
+        @endif
+
+        @if ($errors->any())
+            @foreach ($errors->all() as $error)
+                $(document).Toasts('create', {
+                    class: 'bg-danger',
+                    title: 'Accion Fallida',
+                    body: '{{ $error }}'
+                })
+            @endforeach
+        @endif
+        
         $("#getmodule").change(function() {
-            let idmodule = $("#getmodule").val();
             let iduser = @json($user->id);
             let data = {
-                id: idmodule,
+                id: $("#getmodule").val(),
                 id_user: iduser
             };
             $.ajax({
@@ -112,31 +106,17 @@
                 data: JSON.stringify(data),
                 contentType: "application/json",
                 success: function(response) {
-                    const Toast = Swal.mixin({
-                        toast: true,
-                        position: 'top-end',
-                        showConfirmButton: false,
-                        timer: 3000,
-                        timerProgressBar: true,
-                        didOpen: (toast) => {
-                            toast.addEventListener('mouseenter', Swal.stopTimer)
-                            toast.addEventListener('mouseleave', Swal.resumeTimer)
-                        }
-                    })
                     Toast.fire({
-                        type: 'success',
-                        title: '¡Consulta existosa!'
-                    })
-                    //permite inicializar donde se van a mostrar los submodulos
-                    let options_add = "";
-                    //resultado de la consulta de todos los submodulos asociados a un modulo seleccionado
-                    for (var i = 0; i < response.length; i++) {
-                        options_add += "<option value='"+response[i].id+"'>"+response[i].name_submodules+"</option>";
-                    }
+                        icon: 'success',
+                        title: '¡Consulta exitosa!'
+                    });
+
+                    let options_add = response.map(item => `<option value='${item.id}'>${item.name_submodules}</option>`).join('');
+
                     $("#resultquery").html(`<label for="formGroupExampleInput" class="mb-1">Seleccione los submodulos a remover</label>
                     <select class="form-control show-tick ms select2 choices-multiple-remove-button" id="sub_modules" name="sub_modules[]" 
                     placeholder="Seleccione los submodulos que desea removerle al modulo del usuario" multiple>
-                    `+options_add+`</select>`);
+                    ${options_add}</select>`);
 
                     $(document).ready(function() {
                         let multipleCancelButton = new Choices('.choices-multiple-remove-button', {
@@ -145,59 +125,66 @@
                     });
                 },
                 error: function(xhr, status, error) {
-
-                    const Toast = Swal.mixin({
-                        toast: true,
-                        position: 'top-end',
-                        showConfirmButton: false,
-                        timer: 3000,
-                        timerProgressBar: true,
-                        didOpen: (toast) => {
-                            toast.addEventListener('mouseenter', Swal.stopTimer)
-                            toast.addEventListener('mouseleave', Swal.resumeTimer)
-                        }
-                    });
-
                     Toast.fire({
-                        type: 'error',
-                        title: '¡Error en la consulta!'
+                        icon: 'error',
+                        title: '¡Error en la Consulta!'
                     });
                 }
             });
         });
         //funcion para guardar la infomacion del modulo, submodulo y el usuario
-        $("#savemodulsubm").click(function(e) {
-            e.preventDefault();
-            let data3 = $(".choices-multiple-remove-button").val();
+        function validateUnsignSubModule(event, form) {
+            event.preventDefault();
 
-            if (data3.length == 0) {
-                Swal.fire({
-                    title: 'Campo Vacio ',
-                    text: 'Seleccione los submodulos que desea removerle al modulo del usuario',
-                    type: 'warning'
-                })
-                $("#moduleall").focus();
-                return false;
+            let modulos = $(".choices-remove-button").val();
+            let submodulos = $(".choices-multiple-remove-button").val();
+            let submit = true;
+
+            if (modulos.length == 0) {
+                toastr.warning('Seleccione el modulo para consultar los submodulos.')
+                submit = false;
+            } else {
+                toastr.success('¡Modulo válido! Puede continuar a seleccionar los submodulos.')
             }
-            Swal.fire({
-                title: '¿Desea remover los submodulos?',
-                type: 'warning',
-                showCancelButton: true,
-                cancelButtonColor: '#DD6B55',
-                confirmButtonColor: '#3085d6',
-                confirmButtonText: 'Si, guardar!',
-                cancelButtonText: 'No, cancelar!',
-                closeOnConfirm: false,
-                closeOnCancel: false
-            }).then((result) => {
-                if (result.value) {
-                    document.formularioreset.submit();
-                } else {
-                    Swal.fire({
-                        title: 'Cancelado',
-                        type: 'error'
-                    });
-                }
+
+            if (submodulos == "") {
+                toastr.warning('Seleccione los submodulos que desea rempverle al usuario.')
+                submit = false;
+            } else {
+                toastr.success('¡SubModulos válidos! Puede continuar con la acción solicitada.')
+            }
+
+            if(submit){
+                Swal.fire({
+                    title: '¿Desea remover los submodulos?',
+                    type: 'warning',
+                    showCancelButton: true,
+                    cancelButtonColor: '#DD6B55',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'Si, guardar!',
+                    cancelButtonText: 'No, cancelar!',
+                    closeOnConfirm: false,
+                    closeOnCancel: false
+                }).then((result) => {
+                    if (result.value) {
+                        document.formularioreset.submit();
+                    } else {
+                        Swal.fire({
+                            title: 'Cancelado',
+                            type: 'error'
+                        });
+                    }
+                });
+            }
+        };
+        
+        $(document).ready(function() {
+            new Choices('.choices-remove-button', {
+                removeItemButton: false,
+            });
+
+            new Choices('.choices-multiple-remove-button', {
+                removeItemButton: true,
             });
         });
     </script>

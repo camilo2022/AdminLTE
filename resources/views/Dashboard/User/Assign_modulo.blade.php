@@ -78,6 +78,8 @@
             if (module_add.length == 0) {
                 toastr.warning('Seleccione los modulos que desea asignarle al usuario.')
                 submit = false;
+            } else {
+                toastr.success('¡Modulos válidos! Puede continuar con la acción solicitada.')
             }
 
             if (submit) {

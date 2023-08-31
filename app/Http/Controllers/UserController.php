@@ -221,7 +221,7 @@ class UserController extends Controller
 
     public function show_allsubmodule(Request $request)
     {
-        $user = User::findOrFail($request->id_user);
+        $user = User::find($request->id_user);
         $submodules = UserModule::where('module_id','=', $request->id)
         ->where('user_id','=', $user->id)
         ->first();
