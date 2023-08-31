@@ -17,17 +17,10 @@ class UserSeeder extends Seeder
     public function run()
     {
         User::create([
-            'name'    => 'SuperAdmin',
-            'email'   => 'superadmin@admin.com',
-            'password' => bcrypt('12345678'),
-            'enterprises_id' => 1,
-        ])->assignRole('superadmin');
-
-        User::create([
             'name'    => 'Admin',
             'email'   => 'admin@admin.com',
             'password' => bcrypt('12345678'),
-            'enterprises_id' => 1,
-        ])->assignRole('admin');
+            'enterprise_id' => 1,
+        ])->assignRole(['Dashboard', 'UserView', 'UserCreate', 'UserEdit', 'UserDelete']);
     }
 }

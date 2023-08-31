@@ -43,17 +43,39 @@
                                                 value="{{ $user->email }}">
                                         </div>
                                         <div class="form-group">
-                                            <label for="user_rol">Rol del usuario</label>
-                                            <select class="form-control show-tick ms select2 choices-remove-button"
-                                                id="user_rol" name="rol">
-                                                <option value="" selected disabled>Seleccionar</option>
-                                                @forelse ($roles as $rol)
-                                                    <option value="{{ $rol->name }}"
-                                                        @if (isset($user->roles[0]) && $user->roles[0]->id == $rol->id) selected @endif>
-                                                        {{ $rol->name }}</option>
-                                                @empty
-                                                @endforelse
-                                            </select>
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    <h3 class="card-title">Roles de Usuario</h3>
+                                                    <div class="card-tools">
+                                                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                                            <i class="fas fa-minus"></i>
+                                                        </button>
+                                                        <button type="button" class="btn btn-tool" data-card-widget="remove">
+                                                            <i class="fas fa-times"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+
+                                                <div class="card-body">
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <table id="example2" class="table table-bordered table-hover dataTable dtr-inline">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Roles</th>
+                                                                        <th>Acciones</th>
+                                                                    </tr>
+                                                                </thead>
+
+                                                                <tbody>
+
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
                                         </div>
                                     </div>
                                 </div>
@@ -139,13 +161,10 @@
                     }
                 });
             }
-
         };
 
-        $(document).ready(function() {
-            new Choices('.choices-remove-button', {
-                removeItemButton: false,
-            });
+        $("input[data-bootstrap-switch]").each(function(){
+            $(this).bootstrapSwitch('state', $(this).prop('checked'));
         });
     </script>
 @endsection

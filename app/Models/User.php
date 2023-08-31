@@ -7,6 +7,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Permission\Models\Role as SpatieRole;
 
 class User extends Authenticatable
 {
@@ -47,14 +48,13 @@ class User extends Authenticatable
         return $this->hasMany('App\Post');
     }
 
-    public function modules()
+    public function roles()
     {
-        return $this->belongsToMany(Module::class, 'user_modules', 'user_id', 'module_id')->withPivot('sub_modules');
+        return $this->belongsToMany(SpatieRole::class, 'model_has_roles', 'model_id', 'role_id');
     }
 
-    public function subModules()
+    public function modules()
     {
-        return $this->hasMany(Module::class, 'id', 'sub_modules');
+        return $this->belongsToMany(Module::class, 'modules_has_models', 'user_id', 'module_id');
     }
-    
 }

@@ -16,39 +16,46 @@ class SubModuleSeeder extends Seeder
     public function run()
     {
         SubModule::create([
-            "name_submodules" => "Registro de usuarios",
-            "id_module" => 1,
-            "route" => "/Dashboard/User/Index"
+            "name" => "Usuarios",
+            "route" => "/Dashboard/User/Index",
+            "module_id" => 1,
+            'role_id' => 2
         ]);
         SubModule::create([
-            "name_submodules" => "Usuarios inactivos",
-            "id_module" => 1,
-            "route" => "/Dashboard/User/Index/Inactivos"
+            "name" => "Usuarios Inactivos",
+            "route" => "/Dashboard/User/Index/Inactivos",
+            "module_id" => 1,
+            'role_id' => 2
         ]);
         SubModule::create([
-            "name_submodules" => "Roles",
-            "id_module" => 1,
-            "route" => "/Dashboard/Rol/Index"
+            "name" => "Roles",
+            "route" => "/Dashboard/Rol/Index",
+            "module_id" => 1,
+            'role_id' => 6
         ]);
-        SubModule::create([
-            "name_submodules" => "Permisos",
-            "id_module" => 1,
-            "route" => "/Dashboard/Permission/Index"
-        ]);
-        SubModule::create([
-            "name_submodules" => "Modulos",
-            "id_module" => 1,
-            "route" => "/Dashboard/Module/Index"
-        ]);
-        SubModule::create([
-            "name_submodules" => "Sub Modulos",
-            "id_module" => 1,
-            "route" => "/Dashboard/SubModule/Index"
-        ]);
-        SubModule::create([
-            "name_submodules" => "Empresas",
-            "id_module" => 1,
-            "route" => "/Dashboard/Enterprises/Index"
-        ]);
+        // SubModule::create([
+        //     "name_submodules" => "Permisos",
+        //     "id_module" => 1,
+        //     "route" => "/Dashboard/Permission/Index",
+        //     "module_id" => 1,
+        // ]);
+        // SubModule::create([
+        //     "name_submodules" => "Modulos",
+        //     "id_module" => 1,
+        //     "route" => "/Dashboard/Module/Index",
+        //     "module_id" => 1,
+        // ]);
+        // SubModule::create([
+        //     "name_submodules" => "Sub Modulos",
+        //     "id_module" => 1,
+        //     "route" => "/Dashboard/SubModule/Index",
+        //     "module_id" => 1,
+        // ]);
+        // SubModule::create([
+        //     "name_submodules" => "Empresas",
+        //     "id_module" => 1,
+        //     "route" => "/Dashboard/Enterprises/Index",
+        //     "module_id" => 1,
+        // ]);
     }
 }

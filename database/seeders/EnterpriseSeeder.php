@@ -14,9 +14,9 @@ class EnterpriseSeeder extends Seeder
      * @return void
      */
     public function run()
-    {     
+    {
         Enterprise::create([
-            'name_enterprise' => 'Empresa 1',
+            'name' => 'Empresa 1',
         ]);
     }
 }

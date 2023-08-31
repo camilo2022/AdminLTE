@@ -15,11 +15,12 @@ class CreateSubmodulesTable extends Migration
     {
         Schema::create('submodules', function (Blueprint $table) {
             $table->id('id');
-            $table->string('name_submodules')->comment('Nombre de los submodulos');
-            $table->string('route')->comment('Nombre de los submodulos')->nullable();
-            $table->boolean('is_active')->default(1);
-            $table->unsignedBigInteger('id_module')->comment('Identificacion de los modulos')->nullable();
-            $table->foreign('id_module')->references('id')->on('modules');
+            $table->string('name')->comment('Nombre de los submodulos');
+            $table->string('route')->comment('Nombre de los submodulos');
+            $table->unsignedBigInteger('module_id')->comment('Identificacion de los modulos');
+            $table->unsignedBigInteger('role_id')->comment('Identificacion del rol');
+            $table->foreign('module_id')->references('id')->on('modules');
+            $table->foreign('role_id')->references('id')->on('roles');
             $table->timestamps();
         });
     }

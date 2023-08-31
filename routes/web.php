@@ -14,14 +14,21 @@ use Illuminate\Support\Facades\Auth;
 */
 
 Route::get('/', function () {
-    return view('Auth/login');
+
+    if (Auth::check()) {
+        return redirect()->route('Dashboard');
+    } else {
+        return redirect('/login');
+    }
+
 });
 
 Auth::routes(['register' => false]);
 
-Route::get('/home', 'App\Http\Controllers\HomeController@index')->name('home');
+
 
 Route::middleware(['auth'])->group(function () {
+    Route::get('/Dashboard', 'App\Http\Controllers\HomeController@index')->middleware('can:Dashboard')->name('Dashboard');
     /* USER */
     Route::get('/Dashboard/User/Index', 'App\Http\Controllers\UserController@index')->middleware('can:Dashboard.User.Index')->name('Dashboard.User.Index');
     Route::get('/Dashboard/User/Create', 'App\Http\Controllers\UserController@create')->middleware('can:Dashboard.User.Create')->name('Dashboard.User.Create');
@@ -29,16 +36,6 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/Dashboard/User/Password', 'App\Http\Controllers\UserController@updatePassword')->middleware('can:Dashboard.User.Password')->name('Dashboard.User.Password');
     Route::get('/Dashboard/User/Edit/{id}', 'App\Http\Controllers\UserController@edit')->middleware('can:Dashboard.User.Edit')->name('Dashboard.User.Edit');
     Route::post('/Dashboard/User/Update/{id}', 'App\Http\Controllers\UserController@update')->middleware('can:Dashboard.User.Update')->name('Dashboard.User.Update');
-    Route::get('/Dashboard/User/Show/Module/{id}', 'App\Http\Controllers\UserController@show_module')->middleware('can:Dashboard.User.Show.Module')->name('Dashboard.User.Show.Module');
-    Route::post('Dashboard/User/Assign_module/{id}', 'App\Http\Controllers\UserController@user_assign_module')->middleware('can:Dashboard.User.Assign_module')->name('Dashboard.User.Assign_module');
-    Route::get('/Dashboard/User/Hide/Module/{id}', 'App\Http\Controllers\UserController@hide_module')->middleware('can:Dashboard.User.Hide.Module')->name('Dashboard.User.Hide.Module');
-    Route::post('Dashboard/User/Unssign_module/{id}', 'App\Http\Controllers\UserController@user_unssign_module')->middleware('can:Dashboard.User.Unssign_module')->name('Dashboard.User.Unssign_module');
-    Route::get('/Dashboard/User/Show/SubModule/{id}', 'App\Http\Controllers\UserController@show_submodule')->middleware('can:Dashboard.User.Show.SubModule')->name('Dashboard.User.Show.SubModule');
-    Route::post('/Dashboard/User/Show/SubModule/allsubmodule', 'App\Http\Controllers\UserController@show_allsubmodule')->middleware('can:Dashboard.User.Show.SubModule.allsubmodule')->name('Dashboard.User.Show.SubModule.allsubmodule');
-    Route::post('Dashboard/User/Assign_submodule/{id}', 'App\Http\Controllers\UserController@user_assign_submodule')->middleware('can:Dashboard.User.Assign_submodule')->name('Dashboard.User.Assign_submodule');
-    Route::get('/Dashboard/User/Hide/SubModule/{id}', 'App\Http\Controllers\UserController@hide_submodule')->middleware('can:Dashboard.User.Hide.SubModule')->name('Dashboard.User.Hide.SubModule');
-    Route::post('/Dashboard/User/Hide/SubModule/allsubmodule', 'App\Http\Controllers\UserController@hide_allsubmodule')->middleware('can:Dashboard.User.Hide.SubModule.allsubmodule')->name('Dashboard.User.Hide.SubModule.allsubmodule');
-    Route::post('Dashboard/User/Unssign_submodule/{id}', 'App\Http\Controllers\UserController@user_unssign_submodule')->middleware('can:Dashboard.User.Unssign_submodule')->name('Dashboard.User.Unssign_submodule');
     Route::post('/Dashboard/User/Destroy/{id}', 'App\Http\Controllers\UserController@destroy')->middleware('can:Dashboard.User.Destroy')->name('Dashboard.User.Destroy');
     Route::post('/Dashboard/User/Restore/{id}', 'App\Http\Controllers\UserController@restore')->middleware('can:Dashboard.User.Restore')->name('Dashboard.User.Restore');
     Route::get('/Dashboard/User/Index/Inactivos', 'App\Http\Controllers\UserController@archive')->middleware('can:Dashboard.User.Inactivos')->name('Dashboard.User.Inactivos');

@@ -15,6 +15,9 @@ class ModulesSeeder extends Seeder
      */
     public function run()
     {
-        Module::create([ 'name_modules' => 'Configuracion', 'icon_modules' => 'fas fa-cog']);
+        Module::create([
+            'name' => 'Configuracion',
+            'icon' => 'fas fa-cog'
+        ]);
     }
 }

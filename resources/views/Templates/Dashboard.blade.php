@@ -234,21 +234,21 @@
               </p>
             </a>
           </li>
-          @foreach ($modules as $module)
+          @foreach ($modules->modules as $module)
           <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
-              <i class="nav-icon {{$module->icon_modules}}"></i>
+              <i class="nav-icon {{$module->icon}}"></i>
               <p>
-                {{ $module->name_modules }}
+                {{ $module->name }}
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
             <ul class="nav nav-treeview">
-              @foreach ($module->SubModules as $subModule)
+              @foreach ($module->submodules as $submodule)
                 <li class="nav-item">
-                  <a href="{{ $subModule->route }}" class="nav-link">
+                  <a href="{{ $submodule->route }}" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
-                    <p>{{ $subModule->name_submodules }}</p>
+                    <p>{{ $submodule->name }}</p>
                   </a>
                 </li>
               @endforeach
@@ -299,6 +299,7 @@
 </script>
 <!-- Bootstrap 4 -->
 <script src="{{ asset('js/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+<script src="{{ asset('js/bootstrap-switch/js/bootstrap-switch.min.js') }}"></script>
 <!-- ChartJS -->
 <script src="{{ asset('js/chart.js/Chart.min.js') }}"></script>
 <!-- Sparkline -->

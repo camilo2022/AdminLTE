@@ -37,8 +37,6 @@
                                         <tr>
                                             <th colspan="3">Informacion</th>
                                             <th colspan="3">Gestión</th>
-                                            <th colspan="2">Módulos</th>
-                                            <th colspan="2">Submódulos</th>
                                         </tr>
                                         <tr>
                                             <th>#</th>
@@ -47,10 +45,6 @@
                                             <th>Password</th>
                                             <th>Editar</th>
                                             <th>Eliminar</th>
-                                            <th>Asignar</th>
-                                            <th>Quitar</th>
-                                            <th>Asignar</th>
-                                            <th>Quitar</th>
                                         </tr>
                                     </thead>
 
@@ -83,26 +77,6 @@
                                                         </button>
                                                     </form>
                                                 </td>
-                                                <td>
-                                                    <a href="{{ route('Dashboard.User.Show.Module', $user->id) }}"
-                                                        class="btn btn-success btn-sm"><i
-                                                            class="fas fa-plus-circle text-white"></i></a>
-                                                </td>
-                                                <td>
-                                                    <a href="{{ route('Dashboard.User.Hide.Module', $user->id) }}"
-                                                        class="btn btn-warning btn-sm"><i
-                                                            class="fas fa-minus-circle text-white"></i></a>
-                                                </td>
-                                                <td>
-                                                    <a href="{{ route('Dashboard.User.Show.SubModule', $user->id) }}"
-                                                        class="btn btn-info btn-sm"><i
-                                                            class="fas fa-check-circle text-white"></i></a>
-                                                </td>
-                                                <td>
-                                                    <a href="{{ route('Dashboard.User.Hide.SubModule', $user->id) }}"
-                                                        class="btn btn-sm" style="background: #ff7519;"><i
-                                                            class="fas fa-times-circle text-white"></i></a>
-                                                </td>
                                             </tr>
                                         @endforeach
                                     </tbody>
@@ -113,7 +87,7 @@
                 </div>
             </div>
         </div>
-        @include('Dashboard.User.Modal_change_password')
+        @include('Dashboard.User.ModalChangePassword')
     </section>
 @endsection
 @section('script')

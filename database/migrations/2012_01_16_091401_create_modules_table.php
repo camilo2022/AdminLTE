@@ -15,9 +15,8 @@ class CreateModulesTable extends Migration
     {
         Schema::create('modules', function (Blueprint $table) {
             $table->id('id');
-            $table->boolean('is_active')->default(1);
-            $table->string('name_modules')->comment('Nombre de los modulos');
-            $table->string('icon_modules')->comment('Icono de los modulos');
+            $table->string('name')->comment('Nombre de los modulos');
+            $table->string('icon')->comment('Icono de los modulos');
             $table->timestamps();
         });
     }

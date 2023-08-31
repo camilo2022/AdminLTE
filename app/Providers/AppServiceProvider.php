@@ -27,22 +27,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        View::composer('*', function ($view) {     
-            //Verificamos si el usuario esta registrado
-            if (auth()->check()) {
-                $user = User::find(Auth::id());
-                $modules = $user->modules->sortBy('id')->values()->all(); 
-                foreach ($modules as $module) {
-                    $subModulesJson = $module->pivot->sub_modules;
-                    $subModules = json_decode($subModulesJson);
-                    $module->pivot->sub_modules = $subModules;
-                    $SubModules = SubModule::whereIn('id', $subModules)->where('is_active', true)->get();
-                    $module->SubModules = $SubModules;
+        View::composer('*', function ($view) {
 
-                }
-                View::share(['modules' => $modules]);
+            $modules = User::with(['roles', 'modules.submodules' => function ($query) {
+                $query->whereIn('role_id', auth()->user()->roles->pluck('id'));
+            }])->find(Auth::user()->id);
 
-            }
+            View::share(['modules' => $modules]);
         });
     }
 }
