@@ -30,7 +30,7 @@ class AppServiceProvider extends ServiceProvider
         View::composer('*', function ($view) {
 
             $modules = User::with(['roles', 'modules.submodules' => function ($query) {
-                $query->whereIn('role_id', auth()->user()->roles->pluck('id'));
+                $query->whereIn('role_id', Auth::user()->roles->pluck('id'));
             }])->find(Auth::user()->id);
 
             View::share(['modules' => $modules]);

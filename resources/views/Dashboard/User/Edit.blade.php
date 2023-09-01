@@ -59,7 +59,7 @@
                                                 <div class="card-body">
                                                     <div class="row">
                                                         <div class="col-md-12">
-                                                            <table id="example2" class="table table-bordered table-hover dataTable dtr-inline">
+                                                            <table id="example" class="table table-bordered table-hover dataTable dtr-inline">
                                                                 <thead>
                                                                     <tr>
                                                                         <th>Roles</th>
@@ -68,7 +68,6 @@
                                                                 </thead>
 
                                                                 <tbody>
-
                                                                 </tbody>
                                                             </table>
                                                         </div>
@@ -92,6 +91,55 @@
 
 @section('script')
     <script>
+
+        let table = $('#example').DataTable({
+            "processing": true,
+            "serverSide": true,
+            "ajax": "{{ route('Dashboard.User.Edit', $id) }}",
+            "columns": [
+                { 
+                    data: 'name',
+                },
+                {
+                    data: null,
+                    render: function (data, type, row) {
+                        return '<button type="button" class="btn btn-primary btn-expand" data-row-id="' + row.id + '">Expandir</button>';
+                    },
+                    orderable: true,
+                    searchable: false,
+                },
+            ],
+        });
+
+        $('#example tbody').on('click', 'button.btn-expand', function () {
+            let tr = $(this).closest('tr');
+            let row = table.row(tr);
+            let rowData = row.data();
+            
+            if (row.child.isShown()) {
+                row.child.hide();
+                tr.removeClass('shown');
+            } else {
+                row.child(formatRoles(rowData.roles)).show();
+                tr.addClass('shown');
+            }
+            
+        });
+
+        function formatRoles(roles) {
+            let html = '<table class="table table-bordered table-hover dataTable dtr-inline">';
+            roles.forEach(function (role) {
+                if(role.asignado){
+                    html += `<tr><td>` + role.name + `</td><td><input type="checkbox" name="my-checkbox" checked data-bootstrap-switch data-off-color="danger" data-on-color="success"></td></tr>`;
+                }else{
+                    console.log(role.name);
+                    html += `<tr><td>` + role.name + `</td><td><input type="checkbox" name="my-checkbox" data-bootstrap-switch data-off-color="danger" data-on-color="success" onchange='assignRoleByUser(1, "` + role.name + `")'></td></tr>`;
+                }
+            });
+            html += '</table>';
+            return html;
+        }
+
         function isValidEmail(email) {
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             return emailRegex.test(email);
@@ -163,8 +211,35 @@
             }
         };
 
-        $("input[data-bootstrap-switch]").each(function(){
-            $(this).bootstrapSwitch('state', $(this).prop('checked'));
-        });
+        function assignRoleByUser(user, rol) { 
+            let data = {
+                "id_user": user,
+                "rol_name": rol
+            };
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: "{{ route('Dashboard.User.AssignRole') }}",
+                type: "POST",
+                data: JSON.stringify(data),
+                contentType: "application/json",
+                success: function (respuesta) {
+                    $(document).Toasts('create', {
+                        class: 'bg-success',
+                        title: 'Accion Exitosa',
+                        body: 'Se asignó el rol al usuario correctamente,'
+                    })
+                },
+                error: function(xhr, status, error) {
+                    $(document).Toasts('create', {
+                        class: 'bg-danger',
+                        title: 'Accion Fallida',
+                        body: 'Ocurrió un error al asignar el rol al usuario.'
+                    })
+                }
+            });
+            table.ajax.reload();
+        }
     </script>
 @endsection

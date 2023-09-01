@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Access;
 use App\Models\Module;
 use App\Models\SubModule;
 use App\Models\User;
@@ -70,23 +71,33 @@ class UserController extends Controller
     public function edit($id)
     {
         $user = User::with('roles')->where("id","=", $id)->firstOrFail();
-        return $roles = Role::select('roles.id as id_role','roles.name as name_role','modules.id as id_module','modules.name as name_modules','submodules.id as id_submodules','submodules.name as name_submodules','submodules.module_id','submodules.role_id')
-        ->join('submodules','submodules.role_id','=','roles.id')
-        ->join('modules','modules.id','=','submodules.module_id')
-        ->get();
-        if (request()->ajax()) {
-            $roles = Role::select('roles.id as id_rol','roles.name as name_rol','modules.*','submodules.*')
-            ->join('submodules','submodules.role_id','=','roles.id')
-            ->join('modules','modules.id','=','submodules.module_id')
-            ->get();
 
-            return datatables()->of($roles)->addColumn('btnoes', function ($roles) {
+        if (request()->ajax()) {
+            $accesses = Access::with('roles')->get()
+            ->each(function ($access) use ($id) {
+                $access->roles->each(function ($role) use ($id) {
+                    $isAssigned = DB::table('model_has_roles')
+                        ->where('role_id', $role->id)
+                        ->where('model_type', 'App\\Models\\User') // Ajusta el modelo si es diferente
+                        ->where('model_id', $id)
+                        ->exists();
+                    $role->asignado = $isAssigned;
+                });
+            });
+
+            return datatables()->of($accesses)->addColumn('btnoes', function ($accesses) {
                 return '<input type="checkbox" name="my-checkbox" checked data-bootstrap-switch data-off-color="danger" data-on-color="success">';
             })->rawColumns(['btnoes'])->toJson();
         }
-        return view('Dashboard.User.Edit', compact('user'));
+        return view('Dashboard.User.Edit', compact('user','id'));
     }
 
+    public function assignRole(Request $request)
+    {
+        $user = User::find($request->id_user);
+        $user->assignRole($request->rol_name);
+        return "Success";
+    }
 
     public function update(Request $request, $id)
     {

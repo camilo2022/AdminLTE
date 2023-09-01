@@ -20,6 +20,6 @@ class SubModule extends Model
     
     public function roles()
     {
-        return $this->belongsToMany(SpatieRole::class, 'rol_submodules', 'id_submodule', 'id_rol');
+        return $this->belongsTo(SpatieRole::class, 'role_id');
     }
 }

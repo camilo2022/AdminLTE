@@ -48,10 +48,7 @@ class User extends Authenticatable
         return $this->hasMany('App\Post');
     }
 
-    public function roles()
-    {
-        return $this->belongsToMany(SpatieRole::class, 'model_has_roles', 'model_id', 'role_id');
-    }
+    
 
     public function modules()
     {
