@@ -47,6 +47,9 @@
                                                 <div class="card-header">
                                                     <h3 class="card-title">Roles de Usuario</h3>
                                                     <div class="card-tools">
+                                                        <button type="button" class="btn btn-tool" data-card-widget="card-refresh" data-source="{{ route('Dashboard.User.Edit', $id) }}" onclick="table.ajax.reload();" data-source-selector="#card-refresh-content">
+                                                            <i class="fas fa-sync-alt"></i>
+                                                        </button>
                                                         <button type="button" class="btn btn-tool" data-card-widget="collapse">
                                                             <i class="fas fa-minus"></i>
                                                         </button>
@@ -93,11 +96,17 @@
     <script>
 
         let table = $('#example').DataTable({
+            "paging": false,
+            "lengthChange": false,
+            "searching": false,
+            "info": false,
+            "autoWidth": false,
+            "responsive": true,
             "processing": true,
             "serverSide": true,
             "ajax": "{{ route('Dashboard.User.Edit', $id) }}",
             "columns": [
-                { 
+                {
                     data: 'name',
                 },
                 {
@@ -115,30 +124,42 @@
             let tr = $(this).closest('tr');
             let row = table.row(tr);
             let rowData = row.data();
-            
             if (row.child.isShown()) {
                 row.child.hide();
                 tr.removeClass('shown');
             } else {
                 row.child(formatRoles(rowData.roles)).show();
                 tr.addClass('shown');
+                $("input[data-bootstrap-switch]").each(function(){
+                    $(this).bootstrapSwitch('state');
+                    var originalOnChange = $(this).attr('onchange');
+                    if (originalOnChange) {
+                        $(this).next().find('input[type="checkbox"]').attr('onchange', originalOnChange);
+                    }
+                });
             }
-            
+
         });
 
         function formatRoles(roles) {
             let html = '<table class="table table-bordered table-hover dataTable dtr-inline">';
             roles.forEach(function (role) {
                 if(role.asignado){
-                    html += `<tr><td>` + role.name + `</td><td><input type="checkbox" name="my-checkbox" checked data-bootstrap-switch data-off-color="danger" data-on-color="success"></td></tr>`;
+                    html += `<tr style="width: 50%;"><td>` + role.name + `</td><td><input type="checkbox" name="my-checkbox" checked data-bootstrap-switch data-off-color="danger" data-on-color="success" onchange='unassignRoleByUser({{$id}}, "` + role.name + `", this)'></td></tr>`;
                 }else{
-                    console.log(role.name);
-                    html += `<tr><td>` + role.name + `</td><td><input type="checkbox" name="my-checkbox" data-bootstrap-switch data-off-color="danger" data-on-color="success" onchange='assignRoleByUser(1, "` + role.name + `")'></td></tr>`;
+                    html += `<tr style="width: 50%;"><td>` + role.name + `</td><td><input type="checkbox" name="my-checkbox" data-bootstrap-switch data-off-color="danger" data-on-color="success" onchange='assignRoleByUser({{$id}}, "` + role.name + `", this)'></td></tr>`;
                 }
             });
             html += '</table>';
             return html;
         }
+
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000
+        });
 
         function isValidEmail(email) {
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -150,7 +171,6 @@
 
             let name = $.trim($("#name").val());
             let email = $.trim($("#email").val());
-            let rol = $("#rol").val();
             let submit = true;
 
             if (name == "") {
@@ -161,7 +181,7 @@
             }
 
             if (email == "") {
-                toastr.warning('Por favor, complete el campo de correo.')
+                toastr.warning('Por favor, complete el campo correo electronico.')
                 submit = false;
             } else if (!isValidEmail(email)) {
                 toastr.error('La dirección de correo electrónico ingresada no es válida.')
@@ -169,21 +189,9 @@
             } else {
                 toastr.success('¡Correo válido! Puede continuar con la acción solicitada.')
             }
-            if (rol == "") {
-                toastr.warning('Por favor, complete el campo de rol.')
-                submit = false;
-            } else {
-                toastr.success('¡Rol válido! Puede continuar con la acción solicitada.')
-            }
+
 
             if (submit) {
-                const Toast = Swal.mixin({
-                    toast: true,
-                    position: 'top-end',
-                    showConfirmButton: false,
-                    timer: 3000
-                });
-
                 Swal.fire({
                     title: '¿Desea editar el usuario?',
                     icon: 'warning',
@@ -211,7 +219,7 @@
             }
         };
 
-        function assignRoleByUser(user, rol) { 
+        function assignRoleByUser(user, rol, button) {
             let data = {
                 "id_user": user,
                 "rol_name": rol
@@ -235,11 +243,46 @@
                     $(document).Toasts('create', {
                         class: 'bg-danger',
                         title: 'Accion Fallida',
-                        body: 'Ocurrió un error al asignar el rol al usuario.'
+                        body: 'Usted no tiene permisos para asignar roles.'
                     })
                 }
             });
-            table.ajax.reload();
+            let currentOnChange = button.getAttribute('onchange');
+            let newOnChange = currentOnChange.replace('assign', 'unassign');
+            button.setAttribute('onchange', newOnChange);
+        }
+
+        function unassignRoleByUser(user, rol, button) {
+            let data = {
+                "id_user": user,
+                "rol_name": rol
+            };
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: "{{ route('Dashboard.User.UnassignRole') }}",
+                type: "POST",
+                data: JSON.stringify(data),
+                contentType: "application/json",
+                success: function (respuesta) {
+                    $(document).Toasts('create', {
+                        class: 'bg-warning',
+                        title: 'Accion Exitosa',
+                        body: 'Se desasignó el rol al usuario correctamente,'
+                    })
+                },
+                error: function(xhr, status, error) {
+                    $(document).Toasts('create', {
+                        class: 'bg-danger',
+                        title: 'Accion Fallida',
+                        body: 'Usted no tiene permisos para desasignar roles.'
+                    })
+                }
+            });
+            let currentOnChange = button.getAttribute('onchange');
+            let newOnChange = currentOnChange.replace('unassign', 'assign');
+            button.setAttribute('onchange', newOnChange);
         }
     </script>
 @endsection

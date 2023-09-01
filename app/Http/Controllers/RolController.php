@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Access;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Validator;
 use Spatie\Permission\Models\Permission;
 use Illuminate\Validation\Rule;
-use App\RolModule;
-use App\User;
+
 
 class RolController extends Controller
 {
@@ -19,9 +19,20 @@ class RolController extends Controller
      */
     public function index()
     {
-        $rol = Role::with("permissions")->get();
-        $permission = Permission::all(); 
-        return view('Dashboard.Rol.Index', compact('rol', 'permission') );
+        $accesses = Access::all();
+        if (request()->ajax()) {
+            $roles = Role::with("permissions")->select('roles.*','accesses.name as access_name')->join('accesses','accesses.id','=','roles.access_id')->get();
+
+            return datatables()->of($roles)
+            ->addColumn('btnEdit', function ($roles) {
+                return '<a type="button" class="btn btn-primary text-white btn-sm" onclick="editRole('.$roles->id.',`'.$roles->name.'`,`'.$roles->access_name.'`)" data-toggle="modal" data-target="#modal_rol_editar"><i class="fas fa-pen text-white"></i></a>';
+            })
+            ->addColumn('btnDelete', function ($roles) {
+                return '<a type="button" class="btn btn-danger text-white btn-sm" onclick="deleteRole(`'.route('Dashboard.Rol.Destroy',$roles->id).'`)"><i class="fas fa-trash text-white"></i></a>';
+            })
+            ->rawColumns(['btnEdit','btnDelete'])->toJson();
+        }
+        return view('Dashboard.Role.Index', compact('accesses'));
 
     }
 
@@ -45,12 +56,17 @@ class RolController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|unique:roles',
+            'access' => 'required'
         ]);
         if ($validator->fails()) {
-            return back()->withErrors('¡No se creó el rol por que ya existe!');
+            $errors = [];
+            if ($validator->errors()->has('name')) {
+                $errors[] = '¡El nombre del rol ya existe!';
+            }
+            return '¡No se creó el rol por que ya existe!';
         }
-        $rol = Role::create(['name' => $request->name,]);
-        return back()->withSuccess('¡Rol creado satisfactoriamente!');
+        Role::create(['name' => $request->name,]);
+        return 'Se creo el rol satisfactoriamente.';
     }
 
     /**
@@ -79,7 +95,7 @@ class RolController extends Controller
         {
             $rol->givePermissionTo($permiso);
         }
-        return redirect()->route('Dashboard.Rol.Index')->withSuccess('¡Permisos asignados al rol satisfactoriamente!'); 
+        return redirect()->route('Dashboard.Rol.Index')->withSuccess('¡Permisos asignados al rol satisfactoriamente!');
     }
 
     /**
@@ -116,12 +132,8 @@ class RolController extends Controller
      */
     public function destroy($id)
     {
-        try{
-            Role::findOrFail($id)->delete();
-            return back()->withSuccess('¡Rol eliminado satisfactoriamente!');
-        }catch(\Exception $e){
-            return back()->withErrors('¡Error al eliminar el rol!');
-        }   
+        Role::findOrFail($id)->delete();
+        return 'Se elimino el rol satisfactoriamente.';
     }
 
     public function hide($id)

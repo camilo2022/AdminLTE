@@ -5,7 +5,7 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1 class="m-0 text-dark">Listado Usuarios</h1>
+                        <h1 class="m-0 text-dark">Usuarios</h1>
                     </div><!-- /.col -->
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
@@ -25,8 +25,11 @@
                     <div class="card">
                         <div class="card-header p-2">
                             <ul class="nav nav-pills">
-                                <li class="nav-item"><a class="nav-link active"
-                                        href="{{ route('Dashboard.User.Create') }}">Registrar usuario</a></li>
+                                @role('UserCreate')
+                                    <li class="nav-item"><a class="nav-link active"
+                                        href="{{ route('Dashboard.User.Create') }}">Registrar Usuario</a>
+                                    </li>
+                                @endrole
                             </ul>
                         </div>
 
@@ -35,16 +38,16 @@
                                 <table id="example2" class="table table-bordered table-hover dataTable dtr-inline">
                                     <thead class="thead-dark">
                                         <tr>
-                                            <th colspan="3">Informacion</th>
-                                            <th colspan="3">Gestión</th>
-                                        </tr>
-                                        <tr>
                                             <th>#</th>
                                             <th>Usuario</th>
                                             <th>Email</th>
+                                            @role('UserEdit')
                                             <th>Password</th>
                                             <th>Editar</th>
+                                            @endrole
+                                            @role('UserDelete')
                                             <th>Eliminar</th>
+                                            @endrole
                                         </tr>
                                     </thead>
 
@@ -54,6 +57,7 @@
                                                 <td>{{ $loop->iteration }}</td>
                                                 <td>{{ $user->name }}</td>
                                                 <td>{{ $user->email }}</td>
+                                                @role('UserEdit')
                                                 <td>
                                                     <a class="btn btn-sm text-white" data-toggle='modal'
                                                         data-target='#modalUser' style="background:#000;"
@@ -67,6 +71,8 @@
                                                         <i class="fas fa-pen text-white"></i>
                                                     </a>
                                                 </td>
+                                                @endrole
+                                                @role('UserDelete')
                                                 <td>
                                                     <form method="post"
                                                         action="{{ route('Dashboard.User.Destroy', $user->id) }}"
@@ -77,6 +83,7 @@
                                                         </button>
                                                     </form>
                                                 </td>
+                                                @endrole
                                             </tr>
                                         @endforeach
                                     </tbody>

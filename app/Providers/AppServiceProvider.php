@@ -28,12 +28,13 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         View::composer('*', function ($view) {
+            if(Auth::check()){
+                $modules = User::with(['roles', 'modules.submodules' => function ($query) {
+                    $query->whereIn('role_id', Auth::user()->roles->pluck('id'));
+                }])->find(Auth::user()->id);
 
-            $modules = User::with(['roles', 'modules.submodules' => function ($query) {
-                $query->whereIn('role_id', Auth::user()->roles->pluck('id'));
-            }])->find(Auth::user()->id);
-
-            View::share(['modules' => $modules]);
+                View::share(['modules' => $modules]);
+            }
         });
     }
 }

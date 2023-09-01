@@ -61,7 +61,7 @@ class UserController extends Controller
         $user->name = $request->name;
         $user->email = $request->email;
         $user->password = bcrypt($request->password);
-        $user->enterprises_id = Auth::user()->enterprises_id;
+        $user->enterprise_id = Auth::user()->enterprise_id;
         $user->save();
 
         return redirect()->route('Dashboard.User.Index')->withSuccess('¡Usuario registrado satisfactoriamente!');
@@ -85,9 +85,7 @@ class UserController extends Controller
                 });
             });
 
-            return datatables()->of($accesses)->addColumn('btnoes', function ($accesses) {
-                return '<input type="checkbox" name="my-checkbox" checked data-bootstrap-switch data-off-color="danger" data-on-color="success">';
-            })->rawColumns(['btnoes'])->toJson();
+            return datatables()->of($accesses)->toJson();
         }
         return view('Dashboard.User.Edit', compact('user','id'));
     }
@@ -96,6 +94,13 @@ class UserController extends Controller
     {
         $user = User::find($request->id_user);
         $user->assignRole($request->rol_name);
+        return "Success";
+    }
+
+    public function unassignRole(Request $request)
+    {
+        $user = User::find($request->id_user);
+        $user->removeRole($request->rol_name);
         return "Success";
     }
 
@@ -123,22 +128,8 @@ class UserController extends Controller
         $user->name = $request->name;
         $user->email = $request->email;
         $user->save();
-        if(isset($user->roles[0])){
-            if($user->roles[0]->name != $request->rol){
-                UserModule::where('user_id', $user->id)
-                ->whereNotIn('module_id', function ($query) use ($user, $request) {
-                    $query->select('id_module')
-                        ->from('rol_modules')
-                        ->join('roles', 'rol_modules.id_rol', '=', 'roles.id')
-                        ->where('roles.name', '=', $request->rol)
-                        ->where('rol_modules.id_rol', '=', $user->rol_id);
-                })
-                ->delete();
-            }
-            $user->removeRole($user->roles[0]->id);
-        }
-        $user->assignRole($request->rol);
-        return redirect()->route('Dashboard.User.Index')->withSuccess('¡Rol asignado al usuario satisfactoriamente!');
+
+        return redirect()->route('Dashboard.User.Index')->withSuccess('¡Usuario actualizado satisfactoriamente!');
 
     }
 

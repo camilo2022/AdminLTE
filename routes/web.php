@@ -35,7 +35,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/Dashboard/User/Store', 'App\Http\Controllers\UserController@store')->middleware('can:Dashboard.User.Store')->name('Dashboard.User.Store');
     Route::post('/Dashboard/User/Password', 'App\Http\Controllers\UserController@updatePassword')->middleware('can:Dashboard.User.Password')->name('Dashboard.User.Password');
     Route::get('/Dashboard/User/Edit/{id}', 'App\Http\Controllers\UserController@edit')->middleware('can:Dashboard.User.Edit')->name('Dashboard.User.Edit');
-    Route::post('/Dashboard/User/Assign/Role', 'App\Http\Controllers\UserController@assignRole')->name('Dashboard.User.AssignRole');
+    Route::post('/Dashboard/User/Assign/Role', 'App\Http\Controllers\UserController@assignRole')->middleware('can:Dashboard.User.AssignRole')->name('Dashboard.User.AssignRole');
+    Route::post('/Dashboard/User/Unassign/Role', 'App\Http\Controllers\UserController@unassignRole')->middleware('can:Dashboard.User.UnassignRole')->name('Dashboard.User.UnassignRole');
     Route::post('/Dashboard/User/Update/{id}', 'App\Http\Controllers\UserController@update')->middleware('can:Dashboard.User.Update')->name('Dashboard.User.Update');
     Route::post('/Dashboard/User/Destroy/{id}', 'App\Http\Controllers\UserController@destroy')->middleware('can:Dashboard.User.Destroy')->name('Dashboard.User.Destroy');
     Route::post('/Dashboard/User/Restore/{id}', 'App\Http\Controllers\UserController@restore')->middleware('can:Dashboard.User.Restore')->name('Dashboard.User.Restore');
