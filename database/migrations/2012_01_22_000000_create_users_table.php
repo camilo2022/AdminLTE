@@ -14,16 +14,20 @@ class CreateUsersTable extends Migration
     public function up()
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
+            $table->id()->comment('Identifier of the user');
+            $table->string('name')->comment('Name of the user');
+            $table->string('last_name')->comment('Last Name of the user');
+            $table->string('document_number')->unique()->comment('Number document of the user');
+            $table->string('phone_number')->comment('Phone number of the user');
+            $table->string('address')->comment('Address of the user');
+            $table->string('email')->unique()->comment('Email of the user');
+            $table->timestamp('email_verified_at')->nullable()->comment('Verification email of the user');
             $table->string('password');
             $table->unsignedBigInteger('enterprise_id')->comment('Identificacion de la empresa')->nullable();
-            $table->foreign('enterprise_id')->references('id')->on('enterprises')->onDelete('cascade');
+            $table->foreign('enterprise_id')->references('id')->on('enterprises')->onUpdate('cascade')->onDelete('cascade');
             $table->rememberToken();
             $table->timestamps();
-            $table->timestamp('deleted_at')->nullable();
+            $table->timestamp('deleted_at')->nullable();        
         });
     }
 

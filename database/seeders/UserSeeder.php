@@ -17,10 +17,14 @@ class UserSeeder extends Seeder
     public function run()
     {
         User::create([
-            'name'    => 'Admin',
-            'email'   => 'admin@admin.com',
+            'name' => 'Camilo Andres',
+            'last_name' => 'Acacio Gutierrez',
+            'document_number' => '1004845200',
+            'phone_number' => '3222759176',
+            'address' => 'Cll 11 # 8-32 Panamericano',
+            'email' => 'admin@admin.com',
             'password' => bcrypt('12345678'),
             'enterprise_id' => 1,
-        ])->assignRole(['Dashboard', 'UserView', 'UserCreate', 'UserEdit', 'UserDelete']);
+        ]);
     }
 }
