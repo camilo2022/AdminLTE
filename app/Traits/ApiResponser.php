@@ -58,7 +58,7 @@ trait ApiResponser
 	/**
 	 * Devuelve una respuesta exitosa con un mensaje y código de respuesta personalizado.
 	 * Por ejemplo se usa para cuando se eliminea un dato y solo se necesita un mensaje
-	 * 
+	 *
 	 * @param mixed $message El mensaje.
 	 * @param int $code El código de respuesta HTTP.
 	 * @return \Illuminate\Http\JsonResponse

@@ -27,8 +27,10 @@ class RolesandPermissionSeeder extends Seeder
         Permission::create(['name' => 'Dashboard.Users.Index'])->syncRoles([$Users]);
         Permission::create(['name' => 'Dashboard.Users.Index.Query'])->syncRoles([$Users]);
         Permission::create(['name' => 'Dashboard.Users.Inactives'])->syncRoles([$Users]);
+        Permission::create(['name' => 'Dashboard.Users.Inactives.Query'])->syncRoles([$Users]);
         Permission::create(['name' => 'Dashboard.Users.Store'])->syncRoles([$Users]);
         Permission::create(['name' => 'Dashboard.Users.Update'])->syncRoles([$Users]);
+        Permission::create(['name' => 'Dashboard.Users.Password'])->syncRoles([$Users]);
         Permission::create(['name' => 'Dashboard.Users.Delete'])->syncRoles([$Users]);
         Permission::create(['name' => 'Dashboard.Users.Restore'])->syncRoles([$Users]);
         Permission::create(['name' => 'Dashboard.Users.AssignRoleAndPermissions'])->syncRoles([$Users]);
@@ -38,6 +40,6 @@ class RolesandPermissionSeeder extends Seeder
         Permission::create(['name' => 'Dashboard.RolesAndPermissions.Store'])->syncRoles([$RolesAndPermissions]);
         Permission::create(['name' => 'Dashboard.RolesAndPermissions.Update'])->syncRoles([$RolesAndPermissions]);
         Permission::create(['name' => 'Dashboard.RolesAndPermissions.Delete'])->syncRoles([$RolesAndPermissions]);
-    
+
     }
 }

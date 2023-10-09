@@ -1,14 +1,11 @@
 <?php
-
 namespace App\Http\Requests\User;
-
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
-
-class UserInactivesRequest extends FormRequest
+class UserPasswordRequest extends FormRequest
 {
-    /**
+      /**
      * Maneja una solicitud fallida de validación.
      *
      * @param \Illuminate\Contracts\Validation\Validator $validator
@@ -31,7 +28,6 @@ class UserInactivesRequest extends FormRequest
     {
         return true;
     }
-
     /**
      * Get the validation rules that apply to the request.
      *
@@ -40,34 +36,31 @@ class UserInactivesRequest extends FormRequest
     public function rules()
     {
         return [
-            'start_date' => 'nullable|date',
-            'end_date' => 'nullable|date|after_or_equal:start_date',
-            'perPage' => 'required|numeric',
+            'password' => 'required|string|min:6|confirmed',
+            'password_confirmation' => 'required|string'
         ];
     }
-
-
+    // Mensajes de error personalizados para cada regla de validación
     public function messages()
     {
         return [
-            'start_date.required' => 'El campo Fecha de inicio es requerido.',
-            'start_date.date' => 'El campo Fecha de inicio debe ser una fecha válida.',
-
-            'end_date.required' => 'El campo Fecha de fin es requerido.',
-            'end_date.date' => 'El campo Fecha de fin debe ser una fecha válida.',
-            'end_date.after_or_equal' => 'El campo Fecha de fin debe ser igual o posterior a la Fecha de inicio.',
-
-            'perPage.required' => 'El campo Por página es requerido.',
-            'perPage.numeric' => 'El campo Por página debe ser un valor numérico.',
+            'required' => 'El campo :attribute es requerido.',
+            'string' => 'El campo :attribute debe ser una cadena de caracteres.',
+            'min' => 'El campo :attribute debe tener al menos :min caracteres.',
+            'confirmed' => 'El campo :attribute no coincide con la confirmación de contraseña.',
         ];
     }
-
+    /**
+     * Obtiene los atributos personalizados de los campos.
+     *
+     * @return array
+     */
     public function attributes()
     {
+        // Nombres personalizados para cada campo de la solicitud
         return [
-            'start_date' => 'Fecha de inicio',
-            'end_date' => 'Fecha de fin',
-            'perPage' => 'Numero de página',
+            'password' => 'contraseña',
+            'password_confirmation' => 'confirmación de contraseña',
         ];
     }
 }

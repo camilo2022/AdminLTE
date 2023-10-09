@@ -28,8 +28,10 @@ class UserSeeder extends Seeder
                     'Dashboard.Users.Index',
                     'Dashboard.Users.Index.Query',
                     'Dashboard.Users.Inactives',
+                    'Dashboard.Users.Inactives.Query',
                     'Dashboard.Users.Store',
                     'Dashboard.Users.Update',
+                    'Dashboard.Users.Password',
                     'Dashboard.Users.Delete',
                     'Dashboard.Users.Restore',
                     'Dashboard.Users.AssignRoleAndPermissions',
@@ -63,6 +65,7 @@ class UserSeeder extends Seeder
             $user->assignRole([$RoleAndPermission->role]);
             $user->givePermissionTo($RoleAndPermission->permissions);
         };
+
         $faker = Faker::create();
 
         foreach (range(1, 100) as $index) {

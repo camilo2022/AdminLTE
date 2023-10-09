@@ -9,60 +9,36 @@ use App\Http\Requests\User\UserIndexQueryRequest;
 use App\Http\Resources\User\UserIndexQueryCollection;
 use App\Http\Requests\User\RemoveRolesAndPermissionsRequest;
 use App\Http\Requests\User\UserDeleteRequest;
-use App\Http\Requests\User\UserInactivesRequest;
+use App\Http\Requests\User\UserInactivesQueryRequest;
+use App\Http\Requests\User\UserPasswordRequest;
 use App\Http\Requests\User\UserRestoreRequest;
 use App\Http\Requests\User\UserStoreRequest;
 use App\Http\Requests\User\UserUpdateRequest;
 use App\Http\Resources\User\UserInactivesCollection;
 use Exception;
-use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
+
 class UserController extends Controller
 {
-    /**
-     * Importar el trait ApiResponser para usar sus métodos de respuesta.
-     *
-     * El trait ApiResponser proporciona métodos útiles para formatear y enviar respuestas
-     * HTTP desde los controladores.
-     * Al importar este trait, los controladores pueden acceder a estos métodos para enviar
-     * respuestas de manera uniforme.
-     */
     use ApiResponser;
-    
-    /**
-     * Mensaje de éxito predeterminado para respuestas exitosas.
-     *
-     * Este mensaje se utiliza para indicar el éxito en las respuestas de la API cuando una operación
-     * se realiza con éxito.
-     *
-     * @var string
-     */
-    private $success = 'Consulta Exitosa.';
 
-    /**
-     * Mensaje de error genérico para respuestas de error.
-     *
-     * Este mensaje se utiliza como respuesta genérica en caso de que ocurra un error no específico en la API.
-     *
-     * @var string
-     */
-    private $error = 'Algo salió mal.';
+    private $success = 'Consulta Exitosa.';
+    private $errorException = 'Algo salió mal.';
+    private $errorQueryException = 'Error del servidor de la base de datos.';
+    private $errorModelNotFoundException = 'El usuario no pudo ser encontrado.';
 
     public function index()
     {
         try {
             return view('Dashboard.Users.Index');
         } catch (Exception $e) {
-            return $this->errorResponse(
+            return back()->withErrors(
                 [
-                    'message' => $this->error,
-                    'error' => $e->getMessage()
-                ],
-                500
+                    'Ocurrió un error al cargar la vista: ' . $e->getMessage()
+                ]
             );
         }
     }
@@ -78,7 +54,8 @@ class UserController extends Controller
      *
      * Si los parámetros de filtro están presentes en la solicitud, se aplicarán a la consulta.
      *
-     * @param \App\Http\Requests\UserIndexQueryRequest $request La solicitud HTTP con los parámetros de filtro y paginación.
+     * @param \App\Http\Requests\UserIndexQueryRequest $request La solicitud HTTP con los
+     * parámetros de filtro y paginación.
      *
      * @return \Illuminate\Pagination\LengthAwarePaginator
      * Una lista paginada de usuarios que cumplen con los filtros especificados.
@@ -108,20 +85,43 @@ class UserController extends Controller
                         $query->filterByRole($request->role);
                     }
                 )
+                ->orderBy($request->column, $request->dir)
                 ->paginate($request->perPage);
-                
+
             return $this->successResponse(
                 new UserIndexQueryCollection($users),
                 $this->success,
                 200
             );
-        } catch (Exception $e) {
+        } catch (QueryException $e) {
+            // Manejar la excepción de la base de datos
             return $this->errorResponse(
                 [
-                    'message' => $this->error,
+                    'message' => $this->errorQueryException,
                     'error' => $e->getMessage()
                 ],
                 500
+            );
+        } catch (Exception $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->errorException,
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        }
+    }
+
+    public function inactives()
+    {
+        try {
+            return view('Dashboard.Users.Inactives');
+        } catch (Exception $e) {
+            return back()->withErrors(
+                [
+                    'Ocurrió un error al cargar la vista: ' . $e->getMessage()
+                ]
             );
         }
     }
@@ -142,36 +142,46 @@ class UserController extends Controller
      * @return \Illuminate\Pagination\LengthAwarePaginator
      * Lista paginada de usuarios inactivos que cumplen con los filtros especificados.
      */
-    public function inactives(UserInactivesRequest $request)
+    public function inactivesQuery(UserInactivesQueryRequest $request)
     {
         try {
             $start_date = Carbon::parse($request->start_date)->startOfDay();
             $end_date = Carbon::parse($request->end_date)->endOfDay();
-            //Consulta por nombre
+
             $users = User::with('roles','permissions')
-            //Consulta por nombre, apellido, cedula o correo
-            ->when($request->filled('search'),
-                function ($query) use ($request) {
-                    $query->search($request->search);
-                }
-            )
-            ->when($request->filled('start_date') && $request->filled('end_date'),
-                function ($query) use ($start_date, $end_date) {
-                    $query->whereBetween('created_at', [$start_date, $end_date]);
-                }
-            )
-            //Trae los registros 'eliminados'
-            ->onlyTrashed()
-            ->paginate($request->perPage);
+                //Consulta por nombre, apellido, cedula o correo
+                ->when($request->filled('search'),
+                    function ($query) use ($request) {
+                        $query->search($request->search);
+                    }
+                )
+                ->when($request->filled('start_date') && $request->filled('end_date'),
+                    function ($query) use ($start_date, $end_date) {
+                        $query->filterByDate($start_date, $end_date);
+                    }
+                )
+                ->orderBy($request->column, $request->dir)
+                ->onlyTrashed() //Trae los registros 'eliminados'
+                ->paginate($request->perPage);
+
             return $this->successResponse(
                 new UserInactivesCollection($users),
                 $this->success,
                 200
             );
+        } catch (QueryException $e) {
+            // Manejar la excepción de la base de datos
+            return $this->errorResponse(
+                [
+                    'message' => $this->errorQueryException,
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
         } catch (Exception $e) {
             return $this->errorResponse(
                 [
-                    'message' => $this->error,
+                    'message' => $this->errorException,
                     'error' => $e->getMessage()
                 ],
                 500
@@ -204,17 +214,25 @@ class UserController extends Controller
             $user->email = $request->email;
             $user->password = Hash::make($request->password);
             $user->save();
-            
+
             return $this->successResponse(
                 $user,
                 'Usuario creado exitosamente.',
                 201
             );
+        } catch (ModelNotFoundException $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->errorModelNotFoundException,
+                    'error' => $e->getMessage()
+                ],
+                404
+            );
         } catch (Exception $e) {
             // Devolver una respuesta de error en caso de excepción
             return $this->errorResponse(
                 [
-                    'message' => $this->error,
+                    'message' => $this->errorException,
                     'error' => $e->getMessage()
                 ],
                 500
@@ -255,10 +273,48 @@ class UserController extends Controller
                 'Registro actualizado exitosamente',
                 200
             );
+        } catch (ModelNotFoundException $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->errorModelNotFoundException,
+                    'error' => $e->getMessage()
+                ],
+                404
+            );
         } catch (Exception $e) {
             return $this->errorResponse(
                 [
-                    'message' => $this->error,
+                    'message' => $this->errorException,
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        }
+    }
+
+    public function password(UserPasswordRequest $request, $id)
+    {
+        try {
+            $user = User::findOrFail($id);
+            $user->password = Hash::make($request->password);
+            $user->save();
+            return $this->successResponse(
+                $user,
+                'Contraseña del usuario actualizada exitosamente',
+                200
+            );
+        } catch (ModelNotFoundException $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->errorModelNotFoundException,
+                    'error' => $e->getMessage()
+                ],
+                404
+            );
+        } catch (Exception $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->errorException,
                     'error' => $e->getMessage()
                 ],
                 500
@@ -287,13 +343,21 @@ class UserController extends Controller
             $user = User::findOrFail($request->id)->delete();
             return $this->successResponse(
                 $user,
-                'Registro eliminado exitosamente',
+                'Usuario eliminado exitosamente.',
                 204
+            );
+        } catch (ModelNotFoundException $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->errorModelNotFoundException,
+                    'error' => $e->getMessage()
+                ],
+                404
             );
         } catch (Exception $e) {
             return $this->errorResponse(
                 [
-                    'message' => $this->error,
+                    'message' => $this->errorException,
                     'error' => $e->getMessage()
                 ],
                 500
@@ -322,13 +386,21 @@ class UserController extends Controller
             $user = User::withTrashed()->findOrFail($request->id)->restore();
             return $this->successResponse(
                 $user,
-                'Registro restaurado exitosamente',
+                'Usuario restaurado exitosamente',
                 200
+            );
+        } catch (ModelNotFoundException $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->errorModelNotFoundException,
+                    'error' => $e->getMessage()
+                ],
+                404
             );
         } catch (Exception $e) {
             return $this->errorResponse(
                 [
-                    'message' => $this->error,
+                    'message' => $this->errorException,
                     'error' => $e->getMessage()
                 ],
                 500
@@ -359,7 +431,7 @@ class UserController extends Controller
     {
         try {
             // Obtener el rol existente
-            $role = Role::where('name', '=', $request->role)->first();
+            $role = Role::where('name', '=', $request->role)->firstOrFail();
             $user = User::findOrFail($request->id);
             if (!$role) {
                 return $this->successResponse(
@@ -385,11 +457,19 @@ class UserController extends Controller
                 'Rol y permisos asignados al usuario exitosamente.',
                 200
             );
+        } catch (ModelNotFoundException $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->errorModelNotFoundException,
+                    'error' => $e->getMessage()
+                ],
+                404
+            );
         } catch (QueryException $e) {
             // Manejar la excepción de la base de datos
             return $this->errorResponse(
                 [
-                    'message' => $this->error,
+                    'message' => $this->errorQueryException,
                     'error' => $e->getMessage()
                 ],
                 500
@@ -398,7 +478,7 @@ class UserController extends Controller
             // Manejar otras excepciones
             return $this->errorResponse(
                 [
-                    'message' => $this->error,
+                    'message' => $this->errorException,
                     'error' => $e->getMessage()
                 ],
                 500
@@ -440,7 +520,7 @@ class UserController extends Controller
             // Manejar la excepción de la base de datos
             return $this->errorResponse(
                 [
-                    'message' => $this->error,
+                    'message' => $this->errorModelNotFoundException,
                     'error' => $e->getMessage()
                 ],
                 404
@@ -448,7 +528,7 @@ class UserController extends Controller
         } catch (Exception $e) {
             return $this->errorResponse(
                 [
-                    'message' => $this->error,
+                    'message' => $this->errorException,
                     'error' => $e->getMessage()
                 ],
                 500

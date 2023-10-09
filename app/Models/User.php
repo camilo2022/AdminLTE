@@ -21,8 +21,13 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'last_name',
+        'document_number',
+        'phone_number',
+        'address',
         'email',
         'password',
+        'enterprise_id',
     ];
 
     /**
@@ -52,7 +57,7 @@ class User extends Authenticatable
         } elseif (is_string($search)) {
             // Filtrar por campos de texto
             return $this->scopeSearchByString($query, $search);
-        } 
+        }
     }
 
     public function scopeSearchByString($query, $search)
@@ -77,7 +82,7 @@ class User extends Authenticatable
             }
         );
     }
-    
+
     public function scopeFilterByRole($query, $role)
     {
         if (is_array($role)) {
@@ -91,7 +96,7 @@ class User extends Authenticatable
             return $this->filterByNumericRole($query, $role);
         }
     }
-    
+
     protected function filterByArrayRole($query, $role)
     {
         return $query->whereHas('roles',

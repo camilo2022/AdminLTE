@@ -5,13 +5,13 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1 class="m-0 text-dark">Usuarios</h1>
+                        <h1 class="m-0 text-dark">Usuarios Inactivos</h1>
                     </div><!-- /.col -->
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item">Dashboard</li>
                             <li class="breadcrumb-item">User</li>
-                            <li class="breadcrumb-item">Index</li>
+                            <li class="breadcrumb-item">Inactives</li>
                         </ol>
                     </div><!-- /.col -->
                 </div><!-- /.row -->
@@ -31,25 +31,25 @@
                                     </a>
                                 </li>
                                 <li class="nav-item ml-auto">
-                                    <a class="nav-link active" href="/Dashboard/Users/Index" title="Usuarios activos">
+                                    <a class="nav-link" href="/Dashboard/Users/Index" title="Usuarios activos">
                                         <i class="fas fa-user-check"></i>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="/Dashboard/Users/Inactives" title="Usuarios inactivos">
+                                    <a class="nav-link active" href="/Dashboard/Users/Inactives" title="Usuarios inactivos">
                                         <i class="fas fa-user-xmark"></i>
                                     </a>
                                 </li>
                             </ul>
                         </div>
+
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table id="users" class="table table-bordered table-hover dataTable dtr-inline">
                                     <thead class="thead-dark">
                                         <tr>
                                             <th colspan="7">Información Personal</th>
-                                            <th colspan="3">Gestionar Usuario</th>
-                                            <th colspan="2">Roles y Permisos</th>
+                                            <th colspan="1">Gestionar Usuario</th>
                                         </tr>
                                         <tr>
                                             <th>#</th>
@@ -59,23 +59,21 @@
                                             <th>Telefono</th>
                                             <th>Direccion</th>
                                             <th>Email</th>
-                                            <th>Contraseña</th>
-                                            <th>Editar</th>
-                                            <th>Eliminar</th>
-                                            <th>Asignar</th>
-                                            <th>Remover</th>
+                                            <th>Restaurar</th>
                                         </tr>
                                     </thead>
+
                                     <tbody>
+
                                     </tbody>
                                 </table>
                             </div>
                         </div>
+
                     </div>
                 </div>
             </div>
         </div>
-        @include('Dashboard.Users.Password')
     </section>
 @endsection
 @section('script')
@@ -85,7 +83,7 @@
             "processing": true,
             "serverSide": true,
             "ajax": {
-                "url": "/Dashboard/Users/Index/Query",
+                "url": "/Dashboard/Users/Inactives/Query",
                 "type": "POST",
                 "data": function (request) {
                     var columnMappings = {
@@ -119,53 +117,16 @@
                 {
                     data: null,
                     render: function (data, type, row) {
-                        return `<a onclick="PasswordUserModal(${data.id}, '${data.email}')"
-                            type="button" data-target="#PasswordUserModal" data-toggle='modal'
-                            class="btn bg-dark btn-sm" title="Recuperar contraseña">
-                                <i class="fas fa-user-gear text-white"></i>
-                            </a>`;
-                    }
-                },
-                {
-                    data: null,
-                    render: function (data, type, row) {
-                        return `<a href="/Dashboard/Users/Edit/${data.id}" class="btn btn-primary btn-sm"
-                            title="Editar usuario">
-                                <i class="fas fa-user-pen"></i>
-                            </a>`;
-                    }
-                },
-                {
-                    data: null,
-                    render: function (data, type, row) {
-                        return `<a class="btn btn-danger btn-sm" onclick="DeleteUser(${data.id})"
-                            title="Eliminar usuario" id="DeleteUserButton">
-                                <i class="fas fa-user-minus text-white"></i>
-                            </a>`;
-                    }
-                },
-                {
-                    data: null,
-                    render: function (data, type, row) {
-                        return `<a href="/Dashboard/Users/Edit/${data.id}" class="btn btn-success btn-sm"
-                            title="Asignar rol y permisos al usuario">
-                                <i class="fas fa-user-unlock"></i>
-                            </a>`;
-                    }
-                },
-                {
-                    data: null,
-                    render: function (data, type, row) {
-                        return `<a href="/Dashboard/Users/Edit/${data.id}" class="btn btn-warning btn-sm"
-                            title="Remover rol y permisos al usuario">
-                                <i class="fas fa-user-lock"></i>
+                        return `<a class="btn btn-info btn-sm" onclick="RestoreUser(${data.id})"
+                            title="Restaurar usuario">
+                                <i class="fas fa-user-plus text-white"></i>
                             </a>`;
                     }
                 },
             ],
             "columnDefs": [
                 { "orderable": true, "targets": [0, 1, 2, 3, 4, 5, 6] },
-                { "orderable": false, "targets": [7, 8, 9, 10, 11] }
+                { "orderable": false, "targets": [7] }
             ],
             "pagingType": "full_numbers",
             "language": {
@@ -189,95 +150,26 @@
             "lengthMenu": [10, 25, 50, 100],
             "paging": true,
             "info": false,
-            "searching": true,
-            "autoWidth": true,
+            "searching": true
         });
 
-        function PasswordUserModal(id, email) {
-            $('#PasswordUserButton').attr('onclick', `PasswordUser(${id})`);
-
-            $("#email").val(email);
-            $("#password").val('')
-            $("#password_confirmation").val('')
-        }
-
-        function PasswordUserVisibility(id) {
-            let passwordInput = $(`#${id}`);
-            let passwordIcon = passwordInput.closest('.input-group');
-            if (passwordInput.attr('type') == 'password') {
-                passwordInput.attr('type', 'text');
-                passwordIcon.find('.fa-eye').toggleClass('fa-eye fa-eye-slash');
-            } else if (passwordInput.attr('type') == 'text') {
-                passwordInput.attr('type', 'password');
-                passwordIcon.find('.fa-eye-slash').toggleClass('fa-eye-slash fa-eye');
-            }
-        }
-
-        function PasswordUser(id) {
+        function RestoreUser(id) {
             Swal.fire({
-                title: '¿Desea actualizar la contraseña el usuario?',
-                text: 'El usuario se le actualizara la contraseña.',
+                title: '¿Desea restaurar el usuario?',
+                text: 'El usuario será restaurado.',
                 icon: 'warning',
                 showCancelButton: true,
                 cancelButtonColor: '#DD6B55',
                 confirmButtonColor: '#3085d6',
-                confirmButtonText: 'Si, guardar!',
+                confirmButtonText: 'Si, restaurar!',
                 cancelButtonText: 'No, cancelar!',
                 closeOnConfirm: false,
                 closeOnCancel: false
             }).then((result) => {
                 if (result.value) {
                     $.ajax({
-                        url: '/Dashboard/Users/Password/'+id,
+                        url: '/Dashboard/Users/Restore',
                         type: 'PUT',
-                        data: {
-                            '_token': "{{ csrf_token() }}",
-                            'id': id,
-                            'password': $("#password").val(),
-                            'password_confirmation': $("#password_confirmation").val()
-                        },
-                        success: function(response) {
-                            tableUsers.ajax.reload();
-                            toastr.success(response.message)
-                            $('#PasswordUserModal').modal('hide');
-                        },
-                        error: function(xhr, textStatus, errorThrown) {
-                            tableUsers.ajax.reload();
-                            if(xhr.responseJSON.error){
-                                toastr.error(xhr.responseJSON.error.message)
-                            }
-                            if(xhr.responseJSON.errors){
-                                $.each(xhr.responseJSON.errors, function(field, messages) {
-                                    $.each(messages, function(index, message) {
-                                        toastr.error(message)
-                                    });
-                                });
-                            }
-                        }
-                    });
-                } else {
-                    toastr.error('El usuario no se le actualizo la contraseña.')
-                }
-            });
-        }
-
-        function DeleteUser(id) {
-            Swal.fire({
-                title: '¿Desea eliminar el usuario?',
-                text: 'El usuario será desactivado.',
-                icon: 'warning',
-                showCancelButton: true,
-                cancelButtonColor: '#DD6B55',
-                confirmButtonColor: '#3085d6',
-                confirmButtonText: 'Si, eliminar!',
-                cancelButtonText: 'No, cancelar!',
-                closeOnConfirm: false,
-                closeOnCancel: false
-            }).then((result) => {
-                if (result.value) {
-                    $.ajax({
-                        url: '/Dashboard/Users/Delete',
-                        type: 'DELETE',
                         data: {
                             '_token': "{{ csrf_token() }}",
                             'id': id
@@ -301,7 +193,7 @@
                         }
                     });
                 } else {
-                    toastr.error('El usuario seleccionado no fue eliminado.')
+                    toastr.error('El usuario seleccionado no fue restaurado.')
                 }
             });
         }
@@ -315,6 +207,7 @@
                 toastr.error(' {{ $error }} ')
             @endforeach
         @endif
+
 
     </script>
 @endsection
