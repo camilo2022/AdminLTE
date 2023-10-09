@@ -46,63 +46,78 @@ class User extends Authenticatable
 
     public function scopeSearch($query, $search)
     {
+        if (is_numeric($search)) {
+            // Filtrar por campos numericos
+            return $this->scopeSearchByNumeric($query, $search);
+        } elseif (is_string($search)) {
+            // Filtrar por campos de texto
+            return $this->scopeSearchByString($query, $search);
+        } 
+    }
+
+    public function scopeSearchByString($query, $search)
+    {
         return $query->where(
-            function ($subQuery) use ($search) {
-                // Busco en la base de datos por coincidencias en "name", "last_name" e "email" y
-                // por valores exactos en "document_number"
-                $subQuery->where('name', 'like', '%' . $search . '%')
+            function ($stringQuery) use ($search) {
+                $stringQuery->where('name', 'like', '%' . $search . '%')
                     ->orWhere('last_name', 'like', '%' . $search . '%')
-                    ->orWhere('document_number', '=', $search)
-                    ->orWhere('email', 'like', '%' . $search . '%')
-                    ->orWhereHas('roles',
-                        function ($subRoleQuery) use ($search) {
-                            $subRoleQuery->where('name', 'like',  '%' . $search . '%');
-                        }
-                    );
+                    ->orWhere('address', 'like', '%' . $search . '%')
+                    ->orWhere('email', 'like', '%' . $search . '%');
+            }
+        );
+    }
+
+    public function scopeSearchByNumeric($query, $search)
+    {
+        return $query->where(
+            function ($numericQuery) use ($search) {
+                $numericQuery->where('id', 'like', '%' . $search . '%')
+                    ->orWhere('document_number', 'like', '%' . $search . '%')
+                    ->orWhere('phone_number', 'like', '%' . $search . '%');
             }
         );
     }
     
-    public function scopeFilterByRole($query, $request)
+    public function scopeFilterByRole($query, $role)
     {
-        if (is_array($request->role)) {
+        if (is_array($role)) {
             // Filtrar por roles en el arreglo
-            return $this->filterByArrayRole($query, $request);
-        } elseif (is_string($request->role)) {
+            return $this->filterByArrayRole($query, $role);
+        } elseif (is_string($role)) {
             // Filtrar por un rol específico
-            return $this->filterByStringRole($query, $request);
-        } elseif (is_numeric($request->role)) {
+            return $this->filterByStringRole($query, $role);
+        } elseif (is_numeric($role)) {
             // Filtrar por id del rol
-            return $this->filterByNumericRole($query, $request);
+            return $this->filterByNumericRole($query, $role);
         }
     }
     
-    protected function filterByArrayRole($query, $request)
+    protected function filterByArrayRole($query, $role)
     {
         return $query->whereHas('roles',
             // Busca solo los roles que estan en el array
-            function ($roleQuery) use ($request) {
-                $roleQuery->whereIn('name', $request->role);
+            function ($roleArrayQuery) use ($role) {
+                $roleArrayQuery->whereIn('name', $role);
             }
         );
     }
 
-    public function filterByStringRole($query, $request)
+    public function filterByStringRole($query, $role)
     {
         return $query->whereHas('roles',
             // Busca el rol que esta en la variable
-            function ($roleQuery) use ($request) {
-                $roleQuery->where('name', '=', $request->role);
+            function ($roleStringQuery) use ($role) {
+                $roleStringQuery->where('name', '=', $role);
             }
         );
     }
 
-    protected function filterByNumericRole($query, $request)
+    protected function filterByNumericRole($query, $role)
     {
         return $query->whereHas('roles',
             // Busca solo los roles que estan en el array
-            function ($roleQuery) use ($request) {
-                $roleQuery->where('id', 'like', '%' . $request->role . '%' );
+            function ($roleNumericQuery) use ($role) {
+                $roleNumericQuery->where('id', 'like', '%' . $role . '%' );
             }
         );
     }
@@ -112,5 +127,4 @@ class User extends Authenticatable
         // Filtro por rango de fechas entre 'start_date' y 'end_date' en el campo 'created_at'
         return $query->whereBetween('created_at', [$start_date, $end_date]);
     }
-
 }

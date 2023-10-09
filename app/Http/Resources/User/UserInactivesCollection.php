@@ -2,7 +2,7 @@
 namespace App\Http\Resources\User;
 use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\ResourceCollection;
-class UserIndexCollection extends ResourceCollection
+class UserInactivesCollection extends ResourceCollection
 {
      /**
      * OJO SI VOY A ENVIAR UN ARRAY DE MUCHOS DATOS SE USAN LAS COLLECTIOSNES PARA DARLE FORMATO A LA RESPUESTA
@@ -28,7 +28,6 @@ class UserIndexCollection extends ResourceCollection
                     'updated_at' => Carbon::parse($user->updated_at)->format('Y-m-d H:i:s'),
                     'roles' => $user->roles,
                     'permissions' => $user->permissions,
-                    'configuration_campaign' => $user->configuration->first()
                 ];
             }),
             'meta' => [

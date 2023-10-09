@@ -3,9 +3,8 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Spatie\Permission\Models\Role;
+use Faker\Factory as Faker;
 
 class UserSeeder extends Seeder
 {
@@ -16,7 +15,39 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        User::create([
+        $RolesAndPermissions = [
+            (object) [
+                'role' => 'Dashboard',
+                'permissions' => [
+                    'Dashboard'
+                ]
+            ],
+            (object) [
+                'role' => 'Users',
+                'permissions' => [
+                    'Dashboard.Users.Index',
+                    'Dashboard.Users.Index.Query',
+                    'Dashboard.Users.Inactives',
+                    'Dashboard.Users.Store',
+                    'Dashboard.Users.Update',
+                    'Dashboard.Users.Delete',
+                    'Dashboard.Users.Restore',
+                    'Dashboard.Users.AssignRoleAndPermissions',
+                    'Dashboard.Users.RemoveRoleAndPermissions'
+                ]
+            ],
+            (object) [
+                'role' => 'RolesAndPermissions',
+                'permissions' => [
+                    'Dashboard.RolesAndPermissions.Index',
+                    'Dashboard.RolesAndPermissions.Store',
+                    'Dashboard.RolesAndPermissions.Update',
+                    'Dashboard.RolesAndPermissions.Delete',
+                ]
+            ]
+        ];
+
+        $user = User::create([
             'name' => 'Camilo Andres',
             'last_name' => 'Acacio Gutierrez',
             'document_number' => '1004845200',
@@ -26,5 +57,25 @@ class UserSeeder extends Seeder
             'password' => bcrypt('12345678'),
             'enterprise_id' => 1,
         ]);
+
+        foreach($RolesAndPermissions as $RoleAndPermission) {
+            // Crear o recuperar un permiso con el nombre proporcionado
+            $user->assignRole([$RoleAndPermission->role]);
+            $user->givePermissionTo($RoleAndPermission->permissions);
+        };
+        $faker = Faker::create();
+
+        foreach (range(1, 100) as $index) {
+            User::create([
+                'name' => $faker->firstName,
+                'last_name' => $faker->lastName,
+                'document_number' => $faker->unique()->numberBetween(1000000000, 9999999999),
+                'phone_number' => $faker->phoneNumber,
+                'address' => $faker->address,
+                'email' => $faker->unique()->safeEmail,
+                'password' => bcrypt('12345678'),
+                'enterprise_id' => 1,
+            ]);
+        }
     }
 }

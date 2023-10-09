@@ -5,17 +5,20 @@ use App\Models\User;
 use App\Traits\ApiResponser;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\AssignRoleAndPermissionsRequest;
-use App\Http\Requests\User\UserIndexRequest;
-use App\Http\Resources\User\UserIndexCollection;
+use App\Http\Requests\User\UserIndexQueryRequest;
+use App\Http\Resources\User\UserIndexQueryCollection;
 use App\Http\Requests\User\RemoveRolesAndPermissionsRequest;
 use App\Http\Requests\User\UserDeleteRequest;
 use App\Http\Requests\User\UserInactivesRequest;
 use App\Http\Requests\User\UserRestoreRequest;
 use App\Http\Requests\User\UserStoreRequest;
 use App\Http\Requests\User\UserUpdateRequest;
+use App\Http\Resources\User\UserInactivesCollection;
 use Exception;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 class UserController extends Controller
@@ -49,6 +52,21 @@ class UserController extends Controller
      */
     private $error = 'Algo salió mal.';
 
+    public function index()
+    {
+        try {
+            return view('Dashboard.Users.Index');
+        } catch (Exception $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->error,
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        }
+    }
+
     /**
      * Listado de usuarios con filtros y paginación.
      *
@@ -60,7 +78,7 @@ class UserController extends Controller
      *
      * Si los parámetros de filtro están presentes en la solicitud, se aplicarán a la consulta.
      *
-     * @param \App\Http\Requests\UserIndexRequest $request La solicitud HTTP con los parámetros de filtro y paginación.
+     * @param \App\Http\Requests\UserIndexQueryRequest $request La solicitud HTTP con los parámetros de filtro y paginación.
      *
      * @return \Illuminate\Pagination\LengthAwarePaginator
      * Una lista paginada de usuarios que cumplen con los filtros especificados.
@@ -68,7 +86,7 @@ class UserController extends Controller
      * @throws \Exception
      * Devuelve una respuesta de error en caso de excepción.
      */
-    public function index(UserIndexRequest $request)
+    public function indexQuery(UserIndexQueryRequest $request)
     {
         try {
             $start_date = Carbon::parse($request->start_date)->startOfDay();
@@ -87,12 +105,13 @@ class UserController extends Controller
                 )
                 ->when($request->filled('role'),
                     function ($query) use ($request) {
-                        $query->filterByRole($request);
+                        $query->filterByRole($request->role);
                     }
                 )
                 ->paginate($request->perPage);
+                
             return $this->successResponse(
-                new UserIndexCollection($users),
+                new UserIndexQueryCollection($users),
                 $this->success,
                 200
             );
@@ -145,7 +164,7 @@ class UserController extends Controller
             ->onlyTrashed()
             ->paginate($request->perPage);
             return $this->successResponse(
-                new UserIndexCollection($users),
+                new UserInactivesCollection($users),
                 $this->success,
                 200
             );

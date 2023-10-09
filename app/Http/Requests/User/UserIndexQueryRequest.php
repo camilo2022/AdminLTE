@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class UserIndexRequest extends FormRequest
+class UserIndexQueryRequest extends FormRequest
 {
     /**
      * Maneja una solicitud fallida de validación.
@@ -52,12 +52,8 @@ class UserIndexRequest extends FormRequest
         return [
             'start_date.required' => 'El campo Fecha de inicio es requerido.',
             'start_date.date' => 'El campo Fecha de inicio debe ser una fecha válida.',
-
-            'end_date.required' => 'El campo Fecha de fin es requerido.',
             'end_date.date' => 'El campo Fecha de fin debe ser una fecha válida.',
             'end_date.after_or_equal' => 'El campo Fecha de fin debe ser igual o posterior a la Fecha de inicio.',
-
-            'perPage.required' => 'El campo Por página es requerido.',
             'perPage.numeric' => 'El campo Por página debe ser un valor numérico.',
         ];
     }
@@ -65,9 +61,9 @@ class UserIndexRequest extends FormRequest
     public function attributes()
     {
         return [
-            'start_date' => 'Fecha de inicio',
-            'end_date' => 'Fecha de fin',
-            'perPage' => 'Numero de página',
+            'start_date' => 'fecha de inicio',
+            'end_date' => 'fecha de fin',
+            'perPage' => 'numero de páginas',
         ];
     }
 }

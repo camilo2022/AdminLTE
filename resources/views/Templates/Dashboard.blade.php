@@ -46,6 +46,8 @@
     <!-- DataTables -->
     <link rel="stylesheet" href="{{ asset('css/plugins/datatables-bs4/css/dataTables.bootstrap4.css') }}">
 
+    <link rel="stylesheet" href="{{ asset('css/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
+
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -215,7 +217,7 @@
 
                 <!-- Sidebar Menu -->
                 <nav class="mt-2">
-                    <ul class="nav nav-pills nav-sidebar flex-column text-sm" data-widget="treeview" role="menu"
+                    <ul class="nav nav-pills nav-sidebar flex-column nav-child-indent" data-widget="treeview" role="menu"
                         data-accordion="false">
                         <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
@@ -256,27 +258,25 @@
                                 </p>
                             </a>
                         </li>
-                        @foreach ($modules->modules as $module)
-                            <li class="nav-item has-treeview">
-                                <a href="#" class="nav-link">
-                                    <i class="nav-icon {{ $module->icon }}"></i>
-                                    <p>
-                                        {{ $module->name }}
-                                        <i class="right fas fa-angle-left"></i>
-                                    </p>
-                                </a>
-                                <ul class="nav nav-treeview">
-                                    @foreach ($module->submodules as $submodule)
-                                        <li class="nav-item">
-                                            <a href="{{ $submodule->route }}" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>{{ $submodule->name }}</p>
-                                            </a>
-                                        </li>
-                                    @endforeach
-                                </ul>
-                            </li>
-                        @endforeach
+
+                        <li class="nav-item has-treeview">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-cog"></i>
+                                <p>
+                                    Configuración
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="/Dashboard/Users/Index" class="nav-link">
+                                            <i class="fas fa-user nav-icon"></i>
+                                            <p>Usuarios</p>
+                                        </a>
+                                    </li>
+                            </ul>
+                        </li>
+
                     </ul>
                 </nav>
                 <!-- /.sidebar-menu -->
@@ -381,6 +381,8 @@
 
     <script src="{{ asset('js/ekko-lightbox/ekko-lightbox.min.js') }}"></script>
     <script src="{{ asset('js/filterizr/jquery.filterizr.min.js') }}"></script>
+    
+    <script src="{{ asset('js/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
     @yield('script')
 
 </body>
