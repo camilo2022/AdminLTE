@@ -4,6 +4,7 @@ use Carbon\Carbon;
 use App\Models\User;
 use App\Traits\ApiResponser;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\User\AssignRoleAndPermissionsQueryRequest;
 use App\Http\Requests\User\AssignRoleAndPermissionsRequest;
 use App\Http\Requests\User\UserIndexQueryRequest;
 use App\Http\Resources\User\UserIndexQueryCollection;
@@ -273,7 +274,7 @@ class UserController extends Controller
             $user->save();
             return $this->successResponse(
                 $user,
-                'Registro actualizado exitosamente',
+                'Registro actualizado exitosamente.',
                 200
             );
         } catch (ModelNotFoundException $e) {
@@ -303,7 +304,7 @@ class UserController extends Controller
             $user->save();
             return $this->successResponse(
                 $user,
-                'Contraseña del usuario actualizada exitosamente',
+                'Contraseña del usuario actualizada exitosamente.',
                 200
             );
         } catch (ModelNotFoundException $e) {
@@ -389,7 +390,7 @@ class UserController extends Controller
             $user = User::withTrashed()->findOrFail($request->id)->restore();
             return $this->successResponse(
                 $user,
-                'Usuario restaurado exitosamente',
+                'Usuario restaurado exitosamente.',
                 200
             );
         } catch (ModelNotFoundException $e) {
@@ -408,6 +409,50 @@ class UserController extends Controller
                 ],
                 500
             );
+        }
+    }
+
+    public function assignRoleAndPermissionsQuery(AssignRoleAndPermissionsQueryRequest $request)
+    {
+        try {
+            if ($request->ajax()) {
+
+                $roles = Role::all()
+                ->reject(function ($role) use ($request) {
+                    return User::find($request->id)
+                        ->hasRole($role->name);
+                })
+                ->filter(function ($role) use ($request) {
+                    return User::find($request->id)->hasRole($role->name) &&
+                        !User::find($request->id)->hasAllPermissions($role->permissions);
+                });
+
+                return $this->successResponse(
+                    $roles,
+                    'Usuario restaurado exitosamente',
+                    200
+                );
+            }
+        } catch (ModelNotFoundException $e) {
+            if ($request->ajax()) {
+                return $this->errorResponse(
+                    [
+                        'message' => $this->errorModelNotFoundException,
+                        'error' => $e->getMessage()
+                    ],
+                    500
+                );
+            }
+        } catch (Exception $e) {
+            if ($request->ajax()) {
+                return $this->errorResponse(
+                    [
+                        'message' => $this->errorException,
+                        'error' => $e->getMessage()
+                    ],
+                    500
+                );
+            }
         }
     }
 
@@ -439,15 +484,15 @@ class UserController extends Controller
             if (!$role) {
                 return $this->successResponse(
                     $user,
-                    'El rol especificado no existe',
+                    'El rol especificado no existe.',
                     404
                 );
             }
             // Verificar si el usuario ya tiene el rol
-            if ($user->hasRole($role->name)) {
+            if ($user->hasRole($request->role)) {
                 return $this->successResponse(
                     $user,
-                    'El usuario ya tiene el rol asignado',
+                    'El usuario ya tiene el rol asignado.',
                     400
                 );
             }
@@ -510,7 +555,7 @@ class UserController extends Controller
     {
         try {
             $user = User::findOrFail($request->id);
-            
+
             // Remover los permisos del usuario
             $user->revokePermissionTo($request->permissions);
 

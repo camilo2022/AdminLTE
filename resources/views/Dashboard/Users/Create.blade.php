@@ -1,4 +1,4 @@
-<div class="modal fade bd-example-modal-lg" id="CreateUserModal" tabindex="-1" role="dialog" 
+<div class="modal fade bd-example-modal-lg" id="CreateUserModal" tabindex="-1" role="dialog"
     aria-labelledby="exampleModalLabel" data-backdrop="static" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -29,13 +29,13 @@
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="document_number_s">Numero de documento</label>
-                            <input type="number" class="form-control" id="document_number_s" name="document_number">
+                            <input type="number" class="form-control" id="document_number_s" name="document_number" onkeypress="Numbers(this)">
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="phone_number_s">Numero de telefono</label>
-                            <input type="number" class="form-control" id="phone_number_s" name="phone_number">
+                            <input type="number" class="form-control" id="phone_number_s" name="phone_number" onkeypress="Numbers(this)">
                         </div>
                     </div>
                 </div>

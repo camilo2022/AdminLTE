@@ -35,7 +35,9 @@ class UserSeeder extends Seeder
                     'Dashboard.Users.Delete',
                     'Dashboard.Users.Restore',
                     'Dashboard.Users.AssignRoleAndPermissions',
-                    'Dashboard.Users.RemoveRoleAndPermissions'
+                    'Dashboard.Users.AssignRoleAndPermissions.Query',
+                    'Dashboard.Users.RemoveRoleAndPermissions',
+                    'Dashboard.Users.RemoveRoleAndPermissions.Query'
                 ]
             ],
             (object) [
@@ -73,7 +75,7 @@ class UserSeeder extends Seeder
                 'name' => $faker->firstName,
                 'last_name' => $faker->lastName,
                 'document_number' => $faker->unique()->numberBetween(1000000000, 9999999999),
-                'phone_number' => $faker->phoneNumber,
+                'phone_number' => $faker->numberBetween(3000000000, 3999999999),
                 'address' => $faker->address,
                 'email' => $faker->unique()->safeEmail,
                 'password' => bcrypt('12345678'),
