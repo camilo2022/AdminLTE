@@ -43,6 +43,7 @@ class UserStoreRequest extends FormRequest
             'address' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed',
+            'password_confirmation' => 'required|string'
         ];
     }
     // Mensajes de error personalizados para cada regla de validación

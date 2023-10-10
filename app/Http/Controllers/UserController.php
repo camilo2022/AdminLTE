@@ -18,6 +18,7 @@ use App\Http\Resources\User\UserInactivesCollection;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 
@@ -213,6 +214,7 @@ class UserController extends Controller
             $user->address = $request->address;
             $user->email = $request->email;
             $user->password = Hash::make($request->password);
+            $user->enterprise_id = Auth::user()->enterprise_id;
             $user->save();
 
             return $this->successResponse(
@@ -267,6 +269,7 @@ class UserController extends Controller
             $user->phone_number = $request->phone_number;
             $user->address = $request->address;
             $user->email = $request->email;
+            $user->enterprise_id = Auth::user()->enterprise_id;
             $user->save();
             return $this->successResponse(
                 $user,
@@ -507,10 +510,13 @@ class UserController extends Controller
     {
         try {
             $user = User::findOrFail($request->id);
-            // Remover todos los roles del usuario
-            $user->removeRole($request->role);
-            // Remover todos los permisos del usuario
+            
+            // Remover los permisos del usuario
             $user->revokePermissionTo($request->permissions);
+
+            // Remover el rol del usuario
+            $user->removeRole($request->role);
+
             return $this->successResponse(
                 $user,
                 'Rol y permisos removidos al usuario exitosamente.',

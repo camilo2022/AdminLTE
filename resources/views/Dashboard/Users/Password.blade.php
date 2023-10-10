@@ -13,25 +13,25 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label for="email">Correo Electronico</label>
-                    <input type="text" class="form-control" id="email" name="email" readonly>
+                    <input type="text" class="form-control" id="email_p" name="email" readonly>
                 </div>
                 <div class="form-group">
-                    <label for="password">Nueva contraseña</label>
+                    <label for="password_p">Nueva contraseña</label>
                     <div class="input-group">
-                        <input type="password" class="form-control" id="password" name="password">
+                        <input type="password" class="form-control" id="password_p" name="password">
                         <div class="input-group-append">
-                            <span class="input-group-text" id="password-toggle" onclick="PasswordUserVisibility('password')">
+                            <span class="input-group-text" id="password-toggle" onclick="PasswordUserVisibility('password_p')">
                                 <i class="fas fa-eye"></i>
                             </span>
                         </div>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="password_confirmation">Confirmacion contraseña</label>
+                    <label for="password_confirmation_p">Confirmacion contraseña</label>
                     <div class="input-group">
-                        <input type="password" class="form-control" id="password_confirmation" name="password_confirmation">
+                        <input type="password" class="form-control" id="password_confirmation_p" name="password_confirmation">
                         <div class="input-group-append">
-                            <span class="input-group-text" id="password-confirmation-toggle" onclick="PasswordUserVisibility('password_confirmation')">
+                            <span class="input-group-text" id="password-confirmation-toggle" onclick="PasswordUserVisibility('password_confirmation_p')">
                                 <i class="fas fa-eye"></i>
                             </span>
                         </div>
@@ -39,8 +39,12 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-primary" id="PasswordUserButton" onclick="">Guardar</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" title="Cerrar ventana">
+                    <i class="fas fa-xmark"></i>
+                </button>
+                <button type="button" class="btn btn-primary" id="PasswordUserButton" onclick="" title="Guardar contraseña">
+                    <i class="fas fa-floppy-disk"></i>
+                </button>
             </div>
         </div>
     </div>

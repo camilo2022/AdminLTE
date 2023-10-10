@@ -26,7 +26,7 @@
                         <div class="card-header p-2">
                             <ul class="nav nav-pills">
                                 <li class="nav-item">
-                                    <a class="nav-link active" href="" title="Agregar usuario">
+                                    <a class="nav-link active" type="button" data-target="#CreateUserModal" data-toggle='modal' title="Agregar usuario">
                                         <i class="fas fa-user-plus"></i>
                                     </a>
                                 </li>
@@ -76,6 +76,7 @@
             </div>
         </div>
         @include('Dashboard.Users.Password')
+        @include('Dashboard.Users.Create')
     </section>
 @endsection
 @section('script')
@@ -193,12 +194,73 @@
             "autoWidth": true,
         });
 
+        function CreateUser() {
+            Swal.fire({
+                title: '¿Desea guardar el usuario?',
+                text: 'El usuario será creado.',
+                icon: 'warning',
+                showCancelButton: true,
+                cancelButtonColor: '#DD6B55',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'Si, guardar!',
+                cancelButtonText: 'No, cancelar!',
+                closeOnConfirm: false,
+                closeOnCancel: false
+            }).then((result) => {
+                if (result.value) {
+                    $.ajax({
+                        url: `/Dashboard/Users/Store`,
+                        type: 'POST',
+                        data: {
+                            '_token': "{{ csrf_token() }}",
+                            'name': $("#name_s").val(),
+                            'last_name': $("#last_name_s").val(),
+                            'document_number': $("#document_number_s").val(),
+                            'phone_number': $("#phone_number_s").val(),
+                            'address': $("#address_s").val(),
+                            'email': $("#email_s").val(),
+                            'password': $("#password_s").val(),
+                            'password_confirmation': $("#password_confirmation_s").val()
+                        },
+                        success: function(response) {
+                            tableUsers.ajax.reload();
+                            toastr.success(response.message);
+                            $('#CreateUserModal').modal('hide');
+                            $("#name_s").val('');
+                            $("#last_name_s").val('');
+                            $("#document_number_s").val('');
+                            $("#phone_number_s").val('');
+                            $("#address_s").val('');
+                            $("#email_s").val('');
+                            $("#password_s").val('');
+                            $("#password_confirmation_s").val('');
+                        },
+                        error: function(xhr, textStatus, errorThrown) {
+                            tableUsers.ajax.reload();
+                            if(xhr.responseJSON.error){
+                                toastr.error(xhr.responseJSON.error.message);
+                            }
+                            if(xhr.responseJSON.errors){
+                                $.each(xhr.responseJSON.errors, function(field, messages) {
+                                    $.each(messages, function(index, message) {
+                                        toastr.error(message);
+                                    });
+                                });
+                            }
+                        }
+                    });
+                } else {
+                    toastr.error('El usuario no fue creado.')
+                }
+            });
+        }
+
         function PasswordUserModal(id, email) {
             $('#PasswordUserButton').attr('onclick', `PasswordUser(${id})`);
 
-            $("#email").val(email);
-            $("#password").val('')
-            $("#password_confirmation").val('')
+            $("#email_p").val(email);
+            $("#password_p").val('')
+            $("#password_confirmation_p").val('')
         }
 
         function PasswordUserVisibility(id) {
@@ -228,28 +290,28 @@
             }).then((result) => {
                 if (result.value) {
                     $.ajax({
-                        url: '/Dashboard/Users/Password/'+id,
+                        url: `/Dashboard/Users/Password/${id}`,
                         type: 'PUT',
                         data: {
                             '_token': "{{ csrf_token() }}",
                             'id': id,
-                            'password': $("#password").val(),
-                            'password_confirmation': $("#password_confirmation").val()
+                            'password': $("#password_p").val(),
+                            'password_confirmation': $("#password_confirmation_p").val()
                         },
                         success: function(response) {
                             tableUsers.ajax.reload();
-                            toastr.success(response.message)
+                            toastr.success(response.message);
                             $('#PasswordUserModal').modal('hide');
                         },
                         error: function(xhr, textStatus, errorThrown) {
                             tableUsers.ajax.reload();
                             if(xhr.responseJSON.error){
-                                toastr.error(xhr.responseJSON.error.message)
+                                toastr.error(xhr.responseJSON.error.message);
                             }
                             if(xhr.responseJSON.errors){
                                 $.each(xhr.responseJSON.errors, function(field, messages) {
                                     $.each(messages, function(index, message) {
-                                        toastr.error(message)
+                                        toastr.error(message);
                                     });
                                 });
                             }
@@ -276,7 +338,7 @@
             }).then((result) => {
                 if (result.value) {
                     $.ajax({
-                        url: '/Dashboard/Users/Delete',
+                        url: `/Dashboard/Users/Delete`,
                         type: 'DELETE',
                         data: {
                             '_token': "{{ csrf_token() }}",
@@ -284,17 +346,17 @@
                         },
                         success: function(response) {
                             tableUsers.ajax.reload();
-                            toastr.success(response.message)
+                            toastr.success(response.message);
                         },
                         error: function(xhr, textStatus, errorThrown) {
                             tableUsers.ajax.reload();
                             if(xhr.responseJSON.error){
-                                toastr.error(xhr.responseJSON.error.message)
+                                toastr.error(xhr.responseJSON.error.message);
                             }
                             if(xhr.responseJSON.errors){
                                 $.each(xhr.responseJSON.errors, function(field, messages) {
                                     $.each(messages, function(index, message) {
-                                        toastr.error(message)
+                                        toastr.error(message);
                                     });
                                 });
                             }
