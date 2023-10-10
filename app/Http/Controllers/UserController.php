@@ -417,18 +417,31 @@ class UserController extends Controller
         try {
             if ($request->ajax()) {
 
-                $roles = Role::all()
-                ->reject(function ($role) use ($request) {
-                    return User::find($request->id)
-                        ->hasRole($role->name);
-                })
-                ->filter(function ($role) use ($request) {
-                    return User::find($request->id)->hasRole($role->name) &&
-                        !User::find($request->id)->hasAllPermissions($role->permissions);
-                });
+                $user = User::findOrFail($request->id);
+                $roles = Role::with('permissions')->get();
+
+                $rolesWithMissingPermissions = [];
+
+                foreach ($roles as $role) {
+
+                    $missingPermissions = [];
+
+                    foreach (collect($role->permissions)->pluck('name') as $permission) {
+                        if (!$user->hasRole($role->name) || !$user->hasDirectPermission($permission)) {
+                            $missingPermissions[] = $permission;
+                        }
+                    }
+
+                    if (!empty($missingPermissions)) {
+                        $rolesWithMissingPermissions[] = (object) [
+                            'role' => $role->name,
+                            'permissions' => $missingPermissions
+                        ];
+                    }
+                }
 
                 return $this->successResponse(
-                    $roles,
+                    $rolesWithMissingPermissions,
                     'Usuario restaurado exitosamente',
                     200
                 );
