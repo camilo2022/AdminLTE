@@ -8,7 +8,8 @@ function AssignRoleAndPermissionUserModal(id, email) {
         },
         success: function(response) {
             if (response.data.length == 0) {
-                toastr.info('Tiene todos los roles y permisos ya asignados.')
+                $('#AssignRoleAndPermissionUserModal').modal('hide');
+                toastr.info('Tiene todos los roles y permisos ya asignados.');
                 return false;
             }
 
@@ -16,53 +17,67 @@ function AssignRoleAndPermissionUserModal(id, email) {
             $('#permissions-container-assign').empty();
             $.each(response.data, function (index, item) {
                 // Crear el div del card
-                var card = $('<div class="card collapsed-card">');
+                let card = $('<div class="card collapsed-card">');
 
                 // Crear el div del card-header
-                var cardHeader = $('<div class="card-header border-0 ui-sortable-handle">');
-                var cardTitle = $('<h3 class="card-title mt-1">');
-                var cardIcon = $('<i class="fas fa-shield-check fa-lg mr-1"></i>');
+                let cardHeader = $('<div class="card-header border-0 ui-sortable-handle">');
+                let cardTitle = $('<h3 class="card-title mt-1">');
+                let cardIcon = $('<i class="fas fa-shield-check fa-lg mr-1"></i>');
 
                 cardTitle.append(cardIcon);
                 cardTitle.append(item.role);
 
                 // Crear el div de card-tools
-                var cardTools = $('<div class="card-tools">');
+                let cardTools = $('<div class="card-tools">');
 
-                var collapseButton = $('<button type="button" class="btn btn-info btn-sm" data-card-widget="collapse">');
+                var saveButton = $('<button type="button" class="btn btn-primary btn-sm" title="Remover rol y permisos.">');
+                saveButton.append('<i class="fas fa-floppy-disk"></i>');
+
+                let collapseButton = $('<button type="button" class="btn btn-info btn-sm ml-2" data-card-widget="collapse">');
                 collapseButton.append('<i class="fas fa-plus"></i>');
 
-                var removeButton = $('<button type="button" class="btn btn-danger btn-sm ml-2" data-card-widget="remove">');
+                let removeButton = $('<button type="button" class="btn btn-danger btn-sm ml-2" data-card-widget="remove">');
                 removeButton.append('<i class="fas fa-times"></i>');
 
                 // Agregar elementos al cardHeader
+                cardTools.append(saveButton);
                 cardTools.append(collapseButton);
                 cardTools.append(removeButton);
                 cardHeader.append(cardTitle);
                 cardHeader.append(cardTools);
 
                 // Crear el div del card-body
-                var cardBody = $('<div class="card-body" style="display: none;">');
+                let cardBody = $('<div class="card-body" style="display: none;">');
 
                 // Crear el div para checkboxes
-                var checkboxesDiv = $('<div class="row pl-2 ml-2">');
-                var selectAllCheckbox = $('<input type="checkbox">');
-                var selectAllLabel = $('<label>').text('Seleccionar todos los permisos');
+                let checkboxesDiv = $('<div class="row icheck-primary">');
+                let selectAllCheckbox = $('<input type="checkbox">');
+                selectAllCheckbox.attr('id', `selectAllCheckbox${index}`);
+
+                let selectAllLabel = $('<label>').text('Seleccionar todos los permisos');
+                selectAllLabel.attr('for', `selectAllCheckbox${index}`);
+
                 selectAllCheckbox.change(function() {
-                    var checkboxes = cardBody.find('input[type="checkbox"]');
+                    let checkboxes = cardBody.find('input[type="checkbox"]');
                     checkboxes.prop('checked', selectAllCheckbox.prop('checked'));
                 });
 
                 // Agregar elementos al cardBody
+
                 checkboxesDiv.append(selectAllCheckbox);
                 checkboxesDiv.append(selectAllLabel);
+                checkboxesDiv.append('<br>');
                 cardBody.append(checkboxesDiv);
 
                 // Crear checkboxes para permisos
                 $.each(item.permissions, function (i, permission) {
-                    var permissionDiv = $('<div class="row pl-4 ml-2">');
-                    var permissionCheckbox = $(`<input type="checkbox" id="${permission}">`);
-                    var permissionLabel = $('<label>').text(permission);
+                    let permissionDiv = $('<div class="row pl-2 icheck-primary">');
+                    let permissionCheckbox = $(`<input type="checkbox">`);
+                    permissionCheckbox.attr('id', permission);
+
+                    let permissionLabel = $('<label>').text(permission);
+                    permissionLabel.attr('for', permission);
+                    permissionLabel.attr('class', 'mt-3 ml-3');
 
                     // Agregar elementos al cardBody
                     permissionDiv.append(permissionCheckbox);
@@ -70,17 +85,11 @@ function AssignRoleAndPermissionUserModal(id, email) {
                     cardBody.append(permissionDiv);
                 });
 
-                // Crear el div del card-footer
-                var cardFooter = $('<div class="card-footer bg-transparent" style="display: none;">');
-                var footerRow = $('<div class="row d-flex justify-content-end mr-4 pb-4">');
-                var saveButton = $('<button type="button" class="btn btn-primary" title="Remover rol y permisos.">');
-                saveButton.append('<i class="fas fa-floppy-disk"></i>');
-
                 // Agregar evento click al botón de guardar
                 saveButton.click(function() {
-                    var selectedPermissions = [];
+                    let selectedPermissions = [];
                     cardBody.find('input[type="checkbox"]:checked').each(function() {
-                        if($(this).attr('id') !== undefined) {
+                        if($(this).attr('id') !== `selectAllCheckbox${index}`) {
                             selectedPermissions.push($(this).attr('id'));
                         }
                     });
@@ -89,14 +98,9 @@ function AssignRoleAndPermissionUserModal(id, email) {
                     AssignRoleAndPermission(id, item.role, selectedPermissions, email);
                 });
 
-                // Agregar elementos al cardFooter
-                footerRow.append(saveButton);
-                cardFooter.append(footerRow);
-
                 // Agregar cardHeader, cardBody y cardFooter al card
                 card.append(cardHeader);
                 card.append(cardBody);
-                card.append(cardFooter);
 
                 // Agregar el card al contenedor
                 $('#permissions-container-assign').append(card);
@@ -104,6 +108,7 @@ function AssignRoleAndPermissionUserModal(id, email) {
                 // Mostrar el modal
                 $('#AssignRoleAndPermissionUserModal').modal('show');
             });
+
 
         },
         error: function(xhr, textStatus, errorThrown) {
@@ -146,7 +151,6 @@ function AssignRoleAndPermission(id, role, permissions, email) {
                 success: function(response) {
                     tableUsers.ajax.reload();
                     toastr.success(response.message);
-                    $('#AssignRoleAndPermissionUserModal').modal('hide');
                     AssignRoleAndPermissionUserModal(id, email);
                 },
                 error: function(xhr, textStatus, errorThrown) {
@@ -164,7 +168,7 @@ function AssignRoleAndPermission(id, role, permissions, email) {
                 }
             });
         } else {
-            toastr.error('El rol y los permisos no fueron asignados al usuario.')
+            toastr.info('El rol y los permisos no fueron asignados al usuario.')
         }
     });
 }
