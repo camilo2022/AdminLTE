@@ -5,6 +5,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="user-id" content="{{ Auth::user()->id }}">
     <title>AdminLTE 3 | Dashboard</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -272,12 +273,24 @@
                                 </p>
                             </a>
                             <ul class="nav nav-treeview">
-                                    <li class="nav-item">
-                                        <a href="/Dashboard/Users/Index" class="nav-link">
-                                            <i class="fas fa-user nav-icon"></i>
-                                            <p>Usuarios</p>
-                                        </a>
-                                    </li>
+                                <li class="nav-item">
+                                    <a href="/Dashboard/Users/Index" class="nav-link">
+                                        <i class="fas fa-user nav-icon"></i>
+                                        <p>Usuarios</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/Dashboard/Users/Index" class="nav-link">
+                                        <i class="fas fa-key-skeleton nav-icon"></i>
+                                        <p>Roles y Permisos</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/Dashboard/Users/Index" class="nav-link">
+                                        <i class="fas fa-shield-keyhole nav-icon"></i>
+                                        <p>Enrutamientos</p>
+                                    </a>
+                                </li>
                             </ul>
                         </li>
 

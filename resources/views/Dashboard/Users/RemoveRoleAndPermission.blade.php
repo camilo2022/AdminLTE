@@ -1,10 +1,10 @@
-<div class="modal" id="AssignRoleAndPermissionUserModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+<div class="modal" id="RemoveRoleAndPermissionUserModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
     data-backdrop="static" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header w-100">
                 <div class="text-center w-100" style="background: white;">
-                    <label style="font-size:20px;font-weight:bold;">Asignacion de Rol y Permisos</label>
+                    <label style="font-size:20px;font-weight:bold;">Remocion de Rol y Permisos</label>
                 </div>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
@@ -13,11 +13,11 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label for="email">Correo Electronico</label>
-                    <input type="text" class="form-control" id="email_a" name="email" readonly>
+                    <input type="text" class="form-control" id="email_r" name="email" readonly>
                 </div>
                 <div class="form-group">
                     <label for="">Roles y Permisos</label>
-                    <div id="permissions-container-assign">
+                    <div id="permissions-container-remove">
 
                     </div>
                 </div>

@@ -68,7 +68,7 @@ let tableUsers = $('#users').DataTable({
         {
             data: null,
             render: function (data, type, row) {
-                return `<a onclick="AssignRoleAndPermissionUserModal(${data.id})"
+                return `<a onclick="AssignRoleAndPermissionUserModal(${data.id}, '${CleanText(data.email)}')"
                     type="button" class="btn btn-success btn-sm"
                     title="Asignar rol y permisos al usuario">
                         <i class="fas fa-user-unlock text-white"></i>
@@ -78,7 +78,8 @@ let tableUsers = $('#users').DataTable({
         {
             data: null,
             render: function (data, type, row) {
-                return `<a href="/Dashboard/Users/Edit/${data.id}" class="btn bg-orange btn-sm"
+                return `<a onclick="RemoveRoleAndPermissionUserModal(${data.id}, '${CleanText(data.email)}')"
+                    type="button" class="btn bg-orange btn-sm"
                     title="Remover rol y permisos al usuario">
                         <i class="fas fa-user-lock text-white"></i>
                     </a>`;
@@ -112,5 +113,5 @@ let tableUsers = $('#users').DataTable({
     "paging": true,
     "info": false,
     "searching": true,
-    "autoWidth": true,
+    "autoWidth": true
 });

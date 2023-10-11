@@ -6,6 +6,7 @@ use App\Traits\ApiResponser;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\AssignRoleAndPermissionsQueryRequest;
 use App\Http\Requests\User\AssignRoleAndPermissionsRequest;
+use App\Http\Requests\User\RemoveRoleAndPermissionsQueryRequest;
 use App\Http\Requests\User\UserIndexQueryRequest;
 use App\Http\Resources\User\UserIndexQueryCollection;
 use App\Http\Requests\User\RemoveRolesAndPermissionsRequest;
@@ -442,7 +443,7 @@ class UserController extends Controller
 
                 return $this->successResponse(
                     $rolesWithMissingPermissions,
-                    'Usuario restaurado exitosamente',
+                    'Roles y permisos por asignar consultados exitosamente.',
                     200
                 );
             }
@@ -501,16 +502,12 @@ class UserController extends Controller
                     404
                 );
             }
-            // Verificar si el usuario ya tiene el rol
-            if ($user->hasRole($request->role)) {
-                return $this->successResponse(
-                    $user,
-                    'El usuario ya tiene el rol asignado.',
-                    400
-                );
+            // Verificar si el usuario no tiene el rol
+            if (!$user->hasRole($request->role)) {
+                // Asignar el rol al usuario
+                $user->assignRole([$role]);
             }
-             // Asignar el rol al usuario
-            $user->assignRole([$role]);
+            
             // Asociar los permisos existentes del rol al usuario
             $user->givePermissionTo($request->permissions);
             return $this->successResponse(
@@ -547,6 +544,61 @@ class UserController extends Controller
         }
     }
 
+    public function removeRoleAndPermissionsQuery(RemoveRoleAndPermissionsQueryRequest $request)
+    {
+        try {
+            if ($request->ajax()) {
+
+                $user = User::with('roles.permissions','permissions')->findOrFail($request->id);
+                
+                $rolesWithMissingPermissions = [];
+
+                foreach($user->roles as $role){
+                    $missingPermissions = [];
+
+                    foreach (collect($role->permissions)->pluck('name') as $permission) {
+                        if ($user->hasDirectPermission($permission)) {
+                            $missingPermissions[] = $permission;
+                        }
+                    }
+
+                    if (!empty($missingPermissions)) {
+                        $rolesWithMissingPermissions[] = (object) [
+                            'role' => $role->name,
+                            'permissions' => $missingPermissions
+                        ];
+                    }
+                }              
+
+                return $this->successResponse(
+                    $rolesWithMissingPermissions,
+                    'Roles y permisos por remover consultados exitosamente.',
+                    200
+                );
+            }
+        } catch (ModelNotFoundException $e) {
+            if ($request->ajax()) {
+                return $this->errorResponse(
+                    [
+                        'message' => $this->errorModelNotFoundException,
+                        'error' => $e->getMessage()
+                    ],
+                    500
+                );
+            }
+        } catch (Exception $e) {
+            if ($request->ajax()) {
+                return $this->errorResponse(
+                    [
+                        'message' => $this->errorException,
+                        'error' => $e->getMessage()
+                    ],
+                    500
+                );
+            }
+        }
+    }
+
     /**
      * Remover todos los roles y permisos de un usuario.
      *
@@ -567,13 +619,24 @@ class UserController extends Controller
     public function removeRoleAndPermissions(RemoveRolesAndPermissionsRequest $request)
     {
         try {
+            $role = Role::with('permissions')->where('name', '=', $request->role)->firstOrFail();
             $user = User::findOrFail($request->id);
 
             // Remover los permisos del usuario
             $user->revokePermissionTo($request->permissions);
 
-            // Remover el rol del usuario
-            $user->removeRole($request->role);
+            $missingPermissions = [];
+
+            foreach (collect($role->permissions)->pluck('name') as $permission) {
+                if ($user->hasDirectPermission($permission)) {
+                    $missingPermissions[] = $permission;
+                }
+            }
+
+            if(empty($missingPermissions)) {
+                // Remover el rol del usuario
+                $user->removeRole($request->role);
+            }
 
             return $this->successResponse(
                 $user,

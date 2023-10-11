@@ -79,6 +79,7 @@
         @include('Dashboard.Users.Edit')
         @include('Dashboard.Users.Password')
         @include('Dashboard.Users.AssignRoleAndPermission')
+        @include('Dashboard.Users.RemoveRoleAndPermission')
     </section>
 @endsection
 @section('script')
@@ -88,22 +89,29 @@
     <script src="{{ asset('js/Dashboard/Users/Edit.js') }}"></script>
     <script src="{{ asset('js/Dashboard/Users/Password.js') }}"></script>
     <script src="{{ asset('js/Dashboard/Users/Delete.js') }}"></script>
+    <script src="{{ asset('js/Dashboard/Users/AssignRoleAndPermissions.js') }}"></script>
     <script>
 
-        function AssignRoleAndPermissionUserModal(id) {
+        function RemoveRoleAndPermissionUserModal(id, email) {
             $.ajax({
-                url: `/Dashboard/Users/AssignRoleAndPermissions/Query`,
+                url: `/Dashboard/Users/RemoveRoleAndPermissions/Query`,
                 type: 'POST',
                 data: {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
                     'id': id
                 },
                 success: function(response) {
+                    if($('meta[name="user-id"]').attr('content') == id) {
+                        toastr.warning('Cuidado, vas a remover el rol y los permisos de tu usuario.');
+                    }
+
                     if (response.data.length == 0) {
-                        toastr.info('Tiene todos los roles y permisos ya asignados.')
+                        toastr.info('No tiene roles y permisos asignados para remover.')
                         return false;
                     }
-                    $('#permissions-container').empty();
+
+                    $('#email_r').val(email);
+                    $('#permissions-container-remove').empty();
                     $.each(response.data, function (index, item) {
 
                         var header = $(`<div class="card-header m-2" data-toggle="collapse" data-target="#role-${index}">`);
@@ -141,26 +149,28 @@
                         });
 
                         var footerDiv = $('<div class="footer d-flex justify-content-end mr-4 pb-4">'); // Utilizamos las clases de Bootstrap para alineación
-                        var saveButton = $('<button type="button" class="btn btn-primary" title="Asignar rol y permisos.">');
+                        var saveButton = $('<button type="button" class="btn btn-primary" title="Remover rol y permisos.">');
                         saveButton.append('<i class="fas fa-floppy-disk"></i>');
 
                         saveButton.click(function() {
                             var selectedPermissions = [];
                             body.find('input[type="checkbox"]:checked').each(function() {
-                                selectedPermissions.push($(this).attr('id'));
+                                if($(this).attr('id') !== undefined) {
+                                    selectedPermissions.push($(this).attr('id'));
+                                }
                             });
-
+                            
                             // Llamar a la función AssignRoleAndPermission con el nombre del rol y los permisos
-                            AssignRoleAndPermission(item.role, selectedPermissions);
+                            RemoveRoleAndPermission(id, item.role, selectedPermissions, email);
                         });
 
                         footerDiv.append(saveButton);
                         body.append(footerDiv);
 
-                        $('#permissions-container').append(header);
-                        $('#permissions-container').append(body);
+                        $('#permissions-container-remove').append(header);
+                        $('#permissions-container-remove').append(body);
 
-                        $('#AssignRoleAndPermissionUserModal').modal('show');
+                        $('#RemoveRoleAndPermissionUserModal').modal('show');
                     });
 
                 },
@@ -180,13 +190,70 @@
             });
         }
 
+        function RemoveRoleAndPermission(id, role, permissions, email) {
+            if($('meta[name="user-id"]').attr('content') == id) {
+                toastr.warning('Cuidado, vas a remover el rol y los permisos de tu usuario.');
+            }
+            Swal.fire({
+                title: '¿Desea remover el rol y los permisos al usuario?',
+                text: 'Se removera al usuario el rol y los permisos especificados.',
+                icon: 'warning',
+                showCancelButton: true,
+                cancelButtonColor: '#DD6B55',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'Si, remover!',
+                cancelButtonText: 'No, cancelar!',
+            }).then((result) => {
+                if (result.value) {
+                    $.ajax({
+                        url: `/Dashboard/Users/RemoveRoleAndPermissions`,
+                        type: 'POST',
+                        data: {
+                            '_token': $('meta[name="csrf-token"]').attr('content'),
+                            'id': id,
+                            'role': role,
+                            'permissions': permissions
+                        },
+                        success: function(response) {
+                            tableUsers.ajax.reload();
+                            toastr.success(response.message);
+                            $('#RemoveRoleAndPermissionUserModal').modal('hide');
+                            RemoveRoleAndPermissionUserModal(id, email);
+                        },
+                        error: function(xhr, textStatus, errorThrown) {
+                            tableUsers.ajax.reload();
+                            if (xhr.status === 403) {
+                                toastr.error(xhr.responseJSON.message);
+                            }
+                            if(xhr.responseJSON.error){
+                                toastr.error(xhr.responseJSON.error.message);
+                            }
+                            if(xhr.responseJSON.errors){
+                                $.each(xhr.responseJSON.errors, function(field, messages) {
+                                    $.each(messages, function(index, message) {
+                                        toastr.error(message);
+                                    });
+                                });
+                            }
+                            
+                        },
+                        fail: function() {
+                            toastr.error('No está autorizado para realizar esta accion.');
+                        }
+                    });
+                } else {
+                    toastr.error('El rol y los permisos no fueron removidos al usuario.')
+                }
+            });
+        }
+
         @if (session('success'))
-            toastr.success(' {{ session('success') }} ')
+            toastr.success(' {{ session('success') }} ');
         @endif
 
         @if ($errors->any())
             @foreach ($errors->all() as $error)
-                toastr.error(' {{ $error }} ')
+                toastr.error(' {{ $error }} ');
             @endforeach
         @endif
     </script>

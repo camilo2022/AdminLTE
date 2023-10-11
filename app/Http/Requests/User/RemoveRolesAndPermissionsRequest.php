@@ -43,7 +43,7 @@ class RemoveRolesAndPermissionsRequest extends FormRequest
         return [
             'id' => 'required|exists:users,id',
             'role' => 'required|string|exists:roles,name',
-            'permissions' => 'nullable|array',
+            'permissions' => 'required|array|min:1',
             'permissions.*' => 'string|exists:permissions,name',
         ];
     }
@@ -51,11 +51,14 @@ class RemoveRolesAndPermissionsRequest extends FormRequest
     public function messages()
     {
         return [
-            'required' => 'El campo :attribute es requerido.',
+            'id.required' => 'El campo identificador unico de usuario es requerido.',
+            'rol.required' => 'El campo rol es requerido.',
+            'permissions.required' => 'Debe seleccionar los permisos que desea remover.',
             'array' => 'El campo :attribute debe ser un arreglo.',
             'exists' => 'El :attribute especificado no existe.',
             'unique' => 'El :attribute ya existe.',
             'string' => 'El :attribute debe ser una cadena de texto.',
+            'min' => 'El :attribute debe tener minimo :min permiso seleccionado.',
         ];
     }
 

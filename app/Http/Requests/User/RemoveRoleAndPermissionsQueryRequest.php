@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class AssignRoleAndPermissionsRequest extends FormRequest
+class RemoveRoleAndPermissionsQueryRequest extends FormRequest
 {
     /**
      * Maneja una solicitud fallida de validación.
@@ -42,23 +42,14 @@ class AssignRoleAndPermissionsRequest extends FormRequest
     {
         return [
             'id' => 'required|exists:users,id',
-            'role' => 'required|string|exists:roles,name',
-            'permissions' => 'required|array|min:1',
-            'permissions.*' => 'string|exists:permissions,name',
         ];
     }
 
     public function messages()
     {
         return [
-            'id.required' => 'El campo identificador unico de usuario es requerido.',
-            'rol.required' => 'El campo rol es requerido.',
-            'permissions.required' => 'Debe seleccionar los permisos que desea asignar.',
-            'array' => 'El campo :attribute debe ser un arreglo.',
+            'required' => 'El campo :attribute es requerido.',
             'exists' => 'El :attribute especificado no existe.',
-            'unique' => 'El :attribute ya existe.',
-            'string' => 'El :attribute debe ser una cadena de texto.',
-            'min' => 'El :attribute debe tener minimo :min permiso seleccionado.',
         ];
     }
 
@@ -66,8 +57,6 @@ class AssignRoleAndPermissionsRequest extends FormRequest
     {
         return [
             'id' => 'identificador unico de usuario',
-            'role' => 'rol',
-            'permissions' => 'permisos',
         ];
     }
 }

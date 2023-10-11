@@ -70,5 +70,5 @@ let tableUsers = $('#users').DataTable({
     "paging": true,
     "info": false,
     "searching": true,
-    "autoWidth": true,
+    "autoWidth": true
 });
