@@ -22,6 +22,8 @@ let tableUsers = $('#users').DataTable({
             request.dir = request.order[0].dir;
         },
         "dataSrc": function (response) {
+            response.recordsTotal = response.data.meta.pagination.count;
+            response.recordsFiltered = response.data.meta.pagination.total;
             return response.data.users;
         }
     },
@@ -99,6 +101,9 @@ let tableUsers = $('#users').DataTable({
             "sPrevious": "Anterior",
             "sProcessing": "Procesando...",
         },
+        "info": "Mostrando _START_ a _END_ de _TOTAL_ registros",
+        "infoEmpty": "No hay registros para mostrar",
+        "infoFiltered": "(filtrados de _MAX_ registros en total)",
         "emptyTable": "No hay datos disponibles.",
         "lengthMenu": "Mostrar _MENU_ registros por página.",
         "search": "Buscar:",
@@ -111,7 +116,7 @@ let tableUsers = $('#users').DataTable({
     "pageLength": 10,
     "lengthMenu": [10, 25, 50, 100],
     "paging": true,
-    "info": false,
+    "info": true,
     "searching": true,
     "autoWidth": true
 });

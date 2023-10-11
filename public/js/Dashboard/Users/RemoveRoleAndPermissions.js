@@ -18,6 +18,7 @@ function RemoveRoleAndPermissionUserModal(id, email) {
             }
 
             $('#email_r').val(email);
+            $('#permissions-container-assign').empty();
             $('#permissions-container-remove').empty();
             $.each(response.data, function (index, item) {
                 // Crear el div del card
@@ -112,7 +113,6 @@ function RemoveRoleAndPermissionUserModal(id, email) {
                 // Mostrar el modal
                 $('#RemoveRoleAndPermissionUserModal').modal('show');
             });
-
         },
         error: function(xhr, textStatus, errorThrown) {
             tableUsers.ajax.reload();

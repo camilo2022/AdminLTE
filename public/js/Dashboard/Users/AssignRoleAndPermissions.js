@@ -14,6 +14,7 @@ function AssignRoleAndPermissionUserModal(id, email) {
             }
 
             $('#email_a').val(email);
+            $('#permissions-container-remove').empty();
             $('#permissions-container-assign').empty();
             $.each(response.data, function (index, item) {
                 // Crear el div del card
@@ -108,8 +109,6 @@ function AssignRoleAndPermissionUserModal(id, email) {
                 // Mostrar el modal
                 $('#AssignRoleAndPermissionUserModal').modal('show');
             });
-
-
         },
         error: function(xhr, textStatus, errorThrown) {
             tableUsers.ajax.reload();
