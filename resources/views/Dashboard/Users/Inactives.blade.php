@@ -18,6 +18,34 @@
             </div><!-- /.container-fluid -->
         </div>
     </section>
+
+    @if (session('success') || (session('info')) || (session('warning')) || (session('danger')))
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card card-default">
+                            <div class="card-header">
+                                <h3 class="card-title"><i class="fas fa-bell mr-2"></i>Alertas</h3>
+                                <div class="card-tools">
+                                    <button type="button" class="btn btn-tool" data-card-widget="remove">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                @include('Dashboard.Alerts.Success')
+                                @include('Dashboard.Alerts.Info')
+                                @include('Dashboard.Alerts.Warning')
+                                @include('Dashboard.Alerts.Danger')
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    @endif
+    
     <section class="content">
         <div class="container-fluid">
             <div class="row">
@@ -79,15 +107,4 @@
 @section('script')
     <script src="{{ asset('js/Dashboard/Users/DataTableInactives.js') }}"></script>
     <script src="{{ asset('js/Dashboard/Users/Restore.js') }}"></script>
-    <script>
-        @if (session('success'))
-            toastr.success(' {{ session('success') }} ')
-        @endif
-
-        @if ($errors->any())
-            @foreach ($errors->all() as $error)
-                toastr.error(' {{ $error }} ')
-            @endforeach
-        @endif
-    </script>
 @endsection

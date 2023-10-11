@@ -38,10 +38,9 @@ class UserController extends Controller
         try {
             return view('Dashboard.Users.Index');
         } catch (Exception $e) {
-            return back()->withErrors(
-                [
-                    'Ocurrió un error al cargar la vista: ' . $e->getMessage()
-                ]
+            return back()->with(
+                'danger',
+                'Ocurrió un error al cargar la vista: ' . $e->getMessage()
             );
         }
     }
@@ -121,10 +120,9 @@ class UserController extends Controller
         try {
             return view('Dashboard.Users.Inactives');
         } catch (Exception $e) {
-            return back()->withErrors(
-                [
-                    'Ocurrió un error al cargar la vista: ' . $e->getMessage()
-                ]
+            return back()->with(
+                'danger',
+                'Ocurrió un error al cargar la vista: ' . $e->getMessage()
             );
         }
     }
@@ -507,7 +505,7 @@ class UserController extends Controller
                 // Asignar el rol al usuario
                 $user->assignRole([$role]);
             }
-            
+
             // Asociar los permisos existentes del rol al usuario
             $user->givePermissionTo($request->permissions);
             return $this->successResponse(
@@ -550,7 +548,7 @@ class UserController extends Controller
             if ($request->ajax()) {
 
                 $user = User::with('roles.permissions','permissions')->findOrFail($request->id);
-                
+
                 $rolesWithMissingPermissions = [];
 
                 foreach($user->roles as $role){
@@ -568,7 +566,7 @@ class UserController extends Controller
                             'permissions' => $missingPermissions
                         ];
                     }
-                }              
+                }
 
                 return $this->successResponse(
                     $rolesWithMissingPermissions,

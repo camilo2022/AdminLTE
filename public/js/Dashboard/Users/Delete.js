@@ -23,9 +23,6 @@ function DeleteUser(id) {
                 },
                 error: function(xhr, textStatus, errorThrown) {
                     tableUsers.ajax.reload();
-                    if (xhr.status === 403) {
-                        toastr.error(xhr.responseJSON.message);
-                    }
                     if(xhr.responseJSON.error){
                         toastr.error(xhr.responseJSON.error.message);
                     }

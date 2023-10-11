@@ -1,19 +1,23 @@
-function AssignRoleAndPermissionUserModal(id, email) {
+function RemoveRoleAndPermissionUserModal(id, email) {
     $.ajax({
-        url: `/Dashboard/Users/AssignRoleAndPermissions/Query`,
+        url: `/Dashboard/Users/RemoveRoleAndPermissions/Query`,
         type: 'POST',
         data: {
             '_token': $('meta[name="csrf-token"]').attr('content'),
             'id': id
         },
         success: function(response) {
+            if($('meta[name="user-id"]').attr('content') == id) {
+                toastr.warning('Cuidado, vas a remover el rol y los permisos de tu usuario.');
+            }
+
             if (response.data.length == 0) {
-                toastr.info('Tiene todos los roles y permisos ya asignados.')
+                toastr.info('No tiene roles y permisos asignados para remover.')
                 return false;
             }
 
-            $('#email_a').val(email);
-            $('#permissions-container-assign').empty();
+            $('#email_r').val(email);
+            $('#permissions-container-remove').empty();
             $.each(response.data, function (index, item) {
                 // Crear el div del card
                 var card = $('<div class="card collapsed-card">');
@@ -21,7 +25,7 @@ function AssignRoleAndPermissionUserModal(id, email) {
                 // Crear el div del card-header
                 var cardHeader = $('<div class="card-header border-0 ui-sortable-handle">');
                 var cardTitle = $('<h3 class="card-title mt-1">');
-                var cardIcon = $('<i class="fas fa-shield-check fa-lg mr-1"></i>');
+                var cardIcon = $('<i class="fas fa-shield-xmark fa-lg mr-1"></i>');
 
                 cardTitle.append(cardIcon);
                 cardTitle.append(item.role);
@@ -86,7 +90,7 @@ function AssignRoleAndPermissionUserModal(id, email) {
                     });
 
                     // Llamar a la función RemoveRoleAndPermission con el nombre del rol y los permisos
-                    AssignRoleAndPermission(id, item.role, selectedPermissions, email);
+                    RemoveRoleAndPermission(id, item.role, selectedPermissions, email);
                 });
 
                 // Agregar elementos al cardFooter
@@ -99,10 +103,10 @@ function AssignRoleAndPermissionUserModal(id, email) {
                 card.append(cardFooter);
 
                 // Agregar el card al contenedor
-                $('#permissions-container-assign').append(card);
+                $('#permissions-container-remove').append(card);
 
                 // Mostrar el modal
-                $('#AssignRoleAndPermissionUserModal').modal('show');
+                $('#RemoveRoleAndPermissionUserModal').modal('show');
             });
 
         },
@@ -122,20 +126,23 @@ function AssignRoleAndPermissionUserModal(id, email) {
     });
 }
 
-function AssignRoleAndPermission(id, role, permissions, email) {
+function RemoveRoleAndPermission(id, role, permissions, email) {
+    if($('meta[name="user-id"]').attr('content') == id) {
+        toastr.warning('Cuidado, vas a remover el rol y los permisos de tu usuario.');
+    }
     Swal.fire({
-        title: '¿Desea asignar el rol y los permisos al usuario?',
-        text: 'Se asignara al usuario el rol y los permisos especificados.',
+        title: '¿Desea remover el rol y los permisos al usuario?',
+        text: 'Se removera al usuario el rol y los permisos especificados.',
         icon: 'warning',
         showCancelButton: true,
         cancelButtonColor: '#DD6B55',
         confirmButtonColor: '#3085d6',
-        confirmButtonText: 'Si, asignar!',
+        confirmButtonText: 'Si, remover!',
         cancelButtonText: 'No, cancelar!',
     }).then((result) => {
         if (result.value) {
             $.ajax({
-                url: `/Dashboard/Users/AssignRoleAndPermissions`,
+                url: `/Dashboard/Users/RemoveRoleAndPermissions`,
                 type: 'POST',
                 data: {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
@@ -146,8 +153,8 @@ function AssignRoleAndPermission(id, role, permissions, email) {
                 success: function(response) {
                     tableUsers.ajax.reload();
                     toastr.success(response.message);
-                    $('#AssignRoleAndPermissionUserModal').modal('hide');
-                    AssignRoleAndPermissionUserModal(id, email);
+                    $('#RemoveRoleAndPermissionUserModal').modal('hide');
+                    RemoveRoleAndPermissionUserModal(id, email);
                 },
                 error: function(xhr, textStatus, errorThrown) {
                     tableUsers.ajax.reload();
@@ -164,7 +171,7 @@ function AssignRoleAndPermission(id, role, permissions, email) {
                 }
             });
         } else {
-            toastr.error('El rol y los permisos no fueron asignados al usuario.')
+            toastr.error('El rol y los permisos no fueron removidos al usuario.')
         }
     });
 }

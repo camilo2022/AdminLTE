@@ -11,7 +11,6 @@ class SpatieCheckPermission
 {
     use ApiResponser;
 
-    private $errorAuthorizationException = 'No está autorizado para realizar esta acción.';
     /**
      * Handle an incoming request.
      *
@@ -22,14 +21,20 @@ class SpatieCheckPermission
     public function handle(Request $request, Closure $next, $permission)
     {
         if (!auth()->user()->hasDirectPermission($permission)) {
+            $message = "No está autorizado para realizar esta acción. Falta el permiso: $permission.
+            Contacte al administrador para obtener asistencia o solicitar autorización.";
             if($request->ajax()) {
                 return $this->errorResponse(
                     [
-                        'message' => $this->errorAuthorizationException
+                        'message' => $message
                     ],
                     403
                 );
             }
+            return back()->with(
+                'warning',
+                $message
+            );
             throw new AuthorizationException();
         }
 

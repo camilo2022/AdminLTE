@@ -22,10 +22,7 @@ function RestoreUser(id) {
                     toastr.success(response.message)
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableUsers.ajax.reload();
-                    if (xhr.status === 403) {
-                        toastr.error(xhr.responseJSON.message);
-                    }
+                    tableUsers.ajax.reload(); 
                     if(xhr.responseJSON.error){
                         toastr.error(xhr.responseJSON.error.message)
                     }
