@@ -41,8 +41,7 @@ class RolesAndPermissionsStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'roles' => 'required',
-            'roles.*' => 'string|max:255|unique:roles,name',
+            'role' => 'required|string|max:255|unique:roles,name',
             'permissions' => 'required|array',
             'permissions.*' => 'string|max:255|unique:permissions,name',
         ];
@@ -62,9 +61,8 @@ class RolesAndPermissionsStoreRequest extends FormRequest
     public function attributes()
     {
         return [
-            'roles' => 'Roles',
+            'role' => 'Rol',
             'permissions' => 'Permisos',
-            'roles.*' => 'Elemento en Roles',
             'permissions.*' => 'Elemento en Permisos',
         ];
     }

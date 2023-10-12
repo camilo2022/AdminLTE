@@ -36,26 +36,29 @@ class RolesAndPermissionsUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'role_name' => 'nullable|string|max:50',
-            'permissions.*' => 'required|max:50',
+            'role' => 'required|string|max:255|unique:roles,name,' . $this->route('id'),
+            'permissions' => 'required|array',
+            'permissions.*' => 'string|max:255',
         ];
     }
+
     public function messages()
     {
         return [
             'required' => 'El campo :attribute es requerido.',
-            'string' => 'El campo :attribute debe ser una cadena de caracteres.',
-            'max' => 'El campo :attribute no debe exceder los :max caracteres.',
             'array' => 'El campo :attribute debe ser un arreglo.',
-            'permissions.*.exists' => 'El :attribute seleccionado no existe en la base de datos.',
+            'string' => 'Cada elemento en :attribute debe ser una cadena de caracteres.',
+            'max' => 'Cada elemento en :attribute no debe exceder los :max caracteres.',
+            'unique' => 'El :attribute ya existe.',
         ];
     }
+
     public function attributes()
     {
         return [
-            'role_name' => 'nombre del rol',
-            'permissions' => 'permisos',
-            'permissions.*' => 'permiso',
+            'role' => 'Rol',
+            'permissions' => 'Permisos',
+            'permissions.*' => 'Elemento en Permisos',
         ];
     }
 }

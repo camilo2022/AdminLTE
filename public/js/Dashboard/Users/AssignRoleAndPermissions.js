@@ -113,12 +113,12 @@ function AssignRoleAndPermissionUserModal(id, email) {
         error: function(xhr, textStatus, errorThrown) {
             tableUsers.ajax.reload();
             if(xhr.responseJSON.error){
-                toastr.error(xhr.responseJSON.error.message)
+                toastr.error(xhr.responseJSON.error.message);
             }
             if(xhr.responseJSON.errors){
                 $.each(xhr.responseJSON.errors, function(field, messages) {
                     $.each(messages, function(index, message) {
-                        toastr.error(message)
+                        toastr.error(message);
                     });
                 });
             }
@@ -167,7 +167,7 @@ function AssignRoleAndPermission(id, role, permissions, email) {
                 }
             });
         } else {
-            toastr.info('El rol y los permisos no fueron asignados al usuario.')
+            toastr.info('El rol y los permisos no fueron asignados al usuario.');
         }
     });
 }

@@ -54,7 +54,7 @@
                         <div class="card-header p-2">
                             <ul class="nav nav-pills">
                                 <li class="nav-item">
-                                    <a class="nav-link active" type="button" data-target="#CreateUserModal" data-toggle='modal' title="Agregar rol y permisos">
+                                    <a class="nav-link active" type="button" data-target="#CreateRoleAndPermissionsModal" data-toggle='modal' title="Agregar rol y permisos">
                                         <i class="fas fa-folder-plus"></i>
                                     </a>
                                 </li>
@@ -85,9 +85,13 @@
                 </div>
             </div>
         </div>
+        @include('Dashboard.RoleAndPermissions.Create')
+        @include('Dashboard.RoleAndPermissions.Edit')
     </section>
 @endsection
 @section('script')
     <script src="{{ asset('js/Dashboard/RoleAndPermissions/DataTableIndex.js') }}"></script>
+    <script src="{{ asset('js/Dashboard/RoleAndPermissions/Create.js') }}"></script>
+    <script src="{{ asset('js/Dashboard/RoleAndPermissions/Edit.js') }}"></script>
     <script src="{{ asset('js/Dashboard/RoleAndPermissions/Delete.js') }}"></script>
 @endsection

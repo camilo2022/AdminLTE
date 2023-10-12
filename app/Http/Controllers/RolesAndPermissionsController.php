@@ -105,7 +105,8 @@ class RolesAndPermissionsController extends Controller
      *
      * Esta función crea un nuevo rol con los permisos proporcionados en la solicitud.
      *
-     * @param \App\Http\Requests\RolesAndPermissionsStoreRequest $request La solicitud HTTP con los datos del nuevo rol y sus permisos.
+     * @param \App\Http\Requests\RolesAndPermissionsStoreRequest $request La solicitud HTTP
+     * con los datos del nuevo rol y sus permisos.
      *
      * @return \Illuminate\Http\JsonResponse
      * Una respuesta JSON que indica que el rol y los permisos se han creado correctamente y un mensaje de éxito.
@@ -120,7 +121,7 @@ class RolesAndPermissionsController extends Controller
              // Crear el rol con el nombre proporcionado en la solicitud
             $role = Role::create(
                 [
-                    'name' => $request->roles
+                    'name' => $request->role
                 ]
             );
             // Asignar permisos al rol
@@ -168,7 +169,8 @@ class RolesAndPermissionsController extends Controller
      *
      * Esta función actualiza un rol con los permisos proporcionados en la solicitud.
      *
-     * @param \App\Http\Requests\RolesAndPermissionsUpdateRequest $request La solicitud HTTP con los datos del nuevo rol y sus permisos.
+     * @param \App\Http\Requests\RolesAndPermissionsUpdateRequest $request La solicitud HTTP con
+     * los datos del nuevo rol y sus permisos.
      *
      * @return \Illuminate\Http\JsonResponse
      * Una respuesta JSON que indica que el rol y los permisos se han actualizado correctamente y un mensaje de éxito.
@@ -209,6 +211,9 @@ class RolesAndPermissionsController extends Controller
             }
             // Utilizar syncPermissions() para sincronizar todos los permisos al rol
             $role->syncPermissions($currentPermissions);
+
+            $role->name = $request->role;
+            $role->save();
             // Confirmar la transacción de base de datos
             DB::commit();
             // Devolver una respuesta exitosa con el rol y los permisos actualizados

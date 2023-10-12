@@ -25,7 +25,7 @@ let tableRolesAndPermissions = $('#rolesAndPermissions').DataTable({
     "columns": [
         { data: 'id' },
         { data: 'role' },
-        { 
+        {
             data: null,
             render: function(data, type, row) {
                 let div = $('<div>');
@@ -42,8 +42,12 @@ let tableRolesAndPermissions = $('#rolesAndPermissions').DataTable({
         {
             data: null,
             render: function (data, type, row) {
-                return `<a onclick="PasswordUserModal(${data.id}, '${data.email}')"
-                    type="button" data-target="#PasswordUserModal" data-toggle='modal'
+                let permissions = [];
+                $.each(data.permissions, function(index, permission) {
+                    permissions.push(permission.name);
+                });
+                return `<a onclick="EditRoleAndPermissionsModal(${data.id}, '${data.role}', ${JSON.stringify(permissions).replace(/"/g, "'")})"
+                    type="button" data-target="#EditRoleAndPermissionsModal" data-toggle='modal'
                     class="btn btn-primary btn-sm" title="Editar rol y permisos">
                         <i class="fas fa-folder-gear text-white"></i>
                     </a>`;
