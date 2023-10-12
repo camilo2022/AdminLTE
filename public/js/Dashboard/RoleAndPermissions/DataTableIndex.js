@@ -1,18 +1,13 @@
-let tableUsers = $('#users').DataTable({
+let tableRolesAndPermissions = $('#rolesAndPermissions').DataTable({
     "processing": true,
     "serverSide": true,
     "ajax": {
-        "url": "/Dashboard/Users/Inactives/Query",
+        "url": "/Dashboard/RolesAndPermissions/Index/Query",
         "type": "POST",
         "data": function (request) {
             var columnMappings = {
                 0: 'id',
                 1: 'name',
-                2: 'last_name',
-                3: 'document_number',
-                4: 'phone_number',
-                5: 'address',
-                6: 'email'
             };
             request._token = $('meta[name="csrf-token"]').attr('content');
             request.perPage = request.length;
@@ -24,30 +19,53 @@ let tableUsers = $('#users').DataTable({
         "dataSrc": function (response) {
             response.recordsTotal = response.data.meta.pagination.count;
             response.recordsFiltered = response.data.meta.pagination.total;
-            return response.data.users;
+            return response.data.roles;
         }
     },
     "columns": [
         { data: 'id' },
-        { data: 'name' },
-        { data: 'last_name' },
-        { data: 'document_number' },
-        { data: 'phone_number' },
-        { data: 'address' },
-        { data: 'email' },
+        { data: 'role' },
+        { 
+            data: null,
+            render: function(data, type, row) {
+                let div = $('<div>');
+                // Utiliza $.each() para iterar a través de los elementos del array y crear un <span> para cada permiso.
+                $.each(data.permissions, function(index, permission) {
+                    let span = $('<label>').text(permission.name);
+                    span.attr('class', 'badge badge-info mr-1');
+                    div.append(span);
+                });
+
+                return div.html();
+            }
+        },
         {
             data: null,
             render: function (data, type, row) {
-                return `<a class="btn btn-info btn-sm" onclick="RestoreUser(${data.id})"
-                    title="Restaurar usuario">
-                        <i class="fas fa-user-plus text-white"></i>
+                return `<a onclick="PasswordUserModal(${data.id}, '${data.email}')"
+                    type="button" data-target="#PasswordUserModal" data-toggle='modal'
+                    class="btn btn-primary btn-sm" title="Editar rol y permisos">
+                        <i class="fas fa-folder-gear text-white"></i>
+                    </a>`;
+            }
+        },
+        {
+            data: null,
+            render: function (data, type, row) {
+                let permission_id = [];
+                $.each(data.permissions, function(index, permission) {
+                    permission_id.push(permission.id);
+                });
+                return `<a class="btn btn-danger btn-sm" onclick="DeleteRoleAndPermissions(${data.id}, ${JSON.stringify(permission_id)})"
+                    title="Eliminar rol y permisos" id="DeleteRoleAndPermissionsButton">
+                        <i class="fas fa-folder-minus text-white"></i>
                     </a>`;
             }
         },
     ],
     "columnDefs": [
-        { "orderable": true, "targets": [0, 1, 2, 3, 4, 5, 6] },
-        { "orderable": false, "targets": [7] }
+        { "orderable": true, "targets": [0, 1] },
+        { "orderable": false, "targets": [2, 3, 4] }
     ],
     "pagingType": "full_numbers",
     "language": {
@@ -56,7 +74,6 @@ let tableUsers = $('#users').DataTable({
             "sLast": "Último",
             "sNext": "Siguiente",
             "sPrevious": "Anterior",
-            "sProcessing": "Procesando...",
         },
         "info": "Mostrando _START_ a _END_ de _TOTAL_ registros",
         "infoEmpty": "No hay registros para mostrar",

@@ -99,7 +99,6 @@ let tableUsers = $('#users').DataTable({
             "sLast": "Último",
             "sNext": "Siguiente",
             "sPrevious": "Anterior",
-            "sProcessing": "Procesando...",
         },
         "info": "Mostrando _START_ a _END_ de _TOTAL_ registros",
         "infoEmpty": "No hay registros para mostrar",
@@ -112,6 +111,7 @@ let tableUsers = $('#users').DataTable({
         "thousands": ".",
         "sEmptyTable" : "No se ha llamado información o no está disponible.",
         "sZeroRecords" : "No se encuentran resultados.",
+        "sProcessing": "Procesando..."
     },
     "pageLength": 10,
     "lengthMenu": [10, 25, 50, 100],

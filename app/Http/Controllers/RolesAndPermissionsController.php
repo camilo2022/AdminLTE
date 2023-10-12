@@ -6,43 +6,35 @@ use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
 use Spatie\Permission\Models\Permission;
-use App\Http\Resources\RolesAndPermissions\RolesAndPermissionsCollection;
-use App\Http\Requests\RolesAndPermissions\RolesAndPermissionsIndexRequest;
+use App\Http\Resources\RolesAndPermissions\RolesAndPermissionsIndexQueryCollection;
+use App\Http\Requests\RolesAndPermissions\RolesAndPermissionsIndexQueryRequest;
 use App\Http\Requests\RolesAndPermissions\RolesAndPermissionsStoreRequest;
 use App\Http\Requests\RolesAndPermissions\RolesAndPermissionsDeleteRequest;
 use App\Http\Requests\RolesAndPermissions\RolesAndPermissionsUpdateRequest;
 use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Database\QueryException;
+
 class RolesAndPermissionsController extends Controller
 {
-    /**
-     * Importar el trait ApiResponser para usar sus métodos de respuesta.
-     *
-     * El trait ApiResponser proporciona métodos útiles para formatear y enviar respuestas
-     * HTTP desde los controladores.
-     * Al importar este trait, los controladores pueden acceder a estos métodos para enviar
-     * respuestas de manera uniforme.
-     */
     use ApiResponser;
 
-    /**
-     * Mensaje de éxito predeterminado para respuestas exitosas.
-     *
-     * Este mensaje se utiliza para indicar el éxito en las respuestas de la API cuando una operación
-     * se realiza con éxito.
-     *
-     * @var string
-     */
     private $success = 'Consulta Exitosa.';
-
-    /**
-     * Mensaje de error genérico para respuestas de error.
-     *
-     * Este mensaje se utiliza como respuesta genérica en caso de que ocurra un error no específico en la API.
-     *
-     * @var string
-     */
     private $error = 'Algo salió mal.';
+    private $errorQueryException = 'Error del servidor de la base de datos.';
+    private $errorModelNotFoundException = 'El rol y los permisos no pudo ser encontrado.';
 
+    public function index()
+    {
+        try {
+            return view('Dashboard.RoleAndPermissions.Index');
+        } catch (Exception $e) {
+            return back()->with(
+                'danger',
+                'Ocurrió un error al cargar la vista: ' . $e->getMessage()
+            );
+        }
+    }
     /**
      * Listado de roles y permisos con filtros y paginación.
      *
@@ -62,7 +54,7 @@ class RolesAndPermissionsController extends Controller
      * @throws \Exception
      * Devuelve una respuesta de error en caso de excepción.
      */
-    public function index(RolesAndPermissionsIndexRequest $request)
+    public function indexQuery(RolesAndPermissionsIndexQueryRequest $request)
     {
         try{
             $start_date = Carbon::parse($request->start_date)->startOfDay();
@@ -79,12 +71,22 @@ class RolesAndPermissionsController extends Controller
                         $query->filterByDate($start_date, $end_date);
                     }
                 )
+                ->orderBy($request->column, $request->dir)
                 ->paginate($request->perPage);
             // Devolver una respuesta exitosa con los roles y permisos paginados
             return $this->successResponse(
-                new RolesAndPermissionsCollection($rolesAndPermissions),
+                new RolesAndPermissionsIndexQueryCollection($rolesAndPermissions),
                 $this->success,
                 200
+            );
+        } catch (QueryException $e) {
+            // Manejar la excepción de la base de datos
+            return $this->errorResponse(
+                [
+                    'message' => $this->errorQueryException,
+                    'error' => $e->getMessage()
+                ],
+                500
             );
         } catch (Exception $e) {
             // Devolver una respuesta de error en caso de excepción
@@ -139,6 +141,14 @@ class RolesAndPermissionsController extends Controller
                 $role,
                 'Roles y permisos creados correctamente',
                 201
+            );
+        } catch (ModelNotFoundException $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->errorModelNotFoundException,
+                    'error' => $e->getMessage()
+                ],
+                404
             );
         } catch (Exception $e) {
             // Deshacer la transacción en caso de excepción y devolver una respuesta de error
@@ -207,6 +217,14 @@ class RolesAndPermissionsController extends Controller
                 'Rol y permisos actualizados correctamente',
                 200
             );
+        } catch (ModelNotFoundException $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->errorModelNotFoundException,
+                    'error' => $e->getMessage()
+                ],
+                404
+            );
         } catch (Exception $e) {
             // Deshacer la transacción en caso de excepción y devolver una respuesta de error
             DB::rollback();
@@ -249,6 +267,14 @@ class RolesAndPermissionsController extends Controller
                 '',
                 'Roles y permisos eliminados correctamente',
                 200
+            );
+        } catch (ModelNotFoundException $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->errorModelNotFoundException,
+                    'error' => $e->getMessage()
+                ],
+                404
             );
         } catch (Exception $e) {
             // Deshacer la transacción en caso de excepción y devolver una respuesta de error

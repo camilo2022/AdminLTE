@@ -4,7 +4,7 @@ namespace App\Http\Resources\RolesAndPermissions;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class RolesAndPermissionsCollection extends ResourceCollection
+class RolesAndPermissionsIndexQueryCollection extends ResourceCollection
 {
     
     /**

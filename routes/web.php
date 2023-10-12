@@ -77,8 +77,11 @@ Route::middleware(['auth'])->group(function () {
 
         Route::prefix('/RolesAndPermissions')->group(function () {
 
-            Route::post('/Index', [\App\Http\Controllers\RolesAndPermissionsController::class, 'index'])
+            Route::get('/Index', [\App\Http\Controllers\RolesAndPermissionsController::class, 'index'])
             ->middleware('can:Dashboard.RolesAndPermissions.Index')->name('Dashboard.RolesAndPermissions.Index');
+            
+            Route::post('/Index/Query', [\App\Http\Controllers\RolesAndPermissionsController::class, 'indexQuery'])
+            ->middleware('can:Dashboard.RolesAndPermissions.Index.Query')->name('Dashboard.RolesAndPermissions.Index.Query');
 
             Route::post('/Store', [\App\Http\Controllers\RolesAndPermissionsController::class, 'store'])
             ->middleware('can:Dashboard.RolesAndPermissions.Store')->name('Dashboard.RolesAndPermissions.Store');

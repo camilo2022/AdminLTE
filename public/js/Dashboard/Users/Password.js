@@ -59,7 +59,7 @@ function PasswordUser(id) {
                 }
             });
         } else {
-            toastr.error('El usuario no se le actualizo la contraseña.')
+            toastr.info('El usuario no se le actualizo la contraseña.')
         }
     });
 }

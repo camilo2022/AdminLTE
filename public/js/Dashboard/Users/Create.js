@@ -52,7 +52,7 @@ function CreateUser() {
                 }
             });
         } else {
-            toastr.error('El usuario no fue creado.')
+            toastr.info('El usuario no fue creado.')
         }
     });
 }

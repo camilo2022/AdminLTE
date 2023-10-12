@@ -36,7 +36,7 @@ function DeleteUser(id) {
                 }
             });
         } else {
-            toastr.error('El usuario seleccionado no fue eliminado.')
+            toastr.info('El usuario seleccionado no fue eliminado.')
         }
     });
 }

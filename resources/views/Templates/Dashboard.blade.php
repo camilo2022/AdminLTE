@@ -280,7 +280,7 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="/Dashboard/Users/Index" class="nav-link">
+                                    <a href="/Dashboard/RolesAndPermissions/Index" class="nav-link">
                                         <i class="fas fa-key-skeleton nav-icon"></i>
                                         <p>Roles y Permisos</p>
                                     </a>
