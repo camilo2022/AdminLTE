@@ -50,11 +50,6 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function sendPasswordResetNotification($token)
-    {
-        $this->notify(new CustomPasswordResetNotification($token));
-    }
-
     public function scopeSearch($query, $search)
     {
         if (is_numeric($search)) {

@@ -1,4 +1,6 @@
 function PasswordUserModal(id, email) {
+    RemoveIsValidClassPasswordUser();
+    RemoveIsInvalidClassPasswordUser();
     $('#PasswordUserButton').attr('onclick', `PasswordUser(${id})`);
 
     $("#email_p").val(email);
@@ -40,26 +42,57 @@ function PasswordUser(id) {
                     'password_confirmation': $("#password_confirmation_p").val()
                 },
                 success: function(response) {
+                    RemoveIsValidClassPasswordUser();
+                    RemoveIsInvalidClassPasswordUser();
                     tableUsers.ajax.reload();
                     toastr.success(response.message);
                     $('#PasswordUserModal').modal('hide');
                 },
                 error: function(xhr, textStatus, errorThrown) {
+                    RemoveIsInvalidClassPasswordUser();
                     tableUsers.ajax.reload();
                     if(xhr.responseJSON.error){
                         toastr.error(xhr.responseJSON.error.message);
                     }
                     if(xhr.responseJSON.errors){
                         $.each(xhr.responseJSON.errors, function(field, messages) {
+                            AddIsInvalidClassPasswordUser(field);
                             $.each(messages, function(index, message) {
                                 toastr.error(message);
                             });
                         });
                     }
+                    AddIsValidClassPasswordUser();
                 }
             });
         } else {
             toastr.info('El usuario no se le actualizo la contraseña.')
         }
     });
+}
+
+function AddIsValidClassPasswordUser() {
+    if (!$('#password_p').hasClass('is-invalid')) {
+      $('#password_p').addClass('is-valid');
+    }
+    if (!$('#password_confirmation_p').hasClass('is-invalid')) {
+      $('#password_confirmation_p').addClass('is-valid');
+    }
+}
+
+function RemoveIsValidClassPasswordUser() {
+    $('#password_p').removeClass('is-valid');
+    $('#password_confirmation_p').removeClass('is-valid');
+}
+
+function AddIsInvalidClassPasswordUser(input) {
+    if (!$(`#${input}_p`).hasClass('is-valid')) {
+        $(`#${input}_p`).removeClass('is-valid');
+    }
+    $(`#${input}_p`).addClass('is-invalid');
+}
+
+function RemoveIsInvalidClassPasswordUser() {
+    $('#password_p').removeClass('is-invalid');
+    $('#password_confirmation_p').removeClass('is-invalid');
 }

@@ -1,4 +1,7 @@
 function EditUserModal(id, name, last_name, document_number, phone_number, address, email) {
+    RemoveIsValidClassEditUser();
+    RemoveIsInvalidClassEditUser();
+
     $('#EditUserButton').attr('onclick', `EditUser(${id})`);
 
     $("#name_e").val(name);
@@ -35,26 +38,83 @@ function EditUser(id) {
                     'email': $("#email_e").val()
                 },
                 success: function(response) {
+                    RemoveIsValidClassEditUser();
+                    RemoveIsInvalidClassEditUser();
                     tableUsers.ajax.reload();
                     toastr.success(response.message);
                     $('#EditUserModal').modal('hide');
                 },
                 error: function(xhr, textStatus, errorThrown) {
+                    RemoveIsInvalidClassEditUser();
                     tableUsers.ajax.reload();
                     if(xhr.responseJSON.error){
                         toastr.error(xhr.responseJSON.error.message);
                     }
                     if(xhr.responseJSON.errors){
                         $.each(xhr.responseJSON.errors, function(field, messages) {
+                            AddIsInvalidClassEditUser(field);
                             $.each(messages, function(index, message) {
                                 toastr.error(message);
                             });
                         });
                     }
+                    AddIsValidClassEditUser();
                 }
             });
         } else {
             toastr.info('El usuario no se le actualizo la contraseña.')
         }
     });
+}
+
+function AddIsValidClassEditUser() {
+    if (!$('#name_e').hasClass('is-invalid')) {
+      $('#name_e').addClass('is-valid');
+    }
+    if (!$('#last_name_e').hasClass('is-invalid')) {
+      $('#last_name_e').addClass('is-valid');
+    }
+    if (!$('#document_number_e').hasClass('is-invalid')) {
+      $('#document_number_e').addClass('is-valid');
+    }
+    if (!$('#phone_number_e').hasClass('is-invalid')) {
+      $('#phone_number_e').addClass('is-valid');
+    }
+    if (!$('#address_e').hasClass('is-invalid')) {
+      $('#address_e').addClass('is-valid');
+    }
+    if (!$('#email_e').hasClass('is-invalid')) {
+      $('#email_e').addClass('is-valid');
+    }
+    if (!$('#password_e').hasClass('is-invalid')) {
+      $('#password_e').addClass('is-valid');
+    }
+    if (!$('#password_confirmation_e').hasClass('is-invalid')) {
+      $('#password_confirmation_e').addClass('is-valid');
+    }
+}
+
+function RemoveIsValidClassEditUser() {
+    $('#name_e').removeClass('is-valid');
+    $('#last_name_e').removeClass('is-valid');
+    $('#document_number_e').removeClass('is-valid');
+    $('#phone_number_e').removeClass('is-valid');
+    $('#address_e').removeClass('is-valid');
+    $('#email_e').removeClass('is-valid');
+}
+
+function AddIsInvalidClassEditUser(input) {
+    if (!$(`#${input}_e`).hasClass('is-valid')) {
+        $(`#${input}_e`).removeClass('is-valid');
+    }
+    $(`#${input}_e`).addClass('is-invalid');
+}
+
+function RemoveIsInvalidClassEditUser() {
+    $('#name_e').removeClass('is-invalid');
+    $('#last_name_e').removeClass('is-invalid');
+    $('#document_number_e').removeClass('is-invalid');
+    $('#phone_number_e').removeClass('is-invalid');
+    $('#address_e').removeClass('is-invalid');
+    $('#email_e').removeClass('is-invalid');
 }
