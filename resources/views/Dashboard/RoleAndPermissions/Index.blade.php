@@ -94,4 +94,5 @@
     <script src="{{ asset('js/Dashboard/RoleAndPermissions/Create.js') }}"></script>
     <script src="{{ asset('js/Dashboard/RoleAndPermissions/Edit.js') }}"></script>
     <script src="{{ asset('js/Dashboard/RoleAndPermissions/Delete.js') }}"></script>
+    <script src="{{ asset('js/Dashboard/RoleAndPermissions/Suggestion.js') }}"></script>
 @endsection
