@@ -1,3 +1,42 @@
+function CreateRoleAndPermissionsModal() {
+    RemoveIsValidClassCreateRoleAndPermissions();
+    RemoveIsInvalidClassCreateRoleAndPermissions();
+
+    $('#role_c').val('');
+    $('.permissions_c').empty();
+
+    let permissionGroup = $('<div>');
+    permissionGroup.attr('class', 'form-group');
+
+    let inputGroup = $('<div>');
+    inputGroup.attr('class', 'input-group');
+
+    let input = $('<input>');
+    input.attr('type', 'text');
+    input.attr('class', 'form-control');
+    input.attr('id', `permission_c0`);
+    input.attr('name', 'permissions_c[]');
+
+    let inputGroupAppend = $('<div>');
+    inputGroupAppend.attr('class', 'input-group-append');
+
+    let inputGroupText = $('<span>');
+    inputGroupText.attr('class', 'input-group-text');
+
+    let inputIcon = $('<i>');
+    inputIcon.attr('class', 'fas fa-key');
+  
+    inputGroupText.append(inputIcon);
+    inputGroupAppend.append(inputGroupText);
+    // Construir la estructura de elementos
+    inputGroup.append(input);
+    inputGroup.append(inputGroupAppend);
+    permissionGroup.append(inputGroup);
+
+    // Agregar al contenedor
+    $('.permissions_c').append(permissionGroup);
+}
+
 function CreateRoleAndPermissionsAddPermission(permission) {
     let permissionCount = $(permission).data('count');
 
@@ -68,20 +107,23 @@ function CreateRoleAndPermissions() {
                     tableRolesAndPermissions.ajax.reload();
                     toastr.success(response.message);
                     $('#CreateRoleAndPermissionsModal').modal('hide');
-                    CreateRoleAndPermissionsModalClean();
+                    CreateRoleAndPermissionsModal();
                 },
                 error: function(xhr, textStatus, errorThrown) {
+                    RemoveIsInvalidClassCreateRoleAndPermissions();
                     tableRolesAndPermissions.ajax.reload();
                     if(xhr.responseJSON.error){
                         toastr.error(xhr.responseJSON.error.message);
                     }
                     if(xhr.responseJSON.errors){
                         $.each(xhr.responseJSON.errors, function(field, messages) {
+                            AddIsInvalidClassCreateRoleAndPermissions(field);
                             $.each(messages, function(index, message) {
                                 toastr.error(message);
                             });
                         });
                     }
+                    AddIsValidClassCreateRoleAndPermissions();
                 }
             });
         } else {
@@ -90,26 +132,50 @@ function CreateRoleAndPermissions() {
     });
 }
 
-function CreateRoleAndPermissionsModalClean() {
-    $('#role_c').val('');
-    $('.permissions_c').empty();
+function AddIsValidClassCreateRoleAndPermissions() {
+    if (!$('#role_c').hasClass('is-invalid')) {
+      $('#role_c').addClass('is-valid');
+    }
 
-    let permissionGroup = $('<div>');
-    permissionGroup.attr('class', 'form-group');
+    // Itera sobre los inputs dentro del div
+    $('.permissions_c').find('input').each(function() {
+    
+        // Verifica si el input no tiene la clase 'is-invalid'
+        if (!$(this).hasClass('is-invalid')) {
+            // Agrega la clase 'is-valid'
+            $(this).addClass('is-valid');
+        }
+    });
+}
 
-    let inputGroup = $('<div>');
-    inputGroup.attr('class', 'input-group');
+function RemoveIsValidClassCreateRoleAndPermissions() {
+    $('#role_c').removeClass('is-valid');
+  
+    // Itera sobre los inputs dentro del div
+    $('.permissions_c').find('input').each(function() {
+        // Agrega la clase 'is-valid'
+        $(this).removeClass('is-valid');
+    });
+}
 
-    let input = $('<input>');
-    input.attr('type', 'text');
-    input.attr('class', 'form-control');
-    input.attr('id', `permission_c0`);
-    input.attr('name', 'permissions_c[]');
+function AddIsInvalidClassCreateRoleAndPermissions(input) {
+    if (!$(`#${input}_c`).hasClass('is-valid')) {
+        $(`#${input}_c`).addClass('is-invalid');
+    }
+    $('.permissions_c').find('input').each(function(index) {
+        // Agrega la clase 'is-invalid'
+        if(input === `permissions.${index}`) {
+            $(this).addClass('is-invalid');
+        }
+    });
+}
 
-    // Construir la estructura de elementos
-    inputGroup.append(input);
-    permissionGroup.append(inputGroup);
-
-    // Agregar al contenedor
-    $('.permissions_c').append(permissionGroup);
+function RemoveIsInvalidClassCreateRoleAndPermissions() {
+    $('#role_c').removeClass('is-invalid');
+  
+    // Itera sobre los inputs dentro del div
+    $('.permissions_c').find('input').each(function() {
+        // Remover la clase 'is-invalid'
+        $(this).removeClass('is-invalid');
+    });
 }

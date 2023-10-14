@@ -11,10 +11,10 @@ function PasswordUserModal(id, email) {
 function PasswordUserVisibility(id) {
     let passwordInput = $(`#${id}`);
     let passwordIcon = passwordInput.closest('.input-group');
-    if (passwordInput.attr('type') == 'password') {
+    if (passwordInput.attr('type') === 'password') {
         passwordInput.attr('type', 'text');
         passwordIcon.find('.fa-eye').toggleClass('fa-eye fa-eye-slash');
-    } else if (passwordInput.attr('type') == 'text') {
+    } else if (passwordInput.attr('type') === 'text') {
         passwordInput.attr('type', 'password');
         passwordIcon.find('.fa-eye-slash').toggleClass('fa-eye-slash fa-eye');
     }

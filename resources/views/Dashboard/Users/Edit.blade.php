@@ -15,13 +15,27 @@
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="name">Nombres</label>
-                            <input type="text" class="form-control" id="name_e" name="name">
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="name_e" name="name">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-signature"></i>
+                                    </span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="last_name">Apellidos</label>
-                            <input type="text" class="form-control" id="last_name_e" name="last_name">
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="last_name_e" name="last_name">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-signature"></i>
+                                    </span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -29,13 +43,27 @@
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="document_number_s">Numero de documento</label>
-                            <input type="number" class="form-control" id="document_number_e" name="document_number" onkeypress="Numbers(this)">
+                            <div class="input-group">
+                                <input type="number" class="form-control" id="document_number_e" name="document_number" onkeypress="Numbers(this)">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-address-card"></i>
+                                    </span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="phone_number_s">Numero de telefono</label>
-                            <input type="number" class="form-control" id="phone_number_e" name="phone_number" onkeypress="Numbers(this)">
+                            <div class="input-group">
+                                <input type="number" class="form-control" id="phone_number_e" name="phone_number" onkeypress="Numbers(this)">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-phone"></i>
+                                    </span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -43,13 +71,27 @@
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="address_s">Direccion</label>
-                            <input type="text" class="form-control" id="address_e" name="address">
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="address_e" name="address">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-location-dot"></i>
+                                    </span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
                             <label for="email_s">Correo Electronico</label>
-                            <input type="email" class="form-control" id="email_e" name="email">
+                            <div class="input-group">
+                                <input type="email" class="form-control" id="email_e" name="email">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-envelope"></i>
+                                    </span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

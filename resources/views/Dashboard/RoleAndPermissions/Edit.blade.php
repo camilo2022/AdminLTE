@@ -12,7 +12,7 @@
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label for="role_c">Rol</label>
+                    <label for="role_e">Rol</label>
                     <input type="text" class="form-control" id="role_e" name="role">
                 </div>
                 <div class="form-group">

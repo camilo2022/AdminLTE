@@ -7,11 +7,11 @@ function RemoveRoleAndPermissionUserModal(id, email) {
             'id': id
         },
         success: function(response) {
-            if($('meta[name="user-id"]').attr('content') == id) {
+            if($('meta[name="user-id"]').attr('content') === id) {
                 toastr.warning('Cuidado, vas a remover el rol y los permisos de tu usuario.');
             }
 
-            if (response.data.length == 0) {
+            if (response.data.length === 0) {
                 $('#RemoveRoleAndPermissionUserModal').modal('hide');
                 toastr.info('No tiene roles y permisos asignados para remover.');
                 return false;
@@ -131,7 +131,7 @@ function RemoveRoleAndPermissionUserModal(id, email) {
 }
 
 function RemoveRoleAndPermission(id, role, permissions, email) {
-    if($('meta[name="user-id"]').attr('content') == id) {
+    if($('meta[name="user-id"]').attr('content') === id) {
         toastr.warning('Cuidado, vas a remover el rol y los permisos de tu usuario.');
     }
     Swal.fire({

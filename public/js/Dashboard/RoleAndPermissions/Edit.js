@@ -1,4 +1,7 @@
 function EditRoleAndPermissionsModal(id, role, permissions) {
+    RemoveIsValidClassEditRoleAndPermissions();
+    RemoveIsInvalidClassEditRoleAndPermissions();
+
     $('#role_e').val(role);
     $('.permissions_e').empty();
     $('#EditRoleAndPermissionsButton').attr('onclick', `EditRoleAndPermissions(${id})`);
@@ -113,21 +116,72 @@ function EditRoleAndPermissions(id) {
                     $('#EditRoleAndPermissionsModal').modal('hide');
                 },
                 error: function(xhr, textStatus, errorThrown) {
+                    RemoveIsInvalidClassEditRoleAndPermissions();
                     tableRolesAndPermissions.ajax.reload();
                     if(xhr.responseJSON.error){
                         toastr.error(xhr.responseJSON.error.message);
                     }
                     if(xhr.responseJSON.errors){
                         $.each(xhr.responseJSON.errors, function(field, messages) {
+                            AddIsInvalidClassEditRoleAndPermissions(field);
                             $.each(messages, function(index, message) {
                                 toastr.error(message);
                             });
                         });
                     }
+                    AddIsValidClassEditRoleAndPermissions();
                 }
             });
         } else {
             toastr.info('El rol y los permisos no fueron actualizados.')
         }
+    });
+}
+
+function AddIsValidClassEditRoleAndPermissions() {
+    if (!$('#role_e').hasClass('is-invalid')) {
+      $('#role_e').addClass('is-valid');
+    }
+
+    // Itera sobre los inputs dentro del div
+    $('.permissions_e').find('input').each(function() {
+    
+        // Verifica si el input no tiene la clase 'is-invalid'
+        if (!$(this).hasClass('is-invalid')) {
+            // Agrega la clase 'is-valid'
+            $(this).addClass('is-valid');
+        }
+    });
+}
+
+function RemoveIsValidClassEditRoleAndPermissions() {
+    $('#role_e').removeClass('is-valid');
+  
+    // Itera sobre los inputs dentro del div
+    $('.permissions_e').find('input').each(function() {
+        // Agrega la clase 'is-valid'
+        $(this).removeClass('is-valid');
+    });
+}
+
+function AddIsInvalidClassEditRoleAndPermissions(input) {
+    if (!$(`#${input}_e`).hasClass('is-valid')) {
+        $(`#${input}_e`).addClass('is-invalid');
+    }
+    $('.permissions_e').find('input').each(function(index) {
+        // Agrega la clase 'is-invalid'
+        if(input === `permissions.${index}`) {
+            $(this).addClass('is-invalid');
+        }
+    });
+}
+
+function RemoveIsInvalidClassEditRoleAndPermissions() {
+    $('#role_e').removeClass('is-invalid');
+  
+    // Itera sobre los inputs dentro del div
+    $('.permissions_e').find('input').each(function() {
+        // Remover la clase 'is-invalid'
+        $(this).removeClass('is-invalid');
     });
 }

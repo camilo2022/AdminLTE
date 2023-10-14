@@ -13,7 +13,14 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label for="email">Correo Electronico</label>
-                    <input type="text" class="form-control" id="email_p" name="email" readonly>
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="email_p" name="email" readonly>
+                        <div class="input-group-append">
+                            <span class="input-group-text">
+                                <i class="fas fa-envelope"></i>
+                            </span>
+                        </div>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label for="password_p">Nueva contraseña</label>

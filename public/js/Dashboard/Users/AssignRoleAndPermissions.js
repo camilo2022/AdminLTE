@@ -7,7 +7,7 @@ function AssignRoleAndPermissionUserModal(id, email) {
             'id': id
         },
         success: function(response) {
-            if (response.data.length == 0) {
+            if (response.data.length === 0) {
                 $('#AssignRoleAndPermissionUserModal').modal('hide');
                 toastr.info('Tiene todos los roles y permisos ya asignados.');
                 return false;

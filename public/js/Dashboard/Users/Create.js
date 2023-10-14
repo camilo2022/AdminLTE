@@ -42,16 +42,7 @@ function CreateUser() {
                     tableUsers.ajax.reload();
                     toastr.success(response.message);
                     $('#CreateUserModal').modal('hide');
-                    RemoveIsValidClassCreateUser();
-                    RemoveIsInvalidClassCreateUser();
-                    $('#name_c').val('');
-                    $('#last_name_c').val('');
-                    $('#document_number_c').val('');
-                    $('#phone_number_c').val('');
-                    $('#address_c').val('');
-                    $('#email_c').val('');
-                    $('#password_c').val('');
-                    $('#password_confirmation_c').val('');
+                    CreateUserModal();
                 },
                 error: function(xhr, textStatus, errorThrown) {
                     RemoveIsInvalidClassCreateUser();
