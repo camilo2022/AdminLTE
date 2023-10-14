@@ -2,7 +2,7 @@ let tableRolesAndPermissions = $('#rolesAndPermissions').DataTable({
     "processing": true,
     "serverSide": true,
     "ajax": {
-        "url": "/Dashboard/RolesAndPermissions/Index/Query",
+        "url": "/Dashboard/ModulesAndSubmodules/Index/Query",
         "type": "POST",
         "data": function (request) {
             var columnMappings = {
@@ -17,6 +17,7 @@ let tableRolesAndPermissions = $('#rolesAndPermissions').DataTable({
             request.dir = request.order[0].dir;
         },
         "dataSrc": function (response) {
+            console.log(response);
             response.recordsTotal = response.data.meta.pagination.count;
             response.recordsFiltered = response.data.meta.pagination.total;
             return response.data.roles;

@@ -100,5 +100,24 @@ Route::middleware(['auth'])->group(function () {
 
         });
 
+        Route::prefix('/ModulesAndSubmodules')->group(function () {
+
+            Route::get('/Index', [\App\Http\Controllers\ModulesAndSubmodulesController::class, 'index'])
+            ->middleware('can:Dashboard.ModulesAndSubmodules.Index')->name('Dashboard.ModulesAndSubmodules.Index');
+
+            Route::post('/Index/Query', [\App\Http\Controllers\ModulesAndSubmodulesController::class, 'indexQuery'])
+            ->middleware('can:Dashboard.ModulesAndSubmodules.Index.Query')->name('Dashboard.ModulesAndSubmodules.Index.Query');
+
+            Route::post('/Store', [\App\Http\Controllers\ModulesAndSubmodulesController::class, 'store'])
+            ->middleware('can:Dashboard.ModulesAndSubmodules.Store')->name('Dashboard.ModulesAndSubmodules.Store');
+
+            Route::put('/Update/{id}', [\App\Http\Controllers\ModulesAndSubmodulesController::class, 'update'])
+            ->middleware('can:Dashboard.ModulesAndSubmodules.Update')->name('Dashboard.ModulesAndSubmodules.Update');
+
+            Route::delete('/Delete', [\App\Http\Controllers\ModulesAndSubmodulesController::class, 'delete'])
+            ->middleware('can:Dashboard.ModulesAndSubmodules.Delete')->name('Dashboard.ModulesAndSubmodules.Delete');
+
+        });
+
     });
 });

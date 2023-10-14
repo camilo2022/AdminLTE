@@ -120,3 +120,8 @@ let tableUsers = $('#users').DataTable({
     "searching": true,
     "autoWidth": true
 });
+
+tableUsers.on('error.dt', function (e, settings, techNote, message) {
+    e.preventDefault();
+    toastr.info(message);
+});

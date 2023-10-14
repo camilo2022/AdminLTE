@@ -5,12 +5,12 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1 class="m-0 text-dark">Roles y Permisos</h1>
+                        <h1 class="m-0 text-dark">Modulos y Submodulos</h1>
                     </div><!-- /.col -->
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item">Dashboard</li>
-                            <li class="breadcrumb-item">RolesAndPermissions</li>
+                            <li class="breadcrumb-item">ModulesAndSubmodules</li>
                             <li class="breadcrumb-item">Index</li>
                         </ol>
                     </div><!-- /.col -->
@@ -85,14 +85,8 @@
                 </div>
             </div>
         </div>
-        @include('Dashboard.RoleAndPermissions.Create')
-        @include('Dashboard.RoleAndPermissions.Edit')
     </section>
 @endsection
 @section('script')
-    <script src="{{ asset('js/Dashboard/RoleAndPermissions/DataTableIndex.js') }}"></script>
-    <script src="{{ asset('js/Dashboard/RoleAndPermissions/Create.js') }}"></script>
-    <script src="{{ asset('js/Dashboard/RoleAndPermissions/Edit.js') }}"></script>
-    <script src="{{ asset('js/Dashboard/RoleAndPermissions/Delete.js') }}"></script>
-    <script src="{{ asset('js/Dashboard/RoleAndPermissions/Suggestion.js') }}"></script>
+    <script src="{{ asset('js/Dashboard/ModuleAndSubmodules/DataTableIndex.js') }}"></script>
 @endsection

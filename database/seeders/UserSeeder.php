@@ -49,6 +49,16 @@ class UserSeeder extends Seeder
                     'Dashboard.RolesAndPermissions.Update',
                     'Dashboard.RolesAndPermissions.Delete',
                 ]
+            ],
+            (object) [
+                'role' => 'ModulesAndSubmodules',
+                'permissions' => [
+                    'Dashboard.ModulesAndSubmodules.Index',
+                    'Dashboard.ModulesAndSubmodules.Index.Query',
+                    'Dashboard.ModulesAndSubmodules.Store',
+                    'Dashboard.ModulesAndSubmodules.Update',
+                    'Dashboard.ModulesAndSubmodules.Delete',
+                ]
             ]
         ];
 

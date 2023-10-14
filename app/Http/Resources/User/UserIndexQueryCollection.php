@@ -37,32 +37,8 @@ class UserIndexQueryCollection extends ResourceCollection
                     'per_page' => $this->perPage(),
                     'current_page' => $this->currentPage(),
                     'total_pages' => $this->lastPage(),
-                    'first_page' => $this->first_page(),
-                    'last_page' => $this->last_page(),
-                    'next_page' => $this->next_page(),
-                    'previous_page' => $this->previous_page(),
                 ],
             ],
         ];
-    }
-
-    public function first_page()
-    {
-        return 1;
-    }
-
-    public function last_page()
-    {
-        return $this->lastPage();
-    }
-
-    public function next_page()
-    {
-        return $this->currentPage() < $this->lastPage() ? $this->currentPage() + 1 : null;
-    }
-
-    public function previous_page()
-    {
-        return $this->currentPage() > 1 ? $this->currentPage() - 1 : null;
     }
 }

@@ -286,7 +286,7 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="/Dashboard/Users/Index" class="nav-link">
+                                    <a href="/Dashboard/ModulesAndSubmodules/Index" class="nav-link">
                                         <i class="fas fa-shield-keyhole nav-icon"></i>
                                         <p>Enrutamientos</p>
                                     </a>

@@ -22,6 +22,8 @@ class RolesandPermissionSeeder extends Seeder
 
         $RolesAndPermissions = Role::create(['name' => 'RolesAndPermissions']);
 
+        $ModulesAndSubmodules = Role::create(['name' => 'ModulesAndSubmodules']);
+
         Permission::create(['name' => 'Dashboard'])->syncRoles([$Dashboard]);
 
         Permission::create(['name' => 'Dashboard.Users.Index'])->syncRoles([$Users]);
@@ -43,6 +45,12 @@ class RolesandPermissionSeeder extends Seeder
         Permission::create(['name' => 'Dashboard.RolesAndPermissions.Store'])->syncRoles([$RolesAndPermissions]);
         Permission::create(['name' => 'Dashboard.RolesAndPermissions.Update'])->syncRoles([$RolesAndPermissions]);
         Permission::create(['name' => 'Dashboard.RolesAndPermissions.Delete'])->syncRoles([$RolesAndPermissions]);
+
+        Permission::create(['name' => 'Dashboard.ModulesAndSubmodules.Index'])->syncRoles([$ModulesAndSubmodules]);
+        Permission::create(['name' => 'Dashboard.ModulesAndSubmodules.Index.Query'])->syncRoles([$ModulesAndSubmodules]);
+        Permission::create(['name' => 'Dashboard.ModulesAndSubmodules.Store'])->syncRoles([$ModulesAndSubmodules]);
+        Permission::create(['name' => 'Dashboard.ModulesAndSubmodules.Update'])->syncRoles([$ModulesAndSubmodules]);
+        Permission::create(['name' => 'Dashboard.ModulesAndSubmodules.Delete'])->syncRoles([$ModulesAndSubmodules]);
 
     }
 }
