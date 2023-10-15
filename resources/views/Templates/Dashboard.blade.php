@@ -50,9 +50,9 @@
     <link rel="stylesheet" href="{{ asset('css/plugins/ekko-lightbox/ekko-lightbox.css') }}">
     <!-- DataTables -->
     <link rel="stylesheet" href="{{ asset('css/plugins/datatables-bs4/css/dataTables.bootstrap4.css') }}">
-
     <link rel="stylesheet" href="{{ asset('css/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
-
+    <!-- Select2 -->
+    <link rel="stylesheet" href="{{ asset('css/plugins/select2/css/select2.min.css') }}">
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -362,6 +362,8 @@
     <script src="{{ asset('js/filterizr/jquery.filterizr.min.js') }}"></script>
 
     <script src="{{ asset('js/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
+
+    <script src="{{ asset('js/select2/js/select2.full.min.js') }}"></script>
 
     <script>
         const Toast = Swal.mixin({

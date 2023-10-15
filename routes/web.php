@@ -111,6 +111,9 @@ Route::middleware(['auth'])->group(function () {
             Route::post('/Store', [\App\Http\Controllers\ModulesAndSubmodulesController::class, 'store'])
             ->middleware('can:Dashboard.ModulesAndSubmodules.Store')->name('Dashboard.ModulesAndSubmodules.Store');
 
+            Route::post('/Store/Query', [\App\Http\Controllers\ModulesAndSubmodulesController::class, 'storeQuery'])
+            /* ->middleware('can:Dashboard.ModulesAndSubmodules.Store.Query') */->name('Dashboard.ModulesAndSubmodules.Store.Query');
+
             Route::put('/Update/{id}', [\App\Http\Controllers\ModulesAndSubmodulesController::class, 'update'])
             ->middleware('can:Dashboard.ModulesAndSubmodules.Update')->name('Dashboard.ModulesAndSubmodules.Update');
 

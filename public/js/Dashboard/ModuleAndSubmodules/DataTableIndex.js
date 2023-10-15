@@ -38,10 +38,10 @@ let tableModulesAndSubmodules = $('#modulesAndSubmodules').DataTable({
             render: function(data, type, row) {
                 let rolesDiv = $('<div>');
                 $.each(data.roles, function(index, role) {
-                    let roleSpan = $('<span>');
-                    roleSpan.text(role.name);
-                    rolesDiv.append(roleSpan);
-                    rolesDiv.append('<br>');
+                    let roleSpan = $('<span>')
+                        .text(role.name);
+                    rolesDiv.append(roleSpan)
+                        .append('<br>');
                 });
                 return rolesDiv.prop('outerHTML');
             }
@@ -51,10 +51,10 @@ let tableModulesAndSubmodules = $('#modulesAndSubmodules').DataTable({
             render: function(data, type, row) {
                 let submodulesDiv = $('<div>');
                 $.each(data.submodules, function(index, submodule) {
-                    let submoduleSpan = $('<span>');
-                    submoduleSpan.text(submodule.name);
-                    submodulesDiv.append(submoduleSpan);
-                    submodulesDiv.append('<br>');
+                    let submoduleSpan = $('<span>')
+                        .text(submodule.name);
+                    submodulesDiv.append(submoduleSpan)
+                        .append('<br>');
                 });
                 return submodulesDiv.prop('outerHTML');
             }
@@ -64,10 +64,10 @@ let tableModulesAndSubmodules = $('#modulesAndSubmodules').DataTable({
             render: function(data, type, row) {
                 let submoduleUrlsDiv = $('<div>');
                 $.each(data.submodules, function(index, submodule) {
-                    let urlSpan = $('<span>');
-                    urlSpan.text(submodule.url);
-                    submoduleUrlsDiv.append(urlSpan);
-                    submoduleUrlsDiv.append('<br>');
+                    let urlSpan = $('<span>')
+                        .text(submodule.url);
+                    submoduleUrlsDiv.append(urlSpan)
+                        .append('<br>');
                 });
                 return submoduleUrlsDiv.prop('outerHTML');
             }
@@ -79,8 +79,8 @@ let tableModulesAndSubmodules = $('#modulesAndSubmodules').DataTable({
                 $.each(data.submodules, function(index, submodule) {
                     let icon = $('<i>');
                     icon.addClass(submodule.icon);
-                    submoduleIconsDiv.append(icon.prop('outerHTML'));
-                    submoduleIconsDiv.append('<br>');
+                    submoduleIconsDiv.append(icon.prop('outerHTML'))
+                        .append('<br>');
                 });
                 return submoduleIconsDiv.prop('outerHTML');
             }
@@ -90,10 +90,10 @@ let tableModulesAndSubmodules = $('#modulesAndSubmodules').DataTable({
             render: function(data, type, row) {
                 let submodulePermissionsDiv = $('<div>');
                 $.each(data.submodules, function(index, submodule) {
-                    let permissionSpan = $('<span>');
-                    permissionSpan.text(submodule.permission.name);
-                    submodulePermissionsDiv.append(permissionSpan);
-                    submodulePermissionsDiv.append('<br>');
+                    let permissionSpan = $('<span>')
+                        .text(submodule.permission.name);
+                    submodulePermissionsDiv.append(permissionSpan)
+                        .append('<br>');
                 });
                 return submodulePermissionsDiv.prop('outerHTML');
             }

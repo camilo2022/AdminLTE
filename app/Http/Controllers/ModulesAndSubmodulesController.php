@@ -11,6 +11,8 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
+use Illuminate\Http\Request;
+use Spatie\Permission\Models\Role;
 
 class ModulesAndSubmodulesController extends Controller
 {
@@ -20,6 +22,7 @@ class ModulesAndSubmodulesController extends Controller
     private $error = 'Algo salió mal.';
     private $errorQueryException = 'Error del servidor de la base de datos.';
     private $errorModelNotFoundException = 'El modulo y los submodulos no pudo ser encontrado.';
+    private $errorRoleModelNotFoundException = 'El rol no pudo ser encontrado.';
 
     public function index()
     {
@@ -69,6 +72,51 @@ class ModulesAndSubmodulesController extends Controller
             );
         } catch (Exception $e) {
             // Devolver una respuesta de error en caso de excepción
+            return $this->errorResponse(
+                [
+                    'message' => $this->error,
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        }
+    }
+
+    public function storeQuery(Request $request)
+    {
+        try {
+            if($request->ajax()){
+                if (count($request->all()) === 1) {
+                    // Consulto los roles que no esten asociados a ningun modulo
+                    $RolesWithoutModules = Role::whereDoesntHave('modules')->get();
+
+                    return $this->successResponse(
+                        $RolesWithoutModules,
+                        $this->success,
+                        200
+                    );
+                } 
+                if(count($request->all()) === 2) {
+                    if($request->has('role')) {
+                        $RoleWithPermissions = Role::with('permissions')->findByName($request->role);
+                        return $this->successResponse(
+                            $RoleWithPermissions,
+                            $this->success,
+                            200
+                        );
+                    }
+                }
+            }
+        } catch (ModelNotFoundException $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->errorRoleModelNotFoundException,
+                    'error' => $e->getMessage()
+                ],
+                404
+            );
+        } catch (Exception $e) {
+            // Deshacer la transacción en caso de excepción y devolver una respuesta de error
             return $this->errorResponse(
                 [
                     'message' => $this->error,
