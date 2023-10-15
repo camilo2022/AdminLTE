@@ -54,24 +54,29 @@
                         <div class="card-header p-2">
                             <ul class="nav nav-pills">
                                 <li class="nav-item">
-                                    <a class="nav-link active" type="button" data-target="#CreateRoleAndPermissionsModal" data-toggle='modal' title="Agregar rol y permisos">
-                                        <i class="fas fa-folder-plus"></i>
+                                    <a class="nav-link active" type="button" data-target="#CreateModuleAndSubmodulesModal" data-toggle='modal' title="Agregar modulo y submodulos">
+                                        <i class="fas fa-shield-plus"></i>
                                     </a>
                                 </li>
                             </ul>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table id="rolesAndPermissions" class="table table-bordered table-hover dataTable dtr-inline">
+                                <table id="modulesAndSubmodules" class="table table-bordered table-hover dataTable dtr-inline">
                                     <thead class="thead-dark">
                                         <tr>
-                                            <th colspan="3">Información</th>
-                                            <th colspan="3">Gestionar</th>
+                                            <th colspan="8">Información</th>
+                                            <th colspan="2">Gestionar</th>
                                         </tr>
                                         <tr>
                                             <th>#</th>
-                                            <th>Rol</th>
-                                            <th>Permisos</th>
+                                            <th>Modulo</th>
+                                            <th>Icono</th>
+                                            <th>Rol de Accesso</th>
+                                            <th>Sub modulos</th>
+                                            <th>Rutas</th>
+                                            <th>Iconos</th>
+                                            <th>Permisos de Accesso</th>
                                             <th>Editar</th>
                                             <th>Eliminar</th>
                                         </tr>
@@ -89,4 +94,5 @@
 @endsection
 @section('script')
     <script src="{{ asset('js/Dashboard/ModuleAndSubmodules/DataTableIndex.js') }}"></script>
-@endsection
+    <script src="{{ asset('js/Dashboard/ModuleAndSubmodules/Delete.js') }}"></script>
+@endsection    

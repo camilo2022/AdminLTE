@@ -140,7 +140,7 @@ class RolesAndPermissionsController extends Controller
             // Devolver una respuesta exitosa con el rol y los permisos creados
             return $this->successResponse(
                 $role,
-                'Roles y permisos creados correctamente',
+                'Roles y permisos creados correctamente.',
                 201
             );
         } catch (ModelNotFoundException $e) {
@@ -219,7 +219,7 @@ class RolesAndPermissionsController extends Controller
             // Devolver una respuesta exitosa con el rol y los permisos actualizados
             return $this->successResponse(
                 $role,
-                'Rol y permisos actualizados correctamente',
+                'Rol y permisos actualizados correctamente.',
                 200
             );
         } catch (ModelNotFoundException $e) {
@@ -270,7 +270,7 @@ class RolesAndPermissionsController extends Controller
             // Devolver una respuesta exitosa
             return $this->successResponse(
                 '',
-                'Roles y permisos eliminados correctamente',
+                'Roles y permisos eliminados correctamente.',
                 200
             );
         } catch (ModelNotFoundException $e) {

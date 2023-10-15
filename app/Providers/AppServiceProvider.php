@@ -2,8 +2,8 @@
 
 namespace App\Providers;
 
-use App\Models\SubModule;
-use App\Models\User;
+use App\Models\Module;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
@@ -28,7 +28,35 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         View::composer('*', function ($view) {
-            
+            $items = Collection::make();
+
+            $modules = Module::with('roles', 'submodules.permission')->get();
+
+            foreach ($modules as $module) {
+                $moduleRoles = $module->roles->pluck('name');
+
+                if ($moduleRoles->intersect(Auth::user()->getRoleNames())->isNotEmpty()) {
+                    $submodules = $module->submodules->filter(function ($submodule) {
+                        return Auth::user()->hasDirectPermission($submodule->permission->name);
+                    });
+
+                    if (!$submodules->isEmpty()) {
+                        $items->push((object) [
+                            'name' => $module->name,
+                            'icon' => $module->icon,
+                            'submodules' => $submodules->map(function ($submodule) {
+                                return (object) [
+                                    'name' => $submodule->name,
+                                    'url' => $submodule->url,
+                                    'icon' => $submodule->icon,
+                                ];
+                            }),
+                        ]);
+                    }
+                }
+            }
+
+            View::share(['items' => $items]);
         });
     }
 }

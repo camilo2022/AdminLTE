@@ -66,7 +66,7 @@
                                     <thead class="thead-dark">
                                         <tr>
                                             <th colspan="3">Información</th>
-                                            <th colspan="3">Gestionar</th>
+                                            <th colspan="2">Gestionar</th>
                                         </tr>
                                         <tr>
                                             <th>#</th>

@@ -1,7 +1,7 @@
-function DeleteRoleAndPermissions(id, permission) {
+function DeleteModuleAndSubmodules(id) {
     Swal.fire({
-        title: '¿Desea eliminar el rol y los permisos?',
-        text: 'El rol y sus permisos serán eliminados.',
+        title: '¿Desea eliminar el modulos y los submodulos?',
+        text: 'El modulo y sus submodulos serán eliminados.',
         icon: 'warning',
         showCancelButton: true,
         cancelButtonColor: '#DD6B55',
@@ -11,19 +11,18 @@ function DeleteRoleAndPermissions(id, permission) {
     }).then((result) => {
         if (result.value) {
             $.ajax({
-                url: `/Dashboard/RolesAndPermissions/Delete`,
+                url: `/Dashboard/ModulesAndSubmodules/Delete`,
                 type: 'DELETE',
                 data: {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
-                    'role_id': [id],
-                    'permission_id': permission
+                    'id': id
                 },
                 success: function(response) {
-                    tableRolesAndPermissions.ajax.reload();
+                    tableModulesAndSubmodules.ajax.reload();
                     toastr.success(response.message);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableRolesAndPermissions.ajax.reload();
+                    tableModulesAndSubmodules.ajax.reload();
                     if(xhr.responseJSON.error){
                         toastr.error(xhr.responseJSON.error.message);
                         toastr.error(xhr.responseJSON.error.error);
@@ -39,7 +38,7 @@ function DeleteRoleAndPermissions(id, permission) {
                 }
             });
         } else {
-            toastr.info('El rol y los permisos seleccionados no fueron eliminados.')
+            toastr.info('El modulo y los submodulos seleccionados no fueron eliminados.')
         }
     });
 }

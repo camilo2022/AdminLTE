@@ -224,37 +224,7 @@
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column nav-child-indent" data-widget="treeview" role="menu"
                         data-accordion="false">
-                        <!-- Add icons to the links using the .nav-icon class
-               with font-awesome or any other icon font library -->
-                        <!-- <li class="nav-item has-treeview menu-open">
-            <a href="#" class="nav-link active">
-              <i class="nav-icon fas fa-tachometer-alt"></i>
-              <p>
-                Dashboard
-                <i class="right fas fa-angle-left"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="./index.html" class="nav-link active">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Dashboard v1</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="./index2.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Dashboard v2</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="./index3.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Dashboard v3</p>
-                </a>
-              </li>
-            </ul>
-          </li> -->
+
                         <li class="nav-item">
                             <a href="/Dashboard" class="nav-link active">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
@@ -263,37 +233,29 @@
                                 </p>
                             </a>
                         </li>
-
-                        <li class="nav-item has-treeview">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-cog"></i>
-                                <p>
-                                    Configuración
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="/Dashboard/Users/Index" class="nav-link">
-                                        <i class="fas fa-user nav-icon"></i>
-                                        <p>Usuarios</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="/Dashboard/RolesAndPermissions/Index" class="nav-link">
-                                        <i class="fas fa-key-skeleton nav-icon"></i>
-                                        <p>Roles y Permisos</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="/Dashboard/ModulesAndSubmodules/Index" class="nav-link">
-                                        <i class="fas fa-shield-keyhole nav-icon"></i>
-                                        <p>Enrutamientos</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-
+                        
+                        @foreach ($items as $item)
+                            <li class="nav-item has-treeview">
+                                <a href="#" class="nav-link">
+                                    <i class="{{ $item->icon }}"></i>
+                                    <p>
+                                        {{ $item->name }}
+                                        <i class="right fas fa-angle-left"></i>
+                                    </p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    @foreach ($item->submodules as $subitem)
+                                    <li class="nav-item">
+                                        <a href="{{ $subitem->url }}" class="nav-link">
+                                            <i class="{{ $subitem->icon }}"></i>
+                                            <p>{{ $subitem->name }}</p>
+                                        </a>
+                                    </li>
+                                    @endforeach
+                                </ul>
+                            </li>
+                        @endforeach
+                        
                     </ul>
                 </nav>
                 <!-- /.sidebar-menu -->

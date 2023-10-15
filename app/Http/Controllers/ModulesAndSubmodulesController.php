@@ -3,13 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ModulesAndSubmodules\ModulesAndSubmodulesIndexQueryRequest;
+use App\Http\Requests\ModulesAndSubmodules\ModulesAndSubmodulesDeleteRequest;
 use App\Http\Resources\ModulesAndSubmodules\ModulesAndSubmodulesIndexQueryCollection;
 use App\Models\Module;
 use App\Traits\ApiResponser;
 use Carbon\Carbon;
 use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
-use Illuminate\Http\Request;
 
 class ModulesAndSubmodulesController extends Controller
 {
@@ -68,6 +69,37 @@ class ModulesAndSubmodulesController extends Controller
             );
         } catch (Exception $e) {
             // Devolver una respuesta de error en caso de excepción
+            return $this->errorResponse(
+                [
+                    'message' => $this->error,
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        }
+    }
+
+    public function delete(ModulesAndSubmodulesDeleteRequest $request)
+    {
+        try {
+            // Eliminar modulo y submodulos
+            $module = Module::findOrFail($request->id)->delete();
+            // Devolver una respuesta exitosa
+            return $this->successResponse(
+                $module,
+                'Modulo y submodulos eliminados correctamente.',
+                200
+            );
+        } catch (ModelNotFoundException $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->errorModelNotFoundException,
+                    'error' => $e->getMessage()
+                ],
+                404
+            );
+        } catch (Exception $e) {
+            // Deshacer la transacción en caso de excepción y devolver una respuesta de error
             return $this->errorResponse(
                 [
                     'message' => $this->error,

@@ -46,7 +46,6 @@ function EditRoleAndPermissionsModal(id, role, permissions) {
 
 function EditRoleAndPermissionsAddPermission(permission) {
     let permissionCount = $(permission).data('count');
-    console.log(permissionCount);
     let newPermissionGroup = $('<div>');
     newPermissionGroup.attr('class', 'form-group permission-group');
 
@@ -120,14 +119,16 @@ function EditRoleAndPermissions(id) {
                     tableRolesAndPermissions.ajax.reload();
                     if(xhr.responseJSON.error){
                         toastr.error(xhr.responseJSON.error.message);
-                    }
-                    if(xhr.responseJSON.errors){
+                        toastr.error(xhr.responseJSON.error.error);
+                    } else if(xhr.responseJSON.errors){
                         $.each(xhr.responseJSON.errors, function(field, messages) {
                             AddIsInvalidClassEditRoleAndPermissions(field);
                             $.each(messages, function(index, message) {
                                 toastr.error(message);
                             });
                         });
+                    } else {
+                        toastr.error(xhr.responseJSON.message);
                     }
                     AddIsValidClassEditRoleAndPermissions();
                 }

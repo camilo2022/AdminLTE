@@ -1,4 +1,4 @@
-let tableRolesAndPermissions = $('#rolesAndPermissions').DataTable({
+let tableModulesAndSubmodules = $('#modulesAndSubmodules').DataTable({
     "processing": true,
     "serverSide": true,
     "ajax": {
@@ -17,29 +17,87 @@ let tableRolesAndPermissions = $('#rolesAndPermissions').DataTable({
             request.dir = request.order[0].dir;
         },
         "dataSrc": function (response) {
-            console.log(response);
             response.recordsTotal = response.data.meta.pagination.count;
             response.recordsFiltered = response.data.meta.pagination.total;
-            return response.data.roles;
+            return response.data.modules;
         }
     },
     "columns": [
         { data: 'id' },
-        { data: 'role' },
+        { data: 'module' },
         {
             data: null,
             render: function(data, type, row) {
-                let div = $('<div>');
-                // Utiliza $.each() para iterar a través de los elementos del array y crear un <span> para cada permiso.
-                $.each(data.permissions, function(index, permission) {
-                    let span = $('<label>').text(permission.name);
-                    span.attr('class', 'badge badge-info mr-1');
-                    div.append(span);
-                });
-
-                return div.html();
+                let icon = $('<i>');
+                icon.addClass(data.icon);
+                return icon.prop('outerHTML');
             }
         },
+        {
+            data: null,
+            render: function(data, type, row) {
+                let rolesDiv = $('<div>');
+                $.each(data.roles, function(index, role) {
+                    let roleSpan = $('<span>');
+                    roleSpan.text(role.name);
+                    rolesDiv.append(roleSpan);
+                    rolesDiv.append('<br>');
+                });
+                return rolesDiv.prop('outerHTML');
+            }
+        },
+        {
+            data: null,
+            render: function(data, type, row) {
+                let submodulesDiv = $('<div>');
+                $.each(data.submodules, function(index, submodule) {
+                    let submoduleSpan = $('<span>');
+                    submoduleSpan.text(submodule.name);
+                    submodulesDiv.append(submoduleSpan);
+                    submodulesDiv.append('<br>');
+                });
+                return submodulesDiv.prop('outerHTML');
+            }
+        },
+        {
+            data: null,
+            render: function(data, type, row) {
+                let submoduleUrlsDiv = $('<div>');
+                $.each(data.submodules, function(index, submodule) {
+                    let urlSpan = $('<span>');
+                    urlSpan.text(submodule.url);
+                    submoduleUrlsDiv.append(urlSpan);
+                    submoduleUrlsDiv.append('<br>');
+                });
+                return submoduleUrlsDiv.prop('outerHTML');
+            }
+        },
+        {
+            data: null,
+            render: function(data, type, row) {
+                let submoduleIconsDiv = $('<div>');
+                $.each(data.submodules, function(index, submodule) {
+                    let icon = $('<i>');
+                    icon.addClass(submodule.icon);
+                    submoduleIconsDiv.append(icon.prop('outerHTML'));
+                    submoduleIconsDiv.append('<br>');
+                });
+                return submoduleIconsDiv.prop('outerHTML');
+            }
+        },
+        {
+            data: null,
+            render: function(data, type, row) {
+                let submodulePermissionsDiv = $('<div>');
+                $.each(data.submodules, function(index, submodule) {
+                    let permissionSpan = $('<span>');
+                    permissionSpan.text(submodule.permission.name);
+                    submodulePermissionsDiv.append(permissionSpan);
+                    submodulePermissionsDiv.append('<br>');
+                });
+                return submodulePermissionsDiv.prop('outerHTML');
+            }
+        },        
         {
             data: null,
             render: function (data, type, row) {
@@ -47,23 +105,19 @@ let tableRolesAndPermissions = $('#rolesAndPermissions').DataTable({
                 $.each(data.permissions, function(index, permission) {
                     permissions.push(permission.name);
                 });
-                return `<a onclick="EditRoleAndPermissionsModal(${data.id}, '${data.role}', ${JSON.stringify(permissions).replace(/"/g, "'")})"
-                    type="button" data-target="#EditRoleAndPermissionsModal" data-toggle='modal'
-                    class="btn btn-primary btn-sm" title="Editar rol y permisos">
-                        <i class="fas fa-folder-gear text-white"></i>
+                return `<a onclick="EditModuleAndPermissionsModal(${data.id}, '${data.role}', ${JSON.stringify(permissions).replace(/"/g, "'")})"
+                    type="button" data-target="#EditModuleAndPermissionsModal" data-toggle='modal'
+                    class="btn btn-primary btn-sm" title="Editar modulo y submomdulos">
+                        <i class="fas fa-shield-keyhole text-white"></i>
                     </a>`;
             }
         },
         {
             data: null,
             render: function (data, type, row) {
-                let permission_id = [];
-                $.each(data.permissions, function(index, permission) {
-                    permission_id.push(permission.id);
-                });
-                return `<a class="btn btn-danger btn-sm" onclick="DeleteRoleAndPermissions(${data.id}, ${JSON.stringify(permission_id)})"
-                    title="Eliminar rol y permisos" id="DeleteRoleAndPermissionsButton">
-                        <i class="fas fa-folder-minus text-white"></i>
+                return `<a class="btn btn-danger btn-sm" onclick="DeleteModuleAndSubmodules(${data.id})"
+                    title="Eliminar modulo y submodulos" id="DeleteModuleAndSubumodulesButton">
+                        <i class="fas fa-shield-minus text-white"></i>
                     </a>`;
             }
         },
@@ -101,7 +155,7 @@ let tableRolesAndPermissions = $('#rolesAndPermissions').DataTable({
     "autoWidth": true
 });
 
-tableRolesAndPermissions.on('error.dt', function (e, settings, techNote, message) {
+tableModulesAndSubmodules.on('error.dt', function (e, settings, techNote, message) {
     e.preventDefault();
     toastr.info(message);
 });

@@ -114,13 +114,15 @@ function AssignRoleAndPermissionUserModal(id, email) {
             tableUsers.ajax.reload();
             if(xhr.responseJSON.error){
                 toastr.error(xhr.responseJSON.error.message);
-            }
-            if(xhr.responseJSON.errors){
+                toastr.error(xhr.responseJSON.error.error);
+            } else if(xhr.responseJSON.errors){
                 $.each(xhr.responseJSON.errors, function(field, messages) {
                     $.each(messages, function(index, message) {
                         toastr.error(message);
                     });
                 });
+            } else {
+                toastr.error(xhr.responseJSON.message);
             }
         }
     });
@@ -156,13 +158,15 @@ function AssignRoleAndPermission(id, role, permissions, email) {
                     tableUsers.ajax.reload();
                     if(xhr.responseJSON.error){
                         toastr.error(xhr.responseJSON.error.message);
-                    }
-                    if(xhr.responseJSON.errors){
+                        toastr.error(xhr.responseJSON.error.error);
+                    } else if(xhr.responseJSON.errors){
                         $.each(xhr.responseJSON.errors, function(field, messages) {
                             $.each(messages, function(index, message) {
                                 toastr.error(message);
                             });
                         });
+                    } else {
+                        toastr.error(xhr.responseJSON.message);
                     }
                 }
             });
