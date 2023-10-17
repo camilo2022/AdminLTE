@@ -47,18 +47,7 @@ function CreateUser() {
                 error: function(xhr, textStatus, errorThrown) {
                     RemoveIsInvalidClassCreateUser();
                     tableUsers.ajax.reload();
-                    if(xhr.responseJSON.error){
-                        toastr.error(xhr.responseJSON.error.message);
-                    } else if(xhr.responseJSON.errors){
-                        $.each(xhr.responseJSON.errors, function(field, messages) {
-                            AddIsInvalidClassCreateUser(field);
-                            $.each(messages, function(index, message) {
-                                toastr.error(message);
-                            });
-                        });
-                    } else {
-                        toastr.error(xhr.responseJSON.message);
-                    }
+                    CreateUserAjaxError(xhr);
                     AddIsValidClassCreateUser();
                 }
             });
@@ -66,6 +55,21 @@ function CreateUser() {
             toastr.info('El usuario no fue creado.')
         }
     });
+}
+
+function CreateUserAjaxError(xhr) {
+    if(xhr.responseJSON.error){
+        toastr.error(xhr.responseJSON.error.message);
+        toastr.error(xhr.responseJSON.error.error);
+    } else if(xhr.responseJSON.errors){
+        $.each(xhr.responseJSON.errors, function(field, messages) {
+            $.each(messages, function(index, message) {
+                toastr.error(message);
+            });
+        });
+    } else {
+        toastr.error(xhr.responseJSON.message);
+    }
 }
 
 function AddIsValidClassCreateUser() {

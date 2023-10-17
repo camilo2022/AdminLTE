@@ -47,19 +47,7 @@ function EditUser(id) {
                 error: function(xhr, textStatus, errorThrown) {
                     RemoveIsInvalidClassEditUser();
                     tableUsers.ajax.reload();
-                    if(xhr.responseJSON.error){
-                        toastr.error(xhr.responseJSON.error.message);
-                        toastr.error(xhr.responseJSON.error.error);
-                    } else if(xhr.responseJSON.errors){
-                        $.each(xhr.responseJSON.errors, function(field, messages) {
-                            AddIsInvalidClassEditUser(field);
-                            $.each(messages, function(index, message) {
-                                toastr.error(message);
-                            });
-                        });
-                    } else {
-                        toastr.error(xhr.responseJSON.message);
-                    }
+                    EditUserAjaxError(xhr);
                     AddIsValidClassEditUser();
                 }
             });
@@ -67,6 +55,21 @@ function EditUser(id) {
             toastr.info('El usuario no se le actualizo la contraseña.')
         }
     });
+}
+
+function EditUserAjaxError(xhr) {
+    if(xhr.responseJSON.error){
+        toastr.error(xhr.responseJSON.error.message);
+        toastr.error(xhr.responseJSON.error.error);
+    } else if(xhr.responseJSON.errors){
+        $.each(xhr.responseJSON.errors, function(field, messages) {
+            $.each(messages, function(index, message) {
+                toastr.error(message);
+            });
+        });
+    } else {
+        toastr.error(xhr.responseJSON.message);
+    }
 }
 
 function AddIsValidClassEditUser() {

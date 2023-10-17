@@ -23,9 +23,9 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="icon">Icono</label>
+                    <label for="icon_c">Icono Modulo</label>
                     <div class="input-group">
-                        <input type="text" class="form-control" id="icon_c" name="icon" onkeyup="CreateModuleAndSubmodulesChangeClassIcon(this, 'icon_module')">
+                        <input type="text" class="form-control" id="icon_c" name="icon_c" onkeyup="CreateModuleAndSubmodulesChangeClassIcon(this, 'icon_module')">
                         <div class="input-group-append">
                             <span class="input-group-text">
                                 <i class="" id="icon_module"></i>
@@ -63,29 +63,60 @@
                             <div class="card collapsed-card">
                                 <div class="card-header border-0 ui-sortable-handle">
                                     <h3 class="card-title mt-1">
-                                        <input type="text" class="form-control" id="submodule0_c" name="submodule">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" name="" id="">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text">
+                                                    <i class="fas fa-slider"></i>
+                                                </span>
+                                            </div>
+                                        </div>
                                     </h3>
                                     <div class="card-tools">
                                         <button type="button" class="btn btn-info btn-sm ml-2 mt-2" data-card-widget="collapse">
                                             <i class="fas fa-plus"></i>
                                         </button>
-                                        <button type="button" class="btn btn-danger btn-sm ml-2 mt-2" data-card-widget="remove">
+                                        <button type="button" class="btn btn-danger btn-sm ml-2 mt-2" data-card-widget="remove" onclick="CreateModuleAndSubmodulesRemoveSubmodule(this)">
                                             <i class="fas fa-times"></i>
                                         </button>
                                     </div>
                                 </div>
                                 <div class="card-body" style="display: none;">
-                                    <div class="p-4">
-                                        <select name="" id="" class="form-control select2" style="width: 100%;"></select>
+                                    <div class="form-group">
+                                        <label for="">Role</label>
+                                        <select name="role_c" id="role_c" class="form-control role_c">
+                                            <option value="">Seleccione</option>
+                                        </select>
                                     </div>
-                                    <div class="table-responsive pb-4" id="permissions_access_c">
-                                        <div class="row pl-2 icheck-primary">
-                                            <input type="checkbox" id="Dashboard.ModulesAndSubmodules.Index">
-                                            <label for="Dashboard.ModulesAndSubmodules.Index" class="mt-3 ml-3">
-                                                Dashboard.ModulesAndSubmodules.Index
-                                            </label>
+                                    <div class="form-group">
+                                        <label for="">Permission</label>
+                                        <select name="permission_access_c" id="permission_access_c" class="form-control permission_access_c">
+                                            <option value="">Seleccione</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="">Ruta</label>
+                                        <div class="input-group">
+                                            <input type="text" name="url_c" id="url_c" class="form-control url_c" readonly>
+                                            <div class="input-group-append">
+                                                <span class="input-group-text">
+                                                    <i class="fas fa-route-highway"></i>
+                                                </span>
+                                            </div>
                                         </div>
                                     </div>
+                                    <div class="form-group">
+                                        <label for="">Icono Submodulo</label>
+                                        <div class="input-group">
+                                            <input type="text" name="subicon_c" id="subicon_c" class="form-control subicon_c">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text">
+                                                    <i class="" id="icon_module"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
                                 </div>
                             </div>
                         </div>
@@ -93,10 +124,10 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-success" id="CreateRoleAndPermissionsAddPermissionButton" data-count="1" onclick="CreateRoleAndPermissionsAddPermission(this)" title="Agregar permiso">
+                <button type="button" class="btn btn-success" id="CreateRoleAndPermissionsAddPermissionButton" data-count="1" title="Agregar permiso">
                     <i class="fas fa-plus"></i>
                 </button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal" title="Cerrar ventana" onclick="CreateRoleAndPermissionsModal()">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" title="Cerrar ventana">
                     <i class="fas fa-xmark"></i>
                 </button>
                 <button type="button" class="btn btn-primary" id="CreateRoleAndPermissionsButton" onclick="CreateRoleAndPermissions()" title="Guardar Rol y permisos">

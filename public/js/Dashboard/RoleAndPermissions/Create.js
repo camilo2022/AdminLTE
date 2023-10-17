@@ -112,19 +112,7 @@ function CreateRoleAndPermissions() {
                 error: function(xhr, textStatus, errorThrown) {
                     RemoveIsInvalidClassCreateRoleAndPermissions();
                     tableRolesAndPermissions.ajax.reload();
-                    if(xhr.responseJSON.error){
-                        toastr.error(xhr.responseJSON.error.message);
-                        toastr.error(xhr.responseJSON.error.error);
-                    } else if(xhr.responseJSON.errors){
-                        $.each(xhr.responseJSON.errors, function(field, messages) {
-                            AddIsInvalidClassCreateRoleAndPermissions(field);
-                            $.each(messages, function(index, message) {
-                                toastr.error(message);
-                            });
-                        });
-                    } else {
-                        toastr.error(xhr.responseJSON.message);
-                    }
+                    CreateRoleAndPermissionsAjaxError(xhr);
                     AddIsValidClassCreateRoleAndPermissions();
                 }
             });
@@ -132,6 +120,21 @@ function CreateRoleAndPermissions() {
             toastr.info('El rol y los permisos no fueron creados.')
         }
     });
+}
+
+function CreateRoleAndPermissionsAjaxError(xhr) {
+    if(xhr.responseJSON.error){
+        toastr.error(xhr.responseJSON.error.message);
+        toastr.error(xhr.responseJSON.error.error);
+    } else if(xhr.responseJSON.errors){
+        $.each(xhr.responseJSON.errors, function(field, messages) {
+            $.each(messages, function(index, message) {
+                toastr.error(message);
+            });
+        });
+    } else {
+        toastr.error(xhr.responseJSON.message);
+    }
 }
 
 function AddIsValidClassCreateRoleAndPermissions() {

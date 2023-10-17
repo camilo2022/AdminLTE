@@ -51,19 +51,7 @@ function PasswordUser(id) {
                 error: function(xhr, textStatus, errorThrown) {
                     RemoveIsInvalidClassPasswordUser();
                     tableUsers.ajax.reload();
-                    if(xhr.responseJSON.error){
-                        toastr.error(xhr.responseJSON.error.message);
-                        toastr.error(xhr.responseJSON.error.error);
-                    } else if(xhr.responseJSON.errors){
-                        $.each(xhr.responseJSON.errors, function(field, messages) {
-                            AddIsInvalidClassPasswordUser(field);
-                            $.each(messages, function(index, message) {
-                                toastr.error(message);
-                            });
-                        });
-                    } else {
-                        toastr.error(xhr.responseJSON.message);
-                    }
+                    PasswordUserAjaxError(xhr);
                     AddIsValidClassPasswordUser();
                 }
             });
@@ -71,6 +59,21 @@ function PasswordUser(id) {
             toastr.info('El usuario no se le actualizo la contraseña.')
         }
     });
+}
+
+function PasswordUserAjaxError(xhr) {
+    if(xhr.responseJSON.error){
+        toastr.error(xhr.responseJSON.error.message);
+        toastr.error(xhr.responseJSON.error.error);
+    } else if(xhr.responseJSON.errors){
+        $.each(xhr.responseJSON.errors, function(field, messages) {
+            $.each(messages, function(index, message) {
+                toastr.error(message);
+            });
+        });
+    } else {
+        toastr.error(xhr.responseJSON.message);
+    }
 }
 
 function AddIsValidClassPasswordUser() {

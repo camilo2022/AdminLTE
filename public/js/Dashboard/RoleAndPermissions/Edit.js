@@ -117,19 +117,7 @@ function EditRoleAndPermissions(id) {
                 error: function(xhr, textStatus, errorThrown) {
                     RemoveIsInvalidClassEditRoleAndPermissions();
                     tableRolesAndPermissions.ajax.reload();
-                    if(xhr.responseJSON.error){
-                        toastr.error(xhr.responseJSON.error.message);
-                        toastr.error(xhr.responseJSON.error.error);
-                    } else if(xhr.responseJSON.errors){
-                        $.each(xhr.responseJSON.errors, function(field, messages) {
-                            AddIsInvalidClassEditRoleAndPermissions(field);
-                            $.each(messages, function(index, message) {
-                                toastr.error(message);
-                            });
-                        });
-                    } else {
-                        toastr.error(xhr.responseJSON.message);
-                    }
+                    EditRoleAndPermissionsAjaxError(xhr);
                     AddIsValidClassEditRoleAndPermissions();
                 }
             });
@@ -137,6 +125,21 @@ function EditRoleAndPermissions(id) {
             toastr.info('El rol y los permisos no fueron actualizados.')
         }
     });
+}
+
+function EditRoleAndPermissionsAjaxError(xhr) {
+    if(xhr.responseJSON.error){
+        toastr.error(xhr.responseJSON.error.message);
+        toastr.error(xhr.responseJSON.error.error);
+    } else if(xhr.responseJSON.errors){
+        $.each(xhr.responseJSON.errors, function(field, messages) {
+            $.each(messages, function(index, message) {
+                toastr.error(message);
+            });
+        });
+    } else {
+        toastr.error(xhr.responseJSON.message);
+    }
 }
 
 function AddIsValidClassEditRoleAndPermissions() {

@@ -112,18 +112,7 @@ function AssignRoleAndPermissionUserModal(id, email) {
         },
         error: function(xhr, textStatus, errorThrown) {
             tableUsers.ajax.reload();
-            if(xhr.responseJSON.error){
-                toastr.error(xhr.responseJSON.error.message);
-                toastr.error(xhr.responseJSON.error.error);
-            } else if(xhr.responseJSON.errors){
-                $.each(xhr.responseJSON.errors, function(field, messages) {
-                    $.each(messages, function(index, message) {
-                        toastr.error(message);
-                    });
-                });
-            } else {
-                toastr.error(xhr.responseJSON.message);
-            }
+            AssignRoleAndPermissionAjaxError(xhr);
         }
     });
 }
@@ -156,22 +145,26 @@ function AssignRoleAndPermission(id, role, permissions, email) {
                 },
                 error: function(xhr, textStatus, errorThrown) {
                     tableUsers.ajax.reload();
-                    if(xhr.responseJSON.error){
-                        toastr.error(xhr.responseJSON.error.message);
-                        toastr.error(xhr.responseJSON.error.error);
-                    } else if(xhr.responseJSON.errors){
-                        $.each(xhr.responseJSON.errors, function(field, messages) {
-                            $.each(messages, function(index, message) {
-                                toastr.error(message);
-                            });
-                        });
-                    } else {
-                        toastr.error(xhr.responseJSON.message);
-                    }
+                    AssignRoleAndPermissionAjaxError(xhr);
                 }
             });
         } else {
             toastr.info('El rol y los permisos no fueron asignados al usuario.');
         }
     });
+}
+
+function AssignRoleAndPermissionAjaxError(xhr) {
+    if(xhr.responseJSON.error){
+        toastr.error(xhr.responseJSON.error.message);
+        toastr.error(xhr.responseJSON.error.error);
+    } else if(xhr.responseJSON.errors){
+        $.each(xhr.responseJSON.errors, function(field, messages) {
+            $.each(messages, function(index, message) {
+                toastr.error(message);
+            });
+        });
+    } else {
+        toastr.error(xhr.responseJSON.message);
+    }
 }
