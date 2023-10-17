@@ -9,6 +9,7 @@ class ModuleHasRoles extends Model
 {
     use HasFactory;
     protected $table = 'module_has_roles';
+    public $timestamps = false;
 
     protected $fillable = [
         'role_id',

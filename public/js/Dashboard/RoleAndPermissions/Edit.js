@@ -4,32 +4,39 @@ function EditRoleAndPermissionsModal(id, role, permissions) {
 
     $('#role_e').val(role);
     $('.permissions_e').empty();
-    $('#EditRoleAndPermissionsButton').attr('onclick', `EditRoleAndPermissions(${id})`);
+    $('#EditRoleAndPermissionsButton').attr({
+        'onclick': `EditRoleAndPermissions(${id})`
+    });
 
     $.each(permissions, function (i, permission) {
-        let permissionGroup = $('<div>');
-        permissionGroup.attr('class', 'form-group permission-group');
+        let permissionGroup = $('<div>').attr({
+            'class': 'form-group permission-group'
+        });
 
-        let inputGroup = $('<div>');
-        inputGroup.attr('class', 'input-group');
+        let inputGroup = $('<div>').attr({
+            'class': 'input-group'
+        });
 
-        let input = $('<input>');
-        input.attr('type', 'text');
-        input.attr('class', 'form-control');
-        input.attr('id', `permission_e${i}`);
-        input.attr('name', 'permissions_e[]');
-        input.attr('value', permission);
+        let input = $('<input>').attr({
+            'type': 'text',
+            'class': 'form-control',
+            'id': `permission_e${i}`,
+            'name': 'permissions_e[]',
+            'value': permission
+        });
 
         let inputGroupAppend = $('<div>');
         inputGroupAppend.attr('class', 'input-group-append');
 
-        let span = $('<span>');
-        span.attr('class', 'input-group-text bg-red permission-toggle');
-        span.attr('data-id', i);
-        span.attr('onclick', 'EditRoleAndPermissionsRemovePermission(this)');
+        let span = $('<span>').attr({
+            'class': 'input-group-text bg-red permission-toggle',
+            'data-id': i,
+            'onclick': 'EditRoleAndPermissionsRemovePermission(this)'
+        });
 
-        let icon = $('<i>');
-        icon.attr('class', 'fas fa-minus');
+        let icon = $('<i>').attr({
+            'class': 'fas fa-minus'
+        });
 
         // Construir la estructura de elementos
         span.append(icon);
@@ -39,7 +46,9 @@ function EditRoleAndPermissionsModal(id, role, permissions) {
 
         // Agregar al contenedor
         $('.permissions_e').append(permissionGroup);
-        $('#EditRoleAndPermissionsAddPermissionButton').attr('data-count', i + 1);
+        $('#EditRoleAndPermissionsAddPermissionButton').attr({
+            'data-count': i++
+        });
     })
     $('#EditRoleAndPermissionsModal').modal('show');
 }
@@ -47,27 +56,34 @@ function EditRoleAndPermissionsModal(id, role, permissions) {
 function EditRoleAndPermissionsAddPermission(permission) {
     let permissionCount = $(permission).data('count');
     let newPermissionGroup = $('<div>');
-    newPermissionGroup.attr('class', 'form-group permission-group');
+    newPermissionGroup.attr({
+        'class': 'form-group permission-group'
+    });
 
-    let inputGroup = $('<div>');
-    inputGroup.attr('class', 'input-group');
+    let inputGroup = $('<div>').attr({
+        'class': 'input-group'
+    });
 
-    let input = $('<input>');
-    input.attr('type', 'text');
-    input.attr('class', 'form-control');
-    input.attr('id', `permission_e${permissionCount}`);
-    input.attr('name', 'permissions_e[]');
+    let input = $('<input>').attr({
+        'type': 'text',
+        'class': 'form-control',
+        'id': `permission_e${permissionCount}`,
+        'name': 'permissions_e[]'
+    });
 
-    let inputGroupAppend = $('<div>');
-    inputGroupAppend.attr('class', 'input-group-append');
+    let inputGroupAppend = $('<div>').attr({
+        'class': 'input-group-append'
+    });
 
-    let span = $('<span>');
-    span.attr('class', 'input-group-text bg-red permission-toggle');
-    span.attr('data-id', permissionCount);
-    span.attr('onclick', 'EditRoleAndPermissionsRemovePermission(this)');
+    let span = $('<span>').attr({
+        'class': 'input-group-text bg-red permission-toggle',
+        'data-id': permissionCount,
+        'onclick': 'EditRoleAndPermissionsRemovePermission(this)'
+    });
 
-    let icon = $('<i>');
-    icon.attr('class', 'fas fa-minus');
+    let icon = $('<i>').attr({
+        'class': 'fas fa-minus'
+    });
 
     // Construir la estructura de elementos
     span.append(icon);
@@ -77,7 +93,7 @@ function EditRoleAndPermissionsAddPermission(permission) {
 
     // Agregar al contenedor
     $('.permissions_e').append(newPermissionGroup);
-    permissionCount++
+    permissionCount++;
     $(permission).data('count', permissionCount);
 }
 
@@ -133,6 +149,7 @@ function EditRoleAndPermissionsAjaxError(xhr) {
         toastr.error(xhr.responseJSON.error.error);
     } else if(xhr.responseJSON.errors){
         $.each(xhr.responseJSON.errors, function(field, messages) {
+            AddIsInvalidClassEditRoleAndPermissions(field);
             $.each(messages, function(index, message) {
                 toastr.error(message);
             });
@@ -149,7 +166,7 @@ function AddIsValidClassEditRoleAndPermissions() {
 
     // Itera sobre los inputs dentro del div
     $('.permissions_e').find('input').each(function() {
-    
+
         // Verifica si el input no tiene la clase 'is-invalid'
         if (!$(this).hasClass('is-invalid')) {
             // Agrega la clase 'is-valid'
@@ -160,7 +177,7 @@ function AddIsValidClassEditRoleAndPermissions() {
 
 function RemoveIsValidClassEditRoleAndPermissions() {
     $('#role_e').removeClass('is-valid');
-  
+
     // Itera sobre los inputs dentro del div
     $('.permissions_e').find('input').each(function() {
         // Agrega la clase 'is-valid'
@@ -182,7 +199,7 @@ function AddIsInvalidClassEditRoleAndPermissions(input) {
 
 function RemoveIsInvalidClassEditRoleAndPermissions() {
     $('#role_e').removeClass('is-invalid');
-  
+
     // Itera sobre los inputs dentro del div
     $('.permissions_e').find('input').each(function() {
         // Remover la clase 'is-invalid'

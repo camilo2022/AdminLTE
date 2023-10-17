@@ -233,11 +233,11 @@
                                 </p>
                             </a>
                         </li>
-                        
+
                         @foreach ($items as $item)
                             <li class="nav-item has-treeview">
                                 <a href="#" class="nav-link">
-                                    <i class="{{ $item->icon }}"></i>
+                                    <i class="{{ 'nav-icon '.$item->icon }}"></i>
                                     <p>
                                         {{ $item->name }}
                                         <i class="right fas fa-angle-left"></i>
@@ -247,7 +247,7 @@
                                     @foreach ($item->submodules as $subitem)
                                     <li class="nav-item">
                                         <a href="{{ $subitem->url }}" class="nav-link">
-                                            <i class="{{ $subitem->icon }}"></i>
+                                            <i class="{{ 'nav-icon '.$subitem->icon }}"></i>
                                             <p>{{ $subitem->name }}</p>
                                         </a>
                                     </li>
@@ -255,7 +255,7 @@
                                 </ul>
                             </li>
                         @endforeach
-                        
+
                     </ul>
                 </nav>
                 <!-- /.sidebar-menu -->

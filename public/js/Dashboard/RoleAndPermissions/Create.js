@@ -5,63 +5,72 @@ function CreateRoleAndPermissionsModal() {
     $('#role_c').val('');
     $('.permissions_c').empty();
 
-    let permissionGroup = $('<div>');
-    permissionGroup.attr('class', 'form-group');
+    let permissionGroup = $('<div>').attr({
+        'class': 'form-group'
+    });
 
-    let inputGroup = $('<div>');
-    inputGroup.attr('class', 'input-group');
+    let inputGroup = $('<div>').attr({
+        'class': 'input-group'
+    });
 
-    let input = $('<input>');
-    input.attr('type', 'text');
-    input.attr('class', 'form-control');
-    input.attr('id', `permission_c0`);
-    input.attr('name', 'permissions_c[]');
+    let input = $('<input>').attr({
+        'type': 'text',
+        'class': 'form-control',
+        'id': `permission_c0`,
+        'name': 'permissions_c[]'
+    });
 
-    let inputGroupAppend = $('<div>');
-    inputGroupAppend.attr('class', 'input-group-append');
+    let inputGroupAppend = $('<div>').attr({
+        'class': 'input-group-append'
+    });
 
-    let inputGroupText = $('<span>');
-    inputGroupText.attr('class', 'input-group-text');
+    let inputGroupText = $('<span>').attr({
+        'class': 'input-group-text'
+    });
 
-    let inputIcon = $('<i>');
-    inputIcon.attr('class', 'fas fa-key');
-  
+    let inputIcon = $('<i>').attr({
+        'class': 'fas fa-key'
+    });
+
     inputGroupText.append(inputIcon);
     inputGroupAppend.append(inputGroupText);
-    // Construir la estructura de elementos
-    inputGroup.append(input);
-    inputGroup.append(inputGroupAppend);
+    inputGroup.append(input, inputGroupAppend);
     permissionGroup.append(inputGroup);
 
-    // Agregar al contenedor
     $('.permissions_c').append(permissionGroup);
 }
 
 function CreateRoleAndPermissionsAddPermission(permission) {
     let permissionCount = $(permission).data('count');
 
-    let newPermissionGroup = $('<div>');
-    newPermissionGroup.attr('class', 'form-group permission-group');
+    let newPermissionGroup = $('<div>').attr({
+        'class': 'form-group permission-group'
+    });
 
-    let inputGroup = $('<div>');
-    inputGroup.attr('class', 'input-group');
+    let inputGroup = $('<div>').attr({
+        'class': 'input-group'
+    });
 
-    let input = $('<input>');
-    input.attr('type', 'text');
-    input.attr('class', 'form-control');
-    input.attr('id', `permission_c${permissionCount}`);
-    input.attr('name', 'permissions_c[]');
+    let input = $('<input>').attr({
+        'type': 'text',
+        'class': 'form-control',
+        'id': `permission_c${permissionCount}`,
+        'name': 'permissions_c[]'
+    });
 
-    let inputGroupAppend = $('<div>');
-    inputGroupAppend.attr('class', 'input-group-append');
+    let inputGroupAppend = $('<div>').attr({
+        'class': 'input-group-append'
+    });
 
-    let span = $('<span>');
-    span.attr('class', 'input-group-text bg-red permission-toggle');
-    span.attr('data-id', permissionCount);
-    span.attr('onclick', 'CreateRoleAndPermissionsRemovePermission(this)');
+    let span = $('<span>').attr({
+        'class': 'input-group-text bg-red permission-toggle',
+        'data-id': permissionCount,
+        'onclick': 'CreateRoleAndPermissionsRemovePermission(this)'
+    });
 
-    let icon = $('<i>');
-    icon.attr('class', 'fas fa-minus');
+    let icon = $('<i>').attr({
+        'class': 'fas fa-minus'
+    });
 
     // Construir la estructura de elementos
     span.append(icon);
@@ -71,7 +80,7 @@ function CreateRoleAndPermissionsAddPermission(permission) {
 
     // Agregar al contenedor
     $('.permissions_c').append(newPermissionGroup);
-    permissionCount++
+    permissionCount++;
     $(permission).data('count', permissionCount);
 }
 
@@ -128,6 +137,7 @@ function CreateRoleAndPermissionsAjaxError(xhr) {
         toastr.error(xhr.responseJSON.error.error);
     } else if(xhr.responseJSON.errors){
         $.each(xhr.responseJSON.errors, function(field, messages) {
+            AddIsInvalidClassCreateRoleAndPermissions(field);
             $.each(messages, function(index, message) {
                 toastr.error(message);
             });
@@ -144,7 +154,7 @@ function AddIsValidClassCreateRoleAndPermissions() {
 
     // Itera sobre los inputs dentro del div
     $('.permissions_c').find('input').each(function() {
-    
+
         // Verifica si el input no tiene la clase 'is-invalid'
         if (!$(this).hasClass('is-invalid')) {
             // Agrega la clase 'is-valid'
@@ -155,7 +165,7 @@ function AddIsValidClassCreateRoleAndPermissions() {
 
 function RemoveIsValidClassCreateRoleAndPermissions() {
     $('#role_c').removeClass('is-valid');
-  
+
     // Itera sobre los inputs dentro del div
     $('.permissions_c').find('input').each(function() {
         // Agrega la clase 'is-valid'
@@ -177,7 +187,7 @@ function AddIsInvalidClassCreateRoleAndPermissions(input) {
 
 function RemoveIsInvalidClassCreateRoleAndPermissions() {
     $('#role_c').removeClass('is-invalid');
-  
+
     // Itera sobre los inputs dentro del div
     $('.permissions_c').find('input').each(function() {
         // Remover la clase 'is-invalid'

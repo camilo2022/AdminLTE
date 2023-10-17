@@ -63,6 +63,7 @@ function EditUserAjaxError(xhr) {
         toastr.error(xhr.responseJSON.error.error);
     } else if(xhr.responseJSON.errors){
         $.each(xhr.responseJSON.errors, function(field, messages) {
+            AddIsInvalidClassEditUser(field);
             $.each(messages, function(index, message) {
                 toastr.error(message);
             });

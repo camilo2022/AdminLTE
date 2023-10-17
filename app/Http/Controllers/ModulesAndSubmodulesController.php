@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ModulesAndSubmodules\ModulesAndSubmodulesIndexQueryRequest;
 use App\Http\Requests\ModulesAndSubmodules\ModulesAndSubmodulesDeleteRequest;
+use App\Http\Requests\ModulesAndSubmodules\ModulesAndSubmodulesStoreRequest;
 use App\Http\Resources\ModulesAndSubmodules\ModulesAndSubmodulesIndexQueryCollection;
 use App\Models\Module;
+use App\Models\ModuleHasRoles;
+use App\Models\Submodule;
 use App\Traits\ApiResponser;
 use Carbon\Carbon;
 use Exception;
@@ -82,11 +85,62 @@ class ModulesAndSubmodulesController extends Controller
         }
     }
 
+    public function store(ModulesAndSubmodulesStoreRequest $request)
+    {
+        try {
+            $module = new Module();
+            $module->name = $request->module;
+            $module->icon = $request->icon;
+            $module->save();
+
+            foreach ($request->roles as $role) {
+                $module_has_roles = new ModuleHasRoles();
+                $module_has_roles->role_id = $role;
+                $module_has_roles->module_id = $module->id;
+                $module_has_roles->save();
+            }
+
+            foreach ($request->submodules as $submodules) {
+                $submodules = (object) $submodules;
+                $submodule = new Submodule();
+                $submodule->name = $submodules->submodule;
+                $submodule->url = $submodules->url;
+                $submodule->icon = $submodules->icon;
+                $submodule->module_id = $module->id;
+                $submodule->permission_id = $submodules->permission_id;
+                $submodule->save();
+            }
+
+            return $this->successResponse(
+                $module,
+                'Modulo y submodulos creados correctamente.',
+                201
+            );
+        } catch (ModelNotFoundException $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->errorRoleModelNotFoundException,
+                    'error' => $e->getMessage()
+                ],
+                404
+            );
+        } catch (Exception $e) {
+            // Deshacer la transacción en caso de excepción y devolver una respuesta de error
+            return $this->errorResponse(
+                [
+                    'message' => $this->error,
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        }
+    }
+
     public function storeQuery(Request $request)
     {
         try {
             if($request->ajax()){
-                if (count($request->all()) === 1) {
+                if ($request->filled('roles')) {
                     // Consulto los roles que no esten asociados a ningun modulo
                     $RolesWithoutModules = Role::whereDoesntHave('modules')->get();
 
@@ -95,16 +149,14 @@ class ModulesAndSubmodulesController extends Controller
                         $this->success,
                         200
                     );
-                } 
-                if(count($request->all()) === 2) {
-                    if($request->has('role')) {
-                        $RoleWithPermissions = Role::with('permissions')->findByName($request->role);
-                        return $this->successResponse(
-                            $RoleWithPermissions,
-                            $this->success,
-                            200
-                        );
-                    }
+                }
+                if($request->filled('role')) {
+                    $RoleWithPermissions = Role::with('permissions')->findByName($request->role);
+                    return $this->successResponse(
+                        $RoleWithPermissions,
+                        $this->success,
+                        200
+                    );
                 }
             }
         } catch (ModelNotFoundException $e) {

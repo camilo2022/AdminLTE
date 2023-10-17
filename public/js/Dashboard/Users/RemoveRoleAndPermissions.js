@@ -22,12 +22,21 @@ function RemoveRoleAndPermissionUserModal(id, email) {
             $('#permissions-container-remove').empty();
             $.each(response.data, function (index, item) {
                 // Crear el div del card
-                var card = $('<div class="card collapsed-card">');
+                let card = $('<div>').attr({
+                    'class': 'card collapsed-card'
+                });
 
                 // Crear el div del card-header
-                var cardHeader = $('<div class="card-header border-0 ui-sortable-handle">');
-                var cardTitle = $('<h3 class="card-title mt-1">');
-                var cardIcon = $('<i class="fas fa-shield-xmark fa-lg mr-1"></i>');
+                let cardHeader = $('<div>').attr({
+                    'class': 'card-header border-0 ui-sortable-handle',
+                });
+                let cardTitle = $('<h3>').attr({
+                    'class': 'card-title mt-1'
+                });
+
+                let cardIcon = $('<i>').attr({
+                    'class': 'fas fa-shield-xmark fa-lg mr-1'
+                });
 
                 cardTitle.append(cardIcon);
                 cardTitle.append(item.role);
@@ -52,15 +61,23 @@ function RemoveRoleAndPermissionUserModal(id, email) {
                 cardHeader.append(cardTools);
 
                 // Crear el div del card-body
-                var cardBody = $('<div class="card-body" style="display: none;">');
+                let cardBody = $('<div>').attr({
+                    'class': 'card-body',
+                    'style': 'display: none'
+                });
 
                 // Crear el div para checkboxes
-                let checkboxesDiv = $('<div class="row icheck-primary">');
-                let selectAllCheckbox = $('<input type="checkbox">');
-                selectAllCheckbox.attr('id', `selectAllCheckbox${index}`);
+                let checkboxesDiv = $('<div>').attr({
+                    'class': 'row icheck-primary'
+                });
 
-                let selectAllLabel = $('<label>').text('Seleccionar todos los permisos');
-                selectAllLabel.attr('for', `selectAllCheckbox${index}`);
+                let selectAllCheckbox = $('<input type="checkbox">').attr({
+                    'id': `selectAllCheckbox${index}`
+                });
+
+                let selectAllLabel = $('<label>').text('Seleccionar todos los permisos').attr({
+                    'for': `selectAllCheckbox${index}`
+                });
 
                 selectAllCheckbox.change(function() {
                     let checkboxes = cardBody.find('input[type="checkbox"]');
@@ -76,13 +93,17 @@ function RemoveRoleAndPermissionUserModal(id, email) {
 
                 // Crear checkboxes para permisos
                 $.each(item.permissions, function (i, permission) {
-                    let permissionDiv = $('<div class="row pl-2 icheck-primary">');
-                    let permissionCheckbox = $(`<input type="checkbox">`);
-                    permissionCheckbox.attr('id', permission);
+                    let permissionDiv = $('<div>').attr({
+                        'class': 'row pl-2 icheck-primary'
+                    });
 
-                    let permissionLabel = $('<label>').text(permission);
-                    permissionLabel.attr('for', permission);
-                    permissionLabel.attr('class', 'mt-3 ml-3');
+                    let permissionCheckbox = $(`<input type="checkbox">`).attr({
+                        'id': permission
+                    });
+
+                    let permissionLabel = $('<label>').text(permission).attr({
+                        'for': permission, 'class': 'mt-3 ml-3'
+                    });
 
                     // Agregar elementos al cardBody
                     permissionDiv.append(permissionCheckbox);
