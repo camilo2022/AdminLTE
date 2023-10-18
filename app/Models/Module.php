@@ -71,4 +71,39 @@ class Module extends Model
         // Filtro por rango de fechas entre 'start_date' y 'end_date' en el campo 'created_at'
         return $query->whereBetween('created_at', [$start_date, $end_date]);
     }
+
+    public function syncRoles($roles)
+    {
+        $this->roles()->sync($roles);
+    }
+
+    public function syncSubmodules($submodules)
+    {
+        $newSubmoduleIds = collect();
+
+        if (is_array($submodules)) {
+            collect($submodules)->each(function ($submodule) use ($newSubmoduleIds) {
+                $newSubmoduleIds->push($this->saveSubmodule((object) $submodule));
+            });
+        } elseif (is_object($submodules)) {
+            $newSubmoduleIds->push($this->saveSubmodule((object) $submodules));
+        }
+
+        // Eliminar submódulos que no están en $newSubmoduleIds
+        $this->submodules()->whereNotIn('id', $newSubmoduleIds)->delete();
+    }
+
+    private function saveSubmodule($submodule)
+    {
+        $submoduleNew = !isset($submodule->id) ? new Submodule() : Submodule::findOrFail($submodule->id);
+
+        $submoduleNew->name = is_array($submodule) ? $submodule['submodule'] : $submodule->submodule;
+        $submoduleNew->url = is_array($submodule) ? $submodule['url'] : $submodule->url;
+        $submoduleNew->icon = is_array($submodule) ? $submodule['icon'] : $submodule->icon;
+        $submoduleNew->permission_id = is_array($submodule) ? $submodule['permission_id'] : $submodule->permission_id;
+        $submoduleNew->module_id = $this->id;
+        $submoduleNew->save();
+
+        return $submoduleNew->id;
+    }
 }

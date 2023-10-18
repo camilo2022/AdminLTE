@@ -93,23 +93,8 @@ class ModulesAndSubmodulesController extends Controller
             $module->icon = $request->icon;
             $module->save();
 
-            foreach ($request->roles as $role) {
-                $module_has_roles = new ModuleHasRoles();
-                $module_has_roles->role_id = $role;
-                $module_has_roles->module_id = $module->id;
-                $module_has_roles->save();
-            }
-
-            foreach ($request->submodules as $submodules) {
-                $submodules = (object) $submodules;
-                $submodule = new Submodule();
-                $submodule->name = $submodules->submodule;
-                $submodule->url = $submodules->url;
-                $submodule->icon = $submodules->icon;
-                $submodule->module_id = $module->id;
-                $submodule->permission_id = $submodules->permission_id;
-                $submodule->save();
-            }
+            $module->syncRoles($request->roles);
+            $module->syncSubmodules($request->submodules);
 
             return $this->successResponse(
                 $module,

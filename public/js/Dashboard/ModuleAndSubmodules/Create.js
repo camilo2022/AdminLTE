@@ -61,6 +61,7 @@ function CreateModuleAndSubmodules() {
                     $('#CreateModuleAndSubmodulesModal').modal('hide');
                 },
                 error: function(xhr, textStatus, errorThrown) {
+                    RemoveIsValidClassCreateModuleAndSubmodules();
                     RemoveIsInvalidClassCreateModuleAndSubmodules();
                     tableModulesAndSubmodules.ajax.reload();
                     CreateModuleAndSubmodulesAjaxError(xhr);
@@ -346,8 +347,8 @@ function AddIsValidClassCreateModuleAndSubmodules() {
 }
 
 function RemoveIsValidClassCreateModuleAndSubmodules() {
-    $('#role_c').removeClass('is-valid');
-    $('#role_c').removeClass('is-valid');
+    $('#module_c').removeClass('is-valid');
+    $('#icon_c').removeClass('is-valid');
 
     $('.submodules_c').find('div.submodule_c').each(function(index) {
         $(this).find('select.role_c').removeClass('is-valid');
