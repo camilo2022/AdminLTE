@@ -18,35 +18,36 @@ function AssignRoleAndPermissionUserModal(id, email) {
             $('#permissions-container-assign').empty();
             $.each(response.data, function (index, item) {
                 // Crear el div del card
-                let card = $('<div>').attr({
-                    'class': 'card collapsed-card'
-                });
+                let card = $('<div>').addClass('card collapsed-card');
 
                 // Crear el div del card-header
-                let cardHeader = $('<div>').attr({
-                    'class': 'card-header border-0 ui-sortable-handle',
-                });
-                let cardTitle = $('<h3>').attr({
-                    'class': 'card-title mt-1'
-                });
-                let cardIcon = $('<i>').attr({
-                    'class': 'fas fa-shield-check fa-lg mr-1'
-                });
+                let cardHeader = $('<div>').addClass('card-header border-0 ui-sortable-handle');
+                let cardTitle = $('<h3>').addClass('card-title mt-1');
+                let cardIcon = $('<i>').addClass('fas fa-shield-check fa-lg mr-1');
 
                 cardTitle.append(cardIcon);
                 cardTitle.append(item.role);
 
                 // Crear el div de card-tools
-                let cardTools = $('<div class="card-tools">');
+                let cardTools = $('<div>').addClass('card-tools');
 
-                var saveButton = $('<button type="button" class="btn btn-primary btn-sm" title="Remover rol y permisos.">');
-                saveButton.append('<i class="fas fa-floppy-disk"></i>');
+                let saveButton = $('<button>').attr({
+                    'type': 'button',
+                    'class': 'btn btn-primary btn-sm',
+                    'title': 'Asignar rol y permisos.'
+                }).append($('<i>').addClass('fas fa-floppy-disk'));
 
-                let collapseButton = $('<button type="button" class="btn btn-info btn-sm ml-2" data-card-widget="collapse">');
-                collapseButton.append('<i class="fas fa-plus"></i>');
+                let collapseButton = $('<button>').attr({
+                    'type': 'button',
+                    'class': 'btn btn-info btn-sm ml-2',
+                    'data-card-widget': 'collapse'
+                }).append($('<i>').addClass('fas fa-plus'));
 
-                let removeButton = $('<button type="button" class="btn btn-danger btn-sm ml-2" data-card-widget="remove">');
-                removeButton.append('<i class="fas fa-times"></i>');
+                let removeButton = $('<button>').attr({
+                    'type': 'button',
+                    'class': 'btn btn-danger btn-sm ml-2',
+                    'data-card-widget': 'remove'
+                }).append($('<i>').addClass('fas fa-times'));
 
                 // Agregar elementos al cardHeader
                 cardTools.append(saveButton);
@@ -56,16 +57,13 @@ function AssignRoleAndPermissionUserModal(id, email) {
                 cardHeader.append(cardTools);
 
                 // Crear el div del card-body
-                let cardBody = $('<div>').attr({
-                    'class': 'card-body',
-                    'style': 'display: none'
-                });
+                let cardBody = $('<div>').addClass('card-body').css('display', 'none');
 
                 // Crear el div para checkboxes
-                let checkboxesDiv = $('<div>').attr({
-                    'class': 'row icheck-primary'
-                });
-                let selectAllCheckbox = $('<input type="checkbox">').attr({
+                let checkboxesDiv = $('<div>').addClass('row icheck-primary');
+
+                let selectAllCheckbox = $('<input>').attr({
+                    'type': 'checkbox',
                     'id': `selectAllCheckbox${index}`
                 });
 
@@ -87,15 +85,15 @@ function AssignRoleAndPermissionUserModal(id, email) {
 
                 // Crear checkboxes para permisos
                 $.each(item.permissions, function (i, permission) {
-                    let permissionDiv = $('<div>').attr({
-                        'class': 'row pl-2 icheck-primary'
-                    });
-                    let permissionCheckbox = $(`<input type="checkbox">`).attr({
+                    let permissionDiv = $('<div>').addClass('row pl-2 icheck-primary');
+                    let permissionCheckbox = $(`<input>`).attr({
+                        'type': 'checkbox',
                         'id': permission
                     });
 
                     let permissionLabel = $('<label>').text(permission).attr({
-                        'for': permission, 'class': 'mt-3 ml-3'
+                        'for': permission,
+                        'class': 'mt-3 ml-3'
                     });
 
                     // Agregar elementos al cardBody

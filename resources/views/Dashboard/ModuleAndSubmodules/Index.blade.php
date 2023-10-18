@@ -97,4 +97,5 @@
     <script src="{{ asset('js/Dashboard/ModuleAndSubmodules/DataTableIndex.js') }}"></script>
     <script src="{{ asset('js/Dashboard/ModuleAndSubmodules/Create.js') }}"></script>
     <script src="{{ asset('js/Dashboard/ModuleAndSubmodules/Delete.js') }}"></script>
+    <script src="{{ asset('js/Dashboard/ModuleAndSubmodules/Suggestion.js') }}"></script>
 @endsection

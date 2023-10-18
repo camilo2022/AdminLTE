@@ -13,6 +13,7 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label for="module">Modulo</label>
+                    <i class="ml-2 far fa-circle-question" onclick="SuggestionModule()"></i>
                     <div class="input-group">
                         <input type="text" class="form-control" id="module_c" name="module">
                         <div class="input-group-append">
@@ -24,6 +25,7 @@
                 </div>
                 <div class="form-group">
                     <label for="icon_c">Icono Modulo</label>
+                    <i class="ml-2 far fa-circle-question" onclick="SuggestionModuleIcon()"></i>
                     <div class="input-group">
                         <input type="text" class="form-control" id="icon_c" name="icon_c" onkeyup="CreateModuleAndSubmodulesChangeClassIcon(this, 'icon_module')">
                         <div class="input-group-append">
@@ -35,6 +37,7 @@
                 </div>
                 <div class="form-group">
                     <label for="">Roles de Acceso</label>
+                    <i class="ml-2 far fa-circle-question" onclick="SuggestionModuleRoles()"></i>
                     <div class="card collapsed-card">
                         <div class="card-header border-0 ui-sortable-handle">
                             <h3 class="card-title mt-1">
@@ -58,6 +61,7 @@
                 </div>
                 <div class="form-group">
                     <label for="submodule">Submodulos</label>
+                    <i class="ml-2 far fa-circle-question" onclick="SuggestionSubmodule()"></i>
                     <div class="submodules_c">
 
                     </div>

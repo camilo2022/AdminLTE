@@ -13,10 +13,19 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label for="role_e">Rol</label>
-                    <input type="text" class="form-control" id="role_e" name="role">
+                    <i class="ml-2 far fa-circle-question" onclick="SuggestionRole()"></i>
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="role_e" name="role">
+                        <div class="input-group-append">
+                            <span class="input-group-text">
+                                <i class="fas fa-shield-keyhole"></i>
+                            </span>
+                        </div>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label for="">Permisos</label>
+                    <i class="ml-2 far fa-circle-question" onclick="SuggestionPermissions()"></i>
                     <div class="permissions_e">
 
                     </div>

@@ -5,32 +5,17 @@ function CreateRoleAndPermissionsModal() {
     $('#role_c').val('');
     $('.permissions_c').empty();
 
-    let permissionGroup = $('<div>').attr({
-        'class': 'form-group'
-    });
-
-    let inputGroup = $('<div>').attr({
-        'class': 'input-group'
-    });
-
+    let permissionGroup = $('<div>').addClass('form-group');
+    let inputGroup = $('<div>').addClass('input-group');
     let input = $('<input>').attr({
         'type': 'text',
         'class': 'form-control',
-        'id': `permission_c0`,
+        'id': 'permission_c0',
         'name': 'permissions_c[]'
     });
-
-    let inputGroupAppend = $('<div>').attr({
-        'class': 'input-group-append'
-    });
-
-    let inputGroupText = $('<span>').attr({
-        'class': 'input-group-text'
-    });
-
-    let inputIcon = $('<i>').attr({
-        'class': 'fas fa-key'
-    });
+    let inputGroupAppend = $('<div>').addClass('input-group-append');
+    let inputGroupText = $('<span>').addClass('input-group-text');
+    let inputIcon = $('<i>').addClass('fas fa-key');
 
     inputGroupText.append(inputIcon);
     inputGroupAppend.append(inputGroupText);
@@ -43,13 +28,8 @@ function CreateRoleAndPermissionsModal() {
 function CreateRoleAndPermissionsAddPermission(permission) {
     let permissionCount = $(permission).data('count');
 
-    let newPermissionGroup = $('<div>').attr({
-        'class': 'form-group permission-group'
-    });
-
-    let inputGroup = $('<div>').attr({
-        'class': 'input-group'
-    });
+    let newPermissionGroup = $('<div>').addClass('form-group permission-group');
+    let inputGroup = $('<div>').addClass('input-group');
 
     let input = $('<input>').attr({
         'type': 'text',
@@ -58,9 +38,7 @@ function CreateRoleAndPermissionsAddPermission(permission) {
         'name': 'permissions_c[]'
     });
 
-    let inputGroupAppend = $('<div>').attr({
-        'class': 'input-group-append'
-    });
+    let inputGroupAppend = $('<div>').addClass('input-group-append');
 
     let span = $('<span>').attr({
         'class': 'input-group-text bg-red permission-toggle',
@@ -68,9 +46,7 @@ function CreateRoleAndPermissionsAddPermission(permission) {
         'onclick': 'CreateRoleAndPermissionsRemovePermission(this)'
     });
 
-    let icon = $('<i>').attr({
-        'class': 'fas fa-minus'
-    });
+    let icon = $('<i>').addClass('fas fa-minus');
 
     // Construir la estructura de elementos
     span.append(icon);

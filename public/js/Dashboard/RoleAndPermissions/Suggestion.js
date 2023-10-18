@@ -1,5 +1,5 @@
 function SuggestionRole() {
-    toastr.info('El nombre del rol debe ser representativo de un módulo, por ejemplo, para el módulo de usuarios, el rol se llamaría "Users".');
+    toastr.info('El nombre del rol debe ser representativo de un submódulo, por ejemplo, para el módulo de usuarios, el rol se llamaría "Users".');
     toastr.info('Es recomendable que el nombre del rol sea en inglés.');
 }
 

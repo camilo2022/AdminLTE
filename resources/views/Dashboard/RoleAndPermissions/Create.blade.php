@@ -12,8 +12,8 @@
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label for="role_c" class="mr-2">Rol</label> 
-                    <i class="far fa-circle-question" onclick="SuggestionRole()"></i>
+                    <label for="role_c">Rol</label>
+                    <i class="ml-2 far fa-circle-question" onclick="SuggestionRole()"></i>
                     <div class="input-group">
                         <input type="text" class="form-control" id="role_c" name="role">
                         <div class="input-group-append">
@@ -24,8 +24,8 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="" class="mr-2">Permisos</label>
-                    <i class="far fa-circle-question" onclick="SuggestionPermissions()"></i>
+                    <label for="">Permisos</label>
+                    <i class="ml-2 far fa-circle-question" onclick="SuggestionPermissions()"></i>
                     <div class="permissions_c">
                         <div class="form-group">
                             <div class="input-group">

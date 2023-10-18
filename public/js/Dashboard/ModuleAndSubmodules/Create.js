@@ -123,6 +123,10 @@ function CreateModuleAndSubmodulesAddSubmodule() {
     let cardBody = $('<div>').addClass('card-body').css('display', 'none');
     let roleForm = $('<div>').addClass('form-group');
     let roleLabel = $('<label>').attr('for', '').text('Role');
+    let roleIcon = $('<i>').attr({
+        'class': 'ml-2 far fa-circle-question',
+        'onclick': 'SuggestionModuleRoles()'
+    });
     let roleSelect = $('<select>').attr({
         'id': `role${id}_c`,
         'class': 'form-control role_c',
@@ -133,9 +137,13 @@ function CreateModuleAndSubmodulesAddSubmodule() {
     $('#roles_access_c .icheck-primary input[type="checkbox"]:checked').map(function() {
         roleSelect.append($('<option>').attr('value', $(this).attr('id')).text($(this).attr('id')));
     });
-    roleForm.append(roleLabel, roleSelect);
+    roleForm.append(roleLabel, roleIcon, roleSelect);
     let permissionForm = $('<div>').addClass('form-group');
     let permissionLabel = $('<label>').attr('for', '').text('Permission');
+    let permissionIcon = $('<i>').attr({
+        'class': 'ml-2 far fa-circle-question',
+        'onclick': 'SuggestionSumodulePermission()'
+    });
     let permissionSelect = $('<select>').attr({
         'id': `permission${id}_c`,
         'class': 'form-control permission_c',
@@ -143,9 +151,13 @@ function CreateModuleAndSubmodulesAddSubmodule() {
     });
     let permissionOption = $('<option>').attr('value', '').text('Seleccione');
     permissionSelect.append(permissionOption);
-    permissionForm.append(permissionLabel, permissionSelect);
+    permissionForm.append(permissionLabel, permissionIcon, permissionSelect);
     let urlForm = $('<div>').addClass('form-group');
     let urlLabel = $('<label>').attr('for', '').text('Ruta');
+    let urlSuggestion = $('<i>').attr({
+        'class': 'ml-2 far fa-circle-question',
+        'onclick': 'SuggestionSumoduleRoute()'
+    });
     let urlInputGroup = $('<div>').addClass('input-group');
     let urlInput = $('<input>').attr({
         'type': 'text', id: `url${id}_c`,
@@ -156,9 +168,13 @@ function CreateModuleAndSubmodulesAddSubmodule() {
     let urlIcon = $('<span>').addClass('input-group-text').append($('<i>').addClass('fas fa-route-highway'));
     urlInputAppend.append(urlIcon);
     urlInputGroup.append(urlInput, urlInputAppend);
-    urlForm.append(urlLabel, urlInputGroup);
+    urlForm.append(urlLabel, urlSuggestion, urlInputGroup);
     let subIconForm = $('<div>').addClass('form-group');
     let subIconLabel = $('<label>').attr('for', '').text('Icono Submodulo');
+    let subIconSuggestion = $('<i>').attr({
+        'class': 'ml-2 far fa-circle-question',
+        'onclick': 'SuggestionSubmoduleIcon()'
+    });
     let subIconInputGroup = $('<div>').addClass('input-group');
     let subIconInput = $('<input>').attr({
         'type': 'text', id: `subicon${id}_c`,
@@ -169,7 +185,7 @@ function CreateModuleAndSubmodulesAddSubmodule() {
     let subIconInputIcon = $('<span>').addClass('input-group-text').append($('<i>').attr('id', `icono${id}_c`));
     subIconInputAppend.append(subIconInputIcon);
     subIconInputGroup.append(subIconInput, subIconInputAppend);
-    subIconForm.append(subIconLabel, subIconInputGroup);
+    subIconForm.append(subIconLabel, subIconSuggestion, subIconInputGroup);
 
     cardBody.append(roleForm, permissionForm, urlForm, subIconForm);
     card.append(cardBody);
@@ -202,10 +218,11 @@ function CreateModuleAndSubmodulesQueryRoles(roles) {
     let rolesDiv = $('#roles_access_c');
 
     $.each(roles, function (i, role) {
-        let roleDiv = $('<div class="row pl-2 icheck-primary">');
+        let roleDiv = $('<div>').addClass('row pl-2 icheck-primary');
 
-        let roleCheckbox = $(`<input type="checkbox">`).attr({
+        let roleCheckbox = $('<input>').attr({
             'id': role.name,
+            'type': 'checkbox',
             'onclick': 'CreateModuleAndSubmodulesRoles(this)',
             'data-id': role.id
         });
