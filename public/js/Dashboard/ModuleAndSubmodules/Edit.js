@@ -1,30 +1,30 @@
-function CreateModuleAndSubmodulesModal() {
-    RemoveIsInvalidClassCreateModuleAndSubmodules();
-    RemoveIsValidClassCreateModuleAndSubmodules();
-    $('.submodules_c').empty();
-    $('#roles_access_c').empty();
-    $('#module_c').val('');
-    $('#icon_c').val('');
-    $('#CreateModuleAndSubmodulesAddPermissionButton').attr('data-count', 0)
-    CreateModuleAndSubmodulesAddSubmodule();
+function EditModuleAndSubmodulesModal() {
+    RemoveIsInvalidClassEditModuleAndSubmodules();
+    RemoveIsValidClassEditModuleAndSubmodules();
+    $('.submodules_e').empty();
+    $('#roles_access_e').empty();
+    $('#module_e').val('');
+    $('#icon_e').val('');
+    $('#EditModuleAndSubmodulesAddPermissionButton').attr('data-count', 0)
+    EditModuleAndSubmodulesAddSubmodule();
 
     $.ajax({
-        url: `/Dashboard/ModulesAndSubmodules/Store/Query`,
+        url: `/Dashboard/ModulesAndSubmodules/Update/Query`,
         type: 'POST',
         data: {
             '_token': $('meta[name="csrf-token"]').attr('content'),
             'roles': true
         },
         success: function(response) {
-            CreateModuleAndSubmodulesQueryRoles(response.data);
+            EditModuleAndSubmodulesQueryRoles(response.data);
         },
         error: function(xhr, textStatus, errorThrown) {
-            CreateModuleAndSubmodulesAjaxError(xhr);
+            EditModuleAndSubmodulesAjaxError(xhr);
         }
     });
 }
 
-function CreateModuleAndSubmodules() {
+function EditModuleAndSubmodules(id) {
     Swal.fire({
         title: '¿Desea guardar el modulos y los submodulos?',
         text: 'El modulo y los submodulos serán creados.',
@@ -37,35 +37,35 @@ function CreateModuleAndSubmodules() {
     }).then((result) => {
         if (result.value) {
             $.ajax({
-                url: `/Dashboard/ModulesAndSubmodules/Store`,
+                url: `/Dashboard/ModulesAndSubmodules/Update/${id}`,
                 type: 'POST',
                 data: {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
-                    'module': $('#module_c').val(),
-                    'icon': $('#icon_c').val(),
-                    'roles': $('#roles_access_c .icheck-primary input[type="checkbox"]:checked').map(function () {
+                    'module': $('#module_e').val(),
+                    'icon': $('#icon_e').val(),
+                    'roles': $('#roles_access_e .icheck-primary input[type="checkbox"]:checked').map(function () {
                         return $(this).attr('data-id');
                     }).get(),
-                    'submodules': $('.submodules_c').map(function(index) {
+                    'submodules': $('.submodules_e').map(function(index) {
                         return {
-                            'submodule': $(this).find('.submodule_c .name_c').val(),
-                            'url': $(this).find('.submodule_c .url_c').val(),
-                            'icon': $(this).find('.submodule_c .subicon_c').val(),
-                            'permission_id': $(this).find('.submodule_c .permission_c').val()
+                            'submodule': $(this).find('.submodule_e .name_e').val(),
+                            'url': $(this).find('.submodule_e .url_e').val(),
+                            'icon': $(this).find('.submodule_e .subicon_e').val(),
+                            'permission_id': $(this).find('.submodule_e .permission_e').val()
                         };
                     }).get()
                 },
                 success: function(response) {
                     tableModulesAndSubmodules.ajax.reload();
                     toastr.success(response.message);
-                    $('#CreateModuleAndSubmodulesModal').modal('hide');
+                    $('#EditModuleAndSubmodulesModal').modal('hide');
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    RemoveIsValidClassCreateModuleAndSubmodules();
-                    RemoveIsInvalidClassCreateModuleAndSubmodules();
+                    RemoveIsValidClassEditModuleAndSubmodules();
+                    RemoveIsInvalidClassEditModuleAndSubmodules();
                     tableModulesAndSubmodules.ajax.reload();
-                    CreateModuleAndSubmodulesAjaxError(xhr);
-                    AddIsValidClassCreateModuleAndSubmodules();
+                    EditModuleAndSubmodulesAjaxError(xhr);
+                    AddIsValidClassEditModuleAndSubmodules();
                 }
             });
         } else {
@@ -74,12 +74,12 @@ function CreateModuleAndSubmodules() {
     });
 }
 
-function CreateModuleAndSubmodulesAddSubmodule() {
+function EditModuleAndSubmodulesAddSubmodule(id, submodule, role, permission, url, icon) {
     // Crear el nuevo elemento HTML con jQuery
-    let id = $('#CreateModuleAndSubmodulesAddPermissionButton').attr('data-count');
+    let data = $('#EditModuleAndSubmodulesAddPermissionButton').attr('data-count');
     let newSubmodule = $('<div>').attr({
-        'id': `group-submodule${id}`,
-        'class': 'form-group submodule_c'
+        'id': `group-submodule${data}`,
+        'class': 'form-group submodule_e'
     });
     let card = $('<div>').addClass('card collapsed-card');
     let cardHeader = $('<div>').addClass('card-header border-0 ui-sortable-handle');
@@ -87,9 +87,10 @@ function CreateModuleAndSubmodulesAddSubmodule() {
     let inputGroup = $('<div>').addClass('input-group');
     let input = $('<input>').attr({
         'type': 'text',
-        'class': 'form-control name_c',
-        'id': `name${id}_c`,
-        'name': ''
+        'class': 'form-control name_e',
+        'id': `name${data}_e`,
+        'value': submodule,
+        'data-id': id
     });
     let inputGroupAppend = $('<div>').addClass('input-group-append');
     let inputGroupText = $('<span>').addClass('input-group-text');
@@ -105,7 +106,7 @@ function CreateModuleAndSubmodulesAddSubmodule() {
         'type': 'button',
         'class': 'btn btn-danger btn-sm ml-2 mt-2',
         'data-card-widget': 'remove',
-        'onclick': `CreateModuleAndSubmodulesRemoveSubmodule(${id})`
+        'onclick': `EditModuleAndSubmodulesRemoveSubmodule(${data})`
     });
     let timesIcon = $('<i>').addClass('fas fa-times');
 
@@ -128,18 +129,20 @@ function CreateModuleAndSubmodulesAddSubmodule() {
         'onclick': 'SuggestionModuleRoles()'
     });
     let roleSelect = $('<select>').attr({
-        'id': `role${id}_c`,
-        'class': 'form-control role_c',
-        'onchange': `CreateModuleAndSubmodulesQueryPermissions(this, 'permission${id}_c')`
+        'id': `role${data}_e`,
+        'class': 'form-control role_e',
+        'onchange': `EditModuleAndSubmodulesQueryPermissions(this, 'permission${data}_e')`
     });
     let roleOption = $('<option>').attr('value', '').text('Seleccione');
     roleSelect.append(roleOption);
-    $('#roles_access_c .icheck-primary input[type="checkbox"]:checked').map(function() {
+    $('#roles_access_e .icheck-primary input[type="checkbox"]:checked').map(function() {
         roleSelect.append(
             $('<option>')
             .attr('value', $(this).attr('id'))
             .text($(this).attr('id'))
+            .prop('selected', $(this).attr('id') === role)
         );
+        $(this).attr('id') === role ? roleSelect.val(role).change() : '' ;
     });
     roleForm.append(roleLabel, roleIcon, roleSelect);
     let permissionForm = $('<div>').addClass('form-group');
@@ -149,9 +152,9 @@ function CreateModuleAndSubmodulesAddSubmodule() {
         'onclick': 'SuggestionSumodulePermission()'
     });
     let permissionSelect = $('<select>').attr({
-        'id': `permission${id}_c`,
-        'class': 'form-control permission_c',
-        'onchange': `CreateModuleAndSubmodulesWriteUrl(this, 'url${id}_c')`
+        'id': `permission${data}_e`,
+        'class': 'form-control permission_e',
+        'onchange': `EditModuleAndSubmodulesWriteUrl(this, 'url${data}_e')`
     });
     let permissionOption = $('<option>').attr('value', '').text('Seleccione');
     permissionSelect.append(permissionOption);
@@ -165,8 +168,8 @@ function CreateModuleAndSubmodulesAddSubmodule() {
     let urlInputGroup = $('<div>').addClass('input-group');
     let urlInput = $('<input>').attr({
         'type': 'text', 
-        'id': `url${id}_c`,
-        'class': 'form-control url_c',
+        'id': `url${data}_e`,
+        'class': 'form-control url_e',
         'readonly': 'readonly'
     });
     let urlInputAppend = $('<div>').addClass('input-group-append');
@@ -183,12 +186,12 @@ function CreateModuleAndSubmodulesAddSubmodule() {
     let subIconInputGroup = $('<div>').addClass('input-group');
     let subIconInput = $('<input>').attr({
         'type': 'text', 
-        'id': `subicon${id}_c`,
-        'class': 'form-control subicon_c',
-        'onkeyup': `CreateModuleAndSubmodulesChangeClassIcon(this, 'icono${id}_c')`
+        'id': `subicon${data}_e`,
+        'class': 'form-control subicon_e',
+        'onkeyup': `EditModuleAndSubmodulesChangeClassIcon(this, 'icono${data}_e')`
     });
     let subIconInputAppend = $('<div>').addClass('input-group-append');
-    let subIconInputIcon = $('<span>').addClass('input-group-text').append($('<i>').attr('id', `icono${id}_c`));
+    let subIconInputIcon = $('<span>').addClass('input-group-text').append($('<i>').attr('id', `icono${data}_e`));
     subIconInputAppend.append(subIconInputIcon);
     subIconInputGroup.append(subIconInput, subIconInputAppend);
     subIconForm.append(subIconLabel, subIconSuggestion, subIconInputGroup);
@@ -198,21 +201,21 @@ function CreateModuleAndSubmodulesAddSubmodule() {
 
     newSubmodule.append(card);
 
-    // Agregar el nuevo elemento al elemento con clase "submodules_c"
-    $('.submodules_c').append(newSubmodule);
-    id++;
-    $('#CreateModuleAndSubmodulesAddPermissionButton').attr('data-count', id)
+    // Agregar el nuevo elemento al elemento con clase "submodules_e"
+    $('.submodules_e').append(newSubmodule);
+    data++;
+    $('#EditModuleAndSubmodulesAddPermissionButton').attr('data-count', data)
 }
 
-function CreateModuleAndSubmodulesRemoveSubmodule(index) {
+function EditModuleAndSubmodulesRemoveSubmodule(index) {
     $(`#group-submodule${index}`).remove();
 }
 
-function CreateModuleAndSubmodulesChangeClassIcon(input, icon) {
+function EditModuleAndSubmodulesChangeClassIcon(input, icon) {
     $(`#${icon}`).attr('class', input.value);
 }
 
-function CreateModuleAndSubmodulesWriteUrl(selectPermission, inputUrl) {
+function EditModuleAndSubmodulesWriteUrl(selectPermission, inputUrl) {
     if($(selectPermission).val() === '') {
         $(`#${inputUrl}`).val('');
     } else {
@@ -220,8 +223,8 @@ function CreateModuleAndSubmodulesWriteUrl(selectPermission, inputUrl) {
     }
 }
 
-function CreateModuleAndSubmodulesQueryRoles(roles) {
-    let rolesDiv = $('#roles_access_c');
+function EditModuleAndSubmodulesQueryRoles(roles) {
+    let rolesDiv = $('#roles_access_e');
 
     $.each(roles, function (i, role) {
         let roleDiv = $('<div>').addClass('row pl-2 icheck-primary');
@@ -229,7 +232,7 @@ function CreateModuleAndSubmodulesQueryRoles(roles) {
         let roleCheckbox = $('<input>').attr({
             'id': role.name,
             'type': 'checkbox',
-            'onclick': 'CreateModuleAndSubmodulesRoles(this)',
+            'onclick': 'EditModuleAndSubmodulesRoles(this)',
             'data-id': role.id
         });
 
@@ -244,14 +247,14 @@ function CreateModuleAndSubmodulesQueryRoles(roles) {
     });
 }
 
-function CreateModuleAndSubmodulesRoles(checkbox) {
-    // Obtener IDs de los checkboxes marcados en #roles_access_c
+function EditModuleAndSubmodulesRoles(checkbox) {
+    // Obtener IDs de los checkboxes marcados en #roles_access_e
     let role = $(checkbox).attr('id');
 
-    // Recorrer #submodules_c
-    $('.submodules_c').each(function () {
+    // Recorrer #submodules_e
+    $('.submodules_e').each(function () {
         let submoduleElement = $(this);
-        let selectRole = submoduleElement.find('select.role_c');
+        let selectRole = submoduleElement.find('select.role_e');
 
         // Verificar si el checkbox está marcado
         if ($(checkbox).is(':checked')) {
@@ -267,8 +270,8 @@ function CreateModuleAndSubmodulesRoles(checkbox) {
             let isSelected = optionToRemove.is(':selected');
 
             if (isSelected) {
-                let selectPermission = submoduleElement.find('select.permission_c');
-                submoduleElement.find('input.url_c').val('')
+                let selectPermission = submoduleElement.find('select.permission_e');
+                submoduleElement.find('input.url_e').val('')
                 selectPermission.empty().append(
                     $('<option>', {
                         'value': '',
@@ -282,9 +285,9 @@ function CreateModuleAndSubmodulesRoles(checkbox) {
     });
 }
 
-function CreateModuleAndSubmodulesQueryPermissions(selectRoles, selectPermissions) {
+function EditModuleAndSubmodulesQueryPermissions(selectRoles, selectPermissions) {
     $.ajax({
-        url: `/Dashboard/ModulesAndSubmodules/Store/Query`,
+        url: `/Dashboard/ModulesAndSubmodules/Update/Query`,
         type: 'POST',
         data: {
             '_token': $('meta[name="csrf-token"]').attr('content'),
@@ -292,11 +295,11 @@ function CreateModuleAndSubmodulesQueryPermissions(selectRoles, selectPermission
         },
         success: function(response) {
             if($(selectRoles).val() !== '') {
-                CreateModuleAndSubmodulesPermissions(selectPermissions, response.data.permissions);
+                EditModuleAndSubmodulesPermissions(selectPermissions, response.data.permissions);
             }
         },
         error: function(xhr, textStatus, errorThrown) {
-            CreateModuleAndSubmodulesAjaxError(xhr);
+            EditModuleAndSubmodulesAjaxError(xhr);
             $(`#${selectPermissions}`).empty().append(
                 $('<option>', {
                     'value': '',
@@ -307,7 +310,7 @@ function CreateModuleAndSubmodulesQueryPermissions(selectRoles, selectPermission
     });
 }
 
-function CreateModuleAndSubmodulesPermissions(selectPermissions, permissions) {
+function EditModuleAndSubmodulesPermissions(selectPermissions, permissions) {
     let select = $(`#${selectPermissions}`).empty().append(
         $('<option>',{
             'value': '',
@@ -325,13 +328,13 @@ function CreateModuleAndSubmodulesPermissions(selectPermissions, permissions) {
     });
 }
 
-function CreateModuleAndSubmodulesAjaxError(xhr) {
+function EditModuleAndSubmodulesAjaxError(xhr) {
     if(xhr.responseJSON.error){
         toastr.error(xhr.responseJSON.error.message);
         toastr.error(xhr.responseJSON.error.error);
     } else if(xhr.responseJSON.errors){
         $.each(xhr.responseJSON.errors, function(field, messages) {
-            AddIsInvalidClassCreateModuleAndSubmodules(field);
+            AddIsInvalidClassEditModuleAndSubmodules(field);
             $.each(messages, function(index, message) {
                 toastr.error(message);
             });
@@ -341,87 +344,87 @@ function CreateModuleAndSubmodulesAjaxError(xhr) {
     }
 }
 
-function AddIsValidClassCreateModuleAndSubmodules() {
-    if (!$('#module_c').hasClass('is-invalid')) {
-        $('#module_c').addClass('is-valid');
+function AddIsValidClassEditModuleAndSubmodules() {
+    if (!$('#module_e').hasClass('is-invalid')) {
+        $('#module_e').addClass('is-valid');
     }
 
-    if (!$('#icon_c').hasClass('is-invalid')) {
-        $('#icon_c').addClass('is-valid');
+    if (!$('#icon_e').hasClass('is-invalid')) {
+        $('#icon_e').addClass('is-valid');
     }
 
-    $('.submodules_c').find('div.submodule_c').each(function(index) {
-        if (!$(this).find('select.role_c').hasClass('is-invalid')) {
-            $(this).find('select.role_c').addClass('is-valid');
+    $('.submodules_e').find('div.submodule_e').each(function(index) {
+        if (!$(this).find('select.role_e').hasClass('is-invalid')) {
+            $(this).find('select.role_e').addClass('is-valid');
         }
-        if (!$(this).find('select.permission_c').hasClass('is-invalid')) {
-            $(this).find('select.permission_c').addClass('is-valid');
+        if (!$(this).find('select.permission_e').hasClass('is-invalid')) {
+            $(this).find('select.permission_e').addClass('is-valid');
         }
-        if (!$(this).find('input.subicon_c').hasClass('is-invalid')) {
-            $(this).find('input.subicon_c').addClass('is-valid');
+        if (!$(this).find('input.subicon_e').hasClass('is-invalid')) {
+            $(this).find('input.subicon_e').addClass('is-valid');
         }
-        if (!$(this).find('input.name_c').hasClass('is-invalid')) {
-            $(this).find('input.name_c').addClass('is-valid');
+        if (!$(this).find('input.name_e').hasClass('is-invalid')) {
+            $(this).find('input.name_e').addClass('is-valid');
         }
-        if (!$(this).find('input.url_c').hasClass('is-invalid')) {
-            $(this).find('input.url_c').addClass('is-valid');
+        if (!$(this).find('input.url_e').hasClass('is-invalid')) {
+            $(this).find('input.url_e').addClass('is-valid');
         }
     });
 }
 
-function RemoveIsValidClassCreateModuleAndSubmodules() {
-    $('#module_c').removeClass('is-valid');
-    $('#icon_c').removeClass('is-valid');
+function RemoveIsValidClassEditModuleAndSubmodules() {
+    $('#module_e').removeClass('is-valid');
+    $('#icon_e').removeClass('is-valid');
 
-    $('.submodules_c').find('div.submodule_c').each(function(index) {
-        $(this).find('select.role_c').removeClass('is-valid');
-        $(this).find('select.permission_c').removeClass('is-valid');
-        $(this).find('input.subicon_c').removeClass('is-valid');
-        $(this).find('input.name_c').removeClass('is-valid');
-        $(this).find('input.url_c').removeClass('is-valid');
+    $('.submodules_e').find('div.submodule_e').each(function(index) {
+        $(this).find('select.role_e').removeClass('is-valid');
+        $(this).find('select.permission_e').removeClass('is-valid');
+        $(this).find('input.subicon_e').removeClass('is-valid');
+        $(this).find('input.name_e').removeClass('is-valid');
+        $(this).find('input.url_e').removeClass('is-valid');
     });
 }
 
-function AddIsInvalidClassCreateModuleAndSubmodules(input) {
-    if (!$(`#${input}_c`).hasClass('is-valid')) {
-        $(`#${input}_c`).addClass('is-invalid');
+function AddIsInvalidClassEditModuleAndSubmodules(input) {
+    if (!$(`#${input}_e`).hasClass('is-valid')) {
+        $(`#${input}_e`).addClass('is-invalid');
     }
 
-    $('.submodules_c').find('div.submodule_c').each(function(index) {
+    $('.submodules_e').find('div.submodule_e').each(function(index) {
         // Agrega la clase 'is-invalid'
         if(input === `submodules.${index}.permission_id`) {
-            if (!$(this).find('select.permission_c').hasClass('is-valid')) {
-                $(this).find('select.role_c').addClass('is-invalid');
-                $(this).find('select.permission_c').addClass('is-invalid');
+            if (!$(this).find('select.permission_e').hasClass('is-valid')) {
+                $(this).find('select.role_e').addClass('is-invalid');
+                $(this).find('select.permission_e').addClass('is-invalid');
             }
         }
         if(input === `submodules.${index}.icon`) {
-            if (!$(this).find('input.subicon_c').hasClass('is-valid')) {
-                $(this).find('input.subicon_c').addClass('is-invalid');
+            if (!$(this).find('input.subicon_e').hasClass('is-valid')) {
+                $(this).find('input.subicon_e').addClass('is-invalid');
             }
         }
         if(input === `submodules.${index}.submodule`) {
-            if (!$(this).find('input.name_c').hasClass('is-valid')) {
-                $(this).find('input.name_c').addClass('is-invalid');
+            if (!$(this).find('input.name_e').hasClass('is-valid')) {
+                $(this).find('input.name_e').addClass('is-invalid');
             }
         }
         if(input === `submodules.${index}.url`) {
-            if (!$(this).find('input.url_c').hasClass('is-valid')) {
-                $(this).find('input.url_c').addClass('is-invalid');
+            if (!$(this).find('input.url_e').hasClass('is-valid')) {
+                $(this).find('input.url_e').addClass('is-invalid');
             }
         }
     });
 }
 
-function RemoveIsInvalidClassCreateModuleAndSubmodules() {
-    $('#module_c').removeClass('is-invalid');
-    $('#icon_c').removeClass('is-invalid');
+function RemoveIsInvalidClassEditModuleAndSubmodules() {
+    $('#module_e').removeClass('is-invalid');
+    $('#icon_e').removeClass('is-invalid');
 
-    $('.submodules_c').find('div.submodule_c').each(function(index) {
-        $(this).find('select.role_c').removeClass('is-invalid');
-        $(this).find('select.permission_c').removeClass('is-invalid');
-        $(this).find('input.subicon_c').removeClass('is-invalid');
-        $(this).find('input.name_c').removeClass('is-invalid');
-        $(this).find('input.url_c').removeClass('is-invalid');
+    $('.submodules_e').find('div.submodule_e').each(function(index) {
+        $(this).find('select.role_e').removeClass('is-invalid');
+        $(this).find('select.permission_e').removeClass('is-invalid');
+        $(this).find('input.subicon_e').removeClass('is-invalid');
+        $(this).find('input.name_e').removeClass('is-invalid');
+        $(this).find('input.url_e').removeClass('is-invalid');
     });
 }

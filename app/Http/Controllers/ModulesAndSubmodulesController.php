@@ -124,26 +124,19 @@ class ModulesAndSubmodulesController extends Controller
     public function storeQuery(Request $request)
     {
         try {
-            if($request->ajax()){
-                if ($request->filled('roles')) {
-                    // Consulto los roles que no esten asociados a ningun modulo
-                    $RolesWithoutModules = Role::whereDoesntHave('modules')->get();
-
-                    return $this->successResponse(
-                        $RolesWithoutModules,
-                        $this->success,
-                        200
-                    );
-                }
-                if($request->filled('role')) {
-                    $RoleWithPermissions = Role::with('permissions')->findByName($request->role);
-                    return $this->successResponse(
-                        $RoleWithPermissions,
-                        $this->success,
-                        200
-                    );
-                }
+            if ($request->filled('roles')) {
+                // Consulto los roles que no esten asociados a ningun modulo
+                $Role = Role::whereDoesntHave('modules')->get();
             }
+            if($request->filled('role')) {
+                // Consulto los permisos del rol
+                $Role = Role::with('permissions')->findByName($request->role);
+            }
+            return $this->successResponse(
+                $Role,
+                $this->success,
+                200
+            );
         } catch (ModelNotFoundException $e) {
             return $this->errorResponse(
                 [
