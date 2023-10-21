@@ -20,16 +20,15 @@
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
 </head>
 
-<body class="hold-transition login-page">
+<body class="login-page" style="min-height: 466px;">
     <div class="login-box">
-        <div class="login-logo">
-            <a href="../../index2.html"><b>Admin</b>LTE</a>
-        </div>
-        <!-- /.login-logo -->
-        <div class="card">
-            <div class="card-body login-card-body">
-                <p class="login-box-msg">Sign in to start your session</p>
 
+        <div class="card card-outline card-primary">
+            <div class="card-header text-center">
+                <a href="../../index2.html" class="h1"><b>Admin</b>LTE</a>
+            </div>
+            <div class="card-body">
+                <p class="login-box-msg">Sign in to start your session</p>
                 <form method="POST" action="{{ route('login') }}">
                     @csrf
                     <div class="input-group mb-3">
@@ -40,9 +39,9 @@
                             </div>
                         </div>
                         @error('email')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
                         @enderror
                     </div>
 
@@ -53,9 +52,9 @@
                                 <span class="fas fa-lock"></span>
                             </div>
                             @error('password')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
                             @enderror
                         </div>
                     </div>
@@ -68,33 +67,23 @@
                                 </label>
                             </div>
                         </div>
-                        <!-- /.col -->
+
                         <div class="col-4">
                             <button type="submit" class="btn btn-primary btn-block">Sign In</button>
                         </div>
-                        <!-- /.col -->
+
                     </div>
                 </form>
 
-                <!-- <div class="social-auth-links text-center mb-3">
-        <p>- OR -</p>
-        <a href="#" class="btn btn-block btn-primary">
-          <i class="fab fa-facebook mr-2"></i> Sign in using Facebook
-        </a>
-        <a href="#" class="btn btn-block btn-danger">
-          <i class="fab fa-google-plus mr-2"></i> Sign in using Google+
-        </a>
-      </div> -->
-                <!-- /.social-auth-links -->
-
                 <p class="mb-1">
-                    <a href="{{ route('password.request') }}">I forgot my password</a>
+                <a href="{{ route('password.request') }}">I forgot my password</a>
                 </p>
             </div>
-            <!-- /.login-card-body -->
+
         </div>
+
     </div>
-    <!-- /.login-box -->
+
 
     <!-- jQuery -->
     <script src="js/jquery/jquery.min.js"></script>
@@ -102,6 +91,7 @@
     <script src="js/bootstrap/js/bootstrap.bundle.min.js"></script>
     <!-- AdminLTE App -->
     <script src="js/dist/js/adminlte.min.js"></script>
+
 
 </body>
 
