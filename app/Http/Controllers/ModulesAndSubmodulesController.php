@@ -5,17 +5,14 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ModulesAndSubmodules\ModulesAndSubmodulesIndexQueryRequest;
 use App\Http\Requests\ModulesAndSubmodules\ModulesAndSubmodulesDeleteRequest;
 use App\Http\Requests\ModulesAndSubmodules\ModulesAndSubmodulesStoreRequest;
+use App\Http\Requests\ModulesAndSubmodules\ModulesAndSubmodulesUpdateRequest;
 use App\Http\Resources\ModulesAndSubmodules\ModulesAndSubmodulesIndexQueryCollection;
 use App\Models\Module;
-use App\Models\ModuleHasRoles;
-use App\Models\Submodule;
 use App\Traits\ApiResponser;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
-use Illuminate\Http\Request;
-use Spatie\Permission\Models\Role;
 
 class ModulesAndSubmodulesController extends Controller
 {
@@ -25,7 +22,6 @@ class ModulesAndSubmodulesController extends Controller
     private $error = 'Algo salió mal.';
     private $errorQueryException = 'Error del servidor de la base de datos.';
     private $errorModelNotFoundException = 'El modulo y los submodulos no pudo ser encontrado.';
-    private $errorRoleModelNotFoundException = 'El rol no pudo ser encontrado.';
 
     public function index()
     {
@@ -104,7 +100,7 @@ class ModulesAndSubmodulesController extends Controller
         } catch (ModelNotFoundException $e) {
             return $this->errorResponse(
                 [
-                    'message' => $this->errorRoleModelNotFoundException,
+                    'message' => $this->errorModelNotFoundException,
                     'error' => $e->getMessage()
                 ],
                 404
@@ -121,26 +117,26 @@ class ModulesAndSubmodulesController extends Controller
         }
     }
 
-    public function storeQuery(Request $request)
+    public function update(ModulesAndSubmodulesUpdateRequest $request, $id)
     {
         try {
-            if ($request->filled('roles')) {
-                // Consulto los roles que no esten asociados a ningun modulo
-                $Role = Role::whereDoesntHave('modules')->get();
-            }
-            if($request->filled('role')) {
-                // Consulto los permisos del rol
-                $Role = Role::with('permissions')->findByName($request->role);
-            }
+            $module = Module::findOrFail($id);
+            $module->name = $request->module;
+            $module->icon = $request->icon;
+            $module->save();
+
+            $module->syncRoles($request->roles);
+            $module->syncSubmodules($request->submodules);
+
             return $this->successResponse(
-                $Role,
-                $this->success,
-                200
+                $module,
+                'Modulo y submodulos creados correctamente.',
+                201
             );
         } catch (ModelNotFoundException $e) {
             return $this->errorResponse(
                 [
-                    'message' => $this->errorRoleModelNotFoundException,
+                    'message' => $this->errorModelNotFoundException,
                     'error' => $e->getMessage()
                 ],
                 404

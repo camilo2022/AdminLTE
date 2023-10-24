@@ -45,6 +45,8 @@ class UserSeeder extends Seeder
                 'permissions' => [
                     'Dashboard.RolesAndPermissions.Index',
                     'Dashboard.RolesAndPermissions.Index.Query',
+                    'Dashboard.RolesAndPermissions.Roles.Query',
+                    'Dashboard.RolesAndPermissions.Permissions.Query',
                     'Dashboard.RolesAndPermissions.Store',
                     'Dashboard.RolesAndPermissions.Update',
                     'Dashboard.RolesAndPermissions.Delete',

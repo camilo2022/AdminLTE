@@ -89,6 +89,12 @@ Route::middleware(['auth'])->group(function () {
             Route::post('/Index/Query', [\App\Http\Controllers\RolesAndPermissionsController::class, 'indexQuery'])
             ->middleware('can:Dashboard.RolesAndPermissions.Index.Query')->name('Dashboard.RolesAndPermissions.Index.Query');
 
+            Route::post('/Roles/Query', [\App\Http\Controllers\RolesAndPermissionsController::class, 'rolesQuery'])
+            ->middleware('can:Dashboard.RolesAndPermissions.Store')->name('Dashboard.RolesAndPermissions.Roles.Query');
+
+            Route::post('/Permissions/Query', [\App\Http\Controllers\RolesAndPermissionsController::class, 'permissionsQuery'])
+            ->middleware('can:Dashboard.RolesAndPermissions.Store')->name('Dashboard.RolesAndPermissions.Permissions.Query');
+
             Route::post('/Store', [\App\Http\Controllers\RolesAndPermissionsController::class, 'store'])
             ->middleware('can:Dashboard.RolesAndPermissions.Store')->name('Dashboard.RolesAndPermissions.Store');
 
@@ -110,9 +116,6 @@ Route::middleware(['auth'])->group(function () {
 
             Route::post('/Store', [\App\Http\Controllers\ModulesAndSubmodulesController::class, 'store'])
             ->middleware('can:Dashboard.ModulesAndSubmodules.Store')->name('Dashboard.ModulesAndSubmodules.Store');
-
-            Route::post('/Store/Query', [\App\Http\Controllers\ModulesAndSubmodulesController::class, 'storeQuery'])
-            /* ->middleware('can:Dashboard.ModulesAndSubmodules.Store.Query') */->name('Dashboard.ModulesAndSubmodules.Store.Query');
 
             Route::put('/Update/{id}', [\App\Http\Controllers\ModulesAndSubmodulesController::class, 'update'])
             ->middleware('can:Dashboard.ModulesAndSubmodules.Update')->name('Dashboard.ModulesAndSubmodules.Update');

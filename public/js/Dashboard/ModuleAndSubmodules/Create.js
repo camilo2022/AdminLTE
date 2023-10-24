@@ -5,15 +5,14 @@ function CreateModuleAndSubmodulesModal() {
     $('#roles_access_c').empty();
     $('#module_c').val('');
     $('#icon_c').val('');
-    $('#CreateModuleAndSubmodulesAddPermissionButton').attr('data-count', 0)
+    $('#CreateModuleAndSubmodulesAddPermissionButton').attr('data-count', 0);
     CreateModuleAndSubmodulesAddSubmodule();
 
     $.ajax({
-        url: `/Dashboard/ModulesAndSubmodules/Store/Query`,
+        url: `/Dashboard/RolesAndPermissions/Roles/Query`,
         type: 'POST',
         data: {
             '_token': $('meta[name="csrf-token"]').attr('content'),
-            'roles': true
         },
         success: function(response) {
             CreateModuleAndSubmodulesQueryRoles(response.data);
@@ -284,7 +283,7 @@ function CreateModuleAndSubmodulesRoles(checkbox) {
 
 function CreateModuleAndSubmodulesQueryPermissions(selectRoles, selectPermissions) {
     $.ajax({
-        url: `/Dashboard/ModulesAndSubmodules/Store/Query`,
+        url: `/Dashboard/RolesAndPermissions/Permissions/Query`,
         type: 'POST',
         data: {
             '_token': $('meta[name="csrf-token"]').attr('content'),

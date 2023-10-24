@@ -95,7 +95,7 @@ class Module extends Model
 
     private function saveSubmodule($submodule)
     {
-        $submoduleNew = !isset($submodule->id) ? new Submodule() : Submodule::findOrFail($submodule->id);
+        $submoduleNew = (!isset($submodule->id) || !is_null($submodule->id)) ? new Submodule() : Submodule::findOrFail($submodule->id);
 
         $submoduleNew->name = is_array($submodule) ? $submodule['submodule'] : $submodule->submodule;
         $submoduleNew->url = is_array($submodule) ? $submodule['url'] : $submodule->url;

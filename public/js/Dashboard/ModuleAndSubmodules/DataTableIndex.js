@@ -101,12 +101,8 @@ let tableModulesAndSubmodules = $('#modulesAndSubmodules').DataTable({
         {
             data: null,
             render: function (data, type, row) {
-                let permissions = [];
-                $.each(data.permissions, function(index, permission) {
-                    permissions.push(permission.name);
-                });
-                return `<a onclick="EditModuleAndPermissionsModal(${data.id}, '${data.role}', ${JSON.stringify(permissions).replace(/"/g, "'")})"
-                    type="button" data-target="#EditModuleAndPermissionsModal" data-toggle='modal'
+                return `<a onclick="EditModuleAndSubmodulesModal(${data.id}, '${data.icon}', '${data.module}', ${JSON.stringify(data.roles).replace(/"/g, "'")}, ${JSON.stringify(data.submodules).replace(/"/g, "'")})"
+                    type="button" data-target="#EditModuleAndSubmodulesModal" data-toggle='modal'
                     class="btn btn-primary btn-sm" title="Editar modulo y submomdulos">
                         <i class="fas fa-shield-keyhole text-white"></i>
                     </a>`;

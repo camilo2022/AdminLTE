@@ -91,11 +91,13 @@
             </div>
         </div>
         @include('Dashboard.ModuleAndSubmodules.Create')
+        @include('Dashboard.ModuleAndSubmodules.Edit')
     </section>
 @endsection
 @section('script')
     <script src="{{ asset('js/Dashboard/ModuleAndSubmodules/DataTableIndex.js') }}"></script>
     <script src="{{ asset('js/Dashboard/ModuleAndSubmodules/Create.js') }}"></script>
+    <script src="{{ asset('js/Dashboard/ModuleAndSubmodules/Edit.js') }}"></script>
     <script src="{{ asset('js/Dashboard/ModuleAndSubmodules/Delete.js') }}"></script>
     <script src="{{ asset('js/Dashboard/ModuleAndSubmodules/Suggestion.js') }}"></script>
 @endsection

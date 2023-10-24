@@ -1,22 +1,27 @@
-function EditModuleAndSubmodulesModal() {
+function EditModuleAndSubmodulesModal(id, icon, module, roles, submodules) {
     RemoveIsInvalidClassEditModuleAndSubmodules();
     RemoveIsValidClassEditModuleAndSubmodules();
     $('.submodules_e').empty();
     $('#roles_access_e').empty();
-    $('#module_e').val('');
-    $('#icon_e').val('');
-    $('#EditModuleAndSubmodulesAddPermissionButton').attr('data-count', 0)
-    EditModuleAndSubmodulesAddSubmodule();
+    $('#module_e').val(module);
+    $('#icon_e').val(icon);
+    $('#icon_module_e').addClass(icon);
+    $('#EditModuleAndSubmodulesAddPermissionButton').attr('data-count', 0);
+    $('#EditModuleAndSubmodulesButton').attr('onclick', `EditModuleAndSubmodules(${id})`);
+    EditModuleAndSubmodulesQueryRoles(roles, true);
+    $.each(submodules, function (i, submodule) {
+        EditModuleAndSubmodulesAddSubmodule(submodule.id, submodule.name, '', submodule.permission, submodule.url, submodule.icon);
+    })
 
     $.ajax({
-        url: `/Dashboard/ModulesAndSubmodules/Update/Query`,
+        url: `/Dashboard/RolesAndPermissions/Roles/Query`,
         type: 'POST',
         data: {
             '_token': $('meta[name="csrf-token"]').attr('content'),
             'roles': true
         },
         success: function(response) {
-            EditModuleAndSubmodulesQueryRoles(response.data);
+            EditModuleAndSubmodulesQueryRoles(response.data, false);
         },
         error: function(xhr, textStatus, errorThrown) {
             EditModuleAndSubmodulesAjaxError(xhr);
@@ -25,9 +30,31 @@ function EditModuleAndSubmodulesModal() {
 }
 
 function EditModuleAndSubmodules(id) {
+    var submodulesData = [];
+
+$('div.submodules_e').each(function() {
+    var submoduleElement = $(this);
+
+    var id = submoduleElement.find('div.submodule_e input.name_e').attr('data-id');
+    var submodule = submoduleElement.find('div.submodule_e input.name_e').val();
+    var url = submoduleElement.find('div.submodule_e input.url_e').val();
+    var icon = submoduleElement.find('div.submodule_e input.subicon_e').val();
+    var permission_id = submoduleElement.find('div.submodule_e select.permission_e').val();
+
+    var submoduleData = {
+        'id': id,
+        'submodule': submodule,
+        'url': url,
+        'icon': icon,
+        'permission_id': permission_id
+    };
+
+    submodulesData.push(submoduleData);
+});
+console.log(submodulesData)
     Swal.fire({
-        title: '¿Desea guardar el modulos y los submodulos?',
-        text: 'El modulo y los submodulos serán creados.',
+        title: '¿Desea actualizar el modulos y los submodulos?',
+        text: 'El modulo y los submodulos serán actualizados.',
         icon: 'warning',
         showCancelButton: true,
         cancelButtonColor: '#DD6B55',
@@ -38,7 +65,7 @@ function EditModuleAndSubmodules(id) {
         if (result.value) {
             $.ajax({
                 url: `/Dashboard/ModulesAndSubmodules/Update/${id}`,
-                type: 'POST',
+                type: 'PUT',
                 data: {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
                     'module': $('#module_e').val(),
@@ -48,10 +75,11 @@ function EditModuleAndSubmodules(id) {
                     }).get(),
                     'submodules': $('.submodules_e').map(function(index) {
                         return {
-                            'submodule': $(this).find('.submodule_e .name_e').val(),
-                            'url': $(this).find('.submodule_e .url_e').val(),
-                            'icon': $(this).find('.submodule_e .subicon_e').val(),
-                            'permission_id': $(this).find('.submodule_e .permission_e').val()
+                            'id': $(this).find('div.submodule_e input.name_e').attr('data-id'),
+                            'submodule': $(this).find('div.submodule_e input.name_e').val(),
+                            'url': $(this).find('div.submodule_e input.url_e').val(),
+                            'icon': $(this).find('div.submodule_e input.subicon_e').val(),
+                            'permission_id': $(this).find('div.submodule_e select.permission_e').val()
                         };
                     }).get()
                 },
@@ -69,7 +97,7 @@ function EditModuleAndSubmodules(id) {
                 }
             });
         } else {
-            toastr.info('El modulo y los submodulos no fueron creados.')
+            toastr.info('El modulo y los submodulos no fueron actualizados.')
         }
     });
 }
@@ -158,6 +186,9 @@ function EditModuleAndSubmodulesAddSubmodule(id, submodule, role, permission, ur
     });
     let permissionOption = $('<option>').attr('value', '').text('Seleccione');
     permissionSelect.append(permissionOption);
+    if(permission !== undefined) {
+        permissionSelect.append($('<option>').attr('value', permission.id).text(permission.name).prop('selected', true));
+    }
     permissionForm.append(permissionLabel, permissionIcon, permissionSelect);
     let urlForm = $('<div>').addClass('form-group');
     let urlLabel = $('<label>').attr('for', '').text('Ruta');
@@ -170,7 +201,8 @@ function EditModuleAndSubmodulesAddSubmodule(id, submodule, role, permission, ur
         'type': 'text', 
         'id': `url${data}_e`,
         'class': 'form-control url_e',
-        'readonly': 'readonly'
+        'readonly': 'readonly',
+        'value': url
     });
     let urlInputAppend = $('<div>').addClass('input-group-append');
     let urlIcon = $('<span>').addClass('input-group-text').append($('<i>').addClass('fas fa-route-highway'));
@@ -188,10 +220,11 @@ function EditModuleAndSubmodulesAddSubmodule(id, submodule, role, permission, ur
         'type': 'text', 
         'id': `subicon${data}_e`,
         'class': 'form-control subicon_e',
-        'onkeyup': `EditModuleAndSubmodulesChangeClassIcon(this, 'icono${data}_e')`
+        'onkeyup': `EditModuleAndSubmodulesChangeClassIcon(this, 'icono${data}_e')`,
+        'value': icon
     });
     let subIconInputAppend = $('<div>').addClass('input-group-append');
-    let subIconInputIcon = $('<span>').addClass('input-group-text').append($('<i>').attr('id', `icono${data}_e`));
+    let subIconInputIcon = $('<span>').addClass('input-group-text').append($('<i>').attr('id', `icono${data}_e`).addClass(icon));
     subIconInputAppend.append(subIconInputIcon);
     subIconInputGroup.append(subIconInput, subIconInputAppend);
     subIconForm.append(subIconLabel, subIconSuggestion, subIconInputGroup);
@@ -223,7 +256,7 @@ function EditModuleAndSubmodulesWriteUrl(selectPermission, inputUrl) {
     }
 }
 
-function EditModuleAndSubmodulesQueryRoles(roles) {
+function EditModuleAndSubmodulesQueryRoles(roles, checked) {
     let rolesDiv = $('#roles_access_e');
 
     $.each(roles, function (i, role) {
@@ -233,7 +266,8 @@ function EditModuleAndSubmodulesQueryRoles(roles) {
             'id': role.name,
             'type': 'checkbox',
             'onclick': 'EditModuleAndSubmodulesRoles(this)',
-            'data-id': role.id
+            'data-id': role.id,
+            'checked': checked ? true : false
         });
 
         let roleLabel = $('<label>').text(role.name).attr({
@@ -287,7 +321,7 @@ function EditModuleAndSubmodulesRoles(checkbox) {
 
 function EditModuleAndSubmodulesQueryPermissions(selectRoles, selectPermissions) {
     $.ajax({
-        url: `/Dashboard/ModulesAndSubmodules/Update/Query`,
+        url: `/Dashboard/RolesAndPermissions/Permissions/Query`,
         type: 'POST',
         data: {
             '_token': $('meta[name="csrf-token"]').attr('content'),

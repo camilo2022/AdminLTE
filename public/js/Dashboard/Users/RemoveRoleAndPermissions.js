@@ -7,7 +7,7 @@ function RemoveRoleAndPermissionUserModal(id, email) {
             'id': id
         },
         success: function(response) {
-            if($('meta[name="user-id"]').attr('content') === id) {
+            if($('meta[name="user-id"]').attr('content') == id) {
                 toastr.warning('Cuidado, vas a remover el rol y los permisos de tu usuario.');
             }
 

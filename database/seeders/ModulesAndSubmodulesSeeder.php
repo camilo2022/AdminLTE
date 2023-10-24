@@ -55,7 +55,7 @@ class ModulesAndSubmodulesSeeder extends Seeder
             'url' => '/Dashboard/ModulesAndSubmodules/Index',
             'icon' => 'fas fa-shield-keyhole',
             'module_id' => $Configuracion->id,
-            'permission_id' => 20
+            'permission_id' => 22
         ]);
     }
 }

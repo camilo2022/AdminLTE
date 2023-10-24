@@ -14,6 +14,7 @@ use App\Http\Requests\RolesAndPermissions\RolesAndPermissionsUpdateRequest;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
+use Illuminate\Http\Request;
 
 class RolesAndPermissionsController extends Controller
 {
@@ -90,6 +91,68 @@ class RolesAndPermissionsController extends Controller
             );
         } catch (Exception $e) {
             // Devolver una respuesta de error en caso de excepción
+            return $this->errorResponse(
+                [
+                    'message' => $this->error,
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        }
+    }
+
+    public function rolesQuery(Request $request)
+    {
+        try {
+            // Consulto los roles que no esten asociados a ningun modulo
+            $RolesQuery = Role::whereDoesntHave('modules')->get();
+
+            return $this->successResponse(
+                $RolesQuery,
+                $this->success,
+                200
+            );
+        } catch (ModelNotFoundException $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->errorModelNotFoundException,
+                    'error' => $e->getMessage()
+                ],
+                404
+            );
+        } catch (Exception $e) {
+            // Deshacer la transacción en caso de excepción y devolver una respuesta de error
+            return $this->errorResponse(
+                [
+                    'message' => $this->error,
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        }
+    }
+
+    public function permissionsQuery(Request $request)
+    {
+        try {
+            // Consulto los permisos del rol
+            $PermissionsQuery = Role::with('permissions')->findByName($request->role);
+
+            return $this->successResponse(
+                $PermissionsQuery,
+                $this->success,
+                200
+            );
+        } catch (ModelNotFoundException $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->errorModelNotFoundException,
+                    'error' => $e->getMessage()
+                ],
+                404
+            );
+        } catch (Exception $e) {
+            // Deshacer la transacción en caso de excepción y devolver una respuesta de error
             return $this->errorResponse(
                 [
                     'message' => $this->error,
