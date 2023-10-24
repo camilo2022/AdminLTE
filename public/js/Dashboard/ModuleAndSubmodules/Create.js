@@ -45,12 +45,12 @@ function CreateModuleAndSubmodules() {
                     'roles': $('#roles_access_c .icheck-primary input[type="checkbox"]:checked').map(function () {
                         return $(this).attr('data-id');
                     }).get(),
-                    'submodules': $('.submodules_c').map(function(index) {
+                    'submodules': $('.submodules_c').find('div.submodule_c').map(function(index) {
                         return {
-                            'submodule': $(this).find('.submodule_c .name_c').val(),
-                            'url': $(this).find('.submodule_c .url_c').val(),
-                            'icon': $(this).find('.submodule_c .subicon_c').val(),
-                            'permission_id': $(this).find('.submodule_c .permission_c').val()
+                            'submodule': $(this).find('input.name_c').val(),
+                            'url': $(this).find('input.url_c').val(),
+                            'icon': $(this).find('input.subicon_c').val(),
+                            'permission_id': $(this).find('select.permission_c').val()
                         };
                     }).get()
                 },

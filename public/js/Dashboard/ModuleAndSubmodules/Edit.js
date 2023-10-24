@@ -30,28 +30,6 @@ function EditModuleAndSubmodulesModal(id, icon, module, roles, submodules) {
 }
 
 function EditModuleAndSubmodules(id) {
-    var submodulesData = [];
-
-$('div.submodules_e').each(function() {
-    var submoduleElement = $(this);
-
-    var id = submoduleElement.find('div.submodule_e input.name_e').attr('data-id');
-    var submodule = submoduleElement.find('div.submodule_e input.name_e').val();
-    var url = submoduleElement.find('div.submodule_e input.url_e').val();
-    var icon = submoduleElement.find('div.submodule_e input.subicon_e').val();
-    var permission_id = submoduleElement.find('div.submodule_e select.permission_e').val();
-
-    var submoduleData = {
-        'id': id,
-        'submodule': submodule,
-        'url': url,
-        'icon': icon,
-        'permission_id': permission_id
-    };
-
-    submodulesData.push(submoduleData);
-});
-console.log(submodulesData)
     Swal.fire({
         title: '¿Desea actualizar el modulos y los submodulos?',
         text: 'El modulo y los submodulos serán actualizados.',
@@ -73,13 +51,13 @@ console.log(submodulesData)
                     'roles': $('#roles_access_e .icheck-primary input[type="checkbox"]:checked').map(function () {
                         return $(this).attr('data-id');
                     }).get(),
-                    'submodules': $('.submodules_e').map(function(index) {
+                    'submodules': $('.submodules_e').find('div.submodule_e').map(function(index) {
                         return {
-                            'id': $(this).find('div.submodule_e input.name_e').attr('data-id'),
-                            'submodule': $(this).find('div.submodule_e input.name_e').val(),
-                            'url': $(this).find('div.submodule_e input.url_e').val(),
-                            'icon': $(this).find('div.submodule_e input.subicon_e').val(),
-                            'permission_id': $(this).find('div.submodule_e select.permission_e').val()
+                            'id': $(this).find('input.name_e').attr('data-id'),
+                            'submodule': $(this).find('input.name_e').val(),
+                            'url': $(this).find('input.url_e').val(),
+                            'icon': $(this).find('input.subicon_e').val(),
+                            'permission_id': $(this).find('select.permission_e').val()
                         };
                     }).get()
                 },

@@ -130,7 +130,7 @@ class ModulesAndSubmodulesController extends Controller
 
             return $this->successResponse(
                 $module,
-                'Modulo y submodulos creados correctamente.',
+                'Modulo y submodulos actualizados correctamente.',
                 201
             );
         } catch (ModelNotFoundException $e) {
