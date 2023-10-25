@@ -37,7 +37,7 @@ class ModulesAndSubmodulesSeeder extends Seeder
         Submodule::create([
             'name' => 'Usuarios',
             'url' => '/Dashboard/Users/Index',
-            'icon' => 'fas fa-user',
+            'icon' => 'fas fa-users',
             'module_id' => $Configuracion->id,
             'permission_id' => 2
         ]);
