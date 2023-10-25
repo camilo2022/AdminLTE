@@ -308,6 +308,7 @@
     <!-- JQVMap -->
     <script src="{{ asset('js/jqvmap/jquery.vmap.min.js') }}"></script>
     <script src="{{ asset('js/jqvmap/maps/jquery.vmap.usa.js') }}"></script>
+        <script src="{{ asset('js/jqvmap/maps/jquery.vmap.world.js') }}"></script>
     <!-- jQuery Knob Chart -->
     <script src="{{ asset('js/jquery-knob/jquery.knob.min.js') }}"></script>
     <!-- daterangepicker -->
