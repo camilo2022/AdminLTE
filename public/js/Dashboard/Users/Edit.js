@@ -56,10 +56,8 @@ function EditUser(id) {
 }
 
 function EditUserAjaxError(xhr) {
-    if(xhr.responseJSON.error.error){
-        toastr.error(xhr.responseJSON.error.message);
-        toastr.error(xhr.responseJSON.error.error);
-    } else if(xhr.responseJSON.errors){
+    if(xhr.responseJSON.errors){
+        RemoveIsValidClassEditUser();
         RemoveIsInvalidClassEditUser();
         $.each(xhr.responseJSON.errors, function(field, messages) {
             AddIsInvalidClassEditUser(field);
@@ -68,6 +66,9 @@ function EditUserAjaxError(xhr) {
             });
         });
         AddIsValidClassEditUser();
+    } else if(xhr.responseJSON.error.error){
+        toastr.error(xhr.responseJSON.error.message);
+        toastr.error(xhr.responseJSON.error.error);
     } else {
         toastr.error(xhr.responseJSON.error.message);
         $('#EditUserModal').modal('hide');

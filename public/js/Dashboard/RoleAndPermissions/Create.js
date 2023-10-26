@@ -95,10 +95,8 @@ function CreateRoleAndPermissions() {
                     CreateRoleAndPermissionsModal();
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    RemoveIsInvalidClassCreateRoleAndPermissions();
                     tableRolesAndPermissions.ajax.reload();
                     CreateRoleAndPermissionsAjaxError(xhr);
-                    AddIsValidClassCreateRoleAndPermissions();
                 }
             });
         } else {
@@ -108,18 +106,22 @@ function CreateRoleAndPermissions() {
 }
 
 function CreateRoleAndPermissionsAjaxError(xhr) {
-    if(xhr.responseJSON.error){
-        toastr.error(xhr.responseJSON.error.message);
-        toastr.error(xhr.responseJSON.error.error);
-    } else if(xhr.responseJSON.errors){
+    if(xhr.responseJSON.errors){
+        RemoveIsValidClassCreateRoleAndPermissions();
+        RemoveIsInvalidClassCreateRoleAndPermissions();
         $.each(xhr.responseJSON.errors, function(field, messages) {
             AddIsInvalidClassCreateRoleAndPermissions(field);
             $.each(messages, function(index, message) {
                 toastr.error(message);
             });
         });
+        AddIsValidClassCreateRoleAndPermissions();
+    } else if(xhr.responseJSON.error.error){
+        toastr.error(xhr.responseJSON.error.message);
+        toastr.error(xhr.responseJSON.error.error);
     } else {
-        toastr.error(xhr.responseJSON.message);
+        toastr.error(xhr.responseJSON.error.message);
+        $('#CreateRoleAndPermissionsModal').modal('hide');
     }
 }
 

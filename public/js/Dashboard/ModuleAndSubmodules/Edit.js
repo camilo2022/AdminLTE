@@ -67,11 +67,8 @@ function EditModuleAndSubmodules(id) {
                     $('#EditModuleAndSubmodulesModal').modal('hide');
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    RemoveIsValidClassEditModuleAndSubmodules();
-                    RemoveIsInvalidClassEditModuleAndSubmodules();
                     tableModulesAndSubmodules.ajax.reload();
                     EditModuleAndSubmodulesAjaxError(xhr);
-                    AddIsValidClassEditModuleAndSubmodules();
                 }
             });
         } else {
@@ -341,18 +338,22 @@ function EditModuleAndSubmodulesPermissions(selectPermissions, permissions) {
 }
 
 function EditModuleAndSubmodulesAjaxError(xhr) {
-    if(xhr.responseJSON.error){
-        toastr.error(xhr.responseJSON.error.message);
-        toastr.error(xhr.responseJSON.error.error);
-    } else if(xhr.responseJSON.errors){
+    if(xhr.responseJSON.errors){
+        RemoveIsValidClassEditModuleAndSubmodules();
+        RemoveIsInvalidClassEditModuleAndSubmodules();
         $.each(xhr.responseJSON.errors, function(field, messages) {
             AddIsInvalidClassEditModuleAndSubmodules(field);
             $.each(messages, function(index, message) {
                 toastr.error(message);
             });
         });
+        AddIsValidClassEditModuleAndSubmodules();
+    } else if(xhr.responseJSON.error.error){
+        toastr.error(xhr.responseJSON.error.message);
+        toastr.error(xhr.responseJSON.error.error);
     } else {
-        toastr.error(xhr.responseJSON.message);
+        toastr.error(xhr.responseJSON.error.message);
+        $('#EditModuleAndSubmodulesModal').modal('hide');
     }
 }
 

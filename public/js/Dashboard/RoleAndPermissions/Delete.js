@@ -34,16 +34,16 @@ function DeleteRoleAndPermissions(id, permission) {
 }
 
 function DeleteRoleAndPermissionsAjaxError(xhr) {
-    if(xhr.responseJSON.error){
-        toastr.error(xhr.responseJSON.error.message);
-        toastr.error(xhr.responseJSON.error.error);
-    } else if(xhr.responseJSON.errors){
+    if(xhr.responseJSON.errors){
         $.each(xhr.responseJSON.errors, function(field, messages) {
             $.each(messages, function(index, message) {
                 toastr.error(message);
             });
         });
+    } else if(xhr.responseJSON.error.error){
+        toastr.error(xhr.responseJSON.error.message);
+        toastr.error(xhr.responseJSON.error.error);
     } else {
-        toastr.error(xhr.responseJSON.message);
+        toastr.error(xhr.responseJSON.error.message);
     }
 }

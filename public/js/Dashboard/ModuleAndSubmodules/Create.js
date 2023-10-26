@@ -60,11 +60,8 @@ function CreateModuleAndSubmodules() {
                     $('#CreateModuleAndSubmodulesModal').modal('hide');
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    RemoveIsValidClassCreateModuleAndSubmodules();
-                    RemoveIsInvalidClassCreateModuleAndSubmodules();
                     tableModulesAndSubmodules.ajax.reload();
                     CreateModuleAndSubmodulesAjaxError(xhr);
-                    AddIsValidClassCreateModuleAndSubmodules();
                 }
             });
         } else {
@@ -325,18 +322,22 @@ function CreateModuleAndSubmodulesPermissions(selectPermissions, permissions) {
 }
 
 function CreateModuleAndSubmodulesAjaxError(xhr) {
-    if(xhr.responseJSON.error){
-        toastr.error(xhr.responseJSON.error.message);
-        toastr.error(xhr.responseJSON.error.error);
-    } else if(xhr.responseJSON.errors){
+    if(xhr.responseJSON.errors){
+        RemoveIsValidClassCreateModuleAndSubmodules();
+        RemoveIsInvalidClassCreateModuleAndSubmodules();
         $.each(xhr.responseJSON.errors, function(field, messages) {
             AddIsInvalidClassCreateModuleAndSubmodules(field);
             $.each(messages, function(index, message) {
                 toastr.error(message);
             });
         });
+        AddIsValidClassCreateModuleAndSubmodules();
+    } else if(xhr.responseJSON.error.error){
+        toastr.error(xhr.responseJSON.error.message);
+        toastr.error(xhr.responseJSON.error.error);
     } else {
-        toastr.error(xhr.responseJSON.message);
+        toastr.error(xhr.responseJSON.error.message);
+        $('#CreateModuleAndSubmodulesModal').modal('hide');
     }
 }
 

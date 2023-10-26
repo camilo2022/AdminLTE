@@ -56,8 +56,8 @@ function CreateUser() {
 }
 
 function CreateUserAjaxError(xhr) {
-    console.log(xhr);
     if(xhr.responseJSON.errors){
+        RemoveIsValidClassCreateUser();
         RemoveIsInvalidClassCreateUser();
         $.each(xhr.responseJSON.errors, function(field, messages) {
             AddIsInvalidClassCreateUser(field);
