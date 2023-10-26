@@ -45,10 +45,8 @@ function EditUser(id) {
                     $('#EditUserModal').modal('hide');
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    RemoveIsInvalidClassEditUser();
                     tableUsers.ajax.reload();
                     EditUserAjaxError(xhr);
-                    AddIsValidClassEditUser();
                 }
             });
         } else {
@@ -58,18 +56,21 @@ function EditUser(id) {
 }
 
 function EditUserAjaxError(xhr) {
-    if(xhr.responseJSON.error){
+    if(xhr.responseJSON.error.error){
         toastr.error(xhr.responseJSON.error.message);
         toastr.error(xhr.responseJSON.error.error);
     } else if(xhr.responseJSON.errors){
+        RemoveIsInvalidClassEditUser();
         $.each(xhr.responseJSON.errors, function(field, messages) {
             AddIsInvalidClassEditUser(field);
             $.each(messages, function(index, message) {
                 toastr.error(message);
             });
         });
+        AddIsValidClassEditUser();
     } else {
-        toastr.error(xhr.responseJSON.message);
+        toastr.error(xhr.responseJSON.error.message);
+        $('#EditUserModal').modal('hide');
     }
 }
 

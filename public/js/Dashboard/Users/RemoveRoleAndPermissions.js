@@ -27,7 +27,7 @@ function RemoveRoleAndPermissionUserModal(id, email) {
                 // Crear el div del card-header
                 let cardHeader = $('<div>').addClass('card-header border-0 ui-sortable-handle');
                 let cardTitle = $('<h3>').addClass('card-title mt-1');
-                let cardIcon = $('<i>').addClass('fas fa-shield-check fa-lg mr-1');
+                let cardIcon = $('<i>').addClass('fas fa-shield-xmark fa-lg mr-1');
 
                 cardTitle.append(cardIcon);
                 cardTitle.append(item.role);
@@ -179,7 +179,7 @@ function RemoveRoleAndPermission(id, role, permissions, email) {
 }
 
 function RemoveRoleAndPermissionsAjaxError(xhr) {
-    if(xhr.responseJSON.error){
+    if(xhr.responseJSON.error.error){
         toastr.error(xhr.responseJSON.error.message);
         toastr.error(xhr.responseJSON.error.error);
     } else if(xhr.responseJSON.errors){
@@ -189,6 +189,6 @@ function RemoveRoleAndPermissionsAjaxError(xhr) {
             });
         });
     } else {
-        toastr.error(xhr.responseJSON.message);
+        toastr.error(xhr.responseJSON.error.message);
     }
 }

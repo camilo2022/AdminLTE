@@ -1,9 +1,12 @@
 <?php
+
 namespace App\Http\Requests\RolesAndPermissions;
+
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
-class RolesAndPermissionsUpdateRequest extends FormRequest
+
+class RolesAndPermissionsPermissionsQueryRequest extends FormRequest
 {
     /**
      * Maneja una solicitud fallida de validación.
@@ -19,6 +22,7 @@ class RolesAndPermissionsUpdateRequest extends FormRequest
             'errors' => $validator->errors()
         ], 422));
     }
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -28,6 +32,7 @@ class RolesAndPermissionsUpdateRequest extends FormRequest
     {
         return true;
     }
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -36,9 +41,7 @@ class RolesAndPermissionsUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'role' => 'required|string|max:255|unique:roles,name,' . $this->route('id') .',id',
-            'permissions' => 'required|array',
-            'permissions.*' => 'string|max:255',
+            'role' => 'required|string|exists:roles,name',
         ];
     }
 
@@ -46,19 +49,15 @@ class RolesAndPermissionsUpdateRequest extends FormRequest
     {
         return [
             'required' => 'El campo :attribute es requerido.',
-            'array' => 'El campo :attribute debe ser un arreglo.',
             'string' => 'Cada elemento en :attribute debe ser una cadena de caracteres.',
-            'max' => 'Cada elemento en :attribute no debe exceder los :max caracteres.',
-            'unique' => 'El :attribute ya existe.',
+            'exists' => 'El :attribute no existe.',
         ];
     }
 
     public function attributes()
     {
         return [
-            'role' => 'Rol',
-            'permissions' => 'Permisos',
-            'permissions.*' => 'Elemento en Permisos',
+            
         ];
     }
 }

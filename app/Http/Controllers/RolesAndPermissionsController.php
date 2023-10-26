@@ -10,6 +10,8 @@ use App\Http\Resources\RolesAndPermissions\RolesAndPermissionsIndexQueryCollecti
 use App\Http\Requests\RolesAndPermissions\RolesAndPermissionsIndexQueryRequest;
 use App\Http\Requests\RolesAndPermissions\RolesAndPermissionsStoreRequest;
 use App\Http\Requests\RolesAndPermissions\RolesAndPermissionsDeleteRequest;
+use App\Http\Requests\RolesAndPermissions\RolesAndPermissionsPermissionsQueryRequest;
+use App\Http\Requests\RolesAndPermissions\RolesAndPermissionsRolesQueryRequest;
 use App\Http\Requests\RolesAndPermissions\RolesAndPermissionsUpdateRequest;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -101,7 +103,7 @@ class RolesAndPermissionsController extends Controller
         }
     }
 
-    public function rolesQuery(Request $request)
+    public function rolesQuery(RolesAndPermissionsRolesQueryRequest $request)
     {
         try {
             // Consulto los roles que no esten asociados a ningun modulo
@@ -132,7 +134,7 @@ class RolesAndPermissionsController extends Controller
         }
     }
 
-    public function permissionsQuery(Request $request)
+    public function permissionsQuery(RolesAndPermissionsPermissionsQueryRequest $request)
     {
         try {
             // Consulto los permisos del rol

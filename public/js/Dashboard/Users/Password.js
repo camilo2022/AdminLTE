@@ -49,10 +49,10 @@ function PasswordUser(id) {
                     $('#PasswordUserModal').modal('hide');
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    RemoveIsInvalidClassPasswordUser();
+                    
                     tableUsers.ajax.reload();
                     PasswordUserAjaxError(xhr);
-                    AddIsValidClassPasswordUser();
+                    
                 }
             });
         } else {
@@ -62,18 +62,21 @@ function PasswordUser(id) {
 }
 
 function PasswordUserAjaxError(xhr) {
-    if(xhr.responseJSON.error){
+    if(xhr.responseJSON.error.error){
         toastr.error(xhr.responseJSON.error.message);
         toastr.error(xhr.responseJSON.error.error);
     } else if(xhr.responseJSON.errors){
+        RemoveIsInvalidClassPasswordUser();
         $.each(xhr.responseJSON.errors, function(field, messages) {
             AddIsInvalidClassPasswordUser(field);
             $.each(messages, function(index, message) {
                 toastr.error(message);
             });
         });
+        AddIsValidClassPasswordUser();
     } else {
-        toastr.error(xhr.responseJSON.message);
+        toastr.error(xhr.responseJSON.error.message);
+        $('#PasswordUserModal').modal('hide');
     }
 }
 

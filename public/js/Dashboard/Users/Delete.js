@@ -33,7 +33,7 @@ function DeleteUser(id) {
 }
 
 function DeleteUserAjaxError(xhr) {
-    if(xhr.responseJSON.error){
+    if(xhr.responseJSON.error.error){
         toastr.error(xhr.responseJSON.error.message);
         toastr.error(xhr.responseJSON.error.error);
     } else if(xhr.responseJSON.errors){
@@ -43,6 +43,6 @@ function DeleteUserAjaxError(xhr) {
             });
         });
     } else {
-        toastr.error(xhr.responseJSON.message);
+        toastr.error(xhr.responseJSON.error.message);
     }
 }

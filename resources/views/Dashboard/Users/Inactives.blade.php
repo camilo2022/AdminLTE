@@ -53,11 +53,6 @@
                     <div class="card">
                         <div class="card-header p-2">
                             <ul class="nav nav-pills">
-                                <li class="nav-item">
-                                    <a class="nav-link active" href="" title="Agregar usuario">
-                                        <i class="fas fa-user-plus"></i>
-                                    </a>
-                                </li>
                                 <li class="nav-item ml-auto">
                                     <a class="nav-link" href="/Dashboard/Users/Index" title="Usuarios activos">
                                         <i class="fas fa-user-check"></i>

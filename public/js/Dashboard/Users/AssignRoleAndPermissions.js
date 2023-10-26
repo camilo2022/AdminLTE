@@ -171,7 +171,7 @@ function AssignRoleAndPermission(id, role, permissions, email) {
 }
 
 function AssignRoleAndPermissionAjaxError(xhr) {
-    if(xhr.responseJSON.error){
+    if(xhr.responseJSON.error.error){
         toastr.error(xhr.responseJSON.error.message);
         toastr.error(xhr.responseJSON.error.error);
     } else if(xhr.responseJSON.errors){
@@ -181,6 +181,6 @@ function AssignRoleAndPermissionAjaxError(xhr) {
             });
         });
     } else {
-        toastr.error(xhr.responseJSON.message);
+        toastr.error(xhr.responseJSON.error.message);
     }
 }

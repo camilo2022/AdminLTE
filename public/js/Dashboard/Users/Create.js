@@ -45,10 +45,8 @@ function CreateUser() {
                     CreateUserModal();
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    RemoveIsInvalidClassCreateUser();
                     tableUsers.ajax.reload();
                     CreateUserAjaxError(xhr);
-                    AddIsValidClassCreateUser();
                 }
             });
         } else {
@@ -58,18 +56,22 @@ function CreateUser() {
 }
 
 function CreateUserAjaxError(xhr) {
-    if(xhr.responseJSON.error){
-        toastr.error(xhr.responseJSON.error.message);
-        toastr.error(xhr.responseJSON.error.error);
-    } else if(xhr.responseJSON.errors){
+    console.log(xhr);
+    if(xhr.responseJSON.errors){
+        RemoveIsInvalidClassCreateUser();
         $.each(xhr.responseJSON.errors, function(field, messages) {
             AddIsInvalidClassCreateUser(field);
             $.each(messages, function(index, message) {
                 toastr.error(message);
             });
         });
+        AddIsValidClassCreateUser();
+    } else if(xhr.responseJSON.error.error){
+        toastr.error(xhr.responseJSON.error.message);
+        toastr.error(xhr.responseJSON.error.error);
     } else {
-        toastr.error(xhr.responseJSON.message);
+        toastr.error(xhr.responseJSON.error.message);
+        $('#CreateUserModal').modal('hide');
     }
 }
 
