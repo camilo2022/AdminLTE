@@ -18,7 +18,7 @@ class UserIndexQueryRequest extends FormRequest
     {
         // Lanzar una excepción de validación con los errores de validación obtenidos
         throw new HttpResponseException(response()->json([
-            'message' => 'Error de validación',
+            'message' => 'Error de validación de los datos para obtener listado de usuarios.',
             'errors' => $validator->errors()
         ], 422));
     }

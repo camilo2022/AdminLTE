@@ -219,16 +219,8 @@ class UserController extends Controller
 
             return $this->successResponse(
                 $user,
-                'Usuario creado exitosamente.',
+                'El usuario fue registrado exitosamente.',
                 201
-            );
-        } catch (ModelNotFoundException $e) {
-            return $this->errorResponse(
-                [
-                    'message' => $this->errorModelNotFoundException,
-                    'error' => $e->getMessage()
-                ],
-                404
             );
         } catch (Exception $e) {
             // Devolver una respuesta de error en caso de excepción
@@ -273,7 +265,7 @@ class UserController extends Controller
             $user->save();
             return $this->successResponse(
                 $user,
-                'Registro actualizado exitosamente.',
+                'El usuario fue actualizado exitosamente.',
                 200
             );
         } catch (ModelNotFoundException $e) {
@@ -303,7 +295,7 @@ class UserController extends Controller
             $user->save();
             return $this->successResponse(
                 $user,
-                'Contraseña del usuario actualizada exitosamente.',
+                'La contraseña el usuario fue actualizada exitosamente.',
                 200
             );
         } catch (ModelNotFoundException $e) {
@@ -346,7 +338,7 @@ class UserController extends Controller
             $user = User::findOrFail($request->id)->delete();
             return $this->successResponse(
                 $user,
-                'Usuario eliminado exitosamente.',
+                'El usuario fue eliminado exitosamente.',
                 204
             );
         } catch (ModelNotFoundException $e) {
@@ -389,7 +381,7 @@ class UserController extends Controller
             $user = User::withTrashed()->findOrFail($request->id)->restore();
             return $this->successResponse(
                 $user,
-                'Usuario restaurado exitosamente.',
+                'El usuario fue restaurado exitosamente.',
                 200
             );
         } catch (ModelNotFoundException $e) {
@@ -441,7 +433,7 @@ class UserController extends Controller
 
                 return $this->successResponse(
                     $rolesWithMissingPermissions,
-                    'Roles y permisos por asignar consultados exitosamente.',
+                    'La consulta para asignar rol y permiso realizada exitosamente.',
                     200
                 );
             }
@@ -452,7 +444,7 @@ class UserController extends Controller
                         'message' => $this->errorModelNotFoundException,
                         'error' => $e->getMessage()
                     ],
-                    500
+                    404
                 );
             }
         } catch (Exception $e) {
@@ -510,7 +502,7 @@ class UserController extends Controller
             $user->givePermissionTo($request->permissions);
             return $this->successResponse(
                 $user,
-                'Rol y permisos asignados al usuario exitosamente.',
+                'El rol y los permiso fue asignado al usuario exitosamente.',
                 200
             );
         } catch (ModelNotFoundException $e) {
@@ -570,7 +562,7 @@ class UserController extends Controller
 
                 return $this->successResponse(
                     $rolesWithMissingPermissions,
-                    'Roles y permisos por remover consultados exitosamente.',
+                    'La consulta para remover rol y permiso realizada exitosamente.',
                     200
                 );
             }
@@ -581,7 +573,7 @@ class UserController extends Controller
                         'message' => $this->errorModelNotFoundException,
                         'error' => $e->getMessage()
                     ],
-                    500
+                    404
                 );
             }
         } catch (Exception $e) {
@@ -638,7 +630,7 @@ class UserController extends Controller
 
             return $this->successResponse(
                 $user,
-                'Rol y permisos removidos al usuario exitosamente.',
+                'El rol y los permiso fue removido al usuario exitosamente.',
                 200
             );
         } catch (ModelNotFoundException $e) {

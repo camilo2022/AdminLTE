@@ -40,8 +40,7 @@ function CreateUser() {
                 },
                 success: function(response) {
                     tableUsers.ajax.reload();
-                    toastr.success(response.message);
-                    $('#CreateUserModal').modal('hide');
+                    CreateUserAjaxSuccess(response);
                     CreateUserModal();
                 },
                 error: function(xhr, textStatus, errorThrown) {
@@ -55,8 +54,25 @@ function CreateUser() {
     });
 }
 
+function CreateUserAjaxSuccess(response) {
+    if(response.StatusCode === 201) {
+        toastr.success(response.message);
+        $('#CreateUserModal').modal('hide');
+    }
+}
+
 function CreateUserAjaxError(xhr) {
-    if(xhr.responseJSON.errors){
+    if(xhr.status === 403) {
+        toastr.error(xhr.responseJSON.error.message);
+        $('#CreateUserModal').modal('hide');
+    }
+
+    if(xhr.status === 419) {
+        toastr.error(xhr.responseJSON.error.message);
+        $('#CreateUserModal').modal('hide');
+    }
+    
+    if(xhr.status === 422){
         RemoveIsValidClassCreateUser();
         RemoveIsInvalidClassCreateUser();
         $.each(xhr.responseJSON.errors, function(field, messages) {
@@ -66,17 +82,10 @@ function CreateUserAjaxError(xhr) {
             });
         });
         AddIsValidClassCreateUser();
-    } else if(xhr.responseJSON.error.error){
-        toastr.error(xhr.responseJSON.error.message);
-        toastr.error(xhr.responseJSON.error.error);
-    } else {
-        $(document).Toasts('create', {
-            class: 'bg-danger', 
-            title: 'Unauthorized',
-            subtitle: 'Error',
-            body: xhr.responseJSON.error.message,
-            icon: 'fas fa-xmark fa-lg',
-          })
+    }
+
+    if(xhr.status === 500){
+        toastr.error(xhr.responseJSON.message);
         $('#CreateUserModal').modal('hide');
     }
 }
