@@ -14,9 +14,9 @@ trait ApiResponser
 	 * @param int $code El código de respuesta HTTP.
 	 * @return \Illuminate\Http\JsonResponse
 	 */
-	protected function successResponse($data = [], $message ='Success',  $StatusCode = 200 )
+	protected function successResponse($data = [], $message ='Success',  $status = 200 )
 	{
-		return response()->json(['data' => $data, 'message' => $message, 'error' => false, 'StatusCode' => $StatusCode]);
+		return response()->json(['data' => $data, 'message' => $message, 'error' => false, 'status' => $status]);
 	}
 
 	/**

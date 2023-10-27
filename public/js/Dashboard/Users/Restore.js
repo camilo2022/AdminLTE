@@ -19,10 +19,10 @@ function RestoreUser(id) {
                 },
                 success: function(response) {
                     tableUsers.ajax.reload();
-                    toastr.success(response.message)
+                    RestoreUserAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableUsers.ajax.reload(); 
+                    tableUsers.ajax.reload();
                     RestoreUserAjaxError(xhr);
                 }
             });
@@ -32,17 +32,34 @@ function RestoreUser(id) {
     });
 }
 
+function RestoreUserAjaxSuccess(response) {
+    if(response.status === 204) {
+        toastr.success(response.message);
+    }
+}
+
 function RestoreUserAjaxError(xhr) {
-    if(xhr.responseJSON.errors){
+    if(xhr.status === 403) {
+        toastr.error(xhr.responseJSON.error.message);
+    }
+
+    if(xhr.status === 404) {
+        toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
+    }
+
+    if(xhr.status === 419) {
+        toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
+    }
+
+    if(xhr.status === 422){
         $.each(xhr.responseJSON.errors, function(field, messages) {
             $.each(messages, function(index, message) {
                 toastr.error(message);
             });
         });
-    } else if(xhr.responseJSON.error.error){
-        toastr.error(xhr.responseJSON.error.message);
-        toastr.error(xhr.responseJSON.error.error);
-    } else {
-        toastr.error(xhr.responseJSON.error.message);
+    }
+
+    if(xhr.status === 500){
+        toastr.error(xhr.responseJSON.message);
     }
 }

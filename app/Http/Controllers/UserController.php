@@ -31,7 +31,7 @@ class UserController extends Controller
     private $success = 'Consulta Exitosa.';
     private $errorException = 'Algo salió mal.';
     private $errorQueryException = 'Error del servidor de la base de datos.';
-    private $errorModelNotFoundException = 'El usuario no pudo ser encontrado.';
+    private $errorModelNotFoundException = 'El registro no fue encontrado en la base de datos.';
 
     public function index()
     {
@@ -45,26 +45,6 @@ class UserController extends Controller
         }
     }
 
-    /**
-     * Listado de usuarios con filtros y paginación.
-     *
-     * Esta función devuelve un listado paginado de usuarios aplicando los siguientes filtros:
-     *
-     * - Filtro por rango de fechas de creación (start_date y end_date).
-     * - Filtro por nombre de usuario (search).
-     * - Filtro por rol de usuario (role).
-     *
-     * Si los parámetros de filtro están presentes en la solicitud, se aplicarán a la consulta.
-     *
-     * @param \App\Http\Requests\UserIndexQueryRequest $request La solicitud HTTP con los
-     * parámetros de filtro y paginación.
-     *
-     * @return \Illuminate\Pagination\LengthAwarePaginator
-     * Una lista paginada de usuarios que cumplen con los filtros especificados.
-     *
-     * @throws \Exception
-     * Devuelve una respuesta de error en caso de excepción.
-     */
     public function indexQuery(UserIndexQueryRequest $request)
     {
         try {
@@ -118,31 +98,13 @@ class UserController extends Controller
     public function inactives()
     {
         try {
-            return view('Dashboard.Users.Inactives');
+            return view('Dashboard.Users.Inactivess');
         } catch (Exception $e) {
-            return back()->with(
-                'danger',
-                'Ocurrió un error al cargar la vista: ' . $e->getMessage()
-            );
+            $danger = 'Ocurrió un error al cargar la vista: ' . $e->getMessage();
+            return back()->with('danger', $danger);
         }
     }
 
-    /**
-     * Listado de usuarios inactivos con filtros y paginación.
-     *
-     * Esta función devuelve un listado paginado de usuarios inactivos aplicando los siguientes filtros:
-     *
-     * - Filtro por rango de fechas de creación (start_date y end_date).
-     * - Filtro por nombre de usuario, apellido, número de documento o correo electrónico (search).
-     *
-     * Si los parámetros de filtro están presentes en la solicitud, se aplicarán a la consulta de usuarios inactivos.
-     *
-     * @param \App\Http\Requests\UserInactivesRequest $request La solicitud HTTP con los parámetros
-     * de filtro y paginación.
-     *
-     * @return \Illuminate\Pagination\LengthAwarePaginator
-     * Lista paginada de usuarios inactivos que cumplen con los filtros especificados.
-     */
     public function inactivesQuery(UserInactivesQueryRequest $request)
     {
         try {
@@ -190,19 +152,6 @@ class UserController extends Controller
         }
     }
 
-    /**
-     * Crear un nuevo usuario.
-     *
-     * Esta función crea un nuevo usuario con los datos proporcionados en la solicitud.
-     *
-     * @param \App\Http\Requests\UserStoreRequest $request La solicitud HTTP con los datos del nuevo usuario.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     * Una respuesta JSON que incluye el usuario creado y un mensaje de éxito.
-     *
-     * @throws Exception
-     * Devuelve una respuesta de error en caso de excepción.
-     */
     public function store(UserStoreRequest $request)
     {
         try {
@@ -222,6 +171,15 @@ class UserController extends Controller
                 'El usuario fue registrado exitosamente.',
                 201
             );
+        } catch (QueryException $e) {
+            // Manejar la excepción de la base de datos
+            return $this->errorResponse(
+                [
+                    'message' => $this->errorQueryException,
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
         } catch (Exception $e) {
             // Devolver una respuesta de error en caso de excepción
             return $this->errorResponse(
@@ -234,23 +192,6 @@ class UserController extends Controller
         }
     }
 
-    /**
-     * Actualizar un usuario existente.
-     *
-     * Esta función actualiza los datos de un usuario existente con los datos proporcionados en la solicitud.
-     *
-     * @param \App\Http\Requests\UserUpdateRequest $request La solicitud HTTP con los datos de
-     * actualización del usuario.
-     * @param int $id El ID del usuario que se va a actualizar.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     * Una respuesta JSON que incluye el usuario actualizado y un mensaje de éxito.
-     *
-     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
-     * Devuelve una respuesta de error si el usuario no se encuentra.
-     * @throws Exception
-     * Devuelve una respuesta de error en caso de excepción.
-     */
     public function update(UserUpdateRequest $request, $id)
     {
         try {
@@ -276,6 +217,15 @@ class UserController extends Controller
                 ],
                 404
             );
+        } catch (QueryException $e) {
+            // Manejar la excepción de la base de datos
+            return $this->errorResponse(
+                [
+                    'message' => $this->errorQueryException,
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
         } catch (Exception $e) {
             return $this->errorResponse(
                 [
@@ -295,7 +245,7 @@ class UserController extends Controller
             $user->save();
             return $this->successResponse(
                 $user,
-                'La contraseña el usuario fue actualizada exitosamente.',
+                'La contraseña del usuario fue actualizada exitosamente.',
                 200
             );
         } catch (ModelNotFoundException $e) {
@@ -305,6 +255,15 @@ class UserController extends Controller
                     'error' => $e->getMessage()
                 ],
                 404
+            );
+        } catch (QueryException $e) {
+            // Manejar la excepción de la base de datos
+            return $this->errorResponse(
+                [
+                    'message' => $this->errorQueryException,
+                    'error' => $e->getMessage()
+                ],
+                500
             );
         } catch (Exception $e) {
             return $this->errorResponse(
@@ -317,21 +276,6 @@ class UserController extends Controller
         }
     }
 
-    /**
-     * Eliminar un usuario existente por su ID.
-     *
-     * Esta función elimina un usuario existente según el ID proporcionado en la solicitud.
-     *
-     * @param \App\Http\Requests\UserDeleteRequest $request La solicitud HTTP con el ID del usuario a eliminar.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     * Una respuesta JSON que indica que el usuario se ha eliminado exitosamente (sin datos) y un mensaje de éxito.
-     *
-     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
-     * Devuelve una respuesta de error si el usuario no se encuentra.
-     * @throws Exception
-     * Devuelve una respuesta de error en caso de excepción.
-     */
     public function delete(UserDeleteRequest $request)
     {
         try {
@@ -360,21 +304,6 @@ class UserController extends Controller
         }
     }
 
-    /**
-     * Restaurar un usuario inactivo por su ID.
-     *
-     * Esta función restaura un usuario inactivo según el ID proporcionado en la solicitud.
-     *
-     * @param \App\Http\Requests\UserRestoreRequest $request La solicitud HTTP con el ID del usuario a restaurar.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     * Una respuesta JSON que indica que el usuario se ha restaurado exitosamente y un mensaje de éxito.
-     *
-     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
-     * Devuelve una respuesta de error si el usuario no se encuentra.
-     * @throws Exception
-     * Devuelve una respuesta de error en caso de excepción.
-     */
     public function restore(UserRestoreRequest $request)
     {
         try {
@@ -382,7 +311,7 @@ class UserController extends Controller
             return $this->successResponse(
                 $user,
                 'El usuario fue restaurado exitosamente.',
-                200
+                204
             );
         } catch (ModelNotFoundException $e) {
             return $this->errorResponse(
@@ -406,84 +335,55 @@ class UserController extends Controller
     public function assignRoleAndPermissionsQuery(AssignRoleAndPermissionsQueryRequest $request)
     {
         try {
-            if ($request->ajax()) {
+            $user = User::findOrFail($request->id);
+            $roles = Role::with('permissions')->get();
 
-                $user = User::findOrFail($request->id);
-                $roles = Role::with('permissions')->get();
+            $rolesWithMissingPermissions = [];
 
-                $rolesWithMissingPermissions = [];
-
-                foreach ($roles as $role) {
-
-                    $missingPermissions = [];
-
-                    foreach (collect($role->permissions)->pluck('name') as $permission) {
-                        if (!$user->hasRole($role->name) || !$user->hasDirectPermission($permission)) {
-                            $missingPermissions[] = $permission;
-                        }
-                    }
-
-                    if (!empty($missingPermissions)) {
-                        $rolesWithMissingPermissions[] = (object) [
-                            'role' => $role->name,
-                            'permissions' => $missingPermissions
-                        ];
+            foreach ($roles as $role) {
+                $missingPermissions = [];
+                foreach (collect($role->permissions)->pluck('name') as $permission) {
+                    if (!$user->hasRole($role->name) || !$user->hasDirectPermission($permission)) {
+                        $missingPermissions[] = $permission;
                     }
                 }
+                if (!empty($missingPermissions)) {
+                    $rolesWithMissingPermissions[] = (object) [
+                        'role' => $role->name,
+                        'permissions' => $missingPermissions
+                    ];
+                }
+            }
 
-                return $this->successResponse(
-                    $rolesWithMissingPermissions,
-                    'La consulta para asignar rol y permiso realizada exitosamente.',
-                    200
-                );
-            }
+            return $this->successResponse(
+                $rolesWithMissingPermissions,
+                'La consulta para asignar rol y permisos realizada exitosamente.',
+                200
+            );
         } catch (ModelNotFoundException $e) {
-            if ($request->ajax()) {
-                return $this->errorResponse(
-                    [
-                        'message' => $this->errorModelNotFoundException,
-                        'error' => $e->getMessage()
-                    ],
-                    404
-                );
-            }
+            return $this->errorResponse(
+                [
+                    'message' => $this->errorModelNotFoundException,
+                    'error' => $e->getMessage()
+                ],
+                404
+            );
         } catch (Exception $e) {
-            if ($request->ajax()) {
-                return $this->errorResponse(
-                    [
-                        'message' => $this->errorException,
-                        'error' => $e->getMessage()
-                    ],
-                    500
-                );
-            }
+            return $this->errorResponse(
+                [
+                    'message' => $this->errorException,
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
         }
     }
 
-    /**
-     * Asignar un rol y permisos a un usuario existente.
-     *
-     * Esta función asigna un rol y permisos a un usuario existente según los datos proporcionados en la solicitud.
-     *
-     * @param \App\Http\Requests\AssignRoleAndPermissionsRequest $request La solicitud HTTP con los datos de
-     * asignación de rol y permisos.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     * Una respuesta JSON que indica que el rol y los permisos se han asignado exitosamente al usuario y un
-     * mensaje de éxito.
-     *
-     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
-     * Devuelve una respuesta de error si el usuario o el rol no se encuentran.
-     * @throws \Illuminate\Database\QueryException
-     * Devuelve una respuesta de error si ocurre una excepción de consulta de base de datos.
-     * @throws Exception
-     * Devuelve una respuesta de error en caso de otras excepciones.
-     */
     public function assignRoleAndPermissions(AssignRoleAndPermissionsRequest $request)
     {
         try {
             // Obtener el rol existente
-            $role = Role::where('name', '=', $request->role)->firstOrFail();
+            $role = Role::findByName($request->role);
             $user = User::findOrFail($request->id);
             if (!$role) {
                 return $this->successResponse(
@@ -502,7 +402,7 @@ class UserController extends Controller
             $user->givePermissionTo($request->permissions);
             return $this->successResponse(
                 $user,
-                'El rol y los permiso fue asignado al usuario exitosamente.',
+                'El rol y los permiso fueron asignados al usuario exitosamente.',
                 200
             );
         } catch (ModelNotFoundException $e) {
@@ -512,15 +412,6 @@ class UserController extends Controller
                     'error' => $e->getMessage()
                 ],
                 404
-            );
-        } catch (QueryException $e) {
-            // Manejar la excepción de la base de datos
-            return $this->errorResponse(
-                [
-                    'message' => $this->errorQueryException,
-                    'error' => $e->getMessage()
-                ],
-                500
             );
         } catch (Exception $e) {
             // Manejar otras excepciones
@@ -537,79 +428,53 @@ class UserController extends Controller
     public function removeRoleAndPermissionsQuery(RemoveRoleAndPermissionsQueryRequest $request)
     {
         try {
-            if ($request->ajax()) {
+            $user = User::with('roles.permissions','permissions')->findOrFail($request->id);
 
-                $user = User::with('roles.permissions','permissions')->findOrFail($request->id);
+            $rolesWithMissingPermissions = [];
 
-                $rolesWithMissingPermissions = [];
-
-                foreach($user->roles as $role){
-                    $missingPermissions = [];
-
-                    foreach (collect($role->permissions)->pluck('name') as $permission) {
-                        if ($user->hasDirectPermission($permission)) {
-                            $missingPermissions[] = $permission;
-                        }
-                    }
-
-                    if (!empty($missingPermissions)) {
-                        $rolesWithMissingPermissions[] = (object) [
-                            'role' => $role->name,
-                            'permissions' => $missingPermissions
-                        ];
+            foreach($user->roles as $role){
+                $missingPermissions = [];
+                foreach (collect($role->permissions)->pluck('name') as $permission) {
+                    if ($user->hasDirectPermission($permission)) {
+                        $missingPermissions[] = $permission;
                     }
                 }
+                if (!empty($missingPermissions)) {
+                    $rolesWithMissingPermissions[] = (object) [
+                        'role' => $role->name,
+                        'permissions' => $missingPermissions
+                    ];
+                }
+            }
 
-                return $this->successResponse(
-                    $rolesWithMissingPermissions,
-                    'La consulta para remover rol y permiso realizada exitosamente.',
-                    200
-                );
-            }
+            return $this->successResponse(
+                $rolesWithMissingPermissions,
+                'La consulta para remover rol y permisos realizada exitosamente.',
+                200
+            );
         } catch (ModelNotFoundException $e) {
-            if ($request->ajax()) {
-                return $this->errorResponse(
-                    [
-                        'message' => $this->errorModelNotFoundException,
-                        'error' => $e->getMessage()
-                    ],
-                    404
-                );
-            }
+            return $this->errorResponse(
+                [
+                    'message' => $this->errorModelNotFoundException,
+                    'error' => $e->getMessage()
+                ],
+                404
+            );
         } catch (Exception $e) {
-            if ($request->ajax()) {
-                return $this->errorResponse(
-                    [
-                        'message' => $this->errorException,
-                        'error' => $e->getMessage()
-                    ],
-                    500
-                );
-            }
+            return $this->errorResponse(
+                [
+                    'message' => $this->errorException,
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
         }
     }
 
-    /**
-     * Remover todos los roles y permisos de un usuario.
-     *
-     * Esta función remueve todos los roles y permisos asociados a un usuario según el ID proporcionado en la solicitud.
-     *
-     * @param \App\Http\Requests\RemoveRolesAndPermissionsRequest $request La solicitud HTTP con el ID del
-     * usuario cuyos roles y permisos se deben remover.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     * Una respuesta JSON que indica que los roles y permisos se han removido exitosamente del
-     * usuario y un mensaje de éxito.
-     *
-     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
-     * Devuelve una respuesta de error si el usuario no se encuentra.
-     * @throws Exception
-     * Devuelve una respuesta de error en caso de excepción.
-     */
     public function removeRoleAndPermissions(RemoveRolesAndPermissionsRequest $request)
     {
         try {
-            $role = Role::with('permissions')->where('name', '=', $request->role)->firstOrFail();
+            $role = Role::with('permissions')->findByName($request->role);
             $user = User::findOrFail($request->id);
 
             // Remover los permisos del usuario
@@ -630,7 +495,7 @@ class UserController extends Controller
 
             return $this->successResponse(
                 $user,
-                'El rol y los permiso fue removido al usuario exitosamente.',
+                'El rol y los permisos fueron removidos al usuario exitosamente.',
                 200
             );
         } catch (ModelNotFoundException $e) {

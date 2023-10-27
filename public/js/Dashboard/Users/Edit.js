@@ -38,11 +38,8 @@ function EditUser(id) {
                     'email': $("#email_e").val()
                 },
                 success: function(response) {
-                    RemoveIsValidClassEditUser();
-                    RemoveIsInvalidClassEditUser();
                     tableUsers.ajax.reload();
-                    toastr.success(response.message);
-                    $('#EditUserModal').modal('hide');
+                    EditUserAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
                     tableUsers.ajax.reload();
@@ -50,13 +47,36 @@ function EditUser(id) {
                 }
             });
         } else {
-            toastr.info('El usuario fue actualizado.')
+            toastr.info('El usuario no fue actualizado.')
         }
     });
 }
 
+function EditUserAjaxSuccess(response) {
+    if(response.status === 200) {
+        toastr.success(response.message);
+        $('#EditUserModal').modal('hide');
+    }
+}
+
 function EditUserAjaxError(xhr) {
-    if(xhr.responseJSON.errors){
+    console.log(xhr);
+    if(xhr.status === 403) {
+        toastr.error(xhr.responseJSON.error.message);
+        $('#EditUserModal').modal('hide');
+    }
+
+    if(xhr.status === 404) {
+        toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
+        $('#EditUserModal').modal('hide');
+    }
+
+    if(xhr.status === 419) {
+        toastr.error(xhr.responseJSON.error.message);
+        $('#EditUserModal').modal('hide');
+    }
+
+    if(xhr.status === 422){
         RemoveIsValidClassEditUser();
         RemoveIsInvalidClassEditUser();
         $.each(xhr.responseJSON.errors, function(field, messages) {
@@ -66,11 +86,10 @@ function EditUserAjaxError(xhr) {
             });
         });
         AddIsValidClassEditUser();
-    } else if(xhr.responseJSON.error.error){
-        toastr.error(xhr.responseJSON.error.message);
-        toastr.error(xhr.responseJSON.error.error);
-    } else {
-        toastr.error(xhr.responseJSON.error.message);
+    }
+
+    if(xhr.status === 500){
+        toastr.error(xhr.responseJSON.message);
         $('#EditUserModal').modal('hide');
     }
 }

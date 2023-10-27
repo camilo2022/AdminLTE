@@ -38,25 +38,7 @@ class RolesAndPermissionsController extends Controller
             );
         }
     }
-    /**
-     * Listado de roles y permisos con filtros y paginación.
-     *
-     * Esta función devuelve un listado paginado de roles con sus permisos aplicando los siguientes filtros:
-     *
-     * - Filtro por rango de fechas de creación (start_date y end_date).
-     * - Filtro por nombre de rol (search).
-     *
-     * Si los parámetros de filtro están presentes en la solicitud, se aplicarán a la consulta.
-     *
-     * @param \App\Http\Requests\RolesAndPermissionsIndexRequest $request La solicitud HTTP con los
-     * parámetros de filtro y paginación.
-     *
-     * @return \Illuminate\Pagination\LengthAwarePaginator
-     * Una lista paginada de roles y sus permisos que cumplen con los filtros especificados.
-     *
-     * @throws \Exception
-     * Devuelve una respuesta de error en caso de excepción.
-     */
+
     public function indexQuery(RolesAndPermissionsIndexQueryRequest $request)
     {
         try{
@@ -165,20 +147,6 @@ class RolesAndPermissionsController extends Controller
         }
     }
 
-    /**
-     * Crear un nuevo rol con permisos.
-     *
-     * Esta función crea un nuevo rol con los permisos proporcionados en la solicitud.
-     *
-     * @param \App\Http\Requests\RolesAndPermissionsStoreRequest $request La solicitud HTTP
-     * con los datos del nuevo rol y sus permisos.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     * Una respuesta JSON que indica que el rol y los permisos se han creado correctamente y un mensaje de éxito.
-     *
-     * @throws \Exception
-     * Devuelve una respuesta de error en caso de excepción.
-     */
     public function store(RolesAndPermissionsStoreRequest $request)
     {
         try {
@@ -229,20 +197,6 @@ class RolesAndPermissionsController extends Controller
         }
     }
 
-    /**
-     * Actualizar un rol con permisos.
-     *
-     * Esta función actualiza un rol con los permisos proporcionados en la solicitud.
-     *
-     * @param \App\Http\Requests\RolesAndPermissionsUpdateRequest $request La solicitud HTTP con
-     * los datos del nuevo rol y sus permisos.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     * Una respuesta JSON que indica que el rol y los permisos se han actualizado correctamente y un mensaje de éxito.
-     *
-     * @throws \Exception
-     * Devuelve una respuesta de error en caso de excepción.
-     */
     public function update(RolesAndPermissionsUpdateRequest $request, $roleId)
     {
         try {
@@ -308,20 +262,6 @@ class RolesAndPermissionsController extends Controller
         }
     }
 
-    /**
-     * Eliminar roles y permisos.
-     *
-     * Esta función elimina los roles y permisos especificados en la solicitud.
-     *
-     * @param \App\Http\Requests\RolesAndPermissionsDeleteRequest $request La solicitud HTTP con los IDs
-     * de los roles y permisos a eliminar.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     * Una respuesta JSON que indica que los roles y permisos se han eliminado correctamente y un mensaje de éxito.
-     *
-     * @throws \Exception
-     * Devuelve una respuesta de error en caso de excepción.
-     */
     public function delete(RolesAndPermissionsDeleteRequest $request)
     {
         try {

@@ -33,7 +33,7 @@ function PasswordUser(id) {
     }).then((result) => {
         if (result.value) {
             $.ajax({
-                url: `/Dashboard/Users/Password/${id}`,
+                url: `/Dashboard/Users/Passworld/${id}`,
                 type: 'PUT',
                 data: {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
@@ -42,17 +42,14 @@ function PasswordUser(id) {
                     'password_confirmation': $("#password_confirmation_p").val()
                 },
                 success: function(response) {
-                    RemoveIsValidClassPasswordUser();
-                    RemoveIsInvalidClassPasswordUser();
                     tableUsers.ajax.reload();
-                    toastr.success(response.message);
-                    $('#PasswordUserModal').modal('hide');
+                    PasswordUserAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    
+
                     tableUsers.ajax.reload();
                     PasswordUserAjaxError(xhr);
-                    
+
                 }
             });
         } else {
@@ -61,8 +58,30 @@ function PasswordUser(id) {
     });
 }
 
+function PasswordUserAjaxSuccess(response) {
+    if(response.status === 200) {
+        toastr.success(response.message);
+        $('#PasswordUserModal').modal('hide');
+    }
+}
+
 function PasswordUserAjaxError(xhr) {
-    if(xhr.responseJSON.errors){
+    if(xhr.status === 403) {
+        toastr.error(xhr.responseJSON.error.message);
+        $('#PasswordUserModal').modal('hide');
+    }
+
+    if(xhr.status === 404) {
+        toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
+        $('#PasswordUserModal').modal('hide');
+    }
+
+    if(xhr.status === 419) {
+        toastr.error(xhr.responseJSON.error.message);
+        $('#PasswordUserModal').modal('hide');
+    }
+
+    if(xhr.status === 422){
         RemoveIsValidClassPasswordUser();
         RemoveIsInvalidClassPasswordUser();
         $.each(xhr.responseJSON.errors, function(field, messages) {
@@ -72,11 +91,10 @@ function PasswordUserAjaxError(xhr) {
             });
         });
         AddIsValidClassPasswordUser();
-    } else if(xhr.responseJSON.error.error){
-        toastr.error(xhr.responseJSON.error.message);
-        toastr.error(xhr.responseJSON.error.error);
-    } else {
-        toastr.error(xhr.responseJSON.error.message);
+    }
+
+    if(xhr.status === 500){
+        toastr.error(xhr.responseJSON.message);
         $('#PasswordUserModal').modal('hide');
     }
 }

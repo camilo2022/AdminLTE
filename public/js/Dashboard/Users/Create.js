@@ -41,7 +41,6 @@ function CreateUser() {
                 success: function(response) {
                     tableUsers.ajax.reload();
                     CreateUserAjaxSuccess(response);
-                    CreateUserModal();
                 },
                 error: function(xhr, textStatus, errorThrown) {
                     tableUsers.ajax.reload();
@@ -55,7 +54,7 @@ function CreateUser() {
 }
 
 function CreateUserAjaxSuccess(response) {
-    if(response.StatusCode === 201) {
+    if(response.status === 201) {
         toastr.success(response.message);
         $('#CreateUserModal').modal('hide');
     }
@@ -67,11 +66,16 @@ function CreateUserAjaxError(xhr) {
         $('#CreateUserModal').modal('hide');
     }
 
+    if(xhr.status === 404) {
+        toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
+        $('#CreateUserModal').modal('hide');
+    }
+
     if(xhr.status === 419) {
         toastr.error(xhr.responseJSON.error.message);
         $('#CreateUserModal').modal('hide');
     }
-    
+
     if(xhr.status === 422){
         RemoveIsValidClassCreateUser();
         RemoveIsInvalidClassCreateUser();

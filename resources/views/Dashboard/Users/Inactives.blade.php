@@ -45,7 +45,7 @@
             </div>
         </section>
     @endif
-    
+
     <section class="content">
         <div class="container-fluid">
             <div class="row">

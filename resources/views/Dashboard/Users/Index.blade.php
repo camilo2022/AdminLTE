@@ -54,7 +54,7 @@
                         <div class="card-header p-2">
                             <ul class="nav nav-pills">
                                 <li class="nav-item">
-                                    <a class="nav-link active" type="button" data-target="#CreateUserModal" data-toggle='modal' title="Agregar usuario">
+                                    <a class="nav-link active" type="button" data-target="#CreateUserModal" onclick="CreateUserModal()" data-toggle='modal' title="Agregar usuario">
                                         <i class="fas fa-user-plus"></i>
                                     </a>
                                 </li>
@@ -119,5 +119,4 @@
     <script src="{{ asset('js/Dashboard/Users/Delete.js') }}"></script>
     <script src="{{ asset('js/Dashboard/Users/AssignRoleAndPermissions.js') }}"></script>
     <script src="{{ asset('js/Dashboard/Users/RemoveRoleAndPermissions.js') }}"></script>
-    <script src="{{ asset('js/Dashboard/Alerts/Question.js') }}"></script>
 @endsection

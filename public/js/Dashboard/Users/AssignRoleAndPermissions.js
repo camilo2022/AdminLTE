@@ -112,7 +112,7 @@ function AssignRoleAndPermissionUserModal(id, email) {
                     });
 
                     // Llamar a la función RemoveRoleAndPermission con el nombre del rol y los permisos
-                    AssignRoleAndPermission(id, item.role, selectedPermissions, email);
+                    AssignRoleAndPermissionUser(id, item.role, selectedPermissions, email);
                 });
 
                 // Agregar cardHeader, cardBody y cardFooter al card
@@ -128,12 +128,12 @@ function AssignRoleAndPermissionUserModal(id, email) {
         },
         error: function(xhr, textStatus, errorThrown) {
             tableUsers.ajax.reload();
-            AssignRoleAndPermissionAjaxError(xhr);
+            AssignRoleAndPermissionUserAjaxError(xhr);
         }
     });
 }
 
-function AssignRoleAndPermission(id, role, permissions, email) {
+function AssignRoleAndPermissionUser(id, role, permissions, email) {
     Swal.fire({
         title: '¿Desea asignar el rol y los permisos al usuario?',
         text: 'Se asignara al usuario el rol y los permisos especificados.',
@@ -156,12 +156,12 @@ function AssignRoleAndPermission(id, role, permissions, email) {
                 },
                 success: function(response) {
                     tableUsers.ajax.reload();
-                    toastr.success(response.message);
+                    AssignRoleAndPermissionUserAjaxSuccess(response);
                     AssignRoleAndPermissionUserModal(id, email);
                 },
                 error: function(xhr, textStatus, errorThrown) {
                     tableUsers.ajax.reload();
-                    AssignRoleAndPermissionAjaxError(xhr);
+                    AssignRoleAndPermissionUserAjaxError(xhr);
                 }
             });
         } else {
@@ -170,18 +170,39 @@ function AssignRoleAndPermission(id, role, permissions, email) {
     });
 }
 
-function AssignRoleAndPermissionAjaxError(xhr) {
-    if(xhr.responseJSON.errors){
+function AssignRoleAndPermissionUserAjaxSuccess(response) {
+    if(response.status === 200) {
+        toastr.success(response.message);
+        $('#AssignRoleAndPermissionUserModal').modal('hide');
+    }
+}
+
+function AssignRoleAndPermissionUserAjaxError(xhr) {
+    if(xhr.status === 403) {
+        toastr.error(xhr.responseJSON.error.message);
+        $('#AssignRoleAndPermissionUserModal').modal('hide');
+    }
+
+    if(xhr.status === 404) {
+        toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
+        $('#AssignRoleAndPermissionUserModal').modal('hide');
+    }
+
+    if(xhr.status === 419) {
+        toastr.error(xhr.responseJSON.error.message);
+        $('#AssignRoleAndPermissionUserModal').modal('hide');
+    }
+
+    if(xhr.status === 422){
         $.each(xhr.responseJSON.errors, function(field, messages) {
             $.each(messages, function(index, message) {
                 toastr.error(message);
             });
         });
-    } else if(xhr.responseJSON.error.error){
-        toastr.error(xhr.responseJSON.error.message);
-        toastr.error(xhr.responseJSON.error.error);
-    } else {
-        toastr.error(xhr.responseJSON.error.message);
+    }
+
+    if(xhr.status === 500){
+        toastr.error(xhr.responseJSON.message);
         $('#AssignRoleAndPermissionUserModal').modal('hide');
     }
 }

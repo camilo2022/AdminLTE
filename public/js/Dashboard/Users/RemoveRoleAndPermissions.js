@@ -117,7 +117,7 @@ function RemoveRoleAndPermissionUserModal(id, email) {
                     });
 
                     // Llamar a la función RemoveRoleAndPermission con el nombre del rol y los permisos
-                    RemoveRoleAndPermission(id, item.role, selectedPermissions, email);
+                    RemoveRoleAndPermissionUser(id, item.role, selectedPermissions, email);
                 });
 
                 // Agregar cardHeader, cardBody y cardFooter al card
@@ -133,12 +133,12 @@ function RemoveRoleAndPermissionUserModal(id, email) {
         },
         error: function(xhr, textStatus, errorThrown) {
             tableUsers.ajax.reload();
-            RemoveRoleAndPermissionsAjaxError(xhr);
+            RemoveRoleAndPermissionsUserAjaxError(xhr);
         }
     });
 }
 
-function RemoveRoleAndPermission(id, role, permissions, email) {
+function RemoveRoleAndPermissionUser(id, role, permissions, email) {
     if($('meta[name="user-id"]').attr('content') === id) {
         toastr.warning('Cuidado, vas a remover el rol y los permisos de tu usuario.');
     }
@@ -164,12 +164,12 @@ function RemoveRoleAndPermission(id, role, permissions, email) {
                 },
                 success: function(response) {
                     tableUsers.ajax.reload();
-                    toastr.success(response.message);
+                    RemoveRoleAndPermissionUserAjaxSuccess(response);
                     RemoveRoleAndPermissionUserModal(id, email);
                 },
                 error: function(xhr, textStatus, errorThrown) {
                     tableUsers.ajax.reload();
-                    RemoveRoleAndPermissionsAjaxError(xhr);
+                    RemoveRoleAndPermissionUserAjaxError(xhr);
                 }
             });
         } else {
@@ -178,18 +178,40 @@ function RemoveRoleAndPermission(id, role, permissions, email) {
     });
 }
 
-function RemoveRoleAndPermissionsAjaxError(xhr) {
-    if(xhr.responseJSON.errors){
+
+function RemoveRoleAndPermissionUserAjaxSuccess(response) {
+    if(response.status === 200) {
+        toastr.success(response.message);
+        $('#RemoveRoleAndPermissionUserModal').modal('hide');
+    }
+}
+
+function RemoveRoleAndPermissionUserAjaxError(xhr) {
+    if(xhr.status === 403) {
+        toastr.error(xhr.responseJSON.error.message);
+        $('#RemoveRoleAndPermissionUserModal').modal('hide');
+    }
+
+    if(xhr.status === 404) {
+        toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
+        $('#RemoveRoleAndPermissionUserModal').modal('hide');
+    }
+
+    if(xhr.status === 419) {
+        toastr.error(xhr.responseJSON.error.message);
+        $('#RemoveRoleAndPermissionUserModal').modal('hide');
+    }
+
+    if(xhr.status === 422){
         $.each(xhr.responseJSON.errors, function(field, messages) {
             $.each(messages, function(index, message) {
                 toastr.error(message);
             });
         });
-    } else if(xhr.responseJSON.error.error){
-        toastr.error(xhr.responseJSON.error.message);
-        toastr.error(xhr.responseJSON.error.error);
-    } else {
-        toastr.error(xhr.responseJSON.error.message);
+    }
+
+    if(xhr.status === 500){
+        toastr.error(xhr.responseJSON.message);
         $('#RemoveRoleAndPermissionUserModal').modal('hide');
     }
 }
