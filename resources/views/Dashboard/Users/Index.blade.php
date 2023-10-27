@@ -119,4 +119,5 @@
     <script src="{{ asset('js/Dashboard/Users/Delete.js') }}"></script>
     <script src="{{ asset('js/Dashboard/Users/AssignRoleAndPermissions.js') }}"></script>
     <script src="{{ asset('js/Dashboard/Users/RemoveRoleAndPermissions.js') }}"></script>
+    <script src="{{ asset('js/Dashboard/Alerts/Question.js') }}"></script>
 @endsection

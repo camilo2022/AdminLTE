@@ -70,7 +70,13 @@ function CreateUserAjaxError(xhr) {
         toastr.error(xhr.responseJSON.error.message);
         toastr.error(xhr.responseJSON.error.error);
     } else {
-        toastr.error(xhr.responseJSON.error.message);
+        $(document).Toasts('create', {
+            class: 'bg-danger', 
+            title: 'Unauthorized',
+            subtitle: 'Error',
+            body: xhr.responseJSON.error.message,
+            icon: 'fas fa-xmark fa-lg',
+          })
         $('#CreateUserModal').modal('hide');
     }
 }

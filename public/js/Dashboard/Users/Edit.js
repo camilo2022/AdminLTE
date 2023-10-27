@@ -50,7 +50,7 @@ function EditUser(id) {
                 }
             });
         } else {
-            toastr.info('El usuario no se le actualizo la contraseña.')
+            toastr.info('El usuario fue actualizado.')
         }
     });
 }
