@@ -54,7 +54,7 @@
                         <div class="card-header p-2">
                             <ul class="nav nav-pills">
                                 <li class="nav-item">
-                                    <a class="nav-link active" type="button" data-target="#CreateRoleAndPermissionsModal" data-toggle='modal' title="Agregar rol y permisos">
+                                    <a class="nav-link active" type="button" onclick="CreateRoleAndPermissionsModal()" data-target="#CreateRoleAndPermissionsModal" data-toggle='modal' title="Agregar rol y permisos">
                                         <i class="fas fa-folder-plus"></i>
                                     </a>
                                 </li>

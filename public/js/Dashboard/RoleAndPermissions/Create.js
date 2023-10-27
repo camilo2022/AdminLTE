@@ -90,9 +90,7 @@ function CreateRoleAndPermissions() {
                 },
                 success: function(response) {
                     tableRolesAndPermissions.ajax.reload();
-                    toastr.success(response.message);
-                    $('#CreateRoleAndPermissionsModal').modal('hide');
-                    CreateRoleAndPermissionsModal();
+                    CreateRoleAndPermissionsAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
                     tableRolesAndPermissions.ajax.reload();
@@ -105,8 +103,30 @@ function CreateRoleAndPermissions() {
     });
 }
 
+function CreateRoleAndPermissionsAjaxSuccess(response) {
+    if(response.status === 201) {
+        toastr.success(response.message);
+        $('#CreateRoleAndPermissionsModal').modal('hide');
+    }
+}
+
 function CreateRoleAndPermissionsAjaxError(xhr) {
-    if(xhr.responseJSON.errors){
+    if(xhr.status === 403) {
+        toastr.error(xhr.responseJSON.error.message);
+        $('#CreateRoleAndPermissionsModal').modal('hide');
+    }
+
+    if(xhr.status === 404) {
+        toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
+        $('#CreateRoleAndPermissionsModal').modal('hide');
+    }
+
+    if(xhr.status === 419) {
+        toastr.error(xhr.responseJSON.error.message);
+        $('#CreateRoleAndPermissionsModal').modal('hide');
+    }
+
+    if(xhr.status === 422){
         RemoveIsValidClassCreateRoleAndPermissions();
         RemoveIsInvalidClassCreateRoleAndPermissions();
         $.each(xhr.responseJSON.errors, function(field, messages) {
@@ -116,11 +136,10 @@ function CreateRoleAndPermissionsAjaxError(xhr) {
             });
         });
         AddIsValidClassCreateRoleAndPermissions();
-    } else if(xhr.responseJSON.error.error){
-        toastr.error(xhr.responseJSON.error.message);
-        toastr.error(xhr.responseJSON.error.error);
-    } else {
-        toastr.error(xhr.responseJSON.error.message);
+    }
+
+    if(xhr.status === 500){
+        toastr.error(xhr.responseJSON.message);
         $('#CreateRoleAndPermissionsModal').modal('hide');
     }
 }

@@ -6,7 +6,7 @@
                 <div class="text-center w-100" style="background: white;">
                     <label style="font-size:20px;font-weight:bold;">Creacion de Usuario</label>
                 </div>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="CreateUserModal()">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
@@ -125,7 +125,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal" title="Cerrar ventana" onclick="CreateUserModal()">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" title="Cerrar ventana">
                     <i class="fas fa-xmark"></i>
                 </button>
                 <button type="button" class="btn btn-primary" id="CreateUserButton" onclick="CreateUser()" title="Guardar usuario">

@@ -173,7 +173,7 @@ class RolesAndPermissionsController extends Controller
             // Devolver una respuesta exitosa con el rol y los permisos creados
             return $this->successResponse(
                 $role,
-                'Rol y permisos creados correctamente.',
+                'El rol y sus permisos fueron creados exitosamente.',
                 201
             );
         } catch (ModelNotFoundException $e) {
@@ -183,6 +183,15 @@ class RolesAndPermissionsController extends Controller
                     'error' => $e->getMessage()
                 ],
                 404
+            );
+        } catch (QueryException $e) {
+            // Manejar la excepción de la base de datos
+            return $this->errorResponse(
+                [
+                    'message' => $this->errorQueryException,
+                    'error' => $e->getMessage()
+                ],
+                500
             );
         } catch (Exception $e) {
             // Deshacer la transacción en caso de excepción y devolver una respuesta de error
@@ -238,7 +247,7 @@ class RolesAndPermissionsController extends Controller
             // Devolver una respuesta exitosa con el rol y los permisos actualizados
             return $this->successResponse(
                 $role,
-                'Rol y permisos actualizados correctamente.',
+                'El rol y sus permisos fueron actualizados exitosamente.',
                 200
             );
         } catch (ModelNotFoundException $e) {
@@ -248,6 +257,15 @@ class RolesAndPermissionsController extends Controller
                     'error' => $e->getMessage()
                 ],
                 404
+            );
+        } catch (QueryException $e) {
+            // Manejar la excepción de la base de datos
+            return $this->errorResponse(
+                [
+                    'message' => $this->errorQueryException,
+                    'error' => $e->getMessage()
+                ],
+                500
             );
         } catch (Exception $e) {
             // Deshacer la transacción en caso de excepción y devolver una respuesta de error
@@ -275,8 +293,8 @@ class RolesAndPermissionsController extends Controller
             // Devolver una respuesta exitosa
             return $this->successResponse(
                 '',
-                'Roles y permisos eliminados correctamente.',
-                200
+                'El rol y sus permisos fueron eliminados exitosamente.',
+                204
             );
         } catch (ModelNotFoundException $e) {
             return $this->errorResponse(

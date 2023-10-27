@@ -23,53 +23,6 @@ function CreateModuleAndSubmodulesModal() {
     });
 }
 
-function CreateModuleAndSubmodules() {
-    Swal.fire({
-        title: '¿Desea guardar el modulos y los submodulos?',
-        text: 'El modulo y los submodulos serán creados.',
-        icon: 'warning',
-        showCancelButton: true,
-        cancelButtonColor: '#DD6B55',
-        confirmButtonColor: '#3085d6',
-        confirmButtonText: 'Si, guardar!',
-        cancelButtonText: 'No, cancelar!',
-    }).then((result) => {
-        if (result.value) {
-            $.ajax({
-                url: `/Dashboard/ModulesAndSubmodules/Store`,
-                type: 'POST',
-                data: {
-                    '_token': $('meta[name="csrf-token"]').attr('content'),
-                    'module': $('#module_c').val(),
-                    'icon': $('#icon_c').val(),
-                    'roles': $('#roles_access_c .icheck-primary input[type="checkbox"]:checked').map(function () {
-                        return $(this).attr('data-id');
-                    }).get(),
-                    'submodules': $('.submodules_c').find('div.submodule_c').map(function(index) {
-                        return {
-                            'submodule': $(this).find('input.name_c').val(),
-                            'url': $(this).find('input.url_c').val(),
-                            'icon': $(this).find('input.subicon_c').val(),
-                            'permission_id': $(this).find('select.permission_c').val()
-                        };
-                    }).get()
-                },
-                success: function(response) {
-                    tableModulesAndSubmodules.ajax.reload();
-                    toastr.success(response.message);
-                    $('#CreateModuleAndSubmodulesModal').modal('hide');
-                },
-                error: function(xhr, textStatus, errorThrown) {
-                    tableModulesAndSubmodules.ajax.reload();
-                    CreateModuleAndSubmodulesAjaxError(xhr);
-                }
-            });
-        } else {
-            toastr.info('El modulo y los submodulos no fueron creados.')
-        }
-    });
-}
-
 function CreateModuleAndSubmodulesAddSubmodule() {
     // Crear el nuevo elemento HTML con jQuery
     let id = $('#CreateModuleAndSubmodulesAddPermissionButton').attr('data-count');
@@ -160,7 +113,7 @@ function CreateModuleAndSubmodulesAddSubmodule() {
     });
     let urlInputGroup = $('<div>').addClass('input-group');
     let urlInput = $('<input>').attr({
-        'type': 'text', 
+        'type': 'text',
         'id': `url${id}_c`,
         'class': 'form-control url_c',
         'readonly': 'readonly'
@@ -178,7 +131,7 @@ function CreateModuleAndSubmodulesAddSubmodule() {
     });
     let subIconInputGroup = $('<div>').addClass('input-group');
     let subIconInput = $('<input>').attr({
-        'type': 'text', 
+        'type': 'text',
         'id': `subicon${id}_c`,
         'class': 'form-control subicon_c',
         'onkeyup': `CreateModuleAndSubmodulesChangeClassIcon(this, 'icono${id}_c')`
@@ -321,8 +274,76 @@ function CreateModuleAndSubmodulesPermissions(selectPermissions, permissions) {
     });
 }
 
+function CreateModuleAndSubmodules() {
+    Swal.fire({
+        title: '¿Desea guardar el modulos y los submodulos?',
+        text: 'El modulo y los submodulos serán creados.',
+        icon: 'warning',
+        showCancelButton: true,
+        cancelButtonColor: '#DD6B55',
+        confirmButtonColor: '#3085d6',
+        confirmButtonText: 'Si, guardar!',
+        cancelButtonText: 'No, cancelar!',
+    }).then((result) => {
+        if (result.value) {
+            $.ajax({
+                url: `/Dashboard/ModulesAndSubmodules/Store`,
+                type: 'POST',
+                data: {
+                    '_token': $('meta[name="csrf-token"]').attr('content'),
+                    'module': $('#module_c').val(),
+                    'icon': $('#icon_c').val(),
+                    'roles': $('#roles_access_c .icheck-primary input[type="checkbox"]:checked').map(function () {
+                        return $(this).attr('data-id');
+                    }).get(),
+                    'submodules': $('.submodules_c').find('div.submodule_c').map(function(index) {
+                        return {
+                            'submodule': $(this).find('input.name_c').val(),
+                            'url': $(this).find('input.url_c').val(),
+                            'icon': $(this).find('input.subicon_c').val(),
+                            'permission_id': $(this).find('select.permission_c').val()
+                        };
+                    }).get()
+                },
+                success: function(response) {
+                    tableModulesAndSubmodules.ajax.reload();
+                    CreateModuleAndSubmodulesAjaxSuccess(response);
+                },
+                error: function(xhr, textStatus, errorThrown) {
+                    tableModulesAndSubmodules.ajax.reload();
+                    CreateModuleAndSubmodulesAjaxError(xhr);
+                }
+            });
+        } else {
+            toastr.info('El modulo y los submodulos no fueron creados.')
+        }
+    });
+}
+
+function CreateModuleAndSubmodulesAjaxSuccess(response) {
+    if(response.status === 201) {
+        toastr.success(response.message);
+        $('#CreateModuleAndSubmodulesModal').modal('hide');
+    }
+}
+
 function CreateModuleAndSubmodulesAjaxError(xhr) {
-    if(xhr.responseJSON.errors){
+    if(xhr.status === 403) {
+        toastr.error(xhr.responseJSON.error.message);
+        $('#CreateModuleAndSubmodulesModal').modal('hide');
+    }
+
+    if(xhr.status === 404) {
+        toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
+        $('#CreateModuleAndSubmodulesModal').modal('hide');
+    }
+
+    if(xhr.status === 419) {
+        toastr.error(xhr.responseJSON.error.message);
+        $('#CreateModuleAndSubmodulesModal').modal('hide');
+    }
+
+    if(xhr.status === 422){
         RemoveIsValidClassCreateModuleAndSubmodules();
         RemoveIsInvalidClassCreateModuleAndSubmodules();
         $.each(xhr.responseJSON.errors, function(field, messages) {
@@ -332,11 +353,10 @@ function CreateModuleAndSubmodulesAjaxError(xhr) {
             });
         });
         AddIsValidClassCreateModuleAndSubmodules();
-    } else if(xhr.responseJSON.error.error){
-        toastr.error(xhr.responseJSON.error.message);
-        toastr.error(xhr.responseJSON.error.error);
-    } else {
-        toastr.error(xhr.responseJSON.error.message);
+    }
+
+    if(xhr.status === 500){
+        toastr.error(xhr.responseJSON.message);
         $('#CreateModuleAndSubmodulesModal').modal('hide');
     }
 }

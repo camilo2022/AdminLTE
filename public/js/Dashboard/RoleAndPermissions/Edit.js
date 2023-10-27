@@ -107,8 +107,7 @@ function EditRoleAndPermissions(id) {
                 },
                 success: function(response) {
                     tableRolesAndPermissions.ajax.reload();
-                    toastr.success(response.message);
-                    $('#EditRoleAndPermissionsModal').modal('hide');
+                    EditRoleAndPermissionsAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
                     tableRolesAndPermissions.ajax.reload();
@@ -121,8 +120,30 @@ function EditRoleAndPermissions(id) {
     });
 }
 
+function EditRoleAndPermissionsAjaxSuccess(response) {
+    if(response.status === 200) {
+        toastr.success(response.message);
+        $('#EditRoleAndPermissionsModal').modal('hide');
+    }
+}
+
 function EditRoleAndPermissionsAjaxError(xhr) {
-    if(xhr.responseJSON.errors){
+    if(xhr.status === 403) {
+        toastr.error(xhr.responseJSON.error.message);
+        $('#EditRoleAndPermissionsModal').modal('hide');
+    }
+
+    if(xhr.status === 404) {
+        toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
+        $('#EditRoleAndPermissionsModal').modal('hide');
+    }
+
+    if(xhr.status === 419) {
+        toastr.error(xhr.responseJSON.error.message);
+        $('#EditRoleAndPermissionsModal').modal('hide');
+    }
+
+    if(xhr.status === 422){
         RemoveIsValidClassEditRoleAndPermissions();
         RemoveIsInvalidClassEditRoleAndPermissions();
         $.each(xhr.responseJSON.errors, function(field, messages) {
@@ -132,11 +153,10 @@ function EditRoleAndPermissionsAjaxError(xhr) {
             });
         });
         AddIsValidClassEditRoleAndPermissions();
-    } else if(xhr.responseJSON.error.error){
-        toastr.error(xhr.responseJSON.error.message);
-        toastr.error(xhr.responseJSON.error.error);
-    } else {
-        toastr.error(xhr.responseJSON.error.message);
+    }
+
+    if(xhr.status === 500){
+        toastr.error(xhr.responseJSON.message);
         $('#EditRoleAndPermissionsModal').modal('hide');
     }
 }

@@ -98,10 +98,12 @@ class UserController extends Controller
     public function inactives()
     {
         try {
-            return view('Dashboard.Users.Inactivess');
+            return view('Dashboard.Users.Inactives');
         } catch (Exception $e) {
-            $danger = 'Ocurrió un error al cargar la vista: ' . $e->getMessage();
-            return back()->with('danger', $danger);
+            return back()->with(
+                'danger',
+                'Ocurrió un error al cargar la vista: ' . $e->getMessage()
+            );
         }
     }
 

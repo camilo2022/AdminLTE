@@ -105,6 +105,15 @@ class ModulesAndSubmodulesController extends Controller
                 ],
                 404
             );
+        } catch (QueryException $e) {
+            // Manejar la excepción de la base de datos
+            return $this->errorResponse(
+                [
+                    'message' => $this->errorQueryException,
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
         } catch (Exception $e) {
             // Deshacer la transacción en caso de excepción y devolver una respuesta de error
             return $this->errorResponse(
@@ -131,7 +140,7 @@ class ModulesAndSubmodulesController extends Controller
             return $this->successResponse(
                 $module,
                 'Modulo y submodulos actualizados correctamente.',
-                201
+                200
             );
         } catch (ModelNotFoundException $e) {
             return $this->errorResponse(
@@ -140,6 +149,15 @@ class ModulesAndSubmodulesController extends Controller
                     'error' => $e->getMessage()
                 ],
                 404
+            );
+        } catch (QueryException $e) {
+            // Manejar la excepción de la base de datos
+            return $this->errorResponse(
+                [
+                    'message' => $this->errorQueryException,
+                    'error' => $e->getMessage()
+                ],
+                500
             );
         } catch (Exception $e) {
             // Deshacer la transacción en caso de excepción y devolver una respuesta de error
@@ -162,7 +180,7 @@ class ModulesAndSubmodulesController extends Controller
             return $this->successResponse(
                 $module,
                 'Modulo y submodulos eliminados correctamente.',
-                200
+                204
             );
         } catch (ModelNotFoundException $e) {
             return $this->errorResponse(

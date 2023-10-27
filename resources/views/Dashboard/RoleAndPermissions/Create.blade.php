@@ -6,7 +6,7 @@
                 <div class="text-center w-100" style="background: white;">
                     <label style="font-size:20px;font-weight:bold;">Creacion de Rol y permisos</label>
                 </div>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="CreateRoleAndPermissionsModal()">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
@@ -44,7 +44,7 @@
                 <button type="button" class="btn btn-success" id="CreateRoleAndPermissionsAddPermissionButton" data-count="1" onclick="CreateRoleAndPermissionsAddPermission(this)" title="Agregar permiso">
                     <i class="fas fa-plus"></i>
                 </button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal" title="Cerrar ventana" onclick="CreateRoleAndPermissionsModal()">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" title="Cerrar ventana">
                     <i class="fas fa-xmark"></i>
                 </button>
                 <button type="button" class="btn btn-primary" id="CreateRoleAndPermissionsButton" onclick="CreateRoleAndPermissions()" title="Guardar Rol y permisos">
