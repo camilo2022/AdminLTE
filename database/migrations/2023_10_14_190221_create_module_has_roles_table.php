@@ -14,9 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::create('module_has_roles', function (Blueprint $table) {
-            $table->unsignedBigInteger('role_id');
-            $table->unsignedBigInteger('module_id');
-
+            $table->unsignedBigInteger('role_id')->comment('Identifier of the role');
+            $table->unsignedBigInteger('module_id')->comment('Identifier of the module');
             $table->foreign('role_id')->references('id')->on('roles')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('module_id')->references('id')->on('modules')->onUpdate('cascade')->onDelete('cascade');
         });
