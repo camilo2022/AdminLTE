@@ -26,7 +26,7 @@ return new class extends Migration
             $table->string('neighborhood');
             $table->string('description');
             $table->foreign('client_id')->references('id')->on('clients')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreign('country_id')->references('id')->on('countrys')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('country_id')->references('id')->on('countries')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('departament_id')->references('id')->on('departaments')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('city_id')->references('id')->on('cities')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
