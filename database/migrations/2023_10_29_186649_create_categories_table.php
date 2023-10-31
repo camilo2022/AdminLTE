@@ -18,7 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('clothing_line_id');
             $table->string('name');
             $table->string('code')->unique();
-            $table->string('description');
+            $table->string('description')->nullable();
             $table->foreign('clothing_line_id')->references('id')->on('clothing_lines')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });

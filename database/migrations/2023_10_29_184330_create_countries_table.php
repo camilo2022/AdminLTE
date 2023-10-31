@@ -14,10 +14,10 @@ class CreateCountriesTable extends Migration
     public function up()
     {
         Schema::create('countries', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('country_code');
-            $table->string('tourism_code');
+            $table->id()->comment('Identificador del pais.');
+            $table->string('name')->comment('Nombre del pais.');
+            $table->string('country_code')->comment('Codigo del pais.');
+            $table->string('tourism_code')->comment('Codigo de turismo del pais.');
             $table->timestamps();
         });
     }
@@ -29,6 +29,6 @@ class CreateCountriesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('countrys');
+        Schema::dropIfExists('countries');
     }
 }

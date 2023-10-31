@@ -14,16 +14,16 @@ class CreateUsersTable extends Migration
     public function up()
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->id()->comment('Identifier of the user');
-            $table->string('name')->comment('Name of the user');
-            $table->string('last_name')->comment('Last Name of the user');
-            $table->string('document_number')->unique()->comment('Number document of the user');
-            $table->string('phone_number')->comment('Phone number of the user');
-            $table->string('address')->comment('Address of the user');
-            $table->string('email')->unique()->comment('Email of the user');
-            $table->timestamp('email_verified_at')->nullable()->comment('Verification email of the user');
-            $table->string('password');
-            $table->unsignedBigInteger('enterprise_id')->comment('Identificacion de la empresa')->nullable();
+            $table->id()->comment('Identificador del usuario.');
+            $table->string('name')->comment('Nombre del usuario.');
+            $table->string('last_name')->comment('Apellido del usuario.');
+            $table->string('document_number')->unique()->comment('Numero de documento del usuario.');
+            $table->string('phone_number')->comment('Numero del telefono del usuario.');
+            $table->string('address')->comment('Direccion del usuario.');
+            $table->string('email')->unique()->comment('Correo del usuario.');
+            $table->timestamp('email_verified_at')->nullable()->comment('Verificacion del correo del usuario.');
+            $table->string('password')->comment('Contraseña del usuario.');
+            $table->unsignedBigInteger('enterprise_id')->comment('Identificador de la empresa.')->nullable();
             $table->foreign('enterprise_id')->references('id')->on('enterprises')->onUpdate('cascade')->onDelete('cascade');
             $table->rememberToken();
             $table->timestamps();

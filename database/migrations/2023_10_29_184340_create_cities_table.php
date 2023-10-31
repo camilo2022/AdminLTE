@@ -14,9 +14,9 @@ class CreateCitiesTable extends Migration
     public function up()
     {
         Schema::create('cities', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('departament_id');
-            $table->string('name');
+            $table->id()->comment('Identificador de la ciudad.');
+            $table->unsignedBigInteger('departament_id')->comment('Identificador del departamento.');
+            $table->string('name')->comment('Nombre de la ciudad.');
             $table->foreign('departament_id')->references('id')->on('departaments')->onDelete('cascade');
             $table->timestamps();
         });
@@ -29,6 +29,6 @@ class CreateCitiesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('citys');
+        Schema::dropIfExists('cities');
     }
 }

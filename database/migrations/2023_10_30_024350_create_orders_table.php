@@ -14,24 +14,23 @@ return new class extends Migration
     public function up()
     {
         Schema::create('orders', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('client_id');
-            $table->unsignedBigInteger('client_branch_id');
-            $table->float('value', 8, 2);
-            $table->string('dispatch');
-            $table->date('dispatch_date');
-            $table->unsignedBigInteger('seller_user_id');
-            $table->string('seller_status');
-            $table->date('seller_date');
-            $table->string('seller_observation');
-            $table->unsignedBigInteger('wallet_user_id');
-            $table->string('wallet_status');
-            $table->date('wallet_date');
-            $table->string('wallet_observation');
-            $table->string('dispatched_status');
-            $table->date('dispatched_date');
-            $table->string('payment_status');
-            $table->unsignedBigInteger('collection_id');
+            $table->id()->comment('Identificador del pedido.');
+            $table->unsignedBigInteger('client_id')->comment('Identificador del cliente.');
+            $table->unsignedBigInteger('client_branch_id')->comment('Identificador de la sucursal del cliente.');
+            $table->string('dispatch')->comment('Cuando despachar.');
+            $table->date('dispatch_date')->comment('Fecha de cuando despachar.');
+            $table->unsignedBigInteger('seller_user_id')->comment('Identificador del usuario de vendedor.');
+            $table->string('seller_status')->comment('Estado del vendedor.');
+            $table->date('seller_date')->comment('Fecha del vendedor.');
+            $table->string('seller_observation')->nullable()->comment('Observacion del vendedor.');
+            $table->unsignedBigInteger('wallet_user_id')->nullable()->comment('Identificador del usuario de cartera.');
+            $table->string('wallet_status')->nullable()->comment('Estado de cartera.');
+            $table->date('wallet_date')->nullable()->comment('Fecha de cartera');
+            $table->string('wallet_observation')->nullable()->comment('Observacion de cartera');
+            $table->string('dispatched_status')->nullable()->comment('Estado de despacho.');
+            $table->date('dispatched_date')->nullable()->comment('Fecha de despacho.');
+            $table->string('payment_status')->nullable()->comment('Estado de pago.');
+            $table->unsignedBigInteger('collection_id')->comment('Identificador de la correria.');
             $table->foreign('client_id')->references('id')->on('clients')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('client_branch_id')->references('id')->on('client_branches')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('seller_user_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');

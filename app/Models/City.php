@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -10,12 +10,12 @@ class City extends Model
 
     protected $fillable = [
         'name',
-        'id_departament'
+        'departament_id'
     ];
 
     public function departament()
     {
-          return $this->belongsTo(Departament::class, 'id_departament');
+          return $this->belongsTo(Departament::class, 'departament_id');
     }
 
 }

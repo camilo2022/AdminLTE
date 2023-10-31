@@ -24,7 +24,7 @@ return new class extends Migration
             $table->unsignedBigInteger('city_id');
             $table->string('address');
             $table->string('neighborhood');
-            $table->string('description');
+            $table->string('description')->nullable();
             $table->foreign('client_id')->references('id')->on('clients')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('country_id')->references('id')->on('countries')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('departament_id')->references('id')->on('departaments')->onUpdate('cascade')->onDelete('cascade');

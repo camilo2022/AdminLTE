@@ -22,8 +22,8 @@ return new class extends Migration
             $table->time('send_time');
             $table->unsignedBigInteger('receive_warehouse_id');
             $table->unsignedBigInteger('receive_user_id');
-            $table->date('receive_date');
-            $table->time('receive_time');
+            $table->date('receive_date')->nullable();
+            $table->time('receive_time')->nullable();
             $table->string('transfer_status');
             $table->foreign('send_warehouse_id')->references('id')->on('warehouses')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('send_user_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');

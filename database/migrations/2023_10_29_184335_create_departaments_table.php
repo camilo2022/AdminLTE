@@ -14,9 +14,9 @@ class CreateDepartamentsTable extends Migration
     public function up()
     {
         Schema::create('departaments', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('country_id');
-            $table->string('name');
+            $table->id()->comment('Identificador del departamento.');
+            $table->unsignedBigInteger('country_id')->comment('Identificador del pais.');
+            $table->string('name')->comment('Nombre del departamento.');
             $table->foreign('country_id')->references('id')->on('countries')->onDelete('cascade');
             $table->timestamps();
         });

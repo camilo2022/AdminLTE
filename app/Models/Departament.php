@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -10,11 +10,11 @@ class Departament extends Model
 
     protected $fillable = [
         'name',
-        'id_contry'
+        'country_id'
     ];
 
     public function country()
     {
-          return $this->belongsTo(Country::class, 'id_country');
+          return $this->belongsTo(Country::class, 'country_id');
     }
 }

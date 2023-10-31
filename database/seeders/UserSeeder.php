@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use Illuminate\Database\Seeder;
-use Faker\Factory as Faker;
 
 class UserSeeder extends Seeder
 {
@@ -80,20 +79,5 @@ class UserSeeder extends Seeder
             $user->assignRole([$RoleAndPermission->role]);
             $user->givePermissionTo($RoleAndPermission->permissions);
         };
-
-        $faker = Faker::create();
-
-        foreach (range(1, 100) as $index) {
-            User::create([
-                'name' => $faker->firstName,
-                'last_name' => $faker->lastName,
-                'document_number' => $faker->unique()->numberBetween(1000000000, 9999999999),
-                'phone_number' => $faker->numberBetween(3000000000, 3999999999),
-                'address' => $faker->address,
-                'email' => $faker->unique()->safeEmail,
-                'password' => bcrypt('12345678'),
-                'enterprise_id' => 1,
-            ]);
-        }
     }
 }

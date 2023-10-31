@@ -14,10 +14,10 @@ return new class extends Migration
     public function up()
     {
         Schema::create('modules', function (Blueprint $table) {
-            $table->id();
-            $table->string('name')->comment('Name of the navigation module');
-            $table->string('type')->default('item');
-            $table->string('icon')->comment('Representative navigation icon for the module');
+            $table->id()->comment('Identificador del modulo.');
+            $table->string('name')->comment('Nombre del modulo.');
+            $table->string('type')->default('item')->comment('Tipo de registro.');
+            $table->string('icon')->comment('Icono del modulo.');
             $table->timestamps();
         });
     }

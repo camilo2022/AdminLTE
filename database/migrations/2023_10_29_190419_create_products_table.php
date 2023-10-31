@@ -21,7 +21,7 @@ return new class extends Migration
             $table->unsignedBigInteger('category_id');
             $table->unsignedBigInteger('subcategory_id');
             $table->unsignedBigInteger('model_id');
-            $table->string('route_photo');
+            $table->string('route_photo')->nullable();
             $table->float('price', 8, 2);
             $table->boolean('inventory_status');
             $table->foreign('clothing_line_id')->references('id')->on('clothing_lines')->onUpdate('cascade')->onDelete('cascade');

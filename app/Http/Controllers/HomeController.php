@@ -24,18 +24,6 @@ class HomeController extends Controller
 
     public function index()
     {
-        $query = "CREATE OR REPLACE VIEW view_order_details AS ";
-
-        $selectQuery = "SELECT order_id, product_id, color_id";
-
-        $sizes = Size::all(); // obtener los registros de la tabla sizes
-
-        foreach ($sizes as $size) {
-        $selectQuery .= ", SUM(CASE WHEN size_id = {$size->id} THEN quantity ELSE 0 END) AS {$size->code}";
-        }
-
-        $query .= $selectQuery . " FROM order_details GROUP BY order_id, product_id, color_id";
-        return $query;
         return view('Dashboard.home');
     }
 
