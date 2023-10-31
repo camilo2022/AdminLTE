@@ -26,7 +26,6 @@ class User extends Authenticatable
         'address',
         'email',
         'password',
-        'enterprise_id',
     ];
 
     /**
@@ -50,78 +49,15 @@ class User extends Authenticatable
 
     public function scopeSearch($query, $search)
     {
-        if (is_numeric($search)) {
-            // Filtrar por campos numericos
-            return $this->scopeSearchByNumeric($query, $search);
-        } elseif (is_string($search)) {
-            // Filtrar por campos de texto
-            return $this->scopeSearchByString($query, $search);
-        }
-    }
-
-    public function scopeSearchByString($query, $search)
-    {
         return $query->where(
-            function ($stringQuery) use ($search) {
-                $stringQuery->where('name', 'like', '%' . $search . '%')
+            function ($subQuery) use ($search) {
+                $subQuery->where('name', 'like', '%' . $search . '%')
                     ->orWhere('last_name', 'like', '%' . $search . '%')
                     ->orWhere('address', 'like', '%' . $search . '%')
-                    ->orWhere('email', 'like', '%' . $search . '%');
-            }
-        );
-    }
-
-    public function scopeSearchByNumeric($query, $search)
-    {
-        return $query->where(
-            function ($numericQuery) use ($search) {
-                $numericQuery->where('id', 'like', '%' . $search . '%')
+                    ->orWhere('email', 'like', '%' . $search . '%')
+                    ->orWhere('id', 'like', '%' . $search . '%')
                     ->orWhere('document_number', 'like', '%' . $search . '%')
                     ->orWhere('phone_number', 'like', '%' . $search . '%');
-            }
-        );
-    }
-
-    public function scopeFilterByRole($query, $role)
-    {
-        if (is_array($role)) {
-            // Filtrar por roles en el arreglo
-            return $this->filterByArrayRole($query, $role);
-        } elseif (is_string($role)) {
-            // Filtrar por un rol específico
-            return $this->filterByStringRole($query, $role);
-        } elseif (is_numeric($role)) {
-            // Filtrar por id del rol
-            return $this->filterByNumericRole($query, $role);
-        }
-    }
-
-    protected function filterByArrayRole($query, $role)
-    {
-        return $query->whereHas('roles',
-            // Busca solo los roles que estan en el array
-            function ($roleArrayQuery) use ($role) {
-                $roleArrayQuery->whereIn('name', $role);
-            }
-        );
-    }
-
-    public function filterByStringRole($query, $role)
-    {
-        return $query->whereHas('roles',
-            // Busca el rol que esta en la variable
-            function ($roleStringQuery) use ($role) {
-                $roleStringQuery->where('name', '=', $role);
-            }
-        );
-    }
-
-    protected function filterByNumericRole($query, $role)
-    {
-        return $query->whereHas('roles',
-            // Busca solo los roles que estan en el array
-            function ($roleNumericQuery) use ($role) {
-                $roleNumericQuery->where('id', 'like', '%' . $role . '%' );
             }
         );
     }

@@ -16,7 +16,6 @@ use App\Http\Requests\RolesAndPermissions\RolesAndPermissionsUpdateRequest;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
-use Illuminate\Http\Request;
 
 class RolesAndPermissionsController extends Controller
 {
@@ -32,23 +31,20 @@ class RolesAndPermissionsController extends Controller
         try {
             return view('Dashboard.RoleAndPermissions.Index');
         } catch (Exception $e) {
-            return back()->with(
-                'danger',
-                'Ocurrió un error al cargar la vista: ' . $e->getMessage()
-            );
+            return back()->with('danger', 'Ocurrió un error al cargar la vista: ' . $e->getMessage());
         }
     }
 
     public function indexQuery(RolesAndPermissionsIndexQueryRequest $request)
     {
         try{
-            $start_date = Carbon::parse($request->start_date)->startOfDay();
-            $end_date = Carbon::parse($request->end_date)->endOfDay();
+            $start_date = Carbon::parse($request->input('start_date'))->startOfDay();
+            $end_date = Carbon::parse($request->input('end_date'))->endOfDay();
             // Consultar roles con relaciones y aplicar filtros
             $rolesAndPermissions = Role::with('permissions')
                 ->when($request->filled('search'),
                     function ($query) use ($request) {
-                        $query->search($request->search);
+                        $query->search($request->input('search'));
                     }
                 )
                 ->when($request->filled('start_date') && $request->filled('end_date'),
@@ -56,8 +52,8 @@ class RolesAndPermissionsController extends Controller
                         $query->filterByDate($start_date, $end_date);
                     }
                 )
-                ->orderBy($request->column, $request->dir)
-                ->paginate($request->perPage);
+                ->orderBy($request->input('column'), $request->input('dir'))
+                ->paginate($request->input('perPage'));
             // Devolver una respuesta exitosa con los roles y permisos paginados
             return $this->successResponse(
                 new RolesAndPermissionsIndexQueryCollection($rolesAndPermissions),
@@ -120,7 +116,7 @@ class RolesAndPermissionsController extends Controller
     {
         try {
             // Consulto los permisos del rol
-            $PermissionsQuery = Role::with('permissions')->findByName($request->role);
+            $PermissionsQuery = Role::with('permissions')->findByName($request->input('role'));
 
             return $this->successResponse(
                 $PermissionsQuery,
@@ -152,19 +148,15 @@ class RolesAndPermissionsController extends Controller
         try {
             DB::beginTransaction();
              // Crear el rol con el nombre proporcionado en la solicitud
-            $role = Role::create(
-                [
-                    'name' => $request->role
-                ]
-            );
+            $role = Role::create([
+                'name' => $request->input('role')
+            ]);
             // Asignar permisos al rol
-            $permissions = collect($request->permissions)->map(function ($permissions) {
+            $permissions = collect($request->input('permissions'))->map(function ($permissions) {
                 // Crear o recuperar un permiso con el nombre proporcionado
-                return Permission::firstOrCreate(
-                    [
-                        'name' => $permissions
-                    ]
-                );
+                return Permission::firstOrCreate([
+                    'name' => $permissions
+                ]);
             });
             // Sincronizar los permisos con el rol
             $role->syncPermissions($permissions);
@@ -212,6 +204,7 @@ class RolesAndPermissionsController extends Controller
             DB::beginTransaction();
             // Encontrar el rol
             $role = Role::findOrFail($roleId);
+
             $currentPermissions = collect($request->permissions);
             // Obtener los permisos actuales del rol
             $existingPermissions = $role->permissions->pluck('name');
@@ -240,8 +233,10 @@ class RolesAndPermissionsController extends Controller
             // Utilizar syncPermissions() para sincronizar todos los permisos al rol
             $role->syncPermissions($currentPermissions);
 
-            $role->name = $request->role;
-            $role->save();
+            $role->update([
+                'name' => $request->input('role')
+            ]);
+
             // Confirmar la transacción de base de datos
             DB::commit();
             // Devolver una respuesta exitosa con el rol y los permisos actualizados
@@ -286,8 +281,8 @@ class RolesAndPermissionsController extends Controller
             // Iniciar una transacción de base de datos
             DB::beginTransaction();
             // Eliminar roles y permisos
-            Role::whereIn('id', $request->role_id)->delete();
-            Permission::whereIn('id', $request->permission_id)->delete();
+            Role::whereIn('id', $request->input('role_id'))->delete();
+            Permission::whereIn('id', $request->input('permission_id'))->delete();
             // Confirmar la transacción de base de datos
             DB::commit();
             // Devolver una respuesta exitosa

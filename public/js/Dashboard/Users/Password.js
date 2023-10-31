@@ -33,7 +33,7 @@ function PasswordUser(id) {
     }).then((result) => {
         if (result.value) {
             $.ajax({
-                url: `/Dashboard/Users/Passworld/${id}`,
+                url: `/Dashboard/Users/Password/${id}`,
                 type: 'PUT',
                 data: {
                     '_token': $('meta[name="csrf-token"]').attr('content'),

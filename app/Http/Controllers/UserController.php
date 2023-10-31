@@ -20,7 +20,6 @@ use App\Http\Resources\User\UserInactivesCollection;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 
@@ -38,23 +37,20 @@ class UserController extends Controller
         try {
             return view('Dashboard.Users.Index');
         } catch (Exception $e) {
-            return back()->with(
-                'danger',
-                'Ocurrió un error al cargar la vista: ' . $e->getMessage()
-            );
+            return back()->with('danger', 'Ocurrió un error al cargar la vista: ' . $e->getMessage());
         }
     }
 
     public function indexQuery(UserIndexQueryRequest $request)
     {
         try {
-            $start_date = Carbon::parse($request->start_date)->startOfDay();
-            $end_date = Carbon::parse($request->end_date)->endOfDay();
+            $start_date = Carbon::parse($request->input('start_date'))->startOfDay();
+            $end_date = Carbon::parse($request->input('end_date'))->endOfDay();
             //Consulta por nombre
             $users = User::with('roles', 'permissions')
                 ->when($request->filled('search'),
                     function ($query) use ($request) {
-                        $query->search($request->search);
+                        $query->search($request->input('search'));
                     }
                 )
                 ->when($request->filled('start_date') && $request->filled('end_date'),
@@ -62,13 +58,8 @@ class UserController extends Controller
                         $query->filterByDate($start_date, $end_date);
                     }
                 )
-                ->when($request->filled('role'),
-                    function ($query) use ($request) {
-                        $query->filterByRole($request->role);
-                    }
-                )
-                ->orderBy($request->column, $request->dir)
-                ->paginate($request->perPage);
+                ->orderBy($request->input('column'), $request->input('dir'))
+                ->paginate($request->input('perPage'));
 
             return $this->successResponse(
                 new UserIndexQueryCollection($users),
@@ -100,24 +91,21 @@ class UserController extends Controller
         try {
             return view('Dashboard.Users.Inactives');
         } catch (Exception $e) {
-            return back()->with(
-                'danger',
-                'Ocurrió un error al cargar la vista: ' . $e->getMessage()
-            );
+            return back()->with('danger', 'Ocurrió un error al cargar la vista: ' . $e->getMessage());
         }
     }
 
     public function inactivesQuery(UserInactivesQueryRequest $request)
     {
         try {
-            $start_date = Carbon::parse($request->start_date)->startOfDay();
-            $end_date = Carbon::parse($request->end_date)->endOfDay();
+            $start_date = Carbon::parse($request->input('start_date'))->startOfDay();
+            $end_date = Carbon::parse($request->input('end_date'))->endOfDay();
 
             $users = User::with('roles','permissions')
                 //Consulta por nombre, apellido, cedula o correo
                 ->when($request->filled('search'),
                     function ($query) use ($request) {
-                        $query->search($request->search);
+                        $query->search($request->input('search'));
                     }
                 )
                 ->when($request->filled('start_date') && $request->filled('end_date'),
@@ -125,9 +113,9 @@ class UserController extends Controller
                         $query->filterByDate($start_date, $end_date);
                     }
                 )
-                ->orderBy($request->column, $request->dir)
+                ->orderBy($request->input('column'), $request->input('dir'))
                 ->onlyTrashed() //Trae los registros 'eliminados'
-                ->paginate($request->perPage);
+                ->paginate($request->input('perPage'));
 
             return $this->successResponse(
                 new UserInactivesCollection($users),
@@ -157,15 +145,15 @@ class UserController extends Controller
     public function store(UserStoreRequest $request)
     {
         try {
-            $user = new User();
-            $user->name = $request->name;
-            $user->last_name = $request->last_name;
-            $user->document_number = $request->document_number;
-            $user->phone_number = $request->phone_number;
-            $user->address = $request->address;
-            $user->email = $request->email;
-            $user->password = Hash::make($request->password);
-            $user->save();
+            $user = User::create([
+                'name' => $request->input('name'),
+                'last_name' => $request->input('last_name'),
+                'document_number' => $request->input('document_number'),
+                'phone_number' => $request->input('phone_number'),
+                'address' => $request->input('address'),
+                'email' => $request->input('email'),
+                'password' => Hash::make($request->input('password')),
+            ]);
 
             return $this->successResponse(
                 $user,
@@ -196,14 +184,15 @@ class UserController extends Controller
     public function update(UserUpdateRequest $request, $id)
     {
         try {
-            $user = User::findOrFail($id);
-            $user->name = $request->name;
-            $user->last_name = $request->last_name;
-            $user->document_number = $request->document_number;
-            $user->phone_number = $request->phone_number;
-            $user->address = $request->address;
-            $user->email = $request->email;
-            $user->save();
+            $user = User::findOrFail($id)->update([
+                'name' => $request->input('name'),
+                'last_name' => $request->input('last_name'),
+                'document_number' => $request->input('document_number'),
+                'phone_number' => $request->input('phone_number'),
+                'address' => $request->input('address'),
+                'email' => $request->input('email'),
+            ]);
+
             return $this->successResponse(
                 $user,
                 'El usuario fue actualizado exitosamente.',
@@ -240,9 +229,10 @@ class UserController extends Controller
     public function password(UserPasswordRequest $request, $id)
     {
         try {
-            $user = User::findOrFail($id);
-            $user->password = Hash::make($request->password);
-            $user->save();
+            $user = User::findOrFail($id)->update([
+                'password' => Hash::make($request->input('password')),
+            ]);
+
             return $this->successResponse(
                 $user,
                 'La contraseña del usuario fue actualizada exitosamente.',

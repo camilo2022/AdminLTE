@@ -28,23 +28,20 @@ class ModulesAndSubmodulesController extends Controller
         try {
             return view('Dashboard.ModuleAndSubmodules.Index');
         } catch (Exception $e) {
-            return back()->with(
-                'danger',
-                'Ocurrió un error al cargar la vista: ' . $e->getMessage()
-            );
+            return back()->with('danger', 'Ocurrió un error al cargar la vista: ' . $e->getMessage());
         }
     }
 
     public function indexQuery(ModulesAndSubmodulesIndexQueryRequest $request)
     {
         try{
-            $start_date = Carbon::parse($request->start_date)->startOfDay();
-            $end_date = Carbon::parse($request->end_date)->endOfDay();
+            $start_date = Carbon::parse($request->input('start_date'))->startOfDay();
+            $end_date = Carbon::parse($request->input('end_date'))->endOfDay();
             // Consultar roles con relaciones y aplicar filtros
             $modulesAndSubmodules = Module::with('roles', 'submodules.permission')
                 ->when($request->filled('search'),
                     function ($query) use ($request) {
-                        $query->search($request->search);
+                        $query->search($request->input('search'));
                     }
                 )
                 ->when($request->filled('start_date') && $request->filled('end_date'),
@@ -52,8 +49,8 @@ class ModulesAndSubmodulesController extends Controller
                         $query->filterByDate($start_date, $end_date);
                     }
                 )
-                ->orderBy($request->column, $request->dir)
-                ->paginate($request->perPage);
+                ->orderBy($request->input('column'), $request->input('dir'))
+                ->paginate($request->input('perPage'));
             // Devolver una respuesta exitosa con los roles y permisos paginados
             return $this->successResponse(
                 new ModulesAndSubmodulesIndexQueryCollection($modulesAndSubmodules),
