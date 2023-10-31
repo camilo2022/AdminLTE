@@ -15,12 +15,12 @@ return new class extends Migration
     public function up()
     {
         Schema::create('collections', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('code')->unique();
-            $table->datetime('start_date');
-            $table->datetime('end_date');
-            $table->boolean('active_status');
+            $table->id()->comment('Identificador de la correria.');
+            $table->string('name')->comment('Nombre de la correria.');
+            $table->string('code')->unique()->comment('Codigo de la correria.');
+            $table->datetime('start_date')->comment('Fecha de inicio de la correria.');
+            $table->datetime('end_date')->comment('Fecha de fin de la correria.');
+            $table->boolean('active_status')->comment('Estado de la correria.');
             $table->timestamps();
         });
     }

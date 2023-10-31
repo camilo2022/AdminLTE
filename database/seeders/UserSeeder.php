@@ -70,8 +70,7 @@ class UserSeeder extends Seeder
             'phone_number' => '3222759176',
             'address' => 'Cll 11 # 8-32 Panamericano',
             'email' => 'camiloacacio16@gmail.com',
-            'password' => bcrypt('12345678'),
-            'enterprise_id' => 1,
+            'password' => bcrypt('12345678')
         ]);
 
         foreach($RolesAndPermissions as $RoleAndPermission) {

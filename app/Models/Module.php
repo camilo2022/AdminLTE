@@ -19,14 +19,14 @@ class Module extends Model
         'icon'
     ];
 
-    public function roles() : BelongsToMany
-    {
-        return $this->belongsToMany(Role::class, 'module_has_roles', 'module_id', 'role_id');
-    }
-
     public function submodules() : HasMany
     {
         return $this->hasMany(Submodule::class, 'module_id');
+    }
+
+    public function roles() : BelongsToMany
+    {
+        return $this->belongsToMany(Role::class, 'module_has_roles', 'module_id', 'role_id');
     }
 
     public function scopeSearch($query, $search)
@@ -34,7 +34,7 @@ class Module extends Model
         if (is_string($search)) {
             // Filtrar por campos de texto
             return $this->scopeSearchByString($query, $search);
-        } 
+        }
     }
 
     public function scopeSearchByString($query, $search)
@@ -95,7 +95,7 @@ class Module extends Model
 
     private function saveSubmodule($submodule)
     {
-        $submoduleNew = (!isset($submodule->id) || !is_null($submodule->id)) ? new Submodule() : Submodule::findOrFail($submodule->id);
+        $submoduleNew = !is_null($submodule->id) ? new Submodule() : Submodule::findOrFail($submodule->id);
 
         $submoduleNew->name = is_array($submodule) ? $submodule['submodule'] : $submodule->submodule;
         $submoduleNew->url = is_array($submodule) ? $submodule['url'] : $submodule->url;

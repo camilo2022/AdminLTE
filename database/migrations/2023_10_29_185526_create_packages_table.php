@@ -14,9 +14,9 @@ return new class extends Migration
     public function up()
     {
         Schema::create('packages', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('code')->unique();
+            $table->id()->comment('Identificador del paquete.');
+            $table->string('name')->comment('Nombre del paquete.');
+            $table->string('code')->unique()->comment('Codigo del paquete.');
             $table->timestamps();
         });
     }

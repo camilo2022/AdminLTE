@@ -14,9 +14,9 @@ return new class extends Migration
     public function up()
     {
         Schema::create('order_dispatch_details', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('order_dispatch_id');
-            $table->unsignedBigInteger('order_detail_id');
+            $table->id()->comment('Identificador del detalle de la orden de despacho.');
+            $table->unsignedBigInteger('order_dispatch_id')->comment('Idetificador de la orden de despacho.');
+            $table->unsignedBigInteger('order_detail_id')->unique()->comment('Identificador del detalle de la orden.');
             $table->unsignedBigInteger('02')->default(0)->comment('Cantidad unidades en talla 02');
             $table->unsignedBigInteger('04')->default(0)->comment('Cantidad unidades en talla 04');
             $table->unsignedBigInteger('06')->default(0)->comment('Cantidad unidades en talla 06');
@@ -45,7 +45,7 @@ return new class extends Migration
             $table->unsignedBigInteger('XL')->default(0)->comment('Cantidad unidades en talla XL');
             $table->unsignedBigInteger('XXL')->default(0)->comment('Cantidad unidades en talla XXL');
             $table->unsignedBigInteger('XXXL')->default(0)->comment('Cantidad unidades en talla XXXL');
-            $table->string('order_dispatch_detail_status');
+            $table->string('order_dispatch_detail_status')->comment('Estado del detalle de la orden de despacho.');
             $table->foreign('order_dispatch_id')->references('id')->on('order_dispatches')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('order_detail_id')->references('id')->on('order_details')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class City extends Model
 {
@@ -13,9 +14,8 @@ class City extends Model
         'departament_id'
     ];
 
-    public function departament()
+    public function departament() : BelongsTo
     {
-          return $this->belongsTo(Departament::class, 'departament_id');
+        return $this->belongsTo(Departament::class, 'departament_id');
     }
-
 }

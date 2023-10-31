@@ -21,6 +21,11 @@ class Submodule extends Model
         'permission_id'
     ];
 
+    public function module() : BelongsTo
+    {
+        return $this->belongsTo(Module::class, 'module_id');
+    }
+
     public function permission() : BelongsTo
     {
         return $this->belongsTo(Permission::class, 'permission_id');

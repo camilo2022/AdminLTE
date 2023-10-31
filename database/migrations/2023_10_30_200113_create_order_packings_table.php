@@ -18,6 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('order_dispatch_id');
             $table->unsignedBigInteger('packing_user_id');
             $table->string('packing_status');
+            $table->datetime('packing_date');
             $table->foreign('order_dispatch_id')->references('id')->on('order_dispatches')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('packing_user_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();

@@ -21,14 +21,14 @@ return new class extends Migration
             $table->date('dispatch_date')->comment('Fecha de cuando despachar.');
             $table->unsignedBigInteger('seller_user_id')->comment('Identificador del usuario de vendedor.');
             $table->string('seller_status')->comment('Estado del vendedor.');
-            $table->date('seller_date')->comment('Fecha del vendedor.');
+            $table->datetime('seller_date')->comment('Fecha del vendedor.');
             $table->string('seller_observation')->nullable()->comment('Observacion del vendedor.');
             $table->unsignedBigInteger('wallet_user_id')->nullable()->comment('Identificador del usuario de cartera.');
             $table->string('wallet_status')->nullable()->comment('Estado de cartera.');
-            $table->date('wallet_date')->nullable()->comment('Fecha de cartera');
+            $table->datetime('wallet_date')->nullable()->comment('Fecha de cartera');
             $table->string('wallet_observation')->nullable()->comment('Observacion de cartera');
             $table->string('dispatched_status')->nullable()->comment('Estado de despacho.');
-            $table->date('dispatched_date')->nullable()->comment('Fecha de despacho.');
+            $table->datetime('dispatched_date')->nullable()->comment('Fecha de despacho.');
             $table->string('payment_status')->nullable()->comment('Estado de pago.');
             $table->unsignedBigInteger('collection_id')->comment('Identificador de la correria.');
             $table->foreign('client_id')->references('id')->on('clients')->onUpdate('cascade')->onDelete('cascade');

@@ -165,7 +165,6 @@ class UserController extends Controller
             $user->address = $request->address;
             $user->email = $request->email;
             $user->password = Hash::make($request->password);
-            $user->enterprise_id = Auth::user()->enterprise_id;
             $user->save();
 
             return $this->successResponse(
@@ -204,7 +203,6 @@ class UserController extends Controller
             $user->phone_number = $request->phone_number;
             $user->address = $request->address;
             $user->email = $request->email;
-            $user->enterprise_id = Auth::user()->enterprise_id;
             $user->save();
             return $this->successResponse(
                 $user,

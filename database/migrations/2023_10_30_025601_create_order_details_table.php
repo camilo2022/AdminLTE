@@ -47,10 +47,12 @@ return new class extends Migration
             $table->unsignedBigInteger('XL')->default(0)->comment('Cantidad unidades en talla XL');
             $table->unsignedBigInteger('XXL')->default(0)->comment('Cantidad unidades en talla XXL');
             $table->unsignedBigInteger('XXXL')->default(0)->comment('Cantidad unidades en talla XXXL');
+            $table->datetime('seller_date')->comment('Fecha de vendedor');
+            $table->string('seller_observation')->comment('Observacion de vendedor');
             $table->unsignedBigInteger('wallet_user_id')->nullable()->comment('Identificador del usuario de cartera.');
-            $table->date('wallet_date')->nullable()->comment('Fecha de cartera.');
+            $table->datetime('wallet_date')->nullable()->comment('Fecha de cartera.');
             $table->unsignedBigInteger('dispatched_user_id')->nullable()->comment('Identificador del usuario de despacho.');
-            $table->date('dispatched_date')->nullable()->comment('Fecha de despacho');
+            $table->datetime('dispatched_date')->nullable()->comment('Fecha de despacho');
             $table->string('order_detail_status')->comment('Estado del detalle del pedido.');
             $table->foreign('order_id')->references('id')->on('orders')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('product_id')->references('id')->on('products')->onUpdate('cascade')->onDelete('cascade');
