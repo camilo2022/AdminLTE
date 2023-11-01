@@ -12,7 +12,7 @@ use Illuminate\Auth\Passwords\CanResetPassword as CanResetPasswordTrait;
 class User extends Authenticatable
 {
     use HasFactory, Notifiable, HasRoles, SoftDeletes, CanResetPasswordTrait;
-
+    protected $table = 'users';
     /**
      * The attributes that are mass assignable.
      *

@@ -19,6 +19,7 @@ return new class extends Migration
             $table->unsignedBigInteger('dispatch_user_id');
             $table->string('dispatch_status');
             $table->datetime('dispatch_date');
+            $table->string('consecutive')->unique();
             $table->foreign('order_id')->references('id')->on('orders')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('dispatch_user_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();

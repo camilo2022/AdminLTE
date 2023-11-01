@@ -18,7 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('client_id')->comment('Identificador del cliente.');
             $table->unsignedBigInteger('client_branch_id')->comment('Identificador de la sucursal del cliente.');
             $table->string('dispatch')->comment('Cuando despachar.');
-            $table->date('dispatch_date')->comment('Fecha de cuando despachar.');
+            $table->date('dispatch_date')->nullable()->comment('Fecha de cuando despachar.');
             $table->unsignedBigInteger('seller_user_id')->comment('Identificador del usuario de vendedor.');
             $table->string('seller_status')->comment('Estado del vendedor.');
             $table->datetime('seller_date')->comment('Fecha del vendedor.');
