@@ -203,45 +203,14 @@ class Role extends Model implements RoleContract
 
     public function scopeSearch($query, $search)
     {
-        if (is_numeric($search)) {
-            // Filtrar por campos numericos
-            return $this->scopeSearchByNumeric($query, $search);
-        } elseif (is_string($search)) {
-            // Filtrar por campos de texto
-            return $this->scopeSearchByString($query, $search);
-        } 
-    }
-
-    public function scopeSearchByString($query, $search)
-    {
-        return $query->where(
-            function ($roleStringQuery) use ($search) {
-                // Busco en la base de datos por coincidencias en "name", "last_name" e "email" y
-                // por valores exactos en "document_number"
-                $roleStringQuery->where('name', 'like', '%' . $search . '%')
-                    ->orWhereHas('permissions',
-                        function ($permissionStringQuery) use ($search) {
-                            $permissionStringQuery->where('name', 'like',  '%' . $search . '%');
-                        }
-                    );
+        return $query->where('id', 'like', '%' . $search . '%')
+        ->orWhere('name', 'like', '%' . $search . '%')
+        ->orWhereHas('permissions',
+            function ($subQueryPermission) use ($search) {
+                $subQueryPermission->where('id', 'like',  '%' . $search . '%')
+                ->orWhere('name', 'like',  '%' . $search . '%');
             }
-        );
-    }
-
-    public function scopeSearchByNumeric($query, $search)
-    {
-        return $query->where(
-            function ($roleNumericQuery) use ($search) {
-                // Busco en la base de datos por coincidencias en "name", "last_name" e "email" y
-                // por valores exactos en "document_number"
-                $roleNumericQuery->where('id', 'like', '%' . $search . '%')
-                    ->orWhereHas('permissions',
-                        function ($permissionNumericQuery) use ($search) {
-                            $permissionNumericQuery->where('id', 'like',  '%' . $search . '%');
-                        }
-                    );
-            }
-        );
+        ); 
     }
 
     public function scopeFilterByDate($query, $start_date, $end_date)

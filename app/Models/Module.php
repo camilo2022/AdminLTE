@@ -31,37 +31,27 @@ class Module extends Model
 
     public function scopeSearch($query, $search)
     {
-        if (is_string($search)) {
-            // Filtrar por campos de texto
-            return $this->scopeSearchByString($query, $search);
-        }
-    }
-
-    public function scopeSearchByString($query, $search)
-    {
-        return $query->where(
-            function ($moduleStringQuery) use ($search) {
-                // Busco en la base de datos por coincidencias en "name", "last_name" e "email" y
-                // por valores exactos en "document_number"
-                $moduleStringQuery->where('name', 'like', '%' . $search . '%')
-                    ->orWhere('icon', 'like', '%' . $search . '%')
-                    ->orWhereHas('roles',
-                        function ($roleStringQuery) use ($search) {
-                            $roleStringQuery->where('name', 'like',  '%' . $search . '%');
-                        }
-                    )
-                    ->orWhereHas('submodules',
-                        function ($submoduleStringQuery) use ($search) {
-                            $submoduleStringQuery->where('name', 'like',  '%' . $search . '%')
-                                ->orWhere('url', 'like',  '%' . $search . '%')
-                                ->orWhere('icon', 'like',  '%' . $search . '%');
-                        }
-                    )
-                    ->orWhereHas('submodules.permission',
-                        function ($permissionStringQuery) use ($search) {
-                            $permissionStringQuery->where('name', 'like',  '%' . $search . '%');
-                        }
-                    );
+        return $query->where('id', 'like',  '%' . $search . '%')
+        ->orWhere('name', 'like',  '%' . $search . '%')
+        ->orWhere('icon', 'like', '%' . $search . '%')
+        ->orWhereHas('roles',
+            function ($subQueryRole) use ($search) {
+                $subQueryRole->where('id', 'like',  '%' . $search . '%')
+                ->orWhere('name', 'like',  '%' . $search . '%');
+            }
+        )
+        ->orWhereHas('submodules',
+            function ($subQuerySubmodule) use ($search) {
+                $subQuerySubmodule->where('id', 'like',  '%' . $search . '%')
+                ->orWhere('name', 'like',  '%' . $search . '%')
+                ->orWhere('url', 'like',  '%' . $search . '%')
+                ->orWhere('icon', 'like',  '%' . $search . '%');
+            }
+        )
+        ->orWhereHas('submodules.permission',
+            function ($subQueryPermission) use ($search) {
+                $subQueryPermission->where('id', 'like',  '%' . $search . '%')
+                ->orWhere('name', 'like',  '%' . $search . '%');
             }
         );
     }
@@ -75,35 +65,5 @@ class Module extends Model
     public function syncRoles($roles)
     {
         $this->roles()->sync($roles);
-    }
-
-    public function syncSubmodules($submodules)
-    {
-        $newSubmoduleIds = collect();
-
-        if (is_array($submodules)) {
-            collect($submodules)->each(function ($submodule) use ($newSubmoduleIds) {
-                $newSubmoduleIds->push($this->saveSubmodule((object) $submodule));
-            });
-        } elseif (is_object($submodules)) {
-            $newSubmoduleIds->push($this->saveSubmodule((object) $submodules));
-        }
-
-        // Eliminar submódulos que no están en $newSubmoduleIds
-        $this->submodules()->whereNotIn('id', $newSubmoduleIds)->delete();
-    }
-
-    private function saveSubmodule($submodule)
-    {
-        $submoduleNew = !is_null($submodule->id) ? new Submodule() : Submodule::findOrFail($submodule->id);
-
-        $submoduleNew->name = is_array($submodule) ? $submodule['submodule'] : $submodule->submodule;
-        $submoduleNew->url = is_array($submodule) ? $submodule['url'] : $submodule->url;
-        $submoduleNew->icon = is_array($submodule) ? $submodule['icon'] : $submodule->icon;
-        $submoduleNew->permission_id = is_array($submodule) ? $submodule['permission_id'] : $submodule->permission_id;
-        $submoduleNew->module_id = $this->id;
-        $submoduleNew->save();
-
-        return $submoduleNew->id;
     }
 }

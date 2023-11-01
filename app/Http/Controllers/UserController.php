@@ -17,6 +17,7 @@ use App\Http\Requests\User\UserRestoreRequest;
 use App\Http\Requests\User\UserStoreRequest;
 use App\Http\Requests\User\UserUpdateRequest;
 use App\Http\Resources\User\UserInactivesCollection;
+use App\Traits\ApiMessage;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
@@ -26,11 +27,7 @@ use Spatie\Permission\Models\Role;
 class UserController extends Controller
 {
     use ApiResponser;
-
-    private $success = 'Consulta Exitosa.';
-    private $errorException = 'Algo salió mal.';
-    private $errorQueryException = 'Error del servidor de la base de datos.';
-    private $errorModelNotFoundException = 'El registro no fue encontrado en la base de datos.';
+    use ApiMessage;
 
     public function index()
     {
@@ -63,14 +60,14 @@ class UserController extends Controller
 
             return $this->successResponse(
                 new UserIndexQueryCollection($users),
-                $this->success,
+                $this->getMessage('Success'),
                 200
             );
         } catch (QueryException $e) {
             // Manejar la excepción de la base de datos
             return $this->errorResponse(
                 [
-                    'message' => $this->errorQueryException,
+                    'message' => $this->getMessage('QueryException'),
                     'error' => $e->getMessage()
                 ],
                 500
@@ -78,7 +75,7 @@ class UserController extends Controller
         } catch (Exception $e) {
             return $this->errorResponse(
                 [
-                    'message' => $this->errorException,
+                    'message' => $this->getMessage('Exception'),
                     'error' => $e->getMessage()
                 ],
                 500
@@ -119,14 +116,14 @@ class UserController extends Controller
 
             return $this->successResponse(
                 new UserInactivesCollection($users),
-                $this->success,
+                $this->getMessage('Success'),
                 200
             );
         } catch (QueryException $e) {
             // Manejar la excepción de la base de datos
             return $this->errorResponse(
                 [
-                    'message' => $this->errorQueryException,
+                    'message' => $this->getMessage('QueryException'),
                     'error' => $e->getMessage()
                 ],
                 500
@@ -134,7 +131,7 @@ class UserController extends Controller
         } catch (Exception $e) {
             return $this->errorResponse(
                 [
-                    'message' => $this->errorException,
+                    'message' => $this->getMessage('Exception'),
                     'error' => $e->getMessage()
                 ],
                 500
@@ -145,26 +142,36 @@ class UserController extends Controller
     public function store(UserStoreRequest $request)
     {
         try {
-            $user = User::create([
-                'name' => $request->input('name'),
-                'last_name' => $request->input('last_name'),
-                'document_number' => $request->input('document_number'),
-                'phone_number' => $request->input('phone_number'),
-                'address' => $request->input('address'),
-                'email' => $request->input('email'),
-                'password' => Hash::make($request->input('password')),
-            ]);
+            $user = new User();
+            $user->name = $request->input('name');
+            $user->last_name = $request->input('last_name');
+            $user->document_number = $request->input('document_number');
+            $user->phone_number = $request->input('phone_number');
+            $user->address = $request->input('address');
+            $user->email = $request->input('email');
+            $user->password = Hash::make($request->input('password'));
+            $user->save();
+
 
             return $this->successResponse(
                 $user,
                 'El usuario fue registrado exitosamente.',
                 201
             );
+        } catch (ModelNotFoundException $e) {
+            // Manejar la excepción de la base de datos
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('ModelNotFoundException'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
         } catch (QueryException $e) {
             // Manejar la excepción de la base de datos
             return $this->errorResponse(
                 [
-                    'message' => $this->errorQueryException,
+                    'message' => $this->getMessage('QueryException'),
                     'error' => $e->getMessage()
                 ],
                 500
@@ -173,7 +180,7 @@ class UserController extends Controller
             // Devolver una respuesta de error en caso de excepción
             return $this->errorResponse(
                 [
-                    'message' => $this->errorException,
+                    'message' => $this->getMessage('Exception'),
                     'error' => $e->getMessage()
                 ],
                 500
@@ -184,14 +191,14 @@ class UserController extends Controller
     public function update(UserUpdateRequest $request, $id)
     {
         try {
-            $user = User::findOrFail($id)->update([
-                'name' => $request->input('name'),
-                'last_name' => $request->input('last_name'),
-                'document_number' => $request->input('document_number'),
-                'phone_number' => $request->input('phone_number'),
-                'address' => $request->input('address'),
-                'email' => $request->input('email'),
-            ]);
+            $user = User::findOrFail($id);
+            $user->name = $request->input('name');
+            $user->last_name = $request->input('last_name');
+            $user->document_number = $request->input('document_number');
+            $user->phone_number = $request->input('phone_number');
+            $user->address = $request->input('address');
+            $user->email = $request->input('email');
+            $user->save();
 
             return $this->successResponse(
                 $user,
@@ -201,7 +208,7 @@ class UserController extends Controller
         } catch (ModelNotFoundException $e) {
             return $this->errorResponse(
                 [
-                    'message' => $this->errorModelNotFoundException,
+                    'message' => $this->getMessage('ModelNotFoundException'),
                     'error' => $e->getMessage()
                 ],
                 404
@@ -210,7 +217,7 @@ class UserController extends Controller
             // Manejar la excepción de la base de datos
             return $this->errorResponse(
                 [
-                    'message' => $this->errorQueryException,
+                    'message' => $this->getMessage('QueryException'),
                     'error' => $e->getMessage()
                 ],
                 500
@@ -218,7 +225,7 @@ class UserController extends Controller
         } catch (Exception $e) {
             return $this->errorResponse(
                 [
-                    'message' => $this->errorException,
+                    'message' => $this->getMessage('Exception'),
                     'error' => $e->getMessage()
                 ],
                 500
@@ -229,9 +236,9 @@ class UserController extends Controller
     public function password(UserPasswordRequest $request, $id)
     {
         try {
-            $user = User::findOrFail($id)->update([
-                'password' => Hash::make($request->input('password')),
-            ]);
+            $user = User::findOrFail($id);
+            $user->password = Hash::make($request->input('password'));
+            $user->save();
 
             return $this->successResponse(
                 $user,
@@ -241,7 +248,7 @@ class UserController extends Controller
         } catch (ModelNotFoundException $e) {
             return $this->errorResponse(
                 [
-                    'message' => $this->errorModelNotFoundException,
+                    'message' => $this->getMessage('ModelNotFoundException'),
                     'error' => $e->getMessage()
                 ],
                 404
@@ -250,7 +257,7 @@ class UserController extends Controller
             // Manejar la excepción de la base de datos
             return $this->errorResponse(
                 [
-                    'message' => $this->errorQueryException,
+                    'message' => $this->getMessage('QueryException'),
                     'error' => $e->getMessage()
                 ],
                 500
@@ -258,7 +265,7 @@ class UserController extends Controller
         } catch (Exception $e) {
             return $this->errorResponse(
                 [
-                    'message' => $this->errorException,
+                    'message' => $this->getMessage('Exception'),
                     'error' => $e->getMessage()
                 ],
                 500
@@ -269,7 +276,7 @@ class UserController extends Controller
     public function delete(UserDeleteRequest $request)
     {
         try {
-            $user = User::findOrFail($request->id)->delete();
+            $user = User::findOrFail($request->input('id'))->delete();
             return $this->successResponse(
                 $user,
                 'El usuario fue eliminado exitosamente.',
@@ -278,7 +285,7 @@ class UserController extends Controller
         } catch (ModelNotFoundException $e) {
             return $this->errorResponse(
                 [
-                    'message' => $this->errorModelNotFoundException,
+                    'message' => $this->getMessage('ModelNotFoundException'),
                     'error' => $e->getMessage()
                 ],
                 404
@@ -286,7 +293,7 @@ class UserController extends Controller
         } catch (Exception $e) {
             return $this->errorResponse(
                 [
-                    'message' => $this->errorException,
+                    'message' => $this->getMessage('Exception'),
                     'error' => $e->getMessage()
                 ],
                 500
@@ -297,7 +304,7 @@ class UserController extends Controller
     public function restore(UserRestoreRequest $request)
     {
         try {
-            $user = User::withTrashed()->findOrFail($request->id)->restore();
+            $user = User::withTrashed()->findOrFail($request->input('id'))->restore();
             return $this->successResponse(
                 $user,
                 'El usuario fue restaurado exitosamente.',
@@ -306,7 +313,7 @@ class UserController extends Controller
         } catch (ModelNotFoundException $e) {
             return $this->errorResponse(
                 [
-                    'message' => $this->errorModelNotFoundException,
+                    'message' => $this->getMessage('ModelNotFoundException'),
                     'error' => $e->getMessage()
                 ],
                 404
@@ -314,7 +321,7 @@ class UserController extends Controller
         } catch (Exception $e) {
             return $this->errorResponse(
                 [
-                    'message' => $this->errorException,
+                    'message' => $this->getMessage('Exception'),
                     'error' => $e->getMessage()
                 ],
                 500
@@ -325,7 +332,7 @@ class UserController extends Controller
     public function assignRoleAndPermissionsQuery(AssignRoleAndPermissionsQueryRequest $request)
     {
         try {
-            $user = User::findOrFail($request->id);
+            $user = User::findOrFail($request->input('id'));
             $roles = Role::with('permissions')->get();
 
             $rolesWithMissingPermissions = [];
@@ -353,7 +360,7 @@ class UserController extends Controller
         } catch (ModelNotFoundException $e) {
             return $this->errorResponse(
                 [
-                    'message' => $this->errorModelNotFoundException,
+                    'message' => $this->getMessage('ModelNotFoundException'),
                     'error' => $e->getMessage()
                 ],
                 404
@@ -361,7 +368,7 @@ class UserController extends Controller
         } catch (Exception $e) {
             return $this->errorResponse(
                 [
-                    'message' => $this->errorException,
+                    'message' => $this->getMessage('Exception'),
                     'error' => $e->getMessage()
                 ],
                 500
@@ -373,23 +380,17 @@ class UserController extends Controller
     {
         try {
             // Obtener el rol existente
-            $role = Role::findByName($request->role);
-            $user = User::findOrFail($request->id);
-            if (!$role) {
-                return $this->successResponse(
-                    $user,
-                    'El rol especificado no existe.',
-                    404
-                );
-            }
+            $role = Role::findByName($request->input('role'));
+            $user = User::findOrFail($request->input('id'));
+
             // Verificar si el usuario no tiene el rol
-            if (!$user->hasRole($request->role)) {
+            if (!$user->hasRole($request->input('role'))) {
                 // Asignar el rol al usuario
                 $user->assignRole([$role]);
             }
 
             // Asociar los permisos existentes del rol al usuario
-            $user->givePermissionTo($request->permissions);
+            $user->givePermissionTo($request->input('permissions'));
             return $this->successResponse(
                 $user,
                 'El rol y los permiso fueron asignados al usuario exitosamente.',
@@ -398,7 +399,15 @@ class UserController extends Controller
         } catch (ModelNotFoundException $e) {
             return $this->errorResponse(
                 [
-                    'message' => $this->errorModelNotFoundException,
+                    'message' => $this->getMessage('ModelNotFoundException'),
+                    'error' => $e->getMessage()
+                ],
+                404
+            );
+        } catch (QueryException $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('QueryException'),
                     'error' => $e->getMessage()
                 ],
                 404
@@ -407,7 +416,7 @@ class UserController extends Controller
             // Manejar otras excepciones
             return $this->errorResponse(
                 [
-                    'message' => $this->errorException,
+                    'message' => $this->getMessage('Exception'),
                     'error' => $e->getMessage()
                 ],
                 500
@@ -418,7 +427,7 @@ class UserController extends Controller
     public function removeRoleAndPermissionsQuery(RemoveRoleAndPermissionsQueryRequest $request)
     {
         try {
-            $user = User::with('roles.permissions','permissions')->findOrFail($request->id);
+            $user = User::with('roles.permissions','permissions')->findOrFail($request->input('id'));
 
             $rolesWithMissingPermissions = [];
 
@@ -445,7 +454,7 @@ class UserController extends Controller
         } catch (ModelNotFoundException $e) {
             return $this->errorResponse(
                 [
-                    'message' => $this->errorModelNotFoundException,
+                    'message' => $this->getMessage('ModelNotFoundException'),
                     'error' => $e->getMessage()
                 ],
                 404
@@ -453,7 +462,7 @@ class UserController extends Controller
         } catch (Exception $e) {
             return $this->errorResponse(
                 [
-                    'message' => $this->errorException,
+                    'message' => $this->getMessage('Exception'),
                     'error' => $e->getMessage()
                 ],
                 500
@@ -464,11 +473,11 @@ class UserController extends Controller
     public function removeRoleAndPermissions(RemoveRolesAndPermissionsRequest $request)
     {
         try {
-            $role = Role::with('permissions')->findByName($request->role);
-            $user = User::findOrFail($request->id);
+            $role = Role::with('permissions')->findByName($request->input('role'));
+            $user = User::findOrFail($request->input('id'));
 
             // Remover los permisos del usuario
-            $user->revokePermissionTo($request->permissions);
+            $user->revokePermissionTo($request->input('permissions'));
 
             $missingPermissions = [];
 
@@ -480,7 +489,7 @@ class UserController extends Controller
 
             if(empty($missingPermissions)) {
                 // Remover el rol del usuario
-                $user->removeRole($request->role);
+                $user->removeRole($request->input('role'));
             }
 
             return $this->successResponse(
@@ -492,7 +501,16 @@ class UserController extends Controller
             // Manejar la excepción de la base de datos
             return $this->errorResponse(
                 [
-                    'message' => $this->errorModelNotFoundException,
+                    'message' => $this->getMessage('ModelNotFoundException'),
+                    'error' => $e->getMessage()
+                ],
+                404
+            );
+        } catch (QueryException $e) {
+            // Manejar la excepción de la base de datos
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('QueryException'),
                     'error' => $e->getMessage()
                 ],
                 404
@@ -500,7 +518,7 @@ class UserController extends Controller
         } catch (Exception $e) {
             return $this->errorResponse(
                 [
-                    'message' => $this->errorException,
+                    'message' => $this->getMessage('Exception'),
                     'error' => $e->getMessage()
                 ],
                 500

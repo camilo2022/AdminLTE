@@ -13,6 +13,7 @@ use App\Http\Requests\RolesAndPermissions\RolesAndPermissionsDeleteRequest;
 use App\Http\Requests\RolesAndPermissions\RolesAndPermissionsPermissionsQueryRequest;
 use App\Http\Requests\RolesAndPermissions\RolesAndPermissionsRolesQueryRequest;
 use App\Http\Requests\RolesAndPermissions\RolesAndPermissionsUpdateRequest;
+use App\Traits\ApiMessage;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
@@ -20,11 +21,7 @@ use Illuminate\Database\QueryException;
 class RolesAndPermissionsController extends Controller
 {
     use ApiResponser;
-
-    private $success = 'Consulta Exitosa.';
-    private $error = 'Algo salió mal.';
-    private $errorQueryException = 'Error del servidor de la base de datos.';
-    private $errorModelNotFoundException = 'El rol y los permisos no pudo ser encontrado.';
+    use ApiMessage;
 
     public function index()
     {
@@ -57,14 +54,14 @@ class RolesAndPermissionsController extends Controller
             // Devolver una respuesta exitosa con los roles y permisos paginados
             return $this->successResponse(
                 new RolesAndPermissionsIndexQueryCollection($rolesAndPermissions),
-                $this->success,
+                $this->getMessage('Success'),
                 200
             );
         } catch (QueryException $e) {
             // Manejar la excepción de la base de datos
             return $this->errorResponse(
                 [
-                    'message' => $this->errorQueryException,
+                    'message' => $this->getMessage('QueryException'),
                     'error' => $e->getMessage()
                 ],
                 500
@@ -73,7 +70,7 @@ class RolesAndPermissionsController extends Controller
             // Devolver una respuesta de error en caso de excepción
             return $this->errorResponse(
                 [
-                    'message' => $this->error,
+                    'message' => $this->getMessage('Exception'),
                     'error' => $e->getMessage()
                 ],
                 500
@@ -89,13 +86,13 @@ class RolesAndPermissionsController extends Controller
 
             return $this->successResponse(
                 $RolesQuery,
-                $this->success,
+                $this->getMessage('Success'),
                 200
             );
         } catch (ModelNotFoundException $e) {
             return $this->errorResponse(
                 [
-                    'message' => $this->errorModelNotFoundException,
+                    'message' => $this->getMessage('ModelNotFoundException'),
                     'error' => $e->getMessage()
                 ],
                 404
@@ -104,7 +101,7 @@ class RolesAndPermissionsController extends Controller
             // Deshacer la transacción en caso de excepción y devolver una respuesta de error
             return $this->errorResponse(
                 [
-                    'message' => $this->error,
+                    'message' => $this->getMessage('Exception'),
                     'error' => $e->getMessage()
                 ],
                 500
@@ -120,13 +117,13 @@ class RolesAndPermissionsController extends Controller
 
             return $this->successResponse(
                 $PermissionsQuery,
-                $this->success,
+                $this->getMessage('Success'),
                 200
             );
         } catch (ModelNotFoundException $e) {
             return $this->errorResponse(
                 [
-                    'message' => $this->errorModelNotFoundException,
+                    'message' => $this->getMessage('ModelNotFoundException'),
                     'error' => $e->getMessage()
                 ],
                 404
@@ -135,7 +132,7 @@ class RolesAndPermissionsController extends Controller
             // Deshacer la transacción en caso de excepción y devolver una respuesta de error
             return $this->errorResponse(
                 [
-                    'message' => $this->error,
+                    'message' => $this->getMessage('Exception'),
                     'error' => $e->getMessage()
                 ],
                 500
@@ -148,14 +145,14 @@ class RolesAndPermissionsController extends Controller
         try {
             DB::beginTransaction();
              // Crear el rol con el nombre proporcionado en la solicitud
-            $role = Role::create([
-                'name' => $request->input('role')
-            ]);
+            $role = new Role();
+            $role->name = $request->input('role');
+            $role->save();
             // Asignar permisos al rol
-            $permissions = collect($request->input('permissions'))->map(function ($permissions) {
+            $permissions = collect($request->input('permissions'))->map(function ($permission) {
                 // Crear o recuperar un permiso con el nombre proporcionado
                 return Permission::firstOrCreate([
-                    'name' => $permissions
+                    'name' => $permission
                 ]);
             });
             // Sincronizar los permisos con el rol
@@ -171,7 +168,7 @@ class RolesAndPermissionsController extends Controller
         } catch (ModelNotFoundException $e) {
             return $this->errorResponse(
                 [
-                    'message' => $this->errorModelNotFoundException,
+                    'message' => $this->getMessage('ModelNotFoundException'),
                     'error' => $e->getMessage()
                 ],
                 404
@@ -180,7 +177,7 @@ class RolesAndPermissionsController extends Controller
             // Manejar la excepción de la base de datos
             return $this->errorResponse(
                 [
-                    'message' => $this->errorQueryException,
+                    'message' => $this->getMessage('QueryException'),
                     'error' => $e->getMessage()
                 ],
                 500
@@ -190,7 +187,7 @@ class RolesAndPermissionsController extends Controller
             DB::rollback();
             return $this->errorResponse(
                 [
-                    'message' => $this->error,
+                    'message' => $this->getMessage('Exception'),
                     'error' => $e->getMessage()
                 ],
                 500
@@ -205,7 +202,7 @@ class RolesAndPermissionsController extends Controller
             // Encontrar el rol
             $role = Role::findOrFail($roleId);
 
-            $currentPermissions = collect($request->permissions);
+            $currentPermissions = collect($request->input('permissions'));
             // Obtener los permisos actuales del rol
             $existingPermissions = $role->permissions->pluck('name');
             // Detectar nuevos permisos agregados
@@ -233,9 +230,8 @@ class RolesAndPermissionsController extends Controller
             // Utilizar syncPermissions() para sincronizar todos los permisos al rol
             $role->syncPermissions($currentPermissions);
 
-            $role->update([
-                'name' => $request->input('role')
-            ]);
+            $role->name = $request->input('role');
+            $role->save();
 
             // Confirmar la transacción de base de datos
             DB::commit();
@@ -248,7 +244,7 @@ class RolesAndPermissionsController extends Controller
         } catch (ModelNotFoundException $e) {
             return $this->errorResponse(
                 [
-                    'message' => $this->errorModelNotFoundException,
+                    'message' => $this->getMessage('ModelNotFoundException'),
                     'error' => $e->getMessage()
                 ],
                 404
@@ -257,7 +253,7 @@ class RolesAndPermissionsController extends Controller
             // Manejar la excepción de la base de datos
             return $this->errorResponse(
                 [
-                    'message' => $this->errorQueryException,
+                    'message' => $this->getMessage('QueryException'),
                     'error' => $e->getMessage()
                 ],
                 500
@@ -267,7 +263,7 @@ class RolesAndPermissionsController extends Controller
             DB::rollback();
             return $this->errorResponse(
                 [
-                    'message' => $this->error,
+                    'message' => $this->getMessage('Exception'),
                     'error' => $e->getMessage()
                 ],
                 500
@@ -294,7 +290,7 @@ class RolesAndPermissionsController extends Controller
         } catch (ModelNotFoundException $e) {
             return $this->errorResponse(
                 [
-                    'message' => $this->errorModelNotFoundException,
+                    'message' => $this->getMessage('ModelNotFoundException'),
                     'error' => $e->getMessage()
                 ],
                 404
@@ -304,7 +300,7 @@ class RolesAndPermissionsController extends Controller
             DB::rollback();
             return $this->errorResponse(
                 [
-                    'message' => $this->error,
+                    'message' => $this->getMessage('Exception'),
                     'error' => $e->getMessage()
                 ],
                 500

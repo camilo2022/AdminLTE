@@ -8,6 +8,8 @@ use App\Http\Requests\ModulesAndSubmodules\ModulesAndSubmodulesStoreRequest;
 use App\Http\Requests\ModulesAndSubmodules\ModulesAndSubmodulesUpdateRequest;
 use App\Http\Resources\ModulesAndSubmodules\ModulesAndSubmodulesIndexQueryCollection;
 use App\Models\Module;
+use App\Models\Submodule;
+use App\Traits\ApiMessage;
 use App\Traits\ApiResponser;
 use Carbon\Carbon;
 use Exception;
@@ -17,11 +19,7 @@ use Illuminate\Database\QueryException;
 class ModulesAndSubmodulesController extends Controller
 {
     use ApiResponser;
-
-    private $success = 'Consulta Exitosa.';
-    private $error = 'Algo salió mal.';
-    private $errorQueryException = 'Error del servidor de la base de datos.';
-    private $errorModelNotFoundException = 'El modulo y los submodulos no pudo ser encontrado.';
+    use ApiMessage;
 
     public function index()
     {
@@ -54,14 +52,14 @@ class ModulesAndSubmodulesController extends Controller
             // Devolver una respuesta exitosa con los roles y permisos paginados
             return $this->successResponse(
                 new ModulesAndSubmodulesIndexQueryCollection($modulesAndSubmodules),
-                $this->success,
+                $this->getMessage('Success'),
                 200
             );
         } catch (QueryException $e) {
             // Manejar la excepción de la base de datos
             return $this->errorResponse(
                 [
-                    'message' => $this->errorQueryException,
+                    'message' => $this->getMessage('QueryException'),
                     'error' => $e->getMessage()
                 ],
                 500
@@ -70,7 +68,7 @@ class ModulesAndSubmodulesController extends Controller
             // Devolver una respuesta de error en caso de excepción
             return $this->errorResponse(
                 [
-                    'message' => $this->error,
+                    'message' => $this->getMessage('Exception'),
                     'error' => $e->getMessage()
                 ],
                 500
@@ -82,13 +80,23 @@ class ModulesAndSubmodulesController extends Controller
     {
         try {
             $module = new Module();
-            $module->name = $request->module;
-            $module->icon = $request->icon;
+            $module->name = $request->input('module');
+            $module->icon = $request->input('icon');
             $module->save();
 
-            $module->syncRoles($request->roles);
-            $module->syncSubmodules($request->submodules);
+            $module->syncRoles($request->input('roles'));
 
+            $submodules = collect($request->input('submodules'))->map(function ($submodule) use ($module){
+                $submodule = (object) $submodule;
+                $submoduleNew = new Submodule();
+                $submoduleNew->name = $submodule->submodule;
+                $submoduleNew->url = $submodule->url;
+                $submoduleNew->icon = $submodule->icon;
+                $submoduleNew->permission_id = $submodule->permission_id;
+                $submoduleNew->module_id = $module->id;
+                $submoduleNew->save();
+            });
+            
             return $this->successResponse(
                 $module,
                 'Modulo y submodulos creados correctamente.',
@@ -97,7 +105,7 @@ class ModulesAndSubmodulesController extends Controller
         } catch (ModelNotFoundException $e) {
             return $this->errorResponse(
                 [
-                    'message' => $this->errorModelNotFoundException,
+                    'message' => $this->getMessage('ModelNotFoundException'),
                     'error' => $e->getMessage()
                 ],
                 404
@@ -106,7 +114,7 @@ class ModulesAndSubmodulesController extends Controller
             // Manejar la excepción de la base de datos
             return $this->errorResponse(
                 [
-                    'message' => $this->errorQueryException,
+                    'message' => $this->getMessage('QueryException'),
                     'error' => $e->getMessage()
                 ],
                 500
@@ -115,7 +123,7 @@ class ModulesAndSubmodulesController extends Controller
             // Deshacer la transacción en caso de excepción y devolver una respuesta de error
             return $this->errorResponse(
                 [
-                    'message' => $this->error,
+                    'message' => $this->getMessage('Exception'),
                     'error' => $e->getMessage()
                 ],
                 500
@@ -127,12 +135,25 @@ class ModulesAndSubmodulesController extends Controller
     {
         try {
             $module = Module::findOrFail($id);
-            $module->name = $request->module;
-            $module->icon = $request->icon;
+            $module->name = $request->input('module');
+            $module->icon = $request->input('icon');
             $module->save();
 
-            $module->syncRoles($request->roles);
-            $module->syncSubmodules($request->submodules);
+            $module->syncRoles($request->input('roles'));
+            
+            $submodules = collect($request->input('submodules'))->map(function ($submodule) use ($module){
+                $submodule = (object) $submodule;
+                $submoduleNew = isset($submodule->id) ? Submodule::findOrFail($submodule->id) : new Submodule();
+                $submoduleNew->name = $submodule->submodule;
+                $submoduleNew->url = $submodule->url;
+                $submoduleNew->icon = $submodule->icon;
+                $submoduleNew->permission_id = $submodule->permission_id;
+                $submoduleNew->module_id = $module->id;
+                $submoduleNew->save();
+                return $submoduleNew->id;
+            });
+
+            $module->submodules()->whereNotIn('id', $submodules)->delete();
 
             return $this->successResponse(
                 $module,
@@ -142,7 +163,7 @@ class ModulesAndSubmodulesController extends Controller
         } catch (ModelNotFoundException $e) {
             return $this->errorResponse(
                 [
-                    'message' => $this->errorModelNotFoundException,
+                    'message' => $this->getMessage('ModelNotFoundException'),
                     'error' => $e->getMessage()
                 ],
                 404
@@ -151,7 +172,7 @@ class ModulesAndSubmodulesController extends Controller
             // Manejar la excepción de la base de datos
             return $this->errorResponse(
                 [
-                    'message' => $this->errorQueryException,
+                    'message' => $this->getMessage('QueryException'),
                     'error' => $e->getMessage()
                 ],
                 500
@@ -160,7 +181,7 @@ class ModulesAndSubmodulesController extends Controller
             // Deshacer la transacción en caso de excepción y devolver una respuesta de error
             return $this->errorResponse(
                 [
-                    'message' => $this->error,
+                    'message' => $this->getMessage('Exception'),
                     'error' => $e->getMessage()
                 ],
                 500
@@ -172,7 +193,7 @@ class ModulesAndSubmodulesController extends Controller
     {
         try {
             // Eliminar modulo y submodulos
-            $module = Module::findOrFail($request->id)->delete();
+            $module = Module::findOrFail($request->input('id'))->delete();
             // Devolver una respuesta exitosa
             return $this->successResponse(
                 $module,
@@ -182,7 +203,7 @@ class ModulesAndSubmodulesController extends Controller
         } catch (ModelNotFoundException $e) {
             return $this->errorResponse(
                 [
-                    'message' => $this->errorModelNotFoundException,
+                    'message' => $this->getMessage('ModelNotFoundException'),
                     'error' => $e->getMessage()
                 ],
                 404
@@ -191,7 +212,7 @@ class ModulesAndSubmodulesController extends Controller
             // Deshacer la transacción en caso de excepción y devolver una respuesta de error
             return $this->errorResponse(
                 [
-                    'message' => $this->error,
+                    'message' => $this->getMessage('Exception'),
                     'error' => $e->getMessage()
                 ],
                 500

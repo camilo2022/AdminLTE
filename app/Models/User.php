@@ -49,17 +49,13 @@ class User extends Authenticatable
 
     public function scopeSearch($query, $search)
     {
-        return $query->where(
-            function ($subQuery) use ($search) {
-                $subQuery->where('name', 'like', '%' . $search . '%')
-                    ->orWhere('last_name', 'like', '%' . $search . '%')
-                    ->orWhere('address', 'like', '%' . $search . '%')
-                    ->orWhere('email', 'like', '%' . $search . '%')
-                    ->orWhere('id', 'like', '%' . $search . '%')
-                    ->orWhere('document_number', 'like', '%' . $search . '%')
-                    ->orWhere('phone_number', 'like', '%' . $search . '%');
-            }
-        );
+        return $query->where('name', 'like', '%' . $search . '%')
+        ->orWhere('last_name', 'like', '%' . $search . '%')
+        ->orWhere('address', 'like', '%' . $search . '%')
+        ->orWhere('email', 'like', '%' . $search . '%')
+        ->orWhere('id', 'like', '%' . $search . '%')
+        ->orWhere('document_number', 'like', '%' . $search . '%')
+        ->orWhere('phone_number', 'like', '%' . $search . '%');
     }
 
     public function scopeFilterByDate($query, $start_date, $end_date)
