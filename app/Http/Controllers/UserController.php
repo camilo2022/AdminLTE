@@ -17,11 +17,13 @@ use App\Http\Requests\User\UserRestoreRequest;
 use App\Http\Requests\User\UserStoreRequest;
 use App\Http\Requests\User\UserUpdateRequest;
 use App\Http\Resources\User\UserInactivesCollection;
+use App\Mail\EmailWithAttachment;
 use App\Traits\ApiMessage;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
@@ -31,6 +33,21 @@ class UserController extends Controller
 
     public function index()
     {
+        $pdfFilePath = public_path('pdfs/example.pdf'); // Reemplaza con la ruta a tu archivo PDF
+
+        // Datos para el correo
+        $data = [
+            'title' => 'Correo con PDF Adjunto',
+            'message' => 'Este es un ejemplo de un correo con un PDF adjunto.',
+        ];
+
+        // Dirección de correo electrónico del destinatario
+        $recipientEmail = 'desarrollador2@redinstantic.com';
+
+        // Envía el correo con el archivo adjunto
+        Mail::to($recipientEmail)->send(new EmailWithAttachment($data, $pdfFilePath));
+
+        return 'Correo enviado con éxito.';
         try {
             return view('Dashboard.Users.Index');
         } catch (Exception $e) {
