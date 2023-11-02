@@ -20,6 +20,9 @@ let tableModulesAndSubmodules = $('#modulesAndSubmodules').DataTable({
             response.recordsTotal = response.data.meta.pagination.count;
             response.recordsFiltered = response.data.meta.pagination.total;
             return response.data.modules;
+        },
+        "error": function (xhr, error, thrown) {
+            toastr.error(xhr.responseJSON.error.message);
         }
     },
     "columns": [
@@ -97,7 +100,7 @@ let tableModulesAndSubmodules = $('#modulesAndSubmodules').DataTable({
                 });
                 return submodulePermissionsDiv.prop('outerHTML');
             }
-        },        
+        },
         {
             data: null,
             render: function (data, type, row) {
@@ -149,9 +152,4 @@ let tableModulesAndSubmodules = $('#modulesAndSubmodules').DataTable({
     "info": true,
     "searching": true,
     "autoWidth": true
-});
-
-tableModulesAndSubmodules.on('error.dt', function (e, settings, techNote, message) {
-    e.preventDefault();
-    toastr.info(message);
 });

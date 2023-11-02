@@ -25,6 +25,9 @@ let tableUsers = $('#users').DataTable({
             response.recordsTotal = response.data.meta.pagination.count;
             response.recordsFiltered = response.data.meta.pagination.total;
             return response.data.users;
+        },
+        "error": function (xhr, error, thrown) {
+            toastr.error(xhr.responseJSON.error.message);
         }
     },
     "columns": [
@@ -119,9 +122,4 @@ let tableUsers = $('#users').DataTable({
     "info": true,
     "searching": true,
     "autoWidth": true
-});
-
-tableUsers.on('error.dt', function (e, settings, techNote, message) {
-    e.preventDefault();
-    toastr.info(message);
 });

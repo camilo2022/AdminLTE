@@ -32,7 +32,7 @@ class SpatieCheckPermission
                 );
             }
             return back()->with(
-                'warning',
+                'danger',
                 $message
             );
             throw new AuthorizationException();
