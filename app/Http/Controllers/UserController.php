@@ -24,6 +24,8 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
@@ -33,22 +35,42 @@ class UserController extends Controller
 
     public function index()
     {
-        $pdfFilePath = public_path('pdfs/example.pdf'); // Reemplaza con la ruta a tu archivo PDF
+        /* $pdfFilePath = Storage::path('pdfs/example.pdf');
 
-        // Datos para el correo
         $data = [
             'title' => 'Correo con PDF Adjunto',
             'message' => 'Este es un ejemplo de un correo con un PDF adjunto.',
         ];
 
-        // Dirección de correo electrónico del destinatario
-        $recipientEmail = 'desarrollador2@redinstantic.com';
+        $recipientEmails = [
+            'camiloacacio16@gmail.com'
+        ];
 
-        // Envía el correo con el archivo adjunto
-        Mail::to($recipientEmail)->send(new EmailWithAttachment($data, $pdfFilePath));
+        Mail::to($recipientEmails)->send(new EmailWithAttachment($data, $pdfFilePath)); */
+        
+        /* $data = [
+            'title' => 'Correo con PDF Adjunto',
+            'message' => 'Este es un ejemplo de un correo con un PDF adjunto.',
+        ];
 
-        return 'Correo enviado con éxito.';
+        $recipientEmails = [
+            'camiloacacio16@gmail.com'
+        ];
+
+        $qrCode = QrCode::size(200)->generate('Datos para el código QR. ');
+        $pdf = \PDF::loadView('emails.email', compact('data','qrCode'))
+
+        ->setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true]);
+
+        return $pdf->download('pdfdocumentemployee.pdf');  */
+
+        /*
+        {!! DNS1D::getBarcodeHTML('1004845200', 'PHARMA') !!}
+        {!! DNS1D::getBarcodeHTML('1004845200', 'CODABAR') !!}
+        */
+
         try {
+       
             return view('Dashboard.Users.Index');
         } catch (Exception $e) {
             return back()->with('danger', 'Ocurrió un error al cargar la vista: ' . $e->getMessage());
