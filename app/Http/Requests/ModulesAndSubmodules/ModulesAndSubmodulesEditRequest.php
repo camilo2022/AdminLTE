@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Requests\RolesAndPermissions;
+namespace App\Http\Requests\ModulesAndSubmodules;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class RolesAndPermissionsRolesQueryRequest extends FormRequest
+class ModulesAndSubmodulesEditRequest extends FormRequest
 {
     /**
      * Maneja una solicitud fallida de validación.
@@ -41,14 +41,16 @@ class RolesAndPermissionsRolesQueryRequest extends FormRequest
     public function rules()
     {
         return [
-
+            'role' => 'nullable|string|exists:roles,name',
         ];
     }
 
     public function messages()
     {
         return [
-            
+            'required' => 'El campo :attribute es requerido.',
+            'string' => 'Cada elemento en :attribute debe ser una cadena de caracteres.',
+            'exists' => 'El :attribute no existe.',
         ];
     }
 

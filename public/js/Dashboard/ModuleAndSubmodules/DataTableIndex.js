@@ -104,8 +104,7 @@ let tableModulesAndSubmodules = $('#modulesAndSubmodules').DataTable({
         {
             data: null,
             render: function (data, type, row) {
-                return `<a onclick="EditModuleAndSubmodulesModal(${data.id}, '${data.icon}', '${data.module}', ${JSON.stringify(data.roles).replace(/"/g, "'")}, ${JSON.stringify(data.submodules).replace(/"/g, "'")})"
-                    type="button" data-target="#EditModuleAndSubmodulesModal" data-toggle='modal'
+                return `<a onclick="EditModuleAndSubmodulesModal(${data.id})" type="button"
                     class="btn btn-primary btn-sm" title="Editar modulo y submomdulos">
                         <i class="fas fa-shield-keyhole text-white"></i>
                     </a>`;

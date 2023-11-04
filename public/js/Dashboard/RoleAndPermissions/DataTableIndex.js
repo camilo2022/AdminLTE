@@ -49,8 +49,7 @@ let tableRolesAndPermissions = $('#rolesAndPermissions').DataTable({
                 $.each(data.permissions, function(index, permission) {
                     permissions.push(permission.name);
                 });
-                return `<a onclick="EditRoleAndPermissionsModal(${data.id}, '${data.role}', ${JSON.stringify(permissions).replace(/"/g, "'")})"
-                    type="button" data-target="#EditRoleAndPermissionsModal" data-toggle='modal'
+                return `<a onclick="EditRoleAndPermissionsModal(${data.id})" type="button"
                     class="btn btn-primary btn-sm" title="Editar rol y permisos">
                         <i class="fas fa-folder-gear text-white"></i>
                     </a>`;

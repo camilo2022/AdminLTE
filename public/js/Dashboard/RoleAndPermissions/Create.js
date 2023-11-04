@@ -1,4 +1,22 @@
 function CreateRoleAndPermissionsModal() {
+    $.ajax({
+        url: `/Dashboard/RolesAndPermissions/Create`,
+        type: 'POST',
+        data: {
+            '_token': $('meta[name="csrf-token"]').attr('content')
+        },
+        success: function(response) {
+            CreateRoleAndPermissionsModalCleaned();
+            CreateRoleAndPermissionsAjaxSuccess(response);
+            $('#CreateRoleAndPermissionsModal').modal('show');
+        },
+        error: function(xhr, textStatus, errorThrown) {
+            CreateRoleAndPermissionsAjaxError(xhr);
+        }
+    });
+}
+
+function CreateRoleAndPermissionsModalCleaned() {
     RemoveIsValidClassCreateRoleAndPermissions();
     RemoveIsInvalidClassCreateRoleAndPermissions();
 
@@ -23,6 +41,43 @@ function CreateRoleAndPermissionsModal() {
     permissionGroup.append(inputGroup);
 
     $('.permissions_c').append(permissionGroup);
+}
+
+function CreateRoleAndPermissions() {
+    Swal.fire({
+        title: '¿Desea guardar el rol y los permisos?',
+        text: 'El rol y los permisos serán creados.',
+        icon: 'warning',
+        showCancelButton: true,
+        cancelButtonColor: '#DD6B55',
+        confirmButtonColor: '#3085d6',
+        confirmButtonText: 'Si, guardar!',
+        cancelButtonText: 'No, cancelar!',
+    }).then((result) => {
+        if (result.value) {
+            $.ajax({
+                url: `/Dashboard/RolesAndPermissions/Store`,
+                type: 'POST',
+                data: {
+                    '_token': $('meta[name="csrf-token"]').attr('content'),
+                    'role': $('#role_c').val(),
+                    'permissions': $('input[name="permissions_c[]"]').map(function() {
+                        return $(this).val();
+                    }).get()
+                },
+                success: function(response) {
+                    tableRolesAndPermissions.ajax.reload();
+                    CreateRoleAndPermissionsAjaxSuccess(response);
+                },
+                error: function(xhr, textStatus, errorThrown) {
+                    tableRolesAndPermissions.ajax.reload();
+                    CreateRoleAndPermissionsAjaxError(xhr);
+                }
+            });
+        } else {
+            toastr.info('El rol y los permisos no fueron creados.')
+        }
+    });
 }
 
 function CreateRoleAndPermissionsAddPermission(permission) {
@@ -66,44 +121,12 @@ function CreateRoleAndPermissionsRemovePermission(permission) {
     permissionGroup.remove();
 }
 
-function CreateRoleAndPermissions() {
-    Swal.fire({
-        title: '¿Desea guardar el rol y los permisos?',
-        text: 'El rol y los permisos serán creados.',
-        icon: 'warning',
-        showCancelButton: true,
-        cancelButtonColor: '#DD6B55',
-        confirmButtonColor: '#3085d6',
-        confirmButtonText: 'Si, guardar!',
-        cancelButtonText: 'No, cancelar!',
-    }).then((result) => {
-        if (result.value) {
-            $.ajax({
-                url: `/Dashboard/RolesAndPermissions/Store`,
-                type: 'POST',
-                data: {
-                    '_token': $('meta[name="csrf-token"]').attr('content'),
-                    'role': $('#role_c').val(),
-                    'permissions': $('input[name="permissions_c[]"]').map(function() {
-                        return $(this).val();
-                    }).get()
-                },
-                success: function(response) {
-                    tableRolesAndPermissions.ajax.reload();
-                    CreateRoleAndPermissionsAjaxSuccess(response);
-                },
-                error: function(xhr, textStatus, errorThrown) {
-                    tableRolesAndPermissions.ajax.reload();
-                    CreateRoleAndPermissionsAjaxError(xhr);
-                }
-            });
-        } else {
-            toastr.info('El rol y los permisos no fueron creados.')
-        }
-    });
-}
-
 function CreateRoleAndPermissionsAjaxSuccess(response) {
+    if(response.status === 200) {
+        toastr.success(response.message);
+        $('#CreateRoleAndPermissionsModal').modal('hide');
+    }
+
     if(response.status === 201) {
         toastr.success(response.message);
         $('#CreateRoleAndPermissionsModal').modal('hide');

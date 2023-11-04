@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ModulesAndSubmodules\ModulesAndSubmodulesCreateRequest;
 use App\Http\Requests\ModulesAndSubmodules\ModulesAndSubmodulesIndexQueryRequest;
 use App\Http\Requests\ModulesAndSubmodules\ModulesAndSubmodulesDeleteRequest;
+use App\Http\Requests\ModulesAndSubmodules\ModulesAndSubmodulesEditRequest;
 use App\Http\Requests\ModulesAndSubmodules\ModulesAndSubmodulesStoreRequest;
 use App\Http\Requests\ModulesAndSubmodules\ModulesAndSubmodulesUpdateRequest;
 use App\Http\Resources\ModulesAndSubmodules\ModulesAndSubmodulesIndexQueryCollection;
@@ -15,6 +17,7 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
+use Spatie\Permission\Models\Role;
 
 class ModulesAndSubmodulesController extends Controller
 {
@@ -76,6 +79,37 @@ class ModulesAndSubmodulesController extends Controller
         }
     }
 
+    public function create(ModulesAndSubmodulesCreateRequest $request)
+    {
+        try {
+            if($request->filled('role')) {
+                $permissions = Role::with('permissions')->findByName($request->input('role'));
+
+                return $this->successResponse(
+                    $permissions,
+                    'Los permisos del rol fueron encontrados exitosamente.',
+                    200
+                );
+            }
+
+            $roles = Role::whereDoesntHave('modules')->get();
+            return $this->successResponse(
+                $roles,
+                'Ingrese los datos para hacer la validacion y registro.',
+                200
+            );
+        } catch (Exception $e) {
+            // Devolver una respuesta de error en caso de excepción
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('Exception'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        }
+    }
+
     public function store(ModulesAndSubmodulesStoreRequest $request)
     {
         try {
@@ -121,6 +155,49 @@ class ModulesAndSubmodulesController extends Controller
             );
         } catch (Exception $e) {
             // Deshacer la transacción en caso de excepción y devolver una respuesta de error
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('Exception'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        }
+    }
+
+    public function edit(ModulesAndSubmodulesEditRequest $request, $id)
+    {
+        try {
+            if($request->filled('role')) {
+                $permissions = Role::with('permissions')->findByName($request->input('role'));
+
+                return $this->successResponse(
+                    $permissions,
+                    'El Modulo y submodulos fueron encontrados exitosamente.',
+                    200
+                );
+            }
+
+            $module = Module::with('roles', 'submodules.permission')->findOrFail($id);
+            $roles = Role::whereDoesntHave('modules')->get();
+
+            return $this->successResponse(
+                (object) [
+                    'module' => $module,
+                    'roles' => $roles
+                ],
+                'El Modulo y submodulos fueron encontrados exitosamente.',
+                200
+            );
+        } catch (ModelNotFoundException $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('ModelNotFoundException'),
+                    'error' => $e->getMessage()
+                ],
+                404
+            );
+        } catch (Exception $e) {
             return $this->errorResponse(
                 [
                     'message' => $this->getMessage('Exception'),

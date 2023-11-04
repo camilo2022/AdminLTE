@@ -20,8 +20,8 @@ return new class extends Migration
             $table->string('code')->unique()->comment('Codigo de la correria.');
             $table->datetime('start_date')->comment('Fecha de inicio de la correria.');
             $table->datetime('end_date')->comment('Fecha de fin de la correria.');
-            $table->boolean('active_status')->comment('Estado de la correria.');
             $table->timestamps();
+            $table->timestamp('deleted_at')->nullable();
         });
     }
 

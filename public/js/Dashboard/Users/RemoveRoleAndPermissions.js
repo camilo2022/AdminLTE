@@ -133,7 +133,7 @@ function RemoveRoleAndPermissionUserModal(id, email) {
         },
         error: function(xhr, textStatus, errorThrown) {
             tableUsers.ajax.reload();
-            RemoveRoleAndPermissionsUserAjaxError(xhr);
+            RemoveRoleAndPermissionUserAjaxError(xhr);
         }
     });
 }

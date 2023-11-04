@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Requests\RolesAndPermissions;
+namespace App\Http\Requests\ModulesAndSubmodules;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class RolesAndPermissionsPermissionsQueryRequest extends FormRequest
+class ModulesAndSubmodulesCreateRequest extends FormRequest
 {
     /**
      * Maneja una solicitud fallida de validación.
@@ -41,7 +41,7 @@ class RolesAndPermissionsPermissionsQueryRequest extends FormRequest
     public function rules()
     {
         return [
-            'role' => 'required|string|exists:roles,name',
+            'role' => 'nullable|string|exists:roles,name',
         ];
     }
 

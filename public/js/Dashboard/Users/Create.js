@@ -1,4 +1,22 @@
 function CreateUserModal() {
+    $.ajax({
+        url: `/Dashboard/Users/Create`,
+        type: 'POST',
+        data: {
+            '_token': $('meta[name="csrf-token"]').attr('content')
+        },
+        success: function(response) {
+            CreateUserModalCleaned();
+            CreateUserAjaxSuccess(response);
+            $('#CreateUserModal').modal('show');
+        },
+        error: function(xhr, textStatus, errorThrown) {
+            CreateUserAjaxError(xhr);
+        }
+    });
+}
+
+function CreateUserModalCleaned() {
     RemoveIsValidClassCreateUser();
     RemoveIsInvalidClassCreateUser();
 
@@ -54,6 +72,11 @@ function CreateUser() {
 }
 
 function CreateUserAjaxSuccess(response) {
+    if(response.status === 200) {
+        toastr.success(response.message);
+        $('#CreateUserModal').modal('hide');
+    }
+
     if(response.status === 201) {
         toastr.success(response.message);
         $('#CreateUserModal').modal('hide');

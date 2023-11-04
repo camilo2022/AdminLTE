@@ -1,9 +1,27 @@
-function PasswordUserModal(id, email) {
+function PasswordUserModal(id) {
+    $.ajax({
+        url: `/Dashboard/Users/Show/${id}`,
+        type: 'POST',
+        data: {
+            '_token': $('meta[name="csrf-token"]').attr('content')
+        },
+        success: function(response) {
+            PasswordUserModalCleaned(response.data);
+            PasswordUserAjaxSuccess(response);
+            $('#PasswordUserModal').modal('show');
+        },
+        error: function(xhr, textStatus, errorThrown) {
+            PasswordUserAjaxError(xhr);
+        }
+    });
+}
+
+function PasswordUserModalCleaned(user) {
     RemoveIsValidClassPasswordUser();
     RemoveIsInvalidClassPasswordUser();
-    $('#PasswordUserButton').attr('onclick', `PasswordUser(${id})`);
+    $('#PasswordUserButton').attr('onclick', `PasswordUser(${user.id})`);
 
-    $("#email_p").val(email);
+    $("#email_p").val(user.email);
     $("#password_p").val('')
     $("#password_confirmation_p").val('')
 }

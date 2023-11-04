@@ -47,11 +47,20 @@ Route::middleware(['auth'])->group(function () {
             Route::post('/Inactives/Query', [\App\Http\Controllers\UserController::class, 'inactivesQuery'])
             ->middleware('can:Dashboard.Users.Inactives.Query')->name('Dashboard.Users.Inactives.Query');
 
+            Route::post('/Create', [\App\Http\Controllers\UserController::class, 'create'])
+            ->middleware('can:Dashboard.Users.Create')->name('Dashboard.Users.Create');
+
             Route::post('/Store', [\App\Http\Controllers\UserController::class, 'store'])
             ->middleware('can:Dashboard.Users.Store')->name('Dashboard.Users.Store');
 
+            Route::post('/Edit/{id}', [\App\Http\Controllers\UserController::class, 'edit'])
+            ->middleware('can:Dashboard.Users.Edit')->name('Dashboard.Users.Edit');
+
             Route::put('/Update/{id}', [\App\Http\Controllers\UserController::class, 'update'])
             ->middleware('can:Dashboard.Users.Update')->name('Dashboard.Users.Update');
+
+            Route::post('/Show/{id}', [\App\Http\Controllers\UserController::class, 'show'])
+            ->middleware('can:Dashboard.Users.Show')->name('Dashboard.Users.Show');
 
             Route::put('/Password/{id}', [\App\Http\Controllers\UserController::class, 'password'])
             ->middleware('can:Dashboard.Users.Password')->name('Dashboard.Users.Password');
@@ -84,21 +93,20 @@ Route::middleware(['auth'])->group(function () {
             Route::post('/Index/Query', [\App\Http\Controllers\RolesAndPermissionsController::class, 'indexQuery'])
             ->middleware('can:Dashboard.RolesAndPermissions.Index.Query')->name('Dashboard.RolesAndPermissions.Index.Query');
 
-            Route::post('/Roles/Query', [\App\Http\Controllers\RolesAndPermissionsController::class, 'rolesQuery'])
-            ->middleware('can:Dashboard.RolesAndPermissions.Store')->name('Dashboard.RolesAndPermissions.Roles.Query');
-
-            Route::post('/Permissions/Query', [\App\Http\Controllers\RolesAndPermissionsController::class, 'permissionsQuery'])
-            ->middleware('can:Dashboard.RolesAndPermissions.Store')->name('Dashboard.RolesAndPermissions.Permissions.Query');
+            Route::post('/Create', [\App\Http\Controllers\RolesAndPermissionsController::class, 'create'])
+            ->middleware('can:Dashboard.RolesAndPermissions.Create')->name('Dashboard.RolesAndPermissions.Create');
 
             Route::post('/Store', [\App\Http\Controllers\RolesAndPermissionsController::class, 'store'])
             ->middleware('can:Dashboard.RolesAndPermissions.Store')->name('Dashboard.RolesAndPermissions.Store');
+
+            Route::post('/Edit/{id}', [\App\Http\Controllers\RolesAndPermissionsController::class, 'edit'])
+            ->middleware('can:Dashboard.RolesAndPermissions.Edit')->name('Dashboard.RolesAndPermissions.Edit');
 
             Route::put('/Update/{id}', [\App\Http\Controllers\RolesAndPermissionsController::class, 'update'])
             ->middleware('can:Dashboard.RolesAndPermissions.Update')->name('Dashboard.RolesAndPermissions.Update');
 
             Route::delete('/Delete', [\App\Http\Controllers\RolesAndPermissionsController::class, 'delete'])
             ->middleware('can:Dashboard.RolesAndPermissions.Delete')->name('Dashboard.RolesAndPermissions.Delete');
-
         });
 
         Route::prefix('/ModulesAndSubmodules')->group(function () {
@@ -109,8 +117,14 @@ Route::middleware(['auth'])->group(function () {
             Route::post('/Index/Query', [\App\Http\Controllers\ModulesAndSubmodulesController::class, 'indexQuery'])
             ->middleware('can:Dashboard.ModulesAndSubmodules.Index.Query')->name('Dashboard.ModulesAndSubmodules.Index.Query');
 
+            Route::post('/Create', [\App\Http\Controllers\ModulesAndSubmodulesController::class, 'create'])
+            ->middleware('can:Dashboard.ModulesAndSubmodules.Create')->name('Dashboard.ModulesAndSubmodules.Create');
+
             Route::post('/Store', [\App\Http\Controllers\ModulesAndSubmodulesController::class, 'store'])
             ->middleware('can:Dashboard.ModulesAndSubmodules.Store')->name('Dashboard.ModulesAndSubmodules.Store');
+
+            Route::post('/Edit/{id}', [\App\Http\Controllers\ModulesAndSubmodulesController::class, 'edit'])
+            ->middleware('can:Dashboard.ModulesAndSubmodules.Edit')->name('Dashboard.ModulesAndSubmodules.Edit');
 
             Route::put('/Update/{id}', [\App\Http\Controllers\ModulesAndSubmodulesController::class, 'update'])
             ->middleware('can:Dashboard.ModulesAndSubmodules.Update')->name('Dashboard.ModulesAndSubmodules.Update');

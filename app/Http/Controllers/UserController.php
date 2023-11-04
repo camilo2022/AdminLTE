@@ -16,13 +16,13 @@ use App\Http\Requests\User\UserPasswordRequest;
 use App\Http\Requests\User\UserRestoreRequest;
 use App\Http\Requests\User\UserStoreRequest;
 use App\Http\Requests\User\UserUpdateRequest;
-use App\Http\Resources\User\UserInactivesCollection;
-use App\Mail\EmailWithAttachment;
+use App\Http\Resources\User\UserInactivesQueryCollection;
 use App\Traits\ApiMessage;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Hash;
+use App\Mail\EmailWithAttachment;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
@@ -154,7 +154,7 @@ class UserController extends Controller
                 ->paginate($request->input('perPage'));
 
             return $this->successResponse(
-                new UserInactivesCollection($users),
+                new UserInactivesQueryCollection($users),
                 $this->getMessage('Success'),
                 200
             );
@@ -168,6 +168,26 @@ class UserController extends Controller
                 500
             );
         } catch (Exception $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('Exception'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        }
+    }
+
+    public function create()
+    {
+        try {
+            return $this->successResponse(
+                '',
+                'Ingrese los datos para hacer la validacion y registro.',
+                200
+            );
+        } catch (Exception $e) {
+            // Devolver una respuesta de error en caso de excepción
             return $this->errorResponse(
                 [
                     'message' => $this->getMessage('Exception'),
@@ -227,6 +247,35 @@ class UserController extends Controller
         }
     }
 
+    public function edit($id)
+    {
+        try {
+            $user = User::findOrFail($id);
+
+            return $this->successResponse(
+                $user,
+                'El usuario fue encontrado exitosamente.',
+                200
+            );
+        } catch (ModelNotFoundException $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('ModelNotFoundException'),
+                    'error' => $e->getMessage()
+                ],
+                404
+            );
+        } catch (Exception $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('Exception'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        }
+    }
+
     public function update(UserUpdateRequest $request, $id)
     {
         try {
@@ -260,6 +309,35 @@ class UserController extends Controller
                     'error' => $e->getMessage()
                 ],
                 500
+            );
+        } catch (Exception $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('Exception'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        }
+    }
+
+    public function show($id)
+    {
+        try {
+            $user = User::findOrFail($id);
+
+            return $this->successResponse(
+                $user,
+                'El usuario fue encontrado exitosamente.',
+                200
+            );
+        } catch (ModelNotFoundException $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('ModelNotFoundException'),
+                    'error' => $e->getMessage()
+                ],
+                404
             );
         } catch (Exception $e) {
             return $this->errorResponse(

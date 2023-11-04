@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model as DBModel;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Product extends DBModel
@@ -21,12 +22,18 @@ class Product extends DBModel
         'model_id',
         'route_photo',
         'price',
-        'inventory_status'
+        'inventory_status',
+        'collection_id'
     ];
 
     public function product_inventories() : HasMany
     {
         return $this->hasMany(Inventory::class, 'product_id');
+    }
+
+    public function product_history_prices() : HasMany
+    {
+        return $this->hasMany(ProductHistoryPrice::class, 'product_id');
     }
 
     public function product_photos() : HasMany
@@ -37,6 +44,11 @@ class Product extends DBModel
     public function product_order_details() : HasMany
     {
         return $this->hasMany(OrderDetail::class, 'product_id');
+    }
+
+    public function colors() : BelongsToMany
+    {
+        return $this->belongsToMany(Color::class, 'product_has_colors', 'product_id', 'color_id');
     }
 
     public function clothing_line() : BelongsTo

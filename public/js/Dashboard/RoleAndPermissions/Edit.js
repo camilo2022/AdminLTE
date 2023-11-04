@@ -1,12 +1,30 @@
-function EditRoleAndPermissionsModal(id, role, permissions) {
+function EditRoleAndPermissionsModal(id) {
+    $.ajax({
+        url: `/Dashboard/RolesAndPermissions/Edit/${id}`,
+        type: 'POST',
+        data: {
+            '_token': $('meta[name="csrf-token"]').attr('content')
+        },
+        success: function(response) {
+            EditRoleAndPermissionsModalCleaned(response.data);
+            EditRoleAndPermissionsAjaxSuccess(response);
+            $('#EditRoleAndPermissionsModal').modal('show');
+        },
+        error: function(xhr, textStatus, errorThrown) {
+            EditRoleAndPermissionsAjaxError(xhr);
+        }
+    });
+}
+
+function EditRoleAndPermissionsModalCleaned(roleAndPermissions) {
     RemoveIsValidClassEditRoleAndPermissions();
     RemoveIsInvalidClassEditRoleAndPermissions();
 
-    $('#role_e').val(role);
+    $('#role_e').val(roleAndPermissions.name);
     $('.permissions_e').empty();
-    $('#EditRoleAndPermissionsButton').attr('onclick', `EditRoleAndPermissions(${id})`);
+    $('#EditRoleAndPermissionsButton').attr('onclick', `EditRoleAndPermissions(${roleAndPermissions.id})`);
 
-    $.each(permissions, function (i, permission) {
+    $.each(roleAndPermissions.permissions, function (i, permission) {
         let permissionGroup = $('<div>').addClass('form-group permission-group');
         let inputGroup = $('<div>').addClass('input-group');
 
@@ -15,7 +33,7 @@ function EditRoleAndPermissionsModal(id, role, permissions) {
             'class': 'form-control',
             'id': `permission_e${i}`,
             'name': 'permissions_e[]',
-            'value': permission
+            'value': permission.name
         });
 
         let inputGroupAppend = $('<div>').addClass('input-group-append');
@@ -39,8 +57,44 @@ function EditRoleAndPermissionsModal(id, role, permissions) {
         $('#EditRoleAndPermissionsAddPermissionButton').attr({
             'data-count': i++
         });
-    })
-    $('#EditRoleAndPermissionsModal').modal('show');
+    });
+}
+
+function EditRoleAndPermissions(id) {
+    Swal.fire({
+        title: '¿Desea actualizar el rol y los permisos?',
+        text: 'El rol y los permisos serán actualizados.',
+        icon: 'warning',
+        showCancelButton: true,
+        cancelButtonColor: '#DD6B55',
+        confirmButtonColor: '#3085d6',
+        confirmButtonText: 'Si, actualizar!',
+        cancelButtonText: 'No, cancelar!',
+    }).then((result) => {
+        if (result.value) {
+            $.ajax({
+                url: `/Dashboard/RolesAndPermissions/Update/${id}`,
+                type: 'PUT',
+                data: {
+                    '_token': $('meta[name="csrf-token"]').attr('content'),
+                    'role': $('#role_e').val(),
+                    'permissions': $('input[name="permissions_e[]"]').map(function() {
+                        return $(this).val();
+                    }).get()
+                },
+                success: function(response) {
+                    tableRolesAndPermissions.ajax.reload();
+                    EditRoleAndPermissionsAjaxSuccess(response);
+                },
+                error: function(xhr, textStatus, errorThrown) {
+                    tableRolesAndPermissions.ajax.reload();
+                    EditRoleAndPermissionsAjaxError(xhr);
+                }
+            });
+        } else {
+            toastr.info('El rol y los permisos no fueron actualizados.')
+        }
+    });
 }
 
 function EditRoleAndPermissionsAddPermission(permission) {
@@ -81,43 +135,6 @@ function EditRoleAndPermissionsRemovePermission(permission) {
     let permissionId = $(permission).data('id');
     let permissionGroup = $(`#permission_e${permissionId}`).closest('.permission-group');
     permissionGroup.remove();
-}
-
-function EditRoleAndPermissions(id) {
-    Swal.fire({
-        title: '¿Desea actualizar el rol y los permisos?',
-        text: 'El rol y los permisos serán actualizados.',
-        icon: 'warning',
-        showCancelButton: true,
-        cancelButtonColor: '#DD6B55',
-        confirmButtonColor: '#3085d6',
-        confirmButtonText: 'Si, actualizar!',
-        cancelButtonText: 'No, cancelar!',
-    }).then((result) => {
-        if (result.value) {
-            $.ajax({
-                url: `/Dashboard/RolesAndPermissions/Update/${id}`,
-                type: 'PUT',
-                data: {
-                    '_token': $('meta[name="csrf-token"]').attr('content'),
-                    'role': $('#role_e').val(),
-                    'permissions': $('input[name="permissions_e[]"]').map(function() {
-                        return $(this).val();
-                    }).get()
-                },
-                success: function(response) {
-                    tableRolesAndPermissions.ajax.reload();
-                    EditRoleAndPermissionsAjaxSuccess(response);
-                },
-                error: function(xhr, textStatus, errorThrown) {
-                    tableRolesAndPermissions.ajax.reload();
-                    EditRoleAndPermissionsAjaxError(xhr);
-                }
-            });
-        } else {
-            toastr.info('El rol y los permisos no fueron actualizados.')
-        }
-    });
 }
 
 function EditRoleAndPermissionsAjaxSuccess(response) {

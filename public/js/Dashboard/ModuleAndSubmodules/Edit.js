@@ -1,30 +1,82 @@
-function EditModuleAndSubmodulesModal(id, icon, module, roles, submodules) {
+function EditModuleAndSubmodulesModal(id) {
+    $.ajax({
+        url: `/Dashboard/ModulesAndSubmodules/Edit/${id}`,
+        type: 'POST',
+        data: {
+            '_token': $('meta[name="csrf-token"]').attr('content'),
+        },
+        success: function(response) {
+            EditModuleAndSubmodulesModalCleaned(response.data);
+            EditModuleAndSubmodulesQueryRoles(response.data.roles);
+            EditModuleAndSubmodulesAjaxSuccess(response);
+            $('#EditModuleAndSubmodulesModal').modal('show');
+        },
+        error: function(xhr, textStatus, errorThrown) {
+            EditModuleAndSubmodulesAjaxError(xhr);
+        }
+    });
+}
+
+function EditModuleAndSubmodulesModalCleaned(moduleAndSubmodules) {
     RemoveIsInvalidClassEditModuleAndSubmodules();
     RemoveIsValidClassEditModuleAndSubmodules();
     $('.submodules_e').empty();
     $('#roles_access_e').empty();
-    $('#module_e').val(module);
-    $('#icon_e').val(icon);
-    $('#icon_module_e').addClass(icon);
+    $('#module_e').val(moduleAndSubmodules.module.name);
+    $('#icon_e').val(moduleAndSubmodules.module.icon);
+    $('#icon_module_e').addClass(moduleAndSubmodules.module.icon);
     $('#EditModuleAndSubmodulesAddPermissionButton').attr('data-count', 0);
-    $('#EditModuleAndSubmodulesButton').attr('onclick', `EditModuleAndSubmodules(${id})`);
-    EditModuleAndSubmodulesQueryRoles(roles, true);
-    $.each(submodules, function (i, submodule) {
+    $('#EditModuleAndSubmodulesButton').attr('onclick', `EditModuleAndSubmodules(${moduleAndSubmodules.module.id})`);
+    EditModuleAndSubmodulesQueryRoles(moduleAndSubmodules.module.roles, true);
+    EditModuleAndSubmodulesQueryRoles(moduleAndSubmodules.roles, false);
+    $.each(moduleAndSubmodules.module.submodules, function (i, submodule) {
         EditModuleAndSubmodulesAddSubmodule(submodule.id, submodule.name, '', submodule.permission, submodule.url, submodule.icon);
     })
+}
 
-    $.ajax({
-        url: `/Dashboard/RolesAndPermissions/Roles/Query`,
-        type: 'POST',
-        data: {
-            '_token': $('meta[name="csrf-token"]').attr('content'),
-            'roles': true
-        },
-        success: function(response) {
-            EditModuleAndSubmodulesQueryRoles(response.data, false);
-        },
-        error: function(xhr, textStatus, errorThrown) {
-            EditModuleAndSubmodulesAjaxError(xhr);
+function EditModuleAndSubmodules(id) {
+    Swal.fire({
+        title: '¿Desea actualizar el modulos y los submodulos?',
+        text: 'El modulo y los submodulos serán actualizados.',
+        icon: 'warning',
+        showCancelButton: true,
+        cancelButtonColor: '#DD6B55',
+        confirmButtonColor: '#3085d6',
+        confirmButtonText: 'Si, guardar!',
+        cancelButtonText: 'No, cancelar!',
+    }).then((result) => {
+        if (result.value) {
+            $.ajax({
+                url: `/Dashboard/ModulesAndSubmodules/Update/${id}`,
+                type: 'PUT',
+                data: {
+                    '_token': $('meta[name="csrf-token"]').attr('content'),
+                    'module': $('#module_e').val(),
+                    'icon': $('#icon_e').val(),
+                    'roles': $('#roles_access_e .icheck-primary input[type="checkbox"]:checked').map(function () {
+                        return $(this).attr('data-id');
+                    }).get(),
+                    'submodules': $('.submodules_e').find('div.submodule_e').map(function(index) {
+                        return {
+                            'id': $(this).find('input.name_e').attr('data-id'),
+                            'submodule': $(this).find('input.name_e').val(),
+                            'url': $(this).find('input.url_e').val(),
+                            'icon': $(this).find('input.subicon_e').val(),
+                            'permission_id': $(this).find('select.permission_e').val()
+                        };
+                    }).get()
+                },
+                success: function(response) {
+                    tableModulesAndSubmodules.ajax.reload();
+                    EditModuleAndSubmodulesAjaxSuccess(response);
+                },
+                error: function(xhr, textStatus, errorThrown) {
+                    tableModulesAndSubmodules.ajax.reload();
+                    EditModuleAndSubmodulesAjaxError(xhr);
+                }
+            });
+        } else {
+            toastr.info('El modulo y los submodulos no fueron actualizados.')
         }
     });
 }
@@ -86,7 +138,7 @@ function EditModuleAndSubmodulesAddSubmodule(id, submodule, role, permission, ur
     let roleSelect = $('<select>').attr({
         'id': `role${data}_e`,
         'class': 'form-control role_e',
-        'onchange': `EditModuleAndSubmodulesQueryPermissions(this, 'permission${data}_e')`
+        'onchange': `EditModuleAndSubmodulesQueryPermissions(id, this, 'permission${data}_e')`
     });
     let roleOption = $('<option>').attr('value', '').text('Seleccione');
     roleSelect.append(roleOption);
@@ -246,9 +298,9 @@ function EditModuleAndSubmodulesRoles(checkbox) {
     });
 }
 
-function EditModuleAndSubmodulesQueryPermissions(selectRoles, selectPermissions) {
+function EditModuleAndSubmodulesQueryPermissions(id, selectRoles, selectPermissions) {
     $.ajax({
-        url: `/Dashboard/RolesAndPermissions/Permissions/Query`,
+        url: `/Dashboard/ModulesAndSubmodules/Edit/${id}`,
         type: 'POST',
         data: {
             '_token': $('meta[name="csrf-token"]').attr('content'),
@@ -286,53 +338,6 @@ function EditModuleAndSubmodulesPermissions(selectPermissions, permissions) {
                 'text': permission.name
             }
         ));
-    });
-}
-
-function EditModuleAndSubmodules(id) {
-    Swal.fire({
-        title: '¿Desea actualizar el modulos y los submodulos?',
-        text: 'El modulo y los submodulos serán actualizados.',
-        icon: 'warning',
-        showCancelButton: true,
-        cancelButtonColor: '#DD6B55',
-        confirmButtonColor: '#3085d6',
-        confirmButtonText: 'Si, guardar!',
-        cancelButtonText: 'No, cancelar!',
-    }).then((result) => {
-        if (result.value) {
-            $.ajax({
-                url: `/Dashboard/ModulesAndSubmodules/Update/${id}`,
-                type: 'PUT',
-                data: {
-                    '_token': $('meta[name="csrf-token"]').attr('content'),
-                    'module': $('#module_e').val(),
-                    'icon': $('#icon_e').val(),
-                    'roles': $('#roles_access_e .icheck-primary input[type="checkbox"]:checked').map(function () {
-                        return $(this).attr('data-id');
-                    }).get(),
-                    'submodules': $('.submodules_e').find('div.submodule_e').map(function(index) {
-                        return {
-                            'id': $(this).find('input.name_e').attr('data-id'),
-                            'submodule': $(this).find('input.name_e').val(),
-                            'url': $(this).find('input.url_e').val(),
-                            'icon': $(this).find('input.subicon_e').val(),
-                            'permission_id': $(this).find('select.permission_e').val()
-                        };
-                    }).get()
-                },
-                success: function(response) {
-                    tableModulesAndSubmodules.ajax.reload();
-                    EditModuleAndSubmodulesAjaxSuccess(response);
-                },
-                error: function(xhr, textStatus, errorThrown) {
-                    tableModulesAndSubmodules.ajax.reload();
-                    EditModuleAndSubmodulesAjaxError(xhr);
-                }
-            });
-        } else {
-            toastr.info('El modulo y los submodulos no fueron actualizados.')
-        }
     });
 }
 

@@ -28,8 +28,11 @@ class UserSeeder extends Seeder
                     'Dashboard.Users.Index.Query',
                     'Dashboard.Users.Inactives',
                     'Dashboard.Users.Inactives.Query',
+                    'Dashboard.Users.Create',
                     'Dashboard.Users.Store',
+                    'Dashboard.Users.Edit',
                     'Dashboard.Users.Update',
+                    'Dashboard.Users.Show',
                     'Dashboard.Users.Password',
                     'Dashboard.Users.Delete',
                     'Dashboard.Users.Restore',
@@ -44,11 +47,11 @@ class UserSeeder extends Seeder
                 'permissions' => [
                     'Dashboard.RolesAndPermissions.Index',
                     'Dashboard.RolesAndPermissions.Index.Query',
-                    'Dashboard.RolesAndPermissions.Roles.Query',
-                    'Dashboard.RolesAndPermissions.Permissions.Query',
+                    'Dashboard.RolesAndPermissions.Create',
                     'Dashboard.RolesAndPermissions.Store',
+                    'Dashboard.RolesAndPermissions.Edit',
                     'Dashboard.RolesAndPermissions.Update',
-                    'Dashboard.RolesAndPermissions.Delete',
+                    'Dashboard.RolesAndPermissions.Delete'
                 ]
             ],
             (object) [
@@ -56,7 +59,9 @@ class UserSeeder extends Seeder
                 'permissions' => [
                     'Dashboard.ModulesAndSubmodules.Index',
                     'Dashboard.ModulesAndSubmodules.Index.Query',
+                    'Dashboard.ModulesAndSubmodules.Create',
                     'Dashboard.ModulesAndSubmodules.Store',
+                    'Dashboard.ModulesAndSubmodules.Edit',
                     'Dashboard.ModulesAndSubmodules.Update',
                     'Dashboard.ModulesAndSubmodules.Delete',
                 ]

@@ -54,7 +54,7 @@
                         <div class="card-header p-2">
                             <ul class="nav nav-pills">
                                 <li class="nav-item">
-                                    <a class="nav-link active" type="button" data-target="#CreateUserModal" onclick="CreateUserModal()" data-toggle='modal' title="Agregar usuario">
+                                    <a class="nav-link active" type="button" onclick="CreateUserModal()" title="Agregar usuario">
                                         <i class="fas fa-user-plus"></i>
                                     </a>
                                 </li>

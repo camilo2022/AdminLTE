@@ -41,8 +41,7 @@ let tableUsers = $('#users').DataTable({
         {
             data: null,
             render: function (data, type, row) {
-                return `<a onclick="PasswordUserModal(${data.id}, '${data.email}')"
-                    type="button" data-target="#PasswordUserModal" data-toggle='modal'
+                return `<a onclick="PasswordUserModal(${data.id})" type="button"
                     class="btn bg-dark btn-sm" title="Recuperar contraseña">
                         <i class="fas fa-user-gear text-white"></i>
                     </a>`;
@@ -51,14 +50,10 @@ let tableUsers = $('#users').DataTable({
         {
             data: null,
             render: function (data, type, row) {
-                return `<a onclick="EditUserModal(${data.id}, '${CleanText(data.name)}',
-                '${CleanText(data.last_name)}', '${CleanText(data.document_number)}',
-                '${CleanText(data.phone_number)}', '${CleanText(data.address)}',
-                '${CleanText(data.email)}')"
-                    type="button" data-target="#EditUserModal" data-toggle='modal'
-                    class="btn btn-primary btn-sm" title="Editar usuario">
-                        <i class="fas fa-user-pen text-white"></i>
-                    </a>`;
+                return `<a onclick="EditUserModal(${data.id})" type="button" 
+                class="btn btn-primary btn-sm" title="Editar usuario">
+                    <i class="fas fa-user-pen text-white"></i>
+                </a>`;
             }
         },
         {

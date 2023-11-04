@@ -54,7 +54,7 @@
                         <div class="card-header p-2">
                             <ul class="nav nav-pills">
                                 <li class="nav-item">
-                                    <a class="nav-link active" type="button" onclick="CreateModuleAndSubmodulesModal()" data-target="#CreateModuleAndSubmodulesModal" data-toggle='modal' title="Agregar modulo y submodulos">
+                                    <a class="nav-link active" type="button" onclick="CreateModuleAndSubmodulesModal()" title="Agregar modulo y submodulos">
                                         <i class="fas fa-shield-plus"></i>
                                     </a>
                                 </li>

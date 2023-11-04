@@ -47,7 +47,7 @@ class ModulesAndSubmodulesSeeder extends Seeder
             'url' => '/Dashboard/RolesAndPermissions/Index',
             'icon' => 'fas fa-key-skeleton-left-right',
             'module_id' => $Configuracion->id,
-            'permission_id' => 15
+            'permission_id' => 18
         ]);
 
         Submodule::create([
@@ -55,7 +55,7 @@ class ModulesAndSubmodulesSeeder extends Seeder
             'url' => '/Dashboard/ModulesAndSubmodules/Index',
             'icon' => 'fas fa-shield-keyhole',
             'module_id' => $Configuracion->id,
-            'permission_id' => 22
+            'permission_id' => 27
         ]);
     }
 }

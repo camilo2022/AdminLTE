@@ -1,15 +1,33 @@
-function EditUserModal(id, name, last_name, document_number, phone_number, address, email) {
+function EditUserModal(id) {
+    $.ajax({
+        url: `/Dashboard/Users/Edit/${id}`,
+        type: 'POST',
+        data: {
+            '_token': $('meta[name="csrf-token"]').attr('content')
+        },
+        success: function(response) {
+            EditUserModalCleaned(response.data);
+            EditUserAjaxSuccess(response);
+            $('#EditUserModal').modal('show');
+        },
+        error: function(xhr, textStatus, errorThrown) {
+            EditUserAjaxError(xhr);
+        }
+    });
+}
+
+function EditUserModalCleaned(user) {
     RemoveIsValidClassEditUser();
     RemoveIsInvalidClassEditUser();
 
-    $('#EditUserButton').attr('onclick', `EditUser(${id})`);
+    $('#EditUserButton').attr('onclick', `EditUser(${user.id})`);
 
-    $("#name_e").val(name);
-    $("#last_name_e").val(last_name);
-    $("#document_number_e").val(document_number);
-    $("#phone_number_e").val(phone_number);
-    $("#address_e").val(address);
-    $("#email_e").val(email);
+    $("#name_e").val(user.name);
+    $("#last_name_e").val(user.last_name);
+    $("#document_number_e").val(user.document_number);
+    $("#phone_number_e").val(user.phone_number);
+    $("#address_e").val(user.address);
+    $("#email_e").val(user.email);
 }
 
 function EditUser(id) {

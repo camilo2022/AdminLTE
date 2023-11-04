@@ -2,7 +2,7 @@
 namespace App\Http\Resources\User;
 use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\ResourceCollection;
-class UserInactivesCollection extends ResourceCollection
+class UserInactivesQueryCollection extends ResourceCollection
 {
      /**
      * OJO SI VOY A ENVIAR UN ARRAY DE MUCHOS DATOS SE USAN LAS COLLECTIOSNES PARA DARLE FORMATO A LA RESPUESTA
