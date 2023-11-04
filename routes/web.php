@@ -1,5 +1,10 @@
 <?php
 
+use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ModulesAndSubmodulesController;
+use App\Http\Controllers\RolesAndPermissionsController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -24,112 +29,112 @@ Route::get('/', function () {
 
 });
 
-Route::get('reset-password/{id}/{token}', [App\Http\Controllers\Auth\ResetPasswordController::class, 'showResetForm']);
+Route::get('reset-password/{id}/{token}', [ResetPasswordController::class, 'showResetForm']);
 
 Auth::routes(['register' => false]);
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/Dashboard', [App\Http\Controllers\HomeController::class, 'index'])->middleware('can:Dashboard')->name('Dashboard');
+    Route::get('/Dashboard',  [HomeController::class, 'index'])->middleware('can:Dashboard')->name('Dashboard');
 
     Route::prefix('/Dashboard')->group(function () {
 
         Route::prefix('/Users')->group(function () {
 
-            Route::get('/Index',[\App\Http\Controllers\UserController::class, 'index'])
+            Route::get('/Index',[UserController::class, 'index'])
             ->middleware('can:Dashboard.Users.Index')->name('Dashboard.Users.Index');
 
-            Route::post('/Index/Query', [\App\Http\Controllers\UserController::class, 'indexQuery'])
+            Route::post('/Index/Query', [UserController::class, 'indexQuery'])
             ->middleware('can:Dashboard.Users.Index.Query')->name('Dashboard.Users.Index.Query');
 
-            Route::get('/Inactives', [\App\Http\Controllers\UserController::class, 'inactives'])
+            Route::get('/Inactives', [UserController::class, 'inactives'])
             ->middleware('can:Dashboard.Users.Inactives')->name('Dashboard.Users.Inactives');
 
-            Route::post('/Inactives/Query', [\App\Http\Controllers\UserController::class, 'inactivesQuery'])
+            Route::post('/Inactives/Query', [UserController::class, 'inactivesQuery'])
             ->middleware('can:Dashboard.Users.Inactives.Query')->name('Dashboard.Users.Inactives.Query');
 
-            Route::post('/Create', [\App\Http\Controllers\UserController::class, 'create'])
+            Route::post('/Create', [UserController::class, 'create'])
             ->middleware('can:Dashboard.Users.Create')->name('Dashboard.Users.Create');
 
-            Route::post('/Store', [\App\Http\Controllers\UserController::class, 'store'])
+            Route::post('/Store', [UserController::class, 'store'])
             ->middleware('can:Dashboard.Users.Store')->name('Dashboard.Users.Store');
 
-            Route::post('/Edit/{id}', [\App\Http\Controllers\UserController::class, 'edit'])
+            Route::post('/Edit/{id}', [UserController::class, 'edit'])
             ->middleware('can:Dashboard.Users.Edit')->name('Dashboard.Users.Edit');
 
-            Route::put('/Update/{id}', [\App\Http\Controllers\UserController::class, 'update'])
+            Route::put('/Update/{id}', [UserController::class, 'update'])
             ->middleware('can:Dashboard.Users.Update')->name('Dashboard.Users.Update');
 
-            Route::post('/Show/{id}', [\App\Http\Controllers\UserController::class, 'show'])
+            Route::post('/Show/{id}', [UserController::class, 'show'])
             ->middleware('can:Dashboard.Users.Show')->name('Dashboard.Users.Show');
 
-            Route::put('/Password/{id}', [\App\Http\Controllers\UserController::class, 'password'])
+            Route::put('/Password/{id}', [UserController::class, 'password'])
             ->middleware('can:Dashboard.Users.Password')->name('Dashboard.Users.Password');
 
-            Route::delete('/Delete', [\App\Http\Controllers\UserController::class, 'delete'])
+            Route::delete('/Delete', [UserController::class, 'delete'])
             ->middleware('can:Dashboard.Users.Delete')->name('Dashboard.Users.Delete');
 
-            Route::put('/Restore', [\App\Http\Controllers\UserController::class, 'restore'])
+            Route::put('/Restore', [UserController::class, 'restore'])
             ->middleware('can:Dashboard.Users.Restore')->name('Dashboard.Users.Restore');
 
-            Route::post('/AssignRoleAndPermissions',  [\App\Http\Controllers\UserController::class, 'assignRoleAndPermissions'])
+            Route::post('/AssignRoleAndPermissions',  [UserController::class, 'assignRoleAndPermissions'])
             ->middleware('can:Dashboard.Users.AssignRoleAndPermissions')->name('Dashboard.Users.AssignRoleAndPermissions');
 
-            Route::post('/AssignRoleAndPermissions/Query',  [\App\Http\Controllers\UserController::class, 'assignRoleAndPermissionsQuery'])
+            Route::post('/AssignRoleAndPermissions/Query',  [UserController::class, 'assignRoleAndPermissionsQuery'])
             ->middleware('can:Dashboard.Users.AssignRoleAndPermissions.Query')->name('Dashboard.Users.AssignRoleAndPermissions.Query');
 
-            Route::post('/RemoveRoleAndPermissions',  [\App\Http\Controllers\UserController::class, 'removeRoleAndPermissions'])
+            Route::post('/RemoveRoleAndPermissions',  [UserController::class, 'removeRoleAndPermissions'])
             ->middleware('can:Dashboard.Users.RemoveRoleAndPermissions')->name('Dashboard.Users.RemoveRoleAndPermissions');
 
-            Route::post('/RemoveRoleAndPermissions/Query',  [\App\Http\Controllers\UserController::class, 'removeRoleAndPermissionsQuery'])
+            Route::post('/RemoveRoleAndPermissions/Query',  [UserController::class, 'removeRoleAndPermissionsQuery'])
             ->middleware('can:Dashboard.Users.RemoveRoleAndPermissions.Query')->name('Dashboard.Users.RemoveRoleAndPermissions.Query');
 
         });
 
         Route::prefix('/RolesAndPermissions')->group(function () {
 
-            Route::get('/Index', [\App\Http\Controllers\RolesAndPermissionsController::class, 'index'])
+            Route::get('/Index', [RolesAndPermissionsController::class, 'index'])
             ->middleware('can:Dashboard.RolesAndPermissions.Index')->name('Dashboard.RolesAndPermissions.Index');
 
-            Route::post('/Index/Query', [\App\Http\Controllers\RolesAndPermissionsController::class, 'indexQuery'])
+            Route::post('/Index/Query', [RolesAndPermissionsController::class, 'indexQuery'])
             ->middleware('can:Dashboard.RolesAndPermissions.Index.Query')->name('Dashboard.RolesAndPermissions.Index.Query');
 
-            Route::post('/Create', [\App\Http\Controllers\RolesAndPermissionsController::class, 'create'])
+            Route::post('/Create', [RolesAndPermissionsController::class, 'create'])
             ->middleware('can:Dashboard.RolesAndPermissions.Create')->name('Dashboard.RolesAndPermissions.Create');
 
-            Route::post('/Store', [\App\Http\Controllers\RolesAndPermissionsController::class, 'store'])
+            Route::post('/Store', [RolesAndPermissionsController::class, 'store'])
             ->middleware('can:Dashboard.RolesAndPermissions.Store')->name('Dashboard.RolesAndPermissions.Store');
 
-            Route::post('/Edit/{id}', [\App\Http\Controllers\RolesAndPermissionsController::class, 'edit'])
+            Route::post('/Edit/{id}', [RolesAndPermissionsController::class, 'edit'])
             ->middleware('can:Dashboard.RolesAndPermissions.Edit')->name('Dashboard.RolesAndPermissions.Edit');
 
-            Route::put('/Update/{id}', [\App\Http\Controllers\RolesAndPermissionsController::class, 'update'])
+            Route::put('/Update/{id}', [RolesAndPermissionsController::class, 'update'])
             ->middleware('can:Dashboard.RolesAndPermissions.Update')->name('Dashboard.RolesAndPermissions.Update');
 
-            Route::delete('/Delete', [\App\Http\Controllers\RolesAndPermissionsController::class, 'delete'])
+            Route::delete('/Delete', [RolesAndPermissionsController::class, 'delete'])
             ->middleware('can:Dashboard.RolesAndPermissions.Delete')->name('Dashboard.RolesAndPermissions.Delete');
         });
 
         Route::prefix('/ModulesAndSubmodules')->group(function () {
 
-            Route::get('/Index', [\App\Http\Controllers\ModulesAndSubmodulesController::class, 'index'])
+            Route::get('/Index', [ModulesAndSubmodulesController::class, 'index'])
             ->middleware('can:Dashboard.ModulesAndSubmodules.Index')->name('Dashboard.ModulesAndSubmodules.Index');
 
-            Route::post('/Index/Query', [\App\Http\Controllers\ModulesAndSubmodulesController::class, 'indexQuery'])
+            Route::post('/Index/Query', [ModulesAndSubmodulesController::class, 'indexQuery'])
             ->middleware('can:Dashboard.ModulesAndSubmodules.Index.Query')->name('Dashboard.ModulesAndSubmodules.Index.Query');
 
-            Route::post('/Create', [\App\Http\Controllers\ModulesAndSubmodulesController::class, 'create'])
+            Route::post('/Create', [ModulesAndSubmodulesController::class, 'create'])
             ->middleware('can:Dashboard.ModulesAndSubmodules.Create')->name('Dashboard.ModulesAndSubmodules.Create');
 
-            Route::post('/Store', [\App\Http\Controllers\ModulesAndSubmodulesController::class, 'store'])
+            Route::post('/Store', [ModulesAndSubmodulesController::class, 'store'])
             ->middleware('can:Dashboard.ModulesAndSubmodules.Store')->name('Dashboard.ModulesAndSubmodules.Store');
 
-            Route::post('/Edit/{id}', [\App\Http\Controllers\ModulesAndSubmodulesController::class, 'edit'])
+            Route::post('/Edit/{id}', [ModulesAndSubmodulesController::class, 'edit'])
             ->middleware('can:Dashboard.ModulesAndSubmodules.Edit')->name('Dashboard.ModulesAndSubmodules.Edit');
 
-            Route::put('/Update/{id}', [\App\Http\Controllers\ModulesAndSubmodulesController::class, 'update'])
+            Route::put('/Update/{id}', [ModulesAndSubmodulesController::class, 'update'])
             ->middleware('can:Dashboard.ModulesAndSubmodules.Update')->name('Dashboard.ModulesAndSubmodules.Update');
 
-            Route::delete('/Delete', [\App\Http\Controllers\ModulesAndSubmodulesController::class, 'delete'])
+            Route::delete('/Delete', [ModulesAndSubmodulesController::class, 'delete'])
             ->middleware('can:Dashboard.ModulesAndSubmodules.Delete')->name('Dashboard.ModulesAndSubmodules.Delete');
 
         });
