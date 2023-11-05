@@ -1,7 +1,7 @@
-function DeleteUser(id) {
+function DeleteCollection(id) {
     Swal.fire({
-        title: '¿Desea eliminar el usuario?',
-        text: 'El usuario será desactivado.',
+        title: '¿Desea eliminar la correria?',
+        text: 'La correria será desactivada.',
         icon: 'warning',
         showCancelButton: true,
         cancelButtonColor: '#DD6B55',
@@ -11,34 +11,38 @@ function DeleteUser(id) {
     }).then((result) => {
         if (result.value) {
             $.ajax({
-                url: `/Dashboard/Users/Delete`,
+                url: `/Dashboard/Collections/Delete`,
                 type: 'DELETE',
                 data: {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
                     'id': id
                 },
                 success: function(response) {
-                    tableUsers.ajax.reload();
-                    DeleteUserAjaxSuccess(response);
+                    tableCollections.ajax.reload();
+                    DeleteCollectionAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableUsers.ajax.reload();
-                    DeleteUserAjaxError(xhr);
+                    tableCollections.ajax.reload();
+                    DeleteCollectionAjaxError(xhr);
                 }
             });
         } else {
-            toastr.info('El usuario seleccionado no fue desactiado.')
+            toastr.info('La correria seleccionada no fue desactivada.')
         }
     });
 }
 
-function DeleteUserAjaxSuccess(response) {
+function DeleteCollectionAjaxSuccess(response) {
     if(response.status === 204) {
         toastr.success(response.message);
     }
+
+    if(response.status === 422) {
+        toastr.warning(response.message);
+    }
 }
 
-function DeleteUserAjaxError(xhr) {
+function DeleteCollectionAjaxError(xhr) {
     if(xhr.status === 403) {
         toastr.error(xhr.responseJSON.error.message);
     }

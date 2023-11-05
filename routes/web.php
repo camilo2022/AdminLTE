@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ModulesAndSubmodulesController;
 use App\Http\Controllers\RolesAndPermissionsController;
@@ -136,6 +137,31 @@ Route::middleware(['auth'])->group(function () {
 
             Route::delete('/Delete', [ModulesAndSubmodulesController::class, 'delete'])
             ->middleware('can:Dashboard.ModulesAndSubmodules.Delete')->name('Dashboard.ModulesAndSubmodules.Delete');
+
+        });
+
+        Route::prefix('/Collections')->group(function () {
+
+            Route::get('/Index', [CollectionController::class, 'index'])
+            ->middleware('can:Dashboard.Collections.Index')->name('Dashboard.Collections.Index');
+
+            Route::post('/Index/Query', [CollectionController::class, 'indexQuery'])
+            ->middleware('can:Dashboard.Collections.Index.Query')->name('Dashboard.Collections.Index.Query');
+
+            Route::post('/Create', [CollectionController::class, 'create'])
+            ->middleware('can:Dashboard.Collections.Create')->name('Dashboard.Collections.Create');
+
+            Route::post('/Store', [CollectionController::class, 'store'])
+            ->middleware('can:Dashboard.Collections.Store')->name('Dashboard.Collections.Store');
+
+            Route::post('/Edit/{id}', [CollectionController::class, 'edit'])
+            ->middleware('can:Dashboard.Collections.Edit')->name('Dashboard.Collections.Edit');
+
+            Route::put('/Update/{id}', [CollectionController::class, 'update'])
+            ->middleware('can:Dashboard.Collections.Update')->name('Dashboard.Collections.Update');
+
+            Route::delete('/Delete', [CollectionController::class, 'delete'])
+            ->middleware('can:Dashboard.Collections.Delete')->name('Dashboard.Collections.Delete');
 
         });
 

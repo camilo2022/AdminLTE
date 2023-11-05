@@ -57,5 +57,21 @@ class ModulesAndSubmodulesSeeder extends Seeder
             'module_id' => $Configuracion->id,
             'permission_id' => 27
         ]);
+
+        $Administracion = Module::create(['name' => 'Administración', 'icon' => 'fas fa-folder']);
+
+        ModuleHasRoles::create([
+            'role_id' => 5,
+            'module_id' => $Administracion->id
+        ]);
+
+        Submodule::create([
+            'name' => 'Correrias',
+            'url' => '/Dashboard/Collections/Index',
+            'icon' => 'fa-solid fa-rectangle-vertical-history',
+            'module_id' => $Administracion->id,
+            'permission_id' =>34
+        ]);
+
     }
 }

@@ -23,6 +23,23 @@ return new class extends Migration
             $table->timestamps();
             $table->timestamp('deleted_at')->nullable();
         });
+        
+        DB::unprepared('DROP PROCEDURE IF EXISTS collections');
+
+        DB::unprepared('
+            CREATE PROCEDURE collections(IN currentDateTime DATETIME)
+            BEGIN
+                -- Actualizar los registros que no cumplen la condición
+                UPDATE collections
+                SET deleted_at = currentDateTime
+                WHERE start_date > currentDateTime OR end_date < currentDateTime;
+
+                -- Restaurar los registros que cumplen la condición
+                UPDATE collections
+                SET deleted_at = NULL
+                WHERE start_date <= currentDateTime AND end_date >= currentDateTime;
+            END
+        ');
     }
 
     /**
@@ -33,5 +50,6 @@ return new class extends Migration
     public function down()
     {
         Schema::dropIfExists('collections');
+        DB::unprepared('DROP PROCEDURE IF EXISTS collections');
     }
 };

@@ -5,13 +5,13 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1 class="m-0 text-dark">Usuarios Inactivos</h1>
+                        <h1 class="m-0 text-dark">Correrias</h1>
                     </div><!-- /.col -->
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item">Dashboard</li>
-                            <li class="breadcrumb-item">Users</li>
-                            <li class="breadcrumb-item">Inactives</li>
+                            <li class="breadcrumb-item">Collections</li>
+                            <li class="breadcrumb-item">Index</li>
                         </ol>
                     </div><!-- /.col -->
                 </div><!-- /.row -->
@@ -53,53 +53,48 @@
                     <div class="card">
                         <div class="card-header p-2">
                             <ul class="nav nav-pills">
-                                <li class="nav-item ml-auto">
-                                    <a class="nav-link" href="/Dashboard/Users/Index" title="Usuarios activos">
-                                        <i class="fas fa-user-check"></i>
-                                    </a>
-                                </li>
                                 <li class="nav-item">
-                                    <a class="nav-link active" href="/Dashboard/Users/Inactives" title="Usuarios inactivos">
-                                        <i class="fas fa-user-xmark"></i>
+                                    <a class="nav-link active" type="button" onclick="CreateCollectionModal()" title="Agregar correria">
+                                        <i class="fas fa-plus"></i>
                                     </a>
                                 </li>
                             </ul>
                         </div>
-
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table id="users" class="table table-bordered table-hover dataTable dtr-inline">
+                                <table id="collections" class="table table-bordered table-hover dataTable dtr-inline">
                                     <thead class="thead-dark">
                                         <tr>
-                                            <th colspan="7">Información Personal</th>
-                                            <th colspan="1">Gestionar Usuario</th>
+                                            <th colspan="6">Información</th>
+                                            <th colspan="2">Gestión</th>
                                         </tr>
                                         <tr>
                                             <th>#</th>
-                                            <th>Nombres</th>
-                                            <th>Apellidos</th>
-                                            <th>Documento</th>
-                                            <th>Telefono</th>
-                                            <th>Direccion</th>
-                                            <th>Email</th>
-                                            <th>Restaurar</th>
+                                            <th>Nombre</th>
+                                            <th>Codigo</th>
+                                            <th>Fecha Incio</th>
+                                            <th>Fecha Fin</th>
+                                            <th>Estado</th>
+                                            <th>Editar</th>
+                                            <th>Eliminar</th>
                                         </tr>
                                     </thead>
-
                                     <tbody>
-
                                     </tbody>
                                 </table>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
         </div>
+        @include('Dashboard.Collections.Create')
+        @include('Dashboard.Collections.Edit')
     </section>
 @endsection
 @section('script')
-    <script src="{{ asset('js/Dashboard/Users/DataTableInactives.js') }}"></script>
-    <script src="{{ asset('js/Dashboard/Users/Restore.js') }}"></script>
+    <script src="{{ asset('js/Dashboard/Collections/DataTableIndex.js') }}"></script>
+    <script src="{{ asset('js/Dashboard/Collections/Create.js') }}"></script>
+    <script src="{{ asset('js/Dashboard/Collections/Edit.js') }}"></script>
+    <script src="{{ asset('js/Dashboard/Collections/Delete.js') }}"></script>
 @endsection
