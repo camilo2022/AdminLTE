@@ -346,6 +346,11 @@ function EditModuleAndSubmodulesAjaxSuccess(response) {
         toastr.success(response.message);
         $('#EditModuleAndSubmodulesModal').modal('hide');
     }
+
+    if(response.status === 204) {
+        toastr.info(response.message);
+        $('#EditModuleAndSubmodulesModal').modal('hide');
+    }
 }
 
 function EditModuleAndSubmodulesAjaxError(xhr) {
@@ -377,7 +382,13 @@ function EditModuleAndSubmodulesAjaxError(xhr) {
     }
 
     if(xhr.status === 500){
-        toastr.error(xhr.responseJSON.message);
+        if(xhr.responseJSON.error) {
+            toastr.error(xhr.responseJSON.error.message);
+        }
+
+        if(xhr.responseJSON.message) {
+            toastr.error(xhr.responseJSON.message);
+        }
         $('#EditModuleAndSubmodulesModal').modal('hide');
     }
 }

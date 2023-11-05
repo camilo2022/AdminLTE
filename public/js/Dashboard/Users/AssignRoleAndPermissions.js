@@ -175,6 +175,11 @@ function AssignRoleAndPermissionUserAjaxSuccess(response) {
         toastr.success(response.message);
         $('#AssignRoleAndPermissionUserModal').modal('hide');
     }
+
+    if(response.status === 204) {
+        toastr.info(response.message);
+        $('#PasswordUserModal').modal('hide');
+    }
 }
 
 function AssignRoleAndPermissionUserAjaxError(xhr) {
@@ -202,7 +207,13 @@ function AssignRoleAndPermissionUserAjaxError(xhr) {
     }
 
     if(xhr.status === 500){
-        toastr.error(xhr.responseJSON.message);
+        if(xhr.responseJSON.error) {
+            toastr.error(xhr.responseJSON.error.message);
+        }
+
+        if(xhr.responseJSON.message) {
+            toastr.error(xhr.responseJSON.message);
+        }
         $('#AssignRoleAndPermissionUserModal').modal('hide');
     }
 }

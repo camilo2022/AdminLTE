@@ -75,6 +75,11 @@ function EditUserAjaxSuccess(response) {
         toastr.success(response.message);
         $('#EditUserModal').modal('hide');
     }
+
+    if(response.status === 204) {
+        toastr.info(response.message);
+        $('#PasswordUserModal').modal('hide');
+    }
 }
 
 function EditUserAjaxError(xhr) {
@@ -107,7 +112,13 @@ function EditUserAjaxError(xhr) {
     }
 
     if(xhr.status === 500){
-        toastr.error(xhr.responseJSON.message);
+        if(xhr.responseJSON.error) {
+            toastr.error(xhr.responseJSON.error.message);
+        }
+
+        if(xhr.responseJSON.message) {
+            toastr.error(xhr.responseJSON.message);
+        }
         $('#EditUserModal').modal('hide');
     }
 }

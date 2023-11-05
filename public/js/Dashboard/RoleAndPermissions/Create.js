@@ -123,7 +123,7 @@ function CreateRoleAndPermissionsRemovePermission(permission) {
 
 function CreateRoleAndPermissionsAjaxSuccess(response) {
     if(response.status === 200) {
-        toastr.success(response.message);
+        toastr.info(response.message);
         $('#CreateRoleAndPermissionsModal').modal('hide');
     }
 
@@ -162,7 +162,13 @@ function CreateRoleAndPermissionsAjaxError(xhr) {
     }
 
     if(xhr.status === 500){
-        toastr.error(xhr.responseJSON.message);
+        if(xhr.responseJSON.error) {
+            toastr.error(xhr.responseJSON.error.message);
+        }
+
+        if(xhr.responseJSON.message) {
+            toastr.error(xhr.responseJSON.message);
+        }
         $('#CreateRoleAndPermissionsModal').modal('hide');
     }
 }

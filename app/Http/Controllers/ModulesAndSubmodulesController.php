@@ -174,7 +174,7 @@ class ModulesAndSubmodulesController extends Controller
                 return $this->successResponse(
                     $permissions,
                     'El Modulo y submodulos fueron encontrados exitosamente.',
-                    200
+                    204
                 );
             }
 
@@ -187,7 +187,7 @@ class ModulesAndSubmodulesController extends Controller
                     'roles' => $roles
                 ],
                 'El Modulo y submodulos fueron encontrados exitosamente.',
-                200
+                204
             );
         } catch (ModelNotFoundException $e) {
             return $this->errorResponse(

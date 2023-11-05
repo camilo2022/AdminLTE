@@ -255,7 +255,7 @@ class UserController extends Controller
             return $this->successResponse(
                 $user,
                 'El usuario fue encontrado exitosamente.',
-                200
+                204
             );
         } catch (ModelNotFoundException $e) {
             return $this->errorResponse(
@@ -329,7 +329,7 @@ class UserController extends Controller
             return $this->successResponse(
                 $user,
                 'El usuario fue encontrado exitosamente.',
-                200
+                204
             );
         } catch (ModelNotFoundException $e) {
             return $this->errorResponse(
@@ -472,7 +472,7 @@ class UserController extends Controller
             return $this->successResponse(
                 $rolesWithMissingPermissions,
                 'La consulta para asignar rol y permisos realizada exitosamente.',
-                200
+                204
             );
         } catch (ModelNotFoundException $e) {
             return $this->errorResponse(
@@ -566,7 +566,7 @@ class UserController extends Controller
             return $this->successResponse(
                 $rolesWithMissingPermissions,
                 'La consulta para remover rol y permisos realizada exitosamente.',
-                200
+                204
             );
         } catch (ModelNotFoundException $e) {
             return $this->errorResponse(

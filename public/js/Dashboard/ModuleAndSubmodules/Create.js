@@ -327,7 +327,7 @@ function CreateModuleAndSubmodulesPermissions(selectPermissions, permissions) {
 
 function CreateModuleAndSubmodulesAjaxSuccess(response) {
     if(response.status === 200) {
-        toastr.success(response.message);
+        toastr.info(response.message);
         $('#CreateModuleAndSubmodulesModal').modal('hide');
     }
 
@@ -366,7 +366,13 @@ function CreateModuleAndSubmodulesAjaxError(xhr) {
     }
 
     if(xhr.status === 500){
-        toastr.error(xhr.responseJSON.message);
+        if(xhr.responseJSON.error) {
+            toastr.error(xhr.responseJSON.error.message);
+        }
+
+        if(xhr.responseJSON.message) {
+            toastr.error(xhr.responseJSON.message);
+        }
         $('#CreateModuleAndSubmodulesModal').modal('hide');
     }
 }

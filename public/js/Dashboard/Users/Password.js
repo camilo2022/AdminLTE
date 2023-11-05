@@ -81,6 +81,11 @@ function PasswordUserAjaxSuccess(response) {
         toastr.success(response.message);
         $('#PasswordUserModal').modal('hide');
     }
+
+    if(response.status === 204) {
+        toastr.info(response.message);
+        $('#PasswordUserModal').modal('hide');
+    }
 }
 
 function PasswordUserAjaxError(xhr) {
@@ -112,7 +117,13 @@ function PasswordUserAjaxError(xhr) {
     }
 
     if(xhr.status === 500){
-        toastr.error(xhr.responseJSON.message);
+        if(xhr.responseJSON.error) {
+            toastr.error(xhr.responseJSON.error.message);
+        }
+
+        if(xhr.responseJSON.message) {
+            toastr.error(xhr.responseJSON.message);
+        }
         $('#PasswordUserModal').modal('hide');
     }
 }

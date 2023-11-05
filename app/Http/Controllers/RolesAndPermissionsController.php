@@ -161,7 +161,7 @@ class RolesAndPermissionsController extends Controller
             return $this->successResponse(
                 $roleAndPermissions,
                 'El rol y los permisos fueron encontrados exitosamente.',
-                200
+                204
             );
         } catch (ModelNotFoundException $e) {
             return $this->errorResponse(

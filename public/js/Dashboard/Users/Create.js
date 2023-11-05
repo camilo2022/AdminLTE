@@ -73,7 +73,7 @@ function CreateUser() {
 
 function CreateUserAjaxSuccess(response) {
     if(response.status === 200) {
-        toastr.success(response.message);
+        toastr.info(response.message);
         $('#CreateUserModal').modal('hide');
     }
 
@@ -112,7 +112,13 @@ function CreateUserAjaxError(xhr) {
     }
 
     if(xhr.status === 500){
-        toastr.error(xhr.responseJSON.message);
+        if(xhr.responseJSON.error) {
+            toastr.error(xhr.responseJSON.error.message);
+        }
+
+        if(xhr.responseJSON.message) {
+            toastr.error(xhr.responseJSON.message);
+        }
         $('#CreateUserModal').modal('hide');
     }
 }

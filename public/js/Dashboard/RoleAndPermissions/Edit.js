@@ -142,6 +142,11 @@ function EditRoleAndPermissionsAjaxSuccess(response) {
         toastr.success(response.message);
         $('#EditRoleAndPermissionsModal').modal('hide');
     }
+
+    if(response.status === 204) {
+        toastr.info(response.message);
+        $('#EditRoleAndPermissionsModal').modal('hide');
+    }
 }
 
 function EditRoleAndPermissionsAjaxError(xhr) {
@@ -173,7 +178,13 @@ function EditRoleAndPermissionsAjaxError(xhr) {
     }
 
     if(xhr.status === 500){
-        toastr.error(xhr.responseJSON.message);
+        if(xhr.responseJSON.error) {
+            toastr.error(xhr.responseJSON.error.message);
+        }
+
+        if(xhr.responseJSON.message) {
+            toastr.error(xhr.responseJSON.message);
+        }
         $('#EditRoleAndPermissionsModal').modal('hide');
     }
 }
