@@ -3,6 +3,8 @@
 namespace App\Http\Requests\Trademark;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class TrademarkStoreRequest extends FormRequest
 {
@@ -11,9 +13,22 @@ class TrademarkStoreRequest extends FormRequest
      *
      * @return bool
      */
+    protected function failedValidation(Validator $validator)
+    {
+        // Lanzar una excepción de validación con los errores de validación obtenidos
+        throw new HttpResponseException(response()->json([
+            'message' => 'Error de validación de los datos para guardar registro de la marca del producto.',
+            'errors' => $validator->errors()
+        ], 422));
+    }
+    /**
+     * Determine if the user is authorized to make this request.
+     *
+     * @return bool
+     */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +39,40 @@ class TrademarkStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'name' => ['required', 'string', 'unique:trademarks,name', 'max:255'],
+            'code' => ['required', 'string', 'unique:trademarks,code', 'max:255'],
+            'description' => ['nullable', 'string', 'max:255'],
+            'logo' => ['nullable', 'image', 'mimes:jpeg,jpg,png,gif', 'max:2048']
+        ];
+    }
+
+
+    public function messages()
+    {
+        return [
+            'name.required' => 'El campo Nombre de la marca es requerido.',
+            'name.string' => 'El campo Nombre de la marca debe ser una cadena de texto.',
+            'name.unique' => 'El campo Nombre de la marca ya existe en la base de datos.',
+            'name.max' => 'El campo Nombre de la marca no debe tener mas de 255 caracteres.',
+            'code.required' => 'El campo Codigo de la marca es requerido.',
+            'code.string' => 'El campo Codigo de la marca debe ser una cadena de texto.',
+            'code.unique' => 'El campo Codigo de la marca ya existe en la base de datos.',
+            'code.max' => 'El campo Nombre de la marca no debe tener mas de 255 caracteres.',
+            'description.string' => 'El campo Descripcion de la marca ya existe en la base de datos.',
+            'description.max' => 'El campo Descripcion de la marca no debe tener mas de 255 caracteres.',
+            'logo.image' => 'El campo archivo de Logo de la marca debe ser una imagen.',
+            'logo.mimes' => 'El campo archivo de Logo de la marca debe tener una extensión válida (jpeg, jpg, png, gif).',
+            'logo.max' => 'El campo archivo de Logo de la marca no debe superar los 2 MB (2048 KB).',
+        ];
+    }
+
+    public function attributes()
+    {
+        return [
+            'name' => 'Nombre de la marca',
+            'code' => 'Codigo de la marca',
+            'description' => 'Descripcion de la marca',
+            'logo' => 'Logo de la marca'
         ];
     }
 }

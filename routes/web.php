@@ -6,6 +6,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ModulesAndSubmodulesController;
 use App\Http\Controllers\PackageController;
 use App\Http\Controllers\RolesAndPermissionsController;
+use App\Http\Controllers\TrademarkController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
@@ -36,9 +37,11 @@ Route::get('reset-password/{id}/{token}', [ResetPasswordController::class, 'show
 Auth::routes(['register' => false]);
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/Dashboard',  [HomeController::class, 'index'])->middleware('can:Dashboard')->name('Dashboard');
 
     Route::prefix('/Dashboard')->group(function () {
+
+        Route::get('/',  [HomeController::class, 'index'])
+        ->middleware('can:Dashboard')->name('Dashboard');
 
         Route::prefix('/Users')->group(function () {
 
@@ -191,6 +194,30 @@ Route::middleware(['auth'])->group(function () {
 
             Route::put('/Restore', [PackageController::class, 'restore'])
             ->middleware('can:Dashboard.Packages.Restore')->name('Dashboard.Packages.Restore');
+        });
+
+        Route::prefix('/Trademarks')->group(function () {
+
+            Route::get('/Index', [TrademarkController::class, 'index'])
+            ->middleware('can:Dashboard.Trademarks.Index')->name('Dashboard.Trademarks.Index');
+
+            Route::post('/Index/Query', [TrademarkController::class, 'indexQuery'])
+            ->middleware('can:Dashboard.Trademarks.Index.Query')->name('Dashboard.Trademarks.Index.Query');
+
+            Route::post('/Create', [TrademarkController::class, 'create'])
+            ->middleware('can:Dashboard.Trademarks.Create')->name('Dashboard.Trademarks.Create');
+
+            Route::post('/Store', [TrademarkController::class, 'store'])
+            ->middleware('can:Dashboard.Trademarks.Store')->name('Dashboard.Trademarks.Store');
+
+            Route::post('/Edit/{id}', [TrademarkController::class, 'edit'])
+            ->middleware('can:Dashboard.Trademarks.Edit')->name('Dashboard.Trademarks.Edit');
+
+            Route::put('/Update/{id}', [TrademarkController::class, 'update'])
+            ->middleware('can:Dashboard.Trademarks.Update')->name('Dashboard.Trademarks.Update');
+
+            Route::delete('/Delete', [TrademarkController::class, 'delete'])
+            ->middleware('can:Dashboard.Trademarks.Delete')->name('Dashboard.Trademarks.Delete');
         });
     });
 });

@@ -43,7 +43,7 @@ class RolesAndPermissionsStoreRequest extends FormRequest
         return [
             'role' => 'required|string|max:255|unique:roles,name',
             'permissions' => 'required|array',
-            'permissions.*' => 'string|max:255|unique:permissions,name',
+            'permissions.*' => 'required|string|max:255|unique:permissions,name',
         ];
     }
 

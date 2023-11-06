@@ -16,9 +16,11 @@ return new class extends Migration
         Schema::create('trademarks', function (Blueprint $table) {
             $table->id();
             $table->string('name')->unique();
+            $table->string('code')->unique();
             $table->string('description')->nullable();
-            $table->string('route_logo');
+            $table->string('logo');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Spatie\Permission\Models\Role;
 
 class UserSeeder extends Seeder
 {
@@ -14,84 +15,7 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        $RolesAndPermissions = [
-            (object) [
-                'role' => 'Dashboard',
-                'permissions' => [
-                    'Dashboard'
-                ]
-            ],
-            (object) [
-                'role' => 'Users',
-                'permissions' => [
-                    'Dashboard.Users.Index',
-                    'Dashboard.Users.Index.Query',
-                    'Dashboard.Users.Inactives',
-                    'Dashboard.Users.Inactives.Query',
-                    'Dashboard.Users.Create',
-                    'Dashboard.Users.Store',
-                    'Dashboard.Users.Edit',
-                    'Dashboard.Users.Update',
-                    'Dashboard.Users.Show',
-                    'Dashboard.Users.Password',
-                    'Dashboard.Users.Delete',
-                    'Dashboard.Users.Restore',
-                    'Dashboard.Users.AssignRoleAndPermissions',
-                    'Dashboard.Users.AssignRoleAndPermissions.Query',
-                    'Dashboard.Users.RemoveRoleAndPermissions',
-                    'Dashboard.Users.RemoveRoleAndPermissions.Query'
-                ]
-            ],
-            (object) [
-                'role' => 'RolesAndPermissions',
-                'permissions' => [
-                    'Dashboard.RolesAndPermissions.Index',
-                    'Dashboard.RolesAndPermissions.Index.Query',
-                    'Dashboard.RolesAndPermissions.Create',
-                    'Dashboard.RolesAndPermissions.Store',
-                    'Dashboard.RolesAndPermissions.Edit',
-                    'Dashboard.RolesAndPermissions.Update',
-                    'Dashboard.RolesAndPermissions.Delete'
-                ]
-            ],
-            (object) [
-                'role' => 'ModulesAndSubmodules',
-                'permissions' => [
-                    'Dashboard.ModulesAndSubmodules.Index',
-                    'Dashboard.ModulesAndSubmodules.Index.Query',
-                    'Dashboard.ModulesAndSubmodules.Create',
-                    'Dashboard.ModulesAndSubmodules.Store',
-                    'Dashboard.ModulesAndSubmodules.Edit',
-                    'Dashboard.ModulesAndSubmodules.Update',
-                    'Dashboard.ModulesAndSubmodules.Delete',
-                ]
-            ],
-            (object) [
-                'role' => 'Collections',
-                'permissions' => [
-                    'Dashboard.Collections.Index',
-                    'Dashboard.Collections.Index.Query',
-                    'Dashboard.Collections.Create',
-                    'Dashboard.Collections.Store',
-                    'Dashboard.Collections.Edit',
-                    'Dashboard.Collections.Update',
-                    'Dashboard.Collections.Delete'
-                ]
-            ],
-            (object) [
-                'role' => 'Packages',
-                'permissions' => [
-                    'Dashboard.Packages.Index',
-                    'Dashboard.Packages.Index.Query',
-                    'Dashboard.Packages.Create',
-                    'Dashboard.Packages.Store',
-                    'Dashboard.Packages.Edit',
-                    'Dashboard.Packages.Update',
-                    'Dashboard.Packages.Delete',
-                    'Dashboard.Packages.Restore'
-                ]
-            ]
-        ];
+        $RolesAndPermissions = Role::with('permissions')->get();
 
         $user = User::create([
             'name' => 'Camilo Andres',
@@ -105,8 +29,8 @@ class UserSeeder extends Seeder
 
         foreach($RolesAndPermissions as $RoleAndPermission) {
             // Crear o recuperar un permiso con el nombre proporcionado
-            $user->assignRole([$RoleAndPermission->role]);
-            $user->givePermissionTo($RoleAndPermission->permissions);
+            $user->assignRole([$RoleAndPermission->name]);
+            $user->givePermissionTo($RoleAndPermission->permissions->pluck('name'));
         };
     }
 }

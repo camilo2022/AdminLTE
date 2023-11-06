@@ -56,6 +56,11 @@ return [
             'throw' => false,
         ],
 
+        'links' => [
+            'driver' => 'local',
+            'root' => storage_path('app'),
+        ],
+
     ],
 
     /*

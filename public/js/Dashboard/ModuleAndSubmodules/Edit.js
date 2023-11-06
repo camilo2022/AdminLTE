@@ -7,7 +7,7 @@ function EditModuleAndSubmodulesModal(id) {
         },
         success: function(response) {
             EditModuleAndSubmodulesModalCleaned(response.data);
-            EditModuleAndSubmodulesQueryRoles(response.data.roles);
+            EditModuleAndSubmodulesQueryRoles(response.data.roles, false);
             EditModuleAndSubmodulesAjaxSuccess(response);
             $('#EditModuleAndSubmodulesModal').modal('show');
         },
@@ -28,7 +28,6 @@ function EditModuleAndSubmodulesModalCleaned(moduleAndSubmodules) {
     $('#EditModuleAndSubmodulesAddPermissionButton').attr('data-count', 0);
     $('#EditModuleAndSubmodulesButton').attr('onclick', `EditModuleAndSubmodules(${moduleAndSubmodules.module.id})`);
     EditModuleAndSubmodulesQueryRoles(moduleAndSubmodules.module.roles, true);
-    EditModuleAndSubmodulesQueryRoles(moduleAndSubmodules.roles, false);
     $.each(moduleAndSubmodules.module.submodules, function (i, submodule) {
         EditModuleAndSubmodulesAddSubmodule(submodule.id, submodule.name, '', submodule.permission, submodule.url, submodule.icon);
     })

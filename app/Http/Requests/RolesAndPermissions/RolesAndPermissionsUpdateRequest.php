@@ -38,7 +38,7 @@ class RolesAndPermissionsUpdateRequest extends FormRequest
         return [
             'role' => 'required|string|max:255|unique:roles,name,' . $this->route('id') .',id',
             'permissions' => 'required|array',
-            'permissions.*' => 'string|max:255',
+            'permissions.*' => 'required|string|max:255',
         ];
     }
 
