@@ -77,6 +77,19 @@ class UserSeeder extends Seeder
                     'Dashboard.Collections.Update',
                     'Dashboard.Collections.Delete'
                 ]
+            ],
+            (object) [
+                'role' => 'Packages',
+                'permissions' => [
+                    'Dashboard.Packages.Index',
+                    'Dashboard.Packages.Index.Query',
+                    'Dashboard.Packages.Create',
+                    'Dashboard.Packages.Store',
+                    'Dashboard.Packages.Edit',
+                    'Dashboard.Packages.Update',
+                    'Dashboard.Packages.Delete',
+                    'Dashboard.Packages.Restore'
+                ]
             ]
         ];
 

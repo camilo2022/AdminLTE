@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('name')->comment('Nombre del paquete.');
             $table->string('code')->unique()->comment('Codigo del paquete.');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

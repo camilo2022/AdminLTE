@@ -61,7 +61,7 @@ function EditCollection(id) {
                 }
             });
         } else {
-            toastr.info('la correria no fue actualizada.')
+            toastr.info('La correria no fue actualizada.')
         }
     });
 }

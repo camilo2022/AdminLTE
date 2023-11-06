@@ -1,17 +1,15 @@
-let tableCollections = $('#collections').DataTable({
+let tablePackages = $('#packages').DataTable({
     "processing": true,
     "serverSide": true,
     "ajax": {
-        "url": "/Dashboard/Collections/Index/Query",
+        "url": "/Dashboard/Packages/Index/Query",
         "type": "POST",
         "data": function (request) {
             var columnMappings = {
                 0: 'id',
                 1: 'name',
                 2: 'code',
-                3: 'start_date',
-                4: 'end_date',
-                5: 'deleted_at'
+                3: 'deleted_at'
             };
             request._token = $('meta[name="csrf-token"]').attr('content');
             request.perPage = request.length;
@@ -23,7 +21,7 @@ let tableCollections = $('#collections').DataTable({
         "dataSrc": function (response) {
             response.recordsTotal = response.data.meta.pagination.count;
             response.recordsFiltered = response.data.meta.pagination.total;
-            return response.data.collections;
+            return response.data.packages;
         },
         "error": function (xhr, error, thrown) {
             if(xhr.responseJSON.error) {
@@ -39,8 +37,6 @@ let tableCollections = $('#collections').DataTable({
         { data: 'id' },
         { data: 'name' },
         { data: 'code' },
-        { data: 'start_date' },
-        { data: 'end_date' },
         {
             data: null,
             render: function (data, type, row) {
@@ -58,8 +54,8 @@ let tableCollections = $('#collections').DataTable({
         {
             data: null,
             render: function (data, type, row) {
-                return `<a onclick="EditCollectionModal(${data.id})" type="button" 
-                class="btn btn-primary btn-sm" title="Editar correria">
+                return `<a onclick="EditPackageModal(${data.id})" type="button" 
+                class="btn btn-primary btn-sm" title="Editar tipo de paquete">
                     <i class="fas fa-pen text-white"></i>
                 </a>`;
             }
@@ -67,16 +63,25 @@ let tableCollections = $('#collections').DataTable({
         {
             data: null,
             render: function (data, type, row) {
-                return `<a class="btn btn-danger btn-sm" onclick="DeleteCollection(${data.id})"
-                    title="Eliminar correria" id="DeleteCollectionButton">
+                return `<a class="btn btn-danger btn-sm" onclick="DeletePackage(${data.id})"
+                    title="Eliminar tipo de paquete" id="DeletePackageButton">
                         <i class="fas fa-trash text-white"></i>
+                    </a>`;
+            }
+        },
+        {
+            data: null,
+            render: function (data, type, row) {
+                return `<a class="btn btn-info btn-sm" onclick="RestorePackage(${data.id})"
+                    title="Restaurar tipo de paquete" id="RestorePackageButton">
+                        <i class="fas fa-arrow-rotate-left text-white"></i>
                     </a>`;
             }
         }
     ],
     "columnDefs": [
-        { "orderable": true, "targets": [0, 1, 2, 3, 4, 5] },
-        { "orderable": false, "targets": [6, 7] }
+        { "orderable": true, "targets": [0, 1, 2, 3] },
+        { "orderable": false, "targets": [4, 5, 6] }
     ],
     "pagingType": "full_numbers",
     "language": {

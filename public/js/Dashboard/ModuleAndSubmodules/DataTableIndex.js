@@ -22,7 +22,13 @@ let tableModulesAndSubmodules = $('#modulesAndSubmodules').DataTable({
             return response.data.modules;
         },
         "error": function (xhr, error, thrown) {
-            toastr.error(xhr.responseJSON.error.message);
+            if(xhr.responseJSON.error) {
+                toastr.error(xhr.responseJSON.error.message);
+            }
+    
+            if(xhr.responseJSON.message) {
+                toastr.error(xhr.responseJSON.message);
+            }
         }
     },
     "columns": [

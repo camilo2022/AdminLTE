@@ -27,7 +27,13 @@ let tableUsers = $('#users').DataTable({
             return response.data.users;
         },
         "error": function (xhr, error, thrown) {
-            toastr.error(xhr.responseJSON.error.message);
+            if(xhr.responseJSON.error) {
+                toastr.error(xhr.responseJSON.error.message);
+            }
+    
+            if(xhr.responseJSON.message) {
+                toastr.error(xhr.responseJSON.message);
+            }
         }
     },
     "columns": [

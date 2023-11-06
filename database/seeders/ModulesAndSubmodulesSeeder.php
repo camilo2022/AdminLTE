@@ -73,5 +73,13 @@ class ModulesAndSubmodulesSeeder extends Seeder
             'permission_id' =>34
         ]);
 
+        Submodule::create([
+            'name' => 'Empaques',
+            'url' => '/Dashboard/Packages/Index',
+            'icon' => 'fa-solid fa-box-open',
+            'module_id' => $Administracion->id,
+            'permission_id' =>34
+        ]);
+
     }
 }

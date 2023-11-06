@@ -89,6 +89,7 @@ class RolesAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Dashboard.Packages.Edit'])->syncRoles([$Packages]);
         Permission::create(['name' => 'Dashboard.Packages.Update'])->syncRoles([$Packages]);
         Permission::create(['name' => 'Dashboard.Packages.Delete'])->syncRoles([$Packages]);
+        Permission::create(['name' => 'Dashboard.Packages.Restore'])->syncRoles([$Packages]);
         
         Permission::create(['name' => 'Dashboard.Warehouses.Index'])->syncRoles([$Warehouses]);
         Permission::create(['name' => 'Dashboard.Warehouses.Index.Query'])->syncRoles([$Warehouses]);

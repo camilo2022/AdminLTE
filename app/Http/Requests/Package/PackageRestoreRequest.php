@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class PackageDeleteRequest extends FormRequest
+class PackageRestoreRequest extends FormRequest
 {
     /**
      * Maneja una solicitud fallida de validación.
@@ -18,7 +18,7 @@ class PackageDeleteRequest extends FormRequest
     {
         // Lanzar una excepción de validación con los errores de validación obtenidos
         throw new HttpResponseException(response()->json([
-            'message' => 'Error de validación de los datos para la eliminacion de la correria.',
+            'message' => 'Error de validación de los datos para la restauracion del tipo de paquete.',
             'errors' => $validator->errors()
         ], 422));
     }

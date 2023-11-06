@@ -14,7 +14,6 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class CollectionController extends Controller
@@ -146,10 +145,10 @@ class CollectionController extends Controller
     public function edit($id)
     {
         try {
-            $user = Collection::withTrashed()->findOrFail($id);
+            $collection = Collection::withTrashed()->findOrFail($id);
 
             return $this->successResponse(
-                $user,
+                $collection,
                 'La correria fue encontrado exitosamente.',
                 204
             );

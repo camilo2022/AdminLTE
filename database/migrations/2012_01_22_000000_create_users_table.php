@@ -25,7 +25,7 @@ class CreateUsersTable extends Migration
             $table->string('password')->comment('Contraseña del usuario.');
             $table->rememberToken();
             $table->timestamps();
-            $table->timestamp('deleted_at')->nullable();
+            $table->softDeletes();
         });
     }
 

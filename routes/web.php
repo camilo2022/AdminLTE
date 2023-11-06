@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ModulesAndSubmodulesController;
+use App\Http\Controllers\PackageController;
 use App\Http\Controllers\RolesAndPermissionsController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -165,5 +166,31 @@ Route::middleware(['auth'])->group(function () {
 
         });
 
+        Route::prefix('/Packages')->group(function () {
+
+            Route::get('/Index', [PackageController::class, 'index'])
+            ->middleware('can:Dashboard.Packages.Index')->name('Dashboard.Packages.Index');
+
+            Route::post('/Index/Query', [PackageController::class, 'indexQuery'])
+            ->middleware('can:Dashboard.Packages.Index.Query')->name('Dashboard.Packages.Index.Query');
+
+            Route::post('/Create', [PackageController::class, 'create'])
+            ->middleware('can:Dashboard.Packages.Create')->name('Dashboard.Packages.Create');
+
+            Route::post('/Store', [PackageController::class, 'store'])
+            ->middleware('can:Dashboard.Packages.Store')->name('Dashboard.Packages.Store');
+
+            Route::post('/Edit/{id}', [PackageController::class, 'edit'])
+            ->middleware('can:Dashboard.Packages.Edit')->name('Dashboard.Packages.Edit');
+
+            Route::put('/Update/{id}', [PackageController::class, 'update'])
+            ->middleware('can:Dashboard.Packages.Update')->name('Dashboard.Packages.Update');
+
+            Route::delete('/Delete', [PackageController::class, 'delete'])
+            ->middleware('can:Dashboard.Packages.Delete')->name('Dashboard.Packages.Delete');
+
+            Route::put('/Restore', [PackageController::class, 'restore'])
+            ->middleware('can:Dashboard.Packages.Restore')->name('Dashboard.Packages.Restore');
+        });
     });
 });

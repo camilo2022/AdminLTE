@@ -21,7 +21,7 @@ return new class extends Migration
             $table->datetime('start_date')->comment('Fecha de inicio de la correria.');
             $table->datetime('end_date')->comment('Fecha de fin de la correria.');
             $table->timestamps();
-            $table->timestamp('deleted_at')->nullable();
+            $table->softDeletes();
         });
         
         DB::unprepared('DROP PROCEDURE IF EXISTS collections');
