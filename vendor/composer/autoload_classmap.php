@@ -113,7 +113,6 @@ return array(
     'App\\Models\\Package' => $baseDir . '/app/Models/Package.php',
     'App\\Models\\Product' => $baseDir . '/app/Models/Product.php',
     'App\\Models\\ProductHasColor' => $baseDir . '/app/Models/ProductHasColor.php',
-    'App\\Models\\ProductHistoryPrice' => $baseDir . '/app/Models/ProductHistoryPrice.php',
     'App\\Models\\ProductPhoto' => $baseDir . '/app/Models/ProductPhoto.php',
     'App\\Models\\Subcategory' => $baseDir . '/app/Models/Subcategory.php',
     'App\\Models\\Submodule' => $baseDir . '/app/Models/Submodule.php',

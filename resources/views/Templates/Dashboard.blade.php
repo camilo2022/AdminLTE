@@ -53,6 +53,9 @@
     <link rel="stylesheet" href="{{ asset('css/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
     <!-- Select2 -->
     <link rel="stylesheet" href="{{ asset('css/plugins/select2/css/select2.min.css') }}">
+    <!-- Dropify -->
+    <link rel="stylesheet" href="{{ asset('css/plugins/dropify/dropify.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/plugins/dropify/dropify.min.css') }}">
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -369,6 +372,11 @@
 
     <script src="{{ asset('js/select2/js/select2.full.min.js') }}"></script>
 
+    <!-- Dropify -->
+    <script src="{{ asset('js/dropify/dropify.js') }}"></script>
+    <script src="{{ asset('js/dropify/dropify.min.js') }}"></script>
+
+
     <script>
         const Toast = Swal.mixin({
             toast: true,
@@ -376,6 +384,8 @@
             showConfirmButton: false,
             timer: 3000
         });
+
+        $('.dropify').dropify();
     </script>
     @yield('script')
 

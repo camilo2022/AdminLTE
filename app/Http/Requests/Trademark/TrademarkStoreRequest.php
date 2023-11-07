@@ -42,7 +42,7 @@ class TrademarkStoreRequest extends FormRequest
             'name' => ['required', 'string', 'unique:trademarks,name', 'max:255'],
             'code' => ['required', 'string', 'unique:trademarks,code', 'max:255'],
             'description' => ['nullable', 'string', 'max:255'],
-            'logo' => ['nullable', 'image', 'mimes:jpeg,jpg,png,gif', 'max:2048']
+            'logo' => ['image', 'mimes:jpeg,jpg,png,gif', 'max:2048']
         ];
     }
 

@@ -1,9 +1,9 @@
-<div class="modal" id="EditPackageModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" data-backdrop="static" aria-hidden="true">
+<div class="modal" id="EditTrademarkModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" data-backdrop="static" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header w-100">
                 <div class="text-center w-100" style="background: white;">
-                    <label style="font-size:20px;font-weight:bold;">Edicion de Tipo de empaque</label>
+                    <label style="font-size:20px;font-weight:bold;">Edicion de Marca de producto</label>
                 </div>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
@@ -36,12 +36,35 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-lg-12">
+                    <div class="form-group">
+                        <label for="description">Descripcion</label>
+                        <div class="input-group">
+                            <textarea class="form-control" id="description_e" name="description" cols="30" rows="3"></textarea>
+                            <div class="input-group-append">
+                                <span class="input-group-text">
+                                    <i class="fas fa-text-size"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <div class="form-group">
+                        <label for="logo">Logo</label>
+                        <div class="input-group">
+                            <input type="file" class="form-control dropify" id="logo_e" name="logo"
+                            data-allowed-file-extensions="jpg jpeg png gif" data-max-file-size="2M"
+                            data-default-file="">
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal" title="Cerrar ventana">
                     <i class="fas fa-xmark"></i>
                 </button>
-                <button type="button" class="btn btn-primary" id="EditPackageButton" onclick="" title="Actualizar tipo de empaque.">
+                <button type="button" class="btn btn-primary" id="EditTrademarkButton" onclick="" title="Actualizar marca de producto.">
                     <i class="fas fa-floppy-disk"></i>
                 </button>
             </div>

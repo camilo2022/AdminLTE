@@ -1,35 +1,53 @@
-function EditPackageModal(id) {
+function EditTrademarkModal(id) {
     $.ajax({
-        url: `/Dashboard/Packages/Edit/${id}`,
+        url: `/Dashboard/Trademarks/Edit/${id}`,
         type: 'POST',
         data: {
             '_token': $('meta[name="csrf-token"]').attr('content')
         },
-        success: function(response) {
-            EditPackageModalCleaned(response.data);
-            EditPackageAjaxSuccess(response);
-            $('#EditPackageModal').modal('show');
+        success: function (response) {
+            EditTrademarkModalCleaned(response.data);
+            EditTrademarkAjaxSuccess(response);
+            $('#EditTrademarkModal').modal('show');
         },
-        error: function(xhr, textStatus, errorThrown) {
-            EditPackageAjaxError(xhr);
+        error: function (xhr, textStatus, errorThrown) {
+            EditTrademarkAjaxError(xhr);
         }
     });
 }
 
-function EditPackageModalCleaned(package) {
-    RemoveIsValidClassEditPackage();
-    RemoveIsInvalidClassEditPackage();
+function EditTrademarkModalCleaned(trademark) {
+    RemoveIsValidClassEditTrademark();
+    RemoveIsInvalidClassEditTrademark();
 
-    $('#EditPackageButton').attr('onclick', `EditPackage(${package.id})`);
+    $('#EditTrademarkButton').attr('onclick', `EditTrademark(${trademark.id})`);
 
-    $("#name_e").val(package.name);
-    $("#code_e").val(package.code);
+    $("#name_e").val(trademark.name);
+    $("#code_e").val(trademark.code);
+    $('#description_e').val(trademark.description);
+    var drEvent = $('#logo_e').dropify(
+    {
+    defaultFile: trademark.path
+    });
+    drEvent = drEvent.data('dropify');
+    drEvent.resetPreview();
+    drEvent.clearElement();
+    drEvent.settings.defaultFile = trademark.path;
+    drEvent.destroy();
+    drEvent.init();
+    $('#logo_e').val('');
 }
 
-function EditPackage(id) {
+function EditTrademark(id) {
+    let formData = new FormData();
+    formData.append('_token', $('meta[name="csrf-token"]').attr('content'));
+    formData.append('name', $('#name_e').val());
+    formData.append('code', $('#code_e').val());
+    formData.append('description', $('#description_e').val());
+    formData.append('logo', $('#logo_e')[0].files[0] != undefined ? $('#logo_e')[0].files[0] : null );
     Swal.fire({
-        title: '¿Desea actualizar el tipo de empaque?',
-        text: 'El tipo de empaque se actualizara.',
+        title: '¿Desea actualizar la marca de producto?',
+        text: 'La marca de producto se actualizara.',
         icon: 'warning',
         showCancelButton: true,
         cancelButtonColor: '#DD6B55',
@@ -39,99 +57,99 @@ function EditPackage(id) {
     }).then((result) => {
         if (result.value) {
             $.ajax({
-                url: `/Dashboard/Packages/Update/${id}`,
-                type: 'PUT',
-                data: {
-                    '_token': $('meta[name="csrf-token"]').attr('content'),
-                    'id': id,
-                    'name': $("#name_e").val(),
-                    'code': $("#code_e").val()
+                url: `/Dashboard/Trademarks/Update/${id}`,
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    tableTrademarks.ajax.reload();
+                    EditTrademarkAjaxSuccess(response);
                 },
-                success: function(response) {
-                    tablePackages.ajax.reload();
-                    EditPackageAjaxSuccess(response);
-                },
-                error: function(xhr, textStatus, errorThrown) {
-                    tablePackages.ajax.reload();
-                    EditPackageAjaxError(xhr);
+                error: function (xhr, textStatus, errorThrown) {
+                    tableTrademarks.ajax.reload();
+                    EditTrademarkAjaxError(xhr);
                 }
             });
         } else {
-            toastr.info('El tipo de empaque no fue actualizado.')
+            toastr.info('La marca de producto no fue actualizado.')
         }
     });
 }
 
-function EditPackageAjaxSuccess(response) {
-    if(response.status === 200) {
+function EditTrademarkAjaxSuccess(response) {
+    if (response.status === 200) {
         toastr.success(response.message);
-        $('#EditPackageModal').modal('hide');
+        $('#EditTrademarkModal').modal('hide');
     }
 }
 
-function EditPackageAjaxError(xhr) {
-    console.log(xhr);
-    if(xhr.status === 403) {
+function EditTrademarkAjaxError(xhr) {
+    if (xhr.status === 403) {
         toastr.error(xhr.responseJSON.error.message);
-        $('#EditPackageModal').modal('hide');
+        $('#EditTrademarkModal').modal('hide');
     }
 
-    if(xhr.status === 404) {
+    if (xhr.status === 404) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
-        $('#EditPackageModal').modal('hide');
+        $('#EditTrademarkModal').modal('hide');
     }
 
-    if(xhr.status === 419) {
+    if (xhr.status === 419) {
         toastr.error(xhr.responseJSON.error.message);
-        $('#EditPackageModal').modal('hide');
+        $('#EditTrademarkModal').modal('hide');
     }
 
-    if(xhr.status === 422){
-        RemoveIsValidClassEditPackage();
-        RemoveIsInvalidClassEditPackage();
-        $.each(xhr.responseJSON.errors, function(field, messages) {
-            AddIsInvalidClassEditPackage(field);
-            $.each(messages, function(index, message) {
+    if (xhr.status === 422) {
+        RemoveIsValidClassEditTrademark();
+        RemoveIsInvalidClassEditTrademark();
+        $.each(xhr.responseJSON.errors, function (field, messages) {
+            AddIsInvalidClassEditTrademark(field);
+            $.each(messages, function (index, message) {
                 toastr.error(message);
             });
         });
-        AddIsValidClassEditPackage();
+        AddIsValidClassEditTrademark();
     }
 
-    if(xhr.status === 500){
-        if(xhr.responseJSON.error) {
+    if (xhr.status === 500) {
+        if (xhr.responseJSON.error) {
             toastr.error(xhr.responseJSON.error.message);
         }
 
-        if(xhr.responseJSON.message) {
+        if (xhr.responseJSON.message) {
             toastr.error(xhr.responseJSON.message);
         }
-        $('#EditPackageModal').modal('hide');
+        $('#EditTrademarkModal').modal('hide');
     }
 }
 
-function AddIsValidClassEditPackage() {
+function AddIsValidClassEditTrademark() {
     if (!$('#name_e').hasClass('is-invalid')) {
-      $('#name_e').addClass('is-valid');
+        $('#name_e').addClass('is-valid');
     }
     if (!$('#code_e').hasClass('is-invalid')) {
-      $('#code_e').addClass('is-valid');
+        $('#code_e').addClass('is-valid');
+    }
+    if (!$('#code_e').hasClass('is-invalid')) {
+        $('#description_e').addClass('is-valid');
     }
 }
 
-function RemoveIsValidClassEditPackage() {
+function RemoveIsValidClassEditTrademark() {
     $('#name_e').removeClass('is-valid');
     $('#code_e').removeClass('is-valid');
+    $('#description_e').removeClass('is-valid');
 }
 
-function AddIsInvalidClassEditPackage(input) {
+function AddIsInvalidClassEditTrademark(input) {
     if (!$(`#${input}_e`).hasClass('is-valid')) {
         $(`#${input}_e`).removeClass('is-valid');
     }
     $(`#${input}_e`).addClass('is-invalid');
 }
 
-function RemoveIsInvalidClassEditPackage() {
+function RemoveIsInvalidClassEditTrademark() {
     $('#name_e').removeClass('is-invalid');
     $('#code_e').removeClass('is-invalid');
 }

@@ -79,7 +79,6 @@ function EditCollectionAjaxSuccess(response) {
 }
 
 function EditCollectionAjaxError(xhr) {
-    console.log(xhr);
     if(xhr.status === 403) {
         toastr.error(xhr.responseJSON.error.message);
         $('#EditCollectionModal').modal('hide');

@@ -5,12 +5,12 @@ function CreateTrademarkModal() {
         data: {
             '_token': $('meta[name="csrf-token"]').attr('content')
         },
-        success: function(response) {
+        success: function (response) {
             CreateTrademarkModalCleaned();
             CreateTrademarkAjaxSuccess(response);
             $('#CreateTrademarkModal').modal('show');
         },
-        error: function(xhr, textStatus, errorThrown) {
+        error: function (xhr, textStatus, errorThrown) {
             CreateTrademarkAjaxError(xhr);
         }
     });
@@ -22,9 +22,20 @@ function CreateTrademarkModalCleaned() {
 
     $('#name_c').val('');
     $('#code_c').val('');
+    $('#description_c').val('');
+    $('#logo_c').val('');
+    $('#logo_c').dropify().data('dropify').destroy();
+    $('#logo_c').dropify().data('dropify').init();
 }
 
 function CreateTrademark() {
+    let formData = new FormData();
+    formData.append('_token', $('meta[name="csrf-token"]').attr('content'));
+    formData.append('name', $('#name_c').val());
+    formData.append('code', $('#code_c').val());
+    formData.append('description', $('#description_c').val());
+    formData.append('logo', $('#logo_c')[0].files[0]);
+
     Swal.fire({
         title: '¿Desea guardar la marca de producto?',
         text: 'La marca de producto será creada.',
@@ -39,18 +50,14 @@ function CreateTrademark() {
             $.ajax({
                 url: `/Dashboard/Trademarks/Store`,
                 type: 'POST',
-                data: {
-                    '_token': $('meta[name="csrf-token"]').attr('content'),
-                    'name': $('#name_c').val(),
-                    'code': $('#code_c').val(),
-                    'start_date': $('#start_date_c').val(),
-                    'end_date': $('#end_date_c').val()
-                },
-                success: function(response) {
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
                     tableTrademarks.ajax.reload();
                     CreateTrademarkAjaxSuccess(response);
                 },
-                error: function(xhr, textStatus, errorThrown) {
+                error: function (xhr, textStatus, errorThrown) {
                     tableTrademarks.ajax.reload();
                     CreateTrademarkAjaxError(xhr);
                 }
@@ -62,51 +69,51 @@ function CreateTrademark() {
 }
 
 function CreateTrademarkAjaxSuccess(response) {
-    if(response.status === 200) {
+    if (response.status === 200) {
         toastr.info(response.message);
         $('#CreateTrademarkModal').modal('hide');
     }
 
-    if(response.status === 201) {
+    if (response.status === 201) {
         toastr.success(response.message);
         $('#CreateTrademarkModal').modal('hide');
     }
 }
 
 function CreateTrademarkAjaxError(xhr) {
-    if(xhr.status === 403) {
+    if (xhr.status === 403) {
         toastr.error(xhr.responseJSON.error.message);
         $('#CreateTrademarkModal').modal('hide');
     }
 
-    if(xhr.status === 404) {
+    if (xhr.status === 404) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
         $('#CreateTrademarkModal').modal('hide');
     }
 
-    if(xhr.status === 419) {
+    if (xhr.status === 419) {
         toastr.error(xhr.responseJSON.error.message);
         $('#CreateTrademarkModal').modal('hide');
     }
 
-    if(xhr.status === 422){
+    if (xhr.status === 422) {
         RemoveIsValidClassCreateTrademark();
         RemoveIsInvalidClassCreateTrademark();
-        $.each(xhr.responseJSON.errors, function(field, messages) {
+        $.each(xhr.responseJSON.errors, function (field, messages) {
             AddIsInvalidClassCreateTrademark(field);
-            $.each(messages, function(index, message) {
+            $.each(messages, function (index, message) {
                 toastr.error(message);
             });
         });
         AddIsValidClassCreateTrademark();
     }
 
-    if(xhr.status === 500){
-        if(xhr.responseJSON.error) {
+    if (xhr.status === 500) {
+        if (xhr.responseJSON.error) {
             toastr.error(xhr.responseJSON.error.message);
         }
 
-        if(xhr.responseJSON.message) {
+        if (xhr.responseJSON.message) {
             toastr.error(xhr.responseJSON.message);
         }
         $('#CreateTrademarkModal').modal('hide');
@@ -115,16 +122,20 @@ function CreateTrademarkAjaxError(xhr) {
 
 function AddIsValidClassCreateTrademark() {
     if (!$('#name_c').hasClass('is-invalid')) {
-      $('#name_c').addClass('is-valid');
+        $('#name_c').addClass('is-valid');
     }
     if (!$('#code_c').hasClass('is-invalid')) {
-      $('#code_c').addClass('is-valid');
+        $('#code_c').addClass('is-valid');
+    }
+    if (!$('#code_c').hasClass('is-invalid')) {
+        $('#description_c').addClass('is-valid');
     }
 }
 
 function RemoveIsValidClassCreateTrademark() {
     $('#name_c').removeClass('is-valid');
     $('#code_c').removeClass('is-valid');
+    $('#description_c').removeClass('is-valid');
 }
 
 function AddIsInvalidClassCreateTrademark(input) {

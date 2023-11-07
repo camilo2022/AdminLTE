@@ -16,14 +16,14 @@ class PackageIndexQueryCollection extends ResourceCollection
     public function toArray($request)
     {
         return [
-            'packages' => $this->collection->map(function ($user) {
+            'packages' => $this->collection->map(function ($package) {
                 return [
-                    'id' => $user->id,
-                    'name' => $user->name,
-                    'code' => $user->code,
-                    'created_at' => Carbon::parse($user->created_at)->format('Y-m-d H:i:s'),
-                    'updated_at' => Carbon::parse($user->updated_at)->format('Y-m-d H:i:s'),
-                    'deleted_at' => $user->deleted_at
+                    'id' => $package->id,
+                    'name' => $package->name,
+                    'code' => $package->code,
+                    'created_at' => Carbon::parse($package->created_at)->format('Y-m-d H:i:s'),
+                    'updated_at' => Carbon::parse($package->updated_at)->format('Y-m-d H:i:s'),
+                    'deleted_at' => $package->deleted_at
                 ];
             }),
             'meta' => [

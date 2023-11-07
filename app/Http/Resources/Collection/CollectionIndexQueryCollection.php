@@ -16,16 +16,16 @@ class CollectionIndexQueryCollection extends ResourceCollection
     public function toArray($request)
     {
         return [
-            'collections' => $this->collection->map(function ($user) {
+            'collections' => $this->collection->map(function ($collection) {
                 return [
-                    'id' => $user->id,
-                    'name' => $user->name,
-                    'code' => $user->code,
-                    'start_date' => Carbon::parse($user->start_date)->format('Y-m-d H:i:s'),
-                    'end_date' => Carbon::parse($user->end_date)->format('Y-m-d H:i:s'),
-                    'created_at' => Carbon::parse($user->created_at)->format('Y-m-d H:i:s'),
-                    'updated_at' => Carbon::parse($user->updated_at)->format('Y-m-d H:i:s'),
-                    'deleted_at' => $user->deleted_at
+                    'id' => $collection->id,
+                    'name' => $collection->name,
+                    'code' => $collection->code,
+                    'start_date' => Carbon::parse($collection->start_date)->format('Y-m-d H:i:s'),
+                    'end_date' => Carbon::parse($collection->end_date)->format('Y-m-d H:i:s'),
+                    'created_at' => Carbon::parse($collection->created_at)->format('Y-m-d H:i:s'),
+                    'updated_at' => Carbon::parse($collection->updated_at)->format('Y-m-d H:i:s'),
+                    'deleted_at' => $collection->deleted_at
                 ];
             }),
             'meta' => [

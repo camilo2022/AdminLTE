@@ -14,7 +14,8 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
-use Illuminate\Http\Client\Request;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class TrademarkController extends Controller
 {
@@ -103,9 +104,8 @@ class TrademarkController extends Controller
             $trademark->code = $request->input('code');
             $trademark->description = $request->input('description');
             if ($request->hasFile('logo')) {
-                $path = $request->file('logo')->store('public/Trademarks');
-                $url = asset('storage/' . $path);
-                $trademark->imagen = $url;
+                $path = $request->file('logo')->store('Trademarks','public');
+                $trademark->logo = $path;
             }
             $trademark->save();
 
@@ -148,7 +148,7 @@ class TrademarkController extends Controller
     {
         try {
             $package = Trademark::withTrashed()->findOrFail($id);
-
+            $package->path = asset('storage/' . $package->logo);
             return $this->successResponse(
                 $package,
                 'La marca de producto fue encontrada exitosamente.',
@@ -179,6 +179,14 @@ class TrademarkController extends Controller
             $trademark = Trademark::withTrashed()->findOrFail($id);
             $trademark->name = $request->input('name');
             $trademark->code = $request->input('code');
+            $trademark->description = $request->input('description');
+            if ($request->hasFile('logo')) {
+                if (Storage::disk('public')->exists($trademark->logo)) {
+                    Storage::disk('public')->delete($trademark->logo);
+                }
+                $path = $request->file('logo')->store('Trademarks','public');
+                $trademark->logo = $path;
+            }
             $trademark->save();
 
             return $this->successResponse(

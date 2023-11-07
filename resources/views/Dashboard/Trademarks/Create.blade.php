@@ -41,7 +41,7 @@
                     <div class="form-group">
                         <label for="description">Descripcion</label>
                         <div class="input-group">
-                            <textarea class="form-control id="description_c" name="description"  cols="30" rows="3"></textarea>
+                            <textarea class="form-control" id="description_c" name="description" cols="30" rows="3"></textarea>
                             <div class="input-group-append">
                                 <span class="input-group-text">
                                     <i class="fas fa-text-size"></i>
@@ -54,12 +54,8 @@
                     <div class="form-group">
                         <label for="logo">Logo</label>
                         <div class="input-group">
-                            <input type="file" class="form-control dropify" id="logo_c" name="logo">
-                            <div class="input-group-append">
-                                <span class="input-group-text">
-                                    <i class="fas fa-code"></i>
-                                </span>
-                            </div>
+                            <input type="file" class="form-control dropify" id="logo_c" name="logo"
+                            data-allowed-file-extensions="jpg jpeg png gif" data-max-file-size="2M">
                         </div>
                     </div>
                 </div>

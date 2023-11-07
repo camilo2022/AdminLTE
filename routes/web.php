@@ -213,7 +213,7 @@ Route::middleware(['auth'])->group(function () {
             Route::post('/Edit/{id}', [TrademarkController::class, 'edit'])
             ->middleware('can:Dashboard.Trademarks.Edit')->name('Dashboard.Trademarks.Edit');
 
-            Route::put('/Update/{id}', [TrademarkController::class, 'update'])
+            Route::post('/Update/{id}', [TrademarkController::class, 'update'])
             ->middleware('can:Dashboard.Trademarks.Update')->name('Dashboard.Trademarks.Update');
 
             Route::delete('/Delete', [TrademarkController::class, 'delete'])

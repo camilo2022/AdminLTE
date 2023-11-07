@@ -1,7 +1,7 @@
-function DeletePackage(id) {
+function DeleteTrademark(id) {
     Swal.fire({
-        title: '¿Desea eliminar el tipo de empaque?',
-        text: 'El tipo de empaque será desactivado.',
+        title: '¿Desea eliminar la marca de producto?',
+        text: 'La marca de producto será desactivada.',
         icon: 'warning',
         showCancelButton: true,
         cancelButtonColor: '#DD6B55',
@@ -11,28 +11,28 @@ function DeletePackage(id) {
     }).then((result) => {
         if (result.value) {
             $.ajax({
-                url: `/Dashboard/Packages/Delete`,
+                url: `/Dashboard/Trademarks/Delete`,
                 type: 'DELETE',
                 data: {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
                     'id': id
                 },
                 success: function(response) {
-                    tablePackages.ajax.reload();
-                    DeletePackageAjaxSuccess(response);
+                    tableTrademarks.ajax.reload();
+                    DeleteTrademarkAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tablePackages.ajax.reload();
-                    DeletePackageAjaxError(xhr);
+                    tableTrademarks.ajax.reload();
+                    DeleteTrademarkAjaxError(xhr);
                 }
             });
         } else {
-            toastr.info('El tipo de empaque seleccionado no fue desactivado.')
+            toastr.info('La marca de producto seleccionada no fue desactivada.')
         }
     });
 }
 
-function DeletePackageAjaxSuccess(response) {
+function DeleteTrademarkAjaxSuccess(response) {
     if(response.status === 204) {
         toastr.success(response.message);
     }
@@ -42,7 +42,7 @@ function DeletePackageAjaxSuccess(response) {
     }
 }
 
-function DeletePackageAjaxError(xhr) {
+function DeleteTrademarkAjaxError(xhr) {
     if(xhr.status === 403) {
         toastr.error(xhr.responseJSON.error.message);
     }

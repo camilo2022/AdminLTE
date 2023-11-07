@@ -4,6 +4,7 @@ namespace App\Http\Resources\Trademark;
 
 use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\ResourceCollection;
+use Illuminate\Support\Facades\Storage;
 
 class TrademarkIndexQueryCollection extends ResourceCollection
 {
@@ -16,16 +17,16 @@ class TrademarkIndexQueryCollection extends ResourceCollection
     public function toArray($request)
     {
         return [
-            'trademarks' => $this->collection->map(function ($user) {
+            'trademarks' => $this->collection->map(function ($trademark) {
                 return [
-                    'id' => $user->id,
-                    'name' => $user->name,
-                    'code' => $user->code,
-                    'description' => $user->code,
-                    'logo' => $user->logo,
-                    'created_at' => Carbon::parse($user->created_at)->format('Y-m-d H:i:s'),
-                    'updated_at' => Carbon::parse($user->updated_at)->format('Y-m-d H:i:s'),
-                    'deleted_at' => $user->deleted_at
+                    'id' => $trademark->id,
+                    'name' => $trademark->name,
+                    'code' => $trademark->code,
+                    'description' => $trademark->code,
+                    'logo' =>  asset('storage/' . $trademark->logo),
+                    'created_at' => Carbon::parse($trademark->created_at)->format('Y-m-d H:i:s'),
+                    'updated_at' => Carbon::parse($trademark->updated_at)->format('Y-m-d H:i:s'),
+                    'deleted_at' => $trademark->deleted_at
                 ];
             }),
             'meta' => [
