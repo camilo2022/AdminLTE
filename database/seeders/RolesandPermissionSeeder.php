@@ -51,6 +51,8 @@ class RolesAndPermissionSeeder extends Seeder
 
         $OrderSeller = Role::create(['name' => 'OrderSeller']);
 
+        $Wallet = Role::create(['name' => 'Wallet']);
+
         $OrderWallet = Role::create(['name' => 'OrderWallet']);
 
         $OrderDispatch = Role::create(['name' => 'OrderDispatch']);
@@ -87,7 +89,7 @@ class RolesAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Dashboard.RolesAndPermissions.Edit'])->syncRoles([$RolesAndPermissions]);
         Permission::create(['name' => 'Dashboard.RolesAndPermissions.Update'])->syncRoles([$RolesAndPermissions]);
         Permission::create(['name' => 'Dashboard.RolesAndPermissions.Delete'])->syncRoles([$RolesAndPermissions]);
-        
+
         Permission::create(['name' => 'Dashboard.ModulesAndSubmodules.Index'])->syncRoles([$ModulesAndSubmodules]);
         Permission::create(['name' => 'Dashboard.ModulesAndSubmodules.Index.Query'])->syncRoles([$ModulesAndSubmodules]);
         Permission::create(['name' => 'Dashboard.ModulesAndSubmodules.Create'])->syncRoles([$ModulesAndSubmodules]);
@@ -120,14 +122,16 @@ class RolesAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Dashboard.Trademarks.Edit'])->syncRoles([$Trademarks]);
         Permission::create(['name' => 'Dashboard.Trademarks.Update'])->syncRoles([$Trademarks]);
         Permission::create(['name' => 'Dashboard.Trademarks.Delete'])->syncRoles([$Trademarks]);
+        Permission::create(['name' => 'Dashboard.Trademarks.Restore'])->syncRoles([$Trademarks]);
 
-        Permission::create(['name' => 'Dashboard.Bussineses.Index'])->syncRoles([$Bussinesses]);
-        Permission::create(['name' => 'Dashboard.Bussineses.Index.Query'])->syncRoles([$Bussinesses]);
-        Permission::create(['name' => 'Dashboard.Bussineses.Create'])->syncRoles([$Bussinesses]);
-        Permission::create(['name' => 'Dashboard.Bussineses.Store'])->syncRoles([$Bussinesses]);
-        Permission::create(['name' => 'Dashboard.Bussineses.Edit'])->syncRoles([$Bussinesses]);
-        Permission::create(['name' => 'Dashboard.Bussineses.Update'])->syncRoles([$Bussinesses]);
-        Permission::create(['name' => 'Dashboard.Bussineses.Delete'])->syncRoles([$Bussinesses]);
+        Permission::create(['name' => 'Dashboard.Businesses.Index'])->syncRoles([$Bussinesses]);
+        Permission::create(['name' => 'Dashboard.Businesses.Index.Query'])->syncRoles([$Bussinesses]);
+        Permission::create(['name' => 'Dashboard.Businesses.Create'])->syncRoles([$Bussinesses]);
+        Permission::create(['name' => 'Dashboard.Businesses.Store'])->syncRoles([$Bussinesses]);
+        Permission::create(['name' => 'Dashboard.Businesses.Edit'])->syncRoles([$Bussinesses]);
+        Permission::create(['name' => 'Dashboard.Businesses.Update'])->syncRoles([$Bussinesses]);
+        Permission::create(['name' => 'Dashboard.Businesses.Delete'])->syncRoles([$Bussinesses]);
+        Permission::create(['name' => 'Dashboard.Businesses.Restore'])->syncRoles([$Packages]);
 
         Permission::create(['name' => 'Dashboard.Models.Index'])->syncRoles([$Models]);
         Permission::create(['name' => 'Dashboard.Models.Index.Query'])->syncRoles([$Models]);
@@ -136,6 +140,7 @@ class RolesAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Dashboard.Models.Edit'])->syncRoles([$Models]);
         Permission::create(['name' => 'Dashboard.Models.Update'])->syncRoles([$Models]);
         Permission::create(['name' => 'Dashboard.Models.Delete'])->syncRoles([$Models]);
+        Permission::create(['name' => 'Dashboard.Models.Restore'])->syncRoles([$Packages]);
 
         Permission::create(['name' => 'Dashboard.ClothingLines.Index'])->syncRoles([$ClothingLines]);
         Permission::create(['name' => 'Dashboard.ClothingLines.Index.Query'])->syncRoles([$ClothingLines]);
@@ -144,6 +149,7 @@ class RolesAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Dashboard.ClothingLines.Edit'])->syncRoles([$ClothingLines]);
         Permission::create(['name' => 'Dashboard.ClothingLines.Update'])->syncRoles([$ClothingLines]);
         Permission::create(['name' => 'Dashboard.ClothingLines.Delete'])->syncRoles([$ClothingLines]);
+        Permission::create(['name' => 'Dashboard.ClothingLines.Restore'])->syncRoles([$Packages]);
 
         Permission::create(['name' => 'Dashboard.CategoriesAndSubcategories.Index'])->syncRoles([$CategoriesAndSubcategories]);
         Permission::create(['name' => 'Dashboard.CategoriesAndSubcategories.Index.Query'])->syncRoles([$CategoriesAndSubcategories]);
@@ -152,7 +158,8 @@ class RolesAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Dashboard.CategoriesAndSubcategories.Edit'])->syncRoles([$CategoriesAndSubcategories]);
         Permission::create(['name' => 'Dashboard.CategoriesAndSubcategories.Update'])->syncRoles([$CategoriesAndSubcategories]);
         Permission::create(['name' => 'Dashboard.CategoriesAndSubcategories.Delete'])->syncRoles([$CategoriesAndSubcategories]);
-        
+        Permission::create(['name' => 'Dashboard.CategoriesAndSubcategories.Restore'])->syncRoles([$Packages]);
+
         Permission::create(['name' => 'Dashboard.Warehouses.Index'])->syncRoles([$Warehouses]);
         Permission::create(['name' => 'Dashboard.Warehouses.Index.Query'])->syncRoles([$Warehouses]);
         Permission::create(['name' => 'Dashboard.Warehouses.Create'])->syncRoles([$Warehouses]);
@@ -160,6 +167,7 @@ class RolesAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Dashboard.Warehouses.Edit'])->syncRoles([$Warehouses]);
         Permission::create(['name' => 'Dashboard.Warehouses.Update'])->syncRoles([$Warehouses]);
         Permission::create(['name' => 'Dashboard.Warehouses.Delete'])->syncRoles([$Warehouses]);
+        Permission::create(['name' => 'Dashboard.Warehouses.Restore'])->syncRoles([$Packages]);
 
         Permission::create(['name' => 'Dashboard.Colors.Index'])->syncRoles([$Colors]);
         Permission::create(['name' => 'Dashboard.Colors.Index.Query'])->syncRoles([$Colors]);
@@ -168,6 +176,7 @@ class RolesAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Dashboard.Colors.Edit'])->syncRoles([$Colors]);
         Permission::create(['name' => 'Dashboard.Colors.Update'])->syncRoles([$Colors]);
         Permission::create(['name' => 'Dashboard.Colors.Delete'])->syncRoles([$Colors]);
+        Permission::create(['name' => 'Dashboard.Colors.Restore'])->syncRoles([$Packages]);
 
         Permission::create(['name' => 'Dashboard.Products.Index'])->syncRoles([$Products]);
         Permission::create(['name' => 'Dashboard.Products.Index.Query'])->syncRoles([$Products]);
@@ -235,6 +244,15 @@ class RolesAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Dashboard.Order.Seller.Detail.Pending'])->syncRoles([$OrderSeller]);
         Permission::create(['name' => 'Dashboard.Order.Seller.Cancel'])->syncRoles([$OrderSeller]);
         Permission::create(['name' => 'Dashboard.Order.Seller.Detail.Cancel'])->syncRoles([$OrderSeller]);
+
+        Permission::create(['name' => 'Dashboard.Wallet.Index'])->syncRoles([$Wallet]);
+        Permission::create(['name' => 'Dashboard.Wallet.Index.Query'])->syncRoles([$Wallet]);
+        Permission::create(['name' => 'Dashboard.Wallet.Create'])->syncRoles([$Wallet]);
+        Permission::create(['name' => 'Dashboard.Wallet.Store'])->syncRoles([$Wallet]);
+        Permission::create(['name' => 'Dashboard.Wallet.Show'])->syncRoles([$Wallet]);
+        Permission::create(['name' => 'Dashboard.Wallet.Edit'])->syncRoles([$Wallet]);
+        Permission::create(['name' => 'Dashboard.Wallet.Update'])->syncRoles([$Wallet]);
+        Permission::create(['name' => 'Dashboard.Wallet.Delete'])->syncRoles([$Wallet]);
 
         Permission::create(['name' => 'Dashboard.Order.Wallet.Index'])->syncRoles([$OrderWallet]);
         Permission::create(['name' => 'Dashboard.Order.Wallet.Index.Query'])->syncRoles([$OrderWallet]);

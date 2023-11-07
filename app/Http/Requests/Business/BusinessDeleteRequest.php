@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Requests\Package;
+namespace App\Http\Requests\Business;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class PackageDeleteRequest extends FormRequest
+class BusinessDeleteRequest extends FormRequest
 {
     /**
      * Maneja una solicitud fallida de validación.
@@ -18,7 +18,7 @@ class PackageDeleteRequest extends FormRequest
     {
         // Lanzar una excepción de validación con los errores de validación obtenidos
         throw new HttpResponseException(response()->json([
-            'message' => 'Error de validación de los datos para la eliminacion del tipo de empaque.',
+            'message' => 'Error de validación de los datos para la eliminacion de la empresa.',
             'errors' => $validator->errors()
         ], 422));
     }
@@ -41,7 +41,7 @@ class PackageDeleteRequest extends FormRequest
     public function rules()
     {
         return [
-            'id' => 'required|exists:packages,id',
+            'id' => 'required|exists:businesses,id',
         ];
     }
 

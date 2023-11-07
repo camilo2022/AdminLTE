@@ -1,17 +1,23 @@
-let tableTrademarks = $('#trademarks').DataTable({
+let tableBusinesses = $('#businesses').DataTable({
     "processing": true,
     "serverSide": true,
     "ajax": {
-        "url": "/Dashboard/Trademarks/Index/Query",
+        "url": "/Dashboard/Businesses/Index/Query",
         "type": "POST",
         "data": function (request) {
             var columnMappings = {
                 0: 'id',
                 1: 'name',
-                2: 'code',
-                3: 'description',
-                4: 'logo',
-                5: 'deleted_at'
+                2: 'document_number',
+                3: 'telephone_number',
+                4: 'email',
+                5: 'country_id',
+                6: 'departament_id',
+                7: 'city_id',
+                8: 'address',
+                9: 'neighborhood',
+                10: 'description',
+                11: 'deleted_at'
             };
             request._token = $('meta[name="csrf-token"]').attr('content');
             request.perPage = request.length;
@@ -23,7 +29,7 @@ let tableTrademarks = $('#trademarks').DataTable({
         "dataSrc": function (response) {
             response.recordsTotal = response.data.meta.pagination.count;
             response.recordsFiltered = response.data.meta.pagination.total;
-            return response.data.trademarks;
+            return response.data.businesses;
         },
         "error": function (xhr, error, thrown) {
             if(xhr.responseJSON.error) {
@@ -38,14 +44,15 @@ let tableTrademarks = $('#trademarks').DataTable({
     "columns": [
         { data: 'id' },
         { data: 'name' },
-        { data: 'code' },
+        { data: 'document_number' },
+        { data: 'telephone_number' },
+        { data: 'email' },
+        { data: 'country' },
+        { data: 'departament' },
+        { data: 'city' },
+        { data: 'address' },
+        { data: 'neighborhood' },
         { data: 'description' },
-        {
-            data: 'logo',
-            render: function (data, type, row) {
-                return `<img src="${data}" width="50" height="50">`;
-            }
-        },
         {
             data: 'deleted_at',
             render: function (data, type, row) {
@@ -57,22 +64,22 @@ let tableTrademarks = $('#trademarks').DataTable({
             }
         },
         {
-            data: 'deleted_at',
+            data: null,
             render: function (data, type, row) {
-                btn = ``;
-                if (data === null) {
-                    btn += `<a onclick="EditTrademarkModal(${row.id})" type="button"
-                    class="btn btn-primary btn-sm mr-2" title="Editar marca de prodcuto">
+                let btn = ``;
+                if (data.deleted_at === null) {
+                    btn += `<a onclick="EditBusinessModal(${data.id})" type="button"
+                    class="btn btn-primary btn-sm mr-2" title="Editar tipo de paquete">
                         <i class="fas fa-pen text-white"></i>
                     </a>`;
 
-                    btn += `<a onclick="DeleteTrademark(${row.id})" type="button"
-                    class="btn btn-danger btn-sm mr-2" title="Eliminar marca de prodcuto">
+                    btn += `<a onclick="DeleteBusiness(${data.id})" type="button"
+                    class="btn btn-danger btn-sm mr-2" title="Eliminar tipo de paquete">
                         <i class="fas fa-trash text-white"></i>
                     </a>`;
                 } else {
-                    btn += `<a onclick="RestoreTrademark(${row.id})" type="button"
-                    class="btn btn-info btn-sm mr-2" title="Restaurar marca de prodcuto">
+                    btn += `<a onclick="RestoreBusiness(${data.id})" type="button"
+                    class="btn btn-info btn-sm mr-2"title="Restaurar tipo de paquete">
                         <i class="fas fa-arrow-rotate-left text-white"></i>
                     </a>`;
                 }
@@ -81,8 +88,8 @@ let tableTrademarks = $('#trademarks').DataTable({
         }
     ],
     "columnDefs": [
-        { "orderable": true, "targets": [0, 1, 2, 3, 4, 5] },
-        { "orderable": false, "targets": [6], "className": "text-center" }
+        { "orderable": true, "targets": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] },
+        { "orderable": false, "targets": [12], "className": "text-center"}
     ],
     "pagingType": "full_numbers",
     "language": {

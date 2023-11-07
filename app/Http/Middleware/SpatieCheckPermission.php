@@ -31,13 +31,19 @@ class SpatieCheckPermission
                     403
                 );
             }
-            return back()->with(
-                'danger',
-                $message
-            );
+            $redirectCount = session('redirect_count', 0);
+
+            if ($redirectCount < 5) {
+                session(['redirect_count' => $redirectCount + 1]);
+                return back()->with('danger', $message);
+            } else {
+                session(['redirect_count' => 0]);
+                return redirect('/Dashboard');
+            }
+
             throw new AuthorizationException();
         }
-
+        session(['redirect_count' => 0]);
         return $next($request);
     }
 }

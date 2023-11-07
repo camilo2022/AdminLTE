@@ -27,7 +27,7 @@ function DeleteCollection(id) {
                 }
             });
         } else {
-            toastr.info('La correria seleccionada no fue desactivada.')
+            toastr.info('La correria seleccionada no fue desactivada.');
         }
     });
 }

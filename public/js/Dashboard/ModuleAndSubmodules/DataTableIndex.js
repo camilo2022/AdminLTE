@@ -8,6 +8,7 @@ let tableModulesAndSubmodules = $('#modulesAndSubmodules').DataTable({
             var columnMappings = {
                 0: 'id',
                 1: 'name',
+                2: 'icon',
             };
             request._token = $('meta[name="csrf-token"]').attr('content');
             request.perPage = request.length;
@@ -25,7 +26,7 @@ let tableModulesAndSubmodules = $('#modulesAndSubmodules').DataTable({
             if(xhr.responseJSON.error) {
                 toastr.error(xhr.responseJSON.error.message);
             }
-    
+
             if(xhr.responseJSON.message) {
                 toastr.error(xhr.responseJSON.message);
             }
@@ -127,8 +128,8 @@ let tableModulesAndSubmodules = $('#modulesAndSubmodules').DataTable({
         },
     ],
     "columnDefs": [
-        { "orderable": true, "targets": [0, 1] },
-        { "orderable": false, "targets": [2, 3, 4] }
+        { "orderable": true, "targets": [0, 1, 2] },
+        { "orderable": false, "targets": [2, 3, 4, 5, 6, 7, 8, 9] }
     ],
     "pagingType": "full_numbers",
     "language": {

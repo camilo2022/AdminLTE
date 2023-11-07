@@ -29,7 +29,7 @@ let tableCollections = $('#collections').DataTable({
             if(xhr.responseJSON.error) {
                 toastr.error(xhr.responseJSON.error.message);
             }
-    
+
             if(xhr.responseJSON.message) {
                 toastr.error(xhr.responseJSON.message);
             }
@@ -42,41 +42,37 @@ let tableCollections = $('#collections').DataTable({
         { data: 'start_date' },
         { data: 'end_date' },
         {
-            data: null,
+            data: 'deleted_at',
             render: function (data, type, row) {
-                let span = $('<span>').addClass('badge');
-
-                if (data.deleted_at === null) {
-                    span.text('Activa').addClass('badge-success');
+                if (data === null) {
+                    return `<h5><span class="badge badge-outline badge-success"><i class="fas fa-check mr-2"></i>Activa</span></h5>`;
                 } else {
-                    span.text('Inactiva').addClass('badge-danger');
+                    return `<h5><span class="badge badge-outline badge-danger"><i class="fas fa-xmark mr-2"></i>Inactiva</span></h5>`;
                 }
-
-                return span.prop('outerHTML');
             }
         },
         {
             data: null,
             render: function (data, type, row) {
-                return `<a onclick="EditCollectionModal(${data.id})" type="button" 
-                class="btn btn-primary btn-sm" title="Editar correria">
+                btn =  `<a onclick="EditCollectionModal(${data.id})" type="button"
+                class="btn btn-primary btn-sm mr-2" title="Editar correria">
                     <i class="fas fa-pen text-white"></i>
                 </a>`;
-            }
-        },
-        {
-            data: null,
-            render: function (data, type, row) {
-                return `<a class="btn btn-danger btn-sm" onclick="DeleteCollection(${data.id})"
-                    title="Eliminar correria" id="DeleteCollectionButton">
+
+                if (data.deleted_at === null) {
+                    btn += `<a onclick="DeleteCollection(${data.id})" type="button"
+                    class="btn btn-danger btn-sm" title="Eliminar correria">
                         <i class="fas fa-trash text-white"></i>
                     </a>`;
+                }
+
+                return btn;
             }
         }
     ],
     "columnDefs": [
         { "orderable": true, "targets": [0, 1, 2, 3, 4, 5] },
-        { "orderable": false, "targets": [6, 7] }
+        { "orderable": false, "targets": [6], "className": "text-center"}
     ],
     "pagingType": "full_numbers",
     "language": {
@@ -106,3 +102,7 @@ let tableCollections = $('#collections').DataTable({
     "searching": true,
     "autoWidth": true
 });
+
+$("input[data-bootstrap-switch]").each(function(){
+    $(this).bootstrapSwitch('state', $(this).prop('checked'));
+})

@@ -65,17 +65,11 @@
                                 <table id="packages" class="table table-bordered table-hover dataTable dtr-inline">
                                     <thead class="thead-dark">
                                         <tr>
-                                            <th colspan="4">Información</th>
-                                            <th colspan="3">Gestión</th>
-                                        </tr>
-                                        <tr>
                                             <th>#</th>
                                             <th>Nombre</th>
                                             <th>Codigo</th>
                                             <th>Estado</th>
-                                            <th>Editar</th>
-                                            <th>Eliminar</th>
-                                            <th>Restaurar</th>
+                                            <th>Acciones</th>
                                         </tr>
                                     </thead>
                                     <tbody>

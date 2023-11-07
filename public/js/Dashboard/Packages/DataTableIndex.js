@@ -27,7 +27,7 @@ let tablePackages = $('#packages').DataTable({
             if(xhr.responseJSON.error) {
                 toastr.error(xhr.responseJSON.error.message);
             }
-    
+
             if(xhr.responseJSON.message) {
                 toastr.error(xhr.responseJSON.message);
             }
@@ -38,50 +38,42 @@ let tablePackages = $('#packages').DataTable({
         { data: 'name' },
         { data: 'code' },
         {
-            data: null,
+            data: 'deleted_at',
             render: function (data, type, row) {
-                let span = $('<span>').addClass('badge');
-
-                if (data.deleted_at === null) {
-                    span.text('Activa').addClass('badge-success');
+                if (data === null) {
+                    return `<h5><span class="badge badge-outline badge-success"><i class="fas fa-check mr-2"></i>Activa</span></h5>`;
                 } else {
-                    span.text('Inactiva').addClass('badge-danger');
+                    return `<h5><span class="badge badge-outline badge-danger"><i class="fas fa-xmark mr-2"></i>Inactiva</span></h5>`;
                 }
+            }
+        },
+        {
+            data: null,
+            render: function (data, type, row) {
+                let btn = ``;
+                if (data.deleted_at === null) {
+                    btn += `<a onclick="EditPackageModal(${data.id})" type="button"
+                    class="btn btn-primary btn-sm mr-2" title="Editar tipo de paquete">
+                        <i class="fas fa-pen text-white"></i>
+                    </a>`;
 
-                return span.prop('outerHTML');
-            }
-        },
-        {
-            data: null,
-            render: function (data, type, row) {
-                return `<a onclick="EditPackageModal(${data.id})" type="button" 
-                class="btn btn-primary btn-sm" title="Editar tipo de paquete">
-                    <i class="fas fa-pen text-white"></i>
-                </a>`;
-            }
-        },
-        {
-            data: null,
-            render: function (data, type, row) {
-                return `<a class="btn btn-danger btn-sm" onclick="DeletePackage(${data.id})"
-                    title="Eliminar tipo de paquete" id="DeletePackageButton">
+                    btn += `<a onclick="DeletePackage(${data.id})" type="button"
+                    class="btn btn-danger btn-sm mr-2" title="Eliminar tipo de paquete">
                         <i class="fas fa-trash text-white"></i>
                     </a>`;
-            }
-        },
-        {
-            data: null,
-            render: function (data, type, row) {
-                return `<a class="btn btn-info btn-sm" onclick="RestorePackage(${data.id})"
-                    title="Restaurar tipo de paquete" id="RestorePackageButton">
+                } else {
+                    btn += `<a onclick="RestorePackage(${data.id})" type="button"
+                    class="btn btn-info btn-sm mr-2"title="Restaurar tipo de paquete">
                         <i class="fas fa-arrow-rotate-left text-white"></i>
                     </a>`;
+                }
+                return btn;
             }
         }
     ],
     "columnDefs": [
         { "orderable": true, "targets": [0, 1, 2, 3] },
-        { "orderable": false, "targets": [4, 5, 6] }
+        { "orderable": false, "targets": [4], "className": "text-center"}
     ],
     "pagingType": "full_numbers",
     "language": {

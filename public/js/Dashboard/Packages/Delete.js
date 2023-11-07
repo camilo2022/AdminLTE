@@ -27,7 +27,7 @@ function DeletePackage(id) {
                 }
             });
         } else {
-            toastr.info('El tipo de empaque seleccionado no fue desactivado.')
+            toastr.info('El tipo de empaque seleccionado no fue desactivado.');
         }
     });
 }

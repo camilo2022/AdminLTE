@@ -47,7 +47,7 @@ class UserController extends Controller
         ];
 
         Mail::to($recipientEmails)->send(new EmailWithAttachment($data, $pdfFilePath)); */
-        
+
         /* $data = [
             'title' => 'Correo con PDF Adjunto',
             'message' => 'Este es un ejemplo de un correo con un PDF adjunto.',
@@ -70,7 +70,7 @@ class UserController extends Controller
         */
 
         try {
-       
+
             return view('Dashboard.Users.Index');
         } catch (Exception $e) {
             return back()->with('danger', 'Ocurrió un error al cargar la vista: ' . $e->getMessage());
@@ -211,6 +211,8 @@ class UserController extends Controller
             $user->password = Hash::make($request->input('password'));
             $user->save();
 
+            $user->assignRole(['Dashboard']);
+            $user->givePermissionTo('Dashboard');
 
             return $this->successResponse(
                 $user,

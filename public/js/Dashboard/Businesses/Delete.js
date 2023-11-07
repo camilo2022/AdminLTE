@@ -1,44 +1,48 @@
-function RestoreTrademark(id) {
+function DeleteBusiness(id) {
     Swal.fire({
-        title: '¿Desea restaurar la marca de producto?',
-        text: 'La marca de prodcuto será restaurada.',
+        title: '¿Desea eliminar la empresa?',
+        text: 'La empresa será desactivada.',
         icon: 'warning',
         showCancelButton: true,
         cancelButtonColor: '#DD6B55',
         confirmButtonColor: '#3085d6',
-        confirmButtonText: 'Si, restaurar!',
-        cancelButtonText: 'No, cancelar!'
+        confirmButtonText: 'Si, eliminar!',
+        cancelButtonText: 'No, cancelar!',
     }).then((result) => {
         if (result.value) {
             $.ajax({
-                url: '/Dashboard/Trademarks/Restore',
-                type: 'PUT',
+                url: `/Dashboard/Businesses/Delete`,
+                type: 'DELETE',
                 data: {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
                     'id': id
                 },
                 success: function(response) {
-                    tableTrademarks.ajax.reload();
-                    RestoreTrademarkAjaxSuccess(response);
+                    tableBusinesses.ajax.reload();
+                    DeleteBusinessAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableTrademarks.ajax.reload();
-                    RestoreTrademarkAjaxError(xhr);
+                    tableBusinesses.ajax.reload();
+                    DeleteBusinessAjaxError(xhr);
                 }
             });
         } else {
-            toastr.info('La marca de producto seleccionada no fue restaurada.')
+            toastr.info('La empresa seleccionada no fue desactivada.');
         }
     });
 }
 
-function RestoreTrademarkAjaxSuccess(response) {
+function DeleteBusinessAjaxSuccess(response) {
     if(response.status === 204) {
         toastr.success(response.message);
     }
+
+    if(response.status === 422) {
+        toastr.warning(response.message);
+    }
 }
 
-function RestoreTrademarkAjaxError(xhr) {
+function DeleteBusinessAjaxError(xhr) {
     if(xhr.status === 403) {
         toastr.error(xhr.responseJSON.error.message);
     }

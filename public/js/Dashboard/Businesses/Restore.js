@@ -1,7 +1,7 @@
-function RestoreTrademark(id) {
+function RestoreBusiness(id) {
     Swal.fire({
-        title: '¿Desea restaurar la marca de producto?',
-        text: 'La marca de prodcuto será restaurada.',
+        title: '¿Desea restaurar la empresa?',
+        text: 'La empresa será restaurada.',
         icon: 'warning',
         showCancelButton: true,
         cancelButtonColor: '#DD6B55',
@@ -11,34 +11,34 @@ function RestoreTrademark(id) {
     }).then((result) => {
         if (result.value) {
             $.ajax({
-                url: '/Dashboard/Trademarks/Restore',
+                url: '/Dashboard/Businesses/Restore',
                 type: 'PUT',
                 data: {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
                     'id': id
                 },
                 success: function(response) {
-                    tableTrademarks.ajax.reload();
-                    RestoreTrademarkAjaxSuccess(response);
+                    tableBusinesses.ajax.reload();
+                    RestoreBusinessAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableTrademarks.ajax.reload();
-                    RestoreTrademarkAjaxError(xhr);
+                    tableBusinesses.ajax.reload();
+                    RestoreBusinessAjaxError(xhr);
                 }
             });
         } else {
-            toastr.info('La marca de producto seleccionada no fue restaurada.')
+            toastr.info('La emppresa seleccionada no fue restaurada.')
         }
     });
 }
 
-function RestoreTrademarkAjaxSuccess(response) {
+function RestoreBusinessAjaxSuccess(response) {
     if(response.status === 204) {
         toastr.success(response.message);
     }
 }
 
-function RestoreTrademarkAjaxError(xhr) {
+function RestoreBusinessAjaxError(xhr) {
     if(xhr.status === 403) {
         toastr.error(xhr.responseJSON.error.message);
     }

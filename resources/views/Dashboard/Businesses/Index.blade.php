@@ -5,12 +5,12 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1 class="m-0 text-dark">Marcas</h1>
+                        <h1 class="m-0 text-dark">Empresas</h1>
                     </div><!-- /.col -->
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item">Dashboard</li>
-                            <li class="breadcrumb-item">Trademarks</li>
+                            <li class="breadcrumb-item">Businesses</li>
                             <li class="breadcrumb-item">Index</li>
                         </ol>
                     </div><!-- /.col -->
@@ -54,7 +54,7 @@
                         <div class="card-header p-2">
                             <ul class="nav nav-pills">
                                 <li class="nav-item">
-                                    <a class="nav-link active" type="button" onclick="CreateTrademarkModal()" title="Agregar marca de prodcuto">
+                                    <a class="nav-link active" type="button" onclick="CreateBusinessModal()" title="Agregar empresa">
                                         <i class="fas fa-plus"></i>
                                     </a>
                                 </li>
@@ -62,14 +62,20 @@
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table id="trademarks" class="table table-bordered table-hover dataTable dtr-inline">
+                                <table id="businesses" class="table table-bordered table-hover dataTable dtr-inline nowrap">
                                     <thead class="thead-dark">
                                         <tr>
                                             <th>#</th>
                                             <th>Nombre</th>
-                                            <th>Codigo</th>
+                                            <th>N° documento</th>
+                                            <th>N° telefono</th>
+                                            <th>Correo electronico</th>
+                                            <th>Pais</th>
+                                            <th>Departamento</th>
+                                            <th>Ciudad</th>
+                                            <th>Direccion</th>
+                                            <th>Barrio</th>
                                             <th>Descripcion</th>
-                                            <th>Imagen</th>
                                             <th>Estado</th>
                                             <th>Acciones</th>
                                         </tr>
@@ -83,14 +89,14 @@
                 </div>
             </div>
         </div>
-        @include('Dashboard.Trademarks.Create')
-        @include('Dashboard.Trademarks.Edit')
+        @include('Dashboard.Businesses.Create')
+        @include('Dashboard.Businesses.Edit')
     </section>
 @endsection
 @section('script')
-    <script src="{{ asset('js/Dashboard/Trademarks/DataTableIndex.js') }}"></script>
-    <script src="{{ asset('js/Dashboard/Trademarks/Create.js') }}"></script>
-    <script src="{{ asset('js/Dashboard/Trademarks/Edit.js') }}"></script>
-    <script src="{{ asset('js/Dashboard/Trademarks/Delete.js') }}"></script>
-    <script src="{{ asset('js/Dashboard/Trademarks/Restore.js') }}"></script>
+    <script src="{{ asset('js/Dashboard/Businesses/DataTableIndex.js') }}"></script>
+    <script src="{{ asset('js/Dashboard/Businesses/Create.js') }}"></script>
+    <script src="{{ asset('js/Dashboard/Businesses/Edit.js') }}"></script>
+    <script src="{{ asset('js/Dashboard/Businesses/Delete.js') }}"></script>
+    <script src="{{ asset('js/Dashboard/Businesses/Restore.js') }}"></script>
 @endsection

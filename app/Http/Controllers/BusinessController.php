@@ -2,22 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Trademark\TrademarkDeleteRequest;
-use App\Http\Requests\Trademark\TrademarkIndexQueryRequest;
-use App\Http\Requests\Trademark\TrademarkRestoreRequest;
-use App\Http\Requests\Trademark\TrademarkStoreRequest;
-use App\Http\Requests\Trademark\TrademarkUpdateRequest;
-use App\Http\Resources\Trademark\TrademarkIndexQueryCollection;
-use App\Models\Trademark;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Business\BusinessDeleteRequest;
+use App\Http\Requests\Business\BusinessIndexQueryRequest;
+use App\Http\Requests\Business\BusinessRestoreRequest;
+use App\Http\Requests\Business\BusinessStoreRequest;
+use App\Http\Requests\Business\BusinessUpdateRequest;
+use App\Http\Resources\Business\BusinessIndexQueryCollection;
+use App\Models\Business;
+use App\Models\Country;
 use App\Traits\ApiMessage;
 use App\Traits\ApiResponser;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
-use Illuminate\Support\Facades\Storage;
 
-class TrademarkController extends Controller
+class BusinessController extends Controller
 {
     use ApiResponser;
     use ApiMessage;
@@ -25,19 +26,20 @@ class TrademarkController extends Controller
     public function index()
     {
         try {
-            return view('Dashboard.Trademarks.Index');
+            return view('Dashboard.Businesses.Index');
         } catch (Exception $e) {
             return back()->with('danger', 'Ocurrió un error al cargar la vista: ' . $e->getMessage());
         }
     }
 
-    public function indexQuery(TrademarkIndexQueryRequest $request)
+    public function indexQuery(BusinessIndexQueryRequest $request)
     {
         try {
             $start_date = Carbon::parse($request->input('start_date'))->startOfDay();
             $end_date = Carbon::parse($request->input('end_date'))->endOfDay();
             //Consulta por nombre
-            $collections = Trademark::when($request->filled('search'),
+            $collections = Business::with('country', 'departament', 'city')
+                ->when($request->filled('search'),
                     function ($query) use ($request) {
                         $query->search($request->input('search'));
                     }
@@ -52,7 +54,7 @@ class TrademarkController extends Controller
                 ->paginate($request->input('perPage'));
 
             return $this->successResponse(
-                new TrademarkIndexQueryCollection($collections),
+                new BusinessIndexQueryCollection($collections),
                 $this->getMessage('Success'),
                 200
             );
@@ -79,8 +81,9 @@ class TrademarkController extends Controller
     public function create()
     {
         try {
+            $regions = Country::with('departments.cities')->get();
             return $this->successResponse(
-                '',
+                $regions,
                 'Ingrese los datos para hacer la validacion y registro.',
                 200
             );
@@ -96,22 +99,25 @@ class TrademarkController extends Controller
         }
     }
 
-    public function store(TrademarkStoreRequest $request)
+    public function store(BusinessStoreRequest $request)
     {
         try {
-            $trademark = new Trademark();
-            $trademark->name = $request->input('name');
-            $trademark->code = $request->input('code');
-            $trademark->description = $request->input('description');
-            if ($request->hasFile('logo')) {
-                $path = $request->file('logo')->store('Trademarks','public');
-                $trademark->logo = $path;
-            }
-            $trademark->save();
+            $business = new Business();
+            $business->name = $request->input('name');
+            $business->document_number = $request->input('document_number');
+            $business->telephone_number = $request->input('telephone_number');
+            $business->email = $request->input('email');
+            $business->country_id = $request->input('country_id');
+            $business->departament_id = $request->input('departament_id');
+            $business->city_id = $request->input('city_id');
+            $business->address = $request->input('address');
+            $business->neighbourhood = $request->input('neighbourhood');
+            $business->description = $request->input('description');
+            $business->save();
 
             return $this->successResponse(
-                $trademark,
-                'La marca de producto fue registrada exitosamente.',
+                $business,
+                'La empresa fue registrada exitosamente.',
                 201
             );
         } catch (ModelNotFoundException $e) {
@@ -147,11 +153,15 @@ class TrademarkController extends Controller
     public function edit($id)
     {
         try {
-            $trademark = Trademark::withTrashed()->findOrFail($id);
-            $trademark->path = asset('storage/' . $trademark->logo);
+            $business = Business::withTrashed()->findOrFail($id);
+            $regions = Country::with('departments.cities')->get();
+
             return $this->successResponse(
-                $trademark,
-                'La marca de producto fue encontrada exitosamente.',
+                (object) [
+                    'business' => $business,
+                    'regions' => $regions
+                ],
+                'La empresa fue encontrada exitosamente.',
                 204
             );
         } catch (ModelNotFoundException $e) {
@@ -173,24 +183,24 @@ class TrademarkController extends Controller
         }
     }
 
-    public function update(TrademarkUpdateRequest $request, $id)
+    public function update(BusinessUpdateRequest $request, $id)
     {
         try {
-            $trademark = Trademark::withTrashed()->findOrFail($id);
-            $trademark->name = $request->input('name');
-            $trademark->code = $request->input('code');
-            $trademark->description = $request->input('description');
-            if ($request->hasFile('logo')) {
-                if (Storage::disk('public')->exists($trademark->logo)) {
-                    Storage::disk('public')->delete($trademark->logo);
-                }
-                $path = $request->file('logo')->store('Trademarks','public');
-                $trademark->logo = $path;
-            }
-            $trademark->save();
+            $business = Business::withTrashed()->findOrFail($id);
+            $business->name = $request->input('name');
+            $business->document_number = $request->input('document_number');
+            $business->telephone_number = $request->input('telephone_number');
+            $business->email = $request->input('email');
+            $business->country_id = $request->input('country_id');
+            $business->departament_id = $request->input('departament_id');
+            $business->city_id = $request->input('city_id');
+            $business->address = $request->input('address');
+            $business->neighbourhood = $request->input('neighbourhood');
+            $business->description = $request->input('description');
+            $business->save();
 
             return $this->successResponse(
-                $trademark,
+                $business,
                 'La marca de prodcuto fue actualizada exitosamente.',
                 200
             );
@@ -222,14 +232,14 @@ class TrademarkController extends Controller
         }
     }
 
-    public function delete(TrademarkDeleteRequest $request)
+    public function delete(BusinessDeleteRequest $request)
     {
         try {
-            $trademark = Trademark::withTrashed()->findOrFail($request->input('id'))->delete();
+            $business = Business::withTrashed()->findOrFail($request->input('id'))->delete();
 
             return $this->successResponse(
-                $trademark,
-                'La marca de producto fue eliminado exitosamente.',
+                $business,
+                'La empresa fue eliminada exitosamente.',
                 204
             );
         } catch (ModelNotFoundException $e) {
@@ -251,13 +261,13 @@ class TrademarkController extends Controller
         }
     }
 
-    public function restore(TrademarkRestoreRequest $request)
+    public function restore(BusinessRestoreRequest $request)
     {
         try {
-            $trademark = Trademark::withTrashed()->findOrFail($request->input('id'))->restore();
+            $business = Business::withTrashed()->findOrFail($request->input('id'))->restore();
             return $this->successResponse(
-                $trademark,
-                'La marca de producto fue restaurada exitosamente.',
+                $business,
+                'La empresa fue restaurada exitosamente.',
                 204
             );
         } catch (ModelNotFoundException $e) {

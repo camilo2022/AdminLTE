@@ -4,7 +4,6 @@ namespace App\Http\Resources\Trademark;
 
 use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\ResourceCollection;
-use Illuminate\Support\Facades\Storage;
 
 class TrademarkIndexQueryCollection extends ResourceCollection
 {

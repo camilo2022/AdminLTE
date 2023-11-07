@@ -65,18 +65,13 @@
                                 <table id="collections" class="table table-bordered table-hover dataTable dtr-inline">
                                     <thead class="thead-dark">
                                         <tr>
-                                            <th colspan="6">Información</th>
-                                            <th colspan="2">Gestión</th>
-                                        </tr>
-                                        <tr>
                                             <th>#</th>
                                             <th>Nombre</th>
                                             <th>Codigo</th>
                                             <th>Fecha Incio</th>
                                             <th>Fecha Fin</th>
                                             <th>Estado</th>
-                                            <th>Editar</th>
-                                            <th>Eliminar</th>
+                                            <th>Acciones</th>
                                         </tr>
                                     </thead>
                                     <tbody>

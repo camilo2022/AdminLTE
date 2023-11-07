@@ -18,7 +18,7 @@ class PackageRestoreRequest extends FormRequest
     {
         // Lanzar una excepción de validación con los errores de validación obtenidos
         throw new HttpResponseException(response()->json([
-            'message' => 'Error de validación de los datos para la restauracion del tipo de paquete.',
+            'message' => 'Error de validación de los datos para la restauracion del tipo de empaque.',
             'errors' => $validator->errors()
         ], 422));
     }

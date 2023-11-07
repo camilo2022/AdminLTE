@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Controllers\BusinessController;
 use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ModulesAndSubmodulesController;
@@ -218,6 +219,36 @@ Route::middleware(['auth'])->group(function () {
 
             Route::delete('/Delete', [TrademarkController::class, 'delete'])
             ->middleware('can:Dashboard.Trademarks.Delete')->name('Dashboard.Trademarks.Delete');
+
+            Route::put('/Restore', [TrademarkController::class, 'restore'])
+            ->middleware('can:Dashboard.Trademarks.Restore')->name('Dashboard.Trademarks.Restore');
+        });
+
+        Route::prefix('/Businesses')->group(function () {
+
+            Route::get('/Index', [BusinessController::class, 'index'])
+            ->middleware('can:Dashboard.Businesses.Index')->name('Dashboard.Businesses.Index');
+
+            Route::post('/Index/Query', [BusinessController::class, 'indexQuery'])
+            ->middleware('can:Dashboard.Businesses.Index.Query')->name('Dashboard.Businesses.Index.Query');
+
+            Route::post('/Create', [BusinessController::class, 'create'])
+            ->middleware('can:Dashboard.Businesses.Create')->name('Dashboard.Businesses.Create');
+
+            Route::post('/Store', [BusinessController::class, 'store'])
+            ->middleware('can:Dashboard.Businesses.Store')->name('Dashboard.Businesses.Store');
+
+            Route::post('/Edit/{id}', [BusinessController::class, 'edit'])
+            ->middleware('can:Dashboard.Businesses.Edit')->name('Dashboard.Businesses.Edit');
+
+            Route::post('/Update/{id}', [BusinessController::class, 'update'])
+            ->middleware('can:Dashboard.Businesses.Update')->name('Dashboard.Businesses.Update');
+
+            Route::delete('/Delete', [BusinessController::class, 'delete'])
+            ->middleware('can:Dashboard.Businesses.Delete')->name('Dashboard.Businesses.Delete');
+
+            Route::put('/Restore', [BusinessController::class, 'restore'])
+            ->middleware('can:Dashboard.Businesses.Restore')->name('Dashboard.Businesses.Restore');
         });
     });
 });

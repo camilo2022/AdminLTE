@@ -30,7 +30,7 @@ let tableUsers = $('#users').DataTable({
             if(xhr.responseJSON.error) {
                 toastr.error(xhr.responseJSON.error.message);
             }
-    
+
             if(xhr.responseJSON.message) {
                 toastr.error(xhr.responseJSON.message);
             }
@@ -56,7 +56,7 @@ let tableUsers = $('#users').DataTable({
         {
             data: null,
             render: function (data, type, row) {
-                return `<a onclick="EditUserModal(${data.id})" type="button" 
+                return `<a onclick="EditUserModal(${data.id})" type="button"
                 class="btn btn-primary btn-sm" title="Editar usuario">
                     <i class="fas fa-user-pen text-white"></i>
                 </a>`;
@@ -94,7 +94,7 @@ let tableUsers = $('#users').DataTable({
     ],
     "columnDefs": [
         { "orderable": true, "targets": [0, 1, 2, 3, 4, 5, 6] },
-        { "orderable": false, "targets": [7, 8, 9, 10, 11] }
+        { "orderable": false, "targets": [7, 8, 9, 10, 11], "className": "text-center" }
     ],
     "pagingType": "full_numbers",
     "language": {
