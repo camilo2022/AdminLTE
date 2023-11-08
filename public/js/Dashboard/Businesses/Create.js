@@ -23,7 +23,12 @@ function CreateBusinessModalCleaned() {
     RemoveIsInvalidClassCreateBusiness();
 
     $('#name_c').val('');
-    $('#code_c').val('');
+    $('#document_number_c').val('');
+    $('#telephone_number_c').val('');
+    $('#email_c').val('');
+    $('#description_c').val('');
+    $('#address_c').val('');
+    $('#neighbourhood_c').val('');
 }
 
 function CreateBusinessModalResetSelect(id) {
@@ -42,7 +47,7 @@ function CreateBusinessModalResetSelect(id) {
 }
 
 function CreateBusinessModalCountry(countries) {
-    countries.forEach(country => {       
+    countries.forEach(country => {
         let newOption = new Option(country.name, country.id, false, false);
         $('#country_id_c').append(newOption);
     });
@@ -70,7 +75,7 @@ $('#country_id_c').on('change', function() {
 });
 
 function CreateBusinessModalDepartament(departaments) {
-    departaments.forEach(departament => {       
+    departaments.forEach(departament => {
         let newOption = new Option(departament.name, departament.id, false, false);
         $('#departament_id_c').append(newOption);
     });
@@ -99,7 +104,7 @@ $('#departament_id_c').on('change', function() {
 });
 
 function CreateBusinessModalCity(cities) {
-    cities.forEach(city => {       
+    cities.forEach(city => {
         let newOption = new Option(city.name, city.id, false, false);
         $('#city_id_c').append(newOption);
     });
@@ -123,9 +128,15 @@ function CreateBusiness() {
                 data: {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
                     'name': $('#name_c').val(),
-                    'code': $('#code_c').val(),
-                    'start_date': $('#start_date_c').val(),
-                    'end_date': $('#end_date_c').val()
+                    'document_number': $('#document_number_c').val(),
+                    'telephone_number': $('#telephone_number_c').val(),
+                    'email': $('#email_c').val(),
+                    'description': $('#description_c').val(),
+                    'address': $('#address_c').val(),
+                    'neighbourhood': $('#neighbourhood_c').val(),
+                    'country_id': $('#country_id_c').val(),
+                    'departament_id': $('#departament_id_c').val(),
+                    'city_id': $('#city_id_c').val()
                 },
                 success: function(response) {
                     tableBusinesses.ajax.reload();
@@ -198,17 +209,46 @@ function AddIsValidClassCreateBusiness() {
     if (!$('#name_c').hasClass('is-invalid')) {
       $('#name_c').addClass('is-valid');
     }
-    if (!$('#code_c').hasClass('is-invalid')) {
-      $('#code_c').addClass('is-valid');
+    if (!$('#document_number_c').hasClass('is-invalid')) {
+      $('#document_number_c').addClass('is-valid');
     }
-    $('span[aria-labelledby="select2-country_id_c-container"]').addClass('is-valid');
+    if (!$('#telephone_number_c').hasClass('is-invalid')) {
+        $('#telephone_number_c').addClass('is-valid');
+    }
+    if (!$('#email_c').hasClass('is-invalid')) {
+        $('#email_c').addClass('is-valid');
+    }
+    if (!$('#address_c').hasClass('is-invalid')) {
+        $('#address_c').addClass('is-valid');
+    }
+    if (!$('#neighbourhood_c').hasClass('is-invalid')) {
+        $('#neighbourhood_c').addClass('is-valid');
+    }
+    if (!$('#description_c').hasClass('is-invalid')) {
+        $('#description_c').addClass('is-valid');
+    }
+    if (!$('span[aria-labelledby="select2-country_id_c-container"]').hasClass('is-invalid')) {
+        $('span[aria-labelledby="select2-country_id_c-container"]').addClass('is-valid');
+    }
+    if (!$('span[aria-labelledby="select2-departament_id_c-container"]').hasClass('is-invalid')) {
+        $('span[aria-labelledby="select2-departament_id_c-container"]').addClass('is-valid');
+    }
+    if (!$('span[aria-labelledby="select2-city_id_c-container"]').hasClass('is-invalid')) {
+        $('span[aria-labelledby="select2-city_id_c-container"]').addClass('is-valid');
+    }
 }
 
 function RemoveIsValidClassCreateBusiness() {
     $('#name_c').removeClass('is-valid');
-    $('#code_c').removeClass('is-valid');
-    
-    $('span[aria-labelledby="select2-country_id_c-container"]').addClass('is-valid');
+    $('#document_number_c').removeClass('is-valid');
+    $('#telephone_number_c').removeClass('is-valid');
+    $('#email_c').removeClass('is-valid');
+    $('#address_c').removeClass('is-valid');
+    $('#neighbourhood_c').removeClass('is-valid');
+    $('#description_c').removeClass('is-valid');
+    $('span[aria-labelledby="select2-country_id_c-container"]').removeClass('is-valid');
+    $('span[aria-labelledby="select2-departament_id_c-container"]').removeClass('is-valid');
+    $('span[aria-labelledby="select2-city_id_c-container"]').removeClass('is-valid');
 }
 
 function AddIsInvalidClassCreateBusiness(input) {
@@ -216,11 +256,21 @@ function AddIsInvalidClassCreateBusiness(input) {
         $(`#${input}_c`).removeClass('is-valid');
     }
     $(`#${input}_c`).addClass('is-invalid');
-    $('span[aria-labelledby="select2-country_id_c-container"]').addClass('is-valid');
+    if (!$(`#span[aria-labelledby="select2-${input}_c-container`).hasClass('is-valid')) {
+        $(`span[aria-labelledby="select2-${input}_c-container"]`).removeClass('is-valid');
+    }
+    $(`span[aria-labelledby="select2-${input}_c-container"]`).addClass('is-invalid');
 }
 
 function RemoveIsInvalidClassCreateBusiness() {
     $('#name_c').removeClass('is-invalid');
-    $('#code_c').removeClass('is-invalid');
-    $('span[aria-labelledby="select2-country_id_c-container"]').addClass('is-valid');
+    $('#document_number_c').removeClass('is-invalid');
+    $('#telephone_number_c').removeClass('is-invalid');
+    $('#email_c').removeClass('is-invalid');
+    $('#address_c').removeClass('is-invalid');
+    $('#neighbourhood_c').removeClass('is-invalid');
+    $('#description_c').removeClass('is-invalid');
+    $('span[aria-labelledby="select2-country_id_c-container"]').removeClass('is-invalid');
+    $('span[aria-labelledby="select2-departament_id_c-container"]').removeClass('is-invalid');
+    $('span[aria-labelledby="select2-city_id_c-container"]').removeClass('is-invalid');
 }

@@ -241,7 +241,7 @@ Route::middleware(['auth'])->group(function () {
             Route::post('/Edit/{id}', [BusinessController::class, 'edit'])
             ->middleware('can:Dashboard.Businesses.Edit')->name('Dashboard.Businesses.Edit');
 
-            Route::post('/Update/{id}', [BusinessController::class, 'update'])
+            Route::put('/Update/{id}', [BusinessController::class, 'update'])
             ->middleware('can:Dashboard.Businesses.Update')->name('Dashboard.Businesses.Update');
 
             Route::delete('/Delete', [BusinessController::class, 'delete'])

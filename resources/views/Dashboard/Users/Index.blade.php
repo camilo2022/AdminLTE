@@ -112,7 +112,6 @@
 @endsection
 @section('script')
     <script src="{{ asset('js/Dashboard/Users/DataTableIndex.js') }}"></script>
-    <script src="{{ asset('js/Dashboard/Users/Validators.js') }}"></script>
     <script src="{{ asset('js/Dashboard/Users/Create.js') }}"></script>
     <script src="{{ asset('js/Dashboard/Users/Edit.js') }}"></script>
     <script src="{{ asset('js/Dashboard/Users/Password.js') }}"></script>

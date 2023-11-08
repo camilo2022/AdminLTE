@@ -126,9 +126,9 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="neighborhood">Barrio</label>
+                            <label for="neighbourhood">Barrio</label>
                             <div class="input-group">
-                                <input type="text" class="form-control" id="neighborhood_c" name="neighborhood">
+                                <input type="text" class="form-control" id="neighbourhood_c" name="neighbourhood">
                                 <div class="input-group-append">
                                     <span class="input-group-text">
                                         <i class="fas fa-location-arrow"></i>

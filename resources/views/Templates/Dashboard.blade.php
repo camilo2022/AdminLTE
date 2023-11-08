@@ -58,7 +58,7 @@
     <link rel="stylesheet" href="{{ asset('css/plugins/dropify/dropify.css') }}">
     <link rel="stylesheet" href="{{ asset('css/plugins/dropify/dropify.min.css') }}">
     <style>
-        
+
     </style>
 </head>
 
@@ -103,7 +103,7 @@
                     </a>
                     <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                         <a href="#" class="dropdown-item">
-                            
+
                             <div class="media">
                                 <img src="{{ asset('css/dist/img/user1-128x128.jpg') }}" alt="User Avatar"
                                     class="img-size-50 mr-3 img-circle">
@@ -116,11 +116,11 @@
                                     <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
                                 </div>
                             </div>
-                            
+
                         </a>
                         <div class="dropdown-divider"></div>
                         <a href="#" class="dropdown-item">
-                            
+
                             <div class="media">
                                 <img src="{{ asset('css/dist/img/user8-128x128.jpg') }}" alt="User Avatar"
                                     class="img-size-50 img-circle mr-3">
@@ -134,11 +134,11 @@
                                     <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
                                 </div>
                             </div>
-                            
+
                         </a>
                         <div class="dropdown-divider"></div>
                         <a href="#" class="dropdown-item">
-                            
+
                             <div class="media">
                                 <img src="{{ asset('css/dist/img/user3-128x128.jpg') }}" alt="User Avatar"
                                     class="img-size-50 img-circle mr-3">
@@ -152,7 +152,7 @@
                                     <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
                                 </div>
                             </div>
-                            
+
                         </a>
                         <div class="dropdown-divider"></div>
                         <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
@@ -379,6 +379,8 @@
     <!-- Dropify -->
     <script src="{{ asset('js/dropify/dropify.js') }}"></script>
     <script src="{{ asset('js/dropify/dropify.min.js') }}"></script>
+
+    <script src="{{ asset('js/dist/js/Validators.js') }}"></script>
 
 
     <script>

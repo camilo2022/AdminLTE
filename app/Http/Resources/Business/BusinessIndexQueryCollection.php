@@ -30,7 +30,7 @@ class BusinessIndexQueryCollection extends ResourceCollection
                     'city_id' => $business->city_id,
                     'city' => $business->city->name,
                     'address' => $business->address,
-                    'neighborhood' => $business->neighborhood,
+                    'neighbourhood' => $business->neighbourhood,
                     'description' =>  $business->description,
                     'created_at' => Carbon::parse($business->created_at)->format('Y-m-d H:i:s'),
                     'updated_at' => Carbon::parse($business->updated_at)->format('Y-m-d H:i:s'),

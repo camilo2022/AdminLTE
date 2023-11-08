@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Business\BusinessCreateRequest;
 use App\Http\Requests\Business\BusinessDeleteRequest;
+use App\Http\Requests\Business\BusinessEditRequest;
 use App\Http\Requests\Business\BusinessIndexQueryRequest;
 use App\Http\Requests\Business\BusinessRestoreRequest;
 use App\Http\Requests\Business\BusinessStoreRequest;
@@ -167,13 +168,29 @@ class BusinessController extends Controller
         }
     }
 
-    public function edit($id)
+    public function edit(BusinessEditRequest $request, $id)
     {
         try {
+            if($request->filled('country_id')) {
+                return $this->successResponse(
+                    Departament::where('country_id', '=', $request->input('country_id'))->get(),
+                    'Departamentos encontrados con exito.',
+                    200
+                );
+            }
+
+            if($request->filled('departament_id')) {
+                return $this->successResponse(
+                    City::where('departament_id', '=', $request->input('departament_id'))->get(),
+                    'Ciudades encontradas con exito.',
+                    200
+                );
+            }
+
             return $this->successResponse(
                 (object) [
                     'business' => Business::withTrashed()->findOrFail($id),
-                    'regions' => Country::all()
+                    'countries' => Country::all()
                 ],
                 'La empresa fue encontrada exitosamente.',
                 204
@@ -215,7 +232,7 @@ class BusinessController extends Controller
 
             return $this->successResponse(
                 $business,
-                'La marca de prodcuto fue actualizada exitosamente.',
+                'La empresa fue actualizada exitosamente.',
                 200
             );
         } catch (ModelNotFoundException $e) {
