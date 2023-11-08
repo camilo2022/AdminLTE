@@ -17,6 +17,6 @@ class Country extends Model
 
     public function departaments() : HasMany
     {
-        return $this->hasMany(Departament::class, 'country__id');
+        return $this->hasMany(Departament::class, 'country_id');
     }
 }

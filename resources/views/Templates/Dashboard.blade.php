@@ -52,10 +52,14 @@
     <link rel="stylesheet" href="{{ asset('css/plugins/datatables-bs4/css/dataTables.bootstrap4.css') }}">
     <link rel="stylesheet" href="{{ asset('css/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
     <!-- Select2 -->
-    <link rel="stylesheet" href="{{ asset('css/plugins/select2/css/select2.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/plugins/select2/css/select2.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/plugins/select2-bootstrap4-theme/select2-bootstrap4.css') }}">
     <!-- Dropify -->
     <link rel="stylesheet" href="{{ asset('css/plugins/dropify/dropify.css') }}">
     <link rel="stylesheet" href="{{ asset('css/plugins/dropify/dropify.min.css') }}">
+    <style>
+        
+    </style>
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -384,7 +388,7 @@
             showConfirmButton: false,
             timer: 3000
         });
-
+        $('.select2').select2();
         $('.dropify').dropify();
     </script>
     @yield('script')

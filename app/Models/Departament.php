@@ -17,7 +17,7 @@ class Departament extends Model
 
     public function cities() : HasMany
     {
-        return $this->hasMany(City::class, 'department_id');
+        return $this->hasMany(City::class, 'departament_id');
     }
 
     public function country() : BelongsTo

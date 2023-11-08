@@ -66,7 +66,7 @@
                                     <thead class="thead-dark">
                                         <tr>
                                             <th>#</th>
-                                            <th>Nombre</th>
+                                            <th>Razon social</th>
                                             <th>N° documento</th>
                                             <th>N° telefono</th>
                                             <th>Correo electronico</th>
