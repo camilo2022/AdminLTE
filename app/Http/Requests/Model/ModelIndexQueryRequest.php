@@ -1,18 +1,17 @@
 <?php
 
-namespace App\Http\Requests\Business;
+namespace App\Http\Requests\Model;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class BusinessRestoreRequest extends FormRequest
+class ModelIndexQueryRequest extends FormRequest
 {
     /**
-     * Maneja una solicitud fallida de validación.
+     * Determine if the user is authorized to make this request.
      *
-     * @param \Illuminate\Contracts\Validation\Validator $validator
-     * @throws \Illuminate\Validation\ValidationException
+     * @return bool
      */
     protected function failedValidation(Validator $validator)
     {
@@ -22,7 +21,6 @@ class BusinessRestoreRequest extends FormRequest
             'errors' => $validator->errors()
         ], 422));
     }
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -41,22 +39,30 @@ class BusinessRestoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'id' => 'required|exists:businesses,id',
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
+            'perPage' => 'required|numeric',
         ];
     }
+
 
     public function messages()
     {
         return [
-            'id.required' => 'El campo :attribute es requerido.',
-            'id.exists' => 'El :attribute proporcionado no es válido.',
+            'start_date.required' => 'El campo Fecha de inicio es requerido.',
+            'start_date.date' => 'El campo Fecha de inicio debe ser una fecha válida.',
+            'end_date.date' => 'El campo Fecha de fin debe ser una fecha válida.',
+            'end_date.after_or_equal' => 'El campo Fecha de fin debe ser igual o posterior a la Fecha de inicio.',
+            'perPage.numeric' => 'El campo Por página debe ser un valor numérico.',
         ];
     }
 
     public function attributes()
     {
         return [
-            'id' => 'identificador unico',
+            'start_date' => 'Fecha de inicio',
+            'end_date' => 'Fecha de fin',
+            'perPage' => 'Numero de registros por páginas',
         ];
     }
 }

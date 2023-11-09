@@ -17,7 +17,7 @@ class PackageUpdateRequest extends FormRequest
     {
         // Lanzar una excepción de validación con los errores de validación obtenidos
         throw new HttpResponseException(response()->json([
-            'message' => 'Error de validación de los datos para actualizar registro del tipo de paquete.',
+            'message' => 'Error de validación.',
             'errors' => $validator->errors()
         ], 422));
     }

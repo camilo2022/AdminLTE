@@ -17,7 +17,7 @@ class TrademarkStoreRequest extends FormRequest
     {
         // Lanzar una excepción de validación con los errores de validación obtenidos
         throw new HttpResponseException(response()->json([
-            'message' => 'Error de validación de los datos para guardar registro de la marca del producto.',
+            'message' => 'Error de validación.',
             'errors' => $validator->errors()
         ], 422));
     }

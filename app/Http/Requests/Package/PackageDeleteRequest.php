@@ -18,7 +18,7 @@ class PackageDeleteRequest extends FormRequest
     {
         // Lanzar una excepción de validación con los errores de validación obtenidos
         throw new HttpResponseException(response()->json([
-            'message' => 'Error de validación de los datos para la eliminacion del tipo de empaque.',
+            'message' => 'Error de validación.',
             'errors' => $validator->errors()
         ], 422));
     }

@@ -17,7 +17,7 @@ class TrademarkIndexQueryRequest extends FormRequest
     {
         // Lanzar una excepción de validación con los errores de validación obtenidos
         throw new HttpResponseException(response()->json([
-            'message' => 'Error de validación de los datos para obtener listado de marcas de producto.',
+            'message' => 'Error de validación.',
             'errors' => $validator->errors()
         ], 422));
     }
