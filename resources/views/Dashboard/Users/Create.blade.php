@@ -16,7 +16,7 @@
                         <div class="form-group">
                             <label for="name">Nombres</label>
                             <div class="input-group">
-                                <input type="text" class="form-control" id="name_c" name="name" onkeyup="UpperCase(this)" onblur="Trim(this)">
+                                <input type="text" class="form-control" id="name_c" name="name" onblur="Trim(this)">
                                 <div class="input-group-append">
                                     <span class="input-group-text">
                                         <i class="fas fa-signature"></i>
@@ -29,7 +29,7 @@
                         <div class="form-group">
                             <label for="last_name">Apellidos</label>
                             <div class="input-group">
-                                <input type="text" class="form-control" id="last_name_c" name="last_name" onkeyup="UpperCase(this)" onblur="Trim(this)">
+                                <input type="text" class="form-control" id="last_name_c" name="last_name" onblur="Trim(this)">
                                 <div class="input-group-append">
                                     <span class="input-group-text">
                                         <i class="fas fa-signature"></i>
@@ -72,7 +72,7 @@
                         <div class="form-group">
                             <label for="address_c">Direccion</label>
                             <div class="input-group">
-                                <input type="text" class="form-control" id="address_c" name="address" onkeyup="UpperCase(this)" onblur="Trim(this)">
+                                <input type="text" class="form-control" id="address_c" name="address" onblur="Trim(this)">
                                 <div class="input-group-append">
                                     <span class="input-group-text">
                                         <i class="fas fa-location-dot"></i>
@@ -85,7 +85,7 @@
                         <div class="form-group">
                             <label for="email_c">Correo Electronico</label>
                             <div class="input-group">
-                                <input type="email" class="form-control" id="email_c" name="email" onkeyup="UpperCase(this)" onblur="Trim(this)">
+                                <input type="email" class="form-control" id="email_c" name="email" onblur="Trim(this)">
                                 <div class="input-group-append">
                                     <span class="input-group-text">
                                         <i class="fas fa-envelope"></i>
