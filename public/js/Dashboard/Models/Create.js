@@ -1,44 +1,34 @@
-function CreateTrademarkModal() {
+function CreateModelModal() {
     $.ajax({
-        url: `/Dashboard/Trademarks/Create`,
+        url: `/Dashboard/Models/Create`,
         type: 'POST',
         data: {
             '_token': $('meta[name="csrf-token"]').attr('content')
         },
         success: function (response) {
-            CreateTrademarkModalCleaned();
-            CreateTrademarkAjaxSuccess(response);
-            $('#CreateTrademarkModal').modal('show');
+            CreateModelModalCleaned();
+            CreateModelAjaxSuccess(response);
+            $('#CreateModelModal').modal('show');
         },
         error: function (xhr, textStatus, errorThrown) {
-            CreateTrademarkAjaxError(xhr);
+            CreateModelAjaxError(xhr);
         }
     });
 }
 
-function CreateTrademarkModalCleaned() {
-    RemoveIsValidClassCreateTrademark();
-    RemoveIsInvalidClassCreateTrademark();
+function CreateModelModalCleaned() {
+    RemoveIsValidClassCreateModel();
+    RemoveIsInvalidClassCreateModel();
 
     $('#name_c').val('');
     $('#code_c').val('');
     $('#description_c').val('');
-    $('#logo_c').val('');
-    $('#logo_c').dropify().data('dropify').destroy();
-    $('#logo_c').dropify().data('dropify').init();
 }
 
-function CreateTrademark() {
-    let formData = new FormData();
-    formData.append('_token', $('meta[name="csrf-token"]').attr('content'));
-    formData.append('name', $('#name_c').val());
-    formData.append('code', $('#code_c').val());
-    formData.append('description', $('#description_c').val());
-    formData.append('logo', $('#logo_c')[0].files[0]);
-
+function CreateModel() {
     Swal.fire({
-        title: '¿Desea guardar la marca de producto?',
-        text: 'La marca de producto será creada.',
+        title: '¿Desea guardar la modelo de producto?',
+        text: 'El modelo de producto será creado.',
         icon: 'warning',
         showCancelButton: true,
         cancelButtonColor: '#DD6B55',
@@ -48,64 +38,67 @@ function CreateTrademark() {
     }).then((result) => {
         if (result.value) {
             $.ajax({
-                url: `/Dashboard/Trademarks/Store`,
+                url: `/Dashboard/Models/Store`,
                 type: 'POST',
-                data: formData,
-                processData: false,
-                contentType: false,
+                data: {
+                    '_token': $('meta[name="csrf-token"]').attr('content'),
+                    'name': $('#name_c').val(),
+                    'code': $('#code_c').val(),
+                    'description': $('#description_c').val()
+                },
                 success: function (response) {
-                    tableTrademarks.ajax.reload();
-                    CreateTrademarkAjaxSuccess(response);
+                    tableModels.ajax.reload();
+                    CreateModelAjaxSuccess(response);
                 },
                 error: function (xhr, textStatus, errorThrown) {
-                    tableTrademarks.ajax.reload();
-                    CreateTrademarkAjaxError(xhr);
+                    tableModels.ajax.reload();
+                    CreateModelAjaxError(xhr);
                 }
             });
         } else {
-            toastr.info('La marca de producto no fue creada.')
+            toastr.info('El modelo de producto no fue creado.')
         }
     });
 }
 
-function CreateTrademarkAjaxSuccess(response) {
+function CreateModelAjaxSuccess(response) {
     if (response.status === 200) {
         toastr.info(response.message);
-        $('#CreateTrademarkModal').modal('hide');
+        $('#CreateModelModal').modal('hide');
     }
 
     if (response.status === 201) {
         toastr.success(response.message);
-        $('#CreateTrademarkModal').modal('hide');
+        $('#CreateModelModal').modal('hide');
     }
 }
 
-function CreateTrademarkAjaxError(xhr) {
+function CreateModelAjaxError(xhr) {
     if (xhr.status === 403) {
         toastr.error(xhr.responseJSON.error.message);
-        $('#CreateTrademarkModal').modal('hide');
+        $('#CreateModelModal').modal('hide');
     }
 
     if (xhr.status === 404) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
-        $('#CreateTrademarkModal').modal('hide');
+        $('#CreateModelModal').modal('hide');
     }
 
     if (xhr.status === 419) {
         toastr.error(xhr.responseJSON.error.message);
-        $('#CreateTrademarkModal').modal('hide');
+        $('#CreateModelModal').modal('hide');
     }
 
     if (xhr.status === 422) {
-        RemoveIsValidClassCreateTrademark();
-        RemoveIsInvalidClassCreateTrademark();
+        RemoveIsValidClassCreateModel();
+        RemoveIsInvalidClassCreateModel();
         $.each(xhr.responseJSON.errors, function (field, messages) {
-            AddIsInvalidClassCreateTrademark(field);
+            AddIsInvalidClassCreateModel(field);
             $.each(messages, function (index, message) {
                 toastr.error(message);
             });
         });
-        AddIsValidClassCreateTrademark();
+        AddIsValidClassCreateModel();
     }
 
     if (xhr.status === 500) {
@@ -116,11 +109,11 @@ function CreateTrademarkAjaxError(xhr) {
         if (xhr.responseJSON.message) {
             toastr.error(xhr.responseJSON.message);
         }
-        $('#CreateTrademarkModal').modal('hide');
+        $('#CreateModelModal').modal('hide');
     }
 }
 
-function AddIsValidClassCreateTrademark() {
+function AddIsValidClassCreateModel() {
     if (!$('#name_c').hasClass('is-invalid')) {
         $('#name_c').addClass('is-valid');
     }
@@ -132,20 +125,20 @@ function AddIsValidClassCreateTrademark() {
     }
 }
 
-function RemoveIsValidClassCreateTrademark() {
+function RemoveIsValidClassCreateModel() {
     $('#name_c').removeClass('is-valid');
     $('#code_c').removeClass('is-valid');
     $('#description_c').removeClass('is-valid');
 }
 
-function AddIsInvalidClassCreateTrademark(input) {
+function AddIsInvalidClassCreateModel(input) {
     if (!$(`#${input}_c`).hasClass('is-valid')) {
         $(`#${input}_c`).removeClass('is-valid');
     }
     $(`#${input}_c`).addClass('is-invalid');
 }
 
-function RemoveIsInvalidClassCreateTrademark() {
+function RemoveIsInvalidClassCreateModel() {
     $('#name_c').removeClass('is-invalid');
     $('#code_c').removeClass('is-invalid');
     $('#description_c').removeClass('is-valid');

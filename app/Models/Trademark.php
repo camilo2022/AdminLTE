@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Trademark extends Model
@@ -18,6 +19,11 @@ class Trademark extends Model
         'description',
         'logo'
     ];
+
+    public function products() : HasMany
+    {
+        return $this->hasMany(Product::class, 'trademark_id');
+    }
     
     public function scopeSearch($query, $search)
     {

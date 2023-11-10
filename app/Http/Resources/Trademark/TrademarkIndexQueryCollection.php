@@ -21,7 +21,7 @@ class TrademarkIndexQueryCollection extends ResourceCollection
                     'id' => $trademark->id,
                     'name' => $trademark->name,
                     'code' => $trademark->code,
-                    'description' => $trademark->code,
+                    'description' => $trademark->description,
                     'logo' =>  asset('storage/' . $trademark->logo),
                     'created_at' => Carbon::parse($trademark->created_at)->format('Y-m-d H:i:s'),
                     'updated_at' => Carbon::parse($trademark->updated_at)->format('Y-m-d H:i:s'),

@@ -20,6 +20,7 @@ class Product extends DBModel
         'category_id',
         'subcategory_id',
         'model_id',
+        'trademark_id',
         'route_photo',
         'price',
         'inventory_status',
@@ -69,5 +70,10 @@ class Product extends DBModel
     public function model() : BelongsTo
     {
         return $this->belongsTo(Model::class, 'model_id');
+    }
+
+    public function trademark() : BelongsTo
+    {
+        return $this->belongsTo(Trademark::class, 'trademark_id');
     }
 }

@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('packages', function (Blueprint $table) {
             $table->id()->comment('Identificador del paquete.');
-            $table->string('name')->comment('Nombre del paquete.');
+            $table->string('name')->unique()->comment('Nombre del paquete.');
             $table->string('code')->unique()->comment('Codigo del paquete.');
             $table->timestamps();
             $table->softDeletes();

@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\BusinessController;
 use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ModelController;
 use App\Http\Controllers\ModulesAndSubmodulesController;
 use App\Http\Controllers\PackageController;
 use App\Http\Controllers\RolesAndPermissionsController;
@@ -249,6 +250,33 @@ Route::middleware(['auth'])->group(function () {
 
             Route::put('/Restore', [BusinessController::class, 'restore'])
             ->middleware('can:Dashboard.Businesses.Restore')->name('Dashboard.Businesses.Restore');
+        });
+
+        Route::prefix('/Models')->group(function () {
+
+            Route::get('/Index', [ModelController::class, 'index'])
+            ->middleware('can:Dashboard.Models.Index')->name('Dashboard.Models.Index');
+
+            Route::post('/Index/Query', [ModelController::class, 'indexQuery'])
+            ->middleware('can:Dashboard.Models.Index.Query')->name('Dashboard.Models.Index.Query');
+
+            Route::post('/Create', [ModelController::class, 'create'])
+            ->middleware('can:Dashboard.Models.Create')->name('Dashboard.Models.Create');
+
+            Route::post('/Store', [ModelController::class, 'store'])
+            ->middleware('can:Dashboard.Models.Store')->name('Dashboard.Models.Store');
+
+            Route::post('/Edit/{id}', [ModelController::class, 'edit'])
+            ->middleware('can:Dashboard.Models.Edit')->name('Dashboard.Models.Edit');
+
+            Route::put('/Update/{id}', [ModelController::class, 'update'])
+            ->middleware('can:Dashboard.Models.Update')->name('Dashboard.Models.Update');
+
+            Route::delete('/Delete', [ModelController::class, 'delete'])
+            ->middleware('can:Dashboard.Models.Delete')->name('Dashboard.Models.Delete');
+
+            Route::put('/Restore', [ModelController::class, 'restore'])
+            ->middleware('can:Dashboard.Models.Restore')->name('Dashboard.Models.Restore');
         });
     });
 });

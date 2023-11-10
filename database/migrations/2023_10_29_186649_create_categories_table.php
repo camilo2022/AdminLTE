@@ -16,11 +16,12 @@ return new class extends Migration
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('clothing_line_id');
-            $table->string('name');
+            $table->string('name')->unique();
             $table->string('code')->unique();
             $table->string('description')->nullable();
             $table->foreign('clothing_line_id')->references('id')->on('clothing_lines')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
