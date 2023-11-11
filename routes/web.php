@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\BusinessController;
+use App\Http\Controllers\ClothingLineController;
 use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ModelController;
@@ -277,6 +278,33 @@ Route::middleware(['auth'])->group(function () {
 
             Route::put('/Restore', [ModelController::class, 'restore'])
             ->middleware('can:Dashboard.Models.Restore')->name('Dashboard.Models.Restore');
+        });
+
+        Route::prefix('/ClothingLines')->group(function () {
+
+            Route::get('/Index', [ClothingLineController::class, 'index'])
+            ->middleware('can:Dashboard.ClothingLines.Index')->name('Dashboard.ClothingLines.Index');
+
+            Route::post('/Index/Query', [ClothingLineController::class, 'indexQuery'])
+            ->middleware('can:Dashboard.ClothingLines.Index.Query')->name('Dashboard.ClothingLines.Index.Query');
+
+            Route::post('/Create', [ClothingLineController::class, 'create'])
+            ->middleware('can:Dashboard.ClothingLines.Create')->name('Dashboard.ClothingLines.Create');
+
+            Route::post('/Store', [ClothingLineController::class, 'store'])
+            ->middleware('can:Dashboard.ClothingLines.Store')->name('Dashboard.ClothingLines.Store');
+
+            Route::post('/Edit/{id}', [ClothingLineController::class, 'edit'])
+            ->middleware('can:Dashboard.ClothingLines.Edit')->name('Dashboard.ClothingLines.Edit');
+
+            Route::put('/Update/{id}', [ClothingLineController::class, 'update'])
+            ->middleware('can:Dashboard.ClothingLines.Update')->name('Dashboard.ClothingLines.Update');
+
+            Route::delete('/Delete', [ClothingLineController::class, 'delete'])
+            ->middleware('can:Dashboard.ClothingLines.Delete')->name('Dashboard.ClothingLines.Delete');
+
+            Route::put('/Restore', [ClothingLineController::class, 'restore'])
+            ->middleware('can:Dashboard.ClothingLines.Restore')->name('Dashboard.ClothingLines.Restore');
         });
     });
 });

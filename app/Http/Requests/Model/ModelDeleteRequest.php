@@ -60,4 +60,3 @@ class ModelDeleteRequest extends FormRequest
         ];
     }
 }
-

@@ -49,25 +49,25 @@ class ModelStoreRequest extends FormRequest
     public function messages()
     {
         return [
-            'name.required' => 'El campo Nombre del modelo es requerido.',
-            'name.string' => 'El campo Nombre del modelo debe ser una cadena de texto.',
-            'name.unique' => 'El campo Nombre del modelo ya existe en la base de datos.',
-            'name.max' => 'El campo Nombre del modelo no debe exceder los 255 caracteres.',
-            'code.required' => 'El campo Codigo del modelo es requerido.',
-            'code.string' => 'El campo Codigo del modelo debe ser una cadena de texto.',
-            'code.unique' => 'El campo Codigo del modelo ya existe en la base de datos.',
-            'code.max' => 'El campo Codigo del modelo no debe exceder los 255 caracteres.',
-            'description.string' => 'El campo Descripcion del modelo debe ser una cadena de texto.',
-            'description.max' => 'El campo Descripcion del modelo no debe exceder los 255 caracteres.',
+            'name.required' => 'El campo Nombre del modelo de producto es requerido.',
+            'name.string' => 'El campo Nombre del modelo de producto debe ser una cadena de texto.',
+            'name.unique' => 'El campo Nombre del modelo de producto ya existe en la base de datos.',
+            'name.max' => 'El campo Nombre del modelo de producto no debe exceder los 255 caracteres.',
+            'code.required' => 'El campo Codigo del modelo de producto es requerido.',
+            'code.string' => 'El campo Codigo del modelo de producto debe ser una cadena de texto.',
+            'code.unique' => 'El campo Codigo del modelo de producto ya existe en la base de datos.',
+            'code.max' => 'El campo Codigo del modelo de producto no debe exceder los 255 caracteres.',
+            'description.string' => 'El campo Descripcion del modelo de producto debe ser una cadena de texto.',
+            'description.max' => 'El campo Descripcion del modelo de producto no debe exceder los 255 caracteres.',
         ];
     }
 
     public function attributes()
     {
         return [
-            'name' => 'Nombre del modelo',
-            'code' => 'Codigo del modelo',
-            'description' => 'Descripcion del modelo'
+            'name' => 'Nombre del modelo de producto',
+            'code' => 'Codigo del modelo de producto',
+            'description' => 'Descripcion del modelo de producto'
         ];
     }
 }
