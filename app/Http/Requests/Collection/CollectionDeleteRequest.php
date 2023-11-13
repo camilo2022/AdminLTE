@@ -41,22 +41,15 @@ class CollectionDeleteRequest extends FormRequest
     public function rules()
     {
         return [
-            'id' => 'required|exists:collections,id',
+            'id' => ['required', 'exists:collections,id'],
         ];
     }
 
     public function messages()
     {
         return [
-            'id.required' => 'El campo :attribute es requerido.',
-            'id.exists' => 'El :attribute proporcionado no es válido.',
-        ];
-    }
-
-    public function attributes()
-    {
-        return [
-            'id' => 'identificador unico',
+            'id.required' => 'El campo identificador de la correria es requerido.',
+            'id.exists' => 'El identificador de la correria proporcionado no es válido.',
         ];
     }
 }

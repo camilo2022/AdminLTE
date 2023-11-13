@@ -68,7 +68,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-success" id="EditModuleAndSubmodulesAddSubmoduleButton" title="Agregar submodulo" onclick="EditModuleAndSubmodulesAddSubmodule(null, '', '', undefined, '', '')">
+                <button type="button" class="btn btn-success" id="EditModuleAndSubmodulesAddPermissionButton" title="Agregar submodulo" onclick="EditModuleAndSubmodulesAddSubmodule(null, '', '', undefined, '', '')">
                     <i class="fas fa-plus"></i>
                 </button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal" title="Cerrar ventana">

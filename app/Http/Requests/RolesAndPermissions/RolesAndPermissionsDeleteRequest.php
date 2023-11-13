@@ -41,30 +41,24 @@ class RolesAndPermissionsDeleteRequest extends FormRequest
     public function rules()
     {
         return [
-            'role_id' => 'required|array',
-            'role_id.*' => 'integer|exists:roles,id', // Asegura que los id de roles existan en la tabla roles
-            'permission_id' => 'required|array',
-            'permission_id.*' => 'integer|exists:permissions,id', // Asegura que los id de permisos existan en la tabla permissions
+            'role_id' => ['required', 'array'],
+            'role_id.*' => ['integer', 'exists:roles,id'], // Asegura que los id de roles existan en la tabla roles
+            'permission_id' => ['required', 'array'],
+            'permission_id.*' => ['integer', 'exists:permissions,id'], // Asegura que los id de permisos existan en la tabla permissions
         ];
     }
 
     public function messages()
     {
         return [
-            'required' => 'El campo :attribute es requerido.',
-            'array' => 'El campo :attribute debe ser un arreglo.',
-            'integer' => 'Cada elemento en :attribute debe ser un número entero.',
-            'exists' => 'El :attribute no existe en la base de datos.', // Mensaje para campos que deben existir
-        ];
-    }
-
-    public function attributes()
-    {
-        return [
-            'role_id' => 'id de Roles',
-            'permission_id' => 'id de Permisos',
-            'role_id.*' => 'Elemento en id de Roles',
-            'permission_id.*' => 'Elemento en id de Permisos',
+            'role_id.required' => 'El campo identificador del rol es requerido.',
+            'role_id.array' => 'El campo identificador del rol debe ser un arreglo.',
+            'role_id.integer' => 'El identificador del rol debe ser un número entero.',
+            'role_id.exists' => 'El identificador del rol no existe en la base de datos.',
+            'permission_id.required' => 'El campo identificador de los permisos es requerido.',
+            'permission_id.array' => 'El campo identificador de los permisos debe ser un arreglo.',
+            'permission_id.integer' => 'El identificador del permiso debe ser un número entero.',
+            'permission_id.exists' => 'El identificador del permiso no existe en la base de datos.',
         ];
     }
 }

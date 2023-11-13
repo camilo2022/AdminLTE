@@ -47,7 +47,6 @@ class CollectionUpdateRequest extends FormRequest
         ];
     }
 
-
     public function messages()
     {
         return [
@@ -67,10 +66,8 @@ class CollectionUpdateRequest extends FormRequest
     public function attributes()
     {
         return [
-            'name' => 'Nombre de la correria',
-            'code' => 'Codigo de la correria',
-            'start_date' => 'Fecha de inicio',
-            'end_date' => 'Fecha de fin',
+            'start_date' => 'Fecha Inicial',
+            'end_date' => 'Fecha Final'
         ];
     }
 }

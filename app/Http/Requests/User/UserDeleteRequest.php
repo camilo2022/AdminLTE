@@ -41,22 +41,15 @@ class UserDeleteRequest extends FormRequest
     public function rules()
     {
         return [
-            'id' => 'required|exists:users,id',
+            'id' => ['required', 'exists:users,id'],
         ];
     }
 
     public function messages()
     {
         return [
-            'id.required' => 'El campo :attribute es requerido.',
-            'id.exists' => 'El :attribute proporcionado no es válido.',
-        ];
-    }
-
-    public function attributes()
-    {
-        return [
-            'id' => 'identificador unico',
+            'id.required' => 'El campo identificador del usuario es requerido.',
+            'id.exists' => 'El identificador del usuario proporcionado no es válido.',
         ];
     }
 }

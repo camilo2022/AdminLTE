@@ -42,7 +42,7 @@ class BusinessController extends Controller
             $start_date = Carbon::parse($request->input('start_date'))->startOfDay();
             $end_date = Carbon::parse($request->input('end_date'))->endOfDay();
             //Consulta por nombre
-            $collections = Business::with('country', 'departament', 'city')
+            $businesses = Business::with('country', 'departament', 'city')
                 ->when($request->filled('search'),
                     function ($query) use ($request) {
                         $query->search($request->input('search'));
@@ -58,7 +58,7 @@ class BusinessController extends Controller
                 ->paginate($request->input('perPage'));
 
             return $this->successResponse(
-                new BusinessIndexQueryCollection($collections),
+                new BusinessIndexQueryCollection($businesses),
                 $this->getMessage('Success'),
                 200
             );

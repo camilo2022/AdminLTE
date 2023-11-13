@@ -25,7 +25,7 @@ function EditModuleAndSubmodulesModalCleaned(moduleAndSubmodules) {
     $('#module_e').val(moduleAndSubmodules.module.name);
     $('#icon_e').val(moduleAndSubmodules.module.icon);
     $('#icon_module_e').addClass(moduleAndSubmodules.module.icon);
-    $('#EditModuleAndSubmodulesAddSubmoduleButton').attr('data-count', 0);
+    $('#EditModuleAndSubmodulesAddPermissionButton').attr('data-count', 0);
     $('#EditModuleAndSubmodulesButton').attr('onclick', `EditModuleAndSubmodules(${moduleAndSubmodules.module.id})`);
     EditModuleAndSubmodulesQueryRoles(moduleAndSubmodules.module.roles, true);
     $.each(moduleAndSubmodules.module.submodules, function (i, submodule) {
@@ -82,7 +82,7 @@ function EditModuleAndSubmodules(id) {
 
 function EditModuleAndSubmodulesAddSubmodule(id, submodule, role, permission, url, icon) {
     // Crear el nuevo elemento HTML con jQuery
-    let data = $('#EditModuleAndSubmodulesAddSubmoduleButton').attr('data-count');
+    let data = $('#EditModuleAndSubmodulesAddPermissionButton').attr('data-count');
     let newSubmodule = $('<div>').attr({
         'id': `group-submodule${data}`,
         'class': 'form-group submodule_e'
@@ -215,7 +215,7 @@ function EditModuleAndSubmodulesAddSubmodule(id, submodule, role, permission, ur
     // Agregar el nuevo elemento al elemento con clase "submodules_e"
     $('.submodules_e').append(newSubmodule);
     data++;
-    $('#EditModuleAndSubmodulesAddSubmoduleButton').attr('data-count', data)
+    $('#EditModuleAndSubmodulesAddPermissionButton').attr('data-count', data)
 }
 
 function EditModuleAndSubmodulesRemoveSubmodule(index) {

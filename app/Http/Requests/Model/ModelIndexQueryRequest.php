@@ -39,9 +39,9 @@ class ModelIndexQueryRequest extends FormRequest
     public function rules()
     {
         return [
-            'start_date' => 'nullable|date',
-            'end_date' => 'nullable|date|after_or_equal:start_date',
-            'perPage' => 'required|numeric',
+            'start_date' => ['nullable', 'date'],
+            'end_date' => ['nullable', 'date', 'after_or_equal:start_date'],
+            'perPage' => ['required', 'numeric'],
         ];
     }
 
@@ -53,16 +53,8 @@ class ModelIndexQueryRequest extends FormRequest
             'start_date.date' => 'El campo Fecha de inicio debe ser una fecha válida.',
             'end_date.date' => 'El campo Fecha de fin debe ser una fecha válida.',
             'end_date.after_or_equal' => 'El campo Fecha de fin debe ser igual o posterior a la Fecha de inicio.',
-            'perPage.numeric' => 'El campo Por página debe ser un valor numérico.',
-        ];
-    }
-
-    public function attributes()
-    {
-        return [
-            'start_date' => 'Fecha de inicio',
-            'end_date' => 'Fecha de fin',
-            'perPage' => 'Numero de registros por páginas',
+            'perPage.numeric' => 'El campo Numero de registros por página debe ser un valor numérico.',
+            'perPage.required' => 'El campo Numero de registros por página es requerido.'
         ];
     }
 }

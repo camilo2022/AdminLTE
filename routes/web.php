@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\BusinessController;
+use App\Http\Controllers\CategoriesAndSubcategoriesController;
 use App\Http\Controllers\ClothingLineController;
 use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\HomeController;
@@ -305,6 +306,33 @@ Route::middleware(['auth'])->group(function () {
 
             Route::put('/Restore', [ClothingLineController::class, 'restore'])
             ->middleware('can:Dashboard.ClothingLines.Restore')->name('Dashboard.ClothingLines.Restore');
+        });
+
+        Route::prefix('/CategoriesAndSubcategories')->group(function () {
+
+            Route::get('/Index', [CategoriesAndSubcategoriesController::class, 'index'])
+            ->middleware('can:Dashboard.CategoriesAndSubcategories.Index')->name('Dashboard.CategoriesAndSubcategories.Index');
+
+            Route::post('/Index/Query', [CategoriesAndSubcategoriesController::class, 'indexQuery'])
+            ->middleware('can:Dashboard.CategoriesAndSubcategories.Index.Query')->name('Dashboard.CategoriesAndSubcategories.Index.Query');
+
+            Route::post('/Create', [CategoriesAndSubcategoriesController::class, 'create'])
+            ->middleware('can:Dashboard.CategoriesAndSubcategories.Create')->name('Dashboard.CategoriesAndSubcategories.Create');
+
+            Route::post('/Store', [CategoriesAndSubcategoriesController::class, 'store'])
+            ->middleware('can:Dashboard.CategoriesAndSubcategories.Store')->name('Dashboard.CategoriesAndSubcategories.Store');
+
+            Route::post('/Edit/{id}', [CategoriesAndSubcategoriesController::class, 'edit'])
+            ->middleware('can:Dashboard.CategoriesAndSubcategories.Edit')->name('Dashboard.CategoriesAndSubcategories.Edit');
+
+            Route::put('/Update/{id}', [CategoriesAndSubcategoriesController::class, 'update'])
+            ->middleware('can:Dashboard.CategoriesAndSubcategories.Update')->name('Dashboard.CategoriesAndSubcategories.Update');
+
+            Route::delete('/Delete', [CategoriesAndSubcategoriesController::class, 'delete'])
+            ->middleware('can:Dashboard.CategoriesAndSubcategories.Delete')->name('Dashboard.CategoriesAndSubcategories.Delete');
+
+            Route::put('/Restore', [CategoriesAndSubcategoriesController::class, 'restore'])
+            ->middleware('can:Dashboard.CategoriesAndSubcategories.Restore')->name('Dashboard.CategoriesAndSubcategories.Restore');
         });
     });
 });

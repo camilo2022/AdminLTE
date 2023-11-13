@@ -41,22 +41,15 @@ class RemoveRoleAndPermissionsQueryRequest extends FormRequest
     public function rules()
     {
         return [
-            'id' => 'required|exists:users,id',
+            'id' => ['required', 'exists:users,id'],
         ];
     }
 
     public function messages()
     {
         return [
-            'required' => 'El campo :attribute es requerido.',
-            'exists' => 'El :attribute especificado no existe.',
-        ];
-    }
-
-    public function attributes()
-    {
-        return [
-            'id' => 'identificador unico de usuario',
+            'required' => 'El campo identificador del usuario es requerido.',
+            'exists' => 'El identificador del usuario especificado no existe.',
         ];
     }
 }

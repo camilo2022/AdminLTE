@@ -41,22 +41,15 @@ class ModulesAndSubmodulesDeleteRequest extends FormRequest
     public function rules()
     {
         return [
-            'id' => 'required|exists:modules,id', // Asegura que los id de permisos existan en la tabla permissions
+            'id' => ['required', 'exists:modules,id'], // Asegura que los id de permisos existan en la tabla permissions
         ];
     }
 
     public function messages()
     {
         return [
-            'required' => 'El campo :attribute es requerido.',
-            'exists' => 'El :attribute no existe en la base de datos.', // Mensaje para campos que deben existir
-        ];
-    }
-
-    public function attributes()
-    {
-        return [
-            'id' => 'identificador del modulo',
+            'id.required' => 'El campo identificador del modulo es requerido.',
+            'id.exists' => 'El identificador del modulo no existe en la base de datos.', // Mensaje para campos que deben existir
         ];
     }
 }

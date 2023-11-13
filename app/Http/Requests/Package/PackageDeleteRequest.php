@@ -41,22 +41,15 @@ class PackageDeleteRequest extends FormRequest
     public function rules()
     {
         return [
-            'id' => 'required|exists:packages,id',
+            'id' => ['required', 'exists:packages,id'],
         ];
     }
 
     public function messages()
     {
         return [
-            'id.required' => 'El campo :attribute es requerido.',
-            'id.exists' => 'El :attribute proporcionado no es válido.',
-        ];
-    }
-
-    public function attributes()
-    {
-        return [
-            'id' => 'identificador unico',
+            'id.required' => 'El campo identificador del tipo de empaque es requerido.',
+            'id.exists' => 'El identificador del tipo de empaque proporcionado no es válido.',
         ];
     }
 }

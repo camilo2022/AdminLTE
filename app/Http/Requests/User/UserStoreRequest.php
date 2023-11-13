@@ -1,5 +1,7 @@
 <?php
 namespace App\Http\Requests\User;
+
+use App\Rules\Equals;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
@@ -36,14 +38,14 @@ class UserStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
-            'document_number' => 'required|string|min:5|max:20|unique:users',
-            'phone_number' => 'required|string|size:10',
-            'address' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6|confirmed',
-            'password_confirmation' => 'required|string'
+            'name' => ['required', 'string', 'max:255'],
+            'last_name' => ['required', 'string', 'max:255'],
+            'document_number' => ['required', 'string', 'min:5', 'max:20', 'unique:users'],
+            'phone_number' => ['required', 'string', 'size:10'],
+            'address' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'string', 'min:6', 'confirmed'],
+            'password_confirmation' => ['required', 'string', 'min:6', new Equals($this->input('password_confirmation'), $this->input('password'), 'Contraseña del usuario')]
         ];
     }
     // Mensajes de error personalizados para cada regla de validación

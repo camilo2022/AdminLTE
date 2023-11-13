@@ -89,20 +89,4 @@ class BusinessUpdateRequest extends FormRequest
             'description.max' => 'El campo Descripcion de la empresa no debe exceder los 255 caracteres.',
         ];
     }
-
-    public function attributes()
-    {
-        return [
-            'name' => 'Nombre de la empresa',
-            'document_number' => 'Numero de documento de la empresa',
-            'telephone_number' => 'Numero de telefono de la empresa',
-            'email' => 'Correo electrónico de la empresa',
-            'country_id' => 'Pais de la empresa',
-            'departament_id' => 'Departamento de la empresa',
-            'city_id' => 'Ciudad de la empresa',
-            'address' => 'Direccion de la empresa',
-            'neighbourhood' => 'Barrio de la empresa',
-            'description' => 'Descripción de la empresa'
-        ];
-    }
 }

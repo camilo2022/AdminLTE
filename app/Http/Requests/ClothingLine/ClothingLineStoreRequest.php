@@ -61,13 +61,4 @@ class ClothingLineStoreRequest extends FormRequest
             'description.max' => 'El campo Descripcion de la linea de producto no debe exceder los 255 caracteres.',
         ];
     }
-
-    public function attributes()
-    {
-        return [
-            'name' => 'Nombre de la linea de producto',
-            'code' => 'Codigo de la linea de producto',
-            'description' => 'Descripcion de la linea de producto'
-        ];
-    }
 }

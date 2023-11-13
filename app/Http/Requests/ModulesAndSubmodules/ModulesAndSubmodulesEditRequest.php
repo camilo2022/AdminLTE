@@ -41,23 +41,15 @@ class ModulesAndSubmodulesEditRequest extends FormRequest
     public function rules()
     {
         return [
-            'role' => 'nullable|string|exists:roles,name',
+            'role' => ['nullable', 'string', 'exists:roles,name'],
         ];
     }
 
     public function messages()
     {
         return [
-            'required' => 'El campo :attribute es requerido.',
-            'string' => 'Cada elemento en :attribute debe ser una cadena de caracteres.',
-            'exists' => 'El :attribute no existe.',
-        ];
-    }
-
-    public function attributes()
-    {
-        return [
-            
+            'role.string' => 'El campo Rol debe ser una cadena de caracteres.',
+            'role.exists' => 'El Rol no existe en la base de datos.',
         ];
     }
 }

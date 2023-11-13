@@ -41,9 +41,9 @@ class RolesAndPermissionsIndexQueryRequest extends FormRequest
     public function rules()
     {
         return [
-            'start_date' => 'nullable|date',
-            'end_date' => 'nullable|date|after_or_equal:start_date',
-            'perPage' => 'required|integer|min:1',
+            'start_date' => ['nullable', 'date'],
+            'end_date' => ['nullable', 'date', 'after_or_equal:start_date'],
+            'perPage' => ['required', 'numeric'],
         ];
     }
 
@@ -53,18 +53,8 @@ class RolesAndPermissionsIndexQueryRequest extends FormRequest
             'start_date.required' => 'La fecha de inicio es requerida.',
             'end_date.required' => 'La fecha de fin es requerida.',
             'end_date.after_or_equal' => 'La fecha de fin debe ser igual o posterior a la fecha de inicio.',
-            'perPage.required' => 'El número de elementos por página es requerido.',
-            'perPage.integer' => 'El número de elementos por página debe ser un número entero.',
-            'perPage.min' => 'El número de elementos por página debe ser al menos :min.',
-        ];
-    }
-
-    public function attributes()
-    {
-        return [
-            'start_date' => 'Fecha de inicio',
-            'end_date' => 'Fecha de fin',
-            'perPage' => 'Numero de página',
+            'perPage.numeric' => 'El campo Numero de registros por página debe ser un valor numérico.',
+            'perPage.required' => 'El campo Numero de registros por página es requerido.'
         ];
     }
 }

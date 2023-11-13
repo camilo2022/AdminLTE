@@ -41,22 +41,15 @@ class ModelRestoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'id' => 'required|exists:models,id',
+            'id' => ['required', 'exists:models,id'],
         ];
     }
 
     public function messages()
     {
         return [
-            'id.required' => 'El campo :attribute es requerido.',
-            'id.exists' => 'El :attribute proporcionado no es válido.',
-        ];
-    }
-
-    public function attributes()
-    {
-        return [
-            'id' => 'identificador unico',
+            'id.required' => 'El campo identificador del modelo de producto es requerido.',
+            'id.exists' => 'El identificador del modelo de producto proporcionado no es válido.'
         ];
     }
 }

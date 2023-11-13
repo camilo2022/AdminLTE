@@ -62,13 +62,4 @@ class ModelUpdateRequest extends FormRequest
             'description.max' => 'El campo Descripcion del modelo de producto no debe exceder los 255 caracteres.',
         ];
     }
-
-    public function attributes()
-    {
-        return [
-            'name' => 'Nombre del modelo de producto',
-            'code' => 'Codigo del modelo de producto',
-            'description' => 'Descripcion del modelo de producto'
-        ];
-    }
 }

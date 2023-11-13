@@ -48,20 +48,12 @@ class PackageStoreRequest extends FormRequest
     public function messages()
     {
         return [
-            'name.required' => 'El campo Nombre del tipo de paquete es requerido.',
-            'name.string' => 'El campo Nombre del tipo de paquete debe ser una cadena de texto.',
-            'name.unique' => 'El campo Nombre del tipo de paquete ya existe en la base de datos.',
-            'code.required' => 'El campo Codigo del tipo de paquete es requerido.',
-            'code.string' => 'El campo Codigo del tipo de paquete debe ser una cadena de texto.',
-            'code.unique' => 'El campo Codigo del tipo de paquete ya existe en la base de datos.'
-        ];
-    }
-
-    public function attributes()
-    {
-        return [
-            'name' => 'Nombre del tipo de paquete',
-            'code' => 'Codigo del tipo de paquete'
+            'name.required' => 'El campo Nombre del tipo de empaque es requerido.',
+            'name.string' => 'El campo Nombre del tipo de empaque debe ser una cadena de texto.',
+            'name.unique' => 'El campo Nombre del tipo de empaque ya existe en la base de datos.',
+            'code.required' => 'El campo Codigo del tipo de empaque es requerido.',
+            'code.string' => 'El campo Codigo del tipo de empaque debe ser una cadena de texto.',
+            'code.unique' => 'El campo Codigo del tipo de empaque ya existe en la base de datos.'
         ];
     }
 }

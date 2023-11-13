@@ -41,22 +41,15 @@ class ClothingLineRestoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'id' => 'required|exists:clothing_lines,id',
+            'id' => ['required', 'exists:clothing_lines,id'],
         ];
     }
 
     public function messages()
     {
         return [
-            'id.required' => 'El campo :attribute es requerido.',
-            'id.exists' => 'El :attribute proporcionado no es válido.',
-        ];
-    }
-
-    public function attributes()
-    {
-        return [
-            'id' => 'identificador unico',
+            'id.required' => 'El campo identificador de la linea de producto es requerido.',
+            'id.exists' => 'El identificador de la linea de producto proporcionado no es válido.',
         ];
     }
 }

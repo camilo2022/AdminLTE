@@ -41,8 +41,8 @@ class BusinessEditRequest extends FormRequest
     public function rules()
     {
         return [
-            'country_id' => 'nullable|exists:countries,id',
-            'departament_id' => 'nullable|exists:departaments,id',
+            'country_id' => ['nullable', 'exists:countries,id'],
+            'departament_id' => ['nullable', 'exists:departaments,id'],
         ];
     }
 
@@ -51,14 +51,6 @@ class BusinessEditRequest extends FormRequest
         return [
             'country_id.exists' => 'El pais proporcionado no existe.',
             'departament_id.exists' => 'El departamento proporcionado no existe.',
-        ];
-    }
-
-    public function attributes()
-    {
-        return [
-            'country_id' => 'identificador del pais',
-            'country_id' => 'identificador del departamento',
         ];
     }
 }

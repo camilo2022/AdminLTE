@@ -44,7 +44,7 @@ class DateNotBetween implements Rule
 
     public function message()
     {
-        return 'La :attribute ya está en el rango de fechas de otra correria.';
+        return 'El campo :attribute ya está en el rango de fechas de otra correria.';
     }
 }
 

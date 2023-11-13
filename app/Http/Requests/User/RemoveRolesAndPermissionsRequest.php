@@ -43,7 +43,7 @@ class RemoveRolesAndPermissionsRequest extends FormRequest
         return [
             'id' => 'required|exists:users,id',
             'role' => 'required|string|exists:roles,name',
-            'permissions' => 'required|array|min:1',
+            'permissions' => 'required|array',
             'permissions.*' => 'string|exists:permissions,name',
         ];
     }
@@ -51,23 +51,15 @@ class RemoveRolesAndPermissionsRequest extends FormRequest
     public function messages()
     {
         return [
-            'id.required' => 'El campo identificador unico de usuario es requerido.',
-            'rol.required' => 'El campo rol es requerido.',
-            'permissions.required' => 'Debe seleccionar los permisos que desea remover.',
-            'array' => 'El campo :attribute debe ser un arreglo.',
-            'exists' => 'El :attribute especificado no existe.',
-            'unique' => 'El :attribute ya existe.',
-            'string' => 'El :attribute debe ser una cadena de texto.',
-            'min' => 'El :attribute debe tener minimo :min permiso seleccionado.',
-        ];
-    }
-
-    public function attributes()
-    {
-        return [
-            'id' => 'identificador unico de usuario',
-            'role' => 'rol',
-            'permissions' => 'permisos',
+            'id.required' => 'El campo identificador del usuario es requerido.',
+            'id.exists' => 'El identificador del usuario no existe en la base de datos.',
+            'role.required' => 'El campo rol es requerido.',
+            'role.string' => 'El rol debe ser una cadena de texto.',
+            'role.exists' => 'El rol no existe en la base de datos.',
+            'permissions.required' => 'Debe seleccionar los permisos que desea asignar.',
+            'permissions.array' => 'El campo permisos a asignar debe ser un arreglo.',
+            'permissions.*.string' => 'El permiso debe ser una cadena de texto.',
+            'permissions.*.exists' => 'El permiso no existe en la base de datos.'
         ];
     }
 }

@@ -41,29 +41,25 @@ class RolesAndPermissionsStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'role' => 'required|string|max:255|unique:roles,name',
-            'permissions' => 'required|array',
-            'permissions.*' => 'required|string|max:255|unique:permissions,name',
+            'role' => ['required', 'string', 'max:255', 'unique:roles,name'],
+            'permissions' => ['required', 'array'],
+            'permissions.*' => ['required', 'string', 'max:255', 'unique:permissions,name'],
         ];
     }
 
     public function messages()
     {
         return [
-            'required' => 'El campo :attribute es requerido.',
-            'array' => 'El campo :attribute debe ser un arreglo.',
-            'string' => 'Cada elemento en :attribute debe ser una cadena de caracteres.',
-            'max' => 'Cada elemento en :attribute no debe exceder los :max caracteres.',
-            'unique' => 'El :attribute ya existe.',
-        ];
-    }
-
-    public function attributes()
-    {
-        return [
-            'role' => 'Rol',
-            'permissions' => 'Permisos',
-            'permissions.*' => 'Elemento en Permisos',
+            'role.required' => 'El campo Nombre del rol es requerido.',
+            'role.string' => 'El campo Nombre del rol debe ser una cadena de caracteres.',
+            'role.max' => 'El campo Nombre del rol no debe exceder los 255 caracteres.',
+            'role.unique' => 'El Nombre del rol ya existe en la base de datos.',
+            'permissions.required' => 'El campo Permisos del rol es requerido.',
+            'permissions.array' => 'El campo Permisos del rol debe ser un arreglo.',
+            'permissions.*.required' => 'El Nombre del permiso es requerido.',
+            'permissions.*.string' => 'El Nombre del permiso debe ser una cadena de caracteres.',
+            'permissions.*.max' => 'El Nombre del permiso no debe exceder los 255 caracteres.',
+            'permissions.*.unique' => 'El Nombre del permiso ya existe en la base de datos.',
         ];
     }
 }

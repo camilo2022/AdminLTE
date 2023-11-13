@@ -48,20 +48,12 @@ class PackageUpdateRequest extends FormRequest
     public function messages()
     {
         return [
-            'name.required' => 'El campo Nombre de la correria es requerido.',
-            'name.string' => 'El campo Nombre de la correria debe ser una cadena de texto.',
-            'name.unique' => 'El campo Nombre de la correria ya existe en la base de datos.',
-            'code.required' => 'El campo Codigo de la correria es requerido.',
-            'code.string' => 'El campo Codigo de la correria debe ser una cadena de texto.',
-            'code.unique' => 'El campo Codigo de la correria ya existe en la base de datos.'
-        ];
-    }
-
-    public function attributes()
-    {
-        return [
-            'name' => 'Nombre de la correria',
-            'code' => 'Codigo de la correria'
+            'name.required' => 'El campo Nombre del tipo de empaque es requerido.',
+            'name.string' => 'El campo Nombre del tipo de empaque debe ser una cadena de texto.',
+            'name.unique' => 'El campo Nombre del tipo de empaque ya existe en la base de datos.',
+            'code.required' => 'El campo Codigo del tipo de empaque es requerido.',
+            'code.string' => 'El campo Codigo del tipo de empaque debe ser una cadena de texto.',
+            'code.unique' => 'El campo Codigo del tipo de empaque ya existe en la base de datos.'
         ];
     }
 }

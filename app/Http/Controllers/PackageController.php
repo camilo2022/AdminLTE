@@ -36,7 +36,7 @@ class PackageController extends Controller
             $start_date = Carbon::parse($request->input('start_date'))->startOfDay();
             $end_date = Carbon::parse($request->input('end_date'))->endOfDay();
             //Consulta por nombre
-            $collections = Package::when($request->filled('search'),
+            $packages = Package::when($request->filled('search'),
                     function ($query) use ($request) {
                         $query->search($request->input('search'));
                     }
@@ -51,7 +51,7 @@ class PackageController extends Controller
                 ->paginate($request->input('perPage'));
 
             return $this->successResponse(
-                new PackageIndexQueryCollection($collections),
+                new PackageIndexQueryCollection($packages),
                 $this->getMessage('Success'),
                 200
             );

@@ -133,7 +133,7 @@ class ModulesAndSubmodulesController extends Controller
             
             return $this->successResponse(
                 $module,
-                'Modulo y submodulos creados correctamente.',
+                'Modulo y submodulos creados exitosamente.',
                 201
             );
         } catch (ModelNotFoundException $e) {
@@ -234,7 +234,7 @@ class ModulesAndSubmodulesController extends Controller
 
             return $this->successResponse(
                 $module,
-                'Modulo y submodulos actualizados correctamente.',
+                'Modulo y submodulos actualizados exitosamente.',
                 200
             );
         } catch (ModelNotFoundException $e) {
@@ -274,7 +274,7 @@ class ModulesAndSubmodulesController extends Controller
             // Devolver una respuesta exitosa
             return $this->successResponse(
                 $module,
-                'Modulo y submodulos eliminados correctamente.',
+                'Modulo y submodulos eliminados exitosamente.',
                 204
             );
         } catch (ModelNotFoundException $e) {
