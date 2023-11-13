@@ -14,14 +14,14 @@
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="clothing_line_id">Paises</label>
+                            <label for="clothing_line_id">Lineas</label>
                             <div class="input-group">
                                 <select class="form-control select2" id="clothing_line_id_c" name="clothing_line_id" style="width: 88%">
                                     <option value="">Seleccione</option>
                                 </select>
                                 <div class="input-group-append">
                                     <span class="input-group-text">
-                                        <i class="fas fa-earth-americas"></i>
+                                        <i class="fas fa-clothes-hanger"></i>
                                     </span>
                                 </div>
                             </div>

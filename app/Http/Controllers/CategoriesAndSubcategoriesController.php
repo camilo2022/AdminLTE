@@ -121,7 +121,7 @@ class CategoriesAndSubcategoriesController extends Controller
                 $subcategory = (object) $subcategory;
                 $subcategoryNew = new Subcategory();
                 $subcategoryNew->category_id = $category->id;
-                $subcategoryNew->name = $subcategory->subcategory;
+                $subcategoryNew->name = $subcategory->name;
                 $subcategoryNew->code = $subcategory->code;
                 $subcategoryNew->description = $subcategory->description;
                 $subcategoryNew->save();
@@ -251,7 +251,10 @@ class CategoriesAndSubcategoriesController extends Controller
     {
         try {
             // Eliminar categoria y subcategorias
-            $category = Category::findOrFail($request->input('id'))->delete();
+            $category = Category::findOrFail($request->input('id'));
+            // Eliminar la categoría y sus subcategorías
+            $category->delete();
+            $category->subcategories()->delete();
             // Devolver una respuesta exitosa
             return $this->successResponse(
                 $category,
@@ -281,7 +284,11 @@ class CategoriesAndSubcategoriesController extends Controller
     public function restore(CategoriesAndSubcategoriesRestoreRequest $request)
     {
         try {
-            $category = Category::withTrashed()->findOrFail($request->input('id'))->restore();
+            // Restaurar categoria y subcategorias
+            $category = Category::withTrashed()->findOrFail($request->input('id'));
+            // Restaurar la categoría y sus subcategorías
+            $category->restore();
+            $category->subcategories()->restore();
             return $this->successResponse(
                 $category,
                 'Categoria y subcategorias fueron restauradas exitosamente.',

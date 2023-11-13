@@ -148,7 +148,7 @@ class ModulesAndSubmodulesSeeder extends Seeder
         Submodule::create([
             'name' => 'Lineas',
             'url' => '/Dashboard/ClothingLines/Index',
-            'icon' => 'fas fa-family',
+            'icon' => 'fas fa-clothes-hanger',
             'module_id' => $Administracion->id,
             'permission_id' => 71
         ]);

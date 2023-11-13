@@ -83,7 +83,7 @@ function CreateModuleAndSubmodulesAddSubmodule() {
     });
     let card = $('<div>').addClass('card collapsed-card');
     let cardHeader = $('<div>').addClass('card-header border-0 ui-sortable-handle');
-    let cardTitle = $('<h3>').addClass('card-title mt-1');
+    let cardTitle = $('<h3>').addClass('card-title mt-1').css({'width':'70%'});
     let inputGroup = $('<div>').addClass('input-group');
     let input = $('<input>').attr({
         'type': 'text',

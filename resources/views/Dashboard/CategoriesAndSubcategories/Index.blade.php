@@ -93,5 +93,5 @@
     <script src="{{ asset('js/Dashboard/CategoriesAndSubcategories/Create.js') }}"></script>
     <script src="{{ asset('js/Dashboard/CategoriesAndSubcategories/Edit.js') }}"></script>
     <script src="{{ asset('js/Dashboard/CategoriesAndSubcategories/Delete.js') }}"></script>
-    <script src="{{ asset('js/Dashboard/CategoriesAndSubcategories/Suggestion.js') }}"></script>
+    <script src="{{ asset('js/Dashboard/CategoriesAndSubcategories/Restore.js') }}"></script>
 @endsection

@@ -212,7 +212,6 @@ class PackageController extends Controller
     {
         try {
             $package = Package::withTrashed()->findOrFail($request->input('id'))->delete();
-
             return $this->successResponse(
                 $package,
                 'El tipo de empaque fue eliminado exitosamente.',

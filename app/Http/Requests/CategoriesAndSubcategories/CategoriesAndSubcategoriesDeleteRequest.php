@@ -41,21 +41,15 @@ class CategoriesAndSubcategoriesDeleteRequest extends FormRequest
     public function rules()
     {
         return [
-            'category_id' => ['required', 'exists:roles,id'],
-            'subcategory_id' => ['required', 'array'],
-            'subcategory_id.*' => ['required', 'exists:categories,id'], // Asegura que los id de permisos existan en la tabla permissions
+            'id' => ['required', 'exists:categories,id']
         ];
     }
 
     public function messages()
     {
         return [
-            'category_id.required' => 'El campo identificador del rol es requerido.',
-            'category_id.integer' => 'El identificador del rol debe ser un número entero.',
-            'subcategory_id.required' => 'El campo identificadores de las subcategorias es requerido.',
-            'subcategory_id.array' => 'El campo identificadores de las subcategorias debe ser un arreglo.',
-            'subcategory_id.*.required' => 'El identificador de la subcategoria es requerido.',
-            'subcategory_id.*.exists' => 'El identificador de la subcategoria no existe en la base de datos.',
+            'category_id.required' => 'El campo identificador de la categoria es requerido.',
+            'category_id.integer' => 'El identificador de la categoria debe ser un número entero.'
         ];
     }
 }

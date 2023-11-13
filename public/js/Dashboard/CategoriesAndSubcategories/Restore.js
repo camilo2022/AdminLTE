@@ -1,44 +1,44 @@
-function DeleteCategoryAndSubcategories(id) {
+function RestoreCategoryAndSubcategories(id) {
     Swal.fire({
-        title: '¿Desea eliminar la categoria y subcategorias?',
-        text: 'La categoria y subcategorias serán eliminados.',
+        title: '¿Desea restaurar la categoria y subcategorias?',
+        text: 'La categoria y subcategorias serán restaurada.',
         icon: 'warning',
         showCancelButton: true,
         cancelButtonColor: '#DD6B55',
         confirmButtonColor: '#3085d6',
-        confirmButtonText: 'Si, eliminar!',
-        cancelButtonText: 'No, cancelar!',
+        confirmButtonText: 'Si, restaurar!',
+        cancelButtonText: 'No, cancelar!'
     }).then((result) => {
         if (result.value) {
             $.ajax({
-                url: `/Dashboard/CategoriesAndSubcategories/Delete`,
-                type: 'DELETE',
+                url: '/Dashboard/CategoriesAndSubcategories/Restore',
+                type: 'PUT',
                 data: {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
                     'id': id
                 },
                 success: function(response) {
                     tableCategoriesAndSubcategories.ajax.reload();
-                    DeleteModuleAndSubmodulesAjaxSuccess(response);
+                    RestoreCategoryAndSubcategoriesAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
                     tableCategoriesAndSubcategories.ajax.reload();
-                    DeleteModuleAndSubmodulesAjaxError(xhr);
+                    RestoreCategoryAndSubcategoriesAjaxError(xhr);
                 }
             });
         } else {
-            toastr.info('La categoria y las subcategorias seleccionadas no fueron eliminadas.')
+            toastr.info('La categoria y las subcategorias seleccionadas no fueron restauradas.')
         }
     });
 }
 
-function DeleteModuleAndSubmodulesAjaxSuccess(response) {
+function RestoreCategoryAndSubcategoriesAjaxSuccess(response) {
     if(response.status === 204) {
         toastr.success(response.message);
     }
 }
 
-function DeleteModuleAndSubmodulesAjaxError(xhr) {
+function RestoreCategoryAndSubcategoriesAjaxError(xhr) {
     if(xhr.status === 403) {
         toastr.error(xhr.responseJSON.error.message);
     }
@@ -48,7 +48,7 @@ function DeleteModuleAndSubmodulesAjaxError(xhr) {
     }
 
     if(xhr.status === 419) {
-        toastr.error(xhr.responseJSON.error.message);
+        toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
     }
 
     if(xhr.status === 422){

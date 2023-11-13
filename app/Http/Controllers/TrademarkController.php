@@ -226,7 +226,6 @@ class TrademarkController extends Controller
     {
         try {
             $trademark = Trademark::withTrashed()->findOrFail($request->input('id'))->delete();
-
             return $this->successResponse(
                 $trademark,
                 'La marca de producto fue eliminado exitosamente.',

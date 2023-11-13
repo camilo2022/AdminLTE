@@ -215,7 +215,6 @@ class ClothingLineController extends Controller
     {
         try {
             $clothingLine = ClothingLine::withTrashed()->findOrFail($request->input('id'))->delete();
-
             return $this->successResponse(
                 $clothingLine,
                 'La linea de producto fue eliminada exitosamente.',

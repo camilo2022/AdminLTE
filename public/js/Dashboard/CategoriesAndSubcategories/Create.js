@@ -7,7 +7,7 @@ function CreateCategoryAndSubcategoriesModal() {
         },
         success: function(response) {
             CreateCategoryAndSubcategoriesModalCleaned();
-            CreateCategoryAndSubcategoriesQueryRoles(response.data);
+            CreateCategoryAndSubcategoriesModalClothingLines(response.data);
             CreateCategoryAndSubcategoriesAjaxSuccess(response);
             $('#CreateCategoryAndSubcategoriesModal').modal('show');
         },
@@ -26,6 +26,29 @@ function CreateCategoryAndSubcategoriesModalCleaned() {
     $('#description_c').val('');
     $('#CreateCategoryAndSubcategoriesAddSubcategoryButton').attr('data-count', 0);
     CreateCategoryAndSubcategoriesAddSubcategory();
+    CreateCategoryAndSubcategoriesModalResetSelect();
+}
+
+function CreateCategoryAndSubcategoriesModalResetSelect() {
+    const select = $('#clothing_line_id_c');
+    // Remove all options by setting the select's innerHTML to an empty string
+    select.html('');
+    // Add a new option with jQuery
+    const defaultOption = $('<option>', {
+        value: '',
+        text: 'Seleccione'
+    });
+    // Append the new option to the select
+    select.append(defaultOption);
+    // Trigger the change event
+    select.trigger('change');
+}
+
+function CreateCategoryAndSubcategoriesModalClothingLines(clothingLines) {
+    clothingLines.forEach(clothingLine => {
+        let newOption = new Option(clothingLine.name, clothingLine.id, false, false);
+        $('#clothing_line_id_c').append(newOption);
+    });
 }
 
 function CreateCategoryAndSubcategories() {
@@ -45,14 +68,15 @@ function CreateCategoryAndSubcategories() {
                 type: 'POST',
                 data: {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
-                    'category': $('#name_c').val(),
+                    'clothing_line_id': $('#clothing_line_id_c').val(),
+                    'name': $('#name_c').val(),
                     'code': $('#code_c').val(),
                     'description': $('#description_c').val(),
-                    'subcategories': $('.subcategories_c').find('div.subcategories_c').map(function(index) {
+                    'subcategories': $('.subcategories_c').find('div.subcategory_c').map(function(index) {
                         return {
-                            'subcategory': $(this).find('input.name_c').val(),
+                            'name': $(this).find('input.name_c').val(),
                             'code': $(this).find('input.code_c').val(),
-                            'description': $(this).find('input.description_c').val()
+                            'description': $(this).find('textarea.description_c').val()
                         };
                     }).get()
                 },
@@ -80,7 +104,7 @@ function CreateCategoryAndSubcategoriesAddSubcategory() {
     });
     let card = $('<div>').addClass('card collapsed-card');
     let cardHeader = $('<div>').addClass('card-header border-0 ui-sortable-handle');
-    let cardTitle = $('<h3>').addClass('card-title mt-1');
+    let cardTitle = $('<h3>').addClass('card-title mt-1').css({'width':'70%'});
     let inputGroup = $('<div>').addClass('input-group');
     let input = $('<input>').attr({
         'type': 'text',
@@ -156,7 +180,7 @@ function CreateCategoryAndSubcategoriesAddSubcategory() {
 
     newSubcategory.append(card);
 
-    // Agregar el nuevo elemento al elemento con clase "subcategorys_c"
+    // Agregar el nuevo elemento al elemento con clase "subcategories_c"
     $('.subcategories_c').append(newSubcategory);
     id++;
     $('#CreateCategoryAndSubcategoriesAddSubcategoryButton').attr('data-count', id)
@@ -178,110 +202,6 @@ function CreateCategoryAndSubcategoriesWriteUrl(selectPermission, inputUrl) {
     }
 }
 
-function CreateCategoryAndSubcategoriesQueryRoles(roles) {
-    let rolesDiv = $('#roles_access_c');
-
-    $.each(roles, function (i, role) {
-        let roleDiv = $('<div>').addClass('row pl-2 icheck-primary');
-
-        let roleCheckbox = $('<input>').attr({
-            'id': role.name,
-            'type': 'checkbox',
-            'onclick': 'CreateCategoryAndSubcategoriesRoles(this)',
-            'data-id': role.id
-        });
-
-        let roleLabel = $('<label>').text(role.name).attr({
-            'for': role.name,
-            'class': 'mt-3 ml-3'
-        });
-
-        roleDiv.append(roleCheckbox);
-        roleDiv.append(roleLabel);
-        rolesDiv.append(roleDiv);
-    });
-}
-
-function CreateCategoryAndSubcategoriesRoles(checkbox) {
-    // Obtener IDs de los checkboxes marcados en #roles_access_c
-    let role = $(checkbox).attr('id');
-
-    // Recorrer #subcategorys_c
-    $('.subcategorys_c').each(function () {
-        let subcategoryElement = $(this);
-        let selectRole = subcategoryElement.find('select.role_c');
-
-        // Verificar si el checkbox está marcado
-        if ($(checkbox).is(':checked')) {
-            // Agregar el role al select
-            selectRole.append($('<option>', {
-                'value': role,
-                'text': role
-            }));
-        } else {
-            let optionToRemove = selectRole.find(`option[value="${role}"]`);
-
-            // Verificar si la opción estaba seleccionada antes de la eliminación
-            let isSelected = optionToRemove.is(':selected');
-
-            if (isSelected) {
-                let selectPermission = subcategoryElement.find('select.permission_c');
-                subcategoryElement.find('input.url_c').val('')
-                selectPermission.empty().append(
-                    $('<option>', {
-                        'value': '',
-                        'text': 'Seleccione'
-                    })
-                );
-            }
-            // Quitar el role del select
-            optionToRemove.remove();
-        }
-    });
-}
-
-function CreateCategoryAndSubcategoriesQueryPermissions(selectRoles, selectPermissions) {
-    $.ajax({
-        url: `/Dashboard/CategoriesAndSubcategories/Create`,
-        type: 'POST',
-        data: {
-            '_token': $('meta[name="csrf-token"]').attr('content'),
-            'role': $(selectRoles).val()
-        },
-        success: function(response) {
-            if($(selectRoles).val() !== '') {
-                CreateCategoryAndSubcategoriesPermissions(selectPermissions, response.data.permissions);
-            }
-        },
-        error: function(xhr, textStatus, errorThrown) {
-            CreateCategoryAndSubcategoriesAjaxError(xhr);
-            $(`#${selectPermissions}`).empty().append(
-                $('<option>', {
-                    'value': '',
-                    'text': 'Seleccione'
-                })
-            );
-        }
-    });
-}
-
-function CreateCategoryAndSubcategoriesPermissions(selectPermissions, permissions) {
-    let select = $(`#${selectPermissions}`).empty().append(
-        $('<option>',{
-            'value': '',
-            'text': 'Seleccione'
-        })
-    );
-    // Agregar opciones con los roles seleccionados
-    $.each(permissions, function(index, permission) {
-        select.append($('<option>',
-            {
-                'value': permission.id,
-                'text': permission.name
-            }
-        ));
-    });
-}
 
 function CreateCategoryAndSubcategoriesAjaxSuccess(response) {
     if(response.status === 200) {
@@ -336,43 +256,42 @@ function CreateCategoryAndSubcategoriesAjaxError(xhr) {
 }
 
 function AddIsValidClassCreateCategoryAndSubcategories() {
-    if (!$('#module_c').hasClass('is-invalid')) {
-        $('#module_c').addClass('is-valid');
+    if (!$('#name_c').hasClass('is-invalid')) {
+        $('#name_c').addClass('is-valid');
+    }
+    if (!$('#code_c').hasClass('is-invalid')) {
+        $('#code_c').addClass('is-valid');
+    }
+    if (!$('#description_c').hasClass('is-invalid')) {
+        $('#description_c').addClass('is-valid');
+    }
+    if (!$('span[aria-labelledby="select2-clothing_line_id_c-container"]').hasClass('is-invalid')) {
+        $('span[aria-labelledby="select2-clothing_line_id_c-container"]').addClass('is-valid');
     }
 
-    if (!$('#icon_c').hasClass('is-invalid')) {
-        $('#icon_c').addClass('is-valid');
-    }
-
-    $('.subcategorys_c').find('div.subcategory_c').each(function(index) {
-        if (!$(this).find('select.role_c').hasClass('is-invalid')) {
-            $(this).find('select.role_c').addClass('is-valid');
-        }
-        if (!$(this).find('select.permission_c').hasClass('is-invalid')) {
-            $(this).find('select.permission_c').addClass('is-valid');
-        }
-        if (!$(this).find('input.subicon_c').hasClass('is-invalid')) {
-            $(this).find('input.subicon_c').addClass('is-valid');
-        }
+    $('.subcategories_c').find('div.subcategory_c').each(function(index) {
         if (!$(this).find('input.name_c').hasClass('is-invalid')) {
             $(this).find('input.name_c').addClass('is-valid');
         }
-        if (!$(this).find('input.url_c').hasClass('is-invalid')) {
-            $(this).find('input.url_c').addClass('is-valid');
+        if (!$(this).find('input.code_c').hasClass('is-invalid')) {
+            $(this).find('input.code_c').addClass('is-valid');
+        }
+        if (!$(this).find('textarea.description_c').hasClass('is-invalid')) {
+            $(this).find('textarea.description_c').addClass('is-valid');
         }
     });
 }
 
 function RemoveIsValidClassCreateCategoryAndSubcategories() {
-    $('#module_c').removeClass('is-valid');
-    $('#icon_c').removeClass('is-valid');
+    $('#name_c').removeClass('is-valid');
+    $('#code_c').removeClass('is-valid');
+    $('#description_c').removeClass('is-valid');
+    $('span[aria-labelledby="select2-clothing_line_id_c-container"]').removeClass('is-valid');
 
-    $('.subcategorys_c').find('div.subcategory_c').each(function(index) {
-        $(this).find('select.role_c').removeClass('is-valid');
-        $(this).find('select.permission_c').removeClass('is-valid');
-        $(this).find('input.subicon_c').removeClass('is-valid');
+    $('.subcategories_c').find('div.subcategory_c').each(function(index) {
         $(this).find('input.name_c').removeClass('is-valid');
-        $(this).find('input.url_c').removeClass('is-valid');
+        $(this).find('input.code_c').removeClass('is-valid');
+        $(this).find('textarea.description_c').removeClass('is-valid');
     });
 }
 
@@ -381,41 +300,39 @@ function AddIsInvalidClassCreateCategoryAndSubcategories(input) {
         $(`#${input}_c`).addClass('is-invalid');
     }
 
-    $('.subcategorys_c').find('div.subcategory_c').each(function(index) {
+    if (!$(`#span[aria-labelledby="select2-${input}_c-container`).hasClass('is-valid')) {
+        $(`span[aria-labelledby="select2-${input}_c-container"]`).addClass('is-invalid');
+    }
+
+    $('.subcategories_c').find('div.subcategory_c').each(function(index) {
         // Agrega la clase 'is-invalid'
-        if(input === `subcategorys.${index}.permission_id`) {
-            if (!$(this).find('select.permission_c').hasClass('is-valid')) {
-                $(this).find('select.role_c').addClass('is-invalid');
-                $(this).find('select.permission_c').addClass('is-invalid');
-            }
-        }
-        if(input === `subcategorys.${index}.icon`) {
-            if (!$(this).find('input.subicon_c').hasClass('is-valid')) {
-                $(this).find('input.subicon_c').addClass('is-invalid');
-            }
-        }
-        if(input === `subcategorys.${index}.subcategory`) {
+        if(input === `subcategories.${index}.name`) {
             if (!$(this).find('input.name_c').hasClass('is-valid')) {
                 $(this).find('input.name_c').addClass('is-invalid');
             }
         }
-        if(input === `subcategorys.${index}.url`) {
-            if (!$(this).find('input.url_c').hasClass('is-valid')) {
-                $(this).find('input.url_c').addClass('is-invalid');
+        if(input === `subcategories.${index}.code`) {
+            if (!$(this).find('input.code_c').hasClass('is-valid')) {
+                $(this).find('input.code_c').addClass('is-invalid');
+            }
+        }
+        if(input === `subcategories.${index}.description`) {
+            if (!$(this).find('textarea.description_c').hasClass('is-valid')) {
+                $(this).find('textarea.description_c').addClass('is-invalid');
             }
         }
     });
 }
 
 function RemoveIsInvalidClassCreateCategoryAndSubcategories() {
-    $('#module_c').removeClass('is-invalid');
-    $('#icon_c').removeClass('is-invalid');
+    $('#name_c').removeClass('is-invalid');
+    $('#code_c').removeClass('is-invalid');
+    $('#description_c').removeClass('is-invalid');
+    $('span[aria-labelledby="select2-clothing_line_id_c-container"]').removeClass('is-invalid');
 
-    $('.subcategorys_c').find('div.subcategory_c').each(function(index) {
-        $(this).find('select.role_c').removeClass('is-invalid');
-        $(this).find('select.permission_c').removeClass('is-invalid');
-        $(this).find('input.subicon_c').removeClass('is-invalid');
+    $('.subcategories_c').find('div.subcategory_c').each(function(index) {
         $(this).find('input.name_c').removeClass('is-invalid');
-        $(this).find('input.url_c').removeClass('is-invalid');
+        $(this).find('input.code_c').removeClass('is-invalid');
+        $(this).find('textarea.description_c').removeClass('is-invalid');
     });
 }

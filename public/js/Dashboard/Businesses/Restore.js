@@ -27,7 +27,7 @@ function RestoreBusiness(id) {
                 }
             });
         } else {
-            toastr.info('La emppresa seleccionada no fue restaurada.')
+            toastr.info('La empresa seleccionada no fue restaurada.')
         }
     });
 }

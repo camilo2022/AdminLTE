@@ -215,7 +215,6 @@ class ModelController extends Controller
     {
         try {
             $model = Model::withTrashed()->findOrFail($request->input('id'))->delete();
-
             return $this->successResponse(
                 $model,
                 'El modelo de producto fue eliminado exitosamente.',

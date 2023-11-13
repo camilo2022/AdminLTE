@@ -253,13 +253,12 @@ function RemoveIsValidClassCreateBusiness() {
 
 function AddIsInvalidClassCreateBusiness(input) {
     if (!$(`#${input}_c`).hasClass('is-valid')) {
-        $(`#${input}_c`).removeClass('is-valid');
+        $(`#${input}_c`).addClass('is-invalid');
     }
-    $(`#${input}_c`).addClass('is-invalid');
+    
     if (!$(`#span[aria-labelledby="select2-${input}_c-container`).hasClass('is-valid')) {
-        $(`span[aria-labelledby="select2-${input}_c-container"]`).removeClass('is-valid');
+        $(`span[aria-labelledby="select2-${input}_c-container"]`).addClass('is-invalid');
     }
-    $(`span[aria-labelledby="select2-${input}_c-container"]`).addClass('is-invalid');
 }
 
 function RemoveIsInvalidClassCreateBusiness() {

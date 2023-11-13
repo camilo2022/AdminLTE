@@ -1,4 +1,4 @@
-let tablecategoriesAndSubcategories = $('#categoriesAndSubcategories').DataTable({
+let tableCategoriesAndSubcategories = $('#categoriesAndSubcategories').DataTable({
     "processing": true,
     "serverSide": true,
     "ajax": {
@@ -45,9 +45,9 @@ let tablecategoriesAndSubcategories = $('#categoriesAndSubcategories').DataTable
         { data: 'code' },
         { data: 'description' },
         {
-            data: null,
+            data: 'subcategories',
             render: function(data, type, row) {
-                var table = `<table border="1">
+                var table = `<table border="1" class="w-100">
                     <thead class="thead-dark">
                         <tr>
                             <th>#</th>
@@ -59,7 +59,7 @@ let tablecategoriesAndSubcategories = $('#categoriesAndSubcategories').DataTable
                     </thead>
                     <tbody>`;
 
-                $.each(data.subcategories, function(index, subcategory) {
+                $.each(data, function(index, subcategory) {
                     table += `<tr>
                                     <td>${subcategory.id}</td>    
                                     <td>${subcategory.name}</td>
@@ -73,7 +73,7 @@ let tablecategoriesAndSubcategories = $('#categoriesAndSubcategories').DataTable
 
                 table += `</tbody></table>`;
 
-                return table;
+                return data.length > 0 ? table : '';
             }
         },
         {

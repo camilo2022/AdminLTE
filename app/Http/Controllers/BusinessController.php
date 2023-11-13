@@ -267,7 +267,6 @@ class BusinessController extends Controller
     {
         try {
             $business = Business::withTrashed()->findOrFail($request->input('id'))->delete();
-
             return $this->successResponse(
                 $business,
                 'La empresa fue eliminada exitosamente.',
