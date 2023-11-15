@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class ColorDeleteRequest extends FormRequest
+class ColorRestoreRequest extends FormRequest
 {
     /**
      * Maneja una solicitud fallida de validación.

@@ -1,44 +1,48 @@
-function RestoreClothingLine(id) {
+function DeleteWarehouse(id) {
     Swal.fire({
-        title: '¿Desea restaurar la linea de producto?',
-        text: 'La linea de producto será restaurada.',
+        title: '¿Desea eliminar la bodega?',
+        text: 'La bodega será desactivada.',
         icon: 'warning',
         showCancelButton: true,
         cancelButtonColor: '#DD6B55',
         confirmButtonColor: '#3085d6',
-        confirmButtonText: 'Si, restaurar!',
-        cancelButtonText: 'No, cancelar!'
+        confirmButtonText: 'Si, eliminar!',
+        cancelButtonText: 'No, cancelar!',
     }).then((result) => {
         if (result.value) {
             $.ajax({
-                url: '/Dashboard/ClothingLines/Restore',
-                type: 'PUT',
+                url: `/Dashboard/Warehouses/Delete`,
+                type: 'DELETE',
                 data: {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
                     'id': id
                 },
                 success: function(response) {
-                    tableClothingLines.ajax.reload();
-                    RestoreClothingLineAjaxSuccess(response);
+                    tableWarehouses.ajax.reload();
+                    DeleteWarehouseAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableClothingLines.ajax.reload();
-                    RestoreClothingLineAjaxError(xhr);
+                    tableWarehouses.ajax.reload();
+                    DeleteWarehouseAjaxError(xhr);
                 }
             });
         } else {
-            toastr.info('La linea de producto seleccionada no fue restaurado.')
+            toastr.info('La bodega seleccionada no fue desactivada.')
         }
     });
 }
 
-function RestoreClothingLineAjaxSuccess(response) {
+function DeleteWarehouseAjaxSuccess(response) {
     if(response.status === 204) {
         toastr.success(response.message);
     }
+
+    if(response.status === 422) {
+        toastr.warning(response.message);
+    }
 }
 
-function RestoreClothingLineAjaxError(xhr) {
+function DeleteWarehouseAjaxError(xhr) {
     if(xhr.status === 403) {
         toastr.error(xhr.responseJSON.error.message);
     }

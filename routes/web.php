@@ -5,6 +5,7 @@ use App\Http\Controllers\BusinessController;
 use App\Http\Controllers\CategoriesAndSubcategoriesController;
 use App\Http\Controllers\ClothingLineController;
 use App\Http\Controllers\CollectionController;
+use App\Http\Controllers\ColorController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ModelController;
 use App\Http\Controllers\ModulesAndSubmodulesController;
@@ -12,6 +13,7 @@ use App\Http\Controllers\PackageController;
 use App\Http\Controllers\RolesAndPermissionsController;
 use App\Http\Controllers\TrademarkController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\WarehouseController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -333,6 +335,60 @@ Route::middleware(['auth'])->group(function () {
 
             Route::put('/Restore', [CategoriesAndSubcategoriesController::class, 'restore'])
             ->middleware('can:Dashboard.CategoriesAndSubcategories.Restore')->name('Dashboard.CategoriesAndSubcategories.Restore');
+        });
+
+        Route::prefix('/Warehouses')->group(function () {
+
+            Route::get('/Index', [WarehouseController::class, 'index'])
+            ->middleware('can:Dashboard.Warehouses.Index')->name('Dashboard.Warehouses.Index');
+
+            Route::post('/Index/Query', [WarehouseController::class, 'indexQuery'])
+            ->middleware('can:Dashboard.Warehouses.Index.Query')->name('Dashboard.Warehouses.Index.Query');
+
+            Route::post('/Create', [WarehouseController::class, 'create'])
+            ->middleware('can:Dashboard.Warehouses.Create')->name('Dashboard.Warehouses.Create');
+
+            Route::post('/Store', [WarehouseController::class, 'store'])
+            ->middleware('can:Dashboard.Warehouses.Store')->name('Dashboard.Warehouses.Store');
+
+            Route::post('/Edit/{id}', [WarehouseController::class, 'edit'])
+            ->middleware('can:Dashboard.Warehouses.Edit')->name('Dashboard.Warehouses.Edit');
+
+            Route::put('/Update/{id}', [WarehouseController::class, 'update'])
+            ->middleware('can:Dashboard.Warehouses.Update')->name('Dashboard.Warehouses.Update');
+
+            Route::delete('/Delete', [WarehouseController::class, 'delete'])
+            ->middleware('can:Dashboard.Warehouses.Delete')->name('Dashboard.Warehouses.Delete');
+
+            Route::put('/Restore', [WarehouseController::class, 'restore'])
+            ->middleware('can:Dashboard.Warehouses.Restore')->name('Dashboard.Warehouses.Restore');
+        });
+
+        Route::prefix('/Colors')->group(function () {
+
+            Route::get('/Index', [ColorController::class, 'index'])
+            ->middleware('can:Dashboard.Colors.Index')->name('Dashboard.Colors.Index');
+
+            Route::post('/Index/Query', [ColorController::class, 'indexQuery'])
+            ->middleware('can:Dashboard.Colors.Index.Query')->name('Dashboard.Colors.Index.Query');
+
+            Route::post('/Create', [ColorController::class, 'create'])
+            ->middleware('can:Dashboard.Colors.Create')->name('Dashboard.Colors.Create');
+
+            Route::post('/Store', [ColorController::class, 'store'])
+            ->middleware('can:Dashboard.Colors.Store')->name('Dashboard.Colors.Store');
+
+            Route::post('/Edit/{id}', [ColorController::class, 'edit'])
+            ->middleware('can:Dashboard.Colors.Edit')->name('Dashboard.Colors.Edit');
+
+            Route::put('/Update/{id}', [ColorController::class, 'update'])
+            ->middleware('can:Dashboard.Colors.Update')->name('Dashboard.Colors.Update');
+
+            Route::delete('/Delete', [ColorController::class, 'delete'])
+            ->middleware('can:Dashboard.Colors.Delete')->name('Dashboard.Colors.Delete');
+
+            Route::put('/Restore', [ColorController::class, 'restore'])
+            ->middleware('can:Dashboard.Colors.Restore')->name('Dashboard.Colors.Restore');
         });
     });
 });

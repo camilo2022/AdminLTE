@@ -1,7 +1,7 @@
-function RestoreClothingLine(id) {
+function RestoreWarehouse(id) {
     Swal.fire({
-        title: '¿Desea restaurar la linea de producto?',
-        text: 'La linea de producto será restaurada.',
+        title: '¿Desea restaurar la bodega?',
+        text: 'La bodega será restaurada.',
         icon: 'warning',
         showCancelButton: true,
         cancelButtonColor: '#DD6B55',
@@ -11,34 +11,34 @@ function RestoreClothingLine(id) {
     }).then((result) => {
         if (result.value) {
             $.ajax({
-                url: '/Dashboard/ClothingLines/Restore',
+                url: '/Dashboard/Warehouses/Restore',
                 type: 'PUT',
                 data: {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
                     'id': id
                 },
                 success: function(response) {
-                    tableClothingLines.ajax.reload();
-                    RestoreClothingLineAjaxSuccess(response);
+                    tableWarehouses.ajax.reload();
+                    RestoreWarehouseAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableClothingLines.ajax.reload();
-                    RestoreClothingLineAjaxError(xhr);
+                    tableWarehouse.ajax.reload();
+                    RestoreWarehouseAjaxError(xhr);
                 }
             });
         } else {
-            toastr.info('La linea de producto seleccionada no fue restaurado.')
+            toastr.info('La bodega seleccionada no fue restaurada.')
         }
     });
 }
 
-function RestoreClothingLineAjaxSuccess(response) {
+function RestoreWarehouseAjaxSuccess(response) {
     if(response.status === 204) {
         toastr.success(response.message);
     }
 }
 
-function RestoreClothingLineAjaxError(xhr) {
+function RestoreWarehouseAjaxError(xhr) {
     if(xhr.status === 403) {
         toastr.error(xhr.responseJSON.error.message);
     }

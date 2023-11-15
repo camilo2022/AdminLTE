@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Requests\Color;
+namespace App\Http\Requests\Warehouse;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class ColorDeleteRequest extends FormRequest
+class WarehouseRestoreRequest extends FormRequest
 {
     /**
      * Maneja una solicitud fallida de validación.
@@ -41,15 +41,15 @@ class ColorDeleteRequest extends FormRequest
     public function rules()
     {
         return [
-            'id' => ['required', 'exists:colors,id'],
+            'id' => ['required', 'exists:warehouses,id'],
         ];
     }
 
     public function messages()
     {
         return [
-            'id.required' => 'El campo identificador del color es requerido.',
-            'id.exists' => 'El identificador del color proporcionado no es válido.',
+            'id.required' => 'El campo identificador de la bodega es requerido.',
+            'id.exists' => 'El identificador de la bodega proporcionado no es válido.',
         ];
     }
 }

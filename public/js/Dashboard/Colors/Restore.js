@@ -1,7 +1,7 @@
-function RestoreClothingLine(id) {
+function RestoreColor(id) {
     Swal.fire({
-        title: '¿Desea restaurar la linea de producto?',
-        text: 'La linea de producto será restaurada.',
+        title: '¿Desea restaurar el color?',
+        text: 'El color será restaurada.',
         icon: 'warning',
         showCancelButton: true,
         cancelButtonColor: '#DD6B55',
@@ -11,34 +11,34 @@ function RestoreClothingLine(id) {
     }).then((result) => {
         if (result.value) {
             $.ajax({
-                url: '/Dashboard/ClothingLines/Restore',
+                url: '/Dashboard/Colors/Restore',
                 type: 'PUT',
                 data: {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
                     'id': id
                 },
                 success: function(response) {
-                    tableClothingLines.ajax.reload();
-                    RestoreClothingLineAjaxSuccess(response);
+                    tableColors.ajax.reload();
+                    RestoreColorAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableClothingLines.ajax.reload();
-                    RestoreClothingLineAjaxError(xhr);
+                    tableColor.ajax.reload();
+                    RestoreColorAjaxError(xhr);
                 }
             });
         } else {
-            toastr.info('La linea de producto seleccionada no fue restaurado.')
+            toastr.info('El color seleccionado no fue restaurado.')
         }
     });
 }
 
-function RestoreClothingLineAjaxSuccess(response) {
+function RestoreColorAjaxSuccess(response) {
     if(response.status === 204) {
         toastr.success(response.message);
     }
 }
 
-function RestoreClothingLineAjaxError(xhr) {
+function RestoreColorAjaxError(xhr) {
     if(xhr.status === 403) {
         toastr.error(xhr.responseJSON.error.message);
     }
