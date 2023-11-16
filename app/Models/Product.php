@@ -21,7 +21,6 @@ class Product extends DBModel
         'subcategory_id',
         'model_id',
         'trademark_id',
-        'route_photo',
         'price',
         'inventory_status',
         'collection_id'
