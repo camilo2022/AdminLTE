@@ -47,9 +47,9 @@ class RolesAndPermissionSeeder extends Seeder
 
         $Transfers = Role::create(['name' => 'Transfers']);
 
-        $Clients = Role::create(['name' => 'Clients']);
-
         $OrderSeller = Role::create(['name' => 'OrderSeller']);
+
+        $Clients = Role::create(['name' => 'Clients']);
 
         $Wallet = Role::create(['name' => 'Wallet']);
 
@@ -213,21 +213,6 @@ class RolesAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Dashboard.Transfers.Cancel'])->syncRoles([$Transfers]);
         Permission::create(['name' => 'Dashboard.Transfers.Detail.Cancel'])->syncRoles([$Transfers]);
 
-        Permission::create(['name' => 'Dashboard.Clients.Index'])->syncRoles([$Clients]);
-        Permission::create(['name' => 'Dashboard.Clients.Index.Query'])->syncRoles([$Clients]);
-        Permission::create(['name' => 'Dashboard.Clients.Create'])->syncRoles([$Clients]);
-        Permission::create(['name' => 'Dashboard.Clients.Branch.Create'])->syncRoles([$Clients]);
-        Permission::create(['name' => 'Dashboard.Clients.Store'])->syncRoles([$Clients]);
-        Permission::create(['name' => 'Dashboard.Clients.Branch.Store'])->syncRoles([$Clients]);
-        Permission::create(['name' => 'Dashboard.Clients.Show'])->syncRoles([$Clients]);
-        Permission::create(['name' => 'Dashboard.Clients.Quota'])->syncRoles([$Clients]);
-        Permission::create(['name' => 'Dashboard.Clients.Edit'])->syncRoles([$Clients]);
-        Permission::create(['name' => 'Dashboard.Clients.Branch.Edit'])->syncRoles([$Clients]);
-        Permission::create(['name' => 'Dashboard.Clients.Update'])->syncRoles([$Clients]);
-        Permission::create(['name' => 'Dashboard.Clients.Branch.Update'])->syncRoles([$Clients]);
-        Permission::create(['name' => 'Dashboard.Clients.Delete'])->syncRoles([$Clients]);
-        Permission::create(['name' => 'Dashboard.Clients.Branch.Delete'])->syncRoles([$Clients]);
-
         Permission::create(['name' => 'Dashboard.Order.Seller.Index'])->syncRoles([$OrderSeller]);
         Permission::create(['name' => 'Dashboard.Order.Seller.Index.Query'])->syncRoles([$OrderSeller]);
         Permission::create(['name' => 'Dashboard.Order.Seller.Create'])->syncRoles([$OrderSeller]);
@@ -244,6 +229,21 @@ class RolesAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Dashboard.Order.Seller.Detail.Pending'])->syncRoles([$OrderSeller]);
         Permission::create(['name' => 'Dashboard.Order.Seller.Cancel'])->syncRoles([$OrderSeller]);
         Permission::create(['name' => 'Dashboard.Order.Seller.Detail.Cancel'])->syncRoles([$OrderSeller]);
+
+        Permission::create(['name' => 'Dashboard.Clients.Index'])->syncRoles([$Clients]);
+        Permission::create(['name' => 'Dashboard.Clients.Index.Query'])->syncRoles([$Clients]);
+        Permission::create(['name' => 'Dashboard.Clients.Create'])->syncRoles([$Clients]);
+        Permission::create(['name' => 'Dashboard.Clients.Branch.Create'])->syncRoles([$Clients]);
+        Permission::create(['name' => 'Dashboard.Clients.Store'])->syncRoles([$Clients]);
+        Permission::create(['name' => 'Dashboard.Clients.Branch.Store'])->syncRoles([$Clients]);
+        Permission::create(['name' => 'Dashboard.Clients.Show'])->syncRoles([$Clients]);
+        Permission::create(['name' => 'Dashboard.Clients.Quota'])->syncRoles([$Clients]);
+        Permission::create(['name' => 'Dashboard.Clients.Edit'])->syncRoles([$Clients]);
+        Permission::create(['name' => 'Dashboard.Clients.Branch.Edit'])->syncRoles([$Clients]);
+        Permission::create(['name' => 'Dashboard.Clients.Update'])->syncRoles([$Clients]);
+        Permission::create(['name' => 'Dashboard.Clients.Branch.Update'])->syncRoles([$Clients]);
+        Permission::create(['name' => 'Dashboard.Clients.Delete'])->syncRoles([$Clients]);
+        Permission::create(['name' => 'Dashboard.Clients.Branch.Delete'])->syncRoles([$Clients]);
 
         Permission::create(['name' => 'Dashboard.Wallet.Index'])->syncRoles([$Wallet]);
         Permission::create(['name' => 'Dashboard.Wallet.Index.Query'])->syncRoles([$Wallet]);

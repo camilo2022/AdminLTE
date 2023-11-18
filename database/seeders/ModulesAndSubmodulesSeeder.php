@@ -225,28 +225,20 @@ class ModulesAndSubmodulesSeeder extends Seeder
             'module_id' => $Pedido->id
         ]);
 
-        ModuleHasRoles::create([
-            'role_id' => 18,
-            'module_id' => $Pedido->id
-        ]);
-
-        Submodule::create([
-            'name' => 'Clientes',
-            'url' => '/Dashboard/Clients/Index',
-            'icon' => 'fas fa-user-tie',
-            'module_id' => $Pedido->id,
-            'permission_id' => 135
-        ]);
-
         Submodule::create([
             'name' => 'Pedidos',
             'url' => '/Dashboard/Order/Seller/Index',
             'icon' => 'fas fa-receipt',
             'module_id' => $Pedido->id,
-            'permission_id' => 149
+            'permission_id' => 135
         ]);
 
         $Cartera = Module::create(['name' => 'Cartera', 'icon' => 'fas fa-wallet']);
+
+        ModuleHasRoles::create([
+            'role_id' => 18,
+            'module_id' => $Cartera->id
+        ]);
 
         ModuleHasRoles::create([
             'role_id' => 19,
@@ -256,6 +248,14 @@ class ModulesAndSubmodulesSeeder extends Seeder
         ModuleHasRoles::create([
             'role_id' => 20,
             'module_id' => $Cartera->id
+        ]);
+
+        Submodule::create([
+            'name' => 'Clientes',
+            'url' => '/Dashboard/Clients/Index',
+            'icon' => 'fas fa-user-tie',
+            'module_id' => $Cartera->id,
+            'permission_id' => 151
         ]);
 
         Submodule::create([
