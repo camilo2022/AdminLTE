@@ -138,8 +138,8 @@ function CreateCategoryAndSubcategoriesAddSubcategory() {
     card.append(cardHeader);
 
     let cardBody = $('<div>').addClass('card-body').css('display', 'none');
-    
-    
+
+
     let codeForm = $('<div>').addClass('form-group');
     let codeLabel = $('<label>').attr('for', '').text('Codigo');
     let codeInputGroup = $('<div>').addClass('input-group');
@@ -213,7 +213,7 @@ function CreateCategoryAndSubcategoriesAjaxSuccess(response) {
 
 function CreateCategoryAndSubcategoriesAjaxError(xhr) {
     if(xhr.status === 403) {
-        toastr.error(xhr.responseJSON.error.message);
+        toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
         $('#CreateCategoryAndSubcategoriesModal').modal('hide');
     }
 
@@ -223,7 +223,7 @@ function CreateCategoryAndSubcategoriesAjaxError(xhr) {
     }
 
     if(xhr.status === 419) {
-        toastr.error(xhr.responseJSON.error.message);
+        toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
         $('#CreateCategoryAndSubcategoriesModal').modal('hide');
     }
 
@@ -240,13 +240,7 @@ function CreateCategoryAndSubcategoriesAjaxError(xhr) {
     }
 
     if(xhr.status === 500){
-        if(xhr.responseJSON.error) {
-            toastr.error(xhr.responseJSON.error.message);
-        }
-
-        if(xhr.responseJSON.message) {
-            toastr.error(xhr.responseJSON.message);
-        }
+        toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
         $('#CreateCategoryAndSubcategoriesModal').modal('hide');
     }
 }

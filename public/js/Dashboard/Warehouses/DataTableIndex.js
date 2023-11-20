@@ -25,13 +25,7 @@ let tableWarehouses = $('#warehouses').DataTable({
             return response.data.warehouses;
         },
         "error": function (xhr, error, thrown) {
-            if(xhr.responseJSON.error) {
-                toastr.error(xhr.responseJSON.error.message);
-            }
-
-            if(xhr.responseJSON.message) {
-                toastr.error(xhr.responseJSON.message);
-            }
+            toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
         }
     },
     "columns": [

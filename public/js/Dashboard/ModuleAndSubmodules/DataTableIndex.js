@@ -1,10 +1,10 @@
 let tableModulesAndSubmodules = $('#modulesAndSubmodules').DataTable({
-    "processing": true,
-    "serverSide": true,
-    "ajax": {
-        "url": "/Dashboard/ModulesAndSubmodules/Index/Query",
-        "type": "POST",
-        "data": function (request) {
+    processing: true,
+    serverSide: true,
+    ajax: {
+        url: `/Dashboard/ModulesAndSubmodules/Index/Query`,
+        type: 'POST',
+        data: function (request) {
             var columnMappings = {
                 0: 'id',
                 1: 'name',
@@ -17,95 +17,82 @@ let tableModulesAndSubmodules = $('#modulesAndSubmodules').DataTable({
             request.column = columnMappings[request.order[0].column];
             request.dir = request.order[0].dir;
         },
-        "dataSrc": function (response) {
+        dataSrc: function (response) {
             response.recordsTotal = response.data.meta.pagination.count;
             response.recordsFiltered = response.data.meta.pagination.total;
             return response.data.modules;
         },
-        "error": function (xhr, error, thrown) {
-            if(xhr.responseJSON.error) {
-                toastr.error(xhr.responseJSON.error.message);
-            }
-
-            if(xhr.responseJSON.message) {
-                toastr.error(xhr.responseJSON.message);
-            }
+        error: function (xhr, error, thrown) {
+            toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
         }
     },
-    "columns": [
+    columns: [
         { data: 'id' },
         { data: 'module' },
         {
             data: null,
             render: function(data, type, row) {
-                let icon = $('<i>');
-                icon.addClass(data.icon);
-                return icon.prop('outerHTML');
+                return `<i class="${data.icon}"></i>'`;
             }
         },
         {
             data: null,
             render: function(data, type, row) {
-                let rolesDiv = $('<div>');
+                let div = `<div>`;
                 $.each(data.roles, function(index, role) {
-                    let roleSpan = $('<span>')
-                        .text(role.name);
-                    rolesDiv.append(roleSpan)
-                        .append('<br>');
+                    div += `<span>${role.name}</span><br>`;
                 });
-                return rolesDiv.prop('outerHTML');
+                div += `</div>`;
+
+                return div;
             }
         },
         {
             data: null,
             render: function(data, type, row) {
-                let submodulesDiv = $('<div>');
+                let div = `<div>`;
                 $.each(data.submodules, function(index, submodule) {
-                    let submoduleSpan = $('<span>')
-                        .text(submodule.name);
-                    submodulesDiv.append(submoduleSpan)
-                        .append('<br>');
+                    div += `<span>${submodule.name}</span><br>`;
                 });
-                return submodulesDiv.prop('outerHTML');
+                div += `</div>`;
+
+                return div;
             }
         },
         {
             data: null,
             render: function(data, type, row) {
-                let submoduleUrlsDiv = $('<div>');
+                let div = `<div>`;
                 $.each(data.submodules, function(index, submodule) {
-                    let urlSpan = $('<span>')
-                        .text(submodule.url);
-                    submoduleUrlsDiv.append(urlSpan)
-                        .append('<br>');
+                    div += `<span>${submodule.url}</span><br>`;
                 });
-                return submoduleUrlsDiv.prop('outerHTML');
+                div += `</div>`;
+
+                return div;
             }
         },
         {
             data: null,
             render: function(data, type, row) {
-                let submoduleIconsDiv = $('<div>');
+                let div = `<div>`;
                 $.each(data.submodules, function(index, submodule) {
-                    let icon = $('<i>');
-                    icon.addClass(submodule.icon);
-                    submoduleIconsDiv.append(icon.prop('outerHTML'))
-                        .append('<br>');
+                    div += `<i class="${submodule.icon}"></i><br>`;
                 });
-                return submoduleIconsDiv.prop('outerHTML');
+                div += `</div>`;
+
+                return div;
             }
         },
         {
             data: null,
             render: function(data, type, row) {
-                let submodulePermissionsDiv = $('<div>');
+                let div = `<div>`;
                 $.each(data.submodules, function(index, submodule) {
-                    let permissionSpan = $('<span>')
-                        .text(submodule.permission.name);
-                    submodulePermissionsDiv.append(permissionSpan)
-                        .append('<br>');
+                    div += `<span>${submodule.permission.name}</span><br>`;
                 });
-                return submodulePermissionsDiv.prop('outerHTML');
+                div += `</div>`;
+
+                return div;
             }
         },
         {
@@ -127,35 +114,46 @@ let tableModulesAndSubmodules = $('#modulesAndSubmodules').DataTable({
             }
         },
     ],
-    "columnDefs": [
-        { "orderable": true, "targets": [0, 1, 2] },
-        { "orderable": false, "targets": [2, 3, 4, 5, 6, 7, 8, 9] }
-    ],
-    "pagingType": "full_numbers",
-    "language": {
-        "oPaginate": {
-            "sFirst": "Primero",
-            "sLast": "Último",
-            "sNext": "Siguiente",
-            "sPrevious": "Anterior",
+    columnDefs: [
+        {
+            orderable: true,
+            targets: [0, 1, 2]
         },
-        "info": "Mostrando _START_ a _END_ de _TOTAL_ registros",
-        "infoEmpty": "No hay registros para mostrar",
-        "infoFiltered": "(filtrados de _MAX_ registros en total)",
-        "emptyTable": "No hay datos disponibles.",
-        "lengthMenu": "Mostrar _MENU_ registros por página.",
-        "search": "Buscar:",
-        "zeroRecords": "No se encontraron registros coincidentes.",
-        "decimal" : ",",
-        "thousands": ".",
-        "sEmptyTable" : "No se ha llamado información o no está disponible.",
-        "sZeroRecords" : "No se encuentran resultados.",
-        "sProcessing": "Procesando..."
+        {
+            orderable: false,
+            targets: [2, 3, 4, 5, 6, 7]
+        },
+        {
+            orderable: false,
+            targets: [8, 9],
+            className: 'text-center'
+        }
+    ],
+    pagingType: 'full_numbers',
+    language: {
+        oPaginate: {
+            sFirst: 'Primero',
+            sLast: 'Último',
+            sNext: 'Siguiente',
+            sPrevious: 'Anterior',
+        },
+        info: 'Mostrando _START_ a _END_ de _TOTAL_ registros',
+        infoEmpty: 'No hay registros para mostrar',
+        infoFiltered: '(filtrados de _MAX_ registros en total)',
+        emptyTable: 'No hay datos disponibles.',
+        lengthMenu: 'Mostrar _MENU_ registros por página.',
+        search: 'Buscar:',
+        zeroRecords: 'No se encontraron registros coincidentes.',
+        decimal: ',',
+        thousands: '.',
+        sEmptyTable: 'No se ha llamado información o no está disponible.',
+        sZeroRecords: 'No se encuentran resultados.',
+        sProcessing: 'Procesando...'
     },
-    "pageLength": 10,
-    "lengthMenu": [10, 25, 50, 100],
-    "paging": true,
-    "info": true,
-    "searching": true,
-    "autoWidth": true
+    pageLength: 10,
+    lengthMenu: [10, 25, 50, 100],
+    paging: true,
+    info: true,
+    searching: true,
+    autoWidth: true
 });
