@@ -47,6 +47,8 @@ class UserUpdateRequest extends FormRequest
             'phone_number' => 'required|string|size:10',
             'address' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,' . $this->route('id'),
+            'area_id' => ['required', 'exists:areas,id'],
+            'charge_id' => ['required', 'exists:charges,id'],
         ];
     }
 

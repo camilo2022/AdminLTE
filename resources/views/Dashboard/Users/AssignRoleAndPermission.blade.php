@@ -12,11 +12,11 @@
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label for="email">Correo Electronico</label>
+                    <label for="email_a">Correo Electronico</label>
                     <input type="text" class="form-control" id="email_a" name="email" readonly>
                 </div>
                 <div class="form-group">
-                    <label for="">Roles y Permisos</label>
+                    <label for="permissions-container-assign">Roles y Permisos</label>
                     <div id="permissions-container-assign">
 
                     </div>

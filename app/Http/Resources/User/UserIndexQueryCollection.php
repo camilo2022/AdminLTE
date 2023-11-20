@@ -24,6 +24,8 @@ class UserIndexQueryCollection extends ResourceCollection
                     'phone_number' => $user->phone_number,
                     'address' => $user->address,
                     'email' => $user->email,
+                    'area' => $user->area,
+                    'charge' => $user->charge,
                     'created_at' => Carbon::parse($user->created_at)->format('Y-m-d H:i:s'),
                     'updated_at' => Carbon::parse($user->updated_at)->format('Y-m-d H:i:s'),
                     'roles' => $user->roles,

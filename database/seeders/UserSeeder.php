@@ -23,6 +23,8 @@ class UserSeeder extends Seeder
             'document_number' => '1004845200',
             'phone_number' => '3222759176',
             'address' => 'Cll 11 # 8-32 Panamericano',
+            'area_id' => 1,
+            'charge_id' => 1,
             'email' => 'camiloacacio16@gmail.com',
             'password' => bcrypt('12345678')
         ]);

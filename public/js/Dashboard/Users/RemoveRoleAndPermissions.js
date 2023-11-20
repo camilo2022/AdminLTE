@@ -193,7 +193,7 @@ function RemoveRoleAndPermissionUserAjaxSuccess(response) {
 
 function RemoveRoleAndPermissionUserAjaxError(xhr) {
     if(xhr.status === 403) {
-        toastr.error(xhr.responseJSON.error.message);
+        toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
         $('#RemoveRoleAndPermissionUserModal').modal('hide');
     }
 
@@ -203,7 +203,7 @@ function RemoveRoleAndPermissionUserAjaxError(xhr) {
     }
 
     if(xhr.status === 419) {
-        toastr.error(xhr.responseJSON.error.message);
+        toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
         $('#RemoveRoleAndPermissionUserModal').modal('hide');
     }
 
@@ -216,13 +216,7 @@ function RemoveRoleAndPermissionUserAjaxError(xhr) {
     }
 
     if(xhr.status === 500){
-        if(xhr.responseJSON.error) {
-            toastr.error(xhr.responseJSON.error.message);
-        }
-
-        if(xhr.responseJSON.message) {
-            toastr.error(xhr.responseJSON.message);
-        }
+        toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
         $('#RemoveRoleAndPermissionUserModal').modal('hide');
     }
 }

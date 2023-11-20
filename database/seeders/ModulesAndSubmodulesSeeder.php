@@ -233,7 +233,7 @@ class ModulesAndSubmodulesSeeder extends Seeder
             'permission_id' => 135
         ]);
 
-        $Cartera = Module::create(['name' => 'Cartera', 'icon' => 'fas fa-wallet']);
+        $Cartera = Module::create(['name' => 'Credito y Cartera', 'icon' => 'fas fa-credit-card']);
 
         ModuleHasRoles::create([
             'role_id' => 18,
@@ -261,7 +261,7 @@ class ModulesAndSubmodulesSeeder extends Seeder
         Submodule::create([
             'name' => 'Gestion',
             'url' => '/Dashboard/Wallet/Index',
-            'icon' => 'fas fa-ballot-check',
+            'icon' => 'fas fa-wallet',
             'module_id' => $Cartera->id,
             'permission_id' => 165
         ]);

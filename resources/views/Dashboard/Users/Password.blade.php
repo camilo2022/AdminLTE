@@ -12,7 +12,7 @@
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label for="email">Correo Electronico</label>
+                    <label for="email_p">Correo Electronico</label>
                     <div class="input-group">
                         <input type="text" class="form-control" id="email_p" name="email" readonly>
                         <div class="input-group-append">

@@ -14,7 +14,7 @@
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="name">Nombres</label>
+                            <label for="name_e">Nombres</label>
                             <div class="input-group">
                                 <input type="text" class="form-control" id="name_e" name="name" onblur="Trim(this)">
                                 <div class="input-group-append">
@@ -27,7 +27,7 @@
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="last_name">Apellidos</label>
+                            <label for="last_name_e">Apellidos</label>
                             <div class="input-group">
                                 <input type="text" class="form-control" id="last_name_e" name="last_name" onblur="Trim(this)">
                                 <div class="input-group-append">
@@ -42,7 +42,7 @@
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="document_number_s">Numero de documento</label>
+                            <label for="document_number_e">Numero de documento</label>
                             <div class="input-group">
                                 <input type="text" class="form-control" id="document_number_e" name="document_number" onkeypress="Numbers(event)" onblur="Trim(this)">
                                 <div class="input-group-append">
@@ -55,7 +55,7 @@
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="phone_number_s">Numero de telefono</label>
+                            <label for="phone_number_e">Numero de telefono</label>
                             <div class="input-group">
                                 <input type="text" class="form-control" id="phone_number_e" name="phone_number" onkeypress="Numbers(event)" onblur="Trim(this)">
                                 <div class="input-group-append">
@@ -70,7 +70,7 @@
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="address_s">Direccion</label>
+                            <label for="address_e">Direccion</label>
                             <div class="input-group">
                                 <input type="text" class="form-control" id="address_e" name="address" onblur="Trim(this)">
                                 <div class="input-group-append">
@@ -83,12 +83,44 @@
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="email_s">Correo Electronico</label>
+                            <label for="email_e">Correo Electronico</label>
                             <div class="input-group">
                                 <input type="email" class="form-control" id="email_e" name="email" onblur="Trim(this)">
                                 <div class="input-group-append">
                                     <span class="input-group-text">
                                         <i class="fas fa-envelope"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="area_id_e">Areas</label>
+                            <div class="input-group">
+                                <select class="form-control select2" id="area_id_e" name="area_id" style="width: 88%">
+                                    <option value="">Seleccione</option>
+                                </select>
+                                <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-bags-shopping"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="charge_id_e">Cargos</label>
+                            <div class="input-group">
+                                <select class="form-control select2" id="charge_id_e" name="charge_id" style="width: 88%">
+                                    <option value="">Seleccione</option>
+                                </select>
+                                <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-arrow-up-1-9"></i>
                                     </span>
                                 </div>
                             </div>

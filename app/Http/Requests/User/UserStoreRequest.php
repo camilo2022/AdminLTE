@@ -45,7 +45,9 @@ class UserStoreRequest extends FormRequest
             'address' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:6', 'confirmed'],
-            'password_confirmation' => ['required', 'string', 'min:6', new Equals($this->input('password_confirmation'), $this->input('password'), 'Contraseña del usuario')]
+            'password_confirmation' => ['required', 'string', 'min:6', new Equals($this->input('password_confirmation'), $this->input('password'), 'Contraseña del usuario')],
+            'area_id' => ['required', 'exists:areas,id'],
+            'charge_id' => ['required', 'exists:charges,id'],
         ];
     }
     // Mensajes de error personalizados para cada regla de validación

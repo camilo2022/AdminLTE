@@ -31,16 +31,12 @@ function CreateCategoryAndSubcategoriesModalCleaned() {
 
 function CreateCategoryAndSubcategoriesModalResetSelect() {
     const select = $('#clothing_line_id_c');
-    // Remove all options by setting the select's innerHTML to an empty string
     select.html('');
-    // Add a new option with jQuery
     const defaultOption = $('<option>', {
         value: '',
         text: 'Seleccione'
     });
-    // Append the new option to the select
     select.append(defaultOption);
-    // Trigger the change event
     select.trigger('change');
 }
 

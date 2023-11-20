@@ -10,7 +10,9 @@ use App\Http\Requests\User\RemoveRoleAndPermissionsQueryRequest;
 use App\Http\Requests\User\UserIndexQueryRequest;
 use App\Http\Resources\User\UserIndexQueryCollection;
 use App\Http\Requests\User\RemoveRolesAndPermissionsRequest;
+use App\Http\Requests\User\UserCreateRequest;
 use App\Http\Requests\User\UserDeleteRequest;
+use App\Http\Requests\User\UserEditRequest;
 use App\Http\Requests\User\UserInactivesQueryRequest;
 use App\Http\Requests\User\UserPasswordRequest;
 use App\Http\Requests\User\UserRestoreRequest;
@@ -23,6 +25,8 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Hash;
 use App\Mail\EmailWithAttachment;
+use App\Models\Area;
+use App\Models\Charge;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
@@ -83,7 +87,7 @@ class UserController extends Controller
             $start_date = Carbon::parse($request->input('start_date'))->startOfDay();
             $end_date = Carbon::parse($request->input('end_date'))->endOfDay();
             //Consulta por nombre
-            $users = User::with('roles', 'permissions')
+            $users = User::with('roles', 'permissions', 'area', 'charge')
                 ->when($request->filled('search'),
                     function ($query) use ($request) {
                         $query->search($request->input('search'));
@@ -178,11 +182,19 @@ class UserController extends Controller
         }
     }
 
-    public function create()
+    public function create(UserCreateRequest $request)
     {
         try {
+            if($request->filled('area_id')) {
+                return $this->successResponse(
+                    Charge::where('area_id', '=', $request->input('area_id'))->get(),
+                    'Cargos encontrados con exito.',
+                    200
+                );
+            }
+
             return $this->successResponse(
-                '',
+                Area::all(),
                 'Ingrese los datos para hacer la validacion y registro.',
                 200
             );
@@ -208,6 +220,8 @@ class UserController extends Controller
             $user->phone_number = $request->input('phone_number');
             $user->address = $request->input('address');
             $user->email = $request->input('email');
+            $user->area_id = $request->input('area_id');
+            $user->charge_id = $request->input('charge_id');
             $user->password = Hash::make($request->input('password'));
             $user->save();
 
@@ -249,13 +263,22 @@ class UserController extends Controller
         }
     }
 
-    public function edit($id)
+    public function edit(UserEditRequest $request, $id)
     {
         try {
-            $user = User::findOrFail($id);
+            if($request->filled('area_id')) {
+                return $this->successResponse(
+                    Charge::where('area_id', '=', $request->input('area_id'))->get(),
+                    'Cargos encontrados con exito.',
+                    200
+                );
+            }
 
             return $this->successResponse(
-                $user,
+                (object) [
+                    'user' => User::findOrFail($id),
+                    'areas' => Area::all(),
+                ],
                 'El usuario fue encontrado exitosamente.',
                 204
             );
@@ -288,6 +311,8 @@ class UserController extends Controller
             $user->phone_number = $request->input('phone_number');
             $user->address = $request->input('address');
             $user->email = $request->input('email');
+            $user->area_id = $request->input('area_id');
+            $user->charge_id = $request->input('charge_id');
             $user->save();
 
             return $this->successResponse(

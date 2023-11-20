@@ -17,6 +17,8 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('client_id');
             $table->string('name');
+            $table->unsignedBigInteger('document_type_id');
+            $table->string('document_number');
             $table->string('telephone_number');
             $table->string('email');
             $table->unsignedBigInteger('country_id');
@@ -25,6 +27,7 @@ return new class extends Migration
             $table->string('address');
             $table->string('neighborhood');
             $table->string('description')->nullable();
+            $table->foreign('document_type_id')->references('id')->on('document_types')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('client_id')->references('id')->on('clients')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('country_id')->references('id')->on('countries')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('departament_id')->references('id')->on('departaments')->onUpdate('cascade')->onDelete('cascade');

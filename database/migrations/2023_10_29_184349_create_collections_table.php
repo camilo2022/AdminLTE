@@ -50,6 +50,5 @@ return new class extends Migration
     public function down()
     {
         Schema::dropIfExists('collections');
-        DB::unprepared('DROP PROCEDURE IF EXISTS collections');
     }
 };

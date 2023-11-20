@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -13,13 +14,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('packages', function (Blueprint $table) {
-            $table->id()->comment('Identificador del tipo de empaque.');
-            $table->string('name')->unique()->comment('Nombre del tipo de empaque.');
-            $table->string('code')->unique()->comment('Codigo del tipo de empaque.');
+        Schema::create('areas', function (Blueprint $table) {
+            $table->id()->comment('Identificador del area.');
+            $table->string('name')->unique()->comment('Nombre del area.');
+            $table->string('description')->nullable()->comment('Descripción del area.');
             $table->timestamps();
             $table->softDeletes();
         });
+
+        DB::statement("ALTER TABLE `areas` comment 'Areas'");
     }
 
     /**
@@ -29,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('packages');
+        Schema::dropIfExists('areas');
     }
 };

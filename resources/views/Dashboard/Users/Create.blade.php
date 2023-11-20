@@ -14,7 +14,7 @@
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="name">Nombres</label>
+                            <label for="name_c">Nombres</label>
                             <div class="input-group">
                                 <input type="text" class="form-control" id="name_c" name="name" onblur="Trim(this)">
                                 <div class="input-group-append">
@@ -27,7 +27,7 @@
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="last_name">Apellidos</label>
+                            <label for="last_name_c">Apellidos</label>
                             <div class="input-group">
                                 <input type="text" class="form-control" id="last_name_c" name="last_name" onblur="Trim(this)">
                                 <div class="input-group-append">
@@ -98,7 +98,39 @@
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="password_c">Nueva contraseña</label>
+                            <label for="area_id_c">Areas</label>
+                            <div class="input-group">
+                                <select class="form-control select2" id="area_id_c" name="area_id" style="width: 88%">
+                                    <option value="">Seleccione</option>
+                                </select>
+                                <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-bags-shopping"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="charge_id_c">Cargos</label>
+                            <div class="input-group">
+                                <select class="form-control select2" id="charge_id_c" name="charge_id" style="width: 88%">
+                                    <option value="">Seleccione</option>
+                                </select>
+                                <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-arrow-up-1-9"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="password_c">Contraseña</label>
                             <div class="input-group">
                                 <input type="password" class="form-control" id="password_c" name="password">
                                 <div class="input-group-append">

@@ -38,18 +38,14 @@ function EditBusinessModalCleaned(business) {
 }
 
 function EditBusinessModalResetSelect(id) {
-    const select = document.getElementById(id);
-    // Remove all options by setting the select's innerHTML to an empty string
-    select.innerHTML = '';
-
-    // Add a new option
-    const defaultOption = document.createElement('option');
-    defaultOption.value = '';
-    defaultOption.text = 'Seleccione';
-    select.appendChild(defaultOption);
-
-    // Trigger the change event
-    $(select).trigger('change');
+    const select = $(`#${id}`);
+    select.html('');
+    const defaultOption = $('<option>', {
+        value: '',
+        text: 'Seleccione'
+    });
+    select.append(defaultOption);
+    select.trigger('change');
 }
 
 function EditBusinessModalCountry(countries) {

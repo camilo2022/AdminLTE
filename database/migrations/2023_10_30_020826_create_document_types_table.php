@@ -13,12 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('packages', function (Blueprint $table) {
-            $table->id()->comment('Identificador del tipo de empaque.');
-            $table->string('name')->unique()->comment('Nombre del tipo de empaque.');
-            $table->string('code')->unique()->comment('Codigo del tipo de empaque.');
+        Schema::create('document_types', function (Blueprint $table) {
+            $table->id()->comment('Identificador del tipo documento');
+            $table->string('name')->comment('Nombre del tipo documento');
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
@@ -29,6 +27,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('packages');
+        Schema::dropIfExists('document_types');
     }
 };

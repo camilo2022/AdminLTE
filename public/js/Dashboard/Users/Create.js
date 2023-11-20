@@ -7,6 +7,7 @@ function CreateUserModal() {
         },
         success: function(response) {
             CreateUserModalCleaned();
+            CreateUserModalAreas(response.data);
             CreateUserAjaxSuccess(response);
             $('#CreateUserModal').modal('show');
         },
@@ -17,6 +18,7 @@ function CreateUserModal() {
 }
 
 function CreateUserModalCleaned() {
+    CreateUserModalResetSelect('area_id_c');
     RemoveIsValidClassCreateUser();
     RemoveIsInvalidClassCreateUser();
 
@@ -28,6 +30,52 @@ function CreateUserModalCleaned() {
     $('#email_c').val('');
     $('#password_c').val('');
     $('#password_confirmation_c').val('');
+}
+
+function CreateUserModalResetSelect(id) {
+    const select = $(`#${id}`);
+    select.html('');
+    const defaultOption = $('<option>', {
+        value: '',
+        text: 'Seleccione'
+    });
+    select.append(defaultOption);
+    select.trigger('change');
+}
+
+function CreateUserModalAreas(areas) {
+    areas.forEach(area => {
+        let newOption = new Option(area.name, area.id, false, false);
+        $('#area_id_c').append(newOption);
+    });
+}
+
+$('#area_id_c').on('change', function() {
+    if($(this).val() === '') {
+        CreateUserModalResetSelect('charge_id_c');
+    } else {
+        $.ajax({
+            url: `/Dashboard/Users/Create`,
+            type: 'POST',
+            data: {
+                '_token': $('meta[name="csrf-token"]').attr('content'),
+                'area_id':  $(this).val()
+            },
+            success: function(response) {
+                CreateUserModalCharges(response.data);
+            },
+            error: function(xhr, textStatus, errorThrown) {
+                CreateBusinessAjaxError(xhr);
+            }
+        });
+    }
+});
+
+function CreateUserModalCharges(charges) {
+    charges.forEach(charge => {
+        let newOption = new Option(charge.name, charge.id, false, false);
+        $('#charge_id_c').append(newOption);
+    });
 }
 
 function CreateUser() {
@@ -53,6 +101,8 @@ function CreateUser() {
                     'phone_number': $('#phone_number_c').val(),
                     'address': $('#address_c').val(),
                     'email': $('#email_c').val(),
+                    'area_id': $('#area_id_c').val(),
+                    'charge_id': $('#charge_id_c').val(),
                     'password': $('#password_c').val(),
                     'password_confirmation': $('#password_confirmation_c').val()
                 },
@@ -85,7 +135,7 @@ function CreateUserAjaxSuccess(response) {
 
 function CreateUserAjaxError(xhr) {
     if(xhr.status === 403) {
-        toastr.error(xhr.responseJSON.error.message);
+        toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
         $('#CreateUserModal').modal('hide');
     }
 
@@ -95,7 +145,7 @@ function CreateUserAjaxError(xhr) {
     }
 
     if(xhr.status === 419) {
-        toastr.error(xhr.responseJSON.error.message);
+        toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
         $('#CreateUserModal').modal('hide');
     }
 
@@ -112,13 +162,7 @@ function CreateUserAjaxError(xhr) {
     }
 
     if(xhr.status === 500){
-        if(xhr.responseJSON.error) {
-            toastr.error(xhr.responseJSON.error.message);
-        }
-
-        if(xhr.responseJSON.message) {
-            toastr.error(xhr.responseJSON.message);
-        }
+        toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
         $('#CreateUserModal').modal('hide');
     }
 }
@@ -142,6 +186,12 @@ function AddIsValidClassCreateUser() {
     if (!$('#email_c').hasClass('is-invalid')) {
       $('#email_c').addClass('is-valid');
     }
+    if (!$('span[aria-labelledby="select2-area_id_c-container"]').hasClass('is-invalid')) {
+        $('span[aria-labelledby="select2-area_id_c-container"]').addClass('is-valid');
+    }
+    if (!$('span[aria-labelledby="select2-charge_id_c-container"]').hasClass('is-invalid')) {
+        $('span[aria-labelledby="select2-charge_id_c-container"]').addClass('is-valid');
+    }
     if (!$('#password_c').hasClass('is-invalid')) {
       $('#password_c').addClass('is-valid');
     }
@@ -159,13 +209,17 @@ function RemoveIsValidClassCreateUser() {
     $('#email_c').removeClass('is-valid');
     $('#password_c').removeClass('is-valid');
     $('#password_confirmation_c').removeClass('is-valid');
+    $('span[aria-labelledby="select2-area_id_c-container"]').removeClass('is-valid');
+    $('span[aria-labelledby="select2-charge_id_c-container"]').removeClass('is-valid');
 }
 
 function AddIsInvalidClassCreateUser(input) {
     if (!$(`#${input}_c`).hasClass('is-valid')) {
-        $(`#${input}_c`).removeClass('is-valid');
+        $(`#${input}_c`).addClass('is-invalid');
     }
-    $(`#${input}_c`).addClass('is-invalid');
+    if (!$(`#span[aria-labelledby="select2-${input}_c-container`).hasClass('is-valid')) {
+        $(`span[aria-labelledby="select2-${input}_c-container"]`).addClass('is-invalid');
+    }
 }
 
 function RemoveIsInvalidClassCreateUser() {
@@ -177,4 +231,6 @@ function RemoveIsInvalidClassCreateUser() {
     $('#email_c').removeClass('is-invalid');
     $('#password_c').removeClass('is-invalid');
     $('#password_confirmation_c').removeClass('is-invalid');
+    $('span[aria-labelledby="select2-area_id_c-container"]').removeClass('is-invalid');
+    $('span[aria-labelledby="select2-charge_id_c-container"]').removeClass('is-invalid');
 }
