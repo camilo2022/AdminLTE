@@ -1,42 +1,64 @@
-function EditModuleAndSubmodulesModal(id) {
+function EditCategoryAndSubcategoriesModal(id) {
     $.ajax({
-        url: `/Dashboard/ModulesAndSubmodules/Edit/${id}`,
+        url: `/Dashboard/CategoriesAndSubcategories/Edit/${id}`,
         type: 'POST',
         data: {
             '_token': $('meta[name="csrf-token"]').attr('content'),
         },
         success: function(response) {
-            EditModuleAndSubmodulesModalCleaned(response.data);
-            EditModuleAndSubmodulesQueryRoles(response.data.roles, false);
-            EditModuleAndSubmodulesAjaxSuccess(response);
-            $('#EditModuleAndSubmodulesModal').modal('show');
+            EditCategoryAndSubcategoriesModalCleaned(response.data.category);
+            EditCategoryAndSubcategoriesModalClothingLines(response.data.clothingLines);
+            EditCategoryAndSubcategoriesAjaxSuccess(response);
+            $('#EditCategoryAndSubcategoriesModal').modal('show');
         },
         error: function(xhr, textStatus, errorThrown) {
-            EditModuleAndSubmodulesAjaxError(xhr);
+            EditCategoryAndSubcategoriesAjaxError(xhr);
         }
     });
 }
 
-function EditModuleAndSubmodulesModalCleaned(moduleAndSubmodules) {
-    RemoveIsInvalidClassEditModuleAndSubmodules();
-    RemoveIsValidClassEditModuleAndSubmodules();
-    $('.submodules_e').empty();
-    $('#roles_access_e').empty();
-    $('#module_e').val(moduleAndSubmodules.module.name);
-    $('#icon_e').val(moduleAndSubmodules.module.icon);
-    $('#icon_module_e').addClass(moduleAndSubmodules.module.icon);
-    $('#EditModuleAndSubmodulesAddPermissionButton').attr('data-count', 0);
-    $('#EditModuleAndSubmodulesButton').attr('onclick', `EditModuleAndSubmodules(${moduleAndSubmodules.module.id})`);
-    EditModuleAndSubmodulesQueryRoles(moduleAndSubmodules.module.roles, true);
-    $.each(moduleAndSubmodules.module.submodules, function (i, submodule) {
-        EditModuleAndSubmodulesAddSubmodule(submodule.id, submodule.name, '', submodule.permission, submodule.url, submodule.icon);
+function EditCategoryAndSubcategoriesModalCleaned(categoryAndSubcategories) {
+    RemoveIsInvalidClassEditCategoryAndSubcategories();
+    RemoveIsValidClassEditCategoryAndSubcategories();
+    $('.subcategories_e').empty();
+    $('#name_e').val(categoryAndSubcategories.name);
+    $('#code_e').val(categoryAndSubcategories.code);
+    $('#description_e').val(categoryAndSubcategories.description);
+    $('#EditCategoryAndSubcategoriesAddSubcategoryButton').attr('data-count', 0);
+    $('#EditCategoryAndSubcategoriesButton').attr('data-clothing_line_id', categoryAndSubcategories.clothing_line_id);
+    $('#EditCategoryAndSubcategoriesButton').attr('onclick', `EditCategoryAndSubcategories(${categoryAndSubcategories.id})`);
+    $.each(categoryAndSubcategories.subcategories, function (i, subcategory) {
+        EditCategoryAndSubcategoriesAddSubcategory(subcategory.id, subcategory.name, subcategory.code, subcategory.description, subcategory.deleted_at);
     })
 }
 
-function EditModuleAndSubmodules(id) {
+function EditCategoryAndSubcategoriesModalResetSelect() {
+    const select = $('#clothing_line_id_e');
+    select.html('');
+    const defaultOption = $('<option>', {
+        value: '',
+        text: 'Seleccione'
+    });
+    select.append(defaultOption);
+    select.trigger('change');
+}
+
+function EditCategoryAndSubcategoriesModalClothingLines(clothingLines) {
+    clothingLines.forEach(clothingLine => {
+        let newOption = new Option(clothingLine.name, clothingLine.id, false, false);
+        $('#clothing_line_id_e').append(newOption);
+    });
+    let clothing_line_id = $('#EditCategoryAndSubcategoriesButton').attr('data-clothing_line_id');
+    if(clothing_line_id != '') {
+        $("#clothing_line_id_e").val(clothing_line_id).trigger('change');
+        $('#EditCategoryAndSubcategoriesButton').attr('data-clothing_line_id', '');
+    }
+}
+
+function EditCategoryAndSubcategories(id) {
     Swal.fire({
-        title: '¿Desea actualizar el modulos y los submodulos?',
-        text: 'El modulo y los submodulos serán actualizados.',
+        title: '¿Desea actualizar la categoria y subcategorias?',
+        text: 'La categoria y subcategorias serán actualizados.',
         icon: 'warning',
         showCancelButton: true,
         cancelButtonColor: '#DD6B55',
@@ -46,61 +68,63 @@ function EditModuleAndSubmodules(id) {
     }).then((result) => {
         if (result.value) {
             $.ajax({
-                url: `/Dashboard/ModulesAndSubmodules/Update/${id}`,
+                url: `/Dashboard/CategoriesAndSubcategories/Update/${id}`,
                 type: 'PUT',
                 data: {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
-                    'module': $('#module_e').val(),
-                    'icon': $('#icon_e').val(),
-                    'roles': $('#roles_access_e .icheck-primary input[type="checkbox"]:checked').map(function () {
-                        return $(this).attr('data-id');
-                    }).get(),
-                    'submodules': $('.submodules_e').find('div.submodule_e').map(function(index) {
-                        return {
-                            'id': $(this).find('input.name_e').attr('data-id'),
-                            'submodule': $(this).find('input.name_e').val(),
-                            'url': $(this).find('input.url_e').val(),
-                            'icon': $(this).find('input.subicon_e').val(),
-                            'permission_id': $(this).find('select.permission_e').val()
+                    'clothing_line_id': $('#clothing_line_id_e').val(),
+                    'name': $('#name_e').val(),
+                    'code': $('#code_e').val(),
+                    'description': $('#description_e').val(),
+                    'subcategories': $('.subcategories_e').find('div.subcategory_e').map(function(index) {
+                        const id = $(this).find('input.name_e').attr('data-id');
+                        const subcategory = {
+                            'name': $(this).find('input.name_e').val(),
+                            'code': $(this).find('input.code_e').val(),
+                            'description': $(this).find('textarea.description_e').val()
                         };
+                        if (id != undefined) {
+                            subcategory['id'] = id;
+                        };
+                        return subcategory;
                     }).get()
                 },
                 success: function(response) {
-                    tableModulesAndSubmodules.ajax.reload();
-                    EditModuleAndSubmodulesAjaxSuccess(response);
+                    tableCategoriesAndSubcategories.ajax.reload();
+                    EditCategoryAndSubcategoriesAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableModulesAndSubmodules.ajax.reload();
-                    EditModuleAndSubmodulesAjaxError(xhr);
+                    tableCategoriesAndSubcategories.ajax.reload();
+                    EditCategoryAndSubcategoriesAjaxError(xhr);
                 }
             });
         } else {
-            toastr.info('El modulo y los submodulos no fueron actualizados.')
+            toastr.info('La categoria y subcategorias no fueron actualizados.')
         }
     });
 }
 
-function EditModuleAndSubmodulesAddSubmodule(id, submodule, role, permission, url, icon) {
+function EditCategoryAndSubcategoriesAddSubcategory(id, name, code, description, deleted) {
     // Crear el nuevo elemento HTML con jQuery
-    let data = $('#EditModuleAndSubmodulesAddPermissionButton').attr('data-count');
-    let newSubmodule = $('<div>').attr({
-        'id': `group-submodule${data}`,
-        'class': 'form-group submodule_e'
+    let data = $('#EditCategoryAndSubcategoriesAddSubcategoryButton').attr('data-count');
+    let newSubcategory = $('<div>').attr({
+        'id': `group-subcategory${data}`,
+        'class': 'form-group subcategory_e'
     });
     let card = $('<div>').addClass('card collapsed-card');
     let cardHeader = $('<div>').addClass('card-header border-0 ui-sortable-handle');
-    let cardTitle = $('<h3>').addClass('card-title mt-1');
+    let cardTitle = $('<h3>').addClass('card-title mt-1').css({'width':'70%'});
     let inputGroup = $('<div>').addClass('input-group');
     let input = $('<input>').attr({
         'type': 'text',
         'class': 'form-control name_e',
         'id': `name${data}_e`,
-        'value': submodule,
+        'value': name,
         'data-id': id
     });
     let inputGroupAppend = $('<div>').addClass('input-group-append');
     let inputGroupText = $('<span>').addClass('input-group-text');
-    let sliderIcon = $('<i>').addClass('fas fa-slider');
+    let signatureIcon = $('<i>').addClass('fas fa-signature');
     let cardTools = $('<div>').addClass('card-tools');
     let collapseButton = $('<button>').attr({
         'type': 'button',
@@ -110,14 +134,14 @@ function EditModuleAndSubmodulesAddSubmodule(id, submodule, role, permission, ur
     let plusIcon = $('<i>').addClass('fas fa-plus');
     let removeButton = $('<button>').attr({
         'type': 'button',
-        'class': 'btn btn-danger btn-sm ml-2 mt-2',
-        'data-card-widget': 'remove',
-        'onclick': `EditModuleAndSubmodulesRemoveSubmodule(${data})`
+        'class': `btn btn-${deleted == null ? 'danger' : 'success'} btn-sm ml-2 mt-2`,
+        'data-active': deleted == null ? 'true' : 'false',
+        'onclick': `EditCategoryAndSubcategories${deleted == null ? 'Inactive' : 'Active'}Subcategory(this)`
     });
     let timesIcon = $('<i>').addClass('fas fa-times');
 
     // Anidar elementos
-    inputGroupText.append(sliderIcon);
+    inputGroupText.append(signatureIcon);
     inputGroupAppend.append(inputGroupText);
     inputGroup.append(input, inputGroupAppend);
     cardTitle.append(inputGroup);
@@ -128,345 +152,193 @@ function EditModuleAndSubmodulesAddSubmodule(id, submodule, role, permission, ur
     card.append(cardHeader);
 
     let cardBody = $('<div>').addClass('card-body').css('display', 'none');
-    let roleForm = $('<div>').addClass('form-group');
-    let roleLabel = $('<label>').attr('for', '').text('Role');
-    let roleIcon = $('<i>').attr({
-        'class': 'ml-2 far fa-circle-question',
-        'onclick': 'SuggestionModuleRoles()'
-    });
-    let roleSelect = $('<select>').attr({
-        'id': `role${data}_e`,
-        'class': 'form-control role_e',
-        'onchange': `EditModuleAndSubmodulesQueryPermissions(id, this, 'permission${data}_e')`
-    });
-    let roleOption = $('<option>').attr('value', '').text('Seleccione');
-    roleSelect.append(roleOption);
-    $('#roles_access_e .icheck-primary input[type="checkbox"]:checked').map(function() {
-        roleSelect.append(
-            $('<option>')
-            .attr('value', $(this).attr('id'))
-            .text($(this).attr('id'))
-            .prop('selected', $(this).attr('id') === role)
-        );
-        $(this).attr('id') === role ? roleSelect.val(role).change() : '' ;
-    });
-    roleForm.append(roleLabel, roleIcon, roleSelect);
-    let permissionForm = $('<div>').addClass('form-group');
-    let permissionLabel = $('<label>').attr('for', '').text('Permission');
-    let permissionIcon = $('<i>').attr({
-        'class': 'ml-2 far fa-circle-question',
-        'onclick': 'SuggestionSumodulePermission()'
-    });
-    let permissionSelect = $('<select>').attr({
-        'id': `permission${data}_e`,
-        'class': 'form-control permission_e',
-        'onchange': `EditModuleAndSubmodulesWriteUrl(this, 'url${data}_e')`
-    });
-    let permissionOption = $('<option>').attr('value', '').text('Seleccione');
-    permissionSelect.append(permissionOption);
-    if(permission !== undefined) {
-        permissionSelect.append($('<option>').attr('value', permission.id).text(permission.name).prop('selected', true));
-    }
-    permissionForm.append(permissionLabel, permissionIcon, permissionSelect);
-    let urlForm = $('<div>').addClass('form-group');
-    let urlLabel = $('<label>').attr('for', '').text('Ruta');
-    let urlSuggestion = $('<i>').attr({
-        'class': 'ml-2 far fa-circle-question',
-        'onclick': 'SuggestionSumoduleRoute()'
-    });
-    let urlInputGroup = $('<div>').addClass('input-group');
-    let urlInput = $('<input>').attr({
-        'type': 'text',
-        'id': `url${data}_e`,
-        'class': 'form-control url_e',
-        'readonly': 'readonly',
-        'value': url
-    });
-    let urlInputAppend = $('<div>').addClass('input-group-append');
-    let urlIcon = $('<span>').addClass('input-group-text').append($('<i>').addClass('fas fa-route-highway'));
-    urlInputAppend.append(urlIcon);
-    urlInputGroup.append(urlInput, urlInputAppend);
-    urlForm.append(urlLabel, urlSuggestion, urlInputGroup);
-    let subIconForm = $('<div>').addClass('form-group');
-    let subIconLabel = $('<label>').attr('for', '').text('Icono Submodulo');
-    let subIconSuggestion = $('<i>').attr({
-        'class': 'ml-2 far fa-circle-question',
-        'onclick': 'SuggestionSubmoduleIcon()'
-    });
-    let subIconInputGroup = $('<div>').addClass('input-group');
-    let subIconInput = $('<input>').attr({
-        'type': 'text',
-        'id': `subicon${data}_e`,
-        'class': 'form-control subicon_e',
-        'onkeyup': `EditModuleAndSubmodulesChangeClassIcon(this, 'icono${data}_e')`,
-        'value': icon
-    });
-    let subIconInputAppend = $('<div>').addClass('input-group-append');
-    let subIconInputIcon = $('<span>').addClass('input-group-text').append($('<i>').attr('id', `icono${data}_e`).addClass(icon));
-    subIconInputAppend.append(subIconInputIcon);
-    subIconInputGroup.append(subIconInput, subIconInputAppend);
-    subIconForm.append(subIconLabel, subIconSuggestion, subIconInputGroup);
 
-    cardBody.append(roleForm, permissionForm, urlForm, subIconForm);
+
+    let codeForm = $('<div>').addClass('form-group');
+    let codeLabel = $('<label>').attr('for', '').text('Codigo');
+    let codeInputGroup = $('<div>').addClass('input-group');
+    let codeInput = $('<input>').attr({
+        'type': 'text',
+        'id': `code${data}_e`,
+        'class': 'form-control code_e',
+        'value': code
+    });
+    let codeInputAppend = $('<div>').addClass('input-group-append');
+    let codeIcon = $('<span>').addClass('input-group-text').append($('<i>').addClass('fas fa-code'));
+    codeInputAppend.append(codeIcon);
+    codeInputGroup.append(codeInput, codeInputAppend);
+    codeForm.append(codeLabel, codeInputGroup);
+
+    let descriptionForm = $('<div>').addClass('form-group');
+    let descriptionLabel = $('<label>').attr('for', '').text('Descripcion');
+    let descriptionInputGroup = $('<div>').addClass('input-group');
+    let descriptionInput = $('<textarea>').attr({
+        'type': 'text',
+        'id': `description${data}_e`,
+        'class': 'form-control description_e',
+        'cols': '30',
+        'rows': '3'
+    }).text(description);
+    let descriptionInputAppend = $('<div>').addClass('input-group-append');
+    let descriptionIcon = $('<span>').addClass('input-group-text').append($('<i>').addClass('fas fa-text-size'));
+    descriptionInputAppend.append(descriptionIcon);
+    descriptionInputGroup.append(descriptionInput, descriptionInputAppend);
+    descriptionForm.append(descriptionLabel, descriptionInputGroup);
+
+
+    cardBody.append(codeForm, descriptionForm);
     card.append(cardBody);
 
-    newSubmodule.append(card);
+    newSubcategory.append(card);
 
-    // Agregar el nuevo elemento al elemento con clase "submodules_e"
-    $('.submodules_e').append(newSubmodule);
+    // Agregar el nuevo elemento al elemento con clase "subcategories_e"
+    $('.subcategories_e').append(newSubcategory);
     data++;
-    $('#EditModuleAndSubmodulesAddPermissionButton').attr('data-count', data)
+    $('#EditCategoryAndSubcategoriesAddSubcategoryButton').attr('data-count', data)
 }
 
-function EditModuleAndSubmodulesRemoveSubmodule(index) {
-    $(`#group-submodule${index}`).remove();
-}
-
-function EditModuleAndSubmodulesChangeClassIcon(input, icon) {
-    $(`#${icon}`).attr('class', input.value);
-}
-
-function EditModuleAndSubmodulesWriteUrl(selectPermission, inputUrl) {
-    if($(selectPermission).val() === '') {
-        $(`#${inputUrl}`).val('');
-    } else {
-        $(`#${inputUrl}`).val(`/${$(selectPermission).find('option:selected').text().replace(/\./g, '/')}`);
-    }
-}
-
-function EditModuleAndSubmodulesQueryRoles(roles, checked) {
-    let rolesDiv = $('#roles_access_e');
-
-    $.each(roles, function (i, role) {
-        let roleDiv = $('<div>').addClass('row pl-2 icheck-primary');
-
-        let roleCheckbox = $('<input>').attr({
-            'id': role.name,
-            'type': 'checkbox',
-            'onclick': 'EditModuleAndSubmodulesRoles(this)',
-            'data-id': role.id,
-            'checked': checked ? true : false
-        });
-
-        let roleLabel = $('<label>').text(role.name).attr({
-            'for': role.name,
-            'class': 'mt-3 ml-3'
-        });
-
-        roleDiv.append(roleCheckbox);
-        roleDiv.append(roleLabel);
-        rolesDiv.append(roleDiv);
+function EditCategoryAndSubcategoriesActiveSubcategory(button) {
+    $(button).removeClass().addClass('btn btn-danger btn-sm ml-2 mt-2')
+    $(button).on('click', function() {
+        EditCategoryAndSubcategoriesInactiveSubcategory(this);
     });
+    $(button).attr('data-active', 'true');
+    $(button).find('i').removeClass().addClass('fas fa-times');
 }
 
-function EditModuleAndSubmodulesRoles(checkbox) {
-    // Obtener IDs de los checkboxes marcados en #roles_access_e
-    let role = $(checkbox).attr('id');
-
-    // Recorrer #submodules_e
-    $('.submodules_e').each(function () {
-        let submoduleElement = $(this);
-        let selectRole = submoduleElement.find('select.role_e');
-
-        // Verificar si el checkbox está marcado
-        if ($(checkbox).is(':checked')) {
-            // Agregar el role al select
-            selectRole.append($('<option>', {
-                'value': role,
-                'text': role
-            }));
-        } else {
-            let optionToRemove = selectRole.find(`option[value="${role}"]`);
-
-            // Verificar si la opción estaba seleccionada antes de la eliminación
-            let isSelected = optionToRemove.is(':selected');
-
-            if (isSelected) {
-                let selectPermission = submoduleElement.find('select.permission_e');
-                submoduleElement.find('input.url_e').val('')
-                selectPermission.empty().append(
-                    $('<option>', {
-                        'value': '',
-                        'text': 'Seleccione'
-                    })
-                );
-            }
-            // Quitar el role del select
-            optionToRemove.remove();
-        }
+function EditCategoryAndSubcategoriesInactiveSubcategory(button) {
+    $(button).removeClass().addClass('btn btn-success btn-sm ml-2 mt-2')
+    $(button).on('click', function() {
+        EditCategoryAndSubcategoriesActiveSubcategory(this);
     });
+    $(button).attr('data-active', 'false');
+    $(button).find('i').removeClass().addClass('fas fa-check');
 }
 
-function EditModuleAndSubmodulesQueryPermissions(id, selectRoles, selectPermissions) {
-    $.ajax({
-        url: `/Dashboard/ModulesAndSubmodules/Edit/${id}`,
-        type: 'POST',
-        data: {
-            '_token': $('meta[name="csrf-token"]').attr('content'),
-            'role': $(selectRoles).val()
-        },
-        success: function(response) {
-            if($(selectRoles).val() !== '') {
-                EditModuleAndSubmodulesPermissions(selectPermissions, response.data.permissions);
-            }
-        },
-        error: function(xhr, textStatus, errorThrown) {
-            EditModuleAndSubmodulesAjaxError(xhr);
-            $(`#${selectPermissions}`).empty().append(
-                $('<option>', {
-                    'value': '',
-                    'text': 'Seleccione'
-                })
-            );
-        }
-    });
-}
-
-function EditModuleAndSubmodulesPermissions(selectPermissions, permissions) {
-    let select = $(`#${selectPermissions}`).empty().append(
-        $('<option>',{
-            'value': '',
-            'text': 'Seleccione'
-        })
-    );
-    // Agregar opciones con los roles seleccionados
-    $.each(permissions, function(index, permission) {
-        select.append($('<option>',
-            {
-                'value': permission.id,
-                'text': permission.name
-            }
-        ));
-    });
-}
-
-function EditModuleAndSubmodulesAjaxSuccess(response) {
+function EditCategoryAndSubcategoriesAjaxSuccess(response) {
     if(response.status === 200) {
         toastr.success(response.message);
-        $('#EditModuleAndSubmodulesModal').modal('hide');
+        $('#EditCategoryAndSubcategoriesModal').modal('hide');
     }
 
     if(response.status === 204) {
         toastr.info(response.message);
-        $('#EditModuleAndSubmodulesModal').modal('hide');
+        $('#EditCategoryAndSubcategoriesModal').modal('hide');
     }
 }
 
-function EditModuleAndSubmodulesAjaxError(xhr) {
+function EditCategoryAndSubcategoriesAjaxError(xhr) {
     if(xhr.status === 403) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
-        $('#EditModuleAndSubmodulesModal').modal('hide');
+        $('#EditCategoryAndSubcategoriesModal').modal('hide');
     }
 
     if(xhr.status === 404) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
-        $('#EditModuleAndSubmodulesModal').modal('hide');
+        $('#EditCategoryAndSubcategoriesModal').modal('hide');
     }
 
     if(xhr.status === 419) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
-        $('#EditModuleAndSubmodulesModal').modal('hide');
+        $('#EditCategoryAndSubcategoriesModal').modal('hide');
     }
 
     if(xhr.status === 422){
-        RemoveIsValidClassEditModuleAndSubmodules();
-        RemoveIsInvalidClassEditModuleAndSubmodules();
+        RemoveIsValidClassEditCategoryAndSubcategories();
+        RemoveIsInvalidClassEditCategoryAndSubcategories();
         $.each(xhr.responseJSON.errors, function(field, messages) {
-            AddIsInvalidClassEditModuleAndSubmodules(field);
+            AddIsInvalidClassEditCategoryAndSubcategories(field);
             $.each(messages, function(index, message) {
                 toastr.error(message);
             });
         });
-        AddIsValidClassEditModuleAndSubmodules();
+        AddIsValidClassEditCategoryAndSubcategories();
     }
 
     if(xhr.status === 500){
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
-        $('#EditModuleAndSubmodulesModal').modal('hide');
+        $('#EditCategoryAndSubcategoriesModal').modal('hide');
     }
 }
 
-function AddIsValidClassEditModuleAndSubmodules() {
-    if (!$('#module_e').hasClass('is-invalid')) {
-        $('#module_e').addClass('is-valid');
+function AddIsValidClassEditCategoryAndSubcategories() {
+    if (!$('#name_e').hasClass('is-invalid')) {
+        $('#name_e').addClass('is-valid');
+    }
+    if (!$('#code_e').hasClass('is-invalid')) {
+        $('#code_e').addClass('is-valid');
+    }
+    if (!$('#description_e').hasClass('is-invalid')) {
+        $('#description_e').addClass('is-valid');
+    }
+    if (!$('span[aria-labelledby="select2-clothing_line_id_e-container"]').hasClass('is-invalid')) {
+        $('span[aria-labelledby="select2-clothing_line_id_e-container"]').addClass('is-valid');
     }
 
-    if (!$('#icon_e').hasClass('is-invalid')) {
-        $('#icon_e').addClass('is-valid');
-    }
-
-    $('.submodules_e').find('div.submodule_e').each(function(index) {
-        if (!$(this).find('select.role_e').hasClass('is-invalid')) {
-            $(this).find('select.role_e').addClass('is-valid');
-        }
-        if (!$(this).find('select.permission_e').hasClass('is-invalid')) {
-            $(this).find('select.permission_e').addClass('is-valid');
-        }
-        if (!$(this).find('input.subicon_e').hasClass('is-invalid')) {
-            $(this).find('input.subicon_e').addClass('is-valid');
-        }
+    $('.subcategories_e').find('div.subcategory_e').each(function(index) {
         if (!$(this).find('input.name_e').hasClass('is-invalid')) {
             $(this).find('input.name_e').addClass('is-valid');
         }
-        if (!$(this).find('input.url_e').hasClass('is-invalid')) {
-            $(this).find('input.url_e').addClass('is-valid');
+        if (!$(this).find('input.code_e').hasClass('is-invalid')) {
+            $(this).find('input.code_e').addClass('is-valid');
+        }
+        if (!$(this).find('textarea.description_e').hasClass('is-invalid')) {
+            $(this).find('textarea.description_e').addClass('is-valid');
         }
     });
 }
 
-function RemoveIsValidClassEditModuleAndSubmodules() {
-    $('#module_e').removeClass('is-valid');
-    $('#icon_e').removeClass('is-valid');
+function RemoveIsValidClassEditCategoryAndSubcategories() {
+    $('#name_e').removeClass('is-valid');
+    $('#code_e').removeClass('is-valid');
+    $('#description_e').removeClass('is-valid');
+    $('span[aria-labelledby="select2-clothing_line_id_e-container"]').removeClass('is-valid');
 
-    $('.submodules_e').find('div.submodule_e').each(function(index) {
-        $(this).find('select.role_e').removeClass('is-valid');
-        $(this).find('select.permission_e').removeClass('is-valid');
-        $(this).find('input.subicon_e').removeClass('is-valid');
+    $('.subcategories_e').find('div.subcategory_e').each(function(index) {
         $(this).find('input.name_e').removeClass('is-valid');
-        $(this).find('input.url_e').removeClass('is-valid');
+        $(this).find('input.code_e').removeClass('is-valid');
+        $(this).find('textarea.description_e').removeClass('is-valid');
     });
 }
 
-function AddIsInvalidClassEditModuleAndSubmodules(input) {
+function AddIsInvalidClassEditCategoryAndSubcategories(input) {
     if (!$(`#${input}_e`).hasClass('is-valid')) {
         $(`#${input}_e`).addClass('is-invalid');
     }
 
-    $('.submodules_e').find('div.submodule_e').each(function(index) {
+    if (!$(`#span[aria-labelledby="select2-${input}_e-container`).hasClass('is-valid')) {
+        $(`span[aria-labelledby="select2-${input}_e-container"]`).addClass('is-invalid');
+    }
+
+    $('.subcategories_e').find('div.subcategory_e').each(function(index) {
         // Agrega la clase 'is-invalid'
-        if(input === `submodules.${index}.permission_id`) {
-            if (!$(this).find('select.permission_e').hasClass('is-valid')) {
-                $(this).find('select.role_e').addClass('is-invalid');
-                $(this).find('select.permission_e').addClass('is-invalid');
-            }
-        }
-        if(input === `submodules.${index}.icon`) {
-            if (!$(this).find('input.subicon_e').hasClass('is-valid')) {
-                $(this).find('input.subicon_e').addClass('is-invalid');
-            }
-        }
-        if(input === `submodules.${index}.submodule`) {
+        if(input === `subcategories.${index}.name`) {
             if (!$(this).find('input.name_e').hasClass('is-valid')) {
                 $(this).find('input.name_e').addClass('is-invalid');
             }
         }
-        if(input === `submodules.${index}.url`) {
-            if (!$(this).find('input.url_e').hasClass('is-valid')) {
-                $(this).find('input.url_e').addClass('is-invalid');
+        if(input === `subcategories.${index}.code`) {
+            if (!$(this).find('input.code_e').hasClass('is-valid')) {
+                $(this).find('input.code_e').addClass('is-invalid');
+            }
+        }
+        if(input === `subcategories.${index}.description`) {
+            if (!$(this).find('textarea.description_e').hasClass('is-valid')) {
+                $(this).find('textarea.description_e').addClass('is-invalid');
             }
         }
     });
 }
 
-function RemoveIsInvalidClassEditModuleAndSubmodules() {
-    $('#module_e').removeClass('is-invalid');
-    $('#icon_e').removeClass('is-invalid');
+function RemoveIsInvalidClassEditCategoryAndSubcategories() {
+    $('#name_e').removeClass('is-invalid');
+    $('#code_e').removeClass('is-invalid');
+    $('#description_e').removeClass('is-invalid');
+    $('span[aria-labelledby="select2-clothing_line_id_e-container"]').removeClass('is-invalid');
 
-    $('.submodules_e').find('div.submodule_e').each(function(index) {
-        $(this).find('select.role_e').removeClass('is-invalid');
-        $(this).find('select.permission_e').removeClass('is-invalid');
-        $(this).find('input.subicon_e').removeClass('is-invalid');
+    $('.subcategories_e').find('div.subcategory_e').each(function(index) {
         $(this).find('input.name_e').removeClass('is-invalid');
-        $(this).find('input.url_e').removeClass('is-invalid');
+        $(this).find('input.code_e').removeClass('is-invalid');
+        $(this).find('textarea.description_e').removeClass('is-invalid');
     });
 }

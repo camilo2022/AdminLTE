@@ -75,7 +75,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-success" id="CreateCategoryAndSubcategoriesAddSubcategoryButton" title="Agregar submodulo" onclick="CreateCategoryAndSubcategoriesAddSubcategory()">
+                <button type="button" class="btn btn-success" id="CreateCategoryAndSubcategoriesAddSubcategoryButton" title="Agregar subcategoria" onclick="CreateCategoryAndSubcategoriesAddSubcategory()">
                     <i class="fas fa-plus"></i>
                 </button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal" title="Cerrar ventana">

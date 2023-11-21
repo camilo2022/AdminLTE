@@ -5,6 +5,7 @@ namespace App\Http\Requests\CategoriesAndSubcategories;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Mockery\Undefined;
 
 class CategoriesAndSubcategoriesUpdateRequest extends FormRequest
 {
@@ -46,8 +47,8 @@ class CategoriesAndSubcategoriesUpdateRequest extends FormRequest
             'code' => ['required', 'string', 'max:255', 'unique:categories,code,' . $this->route('id') . ',id'],
             'description' => ['nullable', 'string', 'max:255'],
             'subcategories' => ['required', 'array'],
-            'subcategories.*.name' => ['required', 'string', 'max:255', 'unique:subcategories,name,' . ($this->input('subcategories.*.id') ? $this->input('subcategories.*.id') : 'NULL') . ',id'],
-            'subcategories.*.code' => ['required', 'string', 'max:255', 'unique:subcategories,code,' . ($this->input('subcategories.*.id') ? $this->input('subcategories.*.id') : 'NULL') . ',id'],
+            'subcategories.*.name' => ['required', 'string', 'max:255', ($this->input('subcategories.*.id') ? 'unique:subcategories,name,' . implode('', $this->input('subcategories.*.id')) . 'id' : 'unique:subcategories,name')],
+            'subcategories.*.code' => ['required', 'string', 'max:255', ($this->input('subcategories.*.id') ? 'unique:subcategories,code,' . implode('', $this->input('subcategories.*.id')) . 'id' : 'unique:subcategories,code')],
             'subcategories.*.description' => ['nullable', 'string', 'max:255'],
             'subcategories.*.status' => ['required', 'boolean'],
         ];

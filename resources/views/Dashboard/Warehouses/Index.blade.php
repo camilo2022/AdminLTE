@@ -62,7 +62,7 @@
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table id="warehouses" class="table table-bordered table-hover dataTable dtr-inline nowrap">
+                                <table id="warehouses" class="table table-bordered table-hover dataTable dtr-inline">
                                     <thead class="thead-dark">
                                         <tr>
                                             <th>#</th>

@@ -186,19 +186,6 @@ function CreateCategoryAndSubcategoriesRemoveSubcategory(index) {
     $(`#group-subcategory${index}`).remove();
 }
 
-function CreateCategoryAndSubcategoriesChangeClassIcon(input, icon) {
-    $(`#${icon}`).attr('class', input.value);
-}
-
-function CreateCategoryAndSubcategoriesWriteUrl(selectPermission, inputUrl) {
-    if($(selectPermission).val() === '') {
-        $(`#${inputUrl}`).val('');
-    } else {
-        $(`#${inputUrl}`).val(`/${$(selectPermission).find('option:selected').text().replace(/\./g, '/')}`);
-    }
-}
-
-
 function CreateCategoryAndSubcategoriesAjaxSuccess(response) {
     if(response.status === 200) {
         toastr.info(response.message);
