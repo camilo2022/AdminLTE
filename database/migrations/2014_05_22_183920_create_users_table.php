@@ -32,8 +32,6 @@ class CreateUsersTable extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
-
-        DB::statement("ALTER TABLE `user` comment 'Usuarios'");
     }
 
     /**

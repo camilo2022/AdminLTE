@@ -357,6 +357,15 @@ Route::middleware(['auth'])->group(function () {
             Route::put('/Update/{id}', [WarehouseController::class, 'update'])
             ->middleware('can:Dashboard.Warehouses.Update')->name('Dashboard.Warehouses.Update');
 
+            Route::post('/Show/{id}', [WarehouseController::class, 'show'])
+            ->middleware('can:Dashboard.Warehouses.Show')->name('Dashboard.Warehouses.Show');
+
+            Route::post('/AssignGestor', [WarehouseController::class, 'assignGestor'])
+            ->middleware('can:Dashboard.Warehouses.AssignGestor')->name('Dashboard.Warehouses.AssignGestor');
+
+            Route::post('/RemoveGestor', [WarehouseController::class, 'removeGestor'])
+            ->middleware('can:Dashboard.Warehouses.RemoveGestor')->name('Dashboard.Warehouses.RemoveGestor');
+
             Route::delete('/Delete', [WarehouseController::class, 'delete'])
             ->middleware('can:Dashboard.Warehouses.Delete')->name('Dashboard.Warehouses.Delete');
 

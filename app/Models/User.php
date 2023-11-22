@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Auth\Passwords\CanResetPassword as CanResetPasswordTrait;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -58,6 +59,11 @@ class User extends Authenticatable
     public function charge() : BelongsTo
     {
         return $this->belongsTo(Charge::class, 'charge_id');
+    }
+
+    public function warehouses() : BelongsToMany
+    {
+        return $this->belongsToMany(Warehouse::class, 'warehouse_has_users', 'user_id', 'warehouse_id');
     }
 
     public function scopeSearch($query, $search)

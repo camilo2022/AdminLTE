@@ -64,14 +64,9 @@ let tableWarehouses = $('#warehouses').DataTable({
                         <i class="fas fa-arrow-rotate-left text-white"></i>
                     </a>`;
                 }
-                    btn += `<a onclick="EditWarehouseModal(${row.id})" type="button"
-                    class="btn btn-success btn-sm mr-2" title="Asignar encargado a bodega">
-                        <i class="fas fa-unlock text-white"></i>
-                    </a>`;
-
-                    btn += `<a onclick="EditWarehouseModal(${row.id})" type="button"
-                    class="btn bg-orange btn-sm mr-2" title="Remover encargado a bodega">
-                        <i class="fas fa-lock text-white"></i>
+                    btn += `<a onclick="ShowWarehouseModal(${row.id})" type="button"
+                    class="btn btn-success btn-sm mr-2" title="Asignar y remover encargados a bodega">
+                        <i class="fas fa-eye text-white"></i>
                     </a>`;
 
                 return btn;

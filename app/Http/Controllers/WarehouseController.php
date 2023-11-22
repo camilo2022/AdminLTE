@@ -2,13 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Warehouse\WarehouseAssignGestorRequest;
 use App\Http\Requests\Warehouse\WarehouseDeleteRequest;
 use App\Http\Requests\Warehouse\WarehouseIndexQueryRequest;
+use App\Http\Requests\Warehouse\WarehouseRemoveGestorRequest;
 use App\Http\Requests\Warehouse\WarehouseRestoreRequest;
 use App\Http\Requests\Warehouse\WarehouseStoreRequest;
 use App\Http\Requests\Warehouse\WarehouseUpdateRequest;
 use App\Http\Resources\Warehose\WarehouseIndexQueryCollection;
+use App\Models\User;
 use App\Models\Warehouse;
+use App\Models\WarehouseHasUser;
 use App\Traits\ApiMessage;
 use App\Traits\ApiResponser;
 use Carbon\Carbon;
@@ -200,6 +204,128 @@ class WarehouseController extends Controller
                 500
             );
         } catch (Exception $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('Exception'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        }
+    }
+
+    public function show($id)
+    {
+        try {
+            $users = User::with('warehouses')->get();
+            $warehouse = Warehouse::findOrFail($id);
+
+            foreach ($users as $user) {
+                $warehousesId = $user->warehouses->pluck('id')->all();
+                $user->admin = in_array($id, $warehousesId);
+            }
+
+            return $this->successResponse(
+                (object) [
+                    'warehouse' => $warehouse,
+                    'admins' => $users
+                ],
+                'La bodega fue encontrada exitosamente.',
+                204
+            );
+        } catch (ModelNotFoundException $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('ModelNotFoundException'),
+                    'error' => $e->getMessage()
+                ],
+                404
+            );
+        } catch (Exception $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('Exception'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        }
+    }
+
+    public function assignGestor(WarehouseAssignGestorRequest $request)
+    {
+        try {
+            $warehouse_has_users = new WarehouseHasUser();
+            $warehouse_has_users->user_id = $request->input('user_id');
+            $warehouse_has_users->warehouse_id = $request->input('warehouse_id');
+            $warehouse_has_users->save();
+
+            return $this->successResponse(
+                $warehouse_has_users,
+                'Gestor de bodega asignado exitosamente.',
+                200
+            );
+        } catch (ModelNotFoundException $e) {
+            // Manejar la excepción de la base de datos
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('ModelNotFoundException'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        } catch (QueryException $e) {
+            // Manejar la excepción de la base de datos
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('QueryException'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        } catch (Exception $e) {
+            // Devolver una respuesta de error en caso de excepción
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('Exception'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        }
+    }
+
+    public function removeGestor(WarehouseRemoveGestorRequest $request)
+    {
+        try {
+            $warehouse_has_users = WarehouseHasUser::where('user_id', '=', $request->input('user_id'))
+            ->where('warehouse_id', '=', $request->input('warehouse_id'))->delete();
+
+            return $this->successResponse(
+                $warehouse_has_users,
+                'Gestor de bodega removido exitosamente.',
+                200
+            );
+        } catch (ModelNotFoundException $e) {
+            // Manejar la excepción de la base de datos
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('ModelNotFoundException'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        } catch (QueryException $e) {
+            // Manejar la excepción de la base de datos
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('QueryException'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        } catch (Exception $e) {
+            // Devolver una respuesta de error en caso de excepción
             return $this->errorResponse(
                 [
                     'message' => $this->getMessage('Exception'),

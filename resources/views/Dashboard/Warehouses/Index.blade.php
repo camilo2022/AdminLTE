@@ -84,12 +84,14 @@
         </div>
         @include('Dashboard.Warehouses.Create')
         @include('Dashboard.Warehouses.Edit')
+        @include('Dashboard.Warehouses.Show')
     </section>
 @endsection
 @section('script')
     <script src="{{ asset('js/Dashboard/Warehouses/DataTableIndex.js') }}"></script>
     <script src="{{ asset('js/Dashboard/Warehouses/Create.js') }}"></script>
     <script src="{{ asset('js/Dashboard/Warehouses/Edit.js') }}"></script>
+    <script src="{{ asset('js/Dashboard/Warehouses/Show.js') }}"></script>
     <script src="{{ asset('js/Dashboard/Warehouses/Delete.js') }}"></script>
     <script src="{{ asset('js/Dashboard/Warehouses/Restore.js') }}"></script>
 @endsection

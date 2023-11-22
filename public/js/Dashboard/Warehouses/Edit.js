@@ -16,15 +16,15 @@ function EditWarehouseModal(id) {
     });
 }
 
-function EditWarehouseModalCleaned(trademark) {
+function EditWarehouseModalCleaned(warehouse) {
     RemoveIsValidClassEditWarehouse();
     RemoveIsInvalidClassEditWarehouse();
 
-    $('#EditWarehouseButton').attr('onclick', `EditWarehouse(${trademark.id})`);
+    $('#EditWarehouseButton').attr('onclick', `EditWarehouse(${warehouse.id})`);
 
-    $("#name_e").val(trademark.name);
-    $("#code_e").val(trademark.code);
-    $('#description_e').val(trademark.description);
+    $("#name_e").val(warehouse.name);
+    $("#code_e").val(warehouse.code);
+    $('#description_e').val(warehouse.description);
 }
 
 function EditWarehouse(id) {
