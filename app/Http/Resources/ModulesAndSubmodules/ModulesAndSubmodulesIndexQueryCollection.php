@@ -30,28 +30,27 @@ class ModulesAndSubmodulesIndexQueryCollection extends ResourceCollection
                         }
                     )->toArray(),
                     'submodules' => $module->submodules->map(function ($submodule) {
-                            return [
-                                'id' => $submodule->id,
-                                'name' => $submodule->name,
-                                'url' => $submodule->url,
-                                'icon' => $submodule->icon,
-                                'permission' => (object) [
-                                    'id' => $submodule->permission->id,
-                                    'name' => $submodule->permission->name,
-                                    'guard_name' => $submodule->permission->guard_name,
-                                    'created_at' => Carbon::parse($submodule->permission->created_at)->format('Y-m-d H:i:s'),
-                                    'updated_at' => Carbon::parse($submodule->permission->updated_at)->format('Y-m-d H:i:s'),
-                                ],
-                                'created_at' => Carbon::parse($submodule->created_at)->format('Y-m-d H:i:s'),
-                                'updated_at' => Carbon::parse($submodule->updated_at)->format('Y-m-d H:i:s'),
-                            ];
-                        }
-                    )->toArray(),
+                        return [
+                            'id' => $submodule->id,
+                            'name' => $submodule->name,
+                            'url' => $submodule->url,
+                            'icon' => $submodule->icon,
+                            'permission' => [
+                                'id' => $submodule->permission->id,
+                                'name' => $submodule->permission->name,
+                                'guard_name' => $submodule->permission->guard_name,
+                                'created_at' => Carbon::parse($submodule->permission->created_at)->format('Y-m-d H:i:s'),
+                                'updated_at' => Carbon::parse($submodule->permission->updated_at)->format('Y-m-d H:i:s'),
+                            ],
+                            'created_at' => Carbon::parse($submodule->created_at)->format('Y-m-d H:i:s'),
+                            'updated_at' => Carbon::parse($submodule->updated_at)->format('Y-m-d H:i:s'),
+                        ];
+                    })->toArray(),
                     'created_at' => Carbon::parse($module->created_at)->format('Y-m-d H:i:s'),
                     'updated_at' => Carbon::parse($module->updated_at)->format('Y-m-d H:i:s'),
                 ];
             }),
-            
+
             'meta' => [
                 'pagination' => [
                     'total' => $this->total(),

@@ -4,12 +4,12 @@ use Carbon\Carbon;
 use App\Models\User;
 use App\Traits\ApiResponser;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\User\AssignRoleAndPermissionsQueryRequest;
-use App\Http\Requests\User\AssignRoleAndPermissionsRequest;
-use App\Http\Requests\User\RemoveRoleAndPermissionsQueryRequest;
+use App\Http\Requests\User\UserAssignRoleAndPermissionsQueryRequest;
+use App\Http\Requests\User\UserAssignRoleAndPermissionsRequest;
+use App\Http\Requests\User\UserRemoveRoleAndPermissionsQueryRequest;
+use App\Http\Requests\User\UserRemoveRolesAndPermissionsRequest;
 use App\Http\Requests\User\UserIndexQueryRequest;
 use App\Http\Resources\User\UserIndexQueryCollection;
-use App\Http\Requests\User\RemoveRolesAndPermissionsRequest;
 use App\Http\Requests\User\UserCreateRequest;
 use App\Http\Requests\User\UserDeleteRequest;
 use App\Http\Requests\User\UserEditRequest;
@@ -473,7 +473,7 @@ class UserController extends Controller
         }
     }
 
-    public function assignRoleAndPermissionsQuery(AssignRoleAndPermissionsQueryRequest $request)
+    public function assignRoleAndPermissionsQuery(UserAssignRoleAndPermissionsQueryRequest $request)
     {
         try {
             $user = User::findOrFail($request->input('id'));
@@ -520,7 +520,7 @@ class UserController extends Controller
         }
     }
 
-    public function assignRoleAndPermissions(AssignRoleAndPermissionsRequest $request)
+    public function assignRoleAndPermissions(UserAssignRoleAndPermissionsRequest $request)
     {
         try {
             // Obtener el rol existente
@@ -568,7 +568,7 @@ class UserController extends Controller
         }
     }
 
-    public function removeRoleAndPermissionsQuery(RemoveRoleAndPermissionsQueryRequest $request)
+    public function removeRoleAndPermissionsQuery(UserRemoveRoleAndPermissionsQueryRequest $request)
     {
         try {
             $user = User::with('roles.permissions','permissions')->findOrFail($request->input('id'));
@@ -614,7 +614,7 @@ class UserController extends Controller
         }
     }
 
-    public function removeRoleAndPermissions(RemoveRolesAndPermissionsRequest $request)
+    public function removeRoleAndPermissions(UserRemoveRolesAndPermissionsRequest $request)
     {
         try {
             $role = Role::with('permissions')->findByName($request->input('role'));

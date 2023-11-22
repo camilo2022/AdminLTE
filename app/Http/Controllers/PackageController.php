@@ -141,10 +141,8 @@ class PackageController extends Controller
     public function edit($id)
     {
         try {
-            $package = Package::withTrashed()->findOrFail($id);
-
             return $this->successResponse(
-                $package,
+                Package::withTrashed()->findOrFail($id),
                 'El tipo de empaque fue encontrado exitosamente.',
                 204
             );

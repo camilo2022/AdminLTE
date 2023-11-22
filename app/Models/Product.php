@@ -7,10 +7,12 @@ use Illuminate\Database\Eloquent\Model as DBModel;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends DBModel
 {
     use HasFactory;
+    use SoftDeletes;
     protected $table = 'products';
 
     protected $fillable = [
@@ -21,9 +23,8 @@ class Product extends DBModel
         'subcategory_id',
         'model_id',
         'trademark_id',
-        'price',
-        'inventory_status',
-        'collection_id'
+        'collection_id',
+        'price'
     ];
 
     public function product_inventories() : HasMany
@@ -74,5 +75,53 @@ class Product extends DBModel
     public function trademark() : BelongsTo
     {
         return $this->belongsTo(Trademark::class, 'trademark_id');
+    }
+
+    public function collection() : BelongsTo
+    {
+        return $this->belongsTo(Collection::class, 'collection_id');
+    }
+
+    public function scopeSearch($query, $search)
+    {
+        return $query->where('code', 'like', '%' . $search . '%')
+        ->orWhere('description', 'like', '%' . $search . '%')
+        ->orWhere('price', 'like', '%' . $search . '%')
+        ->orWhereHas('clothing_line',
+            function ($subQuery) use ($search) {
+                $subQuery->where('name', 'like',  '%' . $search . '%');
+            }
+        )
+        ->orWhereHas('category',
+            function ($subQuery) use ($search) {
+                $subQuery->where('name', 'like',  '%' . $search . '%');
+            }
+        )
+        ->orWhereHas('subcategory',
+            function ($subQuery) use ($search) {
+                $subQuery->where('name', 'like',  '%' . $search . '%');
+            }
+        )
+        ->orWhereHas('model',
+            function ($subQuery) use ($search) {
+                $subQuery->where('name', 'like',  '%' . $search . '%');
+            }
+        )
+        ->orWhereHas('trademark',
+            function ($subQuery) use ($search) {
+                $subQuery->where('name', 'like',  '%' . $search . '%');
+            }
+        )
+        ->orWhereHas('collection',
+            function ($subQuery) use ($search) {
+                $subQuery->where('name', 'like',  '%' . $search . '%');
+            }
+        );
+    }
+
+    public function scopeFilterByDate($query, $start_date, $end_date)
+    {
+        // Filtro por rango de fechas entre 'start_date' y 'end_date' en el campo 'created_at'
+        return $query->whereBetween('created_at', [$start_date, $end_date]);
     }
 }

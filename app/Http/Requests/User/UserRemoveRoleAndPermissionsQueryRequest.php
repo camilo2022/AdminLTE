@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class AssignRoleAndPermissionsRequest extends FormRequest
+class UserRemoveRoleAndPermissionsQueryRequest extends FormRequest
 {
     /**
      * Maneja una solicitud fallida de validación.
@@ -41,25 +41,15 @@ class AssignRoleAndPermissionsRequest extends FormRequest
     public function rules()
     {
         return [
-            'id' => 'required|exists:users,id',
-            'role' => 'required|string|exists:roles,name',
-            'permissions' => 'required|array',
-            'permissions.*' => 'string|exists:permissions,name',
+            'id' => ['required', 'exists:users,id'],
         ];
     }
 
     public function messages()
     {
         return [
-            'id.required' => 'El campo identificador del usuario es requerido.',
-            'id.exists' => 'El identificador del usuario no existe en la base de datos.',
-            'role.required' => 'El campo rol es requerido.',
-            'role.string' => 'El rol debe ser una cadena de texto.',
-            'role.exists' => 'El rol no existe en la base de datos.',
-            'permissions.required' => 'Debe seleccionar los permisos que desea asignar.',
-            'permissions.array' => 'El campo permisos a asignar debe ser un arreglo.',
-            'permissions.*.string' => 'El permiso debe ser una cadena de texto.',
-            'permissions.*.exists' => 'El permiso no existe en la base de datos.'
+            'required' => 'El campo identificador del usuario es requerido.',
+            'exists' => 'El identificador del usuario especificado no existe.',
         ];
     }
 }

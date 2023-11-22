@@ -142,10 +142,8 @@ class ColorController extends Controller
     public function edit($id)
     {
         try {
-            $color = Color::withTrashed()->findOrFail($id);
-
             return $this->successResponse(
-                $color,
+                Color::withTrashed()->findOrFail($id),
                 'El color de producto fue encontrado exitosamente.',
                 204
             );

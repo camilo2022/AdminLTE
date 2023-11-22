@@ -29,7 +29,7 @@ class User extends Authenticatable
         'area_id',
         'charge_id',
         'email',
-        'password',
+        'password'
     ];
 
     /**

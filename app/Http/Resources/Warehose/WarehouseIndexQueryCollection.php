@@ -22,20 +22,30 @@ class WarehouseIndexQueryCollection extends ResourceCollection
                     'name' => $warehouse->name,
                     'code' => $warehouse->code,
                     'description' => $warehouse->description,
-                    'created_at' => Carbon::parse($warehouse->created_at)->format('Y-m-d H:i:s'),
-                    'updated_at' => Carbon::parse($warehouse->updated_at)->format('Y-m-d H:i:s'),
+                    'created_at' => $this->formatDate($warehouse->created_at),
+                    'updated_at' => $this->formatDate($warehouse->updated_at),
                     'deleted_at' => $warehouse->deleted_at
                 ];
             }),
             'meta' => [
-                'pagination' => [
-                    'total' => $this->total(),
-                    'count' => $this->count(),
-                    'per_page' => $this->perPage(),
-                    'current_page' => $this->currentPage(),
-                    'total_pages' => $this->lastPage(),
-                ],
+                'pagination' => $this->paginationMeta(),
             ],
+        ];
+    }
+
+    protected function formatDate($date)
+    {
+        return Carbon::parse($date)->format('Y-m-d H:i:s');
+    }
+
+    protected function paginationMeta()
+    {
+        return [
+            'total' => $this->total(),
+            'count' => $this->count(),
+            'per_page' => $this->perPage(),
+            'current_page' => $this->currentPage(),
+            'total_pages' => $this->lastPage(),
         ];
     }
 }

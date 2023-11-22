@@ -16,7 +16,7 @@ class Package extends Model
         'name',
         'code'
     ];
-    
+
     public function scopeSearch($query, $search)
     {
         return $query->where('name', 'like', '%' . $search . '%')

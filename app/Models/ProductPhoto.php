@@ -13,7 +13,6 @@ class ProductPhoto extends Model
 
     protected $fillable = [
         'product_id',
-        'color_id',
         'name',
         'path'
     ];
@@ -21,10 +20,5 @@ class ProductPhoto extends Model
     public function product() : BelongsTo
     {
         return $this->belongsTo(Product::class, 'product_id');
-    }
-
-    public function color() : BelongsTo
-    {
-        return $this->belongsTo(Color::class, 'color_id');
     }
 }

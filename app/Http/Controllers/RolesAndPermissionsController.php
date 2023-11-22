@@ -156,10 +156,8 @@ class RolesAndPermissionsController extends Controller
     public function edit($id)
     {
         try {
-            $roleAndPermissions = Role::with('permissions')->findOrFail($id);
-
             return $this->successResponse(
-                $roleAndPermissions,
+                Role::with('permissions')->findOrFail($id),
                 'El rol y los permisos fueron encontrados exitosamente.',
                 204
             );

@@ -31,6 +31,7 @@ return new class extends Migration
             $table->foreign('trademark_id')->references('id')->on('trademarks')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('collection_id')->references('id')->on('collections')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

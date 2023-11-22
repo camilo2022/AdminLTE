@@ -80,6 +80,8 @@ class UserStoreRequest extends FormRequest
             'phone_number' => 'numero de telefono',
             'address' => 'direccion',
             'email' => 'correo electrónico',
+            'area_id' => 'identifiacdor del area',
+            'charge_id' => 'cidentifiacdor del cargo',
             'password' => 'contraseña',
             'password_confirmation' => 'confirmación de contraseña',
         ];

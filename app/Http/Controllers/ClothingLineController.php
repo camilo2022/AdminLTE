@@ -143,10 +143,8 @@ class ClothingLineController extends Controller
     public function edit($id)
     {
         try {
-            $clothingLine = ClothingLine::withTrashed()->findOrFail($id);
-
             return $this->successResponse(
-                $clothingLine,
+                ClothingLine::withTrashed()->findOrFail($id),
                 'La linea de producto fue encontrada exitosamente.',
                 204
             );

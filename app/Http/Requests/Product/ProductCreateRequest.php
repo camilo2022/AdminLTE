@@ -1,18 +1,17 @@
 <?php
 
-namespace App\Http\Requests\User;
+namespace App\Http\Requests\Product;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class RemoveRoleAndPermissionsQueryRequest extends FormRequest
+class ProductCreateRequest extends FormRequest
 {
     /**
-     * Maneja una solicitud fallida de validación.
+     * Determine if the user is authorized to make this request.
      *
-     * @param \Illuminate\Contracts\Validation\Validator $validator
-     * @throws \Illuminate\Validation\ValidationException
+     * @return bool
      */
     protected function failedValidation(Validator $validator)
     {
@@ -22,7 +21,6 @@ class RemoveRoleAndPermissionsQueryRequest extends FormRequest
             'errors' => $validator->errors()
         ], 422));
     }
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -41,15 +39,17 @@ class RemoveRoleAndPermissionsQueryRequest extends FormRequest
     public function rules()
     {
         return [
-            'id' => ['required', 'exists:users,id'],
+            'clothing_line_id' => ['nullable', 'exists:clothing_lines,id'],
+            'category_id' => ['nullable', 'exists:categories,id'],
         ];
     }
+
 
     public function messages()
     {
         return [
-            'required' => 'El campo identificador del usuario es requerido.',
-            'exists' => 'El identificador del usuario especificado no existe.',
+            'clothing_line_id.exists' => 'La linea del producto proporcionado no existe en la base de datos.',
+            'category_id.exists' => 'La categoria del producto proporcionado no existe en la base de datos.',
         ];
     }
 }

@@ -145,10 +145,8 @@ class CollectionController extends Controller
     public function edit($id)
     {
         try {
-            $collection = Collection::withTrashed()->findOrFail($id);
-
             return $this->successResponse(
-                $collection,
+                Collection::withTrashed()->findOrFail($id),
                 'La correria fue encontrado exitosamente.',
                 204
             );

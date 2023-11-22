@@ -126,7 +126,7 @@ class CategoriesAndSubcategoriesController extends Controller
                 $subcategoryNew->description = $subcategory->description;
                 $subcategoryNew->save();
             });
-            
+
             return $this->successResponse(
                 $category,
                 'Categoria y subcategorias creadas exitosamente.',
@@ -200,10 +200,10 @@ class CategoriesAndSubcategoriesController extends Controller
             $category->code = $request->input('code');
             $category->description = $request->input('description');
             $category->save();
-            
+
             collect($request->input('subcategories'))->map(function ($subcategory) use ($category){
                 $subcategory = (object) $subcategory;
-                $subcategoryNew = isset($subcategory->id) ? Subcategory::findOrFail($subcategory->id) : new Subcategory();
+                $subcategoryNew = isset($subcategory->id) ? Subcategory::find($subcategory->id) : new Subcategory();
                 $subcategoryNew->category_id = $category->id;
                 $subcategoryNew->name = $subcategory->subcategory;
                 $subcategoryNew->code = $subcategory->code;

@@ -22,7 +22,7 @@ class CategoriesAndSubcategoriesIndexQueryCollection extends ResourceCollection
                     'name' => $category->name,
                     'code' => $category->code,
                     'description' => $category->description,
-                    'clothingLine' => (object) [
+                    'clothingLine' => [
                         'id' => $category->clothing_line->id,
                         'name' => $category->clothing_line->name,
                         'code' => $category->clothing_line->code,
@@ -32,23 +32,22 @@ class CategoriesAndSubcategoriesIndexQueryCollection extends ResourceCollection
                         'deleted_at' => Carbon::parse($category->clothing_line->deleted_at)->format('Y-m-d H:i:s')
                     ],
                     'subcategories' => $category->subcategories->map(function ($subcategory) {
-                            return [
-                                'id' => $subcategory->id,
-                                'name' => $subcategory->name,
-                                'code' => $subcategory->code,
-                                'description' => $subcategory->description,
-                                'created_at' => Carbon::parse($subcategory->created_at)->format('Y-m-d H:i:s'),
-                                'updated_at' => Carbon::parse($subcategory->updated_at)->format('Y-m-d H:i:s'),
-                                'deleted_at' => $subcategory->deleted_at
-                            ];
-                        }
-                    )->toArray(),
+                        return [
+                            'id' => $subcategory->id,
+                            'name' => $subcategory->name,
+                            'code' => $subcategory->code,
+                            'description' => $subcategory->description,
+                            'created_at' => Carbon::parse($subcategory->created_at)->format('Y-m-d H:i:s'),
+                            'updated_at' => Carbon::parse($subcategory->updated_at)->format('Y-m-d H:i:s'),
+                            'deleted_at' => $subcategory->deleted_at
+                        ];
+                    })->toArray(),
                     'created_at' => Carbon::parse($category->created_at)->format('Y-m-d H:i:s'),
                     'updated_at' => Carbon::parse($category->updated_at)->format('Y-m-d H:i:s'),
                     'deleted_at' => $category->deleted_at
                 ];
             }),
-            
+
             'meta' => [
                 'pagination' => [
                     'total' => $this->total(),

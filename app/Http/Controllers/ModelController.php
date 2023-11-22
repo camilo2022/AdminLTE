@@ -143,10 +143,8 @@ class ModelController extends Controller
     public function edit($id)
     {
         try {
-            $model = Model::withTrashed()->findOrFail($id);
-
             return $this->successResponse(
-                $model,
+                Model::withTrashed()->findOrFail($id),
                 'El modelo de producto fue encontrada exitosamente.',
                 204
             );

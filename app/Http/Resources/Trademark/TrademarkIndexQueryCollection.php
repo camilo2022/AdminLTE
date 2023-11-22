@@ -23,20 +23,30 @@ class TrademarkIndexQueryCollection extends ResourceCollection
                     'code' => $trademark->code,
                     'description' => $trademark->description,
                     'logo' =>  asset('storage/' . $trademark->logo),
-                    'created_at' => Carbon::parse($trademark->created_at)->format('Y-m-d H:i:s'),
-                    'updated_at' => Carbon::parse($trademark->updated_at)->format('Y-m-d H:i:s'),
+                    'created_at' => $this->formatDate($trademark->created_at),
+                    'updated_at' => $this->formatDate($trademark->updated_at),
                     'deleted_at' => $trademark->deleted_at
                 ];
             }),
             'meta' => [
-                'pagination' => [
-                    'total' => $this->total(),
-                    'count' => $this->count(),
-                    'per_page' => $this->perPage(),
-                    'current_page' => $this->currentPage(),
-                    'total_pages' => $this->lastPage(),
-                ],
+                'pagination' => $this->paginationMeta(),
             ],
+        ];
+    }
+
+    protected function formatDate($date)
+    {
+        return Carbon::parse($date)->format('Y-m-d H:i:s');
+    }
+
+    protected function paginationMeta()
+    {
+        return [
+            'total' => $this->total(),
+            'count' => $this->count(),
+            'per_page' => $this->perPage(),
+            'current_page' => $this->currentPage(),
+            'total_pages' => $this->lastPage(),
         ];
     }
 }

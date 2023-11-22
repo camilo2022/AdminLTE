@@ -130,7 +130,7 @@ class ModulesAndSubmodulesController extends Controller
                 $submoduleNew->module_id = $module->id;
                 $submoduleNew->save();
             });
-            
+
             return $this->successResponse(
                 $module,
                 'Modulo y submodulos creados exitosamente.',
@@ -178,13 +178,10 @@ class ModulesAndSubmodulesController extends Controller
                 );
             }
 
-            $module = Module::with('roles', 'submodules.permission')->findOrFail($id);
-            $roles = Role::whereDoesntHave('modules')->get();
-
             return $this->successResponse(
                 (object) [
-                    'module' => $module,
-                    'roles' => $roles
+                    'module' => Module::with('roles', 'submodules.permission')->findOrFail($id),
+                    'roles' => Role::whereDoesntHave('modules')->get()
                 ],
                 'El Modulo y submodulos fueron encontrados exitosamente.',
                 204
@@ -217,10 +214,10 @@ class ModulesAndSubmodulesController extends Controller
             $module->save();
 
             $module->syncRoles($request->input('roles'));
-            
+
             $submodules = collect($request->input('submodules'))->map(function ($submodule) use ($module){
                 $submodule = (object) $submodule;
-                $submoduleNew = isset($submodule->id) ? Submodule::findOrFail($submodule->id) : new Submodule();
+                $submoduleNew = isset($submodule->id) ? Submodule::find($submodule->id) : new Submodule();
                 $submoduleNew->name = $submodule->submodule;
                 $submoduleNew->url = $submodule->url;
                 $submoduleNew->icon = $submodule->icon;
