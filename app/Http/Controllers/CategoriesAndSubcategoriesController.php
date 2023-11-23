@@ -166,7 +166,12 @@ class CategoriesAndSubcategoriesController extends Controller
         try {
             return $this->successResponse(
                 (object) [
-                    'category' => Category::with('clothing_line', 'subcategories')->findOrFail($id),
+                    'category' => Category::with([
+                        'clothing_line' => function ($query) {
+                            $query->withTrashed();
+                        }, 'subcategories' => function ($query) {
+                            $query->withTrashed();
+                        }])->findOrFail($id),
                     'clothingLines' => ClothingLine::all()
                 ],
                 'La categoria y subcategorias fueron encontrados exitosamente.',
@@ -203,14 +208,13 @@ class CategoriesAndSubcategoriesController extends Controller
 
             collect($request->input('subcategories'))->map(function ($subcategory) use ($category){
                 $subcategory = (object) $subcategory;
-                $subcategoryNew = isset($subcategory->id) ? Subcategory::find($subcategory->id) : new Subcategory();
+                $subcategoryNew = isset($subcategory->id) ? Subcategory::withTrashed()->find($subcategory->id) : new Subcategory();
                 $subcategoryNew->category_id = $category->id;
-                $subcategoryNew->name = $subcategory->subcategory;
+                $subcategoryNew->name = $subcategory->name;
                 $subcategoryNew->code = $subcategory->code;
                 $subcategoryNew->description = $subcategory->description;
-                $subcategoryNew->deleted_at = $subcategory->status ? null : Carbon::now()->format('Y-m-d H:i:s');
+                $subcategoryNew->deleted_at = filter_var($subcategory->status, FILTER_VALIDATE_BOOLEAN) ? null : Carbon::now()->format('Y-m-d H:i:s');
                 $subcategoryNew->save();
-                return $subcategoryNew->id;
             });
 
             return $this->successResponse(

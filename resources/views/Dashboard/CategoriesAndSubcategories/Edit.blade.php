@@ -75,7 +75,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-success" id="EditCategoryAndSubcategoriesAddPermissionButton" title="Agregar subcategoria" onclick="EditCategoryAndSubcategoriesAddSubcategory(null, '', '', '', '')">
+                <button type="button" class="btn btn-success" id="EditCategoryAndSubcategoriesAddPermissionButton" title="Agregar subcategoria" onclick="EditCategoryAndSubcategoriesAddSubcategory(null, null, null, null, null)">
                     <i class="fas fa-plus"></i>
                 </button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal" title="Cerrar ventana">

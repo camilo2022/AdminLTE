@@ -20,6 +20,7 @@ function EditCategoryAndSubcategoriesModal(id) {
 function EditCategoryAndSubcategoriesModalCleaned(categoryAndSubcategories) {
     RemoveIsInvalidClassEditCategoryAndSubcategories();
     RemoveIsValidClassEditCategoryAndSubcategories();
+    EditCategoryAndSubcategoriesModalResetSelect();
     $('.subcategories_e').empty();
     $('#name_e').val(categoryAndSubcategories.name);
     $('#code_e').val(categoryAndSubcategories.code);
@@ -81,7 +82,8 @@ function EditCategoryAndSubcategories(id) {
                         const subcategory = {
                             'name': $(this).find('input.name_e').val(),
                             'code': $(this).find('input.code_e').val(),
-                            'description': $(this).find('textarea.description_e').val()
+                            'description': $(this).find('textarea.description_e').val(),
+                            'status': $(this).find('button.status').attr('data-status')
                         };
                         if (id != undefined) {
                             subcategory['id'] = id;
@@ -134,11 +136,11 @@ function EditCategoryAndSubcategoriesAddSubcategory(id, name, code, description,
     let plusIcon = $('<i>').addClass('fas fa-plus');
     let removeButton = $('<button>').attr({
         'type': 'button',
-        'class': `btn btn-${deleted == null ? 'danger' : 'success'} btn-sm ml-2 mt-2`,
-        'data-active': deleted == null ? 'true' : 'false',
+        'class': `btn btn-${deleted == null ? 'danger' : 'success'} btn-sm ml-2 mt-2 status`,
+        'data-status': deleted == null ? 'true' : 'false',
         'onclick': `EditCategoryAndSubcategories${deleted == null ? 'Inactive' : 'Active'}Subcategory(this)`
     });
-    let timesIcon = $('<i>').addClass('fas fa-times');
+    let timesIcon = $('<i>').addClass(`${deleted == null ? 'fas fa-times' : 'fas fa-check'}`);
 
     // Anidar elementos
     inputGroupText.append(signatureIcon);
@@ -198,20 +200,16 @@ function EditCategoryAndSubcategoriesAddSubcategory(id, name, code, description,
 }
 
 function EditCategoryAndSubcategoriesActiveSubcategory(button) {
-    $(button).removeClass().addClass('btn btn-danger btn-sm ml-2 mt-2')
-    $(button).on('click', function() {
-        EditCategoryAndSubcategoriesInactiveSubcategory(this);
-    });
-    $(button).attr('data-active', 'true');
+    $(button).removeClass('btn-success').addClass('btn-danger')
+    $(button).attr('onclick', 'EditCategoryAndSubcategoriesInactiveSubcategory(this)');
+    $(button).attr('data-status', 'true');
     $(button).find('i').removeClass().addClass('fas fa-times');
 }
 
 function EditCategoryAndSubcategoriesInactiveSubcategory(button) {
-    $(button).removeClass().addClass('btn btn-success btn-sm ml-2 mt-2')
-    $(button).on('click', function() {
-        EditCategoryAndSubcategoriesActiveSubcategory(this);
-    });
-    $(button).attr('data-active', 'false');
+    $(button).removeClass('btn-danger').addClass('btn-success')
+    $(button).attr('onclick', 'EditCategoryAndSubcategoriesActiveSubcategory(this)');
+    $(button).attr('data-status', 'false');
     $(button).find('i').removeClass().addClass('fas fa-check');
 }
 

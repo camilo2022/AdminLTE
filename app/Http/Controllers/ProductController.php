@@ -8,10 +8,13 @@ use App\Http\Requests\Product\ProductDeleteRequest;
 use App\Http\Requests\Product\ProductDestroyRequest;
 use App\Http\Requests\Product\ProductEditRequest;
 use App\Http\Requests\Product\ProductIndexQueryRequest;
+use App\Http\Requests\Product\ProductMasiveRequest;
 use App\Http\Requests\Product\ProductRestoreRequest;
 use App\Http\Requests\Product\ProductStoreRequest;
 use App\Http\Requests\Product\ProductUpdateRequest;
+use App\Http\Requests\Product\ProductUploadRequest;
 use App\Http\Resources\Product\ProductIndexQueryCollection;
+use App\Imports\Product\ProductMasiveImport;
 use App\Models\Category;
 use App\Models\ClothingLine;
 use App\Models\Collection;
@@ -28,6 +31,9 @@ use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ProductController extends Controller
 {
@@ -187,6 +193,52 @@ class ProductController extends Controller
             );
         } catch (Exception $e) {
             // Devolver una respuesta de error en caso de excepción
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('Exception'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        }
+    }
+
+    public function upload(ProductUploadRequest $request)
+    {
+        try {
+            $products = Excel::toCollection(new ProductMasiveImport, $request->file('products'))->first();
+            
+            $productsValidate = new ProductMasiveRequest();
+            $productsValidate->merge([
+                'products' => $products,
+            ]);
+            
+            $validator = Validator::make(
+                $productsValidate->all(),
+                $productsValidate->rules(),
+                $productsValidate->messages()
+            );
+
+            if ($validator->fails()) {
+                throw new ValidationException($validator);
+            }
+            
+            return $this->successResponse(
+                '',
+                'Los productos fueron registrados exitosamente.',
+                201
+            );
+        } catch (ValidationException $e) {
+            // Maneja los errores de validación del nuevo formulario y retorna una respuesta de error
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('ValidationException'),
+                    'errors' => $e->errors(),
+                ],
+                422
+            );
+        } catch (Exception $e) {
+            // Devuelve una respuesta de error en caso de excepción
             return $this->errorResponse(
                 [
                     'message' => $this->getMessage('Exception'),

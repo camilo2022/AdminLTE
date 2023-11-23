@@ -55,7 +55,7 @@
                             <ul class="nav nav-pills">
                                 <li class="nav-item">
                                     <a class="nav-link active" type="button" onclick="CreateCategoryAndSubcategoriesModal()" title="Agregar categoria y subcategorias">
-                                        <i class="fas fa-shield-plus"></i>
+                                        <i class="fas fa-plus"></i>
                                     </a>
                                 </li>
                             </ul>

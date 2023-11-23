@@ -5,7 +5,6 @@ namespace App\Http\Requests\CategoriesAndSubcategories;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
-use Mockery\Undefined;
 
 class CategoriesAndSubcategoriesUpdateRequest extends FormRequest
 {
@@ -47,10 +46,10 @@ class CategoriesAndSubcategoriesUpdateRequest extends FormRequest
             'code' => ['required', 'string', 'max:255', 'unique:categories,code,' . $this->route('id') . ',id'],
             'description' => ['nullable', 'string', 'max:255'],
             'subcategories' => ['required', 'array'],
-            'subcategories.*.name' => ['required', 'string', 'max:255', ($this->input('subcategories.*.id') ? 'unique:subcategories,name,' . implode('', $this->input('subcategories.*.id')) . 'id' : 'unique:subcategories,name')],
-            'subcategories.*.code' => ['required', 'string', 'max:255', ($this->input('subcategories.*.id') ? 'unique:subcategories,code,' . implode('', $this->input('subcategories.*.id')) . 'id' : 'unique:subcategories,code')],
+            'subcategories.*.name' => ['required', 'string', 'max:255'],
+            'subcategories.*.code' => ['required', 'string', 'max:255'],
             'subcategories.*.description' => ['nullable', 'string', 'max:255'],
-            'subcategories.*.status' => ['required', 'boolean'],
+            'subcategories.*.status' => ['required'],
         ];
     }
 
@@ -61,11 +60,9 @@ class CategoriesAndSubcategoriesUpdateRequest extends FormRequest
             'clothing_line_id.exists' => 'El campo Linea del prodcuto no existe en la base de datos.',
             'name.required' => 'El campo Nombre de la categoria es requerido.',
             'name.string' => 'El campo Nombre de la categoria debe ser una cadena de caracteres.',
-            'name.unique' => 'El campo Nombre de la categoria ya ha sido tomado.',
             'name.max' => 'El campo Nombre de la categoria no debe exceder los 255 caracteres.',
             'code.required' => 'El campo Codigo de la categoria es requerido.',
             'code.string' => 'El campo Codigo de la categoria debe ser una cadena de caracteres.',
-            'code.unique' => 'El campo Codigo de la categoria ya ha sido tomado.',
             'code.max' => 'El campo Codigo de la categoria no debe exceder los 255 caracteres.',
             'description.string' => 'El campo Descripcion de la categoria debe ser una cadena de caracteres.',
             'description.max' => 'El campo Descripcion de la categoria no debe exceder los 255 caracteres.',
@@ -81,8 +78,7 @@ class CategoriesAndSubcategoriesUpdateRequest extends FormRequest
             'subcategories.*.code.max' => 'El campo Codigo de la subcategoria no debe exceder los 255 caracteres.',
             'subcategories.*.description.string' => 'El campo Descripcion de la subcategoria debe ser una cadena de caracteres.',
             'subcategories.*.description.max' => 'El campo Descripcion de la subcategoria no debe exceder los 255 caracteres.',
-            'subcategories.*.status.required' => 'El campo Estado de la subcategoria es requerido.',
-            'subcategories.*.status.boolean' => 'El campo Estado de la subcategoria debe ser true o false.',
+            'subcategories.*.status.required' => 'El campo Estado de la subcategoria es requerido.'
         ];
     }
 }
