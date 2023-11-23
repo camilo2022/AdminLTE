@@ -191,15 +191,17 @@ class RolesAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Dashboard.Products.Destroy'])->syncRoles([$Products]);
         Permission::create(['name' => 'Dashboard.Products.Delete'])->syncRoles([$Products]);
         Permission::create(['name' => 'Dashboard.Products.Restore'])->syncRoles([$Products]);
+        Permission::create(['name' => 'Dashboard.Products.Upload'])->syncRoles([$Products]);
+        Permission::create(['name' => 'Dashboard.Products.Download'])->syncRoles([$Products]);
 
         Permission::create(['name' => 'Dashboard.Inventories.Index'])->syncRoles([$Inventories]);
         Permission::create(['name' => 'Dashboard.Inventories.Index.Query'])->syncRoles([$Inventories]);
         Permission::create(['name' => 'Dashboard.Inventories.Create'])->syncRoles([$Inventories]);
         Permission::create(['name' => 'Dashboard.Inventories.Store'])->syncRoles([$Inventories]);
-        Permission::create(['name' => 'Dashboard.Inventories.Upload'])->syncRoles([$Inventories]);
         Permission::create(['name' => 'Dashboard.Inventories.Edit'])->syncRoles([$Inventories]);
         Permission::create(['name' => 'Dashboard.Inventories.Update'])->syncRoles([$Inventories]);
-        Permission::create(['name' => 'Dashboard.Inventories.Delete'])->syncRoles([$Inventories]);
+        Permission::create(['name' => 'Dashboard.Inventories.Upload'])->syncRoles([$Inventories]);
+        Permission::create(['name' => 'Dashboard.Inventories.Download'])->syncRoles([$Inventories]);
 
         Permission::create(['name' => 'Dashboard.Transfers.Index'])->syncRoles([$Transfers]);
         Permission::create(['name' => 'Dashboard.Transfers.Index.Query'])->syncRoles([$Transfers]);
@@ -226,6 +228,7 @@ class RolesAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Dashboard.Order.Seller.Store'])->syncRoles([$OrderSeller]);
         Permission::create(['name' => 'Dashboard.Order.Seller.Detail.Store'])->syncRoles([$OrderSeller]);
         Permission::create(['name' => 'Dashboard.Order.Seller.Show'])->syncRoles([$OrderSeller]);
+        Permission::create(['name' => 'Dashboard.Order.Seller.Show.Query'])->syncRoles([$OrderSeller]);
         Permission::create(['name' => 'Dashboard.Order.Seller.Edit'])->syncRoles([$OrderSeller]);
         Permission::create(['name' => 'Dashboard.Order.Seller.Detail.Edit'])->syncRoles([$OrderSeller]);
         Permission::create(['name' => 'Dashboard.Order.Seller.Update'])->syncRoles([$OrderSeller]);
@@ -243,13 +246,17 @@ class RolesAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Dashboard.Clients.Store'])->syncRoles([$Clients]);
         Permission::create(['name' => 'Dashboard.Clients.Branch.Store'])->syncRoles([$Clients]);
         Permission::create(['name' => 'Dashboard.Clients.Show'])->syncRoles([$Clients]);
+        Permission::create(['name' => 'Dashboard.Clients.Show.Query'])->syncRoles([$Clients]);
         Permission::create(['name' => 'Dashboard.Clients.Quota'])->syncRoles([$Clients]);
+        Permission::create(['name' => 'Dashboard.Clients.Quota.Query'])->syncRoles([$Clients]);
         Permission::create(['name' => 'Dashboard.Clients.Edit'])->syncRoles([$Clients]);
         Permission::create(['name' => 'Dashboard.Clients.Branch.Edit'])->syncRoles([$Clients]);
         Permission::create(['name' => 'Dashboard.Clients.Update'])->syncRoles([$Clients]);
         Permission::create(['name' => 'Dashboard.Clients.Branch.Update'])->syncRoles([$Clients]);
         Permission::create(['name' => 'Dashboard.Clients.Delete'])->syncRoles([$Clients]);
         Permission::create(['name' => 'Dashboard.Clients.Branch.Delete'])->syncRoles([$Clients]);
+        Permission::create(['name' => 'Dashboard.Clients.Restore'])->syncRoles([$Clients]);
+        Permission::create(['name' => 'Dashboard.Clients.Branch.Restore'])->syncRoles([$Clients]);
 
         Permission::create(['name' => 'Dashboard.Wallet.Index'])->syncRoles([$Wallet]);
         Permission::create(['name' => 'Dashboard.Wallet.Index.Query'])->syncRoles([$Wallet]);

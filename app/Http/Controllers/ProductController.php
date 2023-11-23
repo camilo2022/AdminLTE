@@ -159,13 +159,13 @@ class ProductController extends Controller
             });
 
             if ($request->hasFile('photos')) {
-                foreach($request->input('photos') as $photo) {
+                collect($request->input('photos'))->map(function ($photo) use ($product){
                     $productPhoto = new ProductPhoto();
                     $productPhoto->product_id = $product->id;
                     $productPhoto->name = $photo->getClientOriginalName();
                     $productPhoto->path = $photo->store('Products/' . $product->id, 'public');
                     $productPhoto->save();
-                }
+                });
             }
 
             return $this->successResponse(
@@ -193,52 +193,6 @@ class ProductController extends Controller
             );
         } catch (Exception $e) {
             // Devolver una respuesta de error en caso de excepción
-            return $this->errorResponse(
-                [
-                    'message' => $this->getMessage('Exception'),
-                    'error' => $e->getMessage()
-                ],
-                500
-            );
-        }
-    }
-
-    public function upload(ProductUploadRequest $request)
-    {
-        try {
-            $products = Excel::toCollection(new ProductMasiveImport, $request->file('products'))->first();
-            
-            $productsValidate = new ProductMasiveRequest();
-            $productsValidate->merge([
-                'products' => $products,
-            ]);
-            
-            $validator = Validator::make(
-                $productsValidate->all(),
-                $productsValidate->rules(),
-                $productsValidate->messages()
-            );
-
-            if ($validator->fails()) {
-                throw new ValidationException($validator);
-            }
-            
-            return $this->successResponse(
-                '',
-                'Los productos fueron registrados exitosamente.',
-                201
-            );
-        } catch (ValidationException $e) {
-            // Maneja los errores de validación del nuevo formulario y retorna una respuesta de error
-            return $this->errorResponse(
-                [
-                    'message' => $this->getMessage('ValidationException'),
-                    'errors' => $e->errors(),
-                ],
-                422
-            );
-        } catch (Exception $e) {
-            // Devuelve una respuesta de error en caso de excepción
             return $this->errorResponse(
                 [
                     'message' => $this->getMessage('Exception'),
@@ -315,23 +269,33 @@ class ProductController extends Controller
 
             $colors = collect($request->input('colors'))->map(function ($color) use ($product){
                 $color = (object) $color;
-                $productHasColor = isset($color) ? ProductHasColor::find($color) : new ProductHasColor();
-                $productHasColor->product_id = $product->id;
-                $productHasColor->color_id = $color;
-                $productHasColor->save();
-                return $productHasColor->id;
+                $existProductHasColor = ProductHasColor::withTrashed()->where('color_id', '=', $color)
+                ->where('product_id', '=', $product->id)->first();
+
+                if($existProductHasColor) {
+                    $existProductHasColor->restore();
+                } else {
+                    $newProductHasColor = new ProductHasColor();
+                    $newProductHasColor->product_id = $product->id;
+                    $newProductHasColor->color_id = $color;
+                    $newProductHasColor->save();
+
+                    $existProductHasColor = $newProductHasColor;
+                }
+
+                return $existProductHasColor->id;
             });
 
             $product->colors()->whereNotIn('id', $colors)->delete();
 
             if ($request->hasFile('photos')) {
-                foreach($request->file('photos') as $photo) {
+                collect($request->input('photos'))->map(function ($photo) use ($product){
                     $productPhoto = new ProductPhoto();
                     $productPhoto->product_id = $product->id;
                     $productPhoto->name = $photo->getClientOriginalName();
                     $productPhoto->path = $photo->store('Products/' . $product->id, 'public');
                     $productPhoto->save();
-                }
+                });
             }
 
             return $this->successResponse(
@@ -478,6 +442,87 @@ class ProductController extends Controller
                 404
             );
         } catch (Exception $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('Exception'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        }
+    }
+
+    public function upload(ProductUploadRequest $request)
+    {
+        try {
+            $products = Excel::toCollection(new ProductMasiveImport, $request->file('products'))->first();
+
+            $productsValidate = new ProductMasiveRequest();
+            $productsValidate->merge([
+                'products' => $products,
+            ]);
+
+            $validator = Validator::make(
+                $productsValidate->all(),
+                $productsValidate->rules(),
+                $productsValidate->messages()
+            );
+
+            if ($validator->fails()) {
+                throw new ValidationException($validator);
+            }
+
+            foreach($products as $product) {
+
+                $existProduct = Product::where('code', '=', $product->code)->first();
+
+                if($existProduct) {
+                    $existProduct->restore();
+                } else {
+                    $newProduct = new Product();
+                    $newProduct->code = $product->input('code');
+                    $newProduct->description = $product->input('description');
+                    $newProduct->price = $product->input('price');
+                    $newProduct->clothing_line_id = $product->input('clothing_line_id');
+                    $newProduct->category_id = $product->input('category_id');
+                    $newProduct->subcategory_id = $product->input('subcategory_id');
+                    $newProduct->model_id = $product->input('model_id');
+                    $newProduct->trademark_id = $product->input('trademark_id');
+                    $newProduct->collection_id = $product->input('collection_id');
+                    $newProduct->save();
+                    $existProduct = $newProduct;
+                }
+                $existProductHasColor = ProductHasColor::withTrashed()->where('color_id', '=', $product->color_id)
+                ->where('product_id', '=', $product->id)->first();
+
+                if($existProductHasColor) {
+                    $existProductHasColor->restore();
+                } else {
+                    $newProductHasColor = new ProductHasColor();
+                    $newProductHasColor->product_id = $newProduct->id;
+                    $newProductHasColor->color_id = $newProduct->color_id;
+                    $newProductHasColor->save();
+
+                    $existProductHasColor = $newProductHasColor;
+                }
+            }
+
+            return $this->successResponse(
+                '',
+                'Los productos fueron registrados exitosamente.',
+                201
+            );
+        } catch (ValidationException $e) {
+            // Maneja los errores de validación del nuevo formulario y retorna una respuesta de error
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('ValidationException'),
+                    'errors' => $e->errors(),
+                ],
+                422
+            );
+        } catch (Exception $e) {
+            // Devuelve una respuesta de error en caso de excepción
             return $this->errorResponse(
                 [
                     'message' => $this->getMessage('Exception'),
