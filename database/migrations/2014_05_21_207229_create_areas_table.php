@@ -21,8 +21,6 @@ return new class extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
-
-        DB::statement("ALTER TABLE `areas` comment 'Areas'");
     }
 
     /**

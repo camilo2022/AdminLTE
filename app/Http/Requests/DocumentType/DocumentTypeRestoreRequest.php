@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Requests\Warehouse;
+namespace App\Http\Requests\DocumentType;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class WarehouseAssignGestorRequest extends FormRequest
+class DocumentTypeRestoreRequest extends FormRequest
 {
     /**
      * Maneja una solicitud fallida de validación.
@@ -41,18 +41,15 @@ class WarehouseAssignGestorRequest extends FormRequest
     public function rules()
     {
         return [
-            'user_id' => ['required', 'exists:users,id'],
-            'warehouse_id' => ['required', 'exists:warehouses,id'],
+            'id' => ['required', 'exists:document_types,id'],
         ];
     }
 
     public function messages()
     {
         return [
-            'user_id.required' => 'El campo identificador del usuario es requerido.',
-            'user_id.exists' => 'El identificador del usuario proporcionado no es válido.',
-            'warehouse_id.required' => 'El campo identificador de la bodega es requerido.',
-            'warehouse_id.exists' => 'El identificador de la bodega proporcionado no es válido.',
+            'id.required' => 'El campo identificador del tipo de Documento es requerido.',
+            'id.exists' => 'El identificador del tipo de Documento proporcionado no es válido.',
         ];
     }
 }

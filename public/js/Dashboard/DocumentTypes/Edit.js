@@ -1,36 +1,35 @@
-function EditColorModal(id) {
+function EditDocumentTypeModal(id) {
     $.ajax({
-        url: `/Dashboard/Colors/Edit/${id}`,
+        url: `/Dashboard/DocumentTypes/Edit/${id}`,
         type: 'POST',
         data: {
             '_token': $('meta[name="csrf-token"]').attr('content')
         },
         success: function (response) {
-            EditColorModalCleaned(response.data);
-            EditColorAjaxSuccess(response);
-            $('#EditColorModal').modal('show');
+            EditDocumentTypeModalCleaned(response.data);
+            EditDocumentTypeAjaxSuccess(response);
+            $('#EditDocumentTypeModal').modal('show');
         },
         error: function (xhr, textStatus, errorThrown) {
-            EditColorAjaxError(xhr);
+            EditDocumentTypeAjaxError(xhr);
         }
     });
 }
 
-function EditColorModalCleaned(color) {
-    RemoveIsValidClassEditColor();
-    RemoveIsInvalidClassEditColor();
+function EditDocumentTypeModalCleaned(documentType) {
+    RemoveIsValidClassEditDocumentType();
+    RemoveIsInvalidClassEditDocumentType();
 
-    $('#EditColorButton').attr('onclick', `EditColor(${color.id})`);
+    $('#EditDocumentTypeButton').attr('onclick', `EditDocumentType(${documentType.id})`);
 
-    $("#name_e").val(color.name);
-    $("#code_e").val(color.code);
-    $('#value_e').val(color.value);
+    $("#name_e").val(documentType.name);
+    $("#code_e").val(documentType.code);
 }
 
-function EditColor(id) {
+function EditDocumentType(id) {
     Swal.fire({
-        title: '¿Desea actualizar el color?',
-        text: 'El color se actualizara.',
+        title: '¿Desea actualizar el tipo de documento?',
+        text: 'El tipo de documento se actualizara.',
         icon: 'warning',
         showCancelButton: true,
         cancelButtonColor: '#DD6B55',
@@ -40,96 +39,91 @@ function EditColor(id) {
     }).then((result) => {
         if (result.value) {
             $.ajax({
-                url: `/Dashboard/Colors/Update/${id}`,
+                url: `/Dashboard/DocumentTypes/Update/${id}`,
                 type: 'PUT',
                 data: {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
                     'name': $('#name_e').val(),
-                    'code': $('#code_e').val(),
-                    'value': $('#value_e').val()
+                    'code': $('#code_e').val()
                 },
                 success: function (response) {
-                    tableColors.ajax.reload();
-                    EditColorAjaxSuccess(response);
+                    tableDocumentTypes.ajax.reload();
+                    EditDocumentTypeAjaxSuccess(response);
                 },
                 error: function (xhr, textStatus, errorThrown) {
-                    tableColors.ajax.reload();
-                    EditColorAjaxError(xhr);
+                    tableDocumentTypes.ajax.reload();
+                    EditDocumentTypeAjaxError(xhr);
                 }
             });
         } else {
-            toastr.info('El color no fue actualizado.')
+            toastr.info('El tipo de documento no fue actualizado.')
         }
     });
 }
 
-function EditColorAjaxSuccess(response) {
+function EditDocumentTypeAjaxSuccess(response) {
     if (response.status === 200) {
         toastr.success(response.message);
-        $('#EditColorModal').modal('hide');
+        $('#EditDocumentTypeModal').modal('hide');
     }
 }
 
-function EditColorAjaxError(xhr) {
+function EditDocumentTypeAjaxError(xhr) {
     if (xhr.status === 403) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
-        $('#EditColorModal').modal('hide');
+        $('#EditDocumentTypeModal').modal('hide');
     }
 
     if (xhr.status === 404) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
-        $('#EditColorModal').modal('hide');
+        $('#EditDocumentTypeModal').modal('hide');
     }
 
     if (xhr.status === 419) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
-        $('#EditColorModal').modal('hide');
+        $('#EditDocumentTypeModal').modal('hide');
     }
 
     if (xhr.status === 422) {
-        RemoveIsValidClassEditColor();
-        RemoveIsInvalidClassEditColor();
+        RemoveIsValidClassEditDocumentType();
+        RemoveIsInvalidClassEditDocumentType();
         $.each(xhr.responseJSON.errors, function (field, messages) {
-            AddIsInvalidClassEditColor(field);
+            AddIsInvalidClassEditDocumentType(field);
             $.each(messages, function (index, message) {
                 toastr.error(message);
             });
         });
-        AddIsValidClassEditColor();
+        AddIsValidClassEditDocumentType();
     }
 
     if (xhr.status === 500) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
-        $('#EditColorModal').modal('hide');
+        $('#EditDocumentTypeModal').modal('hide');
     }
 }
 
-function AddIsValidClassEditColor() {
+function AddIsValidClassEditDocumentType() {
     if (!$('#name_e').hasClass('is-invalid')) {
         $('#name_e').addClass('is-valid');
     }
     if (!$('#code_e').hasClass('is-invalid')) {
         $('#code_e').addClass('is-valid');
     }
-    if (!$('#value_e').hasClass('is-invalid')) {
-        $('#value_e').addClass('is-valid');
-    }
 }
 
-function RemoveIsValidClassEditColor() {
+function RemoveIsValidClassEditDocumentType() {
     $('#name_e').removeClass('is-valid');
     $('#code_e').removeClass('is-valid');
-    $('#value_e').removeClass('is-valid');
 }
 
-function AddIsInvalidClassEditColor(input) {
+function AddIsInvalidClassEditDocumentType(input) {
     if (!$(`#${input}_e`).hasClass('is-valid')) {
-        $(`#${input}_e`).addClass('is-invalid');
+        $(`#${input}_e`).removeClass('is-valid');
     }
+    $(`#${input}_e`).addClass('is-invalid');
 }
 
-function RemoveIsInvalidClassEditColor() {
+function RemoveIsInvalidClassEditDocumentType() {
     $('#name_e').removeClass('is-invalid');
     $('#code_e').removeClass('is-invalid');
-    $('#value_e').removeClass('is-invalid');
 }

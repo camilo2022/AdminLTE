@@ -133,9 +133,8 @@ function RemoveIsValidClassCreateCollection() {
 
 function AddIsInvalidClassCreateCollection(input) {
     if (!$(`#${input}_c`).hasClass('is-valid')) {
-        $(`#${input}_c`).removeClass('is-valid');
+        $(`#${input}_c`).addClass('is-invalid');
     }
-    $(`#${input}_c`).addClass('is-invalid');
 }
 
 function RemoveIsInvalidClassCreateCollection() {

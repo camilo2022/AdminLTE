@@ -1,18 +1,17 @@
 <?php
 
-namespace App\Http\Requests\Warehouse;
+namespace App\Http\Requests\DocumentType;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class WarehouseAssignGestorRequest extends FormRequest
+class DocumentTypeIndexQueryRequest extends FormRequest
 {
     /**
-     * Maneja una solicitud fallida de validación.
+     * Determine if the user is authorized to make this request.
      *
-     * @param \Illuminate\Contracts\Validation\Validator $validator
-     * @throws \Illuminate\Validation\ValidationException
+     * @return bool
      */
     protected function failedValidation(Validator $validator)
     {
@@ -22,7 +21,6 @@ class WarehouseAssignGestorRequest extends FormRequest
             'errors' => $validator->errors()
         ], 422));
     }
-
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -41,18 +39,22 @@ class WarehouseAssignGestorRequest extends FormRequest
     public function rules()
     {
         return [
-            'user_id' => ['required', 'exists:users,id'],
-            'warehouse_id' => ['required', 'exists:warehouses,id'],
+            'start_date' => ['nullable', 'date'],
+            'end_date' => ['nullable', 'date', 'after_or_equal:start_date'],
+            'perPage' => ['required', 'numeric'],
         ];
     }
+
 
     public function messages()
     {
         return [
-            'user_id.required' => 'El campo identificador del usuario es requerido.',
-            'user_id.exists' => 'El identificador del usuario proporcionado no es válido.',
-            'warehouse_id.required' => 'El campo identificador de la bodega es requerido.',
-            'warehouse_id.exists' => 'El identificador de la bodega proporcionado no es válido.',
+            'start_date.required' => 'El campo Fecha de inicio es requerido.',
+            'start_date.date' => 'El campo Fecha de inicio debe ser una fecha válida.',
+            'end_date.date' => 'El campo Fecha de fin debe ser una fecha válida.',
+            'end_date.after_or_equal' => 'El campo Fecha de fin debe ser igual o posterior a la Fecha de inicio.',
+            'perPage.numeric' => 'El campo Numero de registros por página debe ser un valor numérico.',
+            'perPage.required' => 'El campo Numero de registros por página es requerido.'
         ];
     }
 }

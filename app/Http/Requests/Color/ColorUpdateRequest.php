@@ -49,18 +49,18 @@ class ColorUpdateRequest extends FormRequest
     public function messages()
     {
         return [
-            'name.required' => 'El campo Nombre de la bodega es requerido.',
-            'name.string' => 'El campo Nombre de la bodega debe ser una cadena de texto.',
-            'name.unique' => 'El campo Nombre de la bodega ya existe en la base de datos.',
-            'name.max' => 'El campo Nombre de la bodega no debe exceder los 255 caracteres.',
-            'code.required' => 'El campo Codigo de la bodega es requerido.',
-            'code.string' => 'El campo Codigo de la bodega debe ser una cadena de texto.',
-            'code.unique' => 'El campo Codigo de la bodega ya existe en la base de datos.',
-            'code.max' => 'El campo Codigo de la bodega no debe exceder los 255 caracteres.',
-            'value.required' => 'El campo Codigo de la bodega es requerido.',
-            'value.string' => 'El campo Codigo de la bodega debe ser una cadena de texto.',
-            'value.unique' => 'El campo Codigo de la bodega ya existe en la base de datos.',
-            'value.max' => 'El campo Codigo de la bodega no debe exceder los 255 caracteres.',
+            'name.required' => 'El campo Nombre del color es requerido.',
+            'name.string' => 'El campo Nombre del color debe ser una cadena de texto.',
+            'name.unique' => 'El campo Nombre del color ya existe en la base de datos.',
+            'name.max' => 'El campo Nombre del color no debe exceder los 255 caracteres.',
+            'code.required' => 'El campo Codigo del color es requerido.',
+            'code.string' => 'El campo Codigo del color debe ser una cadena de texto.',
+            'code.unique' => 'El campo Codigo del color ya existe en la base de datos.',
+            'code.max' => 'El campo Codigo del color no debe exceder los 255 caracteres.',
+            'value.required' => 'El campo Codigo del color es requerido.',
+            'value.string' => 'El campo Codigo del color debe ser una cadena de texto.',
+            'value.unique' => 'El campo Codigo del color ya existe en la base de datos.',
+            'value.max' => 'El campo Codigo del color no debe exceder los 255 caracteres.',
         ];
     }
 }

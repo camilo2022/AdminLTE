@@ -6,6 +6,7 @@ use App\Http\Controllers\CategoriesAndSubcategoriesController;
 use App\Http\Controllers\ClothingLineController;
 use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\ColorController;
+use App\Http\Controllers\DocumentTypeController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ModelController;
 use App\Http\Controllers\ModulesAndSubmodulesController;
@@ -148,6 +149,33 @@ Route::middleware(['auth'])->group(function () {
             Route::delete('/Delete', [ModulesAndSubmodulesController::class, 'delete'])
             ->middleware('can:Dashboard.ModulesAndSubmodules.Delete')->name('Dashboard.ModulesAndSubmodules.Delete');
 
+        });
+
+        Route::prefix('/DocumentTypes')->group(function () {
+
+            Route::get('/Index', [DocumentTypeController::class, 'index'])
+            ->middleware('can:Dashboard.DocumentTypes.Index')->name('Dashboard.DocumentTypes.Index');
+
+            Route::post('/Index/Query', [DocumentTypeController::class, 'indexQuery'])
+            ->middleware('can:Dashboard.DocumentTypes.Index.Query')->name('Dashboard.DocumentTypes.Index.Query');
+
+            Route::post('/Create', [DocumentTypeController::class, 'create'])
+            ->middleware('can:Dashboard.DocumentTypes.Create')->name('Dashboard.DocumentTypes.Create');
+
+            Route::post('/Store', [DocumentTypeController::class, 'store'])
+            ->middleware('can:Dashboard.DocumentTypes.Store')->name('Dashboard.DocumentTypes.Store');
+
+            Route::post('/Edit/{id}', [DocumentTypeController::class, 'edit'])
+            ->middleware('can:Dashboard.DocumentTypes.Edit')->name('Dashboard.DocumentTypes.Edit');
+
+            Route::put('/Update/{id}', [DocumentTypeController::class, 'update'])
+            ->middleware('can:Dashboard.DocumentTypes.Update')->name('Dashboard.DocumentTypes.Update');
+
+            Route::delete('/Delete', [DocumentTypeController::class, 'delete'])
+            ->middleware('can:Dashboard.DocumentTypes.Delete')->name('Dashboard.DocumentTypes.Delete');
+
+            Route::put('/Restore', [DocumentTypeController::class, 'restore'])
+            ->middleware('can:Dashboard.DocumentTypes.Restore')->name('Dashboard.DocumentTypes.Restore');
         });
 
         Route::prefix('/Collections')->group(function () {

@@ -261,13 +261,11 @@ function RemoveIsValidClassEditBusiness() {
 
 function AddIsInvalidClassEditBusiness(input) {
     if (!$(`#${input}_e`).hasClass('is-valid')) {
-        $(`#${input}_e`).removeClass('is-valid');
+        $(`#${input}_e`).addClass('is-invalid');
     }
-    $(`#${input}_e`).addClass('is-invalid');
     if (!$(`#span[aria-labelledby="select2-${input}_e-container`).hasClass('is-valid')) {
-        $(`span[aria-labelledby="select2-${input}_e-container"]`).removeClass('is-valid');
+        $(`span[aria-labelledby="select2-${input}_e-container"]`).addClass('is-invalid');
     }
-    $(`span[aria-labelledby="select2-${input}_e-container"]`).addClass('is-invalid');
 }
 
 function RemoveIsInvalidClassEditBusiness() {

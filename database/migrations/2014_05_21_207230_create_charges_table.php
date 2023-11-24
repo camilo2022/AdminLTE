@@ -23,8 +23,6 @@ return new class extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
-
-        DB::statement("ALTER TABLE `charges` comment 'Cargos'");
     }
 
     /**

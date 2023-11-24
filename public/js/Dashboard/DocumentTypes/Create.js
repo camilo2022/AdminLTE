@@ -1,34 +1,33 @@
-function CreateColorModal() {
+function CreateDocumentTypeModal() {
     $.ajax({
-        url: `/Dashboard/Colors/Create`,
+        url: `/Dashboard/DocumentTypes/Create`,
         type: 'POST',
         data: {
             '_token': $('meta[name="csrf-token"]').attr('content')
         },
         success: function (response) {
-            CreateColorModalCleaned();
-            CreateColorAjaxSuccess(response);
-            $('#CreateColorModal').modal('show');
+            CreateDocumentTypeModalCleaned();
+            CreateDocumentTypeAjaxSuccess(response);
+            $('#CreateDocumentTypeModal').modal('show');
         },
         error: function (xhr, textStatus, errorThrown) {
-            CreateColorAjaxError(xhr);
+            CreateDocumentTypeAjaxError(xhr);
         }
     });
 }
 
-function CreateColorModalCleaned() {
-    RemoveIsValidClassCreateColor();
-    RemoveIsInvalidClassCreateColor();
+function CreateDocumentTypeModalCleaned() {
+    RemoveIsValidClassCreateDocumentType();
+    RemoveIsInvalidClassCreateDocumentType();
 
     $('#name_c').val('');
     $('#code_c').val('');
-    $('#value_c').val('');
 }
 
-function CreateColor() {
+function CreateDocumentType() {
     Swal.fire({
-        title: '¿Desea guardar el color?',
-        text: 'El color será creado.',
+        title: '¿Desea guardar el tipo de documento?',
+        text: 'El tipo de documento será creado.',
         icon: 'warning',
         showCancelButton: true,
         cancelButtonColor: '#DD6B55',
@@ -38,101 +37,96 @@ function CreateColor() {
     }).then((result) => {
         if (result.value) {
             $.ajax({
-                url: `/Dashboard/Colors/Store`,
+                url: `/Dashboard/DocumentTypes/Store`,
                 type: 'POST',
                 data: {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
                     'name': $('#name_c').val(),
-                    'code': $('#code_c').val(),
-                    'value': $('#value_c').val()
+                    'code': $('#code_c').val()
                 },
                 success: function (response) {
-                    tableColors.ajax.reload();
-                    CreateColorAjaxSuccess(response);
+                    tableDocumentTypes.ajax.reload();
+                    CreateDocumentTypeAjaxSuccess(response);
                 },
                 error: function (xhr, textStatus, errorThrown) {
-                    tableColors.ajax.reload();
-                    CreateColorAjaxError(xhr);
+                    tableDocumentTypes.ajax.reload();
+                    CreateDocumentTypeAjaxError(xhr);
                 }
             });
         } else {
-            toastr.info('El color no fue creado.')
+            toastr.info('El tipo de documento no fue creado.')
         }
     });
 }
 
-function CreateColorAjaxSuccess(response) {
+function CreateDocumentTypeAjaxSuccess(response) {
     if (response.status === 200) {
         toastr.info(response.message);
-        $('#CreateColorModal').modal('hide');
+        $('#CreateDocumentTypeModal').modal('hide');
     }
 
     if (response.status === 201) {
         toastr.success(response.message);
-        $('#CreateColorModal').modal('hide');
+        $('#CreateDocumentTypeModal').modal('hide');
     }
 }
 
-function CreateColorAjaxError(xhr) {
+function CreateDocumentTypeAjaxError(xhr) {
     if (xhr.status === 403) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
-        $('#CreateColorModal').modal('hide');
+        $('#CreateDocumentTypeModal').modal('hide');
     }
 
     if (xhr.status === 404) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
-        $('#CreateColorModal').modal('hide');
+        $('#CreateDocumentTypeModal').modal('hide');
     }
 
     if (xhr.status === 419) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
-        $('#CreateColorModal').modal('hide');
+        $('#CreateDocumentTypeModal').modal('hide');
     }
 
     if (xhr.status === 422) {
-        RemoveIsValidClassCreateColor();
-        RemoveIsInvalidClassCreateColor();
+        RemoveIsValidClassCreateDocumentType();
+        RemoveIsInvalidClassCreateDocumentType();
         $.each(xhr.responseJSON.errors, function (field, messages) {
-            AddIsInvalidClassCreateColor(field);
+            AddIsInvalidClassCreateDocumentType(field);
             $.each(messages, function (index, message) {
                 toastr.error(message);
             });
         });
-        AddIsValidClassCreateColor();
+        AddIsValidClassCreateDocumentType();
     }
 
     if (xhr.status === 500) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
-        $('#CreateColorModal').modal('hide');
+        $('#CreateDocumentTypeModal').modal('hide');
     }
 }
 
-function AddIsValidClassCreateColor() {
+function AddIsValidClassCreateDocumentType() {
     if (!$('#name_c').hasClass('is-invalid')) {
         $('#name_c').addClass('is-valid');
     }
     if (!$('#code_c').hasClass('is-invalid')) {
         $('#code_c').addClass('is-valid');
     }
-    if (!$('#value_c').hasClass('is-invalid')) {
-        $('#value_c').addClass('is-valid');
-    }
 }
 
-function RemoveIsValidClassCreateColor() {
+function RemoveIsValidClassCreateDocumentType() {
     $('#name_c').removeClass('is-valid');
     $('#code_c').removeClass('is-valid');
     $('#value_c').removeClass('is-valid');
 }
 
-function AddIsInvalidClassCreateColor(input) {
+function AddIsInvalidClassCreateDocumentType(input) {
     if (!$(`#${input}_c`).hasClass('is-valid')) {
         $(`#${input}_c`).addClass('is-invalid');
     }
 }
 
-function RemoveIsInvalidClassCreateColor() {
+function RemoveIsInvalidClassCreateDocumentType() {
     $('#name_c').removeClass('is-invalid');
     $('#code_c').removeClass('is-invalid');
-    $('#value_c').removeClass('is-valid');
 }
