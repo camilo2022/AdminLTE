@@ -55,7 +55,15 @@ class ProductController extends Controller
             $start_date = Carbon::parse($request->input('start_date'))->startOfDay();
             $end_date = Carbon::parse($request->input('end_date'))->endOfDay();
             //Consulta por nombre
-            $products = Product::with('clothing_line', 'category', 'subcategory', 'model', 'trademark', 'collection', 'colors')
+            $products = Product::with([
+                    'clothing_line' => function ($query) { $query->withTrashed(); }, 
+                    'category' => function ($query) { $query->withTrashed(); }, 
+                    'subcategory' => function ($query) { $query->withTrashed(); }, 
+                    'model' => function ($query) { $query->withTrashed(); }, 
+                    'trademark' => function ($query) { $query->withTrashed(); }, 
+                    'collection' => function ($query) { $query->withTrashed(); }, 
+                    'colors' => function ($query) { $query->withTrashed(); }
+                ])
                 ->when($request->filled('search'),
                     function ($query) use ($request) {
                         $query->search($request->input('search'));
@@ -160,6 +168,7 @@ class ProductController extends Controller
 
             if ($request->hasFile('photos')) {
                 collect($request->input('photos'))->map(function ($photo) use ($product){
+                    $photo = (object) $photo;
                     $productPhoto = new ProductPhoto();
                     $productPhoto->product_id = $product->id;
                     $productPhoto->name = $photo->getClientOriginalName();
@@ -290,6 +299,7 @@ class ProductController extends Controller
 
             if ($request->hasFile('photos')) {
                 collect($request->input('photos'))->map(function ($photo) use ($product){
+                    $photo = (object) $photo;
                     $productPhoto = new ProductPhoto();
                     $productPhoto->product_id = $product->id;
                     $productPhoto->name = $photo->getClientOriginalName();
@@ -334,7 +344,15 @@ class ProductController extends Controller
     public function show($id)
     {
         try {
-            $product = Product::with('clothing_line', 'category', 'subcategory', 'model', 'trademark', 'product_photos', 'colors')->findOrFail($id);
+            $product = Product::with(['product_photos',
+                'clothing_line' => function ($query) { $query->withTrashed(); }, 
+                'category' => function ($query) { $query->withTrashed(); }, 
+                'subcategory' => function ($query) { $query->withTrashed(); }, 
+                'model' => function ($query) { $query->withTrashed(); }, 
+                'trademark' => function ($query) { $query->withTrashed(); }, 
+                'collection' => function ($query) { $query->withTrashed(); }, 
+                'colors' => function ($query) { $query->withTrashed(); }
+            ])->findOrFail($id);
 
             foreach ($product->product_photos as $product_photo) {
                 $product_photo->path = asset('storage/' . $product_photo->path);

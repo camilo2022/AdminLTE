@@ -199,7 +199,7 @@ class ModulesAndSubmodulesSeeder extends Seeder
             'url' => '/Dashboard/Products/Index',
             'icon' => 'fas fa-bookmark',
             'module_id' => $Existencias->id,
-            'permission_id' => 108
+            'permission_id' => 106
         ]);
 
         Submodule::create([
@@ -207,7 +207,7 @@ class ModulesAndSubmodulesSeeder extends Seeder
             'url' => '/Dashboard/Inventories/Index',
             'icon' => 'fas fa-shelves',
             'module_id' => $Existencias->id,
-            'permission_id' => 116
+            'permission_id' => 118
         ]);
 
         Submodule::create([
@@ -215,7 +215,7 @@ class ModulesAndSubmodulesSeeder extends Seeder
             'url' => '/Dashboard/Transfers/Index',
             'icon' => 'fas fa-forklift',
             'module_id' => $Existencias->id,
-            'permission_id' => 123
+            'permission_id' => 126
         ]);
 
         $Pedido = Module::create(['name' => 'Ventas', 'icon' => 'fas fa-money-bill']);
@@ -230,7 +230,7 @@ class ModulesAndSubmodulesSeeder extends Seeder
             'url' => '/Dashboard/Order/Seller/Index',
             'icon' => 'fas fa-receipt',
             'module_id' => $Pedido->id,
-            'permission_id' => 141
+            'permission_id' => 143
         ]);
 
         $Cartera = Module::create(['name' => 'Credito y Cartera', 'icon' => 'fas fa-credit-card']);
@@ -255,7 +255,7 @@ class ModulesAndSubmodulesSeeder extends Seeder
             'url' => '/Dashboard/Clients/Index',
             'icon' => 'fas fa-user-tie',
             'module_id' => $Cartera->id,
-            'permission_id' => 157
+            'permission_id' => 160
         ]);
 
         Submodule::create([
@@ -263,7 +263,7 @@ class ModulesAndSubmodulesSeeder extends Seeder
             'url' => '/Dashboard/Wallet/Index',
             'icon' => 'fas fa-wallet',
             'module_id' => $Cartera->id,
-            'permission_id' => 171
+            'permission_id' => 178
         ]);
 
         Submodule::create([
@@ -271,7 +271,7 @@ class ModulesAndSubmodulesSeeder extends Seeder
             'url' => '/Dashboard/Order/Wallet/Index',
             'icon' => 'fas fa-traffic-light',
             'module_id' => $Cartera->id,
-            'permission_id' => 179
+            'permission_id' => 186
         ]);
 
         $Despacho = Module::create(['name' => 'Despacho', 'icon' => 'fas fa-mailbox']);
@@ -296,7 +296,7 @@ class ModulesAndSubmodulesSeeder extends Seeder
             'url' => '/Dashboard/Order/Dispatch/Index',
             'icon' => 'fas fa-filter',
             'module_id' => $Despacho->id,
-            'permission_id' => 194
+            'permission_id' => 201
         ]);
 
         Submodule::create([
@@ -304,7 +304,7 @@ class ModulesAndSubmodulesSeeder extends Seeder
             'url' => '/Dashboard/Order/Packed/Index',
             'icon' => 'fas fa-box-open-full',
             'module_id' => $Despacho->id,
-            'permission_id' => 209
+            'permission_id' => 216
         ]);
 
         Submodule::create([
@@ -312,7 +312,7 @@ class ModulesAndSubmodulesSeeder extends Seeder
             'url' => '/Dashboard/Order/Invoiced/Index',
             'icon' => 'fas fa-file-invoice-dollar',
             'module_id' => $Despacho->id,
-            'permission_id' => 222
+            'permission_id' => 229
         ]);
 
         $Reportes = Module::create(['name' => 'Reportes', 'icon' => 'fas fa-chart-mixed-up-circle-currency']);
@@ -327,7 +327,7 @@ class ModulesAndSubmodulesSeeder extends Seeder
             'url' => '/Dashboard/Reports/Sales/Index',
             'icon' => 'fas fa-hand-holding-dollar',
             'module_id' => $Reportes->id,
-            'permission_id' => 226
+            'permission_id' => 233
         ]);
 
         Submodule::create([
@@ -335,7 +335,7 @@ class ModulesAndSubmodulesSeeder extends Seeder
             'url' => '/Dashboard/Reports/Dispatches/Index',
             'icon' => 'fas fa-hand-holding-box',
             'module_id' => $Reportes->id,
-            'permission_id' => 228
+            'permission_id' => 235
         ]);
 
         Submodule::create([
@@ -343,7 +343,7 @@ class ModulesAndSubmodulesSeeder extends Seeder
             'url' => '/Dashboard/Reports/Productions/Index',
             'icon' => 'fas fa-hand-holding-seedling',
             'module_id' => $Reportes->id,
-            'permission_id' => 230
+            'permission_id' => 237
         ]);
     }
 }

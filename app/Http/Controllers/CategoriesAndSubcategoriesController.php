@@ -40,12 +40,8 @@ class CategoriesAndSubcategoriesController extends Controller
             $end_date = Carbon::parse($request->input('end_date'))->endOfDay();
             // Consultar roles con relaciones y aplicar filtros
             $categoriesAndSubcategories = Category::with([
-                    'clothing_line' => function ($query) {
-                        $query->withTrashed(); // Incluye líneas de ropa eliminadas
-                    },
-                    'subcategories' => function ($query) {
-                        $query->withTrashed(); // Incluye subcategorías eliminadas
-                    }
+                    'clothing_line' => function ($query) { $query->withTrashed(); },
+                    'subcategories' => function ($query) { $query->withTrashed(); }
                 ])
                 ->when($request->filled('search'),
                     function ($query) use ($request) {
@@ -166,12 +162,7 @@ class CategoriesAndSubcategoriesController extends Controller
         try {
             return $this->successResponse(
                 (object) [
-                    'category' => Category::with([
-                        'clothing_line' => function ($query) {
-                            $query->withTrashed();
-                        }, 'subcategories' => function ($query) {
-                            $query->withTrashed();
-                        }])->findOrFail($id),
+                    'category' => Category::with('clothing_line' , 'subcategories')->findOrFail($id),
                     'clothingLines' => ClothingLine::all()
                 ],
                 'La categoria y subcategorias fueron encontrados exitosamente.',
