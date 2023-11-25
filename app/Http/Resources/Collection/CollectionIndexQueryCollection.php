@@ -21,22 +21,32 @@ class CollectionIndexQueryCollection extends ResourceCollection
                     'id' => $collection->id,
                     'name' => $collection->name,
                     'code' => $collection->code,
-                    'start_date' => Carbon::parse($collection->start_date)->format('Y-m-d H:i:s'),
-                    'end_date' => Carbon::parse($collection->end_date)->format('Y-m-d H:i:s'),
-                    'created_at' => Carbon::parse($collection->created_at)->format('Y-m-d H:i:s'),
-                    'updated_at' => Carbon::parse($collection->updated_at)->format('Y-m-d H:i:s'),
+                    'start_date' => $this->formatDate($collection->start_date),
+                    'end_date' => $this->formatDate($collection->end_date),
+                    'created_at' => $this->formatDate($collection->created_at),
+                    'updated_at' => $this->formatDate($collection->updated_at),
                     'deleted_at' => $collection->deleted_at
                 ];
             }),
             'meta' => [
-                'pagination' => [
-                    'total' => $this->total(),
-                    'count' => $this->count(),
-                    'per_page' => $this->perPage(),
-                    'current_page' => $this->currentPage(),
-                    'total_pages' => $this->lastPage(),
-                ],
+                'pagination' => $this->paginationMeta(),
             ],
+        ];
+    }
+
+    protected function formatDate($date)
+    {
+        return Carbon::parse($date)->format('Y-m-d H:i:s');
+    }
+
+    protected function paginationMeta()
+    {
+        return [
+            'total' => $this->total(),
+            'count' => $this->count(),
+            'per_page' => $this->perPage(),
+            'current_page' => $this->currentPage(),
+            'total_pages' => $this->lastPage(),
         ];
     }
 }

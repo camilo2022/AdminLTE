@@ -11,6 +11,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ModelController;
 use App\Http\Controllers\ModulesAndSubmodulesController;
 use App\Http\Controllers\PackageController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\RolesAndPermissionsController;
 use App\Http\Controllers\TrademarkController;
 use App\Http\Controllers\UserController;
@@ -426,6 +427,33 @@ Route::middleware(['auth'])->group(function () {
 
             Route::put('/Restore', [ColorController::class, 'restore'])
             ->middleware('can:Dashboard.Colors.Restore')->name('Dashboard.Colors.Restore');
+        });
+
+        Route::prefix('/Products')->group(function () {
+
+            Route::get('/Index', [ProductController::class, 'index'])
+            ->middleware('can:Dashboard.Products.Index')->name('Dashboard.Products.Index');
+
+            Route::post('/Index/Query', [ProductController::class, 'indexQuery'])
+            ->middleware('can:Dashboard.Products.Index.Query')->name('Dashboard.Products.Index.Query');
+
+            Route::post('/Create', [ProductController::class, 'create'])
+            ->middleware('can:Dashboard.Products.Create')->name('Dashboard.Products.Create');
+
+            Route::post('/Store', [ProductController::class, 'store'])
+            ->middleware('can:Dashboard.Products.Store')->name('Dashboard.Products.Store');
+
+            Route::post('/Edit/{id}', [ProductController::class, 'edit'])
+            ->middleware('can:Dashboard.Products.Edit')->name('Dashboard.Products.Edit');
+
+            Route::post('/Update/{id}', [ProductController::class, 'update'])
+            ->middleware('can:Dashboard.Products.Update')->name('Dashboard.Products.Update');
+
+            Route::delete('/Delete', [ProductController::class, 'delete'])
+            ->middleware('can:Dashboard.Products.Delete')->name('Dashboard.Products.Delete');
+
+            Route::put('/Restore', [ProductControllere::class, 'restore'])
+            ->middleware('can:Dashboard.Products.Restore')->name('Dashboard.Products.Restore');
         });
     });
 });

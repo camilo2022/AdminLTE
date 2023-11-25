@@ -22,20 +22,30 @@ class ModelIndexQueryCollection extends ResourceCollection
                     'name' => $model->name,
                     'code' => $model->code,
                     'description' => $model->description,
-                    'created_at' => Carbon::parse($model->created_at)->format('Y-m-d H:i:s'),
-                    'updated_at' => Carbon::parse($model->updated_at)->format('Y-m-d H:i:s'),
+                    'created_at' => $this->formatDate($model->created_at),
+                    'updated_at' => $this->formatDate($model->updated_at),
                     'deleted_at' => $model->deleted_at
                 ];
             }),
             'meta' => [
-                'pagination' => [
-                    'total' => $this->total(),
-                    'count' => $this->count(),
-                    'per_page' => $this->perPage(),
-                    'current_page' => $this->currentPage(),
-                    'total_pages' => $this->lastPage(),
-                ],
+                'pagination' => $this->paginationMeta(),
             ],
+        ];
+    }
+
+    protected function formatDate($date)
+    {
+        return Carbon::parse($date)->format('Y-m-d H:i:s');
+    }
+
+    protected function paginationMeta()
+    {
+        return [
+            'total' => $this->total(),
+            'count' => $this->count(),
+            'per_page' => $this->perPage(),
+            'current_page' => $this->currentPage(),
+            'total_pages' => $this->lastPage(),
         ];
     }
 }

@@ -29,10 +29,10 @@ let tableRolesAndPermissions = $('#rolesAndPermissions').DataTable({
         { data: 'id' },
         { data: 'role' },
         {
-            data: null,
+            data: 'permissions',
             render: function(data, type, row) {
                 let div = `<div>`;
-                $.each(data.permissions, function(index, permission) {
+                $.each(data, function(index, permission) {
                     div += `<span class="badge badge-info mr-1">${permission.name}</span>`;
                 });
                 div += `</div>`;

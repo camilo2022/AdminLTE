@@ -22,20 +22,30 @@ class ClothingLineIndexQueryCollection extends ResourceCollection
                     'name' => $clothingLine->name,
                     'code' => $clothingLine->code,
                     'description' => $clothingLine->description,
-                    'created_at' => Carbon::parse($clothingLine->created_at)->format('Y-m-d H:i:s'),
-                    'updated_at' => Carbon::parse($clothingLine->updated_at)->format('Y-m-d H:i:s'),
+                    'created_at' => $this->formatDate($clothingLine->created_at),
+                    'updated_at' => $this->formatDate($clothingLine->updated_at),
                     'deleted_at' => $clothingLine->deleted_at
                 ];
             }),
             'meta' => [
-                'pagination' => [
-                    'total' => $this->total(),
-                    'count' => $this->count(),
-                    'per_page' => $this->perPage(),
-                    'current_page' => $this->currentPage(),
-                    'total_pages' => $this->lastPage(),
-                ],
+                'pagination' => $this->paginationMeta(),
             ],
+        ];
+    }
+
+    protected function formatDate($date)
+    {
+        return Carbon::parse($date)->format('Y-m-d H:i:s');
+    }
+
+    protected function paginationMeta()
+    {
+        return [
+            'total' => $this->total(),
+            'count' => $this->count(),
+            'per_page' => $this->perPage(),
+            'current_page' => $this->currentPage(),
+            'total_pages' => $this->lastPage(),
         ];
     }
 }

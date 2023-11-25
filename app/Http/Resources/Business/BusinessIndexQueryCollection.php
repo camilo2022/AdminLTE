@@ -32,20 +32,30 @@ class BusinessIndexQueryCollection extends ResourceCollection
                     'address' => $business->address,
                     'neighbourhood' => $business->neighbourhood,
                     'description' =>  $business->description,
-                    'created_at' => Carbon::parse($business->created_at)->format('Y-m-d H:i:s'),
-                    'updated_at' => Carbon::parse($business->updated_at)->format('Y-m-d H:i:s'),
+                    'created_at' => $this->formatDate($business->created_at),
+                    'updated_at' => $this->formatDate($business->updated_at),
                     'deleted_at' => $business->deleted_at
                 ];
             }),
             'meta' => [
-                'pagination' => [
-                    'total' => $this->total(),
-                    'count' => $this->count(),
-                    'per_page' => $this->perPage(),
-                    'current_page' => $this->currentPage(),
-                    'total_pages' => $this->lastPage(),
-                ],
+                'pagination' => $this->paginationMeta(),
             ],
+        ];
+    }
+
+    protected function formatDate($date)
+    {
+        return Carbon::parse($date)->format('Y-m-d H:i:s');
+    }
+
+    protected function paginationMeta()
+    {
+        return [
+            'total' => $this->total(),
+            'count' => $this->count(),
+            'per_page' => $this->perPage(),
+            'current_page' => $this->currentPage(),
+            'total_pages' => $this->lastPage(),
         ];
     }
 }

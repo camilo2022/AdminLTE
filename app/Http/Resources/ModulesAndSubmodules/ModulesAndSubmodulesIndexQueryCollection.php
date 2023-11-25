@@ -39,27 +39,37 @@ class ModulesAndSubmodulesIndexQueryCollection extends ResourceCollection
                                 'id' => $submodule->permission->id,
                                 'name' => $submodule->permission->name,
                                 'guard_name' => $submodule->permission->guard_name,
-                                'created_at' => Carbon::parse($submodule->permission->created_at)->format('Y-m-d H:i:s'),
-                                'updated_at' => Carbon::parse($submodule->permission->updated_at)->format('Y-m-d H:i:s'),
+                                'created_at' => $this->formatDate($submodule->permission->created_at),
+                                'updated_at' => $this->formatDate($submodule->permission->updated_at),
                             ],
-                            'created_at' => Carbon::parse($submodule->created_at)->format('Y-m-d H:i:s'),
-                            'updated_at' => Carbon::parse($submodule->updated_at)->format('Y-m-d H:i:s'),
+                            'created_at' => $this->formatDate($submodule->created_at),
+                            'updated_at' => $this->formatDate($submodule->updated_at),
                         ];
                     })->toArray(),
-                    'created_at' => Carbon::parse($module->created_at)->format('Y-m-d H:i:s'),
-                    'updated_at' => Carbon::parse($module->updated_at)->format('Y-m-d H:i:s'),
+                    'created_at' => $this->formatDate($module->created_at),
+                    'updated_at' => $this->formatDate($module->updated_at),
                 ];
             }),
 
             'meta' => [
-                'pagination' => [
-                    'total' => $this->total(),
-                    'count' => $this->count(),
-                    'per_page' => $this->perPage(),
-                    'current_page' => $this->currentPage(),
-                    'total_pages' => $this->lastPage(),
-                ],
+                'pagination' => $this->paginationMeta(),
             ],
+        ];
+    }
+
+    protected function formatDate($date)
+    {
+        return Carbon::parse($date)->format('Y-m-d H:i:s');
+    }
+
+    protected function paginationMeta()
+    {
+        return [
+            'total' => $this->total(),
+            'count' => $this->count(),
+            'per_page' => $this->perPage(),
+            'current_page' => $this->currentPage(),
+            'total_pages' => $this->lastPage(),
         ];
     }
 }

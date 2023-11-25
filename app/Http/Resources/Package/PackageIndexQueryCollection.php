@@ -21,20 +21,30 @@ class PackageIndexQueryCollection extends ResourceCollection
                     'id' => $package->id,
                     'name' => $package->name,
                     'code' => $package->code,
-                    'created_at' => Carbon::parse($package->created_at)->format('Y-m-d H:i:s'),
-                    'updated_at' => Carbon::parse($package->updated_at)->format('Y-m-d H:i:s'),
+                    'created_at' => $this->formatDate($package->created_at),
+                    'updated_at' => $this->formatDate($package->updated_at),
                     'deleted_at' => $package->deleted_at
                 ];
             }),
             'meta' => [
-                'pagination' => [
-                    'total' => $this->total(),
-                    'count' => $this->count(),
-                    'per_page' => $this->perPage(),
-                    'current_page' => $this->currentPage(),
-                    'total_pages' => $this->lastPage(),
-                ],
+                'pagination' => $this->paginationMeta(),
             ],
+        ];
+    }
+
+    protected function formatDate($date)
+    {
+        return Carbon::parse($date)->format('Y-m-d H:i:s');
+    }
+
+    protected function paginationMeta()
+    {
+        return [
+            'total' => $this->total(),
+            'count' => $this->count(),
+            'per_page' => $this->perPage(),
+            'current_page' => $this->currentPage(),
+            'total_pages' => $this->lastPage(),
         ];
     }
 }
