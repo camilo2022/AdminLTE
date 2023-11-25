@@ -120,7 +120,7 @@ function CreateModuleAndSubmodulesAddSubmodule() {
     cardHeader.append(cardTitle, cardTools);
     card.append(cardHeader);
 
-    let cardBody = $('<div>').addClass('card-body').css('display', 'none');
+    let cardBody = $('<div>').addClass('card-body').addClass('table-responsive').css('display', 'none');
     let roleForm = $('<div>').addClass('form-group');
     let roleLabel = $('<label>').attr('for', '').text('Role');
     let roleIcon = $('<i>').attr({

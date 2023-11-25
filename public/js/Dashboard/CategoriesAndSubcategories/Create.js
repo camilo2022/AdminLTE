@@ -137,7 +137,7 @@ function CreateCategoryAndSubcategoriesAddSubcategory() {
     cardHeader.append(cardTitle, cardTools);
     card.append(cardHeader);
 
-    let cardBody = $('<div>').addClass('card-body').css('display', 'none');
+    let cardBody = $('<div>').addClass('card-body').addClass('table-responsive').css('display', 'none');
 
 
     let codeForm = $('<div>').addClass('form-group');

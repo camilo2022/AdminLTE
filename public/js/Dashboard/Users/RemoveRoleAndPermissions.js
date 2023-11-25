@@ -61,7 +61,7 @@ function RemoveRoleAndPermissionUserModal(id, email) {
                 cardHeader.append(cardTools);
 
                 // Crear el div del card-body
-                let cardBody = $('<div>').addClass('card-body').css('display', 'none');
+                let cardBody = $('<div>').addClass('card-body').addClass('table-responsive').css('display', 'none');
 
                 // Crear el div para checkboxes
                 let checkboxesDiv = $('<div>').addClass('row icheck-primary');
