@@ -52,6 +52,11 @@ class Product extends DBModel
         return $this->belongsToMany(Color::class, 'product_has_colors', 'product_id', 'color_id');
     }
 
+    public function sizes() : BelongsToMany
+    {
+        return $this->belongsToMany(Size::class, 'product_has_sizes', 'product_id', 'size_id');
+    }
+
     public function clothing_line() : BelongsTo
     {
         return $this->belongsTo(ClothingLine::class, 'clothing_line_id');

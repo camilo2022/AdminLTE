@@ -76,6 +76,7 @@
                                             <th>Marca</th>
                                             <th>Correria</th>
                                             <th>Colores</th>
+                                            <th>Tallas</th>
                                             <th>Estado</th>
                                             <th>Acciones</th>
                                         </tr>

@@ -52,6 +52,8 @@ class ProductStoreRequest extends FormRequest
             'collection_id' => ['required', 'exists:collections,id'],
             'colors' => ['required', 'array'],
             'colors.*' => ['exists:colors,id'],
+            'sizes' => ['required', 'array'],
+            'sizes.*' => ['exists:sizes,id'],
             'photos' => ['nullable', 'array'],
             'photos.*' => ['mimes:jpeg,jpg,png,gif', 'max:5000']
         ];
@@ -80,6 +82,8 @@ class ProductStoreRequest extends FormRequest
             'collection_id.exists' => 'El Identificador de la correria del producto no existe en la base de datos.',
             'colors.array' => 'El campo Colores del producto debe ser un arreglo.',
             'colors.*.exists' => 'El Identificador del color no existe en la base de datos.',
+            'sizes.array' => 'El campo Tallas del producto debe ser un arreglo.',
+            'sizes.*.exists' => 'El Identificador de la talla no existe en la base de datos.',
             'photos.array' => 'El campo Fotos del producto debe ser un arreglo.',
             'photos.*.mimes' => 'El Archivo debe tener una extensión válida (jpeg, jpg, png, gif).',
             'photos.*.max' => 'El Archivo no debe superar los 2 MB (2048 KB).',

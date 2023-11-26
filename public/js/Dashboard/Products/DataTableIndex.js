@@ -16,7 +16,7 @@ let tableProducts = $('#products').DataTable({
                 7: 'model_id',
                 8: 'trademark_id',
                 9: 'collection_id',
-                11: 'deleted_at'
+                12: 'deleted_at'
             };
             request._token = $('meta[name="csrf-token"]').attr('content');
             request.perPage = request.length;
@@ -87,6 +87,18 @@ let tableProducts = $('#products').DataTable({
                 return div;
             }
         },
+        { 
+            data: 'sizes',
+            render: function(data, type, row) {
+                let div = `<div>`;
+                $.each(data, function(index, size) {
+                    div += `<span class="badge badge-info mr-1">${size.code}</span>`;
+                });
+                div += `</div>`;
+
+                return div;
+            }
+        },
         {
             data: 'deleted_at',
             render: function (data, type, row) {
@@ -124,15 +136,15 @@ let tableProducts = $('#products').DataTable({
     columnDefs: [
         {
             orderable: true,
-            targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 11]
+            targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 12]
         },
         {
             orderable: false,
-            targets: [10]
+            targets: [10,11]
         },
         {
             orderable: false,
-            targets: [12],
+            targets: [13],
             className: 'text-center'
         }
     ],

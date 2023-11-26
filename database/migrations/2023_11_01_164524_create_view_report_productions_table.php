@@ -14,7 +14,7 @@ return new class extends Migration
      */
     public function up()
     {
-        $query = DB::table('orders AS ord')
+        /* $query = DB::table('orders AS ord')
         ->select('ord.id AS order_id', DB::raw('COALESCE(ord_dis.id, "N/N") AS order_dispatch_id'),
         DB::raw('COALESCE(ord_dis.consecutive, "N/N") AS order_dispatch_consecutive'), 
         'ord.client_id AS order_client_id', 'cli.name AS client_name', 'cli.document_number AS client_document_number', 
@@ -77,7 +77,7 @@ return new class extends Migration
         ->leftJoin('users AS ord_dis_user_dispatched', 'ord_dis_user_dispatched.id', '=', 'ord_dis.dispatch_user_id');
 
         DB::statement('DROP VIEW IF EXISTS view_report_productions');
-        DB::statement('CREATE VIEW view_report_productions AS ' . $query->toSql());
+        DB::statement('CREATE VIEW view_report_productions AS ' . $query->toSql()); */
     }
 
     /**

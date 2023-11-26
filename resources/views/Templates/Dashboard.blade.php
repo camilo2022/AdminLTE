@@ -392,6 +392,39 @@
         });
         $('.select2').select2();
         $('.dropify').dropify();
+
+        $(document).ready(function() {
+            function setSelect2Width() {
+                var windowWidth = $(window).width();
+                var select2Width;
+
+                if(windowWidth < 450) {
+                    if (windowWidth <= 250 && windowWidth > 310) {
+                        select2Width = '78%';
+                    } else if (windowWidth <= 310 && windowWidth >= 280) {
+                        select2Width = '81%';
+                    } else if (windowWidth <= 400 && windowWidth > 310) {
+                        select2Width = '83%';
+                    } else if (windowWidth <= 450 && windowWidth > 400) {
+                        select2Width = '87%';
+                    } else {
+                        select2Width = '88%';
+                    }
+                    
+                    // Aplicar el ancho calculado a las clases específicas de select2
+                    $('.select2, .select2-container, .select2-container--default, .select2-container--focus').css('width', select2Width);
+                }
+
+            }
+
+            // Establecer el ancho inicial
+            setSelect2Width();
+
+            // Actualizar el ancho cuando cambie el tamaño de la ventana
+            $(window).on('resize', function() {
+                setSelect2Width();
+            });
+        });
     </script>
     @yield('script')
 

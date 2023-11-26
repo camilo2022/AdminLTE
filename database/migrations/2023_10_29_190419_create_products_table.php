@@ -17,13 +17,13 @@ return new class extends Migration
             $table->id();
             $table->string('code')->unique();
             $table->string('description');
+            $table->float('price', 8, 2);
             $table->unsignedBigInteger('clothing_line_id');
             $table->unsignedBigInteger('category_id');
             $table->unsignedBigInteger('subcategory_id');
             $table->unsignedBigInteger('model_id');
             $table->unsignedBigInteger('trademark_id');
             $table->unsignedBigInteger('collection_id');
-            $table->float('price', 8, 2);
             $table->foreign('clothing_line_id')->references('id')->on('clothing_lines')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('category_id')->references('id')->on('categories')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('subcategory_id')->references('id')->on('subcategories')->onUpdate('cascade')->onDelete('cascade');

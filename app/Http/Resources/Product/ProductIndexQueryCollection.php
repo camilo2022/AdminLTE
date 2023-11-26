@@ -29,6 +29,7 @@ class ProductIndexQueryCollection extends ResourceCollection
                     'trademark' => $product->trademark,
                     'collection' => $product->collection,
                     'colors' => $product->colors,
+                    'sizes' => $product->sizes,
                     'created_at' => $this->formatDate($product->created_at),
                     'updated_at' => $this->formatDate($product->updated_at),
                     'deleted_at' => $product->deleted_at
