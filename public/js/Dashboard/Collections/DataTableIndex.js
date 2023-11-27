@@ -46,15 +46,16 @@ let tableCollections = $('#collections').DataTable({
             }
         },
         {
-            data: null,
+            data: 'deleted_at',
+            width: '200px',
             render: function (data, type, row) {
-                btn =  `<a onclick="EditCollectionModal(${data.id})" type="button"
+                btn =  `<a onclick="EditCollectionModal(${row.id})" type="button"
                 class="btn btn-primary btn-sm mr-2" title="Editar correria">
                     <i class="fas fa-pen text-white"></i>
                 </a>`;
 
-                if (data.deleted_at === null) {
-                    btn += `<a onclick="DeleteCollection(${data.id})" type="button"
+                if (data === null) {
+                    btn += `<a onclick="DeleteCollection(${row.id})" type="button"
                     class="btn btn-danger btn-sm" title="Eliminar correria">
                         <i class="fas fa-trash text-white"></i>
                     </a>`;

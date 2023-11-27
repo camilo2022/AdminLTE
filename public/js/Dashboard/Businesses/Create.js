@@ -49,8 +49,8 @@ function CreateBusinessModalCountry(countries) {
     });
 }
 
-$('#country_id_c').on('change', function() {
-    if($(this).val() == '') {
+function CreateBusinessModalCountryGetDepartament(select) {
+    if($(select).val() == '') {
         CreateBusinessModalResetSelect('departament_id_c');
     } else {
         $.ajax({
@@ -58,9 +58,10 @@ $('#country_id_c').on('change', function() {
             type: 'POST',
             data: {
                 '_token': $('meta[name="csrf-token"]').attr('content'),
-                'country_id':  $(this).val()
+                'country_id':  $(select).val()
             },
             success: function(response) {
+                CreateBusinessModalResetSelect('departament_id_c');
                 CreateBusinessModalDepartament(response.data);
             },
             error: function(xhr, textStatus, errorThrown) {
@@ -68,7 +69,7 @@ $('#country_id_c').on('change', function() {
             }
         });
     }
-});
+};
 
 function CreateBusinessModalDepartament(departaments) {
     departaments.forEach(departament => {
@@ -77,8 +78,8 @@ function CreateBusinessModalDepartament(departaments) {
     });
 }
 
-$('#departament_id_c').on('change', function() {
-    if($(this).val() == '') {
+function CreateBusinessModalDepartamentGetCity(select) {
+    if($(select).val() == '') {
         CreateBusinessModalResetSelect('city_id_c');
     } else {
         $.ajax({
@@ -86,7 +87,7 @@ $('#departament_id_c').on('change', function() {
             type: 'POST',
             data: {
                 '_token': $('meta[name="csrf-token"]').attr('content'),
-                'departament_id':  $(this).val()
+                'departament_id':  $(select).val()
             },
             success: function(response) {
                 CreateBusinessModalResetSelect('city_id_c');
@@ -97,7 +98,7 @@ $('#departament_id_c').on('change', function() {
             }
         });
     }
-});
+};
 
 function CreateBusinessModalCity(cities) {
     cities.forEach(city => {

@@ -58,8 +58,8 @@ function EditUserModalAreas(areas) {
     }
 }
 
-$('#area_id_e').on('change', function() {
-    if($(this).val() === '') {
+function EditUserModalAreasGetCharge(select) {
+    if($(select).val() === '') {
         EditUserModalResetSelect('charge_id_e');
     } else {
         let id = $('#EditUserButton').attr('data-id');
@@ -68,7 +68,7 @@ $('#area_id_e').on('change', function() {
             type: 'POST',
             data: {
                 '_token': $('meta[name="csrf-token"]').attr('content'),
-                'area_id':  $(this).val()
+                'area_id':  $(select).val()
             },
             success: function(response) {
                 EditUserModalCharges(response.data);
@@ -78,7 +78,7 @@ $('#area_id_e').on('change', function() {
             }
         });
     }
-});
+};
 
 function EditUserModalCharges(charges) {
     charges.forEach(charge => {

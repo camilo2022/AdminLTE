@@ -18,6 +18,7 @@ use App\Imports\Product\ProductMasiveImport;
 use App\Models\Category;
 use App\Models\ClothingLine;
 use App\Models\Collection;
+use App\Models\Color;
 use App\Models\Model;
 use App\Models\Product;
 use App\Models\ProductHasColor;
@@ -130,6 +131,7 @@ class ProductController extends Controller
                     'models' => Model::all(),
                     'trademarks' => Trademark::all(),
                     'sizes' => Size::all(),
+                    'colors' => Color::all(),
                     'collections' => Collection::all()
                 ],
                 'Ingrese los datos para hacer la validacion y registro.',

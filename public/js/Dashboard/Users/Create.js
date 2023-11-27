@@ -50,8 +50,8 @@ function CreateUserModalAreas(areas) {
     });
 }
 
-$('#area_id_c').on('change', function() {
-    if($(this).val() === '') {
+function CreateUserModalAreasGetCharge(select) {
+    if($(select).val() === '') {
         CreateUserModalResetSelect('charge_id_c');
     } else {
         $.ajax({
@@ -59,7 +59,7 @@ $('#area_id_c').on('change', function() {
             type: 'POST',
             data: {
                 '_token': $('meta[name="csrf-token"]').attr('content'),
-                'area_id':  $(this).val()
+                'area_id':  $(select).val()
             },
             success: function(response) {
                 CreateUserModalCharges(response.data);
@@ -69,7 +69,7 @@ $('#area_id_c').on('change', function() {
             }
         });
     }
-});
+};
 
 function CreateUserModalCharges(charges) {
     charges.forEach(charge => {

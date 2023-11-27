@@ -100,7 +100,7 @@
                         <div class="form-group">
                             <label for="area_id_c">Areas</label>
                             <div class="input-group">
-                                <select class="form-control select2" id="area_id_c" name="area_id" style="width: 88%">
+                                <select class="form-control select2" id="area_id_c" name="area_id" style="width: 88%" onchange="CreateUserModalAreasGetCharge(this)">
                                     <option value="">Seleccione</option>
                                 </select>
                                 <div class="input-group-append">

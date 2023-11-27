@@ -58,21 +58,22 @@ let tableBusinesses = $('#businesses').DataTable({
             }
         },
         {
-            data: null,
+            data: 'deleted_at',
+            width: '200px',
             render: function (data, type, row) {
                 let btn = ``;
-                if (data.deleted_at === null) {
-                    btn += `<a onclick="EditBusinessModal(${data.id})" type="button"
+                if (data === null) {
+                    btn += `<a onclick="EditBusinessModal(${row.id})" type="button"
                     class="btn btn-primary btn-sm mr-2" title="Editar tipo de paquete">
                         <i class="fas fa-pen text-white"></i>
                     </a>`;
 
-                    btn += `<a onclick="DeleteBusiness(${data.id})" type="button"
+                    btn += `<a onclick="DeleteBusiness(${row.id})" type="button"
                     class="btn btn-danger btn-sm mr-2" title="Eliminar tipo de paquete">
                         <i class="fas fa-trash text-white"></i>
                     </a>`;
                 } else {
-                    btn += `<a onclick="RestoreBusiness(${data.id})" type="button"
+                    btn += `<a onclick="RestoreBusiness(${row.id})" type="button"
                     class="btn btn-info btn-sm mr-2"title="Restaurar tipo de paquete">
                         <i class="fas fa-arrow-rotate-left text-white"></i>
                     </a>`;

@@ -44,7 +44,7 @@
                         <div class="form-group">
                             <label for="country_id">Paises</label>
                             <div class="input-group">
-                                <select class="form-control select2" id="country_id_c" name="country_id" style="width: 88%">
+                                <select class="form-control select2" id="country_id_c" name="country_id" style="width: 88%" onchange="CreateBusinessModalCountryGetDepartament(this)">
                                     <option value="">Seleccione</option>
                                 </select>
                                 <div class="input-group-append">
@@ -74,7 +74,7 @@
                         <div class="form-group">
                             <label for="departament_id">Departamento</label>
                             <div class="input-group">
-                                <select class="form-control select2" id="departament_id_c" name="departament_id" style="width: 88%">
+                                <select class="form-control select2" id="departament_id_c" name="departament_id" style="width: 88%" onchange="CreateBusinessModalDepartamentGetCity(this)">
                                     <option value="">Seleccione</option>
                                 </select>
                                 <div class="input-group-append">

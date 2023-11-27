@@ -111,6 +111,7 @@ let tableProducts = $('#products').DataTable({
         },
         {
             data: 'deleted_at',
+            width: '200px',
             render: function (data, type, row) {
                 let btn = ``;
                 if (data === null) {

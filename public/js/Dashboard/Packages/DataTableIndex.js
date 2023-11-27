@@ -42,21 +42,22 @@ let tablePackages = $('#packages').DataTable({
             }
         },
         {
-            data: null,
+            data: 'deleted_at',
+            width: '200px',
             render: function (data, type, row) {
                 let btn = ``;
-                if (data.deleted_at === null) {
-                    btn += `<a onclick="EditPackageModal(${data.id})" type="button"
+                if (data == null) {
+                    btn += `<a onclick="EditPackageModal(${row.id})" type="button"
                     class="btn btn-primary btn-sm mr-2" title="Editar tipo de paquete">
                         <i class="fas fa-pen text-white"></i>
                     </a>`;
 
-                    btn += `<a onclick="DeletePackage(${data.id})" type="button"
+                    btn += `<a onclick="DeletePackage(${row.id})" type="button"
                     class="btn btn-danger btn-sm mr-2" title="Eliminar tipo de paquete">
                         <i class="fas fa-trash text-white"></i>
                     </a>`;
                 } else {
-                    btn += `<a onclick="RestorePackage(${data.id})" type="button"
+                    btn += `<a onclick="RestorePackage(${row.id})" type="button"
                     class="btn btn-info btn-sm mr-2"title="Restaurar tipo de paquete">
                         <i class="fas fa-arrow-rotate-left text-white"></i>
                     </a>`;

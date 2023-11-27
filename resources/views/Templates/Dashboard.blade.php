@@ -398,7 +398,7 @@
                 var windowWidth = $(window).width();
                 var select2Width;
 
-                if(windowWidth < 450) {
+                if(windowWidth < 400) {
                     if (windowWidth <= 250 && windowWidth > 310) {
                         select2Width = '78%';
                     } else if (windowWidth <= 310 && windowWidth >= 280) {

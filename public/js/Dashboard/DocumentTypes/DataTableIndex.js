@@ -43,6 +43,7 @@ let tableDocumentTypes = $('#documentTypes').DataTable({
         },
         {
             data: 'deleted_at',
+            width: '200px',
             render: function (data, type, row) {
                 btn = ``;
                 if (data === null) {

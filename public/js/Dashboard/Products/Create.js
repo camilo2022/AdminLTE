@@ -7,6 +7,12 @@ function CreateProductModal() {
         },
         success: function(response) {
             CreateProductModalCleaned();
+            CreateProductsModalCollection(response.data.collections);
+            CreateProductsModalModel(response.data.models);
+            CreateProductsModalTrademark(response.data.trademarks);
+            CreateProductsModalClothingLine(response.data.clothing_lines);
+            CreateProductsModalSizes(response.data.sizes);
+            CreateProductsModalColors(response.data.colors);
             CreateProductAjaxSuccess(response);
             $('#CreateProductModal').modal('show');
         },
@@ -17,11 +23,145 @@ function CreateProductModal() {
 }
 
 function CreateProductModalCleaned() {
+    CreateProductsModalResetSelect('collection_id_c');
+    CreateProductsModalResetSelect('model_id_c');
+    CreateProductsModalResetSelect('trademark_id_c');
+    CreateProductsModalResetSelect('clothing_line_id_c');
     RemoveIsValidClassCreateProduct();
     RemoveIsInvalidClassCreateProduct();
 
-    $('#name_c').val('');
     $('#code_c').val('');
+    $('#price_c').val('');
+    $('#description_c').val('');
+}
+
+function CreateProductsModalResetSelect(id) {
+    const select = $(`#${id}`);
+    select.html('');
+    const defaultOption = $('<option>', {
+        value: '',
+        text: 'Seleccione'
+    });
+    select.append(defaultOption);
+    select.trigger('change');
+}
+
+function CreateProductsModalSizes(sizes) {
+    $('#sizes_c').empty();
+    $.each(sizes, function(index, size) {
+        let checkSize = `<div class="row pl-2 icheck-primary">
+            <input type="checkbox" id="${size.code}" data-id="${size.id}">
+            <label for="${size.code}" class="mt-3 ml-3">`;
+
+        $.each(size.code.replace(/\s/g, "").split(""), function(index, letra) {
+            checkSize += `<i class="fas fa-${letra}"></i>`;
+        });
+            
+        checkSize += `</label></div>`;
+        $('#sizes_c').append(checkSize);
+    });
+}
+
+function CreateProductsModalColors(colors) {
+    $('#colors_c').empty();
+    $.each(colors, function(index, color) {
+        let checkColor = `<div class="row pl-2 icheck-primary">
+            <input type="checkbox" id="${color.id}" data-id="${color.id}">
+            <label for="${color.id}" class="mt-3 ml-3">`;
+
+        $.each(color.name.replace(/\s/g, "").split(""), function(index, letra) {
+            checkColor += `<i class="fas fa-${letra}"></i>`;
+        });
+            
+        checkColor += `</label></div>`;
+        $('#colors_c').append(checkColor);
+    });
+}
+
+function CreateProductsModalCollection(collections) {
+    collections.forEach(collection => {
+        let newOption = new Option(collection.name, collection.id, false, false);
+        $('#collection_id_c').append(newOption);
+    });
+}
+
+function CreateProductsModalModel(models) {
+    models.forEach(model => {
+        let newOption = new Option(model.name, model.id, false, false);
+        $('#model_id_c').append(newOption);
+    });
+}
+
+function CreateProductsModalTrademark(trademarks) {
+    trademarks.forEach(trademark => {
+        let newOption = new Option(trademark.name, trademark.id, false, false);
+        $('#trademark_id_c').append(newOption);
+    });
+}
+
+function CreateProductsModalClothingLine(clothing_lines) {
+    clothing_lines.forEach(clothing_line => {
+        let newOption = new Option(clothing_line.name, clothing_line.id, false, false);
+        $('#clothing_line_id_c').append(newOption);
+    });
+}
+
+function CreateProductsModalClothingLineGetCategory(select) {
+    if($(select).val() == '') {
+        CreateProductsModalResetSelect('category_id_c');
+    } else {
+        $.ajax({
+            url: `/Dashboard/Products/Create`,
+            type: 'POST',
+            data: {
+                '_token': $('meta[name="csrf-token"]').attr('content'),
+                'clothing_line_id':  $(select).val()
+            },
+            success: function(response) {
+                CreateProductsModalResetSelect('category_id_c');
+                CreateProductsModalCategory(response.data);
+            },
+            error: function(xhr, textStatus, errorThrown) {
+                CreateProductsAjaxError(xhr);
+            }
+        });
+    }
+};
+
+function CreateProductsModalCategory(categories) {
+    categories.forEach(category => {
+        let newOption = new Option(category.name, category.id, false, false);
+        $('#category_id_c').append(newOption);
+    });
+}
+
+function CreateProductsModalCategoryGetSubcategory(select) {
+    if($(select).val() == '') {
+        CreateProductsModalResetSelect('subcategory_id_c');
+    } else {
+        $.ajax({
+            url: `/Dashboard/Products/Create`,
+            type: 'POST',
+            data: {
+                '_token': $('meta[name="csrf-token"]').attr('content'),
+                'category_id':  $(select).val()
+            },
+            success: function(response) {
+                CreateProductsModalResetSelect('subcategory_id_c');
+                CreateProductsModalSubcategory(response.data);
+            },
+            error: function(xhr, textStatus, errorThrown) {
+                CreateProductsAjaxError(xhr);
+            }
+        });
+    }
+};
+
+function CreateProductsModalSubcategory(subcategories) {
+    subcategories.forEach(subcategory => {
+        let newOption = new Option(subcategory.name, subcategory.id, false, false);
+        $('#subcategory_id_c').append(newOption);
+    });
 }
 
 function CreateProduct() {
@@ -123,9 +263,11 @@ function RemoveIsValidClassCreateProduct() {
 
 function AddIsInvalidClassCreateProduct(input) {
     if (!$(`#${input}_c`).hasClass('is-valid')) {
-        $(`#${input}_c`).removeClass('is-valid');
+        $(`#${input}_c`).addClass('is-invalid');
     }
-    $(`#${input}_c`).addClass('is-invalid');
+    if (!$(`#span[aria-labelledby="select2-${input}_c-container`).hasClass('is-valid')) {
+        $(`span[aria-labelledby="select2-${input}_c-container"]`).addClass('is-invalid');
+    }
 }
 
 function RemoveIsInvalidClassCreateProduct() {
