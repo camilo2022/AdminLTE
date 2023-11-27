@@ -32,7 +32,12 @@ let tableColors = $('#colors').DataTable({
         { data: 'id' },
         { data: 'name' },
         { data: 'code' },
-        { data: 'value' },
+        {
+            data: 'value',
+            render: function(data, type, row) {
+                return `<input type="color" value="${data}" class="form-control" disabled>`
+            }
+        },
         {
             data: 'deleted_at',
             render: function (data, type, row) {
@@ -45,9 +50,8 @@ let tableColors = $('#colors').DataTable({
         },
         {
             data: 'deleted_at',
-            width: '200px',
             render: function (data, type, row) {
-                btn = ``;
+                let btn = `<div class="text-center" style="width: 100px;">`;
                 if (data === null) {
                     btn += `<a onclick="EditColorModal(${row.id})" type="button"
                     class="btn btn-primary btn-sm mr-2" title="Editar color">
@@ -64,6 +68,7 @@ let tableColors = $('#colors').DataTable({
                         <i class="fas fa-arrow-rotate-left text-white"></i>
                     </a>`;
                 }
+                btn += `</div>`;
                 return btn;
             }
         }

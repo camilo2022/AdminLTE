@@ -43,10 +43,11 @@ let tableRolesAndPermissions = $('#rolesAndPermissions').DataTable({
         {
             data: null,
             render: function (data, type, row) {
-                return `<a onclick="EditRoleAndPermissionsModal(${data.id})" type="button"
+                return `<div class="text-center" style="width: 100%;">
+                    <a onclick="EditRoleAndPermissionsModal(${data.id})" type="button"
                     class="btn btn-primary btn-sm" title="Editar rol y permisos">
                         <i class="fas fa-folder-gear text-white"></i>
-                    </a>`;
+                    </a></div>`;
             }
         },
         {
@@ -56,10 +57,11 @@ let tableRolesAndPermissions = $('#rolesAndPermissions').DataTable({
                 $.each(data.permissions, function(index, permission) {
                     permission_id.push(permission.id);
                 });
-                return `<a class="btn btn-danger btn-sm" onclick="DeleteRoleAndPermissions(${data.id}, ${JSON.stringify(permission_id)})"
+                return `<div class="text-center" style="width: 100%;">
+                    <a class="btn btn-danger btn-sm" onclick="DeleteRoleAndPermissions(${data.id}, ${JSON.stringify(permission_id)})"
                     title="Eliminar rol y permisos" id="DeleteRoleAndPermissionsButton">
                         <i class="fas fa-folder-minus text-white"></i>
-                    </a>`;
+                    </a></div>`;
             }
         },
     ],
@@ -70,12 +72,7 @@ let tableRolesAndPermissions = $('#rolesAndPermissions').DataTable({
         },
         {
             orderable: false,
-            targets: [2]
-        },
-        {
-            orderable: false,
-            targets: [3, 4],
-            className: 'text-center'
+            targets: [2, 3, 4]
         }
     ],
     pagingType: 'full_numbers',

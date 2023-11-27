@@ -162,7 +162,11 @@ class CategoriesAndSubcategoriesController extends Controller
         try {
             return $this->successResponse(
                 (object) [
-                    'category' => Category::with('clothing_line' , 'subcategories')->findOrFail($id),
+                    'category' => Category::with([
+                        'clothing_line',
+                        'subcategories' => function ($query) { $query->withTrashed(); }
+                        ])
+                    ->findOrFail($id),
                     'clothingLines' => ClothingLine::all()
                 ],
                 'La categoria y subcategorias fueron encontrados exitosamente.',

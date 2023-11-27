@@ -11,9 +11,12 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ModelController;
 use App\Http\Controllers\ModulesAndSubmodulesController;
 use App\Http\Controllers\PackageController;
+use App\Http\Controllers\PaymentMethodController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\RolesAndPermissionsController;
+use App\Http\Controllers\SizeController;
 use App\Http\Controllers\TrademarkController;
+use App\Http\Controllers\TransporterController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WarehouseController;
 use Illuminate\Support\Facades\Route;
@@ -179,29 +182,58 @@ Route::middleware(['auth'])->group(function () {
             ->middleware('can:Dashboard.DocumentTypes.Restore')->name('Dashboard.DocumentTypes.Restore');
         });
 
-        Route::prefix('/Collections')->group(function () {
+        Route::prefix('/Transporters')->group(function () {
 
-            Route::get('/Index', [CollectionController::class, 'index'])
-            ->middleware('can:Dashboard.Collections.Index')->name('Dashboard.Collections.Index');
+            Route::get('/Index', [TransporterController::class, 'index'])
+            ->middleware('can:Dashboard.Transporters.Index')->name('Dashboard.Transporters.Index');
 
-            Route::post('/Index/Query', [CollectionController::class, 'indexQuery'])
-            ->middleware('can:Dashboard.Collections.Index.Query')->name('Dashboard.Collections.Index.Query');
+            Route::post('/Index/Query', [TransporterController::class, 'indexQuery'])
+            ->middleware('can:Dashboard.Transporters.Index.Query')->name('Dashboard.Transporters.Index.Query');
 
-            Route::post('/Create', [CollectionController::class, 'create'])
-            ->middleware('can:Dashboard.Collections.Create')->name('Dashboard.Collections.Create');
+            Route::post('/Create', [TransporterController::class, 'create'])
+            ->middleware('can:Dashboard.Transporters.Create')->name('Dashboard.Transporters.Create');
 
-            Route::post('/Store', [CollectionController::class, 'store'])
-            ->middleware('can:Dashboard.Collections.Store')->name('Dashboard.Collections.Store');
+            Route::post('/Store', [TransporterController::class, 'store'])
+            ->middleware('can:Dashboard.Transporters.Store')->name('Dashboard.Transporters.Store');
 
-            Route::post('/Edit/{id}', [CollectionController::class, 'edit'])
-            ->middleware('can:Dashboard.Collections.Edit')->name('Dashboard.Collections.Edit');
+            Route::post('/Edit/{id}', [TransporterController::class, 'edit'])
+            ->middleware('can:Dashboard.Transporters.Edit')->name('Dashboard.Transporters.Edit');
 
-            Route::put('/Update/{id}', [CollectionController::class, 'update'])
-            ->middleware('can:Dashboard.Collections.Update')->name('Dashboard.Collections.Update');
+            Route::put('/Update/{id}', [TransporterController::class, 'update'])
+            ->middleware('can:Dashboard.Transporters.Update')->name('Dashboard.Transporters.Update');
 
-            Route::delete('/Delete', [CollectionController::class, 'delete'])
-            ->middleware('can:Dashboard.Collections.Delete')->name('Dashboard.Collections.Delete');
+            Route::delete('/Delete', [TransporterController::class, 'delete'])
+            ->middleware('can:Dashboard.Transporters.Delete')->name('Dashboard.Transporters.Delete');
 
+            Route::put('/Restore', [TransporterController::class, 'restore'])
+            ->middleware('can:Dashboard.Transporters.Restore')->name('Dashboard.Transporters.Restore');
+        });
+
+        Route::prefix('/PaymentMethods')->group(function () {
+
+            Route::get('/Index', [PaymentMethodController::class, 'index'])
+            ->middleware('can:Dashboard.PaymentMethods.Index')->name('Dashboard.PaymentMethods.Index');
+
+            Route::post('/Index/Query', [PaymentMethodController::class, 'indexQuery'])
+            ->middleware('can:Dashboard.PaymentMethods.Index.Query')->name('Dashboard.PaymentMethods.Index.Query');
+
+            Route::post('/Create', [PaymentMethodController::class, 'create'])
+            ->middleware('can:Dashboard.PaymentMethods.Create')->name('Dashboard.PaymentMethods.Create');
+
+            Route::post('/Store', [PaymentMethodController::class, 'store'])
+            ->middleware('can:Dashboard.PaymentMethods.Store')->name('Dashboard.PaymentMethods.Store');
+
+            Route::post('/Edit/{id}', [PaymentMethodController::class, 'edit'])
+            ->middleware('can:Dashboard.PaymentMethods.Edit')->name('Dashboard.PaymentMethods.Edit');
+
+            Route::put('/Update/{id}', [PaymentMethodController::class, 'update'])
+            ->middleware('can:Dashboard.PaymentMethods.Update')->name('Dashboard.PaymentMethods.Update');
+
+            Route::delete('/Delete', [PaymentMethodController::class, 'delete'])
+            ->middleware('can:Dashboard.PaymentMethods.Delete')->name('Dashboard.PaymentMethods.Delete');
+
+            Route::put('/Restore', [PaymentMethodController::class, 'restore'])
+            ->middleware('can:Dashboard.PaymentMethods.Restore')->name('Dashboard.PaymentMethods.Restore');
         });
 
         Route::prefix('/Packages')->group(function () {
@@ -231,33 +263,6 @@ Route::middleware(['auth'])->group(function () {
             ->middleware('can:Dashboard.Packages.Restore')->name('Dashboard.Packages.Restore');
         });
 
-        Route::prefix('/Trademarks')->group(function () {
-
-            Route::get('/Index', [TrademarkController::class, 'index'])
-            ->middleware('can:Dashboard.Trademarks.Index')->name('Dashboard.Trademarks.Index');
-
-            Route::post('/Index/Query', [TrademarkController::class, 'indexQuery'])
-            ->middleware('can:Dashboard.Trademarks.Index.Query')->name('Dashboard.Trademarks.Index.Query');
-
-            Route::post('/Create', [TrademarkController::class, 'create'])
-            ->middleware('can:Dashboard.Trademarks.Create')->name('Dashboard.Trademarks.Create');
-
-            Route::post('/Store', [TrademarkController::class, 'store'])
-            ->middleware('can:Dashboard.Trademarks.Store')->name('Dashboard.Trademarks.Store');
-
-            Route::post('/Edit/{id}', [TrademarkController::class, 'edit'])
-            ->middleware('can:Dashboard.Trademarks.Edit')->name('Dashboard.Trademarks.Edit');
-
-            Route::post('/Update/{id}', [TrademarkController::class, 'update'])
-            ->middleware('can:Dashboard.Trademarks.Update')->name('Dashboard.Trademarks.Update');
-
-            Route::delete('/Delete', [TrademarkController::class, 'delete'])
-            ->middleware('can:Dashboard.Trademarks.Delete')->name('Dashboard.Trademarks.Delete');
-
-            Route::put('/Restore', [TrademarkController::class, 'restore'])
-            ->middleware('can:Dashboard.Trademarks.Restore')->name('Dashboard.Trademarks.Restore');
-        });
-
         Route::prefix('/Businesses')->group(function () {
 
             Route::get('/Index', [BusinessController::class, 'index'])
@@ -283,6 +288,121 @@ Route::middleware(['auth'])->group(function () {
 
             Route::put('/Restore', [BusinessController::class, 'restore'])
             ->middleware('can:Dashboard.Businesses.Restore')->name('Dashboard.Businesses.Restore');
+        });
+
+        Route::prefix('/Warehouses')->group(function () {
+
+            Route::get('/Index', [WarehouseController::class, 'index'])
+            ->middleware('can:Dashboard.Warehouses.Index')->name('Dashboard.Warehouses.Index');
+
+            Route::post('/Index/Query', [WarehouseController::class, 'indexQuery'])
+            ->middleware('can:Dashboard.Warehouses.Index.Query')->name('Dashboard.Warehouses.Index.Query');
+
+            Route::post('/Create', [WarehouseController::class, 'create'])
+            ->middleware('can:Dashboard.Warehouses.Create')->name('Dashboard.Warehouses.Create');
+
+            Route::post('/Store', [WarehouseController::class, 'store'])
+            ->middleware('can:Dashboard.Warehouses.Store')->name('Dashboard.Warehouses.Store');
+
+            Route::post('/Edit/{id}', [WarehouseController::class, 'edit'])
+            ->middleware('can:Dashboard.Warehouses.Edit')->name('Dashboard.Warehouses.Edit');
+
+            Route::put('/Update/{id}', [WarehouseController::class, 'update'])
+            ->middleware('can:Dashboard.Warehouses.Update')->name('Dashboard.Warehouses.Update');
+
+            Route::post('/Show/{id}', [WarehouseController::class, 'show'])
+            ->middleware('can:Dashboard.Warehouses.Show')->name('Dashboard.Warehouses.Show');
+
+            Route::post('/AssignGestor', [WarehouseController::class, 'assignGestor'])
+            ->middleware('can:Dashboard.Warehouses.AssignGestor')->name('Dashboard.Warehouses.AssignGestor');
+
+            Route::post('/RemoveGestor', [WarehouseController::class, 'removeGestor'])
+            ->middleware('can:Dashboard.Warehouses.RemoveGestor')->name('Dashboard.Warehouses.RemoveGestor');
+
+            Route::delete('/Delete', [WarehouseController::class, 'delete'])
+            ->middleware('can:Dashboard.Warehouses.Delete')->name('Dashboard.Warehouses.Delete');
+
+            Route::put('/Restore', [WarehouseController::class, 'restore'])
+            ->middleware('can:Dashboard.Warehouses.Restore')->name('Dashboard.Warehouses.Restore');
+        });
+
+        Route::prefix('/Collections')->group(function () {
+
+            Route::get('/Index', [CollectionController::class, 'index'])
+            ->middleware('can:Dashboard.Collections.Index')->name('Dashboard.Collections.Index');
+
+            Route::post('/Index/Query', [CollectionController::class, 'indexQuery'])
+            ->middleware('can:Dashboard.Collections.Index.Query')->name('Dashboard.Collections.Index.Query');
+
+            Route::post('/Create', [CollectionController::class, 'create'])
+            ->middleware('can:Dashboard.Collections.Create')->name('Dashboard.Collections.Create');
+
+            Route::post('/Store', [CollectionController::class, 'store'])
+            ->middleware('can:Dashboard.Collections.Store')->name('Dashboard.Collections.Store');
+
+            Route::post('/Edit/{id}', [CollectionController::class, 'edit'])
+            ->middleware('can:Dashboard.Collections.Edit')->name('Dashboard.Collections.Edit');
+
+            Route::put('/Update/{id}', [CollectionController::class, 'update'])
+            ->middleware('can:Dashboard.Collections.Update')->name('Dashboard.Collections.Update');
+
+            Route::delete('/Delete', [CollectionController::class, 'delete'])
+            ->middleware('can:Dashboard.Collections.Delete')->name('Dashboard.Collections.Delete');
+
+        });
+
+        Route::prefix('/Sizes')->group(function () {
+
+            Route::get('/Index', [SizeController::class, 'index'])
+            ->middleware('can:Dashboard.Sizes.Index')->name('Dashboard.Sizes.Index');
+
+            Route::post('/Index/Query', [SizeController::class, 'indexQuery'])
+            ->middleware('can:Dashboard.Sizes.Index.Query')->name('Dashboard.Sizes.Index.Query');
+
+            Route::post('/Create', [SizeController::class, 'create'])
+            ->middleware('can:Dashboard.Sizes.Create')->name('Dashboard.Sizes.Create');
+
+            Route::post('/Store', [SizeController::class, 'store'])
+            ->middleware('can:Dashboard.Sizes.Store')->name('Dashboard.Sizes.Store');
+
+            Route::post('/Edit/{id}', [SizeController::class, 'edit'])
+            ->middleware('can:Dashboard.Sizes.Edit')->name('Dashboard.Sizes.Edit');
+
+            Route::put('/Update/{id}', [SizeController::class, 'update'])
+            ->middleware('can:Dashboard.Sizes.Update')->name('Dashboard.Sizes.Update');
+
+            Route::delete('/Delete', [SizeController::class, 'delete'])
+            ->middleware('can:Dashboard.Sizes.Delete')->name('Dashboard.Sizes.Delete');
+
+            Route::put('/Restore', [SizeController::class, 'restore'])
+            ->middleware('can:Dashboard.Sizes.Restore')->name('Dashboard.Sizes.Restore');
+        });
+
+        Route::prefix('/Trademarks')->group(function () {
+
+            Route::get('/Index', [TrademarkController::class, 'index'])
+            ->middleware('can:Dashboard.Trademarks.Index')->name('Dashboard.Trademarks.Index');
+
+            Route::post('/Index/Query', [TrademarkController::class, 'indexQuery'])
+            ->middleware('can:Dashboard.Trademarks.Index.Query')->name('Dashboard.Trademarks.Index.Query');
+
+            Route::post('/Create', [TrademarkController::class, 'create'])
+            ->middleware('can:Dashboard.Trademarks.Create')->name('Dashboard.Trademarks.Create');
+
+            Route::post('/Store', [TrademarkController::class, 'store'])
+            ->middleware('can:Dashboard.Trademarks.Store')->name('Dashboard.Trademarks.Store');
+
+            Route::post('/Edit/{id}', [TrademarkController::class, 'edit'])
+            ->middleware('can:Dashboard.Trademarks.Edit')->name('Dashboard.Trademarks.Edit');
+
+            Route::post('/Update/{id}', [TrademarkController::class, 'update'])
+            ->middleware('can:Dashboard.Trademarks.Update')->name('Dashboard.Trademarks.Update');
+
+            Route::delete('/Delete', [TrademarkController::class, 'delete'])
+            ->middleware('can:Dashboard.Trademarks.Delete')->name('Dashboard.Trademarks.Delete');
+
+            Route::put('/Restore', [TrademarkController::class, 'restore'])
+            ->middleware('can:Dashboard.Trademarks.Restore')->name('Dashboard.Trademarks.Restore');
         });
 
         Route::prefix('/Models')->group(function () {
@@ -366,42 +486,6 @@ Route::middleware(['auth'])->group(function () {
             ->middleware('can:Dashboard.CategoriesAndSubcategories.Restore')->name('Dashboard.CategoriesAndSubcategories.Restore');
         });
 
-        Route::prefix('/Warehouses')->group(function () {
-
-            Route::get('/Index', [WarehouseController::class, 'index'])
-            ->middleware('can:Dashboard.Warehouses.Index')->name('Dashboard.Warehouses.Index');
-
-            Route::post('/Index/Query', [WarehouseController::class, 'indexQuery'])
-            ->middleware('can:Dashboard.Warehouses.Index.Query')->name('Dashboard.Warehouses.Index.Query');
-
-            Route::post('/Create', [WarehouseController::class, 'create'])
-            ->middleware('can:Dashboard.Warehouses.Create')->name('Dashboard.Warehouses.Create');
-
-            Route::post('/Store', [WarehouseController::class, 'store'])
-            ->middleware('can:Dashboard.Warehouses.Store')->name('Dashboard.Warehouses.Store');
-
-            Route::post('/Edit/{id}', [WarehouseController::class, 'edit'])
-            ->middleware('can:Dashboard.Warehouses.Edit')->name('Dashboard.Warehouses.Edit');
-
-            Route::put('/Update/{id}', [WarehouseController::class, 'update'])
-            ->middleware('can:Dashboard.Warehouses.Update')->name('Dashboard.Warehouses.Update');
-
-            Route::post('/Show/{id}', [WarehouseController::class, 'show'])
-            ->middleware('can:Dashboard.Warehouses.Show')->name('Dashboard.Warehouses.Show');
-
-            Route::post('/AssignGestor', [WarehouseController::class, 'assignGestor'])
-            ->middleware('can:Dashboard.Warehouses.AssignGestor')->name('Dashboard.Warehouses.AssignGestor');
-
-            Route::post('/RemoveGestor', [WarehouseController::class, 'removeGestor'])
-            ->middleware('can:Dashboard.Warehouses.RemoveGestor')->name('Dashboard.Warehouses.RemoveGestor');
-
-            Route::delete('/Delete', [WarehouseController::class, 'delete'])
-            ->middleware('can:Dashboard.Warehouses.Delete')->name('Dashboard.Warehouses.Delete');
-
-            Route::put('/Restore', [WarehouseController::class, 'restore'])
-            ->middleware('can:Dashboard.Warehouses.Restore')->name('Dashboard.Warehouses.Restore');
-        });
-
         Route::prefix('/Colors')->group(function () {
 
             Route::get('/Index', [ColorController::class, 'index'])
@@ -449,11 +533,23 @@ Route::middleware(['auth'])->group(function () {
             Route::post('/Update/{id}', [ProductController::class, 'update'])
             ->middleware('can:Dashboard.Products.Update')->name('Dashboard.Products.Update');
 
+            Route::post('/Show/{id}', [ProductController::class, 'show'])
+            ->middleware('can:Dashboard.Products.Show')->name('Dashboard.Products.Show');
+
+            Route::post('/Destroy', [ProductController::class, 'destroy'])
+            ->middleware('can:Dashboard.Products.Destroy')->name('Dashboard.Products.Destroy');
+
             Route::delete('/Delete', [ProductController::class, 'delete'])
             ->middleware('can:Dashboard.Products.Delete')->name('Dashboard.Products.Delete');
 
-            Route::put('/Restore', [ProductControllere::class, 'restore'])
+            Route::put('/Restore', [ProductController::class, 'restore'])
             ->middleware('can:Dashboard.Products.Restore')->name('Dashboard.Products.Restore');
+
+            Route::post('/Upload', [ProductController::class, 'upload'])
+            ->middleware('can:Dashboard.Products.Upload')->name('Dashboard.Products.Upload');
+
+            Route::post('/Download', [ProductController::class, 'download'])
+            ->middleware('can:Dashboard.Products.Download')->name('Dashboard.Products.Download');
         });
     });
 });

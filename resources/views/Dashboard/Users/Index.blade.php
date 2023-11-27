@@ -63,7 +63,7 @@
                                         <i class="fas fa-user-check"></i>
                                     </a>
                                 </li>
-                                <li class="nav-item">
+                                <li class="nav-item ml-2">
                                     <a class="nav-link" href="/Dashboard/Users/Inactives" title="Usuarios inactivos">
                                         <i class="fas fa-user-xmark"></i>
                                     </a>

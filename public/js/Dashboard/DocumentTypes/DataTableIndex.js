@@ -43,9 +43,8 @@ let tableDocumentTypes = $('#documentTypes').DataTable({
         },
         {
             data: 'deleted_at',
-            width: '200px',
             render: function (data, type, row) {
-                btn = ``;
+                let btn = `<div class="text-center" style="width: 100px;">`;
                 if (data === null) {
                     btn += `<a onclick="EditDocumentTypeModal(${row.id})" type="button"
                     class="btn btn-primary btn-sm mr-2" title="Editar tipo de documento">
@@ -62,6 +61,7 @@ let tableDocumentTypes = $('#documentTypes').DataTable({
                         <i class="fas fa-arrow-rotate-left text-white"></i>
                     </a>`;
                 }
+                btn += `</div>`;
                 return btn;
             }
         }
@@ -73,8 +73,7 @@ let tableDocumentTypes = $('#documentTypes').DataTable({
         },
         {
             orderable: false,
-            targets: [4],
-            className: "text-center"
+            targets: [4]
         }
     ],
     pagingType: 'full_numbers',

@@ -1,10 +1,10 @@
 let tableUsers = $('#users').DataTable({
-    "processing": true,
-    "serverSide": true,
-    "ajax": {
-        "url": "/Dashboard/Users/Index/Query",
-        "type": "POST",
-        "data": function (request) {
+    processing: true,
+    serverSide: true,
+    ajax: {
+        url: `/Dashboard/Users/Index/Query`,
+        type: 'POST',
+        data: function (request) {
             var columnMappings = {
                 0: 'id',
                 1: 'name',
@@ -21,16 +21,16 @@ let tableUsers = $('#users').DataTable({
             request.column = columnMappings[request.order[0].column];
             request.dir = request.order[0].dir;
         },
-        "dataSrc": function (response) {
+        dataSrc: function (response) {
             response.recordsTotal = response.data.meta.pagination.count;
             response.recordsFiltered = response.data.meta.pagination.total;
             return response.data.users;
         },
-        "error": function (xhr, error, thrown) {
+        error: function (xhr, error, thrown) {
             toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
         }
     },
-    "columns": [
+    columns: [
         { data: 'id' },
         { data: 'name' },
         { data: 'last_name' },
@@ -41,80 +41,91 @@ let tableUsers = $('#users').DataTable({
         {
             data: null,
             render: function (data, type, row) {
-                return `<a onclick="PasswordUserModal(${data.id})" type="button"
+                return `<div class="text-center" style="width: 100%;">
+                    <a onclick="PasswordUserModal(${data.id})" type="button"
                     class="btn bg-dark btn-sm" title="Recuperar contraseña">
                         <i class="fas fa-user-gear text-white"></i>
-                    </a>`;
+                    </a></div>`;
             }
         },
         {
             data: null,
             render: function (data, type, row) {
-                return `<a onclick="EditUserModal(${data.id})" type="button"
-                class="btn btn-primary btn-sm" title="Editar usuario">
-                    <i class="fas fa-user-pen text-white"></i>
-                </a>`;
+                return `<div class="text-center" style="width: 100%;">
+                    <a onclick="EditUserModal(${data.id})" type="button"
+                    class="btn btn-primary btn-sm" title="Editar usuario">
+                        <i class="fas fa-user-pen text-white"></i>
+                    </a></div>`;
             }
         },
         {
             data: null,
             render: function (data, type, row) {
-                return `<a class="btn btn-danger btn-sm" onclick="DeleteUser(${data.id})"
+                return `<div class="text-center" style="width: 100%;">
+                    <a class="btn btn-danger btn-sm" onclick="DeleteUser(${data.id})"
                     title="Eliminar usuario" id="DeleteUserButton">
                         <i class="fas fa-user-minus text-white"></i>
-                    </a>`;
+                    </a></div>`;
             }
         },
         {
             data: null,
             render: function (data, type, row) {
-                return `<a onclick="AssignRoleAndPermissionUserModal(${data.id}, '${CleanText(data.email)}')"
+                return `<div class="text-center" style="width: 100%;">
+                    <a onclick="AssignRoleAndPermissionUserModal(${data.id}, '${CleanText(data.email)}')"
                     type="button" class="btn btn-success btn-sm"
                     title="Asignar rol y permisos al usuario">
                         <i class="fas fa-user-unlock text-white"></i>
-                    </a>`;
+                    </a></div>`;
             }
         },
         {
             data: null,
             render: function (data, type, row) {
-                return `<a onclick="RemoveRoleAndPermissionUserModal(${data.id}, '${CleanText(data.email)}')"
+                return `<div class="text-center" style="width: 100%;">
+                    <a onclick="RemoveRoleAndPermissionUserModal(${data.id}, '${CleanText(data.email)}')"
                     type="button" class="btn bg-orange btn-sm"
                     title="Remover rol y permisos al usuario">
                         <i class="fas fa-user-lock text-white"></i>
-                    </a>`;
+                    </a></div>`;
             }
         },
     ],
-    "columnDefs": [
-        { "orderable": true, "targets": [0, 1, 2, 3, 4, 5, 6] },
-        { "orderable": false, "targets": [7, 8, 9, 10, 11], "className": "text-center" }
-    ],
-    "pagingType": "full_numbers",
-    "language": {
-        "oPaginate": {
-            "sFirst": "Primero",
-            "sLast": "Último",
-            "sNext": "Siguiente",
-            "sPrevious": "Anterior",
+    columnDefs: [
+        {
+            orderable: true,
+            targets: [0, 1, 2, 3, 4, 5, 6]
         },
-        "info": "Mostrando _START_ a _END_ de _TOTAL_ registros",
-        "infoEmpty": "No hay registros para mostrar",
-        "infoFiltered": "(filtrados de _MAX_ registros en total)",
-        "emptyTable": "No hay datos disponibles.",
-        "lengthMenu": "Mostrar _MENU_ registros por página.",
-        "search": "Buscar:",
-        "zeroRecords": "No se encontraron registros coincidentes.",
-        "decimal" : ",",
-        "thousands": ".",
-        "sEmptyTable" : "No se ha llamado información o no está disponible.",
-        "sZeroRecords" : "No se encuentran resultados.",
-        "sProcessing": "Procesando..."
+        {
+            orderable: false,
+            targets: [7, 8, 9, 10, 11]
+        }
+    ],
+    pagingType: 'full_numbers',
+    language: {
+        oPaginate: {
+            sFirst: 'Primero',
+            sLast: 'Último',
+            sNext: 'Siguiente',
+            sPrevious: 'Anterior',
+        },
+        info: 'Mostrando _START_ a _END_ de _TOTAL_ registros',
+        infoEmpty: 'No hay registros para mostrar',
+        infoFiltered: '(filtrados de _MAX_ registros en total)',
+        emptyTable: 'No hay datos disponibles.',
+        lengthMenu: 'Mostrar _MENU_ registros por página.',
+        search: 'Buscar:',
+        zeroRecords: 'No se encontraron registros coincidentes.',
+        decimal: ',',
+        thousands: '.',
+        sEmptyTable: 'No se ha llamado información o no está disponible.',
+        sZeroRecords: 'No se encuentran resultados.',
+        sProcessing: 'Procesando...'
     },
-    "pageLength": 10,
-    "lengthMenu": [10, 25, 50, 100],
-    "paging": true,
-    "info": true,
-    "searching": true,
-    "autoWidth": true
+    pageLength: 10,
+    lengthMenu: [10, 25, 50, 100],
+    paging: true,
+    info: true,
+    searching: true,
+    autoWidth: true
 });

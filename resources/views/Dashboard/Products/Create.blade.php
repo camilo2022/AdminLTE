@@ -12,7 +12,7 @@
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-lg-8">  
+                    <div class="col-lg-8">
                         <div class="row">
                             <div class="col-lg-6">
                                 <div class="form-group">
@@ -31,7 +31,7 @@
                                 <div class="form-group">
                                     <label for="price_c">Precio</label>
                                     <div class="input-group">
-                                        <input type="text" class="form-control" id="price_c" name="price">
+                                        <input type="number" class="form-control" id="price_c" name="price">
                                         <div class="input-group-append">
                                             <span class="input-group-text">
                                                 <i class="fas fa-dollar-sign"></i>
@@ -41,12 +41,12 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row">   
+                        <div class="row">
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <label for="collection_id_c">Correria</label>
                                     <div class="input-group">
-                                        <select class="form-control select2" id="collection_id_c" name="collection_id" style="width: 88%">
+                                        <select class="form-control select2" id="collection_id_c" name="collection_id" style="width: 87%">
                                             <option value="">Seleccione</option>
                                         </select>
                                         <div class="input-group-append">
@@ -59,7 +59,7 @@
                             </div>
                             <div class="col-lg-6">
                                 <div class="form-group">
-                                    <label for="clothing_line_id">Lineas</label>
+                                    <label for="clothing_line_id_c">Lineas</label>
                                     <div class="input-group">
                                         <select class="form-control select2" id="clothing_line_id_c" name="clothing_line_id" style="width: 87%" onchange="CreateProductsModalClothingLineGetCategory(this)">
                                             <option value="">Seleccione</option>
@@ -137,12 +137,14 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div class="col-lg-4">
                         <div class="row">
-                            <div class="col-lg-6">
+                            <div class="col-lg-12">
                                 <div class="form-group">
                                     <label for="description_c">Descripcion</label>
                                     <div class="input-group">
-                                        <textarea class="form-control" id="description_c" name="description" cols="30" rows="8"></textarea>
+                                        <textarea class="form-control" id="description_c" name="description" cols="30" rows="2"></textarea>
                                         <div class="input-group-append">
                                             <span class="input-group-text">
                                                 <i class="fas fa-text-size"></i>
@@ -151,34 +153,32 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-6">
+                            <div class="col-lg-12" style="height: 175px !important;">
                                 <div class="form-group">
                                     <label for="photos_c">Fotografias</label>
                                     <div class="input-group">
-                                        <input type="file" class="form-control dropify" id="photos_c" name="photos"
-                                        data-allowed-file-extensions="jpg jpeg png gif" data-max-file-size="2M">
+                                        <input type="file" class="form-control dropify" id="photos_c" multiple name="photos"
+                                        accept=".jpg, .jpeg, .png, .gif">
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-4">
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <div class="form-group">
-                                    <label for="sizes_c">Tallas</label>
-                                    <div class="input-group" id="sizes_c">
-                                        
-                                    </div>
-                                </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label for="sizes_c">Tallas</label>
+                            <div class="input-group" id="sizes_c">
+
                             </div>
-                            <div class="col-lg-12">
-                                <div class="form-group">
-                                    <label for="colors_c">Colores</label>
-                                    <div class="input-group" id="colors_c">
-                                        
-                                    </div>
-                                </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label for="colors_c">Colores</label>
+                            <div class="input-group" id="colors_c">
+
                             </div>
                         </div>
                     </div>

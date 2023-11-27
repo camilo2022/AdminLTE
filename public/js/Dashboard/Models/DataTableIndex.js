@@ -45,9 +45,8 @@ let tableModels = $('#models').DataTable({
         },
         {
             data: 'deleted_at',
-            width: '200px',
             render: function (data, type, row) {
-                btn = ``;
+                let btn = `<div class="text-center" style="width: 100px;">`;
                 if (data === null) {
                     btn += `<a onclick="EditModelModal(${row.id})" type="button"
                     class="btn btn-primary btn-sm mr-2" title="Editar modelo de prodcuto">
@@ -64,6 +63,7 @@ let tableModels = $('#models').DataTable({
                         <i class="fas fa-arrow-rotate-left text-white"></i>
                     </a>`;
                 }
+                btn += `</div>`;
                 return btn;
             }
         }
@@ -75,8 +75,7 @@ let tableModels = $('#models').DataTable({
         },
         {
             orderable: false,
-            targets: [5],
-            className: 'text-center'
+            targets: [5]
         }
     ],
     pagingType: 'full_numbers',

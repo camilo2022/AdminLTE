@@ -58,6 +58,16 @@
                                         <i class="fas fa-plus"></i>
                                     </a>
                                 </li>
+                                <li class="nav-item ml-auto">
+                                    <a class="nav-link active" type="button" onclick="UploadProductModal()" title="Cargar productos">
+                                        <i class="fas fa-upload"></i>
+                                    </a>
+                                </li>
+                                <li class="nav-item ml-2">
+                                    <a class="nav-link active" type="button" onclick="DownloadProduct()" title="Descargar productos">
+                                        <i class="fas fa-download"></i>
+                                    </a>
+                                </li>
                             </ul>
                         </div>
                         <div class="card-body">
@@ -78,7 +88,7 @@
                                             <th>Colores</th>
                                             <th>Tallas</th>
                                             <th>Estado</th>
-                                            <th>Acciones</th>
+                                            <th style="width: 200px !important;">Acciones</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -92,6 +102,7 @@
         </div>
         @include('Dashboard.Products.Create')
         @include('Dashboard.Products.Edit')
+        @include('Dashboard.Products.Upload')
     </section>
 @endsection
 @section('script')
@@ -100,4 +111,5 @@
     <script src="{{ asset('js/Dashboard/Products/Edit.js') }}"></script>
     <script src="{{ asset('js/Dashboard/Products/Delete.js') }}"></script>
     <script src="{{ asset('js/Dashboard/Products/Restore.js') }}"></script>
+    <script src="{{ asset('js/Dashboard/Products/Upload.js') }}"></script>
 @endsection

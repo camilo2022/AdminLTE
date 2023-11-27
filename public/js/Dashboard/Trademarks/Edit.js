@@ -25,9 +25,8 @@ function EditTrademarkModalCleaned(trademark) {
     $("#name_e").val(trademark.name);
     $("#code_e").val(trademark.code);
     $('#description_e').val(trademark.description);
-    var drEvent = $('#logo_e').dropify(
-    {
-    defaultFile: trademark.path
+    var drEvent = $('#logo_e').dropify({
+        defaultFile: trademark.path
     });
     drEvent = drEvent.data('dropify');
     drEvent.resetPreview();

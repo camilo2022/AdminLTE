@@ -43,9 +43,8 @@ let tablePackages = $('#packages').DataTable({
         },
         {
             data: 'deleted_at',
-            width: '200px',
             render: function (data, type, row) {
-                let btn = ``;
+                let btn = `<div class="text-center" style="width: 100px;">`;
                 if (data == null) {
                     btn += `<a onclick="EditPackageModal(${row.id})" type="button"
                     class="btn btn-primary btn-sm mr-2" title="Editar tipo de paquete">
@@ -62,6 +61,7 @@ let tablePackages = $('#packages').DataTable({
                         <i class="fas fa-arrow-rotate-left text-white"></i>
                     </a>`;
                 }
+                btn += `</div>`;
                 return btn;
             }
         }
@@ -73,8 +73,7 @@ let tablePackages = $('#packages').DataTable({
         },
         {
             orderable: false,
-            targets: [4],
-            className: 'text-center'
+            targets: [4]
         }
     ],
     pagingType: 'full_numbers',

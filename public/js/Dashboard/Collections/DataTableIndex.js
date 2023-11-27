@@ -47,8 +47,10 @@ let tableCollections = $('#collections').DataTable({
         },
         {
             data: 'deleted_at',
-            width: '200px',
             render: function (data, type, row) {
+
+                let btn = `<div class="text-center" style="width: 100px;">`;
+
                 btn =  `<a onclick="EditCollectionModal(${row.id})" type="button"
                 class="btn btn-primary btn-sm mr-2" title="Editar correria">
                     <i class="fas fa-pen text-white"></i>
@@ -60,7 +62,7 @@ let tableCollections = $('#collections').DataTable({
                         <i class="fas fa-trash text-white"></i>
                     </a>`;
                 }
-
+                btn += `</div>`;
                 return btn;
             }
         }
@@ -72,8 +74,7 @@ let tableCollections = $('#collections').DataTable({
         },
         {
             orderable: false,
-            targets: [6],
-            className: "text-center"
+            targets: [6]
         }
     ],
     pagingType: 'full_numbers',

@@ -39,43 +39,43 @@ let tableProducts = $('#products').DataTable({
         { data: 'code' },
         { data: 'description' },
         { data: 'price' },
-        { 
+        {
             data: 'clothing_line',
             render: function (data, type, row) {
                 return data.name;
             }
         },
-        { 
+        {
             data: 'category',
             render: function (data, type, row) {
                 return data.name;
-            } 
+            }
         },
-        { 
+        {
             data: 'subcategory',
             render: function (data, type, row) {
                 return data.name;
-            } 
+            }
         },
-        { 
+        {
             data: 'model',
             render: function (data, type, row) {
                 return data.name;
-            } 
+            }
         },
-        { 
+        {
             data: 'trademark',
             render: function (data, type, row) {
                 return data.name;
-            } 
+            }
         },
-        { 
+        {
             data: 'collection',
             render: function (data, type, row) {
                 return data.name;
-            } 
+            }
         },
-        { 
+        {
             data: 'colors',
             render: function(data, type, row) {
                 let div = `<div>`;
@@ -87,10 +87,10 @@ let tableProducts = $('#products').DataTable({
                 return div;
             }
         },
-        { 
+        {
             data: 'sizes',
             render: function(data, type, row) {
-                let div = `<div>`;
+                let div = `<div style="width: 150px;">`;
                 $.each(data, function(index, size) {
                     div += `<span class="badge badge-info mr-1">${size.code}</span>`;
                 });
@@ -111,10 +111,14 @@ let tableProducts = $('#products').DataTable({
         },
         {
             data: 'deleted_at',
-            width: '200px',
             render: function (data, type, row) {
-                let btn = ``;
+                let btn = `<div class="text-center" style="width: 150px;">`;
                 if (data === null) {
+                    btn += `<a onclick="ShowProductModal(${row.id})" type="button"
+                    class="btn btn-success btn-sm mr-2" title="Visualizar producto">
+                        <i class="fas fa-eye text-white"></i>
+                    </a>`;
+
                     btn += `<a onclick="EditProductModal(${row.id})" type="button"
                     class="btn btn-primary btn-sm mr-2" title="Editar producto">
                         <i class="fas fa-pen text-white"></i>
@@ -130,24 +134,21 @@ let tableProducts = $('#products').DataTable({
                         <i class="fas fa-arrow-rotate-left text-white"></i>
                     </a>`;
                 }
+                btn += `</div>`;
                 return btn;
             }
         }
     ],
     columnDefs: [
         {
+            targets: 0,
             orderable: true,
             targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 12]
         },
         {
             orderable: false,
-            targets: [10,11]
+            targets: [10, 11, 13]
         },
-        {
-            orderable: false,
-            targets: [13],
-            className: 'text-center'
-        }
     ],
     pagingType: 'full_numbers',
     language: {

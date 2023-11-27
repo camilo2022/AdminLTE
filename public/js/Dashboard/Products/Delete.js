@@ -1,7 +1,7 @@
-function DeletePackage(id) {
+function DeleteProduct(id) {
     Swal.fire({
-        title: '¿Desea eliminar el tipo de empaque?',
-        text: 'El tipo de empaque será desactivado.',
+        title: '¿Desea eliminar el producto?',
+        text: 'El producto será desactivado.',
         icon: 'warning',
         showCancelButton: true,
         cancelButtonColor: '#DD6B55',
@@ -11,28 +11,28 @@ function DeletePackage(id) {
     }).then((result) => {
         if (result.value) {
             $.ajax({
-                url: `/Dashboard/Packages/Delete`,
+                url: `/Dashboard/Products/Delete`,
                 type: 'DELETE',
                 data: {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
                     'id': id
                 },
                 success: function(response) {
-                    tablePackages.ajax.reload();
-                    DeletePackageAjaxSuccess(response);
+                    tableProducts.ajax.reload();
+                    DeleteProductAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tablePackages.ajax.reload();
-                    DeletePackageAjaxError(xhr);
+                    tableProducts.ajax.reload();
+                    DeleteProductAjaxError(xhr);
                 }
             });
         } else {
-            toastr.info('El tipo de empaque seleccionado no fue desactivado.');
+            toastr.info('El producto seleccionado no fue desactivado.');
         }
     });
 }
 
-function DeletePackageAjaxSuccess(response) {
+function DeleteProductAjaxSuccess(response) {
     if(response.status === 204) {
         toastr.success(response.message);
     }
@@ -42,7 +42,7 @@ function DeletePackageAjaxSuccess(response) {
     }
 }
 
-function DeletePackageAjaxError(xhr) {
+function DeleteProductAjaxError(xhr) {
     if(xhr.status === 403) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
     }

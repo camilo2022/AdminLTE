@@ -1,10 +1,10 @@
 let tableWarehouses = $('#warehouses').DataTable({
-    "processing": true,
-    "serverSide": true,
-    "ajax": {
-        "url": "/Dashboard/Warehouses/Index/Query",
-        "type": "POST",
-        "data": function (request) {
+    processing: true,
+    serverSide: true,
+    ajax: {
+        url: `/Dashboard/Warehouses/Index/Query`,
+        type: 'POST',
+        data: function (request) {
             var columnMappings = {
                 0: 'id',
                 1: 'name',
@@ -19,16 +19,16 @@ let tableWarehouses = $('#warehouses').DataTable({
             request.column = columnMappings[request.order[0].column];
             request.dir = request.order[0].dir;
         },
-        "dataSrc": function (response) {
+        dataSrc: function (response) {
             response.recordsTotal = response.data.meta.pagination.count;
             response.recordsFiltered = response.data.meta.pagination.total;
             return response.data.warehouses;
         },
-        "error": function (xhr, error, thrown) {
+        error: function (xhr, error, thrown) {
             toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
         }
     },
-    "columns": [
+    columns: [
         { data: 'id' },
         { data: 'name' },
         { data: 'code' },
@@ -45,10 +45,14 @@ let tableWarehouses = $('#warehouses').DataTable({
         },
         {
             data: 'deleted_at',
-            width: '200px',
             render: function (data, type, row) {
-                btn = ``;
+                let btn = `<div class="text-center" style="width: 150px;">`;
                 if (data === null) {
+                    btn += `<a onclick="ShowWarehouseModal(${row.id})" type="button"
+                    class="btn btn-success btn-sm mr-2" title="Asignar y remover encargados a bodega">
+                        <i class="fas fa-eye text-white"></i>
+                    </a>`;
+
                     btn += `<a onclick="EditWarehouseModal(${row.id})" type="button"
                     class="btn btn-primary btn-sm mr-2" title="Editar bodega">
                         <i class="fas fa-pen text-white"></i>
@@ -64,44 +68,46 @@ let tableWarehouses = $('#warehouses').DataTable({
                         <i class="fas fa-arrow-rotate-left text-white"></i>
                     </a>`;
                 }
-                    btn += `<a onclick="ShowWarehouseModal(${row.id})" type="button"
-                    class="btn btn-success btn-sm mr-2" title="Asignar y remover encargados a bodega">
-                        <i class="fas fa-eye text-white"></i>
-                    </a>`;
-
+                btn += `</div>`;
                 return btn;
             }
         }
     ],
-    "columnDefs": [
-        { "orderable": true, "targets": [0, 1, 2, 3, 4] },
-        { "orderable": false, "targets": [5], "className": "text-center" }
-    ],
-    "pagingType": "full_numbers",
-    "language": {
-        "oPaginate": {
-            "sFirst": "Primero",
-            "sLast": "Último",
-            "sNext": "Siguiente",
-            "sPrevious": "Anterior",
+    columnDefs: [
+        {
+            orderable: true,
+            targets: [0, 1, 2, 3, 4]
         },
-        "info": "Mostrando _START_ a _END_ de _TOTAL_ registros",
-        "infoEmpty": "No hay registros para mostrar",
-        "infoFiltered": "(filtrados de _MAX_ registros en total)",
-        "emptyTable": "No hay datos disponibles.",
-        "lengthMenu": "Mostrar _MENU_ registros por página.",
-        "search": "Buscar:",
-        "zeroRecords": "No se encontraron registros coincidentes.",
-        "decimal" : ",",
-        "thousands": ".",
-        "sEmptyTable" : "No se ha llamado información o no está disponible.",
-        "sZeroRecords" : "No se encuentran resultados.",
-        "sProcessing": "Procesando..."
+        {
+            orderable: false,
+            targets: [5]
+        }
+    ],
+    pagingType: 'full_numbers',
+    language: {
+        oPaginate: {
+            sFirst: 'Primero',
+            sLast: 'Último',
+            sNext: 'Siguiente',
+            sPrevious: 'Anterior',
+        },
+        info: 'Mostrando _START_ a _END_ de _TOTAL_ registros',
+        infoEmpty: 'No hay registros para mostrar',
+        infoFiltered: '(filtrados de _MAX_ registros en total)',
+        emptyTable: 'No hay datos disponibles.',
+        lengthMenu: 'Mostrar _MENU_ registros por página.',
+        search: 'Buscar:',
+        zeroRecords: 'No se encontraron registros coincidentes.',
+        decimal: ',',
+        thousands: '.',
+        sEmptyTable: 'No se ha llamado información o no está disponible.',
+        sZeroRecords: 'No se encuentran resultados.',
+        sProcessing: 'Procesando...'
     },
-    "pageLength": 10,
-    "lengthMenu": [10, 25, 50, 100],
-    "paging": true,
-    "info": true,
-    "searching": true,
-    "autoWidth": true
+    pageLength: 10,
+    lengthMenu: [10, 25, 50, 100],
+    paging: true,
+    info: true,
+    searching: true,
+    autoWidth: true
 });

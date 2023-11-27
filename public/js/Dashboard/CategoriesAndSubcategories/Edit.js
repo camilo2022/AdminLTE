@@ -304,7 +304,7 @@ function AddIsInvalidClassEditCategoryAndSubcategories(input) {
         $(`#${input}_e`).addClass('is-invalid');
     }
 
-    if (!$(`#span[aria-labelledby="select2-${input}_e-container`).hasClass('is-valid')) {
+    if (!$(`span[aria-labelledby="select2-${input}_e-container`).hasClass('is-valid')) {
         $(`span[aria-labelledby="select2-${input}_e-container"]`).addClass('is-invalid');
     }
 

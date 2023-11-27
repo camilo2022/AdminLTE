@@ -9,6 +9,7 @@ trait ApiMessage
 		'ModelNotFoundException' => 'No se encontraron resultados para la búsqueda.',
 		'QueryException' => 'Error en la base de datos, por favor, inténtelo de nuevo más tarde.',
 		'Exception' => 'Se ha producido un error inesperado, por favor, inténtelo de nuevo más tarde.',
+        'ValidationException' => 'Error de validación.'
 	];
 
     public function getMessage($key) {

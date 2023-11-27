@@ -59,14 +59,14 @@ class ProductController extends Controller
             $end_date = Carbon::parse($request->input('end_date'))->endOfDay();
             //Consulta por nombre
             $products = Product::with([
-                    'clothing_line' => function ($query) { $query->withTrashed(); }, 
-                    'category' => function ($query) { $query->withTrashed(); }, 
-                    'subcategory' => function ($query) { $query->withTrashed(); }, 
-                    'model' => function ($query) { $query->withTrashed(); }, 
-                    'trademark' => function ($query) { $query->withTrashed(); }, 
-                    'collection' => function ($query) { $query->withTrashed(); }, 
-                    'colors' => function ($query) { $query->withTrashed(); }, 
-                    'sizes' => function ($query) { $query->withTrashed(); }
+                    'clothing_line' => function ($query) { $query->withTrashed(); },
+                    'category' => function ($query) { $query->withTrashed(); },
+                    'subcategory' => function ($query) { $query->withTrashed(); },
+                    'model' => function ($query) { $query->withTrashed(); },
+                    'trademark' => function ($query) { $query->withTrashed(); },
+                    'collection' => function ($query) { $query->withTrashed(); },
+                    'colors',
+                    'sizes'
                 ])
                 ->when($request->filled('search'),
                     function ($query) use ($request) {
@@ -79,6 +79,7 @@ class ProductController extends Controller
                     }
                 )
                 ->orderBy($request->input('column'), $request->input('dir'))
+                ->withTrashed() //Trae los registros 'eliminados'
                 ->paginate($request->input('perPage'));
 
             return $this->successResponse(
@@ -165,7 +166,6 @@ class ProductController extends Controller
             $product->save();
 
             collect($request->input('colors'))->map(function ($color) use ($product){
-                $color = (object) $color;
                 $productHasColor = new ProductHasColor();
                 $productHasColor->product_id = $product->id;
                 $productHasColor->color_id = $color;
@@ -173,7 +173,6 @@ class ProductController extends Controller
             });
 
             collect($request->input('sizes'))->map(function ($size) use ($product){
-                $size = (object) $size;
                 $productHasSize = new ProductHasSize();
                 $productHasSize->product_id = $product->id;
                 $productHasSize->size_id = $size;
@@ -181,14 +180,14 @@ class ProductController extends Controller
             });
 
             if ($request->hasFile('photos')) {
-                collect($request->input('photos'))->map(function ($photo) use ($product){
-                    $photo = (object) $photo;
+                $photos = $request->file('photos');
+                foreach ($photos as $photo) {
                     $productPhoto = new ProductPhoto();
                     $productPhoto->product_id = $product->id;
                     $productPhoto->name = $photo->getClientOriginalName();
                     $productPhoto->path = $photo->store('Products/' . $product->id, 'public');
                     $productPhoto->save();
-                });
+                }
             }
 
             return $this->successResponse(
@@ -247,11 +246,21 @@ class ProductController extends Controller
 
             return $this->successResponse(
                 (object) [
-                    'product' => Product::findOrFail($id),
+                    'product' => Product::with([
+                        'clothing_line' => function ($query) { $query->withTrashed(); },
+                        'category' => function ($query) { $query->withTrashed(); },
+                        'subcategory' => function ($query) { $query->withTrashed(); },
+                        'model' => function ($query) { $query->withTrashed(); },
+                        'trademark' => function ($query) { $query->withTrashed(); },
+                        'collection' => function ($query) { $query->withTrashed(); },
+                        'colors',
+                        'sizes'
+                    ])->findOrFail($id),
                     'clothing_lines' => ClothingLine::all(),
                     'models' => Model::all(),
                     'trademarks' => Trademark::all(),
                     'sizes' => Size::all(),
+                    'colors' => Color::all(),
                     'collections' => Collection::all()
                 ],
                 'El producto fue encontrado exitosamente.',
@@ -292,40 +301,38 @@ class ProductController extends Controller
             $product->save();
 
             $colors = collect($request->input('colors'))->map(function ($color) use ($product){
-                $color = (object) $color;
-
-                $existProductHasColor = ProductHasColor::withTrashed()->updateOrCreate(
-                    ['color_id' => $color, 'product_id' => $product->id],
-                    ['deleted_at' => null]
-                );
-
-                return $existProductHasColor->id;
+                $productHasColor = ProductHasColor::withTrashed()->where('color_id', '=', $color)->where('product_id', '=', $product->id)->first();
+                $productHasColor = !is_null($productHasColor) ? $productHasColor : new ProductHasColor();
+                $productHasColor->product_id = $product->id;
+                $productHasColor->color_id = $color;
+                $productHasColor->deleted_at = null;
+                $productHasColor->save();
+                return $productHasColor->id;
             });
 
-            $product->colors()->whereNotIn('id', $colors)->delete();
+            ProductHasColor::whereNotIn('id', $colors)->delete();
 
             $sizes = collect($request->input('sizes'))->map(function ($size) use ($product){
-                $size = (object) $size;
-
-                $existProductHasSize = ProductHasSize::withTrashed()->updateOrCreate(
-                    ['size_id' => $size, 'product_id' => $product->id],
-                    ['deleted_at' => null]
-                );
-                
-                return $existProductHasSize->id;
+                $productHasSize = ProductHasSize::withTrashed()->where('size_id', '=', $size)->where('product_id', '=', $product->id)->first();
+                $productHasColor = !is_null($productHasSize) ? $productHasSize : new ProductHasSize();
+                $productHasSize->product_id = $product->id;
+                $productHasSize->size_id = $size;
+                $productHasSize->deleted_at = null;
+                $productHasSize->save();
+                return $productHasSize->id;
             });
 
-            $product->sizes()->whereNotIn('id', $sizes)->delete();
+            ProductHasSize::whereNotIn('id', $sizes)->delete();
 
             if ($request->hasFile('photos')) {
-                collect($request->input('photos'))->map(function ($photo) use ($product){
-                    $photo = (object) $photo;
+                $photos = $request->file('photos');
+                foreach ($photos as $photo) {
                     $productPhoto = new ProductPhoto();
                     $productPhoto->product_id = $product->id;
                     $productPhoto->name = $photo->getClientOriginalName();
                     $productPhoto->path = $photo->store('Products/' . $product->id, 'public');
                     $productPhoto->save();
-                });
+                }
             }
 
             return $this->successResponse(
@@ -364,15 +371,16 @@ class ProductController extends Controller
     public function show($id)
     {
         try {
-            $product = Product::with(['product_photos',
-                'clothing_line' => function ($query) { $query->withTrashed(); }, 
-                'category' => function ($query) { $query->withTrashed(); }, 
-                'subcategory' => function ($query) { $query->withTrashed(); }, 
-                'model' => function ($query) { $query->withTrashed(); }, 
-                'trademark' => function ($query) { $query->withTrashed(); }, 
-                'collection' => function ($query) { $query->withTrashed(); }, 
-                'colors' => function ($query) { $query->withTrashed(); }, 
-                'sizes' => function ($query) { $query->withTrashed(); }
+            $product = Product::with([
+                'clothing_line' => function ($query) { $query->withTrashed(); },
+                'category' => function ($query) { $query->withTrashed(); },
+                'subcategory' => function ($query) { $query->withTrashed(); },
+                'model' => function ($query) { $query->withTrashed(); },
+                'trademark' => function ($query) { $query->withTrashed(); },
+                'collection' => function ($query) { $query->withTrashed(); },
+                'product_photos',
+                'colors',
+                'sizes'
             ])->findOrFail($id);
 
             foreach ($product->product_photos as $product_photo) {
@@ -381,7 +389,7 @@ class ProductController extends Controller
 
             return $this->successResponse(
                 $product,
-                'El producto fue actualizado exitosamente.',
+                'El producto fue encontrado exitosamente.',
                 204
             );
         } catch (ModelNotFoundException $e) {
@@ -498,7 +506,7 @@ class ProductController extends Controller
 
             $productsValidate = new ProductMasiveRequest();
             $productsValidate->merge([
-                'products' => $products,
+                'products' => $products->toArray(),
             ]);
 
             $validator = Validator::make(
@@ -511,29 +519,35 @@ class ProductController extends Controller
                 throw new ValidationException($validator);
             }
 
-            foreach($products as $product) {
+            foreach($products->toArray() as $product) {
+                $product = (object) $product;
+                $existProduct = Product::withTrashed()->where('code', '=', $product->code)->first();
+                $existProduct = !is_null($existProduct) ? $existProduct : new Product();
+                $existProduct->code = $product->code;
+                $existProduct->description = $product->description;
+                $existProduct->price = $product->price;
+                $existProduct->clothing_line_id = $product->clothing_line_id;
+                $existProduct->category_id = $product->category_id;
+                $existProduct->subcategory_id = $product->subcategory_id;
+                $existProduct->model_id = $product->model_id;
+                $existProduct->trademark_id = $product->trademark_id;
+                $existProduct->collection_id = $product->collection_id;
+                $existProduct->deleted_at = null;
+                $existProduct->save();
 
-                $existProduct = Product::withTrashed()->updateOrCreate(['code' => $product->code], [
-                    'description' => $product->input('description'),
-                    'price' => $product->input('price'),
-                    'clothing_line_id' => $product->input('clothing_line_id'),
-                    'category_id' => $product->input('category_id'),
-                    'subcategory_id' => $product->input('subcategory_id'),
-                    'model_id' => $product->input('model_id'),
-                    'trademark_id' => $product->input('trademark_id'),
-                    'collection_id' => $product->input('collection_id'),
-                    'deleted_at' => null
-                ]);
+                $productHasColor = ProductHasColor::withTrashed()->where('color_id', '=', $product->color_id)->where('product_id', '=', $existProduct->id)->first();
+                $productHasColor = !is_null($productHasColor) ? $productHasColor : new ProductHasColor();
+                $productHasColor->product_id = $existProduct->id;
+                $productHasColor->color_id = $product->color_id;
+                $productHasColor->deleted_at = null;
+                $productHasColor->save();
 
-                $existProductHasColor = ProductHasColor::withTrashed()->updateOrCreate(
-                    ['color_id' => $product->color_id, 'product_id' => $existProduct->id],
-                    ['deleted_at' => null]
-                );
-
-                $existProductHasSize = ProductHasSize::withTrashed()->updateOrCreate(
-                    ['size_id' => $product->size_id, 'product_id' => $existProduct->id],
-                    ['deleted_at' => null]
-                );
+                $productHasSize = ProductHasSize::withTrashed()->where('size_id', '=', $product->size_id)->where('product_id', '=', $existProduct->id)->first();
+                $productHasSize = !is_null($productHasSize) ? $productHasSize : new ProductHasSize();
+                $productHasSize->product_id = $existProduct->id;
+                $productHasSize->size_id = $product->size_id;
+                $productHasSize->deleted_at = null;
+                $productHasSize->save();
             }
 
             return $this->successResponse(
@@ -552,6 +566,46 @@ class ProductController extends Controller
             );
         } catch (Exception $e) {
             // Devuelve una respuesta de error en caso de excepción
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('Exception'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        }
+    }
+
+    public function download()
+    {
+        try {
+            $products = Product::with([
+                    'clothing_line' => function ($query) { $query->withTrashed(); },
+                    'category' => function ($query) { $query->withTrashed(); },
+                    'subcategory' => function ($query) { $query->withTrashed(); },
+                    'model' => function ($query) { $query->withTrashed(); },
+                    'trademark' => function ($query) { $query->withTrashed(); },
+                    'collection' => function ($query) { $query->withTrashed(); },
+                    'colors',
+                    'sizes'
+                ])
+                ->get();
+
+            return $this->successResponse(
+                new ProductIndexQueryCollection($products),
+                $this->getMessage('Success'),
+                200
+            );
+        } catch (QueryException $e) {
+            // Manejar la excepción de la base de datos
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('QueryException'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        } catch (Exception $e) {
             return $this->errorResponse(
                 [
                     'message' => $this->getMessage('Exception'),

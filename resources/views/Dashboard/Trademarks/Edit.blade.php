@@ -54,8 +54,7 @@
                         <label for="logo">Logo</label>
                         <div class="input-group">
                             <input type="file" class="form-control dropify" id="logo_e" name="logo"
-                            data-allowed-file-extensions="jpg jpeg png gif" data-max-file-size="2M"
-                            data-default-file="">
+                            accept=".jpg, .jpeg, .png, .gif" data-default-file="">
                         </div>
                     </div>
                 </div>

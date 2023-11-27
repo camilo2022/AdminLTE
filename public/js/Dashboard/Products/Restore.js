@@ -1,7 +1,7 @@
-function RestorePackage(id) {
+function RestoreProduct(id) {
     Swal.fire({
-        title: '¿Desea restaurar el tipo de empaque?',
-        text: 'El tipo de empaque será restaurado.',
+        title: '¿Desea restaurar el producto?',
+        text: 'El producto será restaurado.',
         icon: 'warning',
         showCancelButton: true,
         cancelButtonColor: '#DD6B55',
@@ -11,34 +11,34 @@ function RestorePackage(id) {
     }).then((result) => {
         if (result.value) {
             $.ajax({
-                url: '/Dashboard/Packages/Restore',
+                url: '/Dashboard/Products/Restore',
                 type: 'PUT',
                 data: {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
                     'id': id
                 },
                 success: function(response) {
-                    tablePackages.ajax.reload();
-                    RestorePackageAjaxSuccess(response);
+                    tableProducts.ajax.reload();
+                    RestoreProductAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tablePackages.ajax.reload();
-                    RestorePackageAjaxError(xhr);
+                    tableProducts.ajax.reload();
+                    RestoreProductAjaxError(xhr);
                 }
             });
         } else {
-            toastr.info('El tipo de empaque seleccionado no fue restaurado.')
+            toastr.info('El producto seleccionado no fue restaurado.')
         }
     });
 }
 
-function RestorePackageAjaxSuccess(response) {
+function RestoreProductAjaxSuccess(response) {
     if(response.status === 204) {
         toastr.success(response.message);
     }
 }
 
-function RestorePackageAjaxError(xhr) {
+function RestoreProductAjaxError(xhr) {
     if(xhr.status === 403) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
     }

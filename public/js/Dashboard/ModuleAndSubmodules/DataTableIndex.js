@@ -98,19 +98,21 @@ let tableModulesAndSubmodules = $('#modulesAndSubmodules').DataTable({
         {
             data: null,
             render: function (data, type, row) {
-                return `<a onclick="EditModuleAndSubmodulesModal(${data.id})" type="button"
+                return `<div class="text-center" style="width: 100%;">
+                <a onclick="EditModuleAndSubmodulesModal(${data.id})" type="button"
                     class="btn btn-primary btn-sm" title="Editar modulo y submomdulos">
                         <i class="fas fa-shield-keyhole text-white"></i>
-                    </a>`;
+                    </a></div>`;
             }
         },
         {
             data: null,
             render: function (data, type, row) {
-                return `<a class="btn btn-danger btn-sm" onclick="DeleteModuleAndSubmodules(${data.id})"
+                return `<div class="text-center" style="width: 100%;">
+                    <a class="btn btn-danger btn-sm" onclick="DeleteModuleAndSubmodules(${data.id})"
                     title="Eliminar modulo y submodulos" id="DeleteModuleAndSubumodulesButton">
                         <i class="fas fa-shield-minus text-white"></i>
-                    </a>`;
+                    </a></div>`;
             }
         },
     ],
@@ -121,12 +123,7 @@ let tableModulesAndSubmodules = $('#modulesAndSubmodules').DataTable({
         },
         {
             orderable: false,
-            targets: [2, 3, 4, 5, 6, 7]
-        },
-        {
-            orderable: false,
-            targets: [8, 9],
-            className: 'text-center'
+            targets: [2, 3, 4, 5, 6, 7, 8, 9]
         }
     ],
     pagingType: 'full_numbers',

@@ -23,6 +23,15 @@ class ProductUpdateRequest extends FormRequest
         ], 422));
     }
 
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'sizes' => json_decode($this->input('sizes')),
+            'colors' => json_decode($this->input('colors')),
+            'photos' => json_decode($this->input('photos')),
+        ]);
+    }
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -43,7 +52,7 @@ class ProductUpdateRequest extends FormRequest
         return [
             'code' => ['required', 'string', 'unique:products,code,' . $this->route('id') .',id', 'max:255'],
             'description' => ['nullable', 'string', 'max:255'],
-            'price' => ['required', 'numeric'],
+            'price' => ['required', 'numeric', 'between:0,999999.99'],
             'clothing_line_id' => ['required', 'exists:clothing_lines,id'],
             'category_id' => ['required', 'exists:categories,id'],
             'subcategory_id' => ['required', 'exists:subcategories,id'],
@@ -68,14 +77,17 @@ class ProductUpdateRequest extends FormRequest
             'code.max' => 'El campo Codigo del producto no debe tener mas de 255 caracteres.',
             'description.string' => 'El campo Descripcion del producto debe ser una cadena de texto.',
             'description.max' => 'El campo Descripcion del producto no debe tener mas de 255 caracteres.',
+            'price.required' => 'El campo Precio del producto es requerido.',
+            'price.string' => 'El campo Precio del producto debe ser numerico.',
+            'price.between' => 'El campo Precio del producto debe estar en un rango de 0 a 999999.99.',
             'clothing_line_id.required' => 'El campo Linea del producto es requerido.',
             'clothing_line_id.exists' => 'El Identificador de la linea del producto no existe en la base de datos.',
             'category_id.required' => 'El campo Categoria del producto es requerido.',
             'category_id.exists' => 'El Identificador de la categoria del producto no existe en la base de datos.',
             'subcategory_id.required' => 'El campo Subcategoria del producto es requerido.',
-            'subcategory_id.exists' => 'El Identificador de la subcategoria del producto no existe en la base de datos.',     
+            'subcategory_id.exists' => 'El Identificador de la subcategoria del producto no existe en la base de datos.',
             'model_id.required' => 'El campo Modelo del producto es requerido.',
-            'model_id.exists' => 'El Identificador del modelo del producto no existe en la base de datos.',           
+            'model_id.exists' => 'El Identificador del modelo del producto no existe en la base de datos.',
             'trademark_id.required' => 'El campo Marca del producto es requerido.',
             'trademark_id.exists' => 'El Identificador de la marca del producto no existe en la base de datos.',
             'collection_id.required' => 'El campo Correria del producto es requerido.',

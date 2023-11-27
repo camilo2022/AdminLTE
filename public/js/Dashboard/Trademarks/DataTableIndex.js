@@ -52,9 +52,8 @@ let tableTrademarks = $('#trademarks').DataTable({
         },
         {
             data: 'deleted_at',
-            width: '200px',
             render: function (data, type, row) {
-                btn = ``;
+                let btn = `<div class="text-center" style="width: 100px;">`;
                 if (data === null) {
                     btn += `<a onclick="EditTrademarkModal(${row.id})" type="button"
                     class="btn btn-primary btn-sm mr-2" title="Editar marca de prodcuto">
@@ -71,6 +70,7 @@ let tableTrademarks = $('#trademarks').DataTable({
                         <i class="fas fa-arrow-rotate-left text-white"></i>
                     </a>`;
                 }
+                btn += `</div>`;
                 return btn;
             }
         }

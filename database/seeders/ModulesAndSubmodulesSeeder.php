@@ -90,6 +90,11 @@ class ModulesAndSubmodulesSeeder extends Seeder
             'module_id' => $Administracion->id
         ]);
 
+        ModuleHasRoles::create([
+            'role_id' => 11,
+            'module_id' => $Administracion->id
+        ]);
+
         Submodule::create([
             'name' => 'Tipos de Documento',
             'url' => '/Dashboard/DocumentTypes/Index',
@@ -137,13 +142,16 @@ class ModulesAndSubmodulesSeeder extends Seeder
             'module_id' => $Administracion->id,
             'permission_id' => 72
         ]);
-        
-        $Insumos = Module::create(['name' => 'Insumos', 'icon' => 'fas fa-reel']);
 
-        ModuleHasRoles::create([
-            'role_id' => 11,
-            'module_id' => $Insumos->id
+        Submodule::create([
+            'name' => 'Correrias',
+            'url' => '/Dashboard/Collections/Index',
+            'icon' => 'fas fa-rectangle-vertical-history',
+            'module_id' => $Administracion->id,
+            'permission_id' => 83
         ]);
+
+        $Insumos = Module::create(['name' => 'Insumos', 'icon' => 'fas fa-reel']);
 
         ModuleHasRoles::create([
             'role_id' => 12,
@@ -180,15 +188,7 @@ class ModulesAndSubmodulesSeeder extends Seeder
             'url' => '/Dashboard/Sizes/Index',
             'icon' => 'fas fa-arrow-up-9-1',
             'module_id' => $Insumos->id,
-            'permission_id' => 83
-        ]);
-
-        Submodule::create([
-            'name' => 'Correrias',
-            'url' => '/Dashboard/Collections/Index',
-            'icon' => 'fas fa-rectangle-vertical-history',
-            'module_id' => $Insumos->id,
-            'permission_id' => 91
+            'permission_id' => 90
         ]);
 
         Submodule::create([

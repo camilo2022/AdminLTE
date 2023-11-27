@@ -41,43 +41,49 @@ let tableUsers = $('#users').DataTable({
         {
             data: null,
             render: function (data, type, row) {
-                return `<a class="btn btn-info btn-sm" onclick="RestoreUser(${data.id})"
+                return `<div class="text-center" style="width: 100%;">
+                    <a class="btn btn-info btn-sm" onclick="RestoreUser(${data.id})"
                     title="Restaurar usuario">
                         <i class="fas fa-user-plus text-white"></i>
-                    </a>`;
+                    </a></div>`;
             }
         },
     ],
-    "columnDefs": [
-        { "orderable": true, "targets": [0, 1, 2, 3, 4, 5, 6] },
-        { "orderable": false, "targets": [7], "className": "text-center" }
-    ],
-    "pagingType": "full_numbers",
-    "language": {
-        "oPaginate": {
-            "sFirst": "Primero",
-            "sLast": "Último",
-            "sNext": "Siguiente",
-            "sPrevious": "Anterior",
-            "sProcessing": "Procesando...",
+    columnDefs: [
+        {
+            orderable: true,
+            targets: [0, 1, 2, 3, 4, 5, 6]
         },
-        "info": "Mostrando _START_ a _END_ de _TOTAL_ registros",
-        "infoEmpty": "No hay registros para mostrar",
-        "infoFiltered": "(filtrados de _MAX_ registros en total)",
-        "emptyTable": "No hay datos disponibles.",
-        "lengthMenu": "Mostrar _MENU_ registros por página.",
-        "search": "Buscar:",
-        "zeroRecords": "No se encontraron registros coincidentes.",
-        "decimal" : ",",
-        "thousands": ".",
-        "sEmptyTable" : "No se ha llamado información o no está disponible.",
-        "sZeroRecords" : "No se encuentran resultados.",
-        "sProcessing": "Procesando..."
+        {
+            orderable: false,
+            targets: [7]
+        }
+    ],
+    pagingType: 'full_numbers',
+    language: {
+        oPaginate: {
+            sFirst: 'Primero',
+            sLast: 'Último',
+            sNext: 'Siguiente',
+            sPrevious: 'Anterior',
+        },
+        info: 'Mostrando _START_ a _END_ de _TOTAL_ registros',
+        infoEmpty: 'No hay registros para mostrar',
+        infoFiltered: '(filtrados de _MAX_ registros en total)',
+        emptyTable: 'No hay datos disponibles.',
+        lengthMenu: 'Mostrar _MENU_ registros por página.',
+        search: 'Buscar:',
+        zeroRecords: 'No se encontraron registros coincidentes.',
+        decimal: ',',
+        thousands: '.',
+        sEmptyTable: 'No se ha llamado información o no está disponible.',
+        sZeroRecords: 'No se encuentran resultados.',
+        sProcessing: 'Procesando...'
     },
-    "pageLength": 10,
-    "lengthMenu": [10, 25, 50, 100],
-    "paging": true,
-    "info": true,
-    "searching": true,
-    "autoWidth": true
+    pageLength: 10,
+    lengthMenu: [10, 25, 50, 100],
+    paging: true,
+    info: true,
+    searching: true,
+    autoWidth: true
 });
