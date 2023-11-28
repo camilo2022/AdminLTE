@@ -14,37 +14,11 @@ class TransferDetail extends Model
     protected $fillable = [
         'transfer_id',
         'product_id',
+        'size_id',
         'color_id',
+        'quantity',
         'send_warehouse_id',
         'receive_warehouse_id',
-        '02',
-        '04',
-        '06',
-        '08',
-        '10',
-        '12',
-        '14',
-        '16',
-        '18',
-        '20',
-        '22',
-        '24',
-        '26',
-        '28',
-        '30',
-        '32',
-        '34',
-        '36',
-        '38',
-        'XXXS',
-        'XXS',
-        'XS',
-        'S',
-        'M',
-        'L',
-        'XL',
-        'XXL',
-        'XXXL',
         'transfer_detail_status'
     ];
 
@@ -56,6 +30,11 @@ class TransferDetail extends Model
     public function product() : BelongsTo
     {
         return $this->belongsTo(Product::class, 'product_id');
+    }
+
+    public function size() : BelongsTo
+    {
+        return $this->belongsTo(Size::class, 'size_id');
     }
 
     public function color() : BelongsTo

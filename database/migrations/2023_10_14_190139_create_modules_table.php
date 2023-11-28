@@ -15,9 +15,9 @@ return new class extends Migration
     {
         Schema::create('modules', function (Blueprint $table) {
             $table->id()->comment('Identificador del modulo.');
-            $table->string('name')->comment('Nombre del modulo.');
+            $table->string('name')->unique()->comment('Nombre del modulo.');
             $table->string('type')->default('item')->comment('Tipo de registro.');
-            $table->string('icon')->comment('Icono del modulo.');
+            $table->string('icon')->unique()->comment('Icono del modulo.');
             $table->timestamps();
         });
     }

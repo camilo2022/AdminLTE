@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('transfers', function (Blueprint $table) {
             $table->id();
-            $table->string('consecutive')->unique();
+            $table->string('consecutive')->unique()->nullable();
             $table->unsignedBigInteger('send_user_id');
             $table->datetime('send_date');
             $table->unsignedBigInteger('receive_user_id');

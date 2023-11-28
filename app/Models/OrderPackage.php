@@ -30,8 +30,8 @@ class OrderPackage extends Model
         return $this->belongsTo(OrderPacking::class, 'order_packing_id');
     }
 
-    public function package() : BelongsTo
+    public function package_type() : BelongsTo
     {
-        return $this->belongsTo(User::class, 'package_id');
+        return $this->belongsTo(User::class, 'package_type_id');
     }
 }

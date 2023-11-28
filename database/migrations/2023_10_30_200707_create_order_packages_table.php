@@ -16,12 +16,12 @@ return new class extends Migration
         Schema::create('order_packages', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('order_packing_id');
-            $table->unsignedBigInteger('package_id');
+            $table->unsignedBigInteger('package_type_id');
             $table->string('weight');
             $table->string('package_status');
             $table->datetime('package_date');
             $table->foreign('order_packing_id')->references('id')->on('order_packings')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreign('package_id')->references('id')->on('packages')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('package_type_id')->references('id')->on('package_types')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });
     }

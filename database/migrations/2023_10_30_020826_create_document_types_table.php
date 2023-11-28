@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('document_types', function (Blueprint $table) {
             $table->id()->comment('Identificador del tipo documento');
-            $table->string('name')->comment('Nombre del tipo documento');
+            $table->string('name')->unique()->comment('Nombre del tipo documento');
             $table->string('code')->unique()->comment('Codigo del tipo documento');
             $table->timestamps();
             $table->softDeletes();

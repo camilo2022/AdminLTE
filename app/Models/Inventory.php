@@ -13,41 +13,20 @@ class Inventory extends Model
 
     protected $fillable = [
         'product_id',
+        'size_id',
         'warehouse_id',
         'color_id',
-        '02',
-        '04',
-        '06',
-        '08',
-        '10',
-        '12',
-        '14',
-        '16',
-        '18',
-        '20',
-        '22',
-        '24',
-        '26',
-        '28',
-        '30',
-        '32',
-        '34',
-        '36',
-        '38',
-        'XXXS',
-        'XXS',
-        'XS',
-        'S',
-        'M',
-        'L',
-        'XL',
-        'XXL',
-        'XXXL'
+        'quantity'
     ];
 
     public function product() : BelongsTo
     {
         return $this->belongsTo(Product::class, 'product_id');
+    }
+
+    public function size() : BelongsTo
+    {
+        return $this->belongsTo(Size::class, 'size_id');
     }
 
     public function warehouse() : BelongsTo

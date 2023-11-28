@@ -27,24 +27,14 @@ class Product extends DBModel
         'price'
     ];
 
-    public function product_inventories() : HasMany
+    public function inventories() : HasMany
     {
         return $this->hasMany(Inventory::class, 'product_id');
     }
 
-    public function product_history_prices() : HasMany
-    {
-        return $this->hasMany(ProductHistoryPrice::class, 'product_id');
-    }
-
-    public function product_photos() : HasMany
+    public function photos() : HasMany
     {
         return $this->hasMany(ProductPhoto::class, 'product_id');
-    }
-
-    public function product_order_details() : HasMany
-    {
-        return $this->hasMany(OrderDetail::class, 'product_id');
     }
 
     public function colors() : BelongsToMany

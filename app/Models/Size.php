@@ -18,11 +18,6 @@ class Size extends Model
         'code'
     ];
 
-    public function products() : BelongsToMany
-    {
-        return $this->belongsToMany(Product::class, 'product_has_colors', 'size_id', 'product_id');
-    }
-
     public function scopeSearch($query, $search)
     {
         return $query->where('name', 'like', '%' . $search . '%')

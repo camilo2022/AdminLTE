@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('order_packings', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('order_dispatch_id');
+            $table->unsignedBigInteger('order_dispatch_id')->unique();
             $table->unsignedBigInteger('packing_user_id');
             $table->string('packing_status');
             $table->datetime('packing_date');

@@ -10,7 +10,7 @@ use App\Http\Controllers\DocumentTypeController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ModelController;
 use App\Http\Controllers\ModulesAndSubmodulesController;
-use App\Http\Controllers\PackageController;
+use App\Http\Controllers\PackageTypeController;
 use App\Http\Controllers\PaymentMethodController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\RolesAndPermissionsController;
@@ -236,31 +236,31 @@ Route::middleware(['auth'])->group(function () {
             ->middleware('can:Dashboard.PaymentMethods.Restore')->name('Dashboard.PaymentMethods.Restore');
         });
 
-        Route::prefix('/Packages')->group(function () {
+        Route::prefix('/PackageTypes')->group(function () {
 
-            Route::get('/Index', [PackageController::class, 'index'])
-            ->middleware('can:Dashboard.Packages.Index')->name('Dashboard.Packages.Index');
+            Route::get('/Index', [PackageTypeController::class, 'index'])
+            ->middleware('can:Dashboard.PackageTypes.Index')->name('Dashboard.PackageTypes.Index');
 
-            Route::post('/Index/Query', [PackageController::class, 'indexQuery'])
-            ->middleware('can:Dashboard.Packages.Index.Query')->name('Dashboard.Packages.Index.Query');
+            Route::post('/Index/Query', [PackageTypeController::class, 'indexQuery'])
+            ->middleware('can:Dashboard.PackageTypes.Index.Query')->name('Dashboard.PackageTypes.Index.Query');
 
-            Route::post('/Create', [PackageController::class, 'create'])
-            ->middleware('can:Dashboard.Packages.Create')->name('Dashboard.Packages.Create');
+            Route::post('/Create', [PackageTypeController::class, 'create'])
+            ->middleware('can:Dashboard.PackageTypes.Create')->name('Dashboard.PackageTypes.Create');
 
-            Route::post('/Store', [PackageController::class, 'store'])
-            ->middleware('can:Dashboard.Packages.Store')->name('Dashboard.Packages.Store');
+            Route::post('/Store', [PackageTypeController::class, 'store'])
+            ->middleware('can:Dashboard.PackageTypes.Store')->name('Dashboard.PackageTypes.Store');
 
-            Route::post('/Edit/{id}', [PackageController::class, 'edit'])
-            ->middleware('can:Dashboard.Packages.Edit')->name('Dashboard.Packages.Edit');
+            Route::post('/Edit/{id}', [PackageTypeController::class, 'edit'])
+            ->middleware('can:Dashboard.PackageTypes.Edit')->name('Dashboard.PackageTypes.Edit');
 
-            Route::put('/Update/{id}', [PackageController::class, 'update'])
-            ->middleware('can:Dashboard.Packages.Update')->name('Dashboard.Packages.Update');
+            Route::put('/Update/{id}', [PackageTypeController::class, 'update'])
+            ->middleware('can:Dashboard.PackageTypes.Update')->name('Dashboard.PackageTypes.Update');
 
-            Route::delete('/Delete', [PackageController::class, 'delete'])
-            ->middleware('can:Dashboard.Packages.Delete')->name('Dashboard.Packages.Delete');
+            Route::delete('/Delete', [PackageTypeController::class, 'delete'])
+            ->middleware('can:Dashboard.PackageTypes.Delete')->name('Dashboard.PackageTypes.Delete');
 
-            Route::put('/Restore', [PackageController::class, 'restore'])
-            ->middleware('can:Dashboard.Packages.Restore')->name('Dashboard.Packages.Restore');
+            Route::put('/Restore', [PackageTypeController::class, 'restore'])
+            ->middleware('can:Dashboard.PackageTypes.Restore')->name('Dashboard.PackageTypes.Restore');
         });
 
         Route::prefix('/Businesses')->group(function () {

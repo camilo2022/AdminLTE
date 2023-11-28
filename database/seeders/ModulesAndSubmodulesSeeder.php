@@ -121,7 +121,7 @@ class ModulesAndSubmodulesSeeder extends Seeder
 
         Submodule::create([
             'name' => 'Empaques',
-            'url' => '/Dashboard/Packages/Index',
+            'url' => '/Dashboard/PackageTypes/Index',
             'icon' => 'fas fa-box-open',
             'module_id' => $Administracion->id,
             'permission_id' => 56

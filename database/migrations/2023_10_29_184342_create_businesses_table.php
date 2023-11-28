@@ -15,10 +15,10 @@ return new class extends Migration
     {
         Schema::create('businesses', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('document_number');
+            $table->string('name')->unique();
+            $table->string('document_number')->unique();
             $table->string('telephone_number');
-            $table->string('email');
+            $table->string('email')->unique();
             $table->unsignedBigInteger('country_id');
             $table->unsignedBigInteger('departament_id');
             $table->unsignedBigInteger('city_id');

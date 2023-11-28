@@ -18,6 +18,7 @@ class OrderDispatch extends Model
         'dispatch_user_id',
         'dispatch_status',
         'dispatched_date',
+        'consecutive'
     ];
 
     public function order_packing() : HasOne

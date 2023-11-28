@@ -63,17 +63,17 @@ let tableBusinesses = $('#businesses').DataTable({
                 let btn = `<div class="text-center" style="width: 100px;">`;
                 if (data === null) {
                     btn += `<a onclick="EditBusinessModal(${row.id})" type="button"
-                    class="btn btn-primary btn-sm mr-2" title="Editar tipo de paquete">
+                    class="btn btn-primary btn-sm mr-2" title="Editar empresa">
                         <i class="fas fa-pen text-white"></i>
                     </a>`;
 
                     btn += `<a onclick="DeleteBusiness(${row.id})" type="button"
-                    class="btn btn-danger btn-sm mr-2" title="Eliminar tipo de paquete">
+                    class="btn btn-danger btn-sm mr-2" title="Eliminar empresa">
                         <i class="fas fa-trash text-white"></i>
                     </a>`;
                 } else {
                     btn += `<a onclick="RestoreBusiness(${row.id})" type="button"
-                    class="btn btn-info btn-sm mr-2"title="Restaurar tipo de paquete">
+                    class="btn btn-info btn-sm mr-2"title="Restaurar empresa">
                         <i class="fas fa-arrow-rotate-left text-white"></i>
                     </a>`;
                 }
