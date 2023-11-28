@@ -6,11 +6,13 @@ function EditCollectionModal(id) {
             '_token': $('meta[name="csrf-token"]').attr('content')
         },
         success: function(response) {
+            tableCollections.ajax.reload();
             EditCollectionModalCleaned(response.data);
             EditCollectionAjaxSuccess(response);
             $('#EditCollectionModal').modal('show');
         },
         error: function(xhr, textStatus, errorThrown) {
+            tableCollections.ajax.reload();
             EditCollectionAjaxError(xhr);
         }
     });

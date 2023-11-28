@@ -6,11 +6,13 @@ function EditRoleAndPermissionsModal(id) {
             '_token': $('meta[name="csrf-token"]').attr('content')
         },
         success: function(response) {
+            tableRolesAndPermissions.ajax.reload();
             EditRoleAndPermissionsModalCleaned(response.data);
             EditRoleAndPermissionsAjaxSuccess(response);
             $('#EditRoleAndPermissionsModal').modal('show');
         },
         error: function(xhr, textStatus, errorThrown) {
+            tableRolesAndPermissions.ajax.reload();
             EditRoleAndPermissionsAjaxError(xhr);
         }
     });

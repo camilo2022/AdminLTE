@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\Product\ProductExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Product\ProductCreateRequest;
 use App\Http\Requests\Product\ProductDeleteRequest;
@@ -14,7 +15,7 @@ use App\Http\Requests\Product\ProductStoreRequest;
 use App\Http\Requests\Product\ProductUpdateRequest;
 use App\Http\Requests\Product\ProductUploadRequest;
 use App\Http\Resources\Product\ProductIndexQueryCollection;
-use App\Imports\Product\ProductMasiveImport;
+use App\Imports\Product\ProductImport;
 use App\Models\Category;
 use App\Models\ClothingLine;
 use App\Models\Collection;
@@ -310,11 +311,11 @@ class ProductController extends Controller
                 return $productHasColor->id;
             });
 
-            ProductHasColor::whereNotIn('id', $colors)->delete();
+            ProductHasColor::whereNotIn('id', $colors)->where('product_id', '=', $product->id)->delete();
 
             $sizes = collect($request->input('sizes'))->map(function ($size) use ($product){
                 $productHasSize = ProductHasSize::withTrashed()->where('size_id', '=', $size)->where('product_id', '=', $product->id)->first();
-                $productHasColor = !is_null($productHasSize) ? $productHasSize : new ProductHasSize();
+                $productHasSize = !is_null($productHasSize) ? $productHasSize : new ProductHasSize();
                 $productHasSize->product_id = $product->id;
                 $productHasSize->size_id = $size;
                 $productHasSize->deleted_at = null;
@@ -322,7 +323,7 @@ class ProductController extends Controller
                 return $productHasSize->id;
             });
 
-            ProductHasSize::whereNotIn('id', $sizes)->delete();
+            ProductHasSize::whereNotIn('id', $sizes)->where('product_id', '=', $product->id)->delete();
 
             if ($request->hasFile('photos')) {
                 $photos = $request->file('photos');
@@ -502,7 +503,7 @@ class ProductController extends Controller
     public function upload(ProductUploadRequest $request)
     {
         try {
-            $products = Excel::toCollection(new ProductMasiveImport, $request->file('products'))->first();
+            $products = Excel::toCollection(new ProductImport, $request->file('products'))->first();
 
             $productsValidate = new ProductMasiveRequest();
             $productsValidate->merge([
@@ -518,11 +519,27 @@ class ProductController extends Controller
             if ($validator->fails()) {
                 throw new ValidationException($validator);
             }
+            
+            $groups = $products->groupBy('code');
+            $products = $groups->map(function ($group, $index) {
+                return [
+                    'code' => $index,
+                    'description' => $group->first()['description'],
+                    'price' => $group->first()['price'],
+                    'clothing_line_id' => $group->first()['clothing_line_id'],
+                    'category_id' => $group->first()['category_id'],
+                    'subcategory_id' => $group->first()['subcategory_id'],
+                    'model_id' => $group->first()['model_id'],
+                    'trademark_id' => $group->first()['trademark_id'],
+                    'collection_id' => $group->first()['collection_id'],
+                    'colors' => $group->pluck('color_id')->unique()->values()->toArray(),
+                    'sizes' => $group->pluck('size_id')->unique()->values()->toArray(),
+                ];
+            })->values();
 
-            foreach($products->toArray() as $product) {
+            foreach($products as $product) {
                 $product = (object) $product;
-                $existProduct = Product::withTrashed()->where('code', '=', $product->code)->first();
-                $existProduct = !is_null($existProduct) ? $existProduct : new Product();
+                $existProduct = new Product();
                 $existProduct->code = $product->code;
                 $existProduct->description = $product->description;
                 $existProduct->price = $product->price;
@@ -532,22 +549,21 @@ class ProductController extends Controller
                 $existProduct->model_id = $product->model_id;
                 $existProduct->trademark_id = $product->trademark_id;
                 $existProduct->collection_id = $product->collection_id;
-                $existProduct->deleted_at = null;
                 $existProduct->save();
 
-                $productHasColor = ProductHasColor::withTrashed()->where('color_id', '=', $product->color_id)->where('product_id', '=', $existProduct->id)->first();
-                $productHasColor = !is_null($productHasColor) ? $productHasColor : new ProductHasColor();
-                $productHasColor->product_id = $existProduct->id;
-                $productHasColor->color_id = $product->color_id;
-                $productHasColor->deleted_at = null;
-                $productHasColor->save();
+                collect($product->colors)->map(function ($color) use ($existProduct){
+                    $productHasColor = new ProductHasColor();
+                    $productHasColor->product_id = $existProduct->id;
+                    $productHasColor->color_id = $color;
+                    $productHasColor->save();
+                });
 
-                $productHasSize = ProductHasSize::withTrashed()->where('size_id', '=', $product->size_id)->where('product_id', '=', $existProduct->id)->first();
-                $productHasSize = !is_null($productHasSize) ? $productHasSize : new ProductHasSize();
-                $productHasSize->product_id = $existProduct->id;
-                $productHasSize->size_id = $product->size_id;
-                $productHasSize->deleted_at = null;
-                $productHasSize->save();
+                collect($product->sizes)->map(function ($size) use ($existProduct){
+                    $productHasSize = new ProductHasSize();
+                    $productHasSize->product_id = $existProduct->id;
+                    $productHasSize->size_id = $size;
+                    $productHasSize->save();
+                });
             }
 
             return $this->successResponse(
@@ -591,11 +607,7 @@ class ProductController extends Controller
                 ])
                 ->get();
 
-            return $this->successResponse(
-                new ProductIndexQueryCollection($products),
-                $this->getMessage('Success'),
-                200
-            );
+            return Excel::download(new ProductExport($products),"PRODUCTOS.xlsx");
         } catch (QueryException $e) {
             // Manejar la excepción de la base de datos
             return $this->errorResponse(

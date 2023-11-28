@@ -16,7 +16,7 @@ use Maatwebsite\Excel\Events\AfterSheet;
 
 HeadingRowFormatter::default('none');
 
-class ProductMasiveImport implements ToCollection, WithHeadingRow, WithEvents
+class ProductImport implements ToCollection, WithHeadingRow, WithEvents
 {
     public $sheetNames;
     public $sheetData;

@@ -6,11 +6,13 @@ function EditModelModal(id) {
             '_token': $('meta[name="csrf-token"]').attr('content')
         },
         success: function (response) {
+            tableModels.ajax.reload();
             EditModelModalCleaned(response.data);
             EditModelAjaxSuccess(response);
             $('#EditModelModal').modal('show');
         },
         error: function (xhr, textStatus, errorThrown) {
+            tableModels.ajax.reload();
             EditModelAjaxError(xhr);
         }
     });

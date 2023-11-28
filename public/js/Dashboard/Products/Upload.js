@@ -57,7 +57,7 @@ function UploadProduct() {
 function UploadProductAjaxSuccess(response) {
     if(response.status === 201) {
         toastr.success(response.message);
-        $('#EditProductModal').modal('hide');
+        $('#UploadProductModal').modal('hide');
     }
 
     $('#loading').remove();
@@ -66,18 +66,18 @@ function UploadProductAjaxSuccess(response) {
 function UploadProductAjaxError(xhr) {
     console.log(xhr);
     if(xhr.status === 403) {
-        toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
-        $('#EditProductModal').modal('hide');
+        toastr.error(xhr.responseJSON.message);
+        $('#UploadProductModal').modal('hide');
     }
 
     if(xhr.status === 404) {
-        toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
-        $('#EditProductModal').modal('hide');
+        toastr.error(xhr.responseJSON.message);
+        $('#UploadProductModal').modal('hide');
     }
 
     if(xhr.status === 419) {
-        toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
-        $('#EditProductModal').modal('hide');
+        toastr.error(xhr.responseJSON.message);
+        $('#UploadProductModal').modal('hide');
     }
 
     if(xhr.status === 422){
@@ -111,7 +111,7 @@ function UploadProductAjaxError(xhr) {
     }
 
     if(xhr.status === 500){
-        toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
-        $('#EditProductModal').modal('hide');
+        toastr.error(xhr.responseJSON.message);
+        $('#UploadProductModal').modal('hide');
     }
 }

@@ -6,11 +6,13 @@ function EditColorModal(id) {
             '_token': $('meta[name="csrf-token"]').attr('content')
         },
         success: function (response) {
+            tableColors.ajax.reload();
             EditColorModalCleaned(response.data);
             EditColorAjaxSuccess(response);
             $('#EditColorModal').modal('show');
         },
         error: function (xhr, textStatus, errorThrown) {
+            tableColors.ajax.reload();
             EditColorAjaxError(xhr);
         }
     });

@@ -6,11 +6,13 @@ function ShowWarehouseModal(id) {
             '_token': $('meta[name="csrf-token"]').attr('content')
         },
         success: function (response) {
+            tableWarehouses.ajax.reload();
             ShowWarehouseModalCleaned(response.data);
             ShowWarehouseAjaxSuccess(response);
             $('#ShowWarehouseModal').modal('show');
         },
         error: function (xhr, textStatus, errorThrown) {
+            tableWarehouses.ajax.reload();
             ShowWarehouseAjaxError(xhr);
         }
     });

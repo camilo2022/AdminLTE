@@ -6,11 +6,13 @@ function PasswordUserModal(id) {
             '_token': $('meta[name="csrf-token"]').attr('content')
         },
         success: function(response) {
+            tableUsers.ajax.reload();
             PasswordUserModalCleaned(response.data);
             PasswordUserAjaxSuccess(response);
             $('#PasswordUserModal').modal('show');
         },
         error: function(xhr, textStatus, errorThrown) {
+            tableUsers.ajax.reload();
             PasswordUserAjaxError(xhr);
         }
     });

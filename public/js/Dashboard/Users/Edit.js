@@ -6,12 +6,14 @@ function EditUserModal(id) {
             '_token': $('meta[name="csrf-token"]').attr('content')
         },
         success: function(response) {
+            tableUsers.ajax.reload();
             EditUserModalCleaned(response.data.user);
             EditUserModalAreas(response.data.areas);
             EditUserAjaxSuccess(response);
             $('#EditUserModal').modal('show');
         },
         error: function(xhr, textStatus, errorThrown) {
+            tableUsers.ajax.reload();
             EditUserAjaxError(xhr);
         }
     });

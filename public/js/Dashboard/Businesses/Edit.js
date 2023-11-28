@@ -6,12 +6,14 @@ function EditBusinessModal(id) {
             '_token': $('meta[name="csrf-token"]').attr('content')
         },
         success: function(response) {
+            tableBusinesses.ajax.reload();
             EditBusinessModalCleaned(response.data.business);
             EditBusinessModalCountry(response.data.countries);
             EditBusinessAjaxSuccess(response);
             $('#EditBusinessModal').modal('show');
         },
         error: function(xhr, textStatus, errorThrown) {
+            tableBusinesses.ajax.reload();
             EditBusinessAjaxError(xhr);
         }
     });

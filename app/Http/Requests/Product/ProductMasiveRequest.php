@@ -42,7 +42,7 @@ class ProductMasiveRequest extends FormRequest
     {
 
         return [
-            'products.*.code' => ['required', 'string', 'max:255'],
+            'products.*.code' => ['required', 'string', 'max:255', 'unique:products,code'],
             'products.*.description' => ['nullable', 'string', 'max:255'],
             'products.*.price' => ['required', 'numeric', 'between:0,999999.99'],
             'products.*.clothing_line_id' => ['required'],
@@ -62,6 +62,7 @@ class ProductMasiveRequest extends FormRequest
             'products.*.code.required' => 'El campo Codigo del producto es requerido.',
             'products.*.code.string' => 'El campo Codigo del producto debe ser una cadena de texto.',
             'products.*.code.max' => 'El campo Codigo del producto no debe tener mas de 255 caracteres.',
+            'products.*.code.unique' => 'El campo Codigo del producto ya fue tomado.',
             'products.*.description.string' => 'El campo Descripcion del producto debe ser una cadena de texto.',
             'products.*.description.max' => 'El campo Descripcion del producto no debe tener mas de 255 caracteres.',
             'products.*.price.required' => 'El campo Precio del producto es requerido.',

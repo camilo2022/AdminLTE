@@ -64,9 +64,12 @@
                                     </a>
                                 </li>
                                 <li class="nav-item ml-2">
-                                    <a class="nav-link active" type="button" onclick="DownloadProduct()" title="Descargar productos">
-                                        <i class="fas fa-download"></i>
-                                    </a>
+                                    <form action="{{ route('Dashboard.Products.Download') }}" method="POST" name="DownloadProducts">
+                                        @csrf
+                                        <a class="nav-link active" type="button" onclick="DownloadProduct()" title="Descargar productos">
+                                            <i class="fas fa-download"></i>
+                                        </a>
+                                    </form>
                                 </li>
                             </ul>
                         </div>
@@ -102,6 +105,7 @@
         </div>
         @include('Dashboard.Products.Create')
         @include('Dashboard.Products.Edit')
+        @include('Dashboard.Products.Show')
         @include('Dashboard.Products.Upload')
     </section>
 @endsection
@@ -109,7 +113,9 @@
     <script src="{{ asset('js/Dashboard/Products/DataTableIndex.js') }}"></script>
     <script src="{{ asset('js/Dashboard/Products/Create.js') }}"></script>
     <script src="{{ asset('js/Dashboard/Products/Edit.js') }}"></script>
+    <script src="{{ asset('js/Dashboard/Products/Show.js') }}"></script>
     <script src="{{ asset('js/Dashboard/Products/Delete.js') }}"></script>
     <script src="{{ asset('js/Dashboard/Products/Restore.js') }}"></script>
     <script src="{{ asset('js/Dashboard/Products/Upload.js') }}"></script>
+    <script src="{{ asset('js/Dashboard/Products/Download.js') }}"></script>
 @endsection
