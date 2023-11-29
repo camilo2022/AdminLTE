@@ -102,7 +102,7 @@ class InventoryController extends Controller
             if ($validator->fails()) {
                 throw new ValidationException($validator);
             }
-            
+
             $groups = $inventories->groupBy('product_id', 'size_id', 'warehouse_id', 'color_id');
             $inventories = $groups->map(function ($group) {
                 return [
@@ -121,7 +121,7 @@ class InventoryController extends Controller
                 ->where('color_id', '=', $inventory->color_id)->first();
 
                 if($existInventory) {
-                    $existInventory->quantity = $existInventory->quantity + $inventory->quantity;
+                    $existInventory->quantity = ($existInventory->quantity + $inventory->quantity) >= 0 ? $existInventory->quantity + $inventory->quantity : 0;
                     $existInventory->save();
                 } else {
                     $inventoryNew = new Inventory();
@@ -129,9 +129,9 @@ class InventoryController extends Controller
                     $inventoryNew->size_id = $inventory->size_id;
                     $inventoryNew->warehouse_id = $inventory->warehouse_id;
                     $inventoryNew->color_id = $inventory->color_id;
-                    $inventoryNew->quantity = $inventory->quantity;
+                    $inventoryNew->quantity = $inventory->quantity >= 0 ? $inventory->quantity : 0;
                     $inventoryNew->save();
-                }    
+                }
             }
 
             return $this->successResponse(
@@ -171,7 +171,7 @@ class InventoryController extends Controller
                 ])
                 ->get();
 
-            return Excel::download(new InventoryExport($inventories),"INVENTARIOS.xlsx");
+            return Excel::download(new InventoryExport($inventories), "INVENTARIOS.xlsx");
         } catch (QueryException $e) {
             // Manejar la excepción de la base de datos
             return $this->errorResponse(

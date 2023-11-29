@@ -64,7 +64,6 @@ function UploadProductAjaxSuccess(response) {
 }
 
 function UploadProductAjaxError(xhr) {
-    console.log(xhr);
     if(xhr.status === 403) {
         toastr.error(xhr.responseJSON.message);
         $('#UploadProductModal').modal('hide');
@@ -98,13 +97,25 @@ function UploadProductAjaxError(xhr) {
             let errorInfo = [];
 
             for (let key in xhr.responseJSON.error.errors) {
+                console.log(key);
                 if (xhr.responseJSON.error.errors.hasOwnProperty(key)) {
-                    let match = key.match(/products\.(\d+)\.(\w+)/);
+                    let matchs = key.match(/products\.(\d+)\.(\w+)/);
+                    console.log(matchs);
+                    if (matchs) {
+                        let rowIndex = parseInt(matchs[1]) + 1;
+                        let fieldName = matchs[2];
+                        let errorMessages = xhr.responseJSON.error.errors[key];
+                        errorMessages.forEach(errorMessage => {
+                            errorInfo.push(`Fila ${rowIndex}: ${fieldName} - ${errorMessage}`);
+                        });
+                    }
+                    let match = key.match(/products\.(\d+)/);
                     if (match) {
                         let rowIndex = parseInt(match[1]) + 1;
-                        let fieldName = match[2];
-                        let errorMessage = xhr.responseJSON.error.errors[key][0];
-                        errorInfo.push(`Fila ${rowIndex}: ${fieldName} - ${errorMessage}`);
+                        let errorMessages = xhr.responseJSON.error.errors[key];
+                        errorMessages.forEach(errorMessage => {
+                            errorInfo.push(`Fila ${rowIndex}: ${errorMessage}`);
+                        });
                     }
                 }
             }

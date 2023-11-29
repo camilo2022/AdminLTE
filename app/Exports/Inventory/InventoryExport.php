@@ -11,81 +11,56 @@ use Maatwebsite\Excel\Concerns\WithTitle;
 class InventoryExport implements FromArray, Responsable, WithHeadings, WithTitle
 {
     use Exportable;
-    
-    private $products;
 
-    public function __construct($products)
+    private $inventories;
+
+    public function __construct($inventories)
     {
-        $this->products = $products;
+        $this->inventories = $inventories;
     }
-    
+
     public function headings(): array
     {
         return [
             'id',
-            'codigo',
-            'observacion',
-            'precio',
-            'correria',
-            'id correria',
-            'linea',
-            'id linea',
-            'categoria',
-            'id categoria',
-            'subcategoria',
-            'id subcategoria',
-            'marca',
-            'id marca',
-            'modelo',
-            'id modelo',
-            'color',
-            'id color',
-            'talla',
-            'id talla',
+            'product_id',
+            'product_code',
+            'size_id',
+            'size_code',
+            'warehouse_id',
+            'warehouse_code',
+            'color_id',
+            'color_code',
+            'quantity'
         ];
     }
-    
+
     public function title(): string
     {
-        return 'Productos';
+        return 'Inventarios';
     }
-    
+
     public function array(): array
     {
        $array = [];
             $i=0;
-            
-            foreach($this->products as $product) {
-                foreach($product->sizes as $size) {
-                    foreach($product->colors as $color) {
-                        $fila = [
-                            'id' => $product->id,
-                            'codigo' => $product->code,
-                            'observacion' => $product->observation,
-                            'precio' => $product->price,
-                            'correria' => $product->collection->name,
-                            'id correria' => $product->collection_id,
-                            'linea' => $product->clothing_line->name,
-                            'id linea' => $product->clothing_line_id,
-                            'categoria' => $product->category->name,
-                            'id categoria' => $product->category_id,
-                            'subcategoria' => $product->subcategory->name,
-                            'id subcategoria' => $product->subcategory_id,
-                            'marca' => $product->trademark->name,
-                            'id marca' => $product->trademark_id,
-                            'modelo' => $product->model->name,
-                            'id modelo' => $product->model_id,
-                            'color' => $color->name,
-                            'id color' => $color->id,
-                            'talla' => $size->name,
-                            'id talla' => $size->id,
-                        ];
-                        array_push($array, $fila);
-                        $i++;
-                    }
-                }
+
+            foreach($this->inventories as $inventory) {
+                array_push($array, [
+                    'id' => $inventory->id,
+                    'product_id' => $inventory->product_id,
+                    'product_code' => $inventory->product->code,
+                    'size_id' => $inventory->size_id,
+                    'size_code' => $inventory->size->code,
+                    'warehouse_id' => $inventory->warehouse_id,
+                    'warehouse_code' => $inventory->warehouse->code,
+                    'color_id' => $inventory->color_id,
+                    'color_code' => $inventory->color->code,
+                    'quantity' => $inventory->quantity
+                ]);
+                $i++;
             }
-            
+
        return $array;
     }
 }

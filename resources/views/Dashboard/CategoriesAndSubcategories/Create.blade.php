@@ -16,7 +16,7 @@
                         <div class="form-group">
                             <label for="clothing_line_id">Lineas</label>
                             <div class="input-group">
-                                <select class="form-control select2" id="clothing_line_id_c" name="clothing_line_id" style="width: 88%">
+                                <select class="form-control select2" id="clothing_line_id_c" name="clothing_line_id" style="width: 87%">
                                     <option value="">Seleccione</option>
                                 </select>
                                 <div class="input-group-append">

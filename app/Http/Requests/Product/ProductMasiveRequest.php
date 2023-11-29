@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests\Product;
 
+use App\Rules\CategoryExistsForClothingLine;
+use App\Rules\SubcategoryExistsForCategory;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
@@ -42,6 +44,10 @@ class ProductMasiveRequest extends FormRequest
     {
 
         return [
+            'products.*' => [
+                new SubcategoryExistsForCategory('subcategories',$this->input('products.*.subcategory_id'),'id',$this->input('products.*.category_id'),'category_id'),
+                new CategoryExistsForClothingLine('categories',$this->input('products.*.category_id'),'id',$this->input('products.*.clothing_line_id'),'clothing_line_id'),
+            ],
             'products.*.code' => ['required', 'string', 'max:255', 'unique:products,code'],
             'products.*.description' => ['nullable', 'string', 'max:255'],
             'products.*.price' => ['required', 'numeric', 'between:0,999999.99'],

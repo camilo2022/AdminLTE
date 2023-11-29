@@ -27,8 +27,6 @@ class DateNotBetween implements Rule
 
     public function passes($attribute, $value)
     {
-        // Realiza una consulta para verificar si existen registros en la tabla especificada
-        // donde el valor de $value no está entre $startField y $endField.
         $count = DB::table($this->table)
             ->when(!is_null($this->excludedId),
                 function ($query) {

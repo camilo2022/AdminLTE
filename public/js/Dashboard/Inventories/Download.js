@@ -1,7 +1,7 @@
-function DownloadProduct() {
+function DownloadInventory() {
     Swal.fire({
-        title: '¿Desea descargar el archivo de productos?',
-        text: 'El archivo de productos se procesara y descargara.',
+        title: '¿Desea descargar el archivo de inventarios?',
+        text: 'El archivo de inventarios se procesara y descargara.',
         icon: 'warning',
         showCancelButton: true,
         cancelButtonColor: '#DD6B55',
@@ -11,9 +11,9 @@ function DownloadProduct() {
     }).then((result) => {
         if (result.value) {
             toastr.info('Por favor espere un momento a que se procese, genere y descargue el archivo porfavor.');
-            document.DownloadProducts.submit();
+            document.DownloadInventories.submit();
         } else {
-            toastr.info('El archivo de productos no fue descargado.')
+            toastr.info('El archivo de inventarios no fue descargado.')
         }
     });
 }
