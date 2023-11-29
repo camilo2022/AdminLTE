@@ -8,6 +8,7 @@ use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\ColorController;
 use App\Http\Controllers\DocumentTypeController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\ModelController;
 use App\Http\Controllers\ModulesAndSubmodulesController;
 use App\Http\Controllers\PackageTypeController;
@@ -550,6 +551,21 @@ Route::middleware(['auth'])->group(function () {
 
             Route::post('/Download', [ProductController::class, 'download'])
             ->middleware('can:Dashboard.Products.Download')->name('Dashboard.Products.Download');
+        });
+
+        Route::prefix('/Inventories')->group(function () {
+
+            Route::get('/Index', [InventoryController::class, 'index'])
+            ->middleware('can:Dashboard.Inventories.Index')->name('Dashboard.Inventories.Index');
+
+            Route::post('/Index/Query', [InventoryController::class, 'indexQuery'])
+            ->middleware('can:Dashboard.Inventories.Index.Query')->name('Dashboard.Inventories.Index.Query');
+
+            Route::post('/Upload', [InventoryController::class, 'upload'])
+            ->middleware('can:Dashboard.Inventories.Upload')->name('Dashboard.Inventories.Upload');
+
+            Route::post('/Download', [InventoryController::class, 'download'])
+            ->middleware('can:Dashboard.Inventories.Download')->name('Dashboard.Inventories.Download');
         });
     });
 });

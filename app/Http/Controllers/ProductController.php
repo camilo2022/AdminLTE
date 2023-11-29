@@ -379,13 +379,13 @@ class ProductController extends Controller
                 'model' => function ($query) { $query->withTrashed(); },
                 'trademark' => function ($query) { $query->withTrashed(); },
                 'collection' => function ($query) { $query->withTrashed(); },
-                'product_photos',
+                'photos',
                 'colors',
                 'sizes'
             ])->findOrFail($id);
 
-            foreach ($product->product_photos as $product_photo) {
-                $product_photo->path = asset('storage/' . $product_photo->path);
+            foreach ($product->photos as $photo) {
+                $photo->path = asset('storage/' . $photo->path);
             }
 
             return $this->successResponse(
@@ -539,28 +539,28 @@ class ProductController extends Controller
 
             foreach($products as $product) {
                 $product = (object) $product;
-                $existProduct = new Product();
-                $existProduct->code = $product->code;
-                $existProduct->description = $product->description;
-                $existProduct->price = $product->price;
-                $existProduct->clothing_line_id = $product->clothing_line_id;
-                $existProduct->category_id = $product->category_id;
-                $existProduct->subcategory_id = $product->subcategory_id;
-                $existProduct->model_id = $product->model_id;
-                $existProduct->trademark_id = $product->trademark_id;
-                $existProduct->collection_id = $product->collection_id;
-                $existProduct->save();
+                $productNew = new Product();
+                $productNew->code = $product->code;
+                $productNew->description = $product->description;
+                $productNew->price = $product->price;
+                $productNew->clothing_line_id = $product->clothing_line_id;
+                $productNew->category_id = $product->category_id;
+                $productNew->subcategory_id = $product->subcategory_id;
+                $productNew->model_id = $product->model_id;
+                $productNew->trademark_id = $product->trademark_id;
+                $productNew->collection_id = $product->collection_id;
+                $productNew->save();
 
-                collect($product->colors)->map(function ($color) use ($existProduct){
+                collect($product->colors)->map(function ($color) use ($productNew){
                     $productHasColor = new ProductHasColor();
-                    $productHasColor->product_id = $existProduct->id;
+                    $productHasColor->product_id = $productNew->id;
                     $productHasColor->color_id = $color;
                     $productHasColor->save();
                 });
 
-                collect($product->sizes)->map(function ($size) use ($existProduct){
+                collect($product->sizes)->map(function ($size) use ($productNew){
                     $productHasSize = new ProductHasSize();
-                    $productHasSize->product_id = $existProduct->id;
+                    $productHasSize->product_id = $productNew->id;
                     $productHasSize->size_id = $size;
                     $productHasSize->save();
                 });

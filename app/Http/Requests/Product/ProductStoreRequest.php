@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Product;
 
+use App\Rules\ImageDimension;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
@@ -64,7 +65,7 @@ class ProductStoreRequest extends FormRequest
             'sizes' => ['required', 'array'],
             'sizes.*' => ['exists:sizes,id'],
             'photos' => ['nullable', 'array'],
-            'photos.*' => ['mimes:jpeg,jpg,png,gif', 'max:10000']
+            'photos.*' => ['mimes:jpeg,jpg,png,gif', 'max:10000',  new ImageDimension(100, 1920, 100, 1080, function($attr, $value){ return $value->getClientOriginalName(); })]
         ];
     }
 

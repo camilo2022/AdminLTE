@@ -91,7 +91,7 @@
                                             <th>Colores</th>
                                             <th>Tallas</th>
                                             <th>Estado</th>
-                                            <th style="width: 200px !important;">Acciones</th>
+                                            <th>Acciones</th>
                                         </tr>
                                     </thead>
                                     <tbody>

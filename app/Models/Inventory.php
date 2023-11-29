@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Inventory extends Model
 {
     use HasFactory;
-    protected $table = 'clothing_lines';
+    protected $table = 'inventories';
 
     protected $fillable = [
         'product_id',
@@ -37,5 +37,38 @@ class Inventory extends Model
     public function color() : BelongsTo
     {
         return $this->belongsTo(Color::class, 'color_id');
+    }
+
+    public function scopeSearch($query, $search)
+    {
+        return $query->where('quantity', 'like', '%' . $search . '%')
+        ->orWhereHas('product',
+            function ($subQuery) use ($search) {
+                $subQuery->where('code', 'like',  '%' . $search . '%');
+            }
+        )
+        ->orWhereHas('size',
+            function ($subQuery) use ($search) {
+                $subQuery->where('code', 'like',  '%' . $search . '%');
+            }
+        )
+        ->orWhereHas('warehouse',
+            function ($subQuery) use ($search) {
+                $subQuery->where('name', 'like',  '%' . $search . '%')
+                ->orWhere('code', 'like',  '%' . $search . '%');
+            }
+        )
+        ->orWhereHas('color',
+            function ($subQuery) use ($search) {
+                $subQuery->where('name', 'like',  '%' . $search . '%')
+                ->orWhere('code', 'like',  '%' . $search . '%');
+            }
+        );
+    }
+
+    public function scopeFilterByDate($query, $start_date, $end_date)
+    {
+        // Filtro por rango de fechas entre 'start_date' y 'end_date' en el campo 'created_at'
+        return $query->whereBetween('created_at', [$start_date, $end_date]);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Product;
 
+use App\Rules\ImageDimension;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
@@ -64,7 +65,7 @@ class ProductUpdateRequest extends FormRequest
             'sizes' => ['required', 'array'],
             'sizes.*' => ['exists:sizes,id'],
             'photos' => ['nullable', 'array'],
-            'photos.*' => ['mimes:jpeg,jpg,png,gif', 'max:5000']
+            'photos.*' => ['mimes:jpeg,jpg,png,gif', 'max:10000', new ImageDimension(100, 1920, 100, 1080, function($attr, $value){ return $value->getClientOriginalName(); })]
         ];
     }
 
@@ -98,7 +99,7 @@ class ProductUpdateRequest extends FormRequest
             'sizes.*.exists' => 'El Identificador de la talla no existe en la base de datos.',
             'photos.array' => 'El campo Fotos del producto debe ser un arreglo.',
             'photos.*.mimes' => 'El Archivo debe tener una extensión válida (jpeg, jpg, png, gif).',
-            'photos.*.max' => 'El Archivo no debe superar los 2 MB (2048 KB).',
+            'photos.*.max' => 'El Archivo no debe superar los 10 MB.',
         ];
     }
 }

@@ -18,10 +18,10 @@ function ShowProductModal(id) {
 }
 
 function ShowProductModalCleaned(product) {
-    $.each(product.product_photos, function(index, product_photo) {
+    $.each(product.photos, function(index, photo) {
         $('#photos_indicators').append(`<li data-target="#carouselExampleIndicators" data-slide-to="${index}" ${index == 0 ? 'class="active"' : ''}></li>`);
         $('#photos_carousel').append(`<div class="carousel-item ${index == 0 ? 'active' : ''}">
-                <img class="d-block w-100" src="${product_photo.path}" alt="${product_photo.name}">
+                <img class="d-block w-100" src="${photo.path}" alt="${photo.name}">
             </div>`);
     });
 }

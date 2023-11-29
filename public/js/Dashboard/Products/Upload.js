@@ -81,33 +81,42 @@ function UploadProductAjaxError(xhr) {
     }
 
     if(xhr.status === 422){
-        $.each(xhr.responseJSON.error.errors, function(field, messages) {
-            $.each(messages, function(index, message) {
-                toastr.error(message);
+        if(xhr.responseJSON.errors) {
+            $.each(xhr.responseJSON.errors, function(field, messages) {
+                $.each(messages, function(index, message) {
+                    toastr.error(message);
+                });
             });
-        });
+        }
+        if(xhr.responseJSON.error) {
+            $.each(xhr.responseJSON.error.errors, function(field, messages) {
+                $.each(messages, function(index, message) {
+                    toastr.error(message);
+                });
+            });
 
-        let errorInfo = [];
+            let errorInfo = [];
 
-        for (let key in xhr.responseJSON.error.errors) {
-            if (xhr.responseJSON.error.errors.hasOwnProperty(key)) {
-                let match = key.match(/products\.(\d+)\.(\w+)/);
-                if (match) {
-                    let rowIndex = parseInt(match[1]) + 1;
-                    let fieldName = match[2];
-                    let errorMessage = xhr.responseJSON.error.errors[key][0];
-                    errorInfo.push(`Fila ${rowIndex}: ${fieldName} - ${errorMessage}`);
+            for (let key in xhr.responseJSON.error.errors) {
+                if (xhr.responseJSON.error.errors.hasOwnProperty(key)) {
+                    let match = key.match(/products\.(\d+)\.(\w+)/);
+                    if (match) {
+                        let rowIndex = parseInt(match[1]) + 1;
+                        let fieldName = match[2];
+                        let errorMessage = xhr.responseJSON.error.errors[key][0];
+                        errorInfo.push(`Fila ${rowIndex}: ${fieldName} - ${errorMessage}`);
+                    }
                 }
             }
+            let errorString = errorInfo.join('\n');
+            let blob = new Blob([errorString], { type: 'text/plain' });
+            let link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blob);
+            link.download = 'errores.txt';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
-        let errorString = errorInfo.join('\n');
-        let blob = new Blob([errorString], { type: 'text/plain' });
-        let link = document.createElement('a');
-        link.href = window.URL.createObjectURL(blob);
-        link.download = 'errores.txt';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
     }
 
     if(xhr.status === 500){
