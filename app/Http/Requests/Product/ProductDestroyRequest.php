@@ -48,8 +48,8 @@ class ProductDestroyRequest extends FormRequest
     public function messages()
     {
         return [
-            'id.required' => 'El campo identificador de la foto del producto es requerido.',
-            'id.exists' => 'El identificador de la foto del producto proporcionado no es válido.',
+            'id.required' => 'El Identificador de la foto del producto es requerido.',
+            'id.exists' => 'El Identificador de la foto del producto no es válido.',
         ];
     }
 }

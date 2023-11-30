@@ -48,8 +48,8 @@ class ColorRestoreRequest extends FormRequest
     public function messages()
     {
         return [
-            'id.required' => 'El campo identificador del color es requerido.',
-            'id.exists' => 'El identificador del color proporcionado no es válido.',
+            'id.required' => 'El Identificador del color es requerido.',
+            'id.exists' => 'El Identificador del color no es válido.',
         ];
     }
 }

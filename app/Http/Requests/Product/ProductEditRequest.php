@@ -48,8 +48,8 @@ class ProductEditRequest extends FormRequest
     public function messages()
     {
         return [
-            'clothing_line_id.exists' => 'La linea del producto proporcionado no existe en la base de datos.',
-            'category_id.exists' => 'La categoria del producto proporcionado no existe en la base de datos.',
+            'clothing_line_id.exists' => 'El Identificador de la linea del producto no es valido.',
+            'category_id.exists' => 'El Identificador de la categoria del producto no es valido.',
         ];
     }
 }

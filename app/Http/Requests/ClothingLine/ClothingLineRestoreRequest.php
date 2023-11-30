@@ -48,8 +48,8 @@ class ClothingLineRestoreRequest extends FormRequest
     public function messages()
     {
         return [
-            'id.required' => 'El campo identificador de la linea de producto es requerido.',
-            'id.exists' => 'El identificador de la linea de producto proporcionado no es válido.',
+            'id.required' => 'El Identificador de la linea de producto es requerido.',
+            'id.exists' => 'El Identificador de la linea de producto no es válido.',
         ];
     }
 }

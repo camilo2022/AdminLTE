@@ -68,7 +68,7 @@ class ModulesAndSubmodulesUpdateRequest extends FormRequest
             'roles.required' => 'El campo Roles de acceso es requerido.',
             'roles.array' => 'El campo Roles de acceso debe ser un arreglo.',
             'roles.*.numeric' => 'El identificador del rol de acceso debe ser numerico.',
-            'roles.*.exists' => 'El identificador del rol de acceso no existe en la base de datos.',
+            'roles.*.exists' => 'El identificador del rol de acceso no es valido.',
             'roles.*.unique' => 'El identificador del rol de acceso ya ha sido tomado.',
             'submodules.required' => 'El campo Submodulos es requerido.',
             'submodules.array' => 'El campo Submodulos debe ser un arreglo.',
@@ -88,7 +88,7 @@ class ModulesAndSubmodulesUpdateRequest extends FormRequest
             'submodules.*.icon.unique' => 'El campo Icono del submodulo ya ha sido tomado.',
             'submodules.*.permission_id.required' => 'El campo Permiso de acceso del submodulo es requerido.',
             'submodules.*.permission_id.max' => 'El campo Permiso de acceso del submodulo no debe exceder los 255 caracteres.',
-            'submodules.*.permission_id.exists' => 'El campo Permiso de acceso del submodulo no existe en la base de datos.',
+            'submodules.*.permission_id.exists' => 'El Identificador del Permiso de acceso del submodulo no es valido.',
             'submodules.*.permission_id.unique' => 'El campo Permiso de acceso del submodulo ya ha sido tomado.',
         ];
     }

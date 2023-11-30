@@ -49,8 +49,8 @@ class BusinessEditRequest extends FormRequest
     public function messages()
     {
         return [
-            'country_id.exists' => 'El pais proporcionado no existe.',
-            'departament_id.exists' => 'El departamento proporcionado no existe.',
+            'country_id.exists' => 'El Identificador del pais no es valido.',
+            'departament_id.exists' => 'El Identificador del departamento no es valido.',
         ];
     }
 }

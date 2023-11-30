@@ -48,8 +48,8 @@ class ModelRestoreRequest extends FormRequest
     public function messages()
     {
         return [
-            'id.required' => 'El campo identificador del modelo de producto es requerido.',
-            'id.exists' => 'El identificador del modelo de producto proporcionado no es válido.'
+            'id.required' => 'El Identificador del modelo de producto es requerido.',
+            'id.exists' => 'El Identificador del modelo de producto no es válido.'
         ];
     }
 }

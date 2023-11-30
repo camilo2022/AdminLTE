@@ -121,7 +121,7 @@ class InventoryController extends Controller
                 ->where('color_id', '=', $inventory->color_id)->first();
 
                 if($existInventory) {
-                    $existInventory->quantity = ($existInventory->quantity + $inventory->quantity) >= 0 ? $existInventory->quantity + $inventory->quantity : 0;
+                    $existInventory->quantity += ($existInventory->quantity + $inventory->quantity) >= 0 ? $inventory->quantity : 0;
                     $existInventory->save();
                 } else {
                     $inventoryNew = new Inventory();

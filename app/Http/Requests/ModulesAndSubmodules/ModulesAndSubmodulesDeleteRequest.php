@@ -48,8 +48,8 @@ class ModulesAndSubmodulesDeleteRequest extends FormRequest
     public function messages()
     {
         return [
-            'id.required' => 'El campo identificador del modulo es requerido.',
-            'id.exists' => 'El identificador del modulo no existe en la base de datos.', // Mensaje para campos que deben existir
+            'id.required' => 'El Identificador del modulo es requerido.',
+            'id.exists' => 'El Identificador del modulo no es valido.', // Mensaje para campos que deben existir
         ];
     }
 }

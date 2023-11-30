@@ -48,7 +48,7 @@ class UserEditRequest extends FormRequest
     public function messages()
     {
         return [
-            'area_id.exists' => 'El area proporcionada no existe.',
+            'area_id.exists' => 'El Identifiador del area no es valido.',
         ];
     }
 }

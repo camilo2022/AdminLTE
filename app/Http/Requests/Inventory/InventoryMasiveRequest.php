@@ -54,15 +54,15 @@ class InventoryMasiveRequest extends FormRequest
     {
         return [
             'inventories.*.product_id.required' => 'El campo Identificador del producto es requerido.',
-            'inventories.*.product_id.exists' => 'El Identificador del producto no existe en la base de datos.',
+            'inventories.*.product_id.exists' => 'El Identificador del producto no es valido.',
             'inventories.*.size_id.required' => 'El campo Identificador de la talla es requerido.',
-            'inventories.*.size_id.exists' => 'El Identificador de la talla no existe en la base de datos.',
+            'inventories.*.size_id.exists' => 'El Identificador de la talla no es valido.',
             'inventories.*.warehouse_id.required' => 'El campo Identificador de la bodega es requerido.',
-            'inventories.*.warehouse_id.exists' => 'El Identificador de la bodega no existe en la base de datos.',
+            'inventories.*.warehouse_id.exists' => 'El Identificador de la bodega no es valido.',
             'inventories.*.color_id.required' => 'El campo Identificador del color es requerido.',
-            'inventories.*.color_id.exists' => 'El Identificador del color no existe en la base de datos.',
+            'inventories.*.color_id.exists' => 'El Identificador del color no es valido.',
             'inventories.*.quantity.required' => 'El campo Cantidad de inventario es requerido.',
-            'inventories.*.quantity.required' => 'El campo Cantidad de inventario debe ser un valor numerico.',
+            'inventories.*.quantity.numeric' => 'El campo Cantidad de inventario debe ser un valor numerico.',
         ];
     }
 }

@@ -51,15 +51,15 @@ class UserAssignRoleAndPermissionsRequest extends FormRequest
     public function messages()
     {
         return [
-            'id.required' => 'El campo identificador del usuario es requerido.',
-            'id.exists' => 'El identificador del usuario no existe en la base de datos.',
+            'id.required' => 'El Identificador del usuario es requerido.',
+            'id.exists' => 'El Identificador del usuario no es valido.',
             'role.required' => 'El campo rol es requerido.',
-            'role.string' => 'El rol debe ser una cadena de texto.',
-            'role.exists' => 'El rol no existe en la base de datos.',
-            'permissions.required' => 'Debe seleccionar los permisos que desea asignar.',
+            'role.string' => 'El campo rol debe ser una cadena de texto.',
+            'role.exists' => 'El rol no es valido.',
+            'permissions.required' => 'El campo permisos es requerido.',
             'permissions.array' => 'El campo permisos a asignar debe ser un arreglo.',
-            'permissions.*.string' => 'El permiso debe ser una cadena de texto.',
-            'permissions.*.exists' => 'El permiso no existe en la base de datos.'
+            'permissions.*.string' => 'El campo permiso debe ser una cadena de texto.',
+            'permissions.*.exists' => 'El permiso no es valido.'
         ];
     }
 }

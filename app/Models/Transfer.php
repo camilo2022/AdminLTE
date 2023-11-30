@@ -14,14 +14,16 @@ class Transfer extends Model
 
     protected $fillable = [
         'consecutive',
-        'send_user_id',
-        'send_time',
-        'receive_user_id',
-        'receive_time',
-        'transfer_status'
+        'from_user_id',
+        'form_date',
+        'from_observation',
+        'to_user_id',
+        'to_time',
+        'to_observation',
+        'status'
     ];
 
-    public function transfer_details() : HasMany
+    public function details() : HasMany
     {
         return $this->hasMany(TransferDetail::class, 'transfer_id');
     }

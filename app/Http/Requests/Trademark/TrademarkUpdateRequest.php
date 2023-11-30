@@ -42,7 +42,7 @@ class TrademarkUpdateRequest extends FormRequest
             'name' => ['required', 'string', 'unique:trademarks,name,' . $this->route('id') .',id', 'max:255'],
             'code' => ['required', 'string', 'unique:trademarks,code,' . $this->route('id') .',id', 'max:255'],
             'description' => ['nullable', 'string', 'max:255'],
-            'logo' => ['nullable', 'image', 'mimes:jpeg,jpg,png,gif', 'max:2048']
+            'logo' => ['nullable', 'mimes:jpeg,jpg,png,gif', 'max:2048']
         ];
     }
 
@@ -60,7 +60,6 @@ class TrademarkUpdateRequest extends FormRequest
             'code.max' => 'El campo Nombre de la marca no debe tener mas de 255 caracteres.',
             'description.string' => 'El campo Descripcion de la marca debe ser una cadena de texto.',
             'description.max' => 'El campo Descripcion de la marca no debe tener mas de 255 caracteres.',
-            'logo.image' => 'El campo archivo de Logo de la marca debe ser una imagen.',
             'logo.mimes' => 'El campo archivo de Logo de la marca debe tener una extensión válida (jpeg, jpg, png, gif).',
             'logo.max' => 'El campo archivo de Logo de la marca no debe superar los 2 MB (2048 KB).',
         ];

@@ -519,7 +519,7 @@ class ProductController extends Controller
             if ($validator->fails()) {
                 throw new ValidationException($validator);
             }
-            
+
             $groups = $products->groupBy('code');
             $products = $groups->map(function ($group, $index) {
                 return [

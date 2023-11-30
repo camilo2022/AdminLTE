@@ -45,7 +45,7 @@ class UserStoreRequest extends FormRequest
             'address' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:6', 'confirmed'],
-            'password_confirmation' => ['required', 'string', 'min:6', new Equals($this->input('password_confirmation'), $this->input('password'), 'Contraseña del usuario')],
+            'password_confirmation' => ['required', 'string', 'min:6', new Equals($this->input('password_confirmation'), $this->input('password'), 'Contraseña')],
             'area_id' => ['required', 'exists:areas,id'],
             'charge_id' => ['required', 'exists:charges,id'],
         ];
@@ -61,7 +61,7 @@ class UserStoreRequest extends FormRequest
             'max' => 'El campo :attribute no debe exceder los :max caracteres.',
             'min' => 'El campo :attribute debe tener al menos :min caracteres.',
             'size' => 'El campo :attribute debe tener :size caracteres.',
-            'exists' => 'El campo :attribute no existe en la base de datos.',
+            'exists' => 'El campo :attribute no es valido.',
             'confirmed' => 'El campo :attribute no coincide con la confirmación de contraseña.',
         ];
     }
@@ -80,8 +80,8 @@ class UserStoreRequest extends FormRequest
             'phone_number' => 'numero de telefono',
             'address' => 'direccion',
             'email' => 'correo electrónico',
-            'area_id' => 'identifiacdor del area',
-            'charge_id' => 'cidentifiacdor del cargo',
+            'area_id' => 'Identificador del area',
+            'charge_id' => 'Identificador del cargo',
             'password' => 'contraseña',
             'password_confirmation' => 'confirmación de contraseña',
         ];

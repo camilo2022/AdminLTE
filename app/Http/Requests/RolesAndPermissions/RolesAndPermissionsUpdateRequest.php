@@ -45,16 +45,16 @@ class RolesAndPermissionsUpdateRequest extends FormRequest
     public function messages()
     {
         return [
-            'role.required' => 'El campo Nombre del rol es requerido.',
-            'role.string' => 'El campo Nombre del rol debe ser una cadena de caracteres.',
-            'role.max' => 'El campo Nombre del rol no debe exceder los 255 caracteres.',
-            'role.unique' => 'El Nombre del rol ya existe en la base de datos.',
+            'role.required' => 'El campo rol es requerido.',
+            'role.string' => 'El campo rol debe ser una cadena de caracteres.',
+            'role.max' => 'El campo rol no debe exceder los 255 caracteres.',
+            'role.unique' => 'El rol ya existe en la base de datos.',
             'permissions.required' => 'El campo Permisos del rol es requerido.',
             'permissions.array' => 'El campo Permisos del rol debe ser un arreglo.',
-            'permissions.*.required' => 'El Nombre del permiso es requerido.',
-            'permissions.*.string' => 'El Nombre del permiso debe ser una cadena de caracteres.',
-            'permissions.*.max' => 'El Nombre del permiso no debe exceder los 255 caracteres.',
-            'permissions.*.unique' => 'El Nombre del permiso ya existe en la base de datos.',
+            'permissions.*.required' => 'El permiso es requerido.',
+            'permissions.*.string' => 'El permiso debe ser una cadena de caracteres.',
+            'permissions.*.max' => 'El permiso no debe exceder los 255 caracteres.',
+            'permissions.*.unique' => 'El permiso ya existe en la base de datos.',
         ];
     }
 }

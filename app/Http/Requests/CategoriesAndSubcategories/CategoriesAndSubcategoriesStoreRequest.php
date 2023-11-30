@@ -56,7 +56,7 @@ class CategoriesAndSubcategoriesStoreRequest extends FormRequest
     {
         return [
             'clothing_line_id.required' => 'El campo Linea del prodcuto es requerido.',
-            'clothing_line_id.exists' => 'El campo Linea del prodcuto no existe en la base de datos.',
+            'clothing_line_id.exists' => 'El campo Linea del prodcuto no es valido.',
             'name.required' => 'El campo Nombre de la categoria es requerido.',
             'name.string' => 'El campo Nombre de la categoria debe ser una cadena de caracteres.',
             'name.unique' => 'El campo Nombre de la categoria ya ha sido tomado.',

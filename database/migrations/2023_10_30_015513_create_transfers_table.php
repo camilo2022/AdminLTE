@@ -16,13 +16,15 @@ return new class extends Migration
         Schema::create('transfers', function (Blueprint $table) {
             $table->id();
             $table->string('consecutive')->unique()->nullable();
-            $table->unsignedBigInteger('send_user_id');
-            $table->datetime('send_date');
-            $table->unsignedBigInteger('receive_user_id');
-            $table->datetime('receive_date')->nullable();
-            $table->string('transfer_status');
-            $table->foreign('send_user_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreign('receive_user_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
+            $table->unsignedBigInteger('from_user_id');
+            $table->datetime('from_date');
+            $table->string('from_observation')->nullable();
+            $table->unsignedBigInteger('to_user_id')->nullable();
+            $table->datetime('to_date')->nullable();
+            $table->string('to_observation')->nullable();
+            $table->string('status');
+            $table->foreign('from_user_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('to_user_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });
     }

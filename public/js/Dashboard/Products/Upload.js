@@ -96,16 +96,14 @@ function UploadProductAjaxError(xhr) {
 
             let errorInfo = [];
 
-            for (let key in xhr.responseJSON.error.errors) {
-                console.log(key);
+            $.each(xhr.responseJSON.error.errors, function (key, value) {
                 if (xhr.responseJSON.error.errors.hasOwnProperty(key)) {
                     let matchs = key.match(/products\.(\d+)\.(\w+)/);
-                    console.log(matchs);
                     if (matchs) {
                         let rowIndex = parseInt(matchs[1]) + 1;
                         let fieldName = matchs[2];
                         let errorMessages = xhr.responseJSON.error.errors[key];
-                        errorMessages.forEach(errorMessage => {
+                        $.each(errorMessages, function (_, errorMessage) {
                             errorInfo.push(`Fila ${rowIndex}: ${fieldName} - ${errorMessage}`);
                         });
                     }
@@ -113,20 +111,23 @@ function UploadProductAjaxError(xhr) {
                     if (match) {
                         let rowIndex = parseInt(match[1]) + 1;
                         let errorMessages = xhr.responseJSON.error.errors[key];
-                        errorMessages.forEach(errorMessage => {
+                        $.each(errorMessages, function (index, errorMessage) {
                             errorInfo.push(`Fila ${rowIndex}: ${errorMessage}`);
                         });
                     }
                 }
-            }
+            });
+
             let errorString = errorInfo.join('\n');
             let blob = new Blob([errorString], { type: 'text/plain' });
-            let link = document.createElement('a');
-            link.href = window.URL.createObjectURL(blob);
-            link.download = 'errores.txt';
-            document.body.appendChild(link);
+            let link = $('<a>').attr({
+                href: window.URL.createObjectURL(blob),
+                download: 'errores.txt'
+            });
+
+            $('body').append(link);
             link.click();
-            document.body.removeChild(link);
+            link.remove();
         }
     }
 

@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Requests\Transporter;
+namespace App\Http\Requests\Transfer;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class TransporterRestoreRequest extends FormRequest
+class TransferApproveRequest extends FormRequest
 {
     /**
      * Maneja una solicitud fallida de validación.
@@ -41,15 +41,15 @@ class TransporterRestoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'id' => ['required', 'exists:transporters,id'],
+            'id' => ['required', 'exists:transfers,id'],
         ];
     }
 
     public function messages()
     {
         return [
-            'id.required' => 'El Identificador de la transportadora es requerido.',
-            'id.exists' => 'El Identificador de la transportadora no es válido.',
+            'id.required' => 'El Identificador de la transferencia es requerido.',
+            'id.exists' => 'El Identificador de la transferencia no es válido.',
         ];
     }
 }

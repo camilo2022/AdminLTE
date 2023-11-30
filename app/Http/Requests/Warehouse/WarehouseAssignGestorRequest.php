@@ -49,10 +49,10 @@ class WarehouseAssignGestorRequest extends FormRequest
     public function messages()
     {
         return [
-            'user_id.required' => 'El campo identificador del usuario es requerido.',
-            'user_id.exists' => 'El identificador del usuario proporcionado no es válido.',
-            'warehouse_id.required' => 'El campo identificador de la bodega es requerido.',
-            'warehouse_id.exists' => 'El identificador de la bodega proporcionado no es válido.',
+            'user_id.required' => 'El Identificador del usuario es requerido.',
+            'user_id.exists' => 'El Identificador del usuario no es valido.',
+            'warehouse_id.required' => 'El Identificador de la bodega es requerido.',
+            'warehouse_id.exists' => 'El Identificador de la bodega no es valido.',
         ];
     }
 }

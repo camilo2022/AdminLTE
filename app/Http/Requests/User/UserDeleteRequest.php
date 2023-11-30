@@ -48,8 +48,8 @@ class UserDeleteRequest extends FormRequest
     public function messages()
     {
         return [
-            'id.required' => 'El campo identificador del usuario es requerido.',
-            'id.exists' => 'El identificador del usuario proporcionado no es válido.',
+            'id.required' => 'El Identificador del usuario es requerido.',
+            'id.exists' => 'El Identificador del usuario no es válido.',
         ];
     }
 }

@@ -48,8 +48,8 @@ class PackageTypeRestoreRequest extends FormRequest
     public function messages()
     {
         return [
-            'id.required' => 'El campo identificador del tipo de empaque es requerido.',
-            'id.exists' => 'El identificador del tipo de empaque proporcionado no es válido.',
+            'id.required' => 'El Identificador del tipo de empaque es requerido.',
+            'id.exists' => 'El Identificador del tipo de empaque no es válido.',
         ];
     }
 }

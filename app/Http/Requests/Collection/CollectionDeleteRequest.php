@@ -48,8 +48,8 @@ class CollectionDeleteRequest extends FormRequest
     public function messages()
     {
         return [
-            'id.required' => 'El campo identificador de la correria es requerido.',
-            'id.exists' => 'El identificador de la correria proporcionado no es válido.',
+            'id.required' => 'El Identificador de la correria es requerido.',
+            'id.exists' => 'El Identificador de la correria no es válido.',
         ];
     }
 }

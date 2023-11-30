@@ -39,7 +39,7 @@ class UserPasswordRequest extends FormRequest
     {
         return [
             'password' => ['required', 'string', 'min:6', 'confirmed'],
-            'password_confirmation' => ['required', 'string', 'min:6', new Equals($this->input('password_confirmation'), $this->input('password'), 'Contraseña del usuario')]
+            'password_confirmation' => ['required', 'string', 'min:6', new Equals($this->input('password_confirmation'), $this->input('password'), 'Contraseña')]
         ];
     }
     // Mensajes de error personalizados para cada regla de validación
@@ -55,7 +55,7 @@ class UserPasswordRequest extends FormRequest
             'password_confirmation.min' => 'El campo Confirmacion de contraseña del usuario debe tener al menos 6 caracteres.'
         ];
     }
-    
+
     public function attributes()
     {
         return [

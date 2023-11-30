@@ -48,8 +48,8 @@ class DocumentTypeDeleteRequest extends FormRequest
     public function messages()
     {
         return [
-            'id.required' => 'El campo identificador del tipo de Documento es requerido.',
-            'id.exists' => 'El identificador del tipo de Documento proporcionado no es válido.',
+            'id.required' => 'El Identificador del tipo de documento es requerido.',
+            'id.exists' => 'El Identificador del tipo de documento no es válido.',
         ];
     }
 }

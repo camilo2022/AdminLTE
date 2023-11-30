@@ -48,8 +48,8 @@ class TransporterDeleteRequest extends FormRequest
     public function messages()
     {
         return [
-            'id.required' => 'El campo identificador de la transportadora es requerido.',
-            'id.exists' => 'El identificador de la transportadora proporcionado no es válido.',
+            'id.required' => 'El Identificador de la transportadora es requerido.',
+            'id.exists' => 'El Identificador de la transportadora no es válido.',
         ];
     }
 }

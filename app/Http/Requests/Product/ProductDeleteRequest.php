@@ -48,8 +48,8 @@ class ProductDeleteRequest extends FormRequest
     public function messages()
     {
         return [
-            'id.required' => 'El campo identificador del producto es requerido.',
-            'id.exists' => 'El identificador del producto proporcionado no es válido.',
+            'id.required' => 'El Identificador del producto es requerido.',
+            'id.exists' => 'El Identificador del producto no es válido.',
         ];
     }
 }

@@ -49,7 +49,7 @@ class ModulesAndSubmodulesCreateRequest extends FormRequest
     {
         return [
             'role.*.string' => 'Cada elemento en el campo Roles debe ser una cadena de caracteres.',
-            'role.*.exists' => 'El Rol no existe en la base de datos.'
+            'role.*.exists' => 'El Rol no es valido.'
         ];
     }
 }

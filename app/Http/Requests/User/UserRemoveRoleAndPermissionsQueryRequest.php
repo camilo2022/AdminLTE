@@ -48,8 +48,8 @@ class UserRemoveRoleAndPermissionsQueryRequest extends FormRequest
     public function messages()
     {
         return [
-            'required' => 'El campo identificador del usuario es requerido.',
-            'exists' => 'El identificador del usuario especificado no existe.',
+            'required' => 'El Identificador del usuario es requerido.',
+            'exists' => 'El Identificador del usuario no existe.',
         ];
     }
 }

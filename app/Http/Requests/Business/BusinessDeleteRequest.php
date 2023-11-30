@@ -48,8 +48,8 @@ class BusinessDeleteRequest extends FormRequest
     public function messages()
     {
         return [
-            'id.required' => 'El campo identificador de la empresa es requerido.',
-            'id.exists' => 'El identificador de la empresa proporcionado no es válido.',
+            'id.required' => 'El Identificador de la empresa es requerido.',
+            'id.exists' => 'El Identificador de la empresa no es válido.',
         ];
     }
 }
