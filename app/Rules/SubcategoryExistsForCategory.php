@@ -13,20 +13,22 @@ class SubcategoryExistsForCategory implements Rule
     protected $camp_compared;
     protected $column_camp_compared;
 
-    public function __construct($table, $camp, $column_camp, $camp_compared, $column_camp_compared)
+    public function __construct($table, $column_camp, $column_camp_compared)
     {
         $this->table = $table;
-        $this->camp = $camp;
         $this->column_camp = $column_camp;
-        $this->camp_compared = $camp_compared;
         $this->column_camp_compared = $column_camp_compared;
     }
 
     public function passes($attribute, $value)
     {
+        $subcategoryId = $value; 
+        $categoryId = request()->input('category_id'); 
+        
+        // Armamos consulta con valores reales
         return DB::table($this->table)
-            ->where($this->column_camp, $this->camp)
-            ->where($this->column_camp_compared, $this->camp_compared)
+            ->where($this->column_camp, $categoryId) 
+            ->where($this->column_camp_compared, $subcategoryId)
             ->exists();
     }
 

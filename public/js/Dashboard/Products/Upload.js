@@ -65,17 +65,17 @@ function UploadProductAjaxSuccess(response) {
 
 function UploadProductAjaxError(xhr) {
     if(xhr.status === 403) {
-        toastr.error(xhr.responseJSON.message);
+        toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
         $('#UploadProductModal').modal('hide');
     }
 
     if(xhr.status === 404) {
-        toastr.error(xhr.responseJSON.message);
+        toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
         $('#UploadProductModal').modal('hide');
     }
 
     if(xhr.status === 419) {
-        toastr.error(xhr.responseJSON.message);
+        toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
         $('#UploadProductModal').modal('hide');
     }
 
@@ -131,7 +131,7 @@ function UploadProductAjaxError(xhr) {
     }
 
     if(xhr.status === 500){
-        toastr.error(xhr.responseJSON.message);
+        toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
         $('#UploadProductModal').modal('hide');
     }
 }
