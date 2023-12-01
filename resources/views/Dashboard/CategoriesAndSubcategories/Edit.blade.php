@@ -66,7 +66,7 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="form-group">
-                            <label for="submodule">Subcategorias</label>
+                            <label for="subcategory">Subcategorias</label>
                             <div class="subcategories_e">
 
                             </div>

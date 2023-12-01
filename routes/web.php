@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AreasAndChargesController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\BusinessController;
 use App\Http\Controllers\CategoriesAndSubcategoriesController;
@@ -156,6 +157,33 @@ Route::middleware(['auth'])->group(function () {
             Route::delete('/Delete', [ModulesAndSubmodulesController::class, 'delete'])
             ->middleware('can:Dashboard.ModulesAndSubmodules.Delete')->name('Dashboard.ModulesAndSubmodules.Delete');
 
+        });
+
+        Route::prefix('/AreasAndCharges')->group(function () {
+
+            Route::get('/Index', [AreasAndChargesController::class, 'index'])
+            ->middleware('can:Dashboard.AreasAndCharges.Index')->name('Dashboard.AreasAndCharges.Index');
+
+            Route::post('/Index/Query', [AreasAndChargesController::class, 'indexQuery'])
+            ->middleware('can:Dashboard.AreasAndCharges.Index.Query')->name('Dashboard.AreasAndCharges.Index.Query');
+
+            Route::post('/Create', [AreasAndChargesController::class, 'create'])
+            ->middleware('can:Dashboard.AreasAndCharges.Create')->name('Dashboard.AreasAndCharges.Create');
+
+            Route::post('/Store', [AreasAndChargesController::class, 'store'])
+            ->middleware('can:Dashboard.AreasAndCharges.Store')->name('Dashboard.AreasAndCharges.Store');
+
+            Route::post('/Edit/{id}', [AreasAndChargesController::class, 'edit'])
+            ->middleware('can:Dashboard.AreasAndCharges.Edit')->name('Dashboard.AreasAndCharges.Edit');
+
+            Route::put('/Update/{id}', [AreasAndChargesController::class, 'update'])
+            ->middleware('can:Dashboard.AreasAndCharges.Update')->name('Dashboard.AreasAndCharges.Update');
+
+            Route::delete('/Delete', [AreasAndChargesController::class, 'delete'])
+            ->middleware('can:Dashboard.AreasAndCharges.Delete')->name('Dashboard.AreasAndCharges.Delete');
+
+            Route::put('/Restore', [AreasAndChargesController::class, 'restore'])
+            ->middleware('can:Dashboard.AreasAndCharges.Restore')->name('Dashboard.AreasAndCharges.Restore');
         });
 
         Route::prefix('/DocumentTypes')->group(function () {
@@ -606,28 +634,28 @@ Route::middleware(['auth'])->group(function () {
             ->middleware('can:Dashboard.Transfers.Cancel')->name('Dashboard.Transfers.Cancel');
 
             Route::prefix('/Details')->group(function () {
-    
+
                 Route::post('/Index/Query', [TransferDetailController::class, 'indexQuery'])
                 ->middleware('can:Dashboard.Transfers.Details.Index.Query')->name('Dashboard.Transfers.Details.Index.Query');
-    
+
                 Route::post('/Create', [TransferDetailController::class, 'create'])
                 ->middleware('can:Dashboard.Transfers.Details.Create')->name('Dashboard.Transfers.Details.Create');
-    
+
                 Route::post('/Store', [TransferDetailController::class, 'store'])
                 ->middleware('can:Dashboard.Transfers.Details.Store')->name('Dashboard.Transfers.Details.Store');
-    
+
                 Route::post('/Edit/{id}', [TransferDetailController::class, 'edit'])
                 ->middleware('can:Dashboard.Transfers.Details.Edit')->name('Dashboard.Transfers.Details.Edit');
-    
+
                 Route::put('/Update/{id}', [TransferDetailController::class, 'update'])
                 ->middleware('can:Dashboard.Transfers.Details.Update')->name('Dashboard.Transfers.Details.Update');
-    
+
                 Route::delete('/Delete', [TransferDetailController::class, 'delete'])
                 ->middleware('can:Dashboard.Transfers.Details.Delete')->name('Dashboard.Transfers.Details.Delete');
-    
+
                 Route::put('/Pending', [TransferDetailController::class, 'pending'])
                 ->middleware('can:Dashboard.Transfers.Details.Pending')->name('Dashboard.Transfers.Details.Pending');
-    
+
                 Route::put('/Cancel', [TransferDetailController::class, 'cancel'])
                 ->middleware('can:Dashboard.Transfers.Details.Cancel')->name('Dashboard.Transfers.Details.Cancel');
             });

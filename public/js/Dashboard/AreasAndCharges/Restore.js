@@ -1,44 +1,44 @@
-function DeleteCategoryAndSubcategories(id) {
+function RestoreAreaAndCharges(id) {
     Swal.fire({
-        title: '¿Desea eliminar la categoria y subcategorias?',
-        text: 'La categoria y subcategorias serán eliminados.',
+        title: '¿Desea restaurar el area y los cargos?',
+        text: 'El area y los cargos serán restaurada.',
         icon: 'warning',
         showCancelButton: true,
         cancelButtonColor: '#DD6B55',
         confirmButtonColor: '#3085d6',
-        confirmButtonText: 'Si, eliminar!',
-        cancelButtonText: 'No, cancelar!',
+        confirmButtonText: 'Si, restaurar!',
+        cancelButtonText: 'No, cancelar!'
     }).then((result) => {
         if (result.value) {
             $.ajax({
-                url: `/Dashboard/CategoriesAndSubcategories/Delete`,
-                type: 'DELETE',
+                url: '/Dashboard/AreasAndCharges/Restore',
+                type: 'PUT',
                 data: {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
                     'id': id
                 },
                 success: function(response) {
-                    tableCategoriesAndSubcategories.ajax.reload();
-                    DeleteCategoryAndSubcategoriesAjaxSuccess(response);
+                    tableAreasAndCharges.ajax.reload();
+                    RestoreAreaAndChargesAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableCategoriesAndSubcategories.ajax.reload();
-                    DeleteCategoryAndSubcategoriesAjaxError(xhr);
+                    tableAreasAndCharges.ajax.reload();
+                    RestoreAreaAndChargesAjaxError(xhr);
                 }
             });
         } else {
-            toastr.info('La categoria y las subcategorias seleccionadas no fueron eliminadas.')
+            toastr.info('La categoria y las subcategorias seleccionadas no fueron restauradas.')
         }
     });
 }
 
-function DeleteCategoryAndSubcategoriesAjaxSuccess(response) {
+function RestoreAreaAndChargesAjaxSuccess(response) {
     if(response.status === 204) {
         toastr.success(response.message);
     }
 }
 
-function DeleteCategoryAndSubcategoriesAjaxError(xhr) {
+function RestoreAreaAndChargesAjaxError(xhr) {
     if(xhr.status === 403) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
     }

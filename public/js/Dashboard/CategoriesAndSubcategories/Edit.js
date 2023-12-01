@@ -66,7 +66,7 @@ function EditCategoryAndSubcategories(id) {
         showCancelButton: true,
         cancelButtonColor: '#DD6B55',
         confirmButtonColor: '#3085d6',
-        confirmButtonText: 'Si, guardar!',
+        confirmButtonText: 'Si, actualizar!',
         cancelButtonText: 'No, cancelar!',
     }).then((result) => {
         if (result.value) {

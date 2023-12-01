@@ -1,7 +1,7 @@
-function DeleteCategoryAndSubcategories(id) {
+function DeleteAreaAndCharges(id) {
     Swal.fire({
-        title: '¿Desea eliminar la categoria y subcategorias?',
-        text: 'La categoria y subcategorias serán eliminados.',
+        title: '¿Desea eliminar el area y los cargos?',
+        text: 'El area y los cargos serán eliminados.',
         icon: 'warning',
         showCancelButton: true,
         cancelButtonColor: '#DD6B55',
@@ -11,19 +11,19 @@ function DeleteCategoryAndSubcategories(id) {
     }).then((result) => {
         if (result.value) {
             $.ajax({
-                url: `/Dashboard/CategoriesAndSubcategories/Delete`,
+                url: `/Dashboard/AreasAndCharges/Delete`,
                 type: 'DELETE',
                 data: {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
                     'id': id
                 },
                 success: function(response) {
-                    tableCategoriesAndSubcategories.ajax.reload();
-                    DeleteCategoryAndSubcategoriesAjaxSuccess(response);
+                    tableAreasAndCharges.ajax.reload();
+                    DeleteAreaAndChargesAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableCategoriesAndSubcategories.ajax.reload();
-                    DeleteCategoryAndSubcategoriesAjaxError(xhr);
+                    tableAreasAndCharges.ajax.reload();
+                    DeleteAreaAndChargesAjaxError(xhr);
                 }
             });
         } else {
@@ -32,13 +32,13 @@ function DeleteCategoryAndSubcategories(id) {
     });
 }
 
-function DeleteCategoryAndSubcategoriesAjaxSuccess(response) {
+function DeleteAreaAndChargesAjaxSuccess(response) {
     if(response.status === 204) {
         toastr.success(response.message);
     }
 }
 
-function DeleteCategoryAndSubcategoriesAjaxError(xhr) {
+function DeleteAreaAndChargesAjaxError(xhr) {
     if(xhr.status === 403) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
     }

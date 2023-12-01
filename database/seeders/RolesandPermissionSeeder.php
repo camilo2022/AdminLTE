@@ -23,6 +23,8 @@ class RolesAndPermissionSeeder extends Seeder
 
         $ModulesAndSubmodules = Role::create(['name' => 'ModulesAndSubmodules']);
 
+        $AreasAndCharges = Role::create(['name' => 'AreasAndCharges']);
+
         $DocumentTypes = Role::create(['name' => 'DocumentTypes']);
 
         $Transporters = Role::create(['name' => 'Transporters']);
@@ -105,6 +107,15 @@ class RolesAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Dashboard.ModulesAndSubmodules.Edit'])->syncRoles([$ModulesAndSubmodules]);
         Permission::create(['name' => 'Dashboard.ModulesAndSubmodules.Update'])->syncRoles([$ModulesAndSubmodules]);
         Permission::create(['name' => 'Dashboard.ModulesAndSubmodules.Delete'])->syncRoles([$ModulesAndSubmodules]);
+
+        Permission::create(['name' => 'Dashboard.AreasAndCharges.Index'])->syncRoles([$AreasAndCharges]);
+        Permission::create(['name' => 'Dashboard.AreasAndCharges.Index.Query'])->syncRoles([$AreasAndCharges]);
+        Permission::create(['name' => 'Dashboard.AreasAndCharges.Create'])->syncRoles([$AreasAndCharges]);
+        Permission::create(['name' => 'Dashboard.AreasAndCharges.Store'])->syncRoles([$AreasAndCharges]);
+        Permission::create(['name' => 'Dashboard.AreasAndCharges.Edit'])->syncRoles([$AreasAndCharges]);
+        Permission::create(['name' => 'Dashboard.AreasAndCharges.Update'])->syncRoles([$AreasAndCharges]);
+        Permission::create(['name' => 'Dashboard.AreasAndCharges.Delete'])->syncRoles([$AreasAndCharges]);
+        Permission::create(['name' => 'Dashboard.AreasAndCharges.Restore'])->syncRoles([$AreasAndCharges]);
 
         Permission::create(['name' => 'Dashboard.DocumentTypes.Index'])->syncRoles([$DocumentTypes]);
         Permission::create(['name' => 'Dashboard.DocumentTypes.Index.Query'])->syncRoles([$DocumentTypes]);

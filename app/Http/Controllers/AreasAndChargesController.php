@@ -111,7 +111,7 @@ class AreasAndChargesController extends Controller
             collect($request->input('charges'))->map(function ($charge) use ($area){
                 $charge = (object) $charge;
                 $chargeNew = new Charge();
-                $chargeNew->category_id = $area->id;
+                $chargeNew->area_id = $area->id;
                 $chargeNew->name = $area->name;
                 $chargeNew->description = $area->description;
                 $chargeNew->save();
@@ -189,10 +189,10 @@ class AreasAndChargesController extends Controller
             $area->description = $request->input('description');
             $area->save();
 
-            collect($request->input('subcategories'))->map(function ($charge) use ($area){
+            collect($request->input('charges'))->map(function ($charge) use ($area){
                 $charge = (object) $charge;
                 $chargeNew = isset($charge->id) ? Charge::withTrashed()->find($charge->id) : new Charge();
-                $chargeNew->category_id = $area->id;
+                $chargeNew->area_id = $area->id;
                 $chargeNew->name = $charge->name;
                 $chargeNew->description = $charge->description;
                 $chargeNew->deleted_at = filter_var($charge->status, FILTER_VALIDATE_BOOLEAN) ? null : Carbon::now()->format('Y-m-d H:i:s');
@@ -273,7 +273,7 @@ class AreasAndChargesController extends Controller
             // Restaurar categoria y subcategorias
             $area = Area::withTrashed()->findOrFail($request->input('id'));
             // Restaurar la categoría y sus subcategorías
-            $area->subcategories()->restore();
+            $area->charges()->restore();
             $area->restore();
             return $this->successResponse(
                 $area,

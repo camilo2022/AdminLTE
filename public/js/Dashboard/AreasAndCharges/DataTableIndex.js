@@ -1,13 +1,12 @@
-let tableCategoriesAndSubcategories = $('#categoriesAndSubcategories').DataTable({
+let tableAreasAndCharges = $('#areasAndCharges').DataTable({
     processing: true,
     serverSide: true,
     ajax: {
-        url: `/Dashboard/CategoriesAndSubcategories/Index/Query`,
+        url: `/Dashboard/AreasAndCharges/Index/Query`,
         type: 'POST',
         data: function (request) {
             var columnMappings = {
                 0: 'id',
-                1: 'clothing_line_id',
                 2: 'name',
                 3: 'icon',
                 4: 'description',
@@ -23,7 +22,7 @@ let tableCategoriesAndSubcategories = $('#categoriesAndSubcategories').DataTable
         dataSrc: function (response) {
             response.recordsTotal = response.data.meta.pagination.count;
             response.recordsFiltered = response.data.meta.pagination.total;
-            return response.data.categories;
+            return response.data.areas;
         },
         error: function (xhr, error, thrown) {
             toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
@@ -31,36 +30,28 @@ let tableCategoriesAndSubcategories = $('#categoriesAndSubcategories').DataTable
     },
     columns: [
         { data: 'id' },
-        { data: 'clothingLine',
-            render: function (data, type, row) {
-                return data.name;
-            }
-        },
         { data: 'name' },
-        { data: 'code' },
         { data: 'description' },
         {
-            data: 'subcategories',
+            data: 'charges',
             render: function(data, type, row) {
                 var table = `<table border="1" class="w-100">
                     <thead class="thead-dark">
                         <tr>
                             <th>#</th>
-                            <th>Subcategoría</th>
-                            <th>Código</th>
+                            <th>Cargo</th>
                             <th>Descripción</th>
                             <th>Estado</th>
                         </tr>
                     </thead>
                     <tbody>`;
 
-                $.each(data, function(index, subcategory) {
+                $.each(data, function(index, charge) {
                     table += `<tr>
-                                    <td>${subcategory.id}</td>
-                                    <td>${subcategory.name}</td>
-                                    <td>${subcategory.code}</td>
-                                    <td>${subcategory.description}</td>
-                                    <td>${subcategory.deleted_at === null ?
+                                    <td>${charge.id}</td>
+                                    <td>${charge.name}</td>
+                                    <td>${charge.description === null ? '' : charge.description}</td>
+                                    <td>${charge.deleted_at === null ?
                                         '<span class="badge badge-success"><i class="fas fa-check mr-2"></i>Activa</span>' :
                                         '<span class="badge badge-danger"><i class="fas fa-xmark mr-2"></i>Inactiva</span>'}</td>
                                 </tr>`;
@@ -86,18 +77,18 @@ let tableCategoriesAndSubcategories = $('#categoriesAndSubcategories').DataTable
             render: function (data, type, row) {
                 let btn = `<div class="text-center" style="width: 100px;">`;
                 if (data === null) {
-                    btn += `<a onclick="EditCategoryAndSubcategoriesModal(${row.id})" type="button"
-                    class="btn btn-primary btn-sm mr-2" title="Editar categoria y subcategorias">
+                    btn += `<a onclick="EditAreaAndChargesModal(${row.id})" type="button"
+                    class="btn btn-primary btn-sm mr-2" title="Editar area y cargos">
                         <i class="fas fa-pen text-white"></i>
                     </a>`;
 
-                    btn += `<a onclick="DeleteCategoryAndSubcategories(${row.id})" type="button"
-                    class="btn btn-danger btn-sm mr-2" title="Eliminar categoria y subcategorias">
+                    btn += `<a onclick="DeleteAreaAndCharges(${row.id})" type="button"
+                    class="btn btn-danger btn-sm mr-2" title="Eliminar area y cargos">
                         <i class="fas fa-trash text-white"></i>
                     </a>`;
                 } else {
-                    btn += `<a onclick="RestoreCategoryAndSubcategories(${row.id})" type="button"
-                    class="btn btn-info btn-sm mr-2"title="Restaurar categoria y subcategorias">
+                    btn += `<a onclick="RestoreAreaAndCharges(${row.id})" type="button"
+                    class="btn btn-info btn-sm mr-2"title="Restaurar area y cargos">
                         <i class="fas fa-arrow-rotate-left text-white"></i>
                     </a>`;
                 }
@@ -109,12 +100,12 @@ let tableCategoriesAndSubcategories = $('#categoriesAndSubcategories').DataTable
     columnDefs: [
         {
             orderable: true,
-            targets: [0, 1, 2, 3, 4, 6]
+            targets: [0, 1, 2, 4]
         },
         {
             orderable: false,
-            targets: [5, 7]
-        },
+            targets: [3, 5]
+        }
     ],
     pagingType: 'full_numbers',
     language: {
