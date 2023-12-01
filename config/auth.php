@@ -40,6 +40,10 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+        'item' => [
+            'driver' => 'session', // Puedes cambiar 'session' según tus necesidades de autenticación
+            'provider' => 'modules', // Cambia 'your_provider' al nombre de tu proveedor de usuarios
+        ],
     ],
 
     /*
@@ -64,11 +68,10 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
         ],
-
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+        'modules' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Module::class,
+        ],
     ],
 
     /*

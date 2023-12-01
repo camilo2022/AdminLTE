@@ -6,13 +6,17 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Spatie\Permission\Models\Role;
+use Spatie\Permission\Traits\HasRoles;
 
 class Module extends Model
 {
     use HasFactory;
-    protected $table = 'modules';
+    use HasRoles;
 
+    protected $table = 'modules';
+    protected $guard_name = 'item';
     protected $fillable = [
         'name',
         'type',
@@ -24,9 +28,9 @@ class Module extends Model
         return $this->hasMany(Submodule::class, 'module_id');
     }
 
-    public function roles() : BelongsToMany
+    public function roles() : MorphToMany
     {
-        return $this->belongsToMany(Role::class, 'module_has_roles', 'module_id', 'role_id');
+        return $this->morphToMany(Role::class, 'model', 'model_has_roles', 'model_id', 'role_id');
     }
 
     public function scopeSearch($query, $search)
@@ -61,9 +65,9 @@ class Module extends Model
         // Filtro por rango de fechas entre 'start_date' y 'end_date' en el campo 'created_at'
         return $query->whereBetween('created_at', [$start_date, $end_date]);
     }
-
-    public function syncRoles($roles)
+ 
+    /* public function syncRoles($roles)
     {
         $this->roles()->sync($roles);
-    }
+    } */
 }

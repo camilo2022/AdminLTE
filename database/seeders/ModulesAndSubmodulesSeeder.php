@@ -19,20 +19,7 @@ class ModulesAndSubmodulesSeeder extends Seeder
     {
         $Configuracion = Module::create(['name' => 'Configuración', 'icon' => 'fas fa-cog']);
 
-        ModuleHasRoles::create([
-            'role_id' => 2,
-            'module_id' => $Configuracion->id
-        ]);
-
-        ModuleHasRoles::create([
-            'role_id' => 3,
-            'module_id' => $Configuracion->id
-        ]);
-
-        ModuleHasRoles::create([
-            'role_id' => 4,
-            'module_id' => $Configuracion->id
-        ]);
+        $Configuracion->roles()->sync([2, 3, 4], ['guard_name' => 'item']);
 
         Submodule::create([
             'name' => 'Usuarios',
@@ -60,40 +47,7 @@ class ModulesAndSubmodulesSeeder extends Seeder
 
         $Administracion = Module::create(['name' => 'Administración', 'icon' => 'fas fa-folder']);
 
-        ModuleHasRoles::create([
-            'role_id' => 5,
-            'module_id' => $Administracion->id
-        ]);
-
-        ModuleHasRoles::create([
-            'role_id' => 6,
-            'module_id' => $Administracion->id
-        ]);
-
-        ModuleHasRoles::create([
-            'role_id' => 7,
-            'module_id' => $Administracion->id
-        ]);
-
-        ModuleHasRoles::create([
-            'role_id' => 8,
-            'module_id' => $Administracion->id
-        ]);
-
-        ModuleHasRoles::create([
-            'role_id' => 9,
-            'module_id' => $Administracion->id
-        ]);
-
-        ModuleHasRoles::create([
-            'role_id' => 10,
-            'module_id' => $Administracion->id
-        ]);
-
-        ModuleHasRoles::create([
-            'role_id' => 11,
-            'module_id' => $Administracion->id
-        ]);
+        $Administracion->roles()->sync([5, 6, 7, 8, 9, 10, 11], ['guard_name' => 'item']);
 
         Submodule::create([
             'name' => 'Tipos de Documento',
@@ -153,35 +107,7 @@ class ModulesAndSubmodulesSeeder extends Seeder
 
         $Insumos = Module::create(['name' => 'Insumos', 'icon' => 'fas fa-reel']);
 
-        ModuleHasRoles::create([
-            'role_id' => 12,
-            'module_id' => $Insumos->id
-        ]);
-
-        ModuleHasRoles::create([
-            'role_id' => 13,
-            'module_id' => $Insumos->id
-        ]);
-
-        ModuleHasRoles::create([
-            'role_id' => 14,
-            'module_id' => $Insumos->id
-        ]);
-
-        ModuleHasRoles::create([
-            'role_id' => 15,
-            'module_id' => $Insumos->id
-        ]);
-
-        ModuleHasRoles::create([
-            'role_id' => 16,
-            'module_id' => $Insumos->id
-        ]);
-
-        ModuleHasRoles::create([
-            'role_id' => 17,
-            'module_id' => $Insumos->id
-        ]);
+        $Insumos->roles()->sync([12, 13, 14, 15, 16, 17], ['guard_name' => 'item']);
 
         Submodule::create([
             'name' => 'Tallas',
@@ -233,20 +159,7 @@ class ModulesAndSubmodulesSeeder extends Seeder
 
         $Existencias = Module::create(['name' => 'Existencias', 'icon' => 'fas fa-hundred-points']);
 
-        ModuleHasRoles::create([
-            'role_id' => 18,
-            'module_id' => $Existencias->id
-        ]);
-
-        ModuleHasRoles::create([
-            'role_id' => 19,
-            'module_id' => $Existencias->id
-        ]);
-
-        ModuleHasRoles::create([
-            'role_id' => 20,
-            'module_id' => $Existencias->id
-        ]);
+        $Existencias->roles()->sync([18, 19, 20], ['guard_name' => 'item']);
 
         Submodule::create([
             'name' => 'Productos',
@@ -274,10 +187,7 @@ class ModulesAndSubmodulesSeeder extends Seeder
 
         $Pedido = Module::create(['name' => 'Ventas', 'icon' => 'fas fa-money-bill']);
 
-        ModuleHasRoles::create([
-            'role_id' => 21,
-            'module_id' => $Pedido->id
-        ]);
+        $Pedido->roles()->sync([21], ['guard_name' => 'item']);
 
         Submodule::create([
             'name' => 'Pedidos',
@@ -289,20 +199,7 @@ class ModulesAndSubmodulesSeeder extends Seeder
 
         $Cartera = Module::create(['name' => 'Credito y Cartera', 'icon' => 'fas fa-credit-card']);
 
-        ModuleHasRoles::create([
-            'role_id' => 22,
-            'module_id' => $Cartera->id
-        ]);
-
-        ModuleHasRoles::create([
-            'role_id' => 23,
-            'module_id' => $Cartera->id
-        ]);
-
-        ModuleHasRoles::create([
-            'role_id' => 24,
-            'module_id' => $Cartera->id
-        ]);
+        $Cartera->roles()->sync([22, 23, 24], ['guard_name' => 'item']);
 
         Submodule::create([
             'name' => 'Clientes',
@@ -330,20 +227,7 @@ class ModulesAndSubmodulesSeeder extends Seeder
 
         $Despacho = Module::create(['name' => 'Despacho', 'icon' => 'fas fa-mailbox']);
 
-        ModuleHasRoles::create([
-            'role_id' => 25,
-            'module_id' => $Despacho->id
-        ]);
-
-        ModuleHasRoles::create([
-            'role_id' => 26,
-            'module_id' => $Despacho->id
-        ]);
-
-        ModuleHasRoles::create([
-            'role_id' => 27,
-            'module_id' => $Despacho->id
-        ]);
+        $Despacho->roles()->sync([25, 26, 27], ['guard_name' => 'item']);
 
         Submodule::create([
             'name' => 'Filtro',
@@ -371,10 +255,7 @@ class ModulesAndSubmodulesSeeder extends Seeder
 
         $Reportes = Module::create(['name' => 'Reportes', 'icon' => 'fas fa-chart-mixed-up-circle-currency']);
 
-        ModuleHasRoles::create([
-            'role_id' => 28,
-            'module_id' => $Reportes->id
-        ]);
+        $Reportes->roles()->sync([28], ['guard_name' => 'item']);
 
         Submodule::create([
             'name' => 'Ventas',

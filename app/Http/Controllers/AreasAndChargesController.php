@@ -2,24 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\CategoriesAndSubcategories\CategoriesAndSubcategoriesDeleteRequest;
-use App\Http\Requests\CategoriesAndSubcategories\CategoriesAndSubcategoriesIndexQueryRequest;
-use App\Http\Requests\CategoriesAndSubcategories\CategoriesAndSubcategoriesRestoreRequest;
-use App\Http\Requests\CategoriesAndSubcategories\CategoriesAndSubcategoriesStoreRequest;
-use App\Http\Requests\CategoriesAndSubcategories\CategoriesAndSubcategoriesUpdateRequest;
-use App\Http\Resources\CategoriesAndSubcategories\CategoriesAndSubcategoriesIndexQueryCollection;
-use App\Models\Category;
-use App\Models\ClothingLine;
-use App\Models\Subcategory;
-use App\Traits\ApiResponser;
+use App\Http\Requests\AreasAndCharges\AreasAndChargesDeleteRequest;
+use App\Http\Requests\AreasAndCharges\AreasAndChargesIndexQueryRequest;
+use App\Http\Requests\AreasAndCharges\AreasAndChargesRestoreRequest;
+use App\Http\Requests\AreasAndCharges\AreasAndChargesStoreRequest;
+use App\Http\Requests\AreasAndCharges\AreasAndChargesUpdateRequest;
+use App\Http\Resources\AreasAndCharges\AreasAndChargesIndexQueryCollection;
+use App\Models\Area;
+use App\Models\Charge;
 use App\Traits\ApiMessage;
+use App\Traits\ApiResponser;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 
-class CategoriesAndSubcategoriesController extends Controller
+class AreasAndChargesController extends Controller
 {
     use ApiResponser;
     use ApiMessage;
@@ -27,21 +25,20 @@ class CategoriesAndSubcategoriesController extends Controller
     public function index()
     {
         try {
-            return view('Dashboard.CategoriesAndSubcategories.Index');
+            return view('Dashboard.AreasAndCharges.Index');
         } catch (Exception $e) {
             return back()->with('danger', 'Ocurrió un error al cargar la vista: ' . $e->getMessage());
         }
     }
 
-    public function indexQuery(CategoriesAndSubcategoriesIndexQueryRequest $request)
+    public function indexQuery(AreasAndChargesIndexQueryRequest $request)
     {
         try{
             $start_date = Carbon::parse($request->input('start_date'))->startOfDay();
             $end_date = Carbon::parse($request->input('end_date'))->endOfDay();
             // Consultar roles con relaciones y aplicar filtros
-            $categoriesAndSubcategories = Category::with([
-                    'clothing_line' => function ($query) { $query->withTrashed(); },
-                    'subcategories' => function ($query) { $query->withTrashed(); }
+            $areasAndCharges = Area::with([
+                    'charges' => function ($query) { $query->withTrashed(); }
                 ])
                 ->when($request->filled('search'),
                     function ($query) use ($request) {
@@ -58,7 +55,7 @@ class CategoriesAndSubcategoriesController extends Controller
                 ->paginate($request->input('perPage'));
             // Devolver una respuesta exitosa con los roles y permisos paginados
             return $this->successResponse(
-                new CategoriesAndSubcategoriesIndexQueryCollection($categoriesAndSubcategories),
+                new AreasAndChargesIndexQueryCollection($areasAndCharges),
                 $this->getMessage('Success'),
                 200
             );
@@ -87,7 +84,7 @@ class CategoriesAndSubcategoriesController extends Controller
     {
         try {
             return $this->successResponse(
-                ClothingLine::all(),
+                '',
                 'Ingrese los datos para hacer la validacion y registro.',
                 200
             );
@@ -103,29 +100,26 @@ class CategoriesAndSubcategoriesController extends Controller
         }
     }
 
-    public function store(CategoriesAndSubcategoriesStoreRequest $request)
+    public function store(AreasAndChargesStoreRequest $request)
     {
         try {
-            $category = new Category();
-            $category->clothing_line_id = $request->input('clothing_line_id');
-            $category->name = $request->input('name');
-            $category->code = $request->input('code');
-            $category->description = $request->input('description');
-            $category->save();
+            $area = new Area();
+            $area->name = $request->input('name');
+            $area->description = $request->input('description');
+            $area->save();
 
-            collect($request->input('subcategories'))->map(function ($subcategory) use ($category){
-                $subcategory = (object) $subcategory;
-                $subcategoryNew = new Subcategory();
-                $subcategoryNew->category_id = $category->id;
-                $subcategoryNew->name = $subcategory->name;
-                $subcategoryNew->code = $subcategory->code;
-                $subcategoryNew->description = $subcategory->description;
-                $subcategoryNew->save();
+            collect($request->input('charges'))->map(function ($charge) use ($area){
+                $charge = (object) $charge;
+                $chargeNew = new Charge();
+                $chargeNew->category_id = $area->id;
+                $chargeNew->name = $area->name;
+                $chargeNew->description = $area->description;
+                $chargeNew->save();
             });
 
             return $this->successResponse(
-                $category,
-                'Categoria y subcategorias registrados exitosamente.',
+                $area,
+                'Area y cargos registrados exitosamente.',
                 201
             );
         } catch (ModelNotFoundException $e) {
@@ -161,15 +155,11 @@ class CategoriesAndSubcategoriesController extends Controller
     {
         try {
             return $this->successResponse(
-                (object) [
-                    'category' => Category::with([
-                        'clothing_line',
-                        'subcategories' => function ($query) { $query->withTrashed(); }
-                    ])
-                    ->findOrFail($id),
-                    'clothingLines' => ClothingLine::all()
-                ],
-                'La categoria y subcategorias fueron encontrados exitosamente.',
+                Area::with([
+                    'charges' => function ($query) { $query->withTrashed(); }
+                ])
+                ->findOrFail($id),
+                'El area y cargos fueron encontrados exitosamente.',
                 204
             );
         } catch (ModelNotFoundException $e) {
@@ -191,30 +181,27 @@ class CategoriesAndSubcategoriesController extends Controller
         }
     }
 
-    public function update(CategoriesAndSubcategoriesUpdateRequest $request, $id)
+    public function update(AreasAndChargesUpdateRequest $request, $id)
     {
         try {
-            $category = Category::findOrFail($id);
-            $category->clothing_line_id = $request->input('clothing_line_id');
-            $category->name = $request->input('name');
-            $category->code = $request->input('code');
-            $category->description = $request->input('description');
-            $category->save();
+            $area = Area::findOrFail($id);
+            $area->name = $request->input('name');
+            $area->description = $request->input('description');
+            $area->save();
 
-            collect($request->input('subcategories'))->map(function ($subcategory) use ($category){
-                $subcategory = (object) $subcategory;
-                $subcategoryNew = isset($subcategory->id) ? Subcategory::withTrashed()->find($subcategory->id) : new Subcategory();
-                $subcategoryNew->category_id = $category->id;
-                $subcategoryNew->name = $subcategory->name;
-                $subcategoryNew->code = $subcategory->code;
-                $subcategoryNew->description = $subcategory->description;
-                $subcategoryNew->deleted_at = filter_var($subcategory->status, FILTER_VALIDATE_BOOLEAN) ? null : Carbon::now()->format('Y-m-d H:i:s');
-                $subcategoryNew->save();
+            collect($request->input('subcategories'))->map(function ($charge) use ($area){
+                $charge = (object) $charge;
+                $chargeNew = isset($charge->id) ? Charge::withTrashed()->find($charge->id) : new Charge();
+                $chargeNew->category_id = $area->id;
+                $chargeNew->name = $charge->name;
+                $chargeNew->description = $charge->description;
+                $chargeNew->deleted_at = filter_var($charge->status, FILTER_VALIDATE_BOOLEAN) ? null : Carbon::now()->format('Y-m-d H:i:s');
+                $chargeNew->save();
             });
 
             return $this->successResponse(
-                $category,
-                'Categoria y subcategorias actualizadas exitosamente.',
+                $area,
+                'Area y cargos actualizadas exitosamente.',
                 200
             );
         } catch (ModelNotFoundException $e) {
@@ -246,18 +233,18 @@ class CategoriesAndSubcategoriesController extends Controller
         }
     }
 
-    public function delete(CategoriesAndSubcategoriesDeleteRequest $request)
+    public function delete(AreasAndChargesDeleteRequest $request)
     {
         try {
             // Eliminar categoria y subcategorias
-            $category = Category::findOrFail($request->input('id'));
+            $area = Area::findOrFail($request->input('id'));
             // Eliminar la categoría y sus subcategorías
-            $category->subcategories()->delete();
-            $category->delete();
+            $area->charges()->delete();
+            $area->delete();
             // Devolver una respuesta exitosa
             return $this->successResponse(
-                $category,
-                'Categoria y subcategorias eliminadas exitosamente.',
+                $area,
+                'Area y cargos eliminadas exitosamente.',
                 204
             );
         } catch (ModelNotFoundException $e) {
@@ -280,17 +267,17 @@ class CategoriesAndSubcategoriesController extends Controller
         }
     }
 
-    public function restore(CategoriesAndSubcategoriesRestoreRequest $request)
+    public function restore(AreasAndChargesRestoreRequest $request)
     {
         try {
             // Restaurar categoria y subcategorias
-            $category = Category::withTrashed()->findOrFail($request->input('id'));
+            $area = Area::withTrashed()->findOrFail($request->input('id'));
             // Restaurar la categoría y sus subcategorías
-            $category->subcategories()->restore();
-            $category->restore();
+            $area->subcategories()->restore();
+            $area->restore();
             return $this->successResponse(
-                $category,
-                'Categoria y subcategorias fueron restauradas exitosamente.',
+                $area,
+                'Area y cargos fueron restauradas exitosamente.',
                 204
             );
         } catch (ModelNotFoundException $e) {

@@ -48,8 +48,8 @@ class CategoriesAndSubcategoriesDeleteRequest extends FormRequest
     public function messages()
     {
         return [
-            'category_id.required' => 'El Identificador de la categoria es requerido.',
-            'category_id.integer' => 'El Identificador de la categoria no es valido.'
+            'id.required' => 'El Identificador de la categoria es requerido.',
+            'id.integer' => 'El Identificador de la categoria no es valido.'
         ];
     }
 }

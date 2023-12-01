@@ -10,8 +10,8 @@ use Spatie\Permission\Models\Permission;
 class Submodule extends Model
 {
     use HasFactory;
+    
     protected $table = 'submodules';
-
     protected $fillable = [
         'name',
         'type',

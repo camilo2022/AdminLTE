@@ -11,8 +11,8 @@ class Area extends Model
 {
     use HasFactory;
     use SoftDeletes;
-    protected $table = 'areas';
 
+    protected $table = 'areas';
     protected $fillable = [
         'name',
         'description',

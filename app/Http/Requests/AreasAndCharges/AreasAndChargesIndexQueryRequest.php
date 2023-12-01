@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Requests\CategoriesAndSubcategories;
+namespace App\Http\Requests\AreasAndCharges;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class CategoriesAndSubcategoriesIndexQueryRequest extends FormRequest
+class AreasAndChargesIndexQueryRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

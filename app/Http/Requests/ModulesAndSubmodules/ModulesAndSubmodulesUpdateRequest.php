@@ -44,7 +44,7 @@ class ModulesAndSubmodulesUpdateRequest extends FormRequest
             'module' => ['required', 'string', 'max:255', 'unique:modules,name,' . $this->route('id') . ',id'],
             'icon' => ['required', 'string', 'max:255', 'unique:modules,icon,' . $this->route('id') . ',id'],
             'roles' => ['required', 'array'],
-            'roles.*' => ['numeric', 'exists:roles,id', 'unique:module_has_roles,role_id,' . $this->route('id') . ',module_id'],
+            'roles.*' => ['numeric', 'exists:roles,id', 'unique:model_has_roles,role_id,' . $this->route('id') . ',model_id,model_type,App\Models\Module'],
             'submodules' => ['required', 'array'],
             'submodules.*' => ['required', 'array'],
             'submodules.*.submodule' => ['required', 'string', 'max:255', 'unique:submodules,name,' . $this->route('id') . ',module_id'],

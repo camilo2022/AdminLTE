@@ -44,7 +44,7 @@ class ModulesAndSubmodulesStoreRequest extends FormRequest
             'module' => ['required', 'string', 'max:255', 'unique:modules,name'],
             'icon' => ['required', 'string', 'max:255', 'unique:modules,icon'],
             'roles' => ['required', 'array'],
-            'roles.*' => ['numeric', 'exists:roles,id', 'unique:module_has_roles,role_id'],
+            'roles.*' => ['numeric', 'exists:roles,id', 'unique:model_has_roles,role_id,App\Models\Module,model_type'],
             'submodules' => ['required', 'array'],
             'submodules.*' => ['required', 'array'],
             'submodules.*.submodule' => ['required', 'string', 'max:255', 'unique:submodules,name'],

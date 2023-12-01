@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Requests\CategoriesAndSubcategories;
+namespace App\Http\Requests\AreasAndCharges;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class CategoriesAndSubcategoriesRestoreRequest extends FormRequest
+class AreasAndChargesRestoreRequest extends FormRequest
 {
     /**
      * Maneja una solicitud fallida de validación.
@@ -41,15 +41,15 @@ class CategoriesAndSubcategoriesRestoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'id' => ['required', 'exists:categories,id']
+            'id' => ['required', 'exists:areas,id']
         ];
     }
 
     public function messages()
     {
         return [
-            'id.required' => 'El Identificador de la categoria es requerido.',
-            'id.integer' => 'El Identificador de la categoria no es valido.'
+            'id.required' => 'El Identificador del area es requerido.',
+            'id.integer' => 'El Identificador del area no es valido.'
         ];
     }
 }

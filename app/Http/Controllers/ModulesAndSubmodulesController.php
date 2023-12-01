@@ -118,7 +118,7 @@ class ModulesAndSubmodulesController extends Controller
             $module->icon = $request->input('icon');
             $module->save();
 
-            $module->syncRoles($request->input('roles'));
+            $module->roles()->sync($request->input('roles'));
 
             $submodules = collect($request->input('submodules'))->map(function ($submodule) use ($module){
                 $submodule = (object) $submodule;
@@ -213,7 +213,7 @@ class ModulesAndSubmodulesController extends Controller
             $module->icon = $request->input('icon');
             $module->save();
 
-            $module->syncRoles($request->input('roles'));
+            $module->roles()->sync($request->input('roles'));
 
             $submodules = collect($request->input('submodules'))->map(function ($submodule) use ($module){
                 $submodule = (object) $submodule;

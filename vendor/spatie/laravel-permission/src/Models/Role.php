@@ -5,6 +5,7 @@ namespace Spatie\Permission\Models;
 use App\Models\Module;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Spatie\Permission\Contracts\Role as RoleContract;
 use Spatie\Permission\Exceptions\GuardDoesNotMatch;
 use Spatie\Permission\Exceptions\RoleAlreadyExists;
@@ -196,9 +197,10 @@ class Role extends Model implements RoleContract
         return $this->permissions->contains($permission->getKeyName(), $permission->getKey());
     }
 
-    public function modules() : BelongsToMany
+    public function modules(): BelongsToMany
     {
-        return $this->belongsToMany(Module::class, 'module_has_roles', 'role_id', 'module_id');
+        return $this->belongsToMany(Module::class, 'model_has_roles', 'role_id', 'model_id')
+            ->where('model_type', Module::class);
     }
 
     public function scopeSearch($query, $search)

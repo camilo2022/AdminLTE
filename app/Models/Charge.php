@@ -11,8 +11,8 @@ class Charge extends Model
 {
     use HasFactory;
     use SoftDeletes;
-    protected $table = 'charges';
 
+    protected $table = 'charges';
     protected $fillable = [
         'area_id',
         'name',
