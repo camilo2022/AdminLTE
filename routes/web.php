@@ -17,6 +17,8 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\RolesAndPermissionsController;
 use App\Http\Controllers\SizeController;
 use App\Http\Controllers\TrademarkController;
+use App\Http\Controllers\TransferController;
+use App\Http\Controllers\TransferDetailController;
 use App\Http\Controllers\TransporterController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WarehouseController;
@@ -566,6 +568,70 @@ Route::middleware(['auth'])->group(function () {
 
             Route::post('/Download', [InventoryController::class, 'download'])
             ->middleware('can:Dashboard.Inventories.Download')->name('Dashboard.Inventories.Download');
+        });
+
+        Route::prefix('/Transfers')->group(function () {
+
+            Route::get('/Index', [TransferController::class, 'index'])
+            ->middleware('can:Dashboard.Transfers.Index')->name('Dashboard.Transfers.Index');
+
+            Route::post('/Index/Query', [TransferController::class, 'indexQuery'])
+            ->middleware('can:Dashboard.Transfers.Index.Query')->name('Dashboard.Transfers.Index.Query');
+
+            Route::post('/Create', [TransferController::class, 'create'])
+            ->middleware('can:Dashboard.Transfers.Create')->name('Dashboard.Transfers.Create');
+
+            Route::post('/Store', [TransferController::class, 'store'])
+            ->middleware('can:Dashboard.Transfers.Store')->name('Dashboard.Transfers.Store');
+
+            Route::post('/Edit/{id}', [TransferController::class, 'edit'])
+            ->middleware('can:Dashboard.Transfers.Edit')->name('Dashboard.Transfers.Edit');
+
+            Route::put('/Update/{id}', [TransferController::class, 'update'])
+            ->middleware('can:Dashboard.Transfers.Update')->name('Dashboard.Transfers.Update');
+
+            Route::post('/Show/{id}', [TransferController::class, 'show'])
+            ->middleware('can:Dashboard.Transfers.Show')->name('Dashboard.Transfers.Show');
+
+            Route::post('/Destroy', [TransferController::class, 'destroy'])
+            ->middleware('can:Dashboard.Transfers.Destroy')->name('Dashboard.Transfers.Destroy');
+
+            Route::delete('/Delete', [TransferController::class, 'delete'])
+            ->middleware('can:Dashboard.Transfers.Delete')->name('Dashboard.Transfers.Delete');
+
+            Route::put('/Approve', [TransferController::class, 'approve'])
+            ->middleware('can:Dashboard.Transfers.Approve')->name('Dashboard.Transfers.Approve');
+
+            Route::put('/Cancel', [TransferController::class, 'cancel'])
+            ->middleware('can:Dashboard.Transfers.Cancel')->name('Dashboard.Transfers.Cancel');
+
+            Route::prefix('/Details')->group(function () {
+    
+                Route::post('/Index/Query', [TransferDetailController::class, 'indexQuery'])
+                ->middleware('can:Dashboard.Transfers.Details.Index.Query')->name('Dashboard.Transfers.Details.Index.Query');
+    
+                Route::post('/Create', [TransferDetailController::class, 'create'])
+                ->middleware('can:Dashboard.Transfers.Details.Create')->name('Dashboard.Transfers.Details.Create');
+    
+                Route::post('/Store', [TransferDetailController::class, 'store'])
+                ->middleware('can:Dashboard.Transfers.Details.Store')->name('Dashboard.Transfers.Details.Store');
+    
+                Route::post('/Edit/{id}', [TransferDetailController::class, 'edit'])
+                ->middleware('can:Dashboard.Transfers.Details.Edit')->name('Dashboard.Transfers.Details.Edit');
+    
+                Route::put('/Update/{id}', [TransferDetailController::class, 'update'])
+                ->middleware('can:Dashboard.Transfers.Details.Update')->name('Dashboard.Transfers.Details.Update');
+    
+                Route::delete('/Delete', [TransferDetailController::class, 'delete'])
+                ->middleware('can:Dashboard.Transfers.Details.Delete')->name('Dashboard.Transfers.Details.Delete');
+    
+                Route::put('/Pending', [TransferDetailController::class, 'pending'])
+                ->middleware('can:Dashboard.Transfers.Details.Pending')->name('Dashboard.Transfers.Details.Pending');
+    
+                Route::put('/Cancel', [TransferDetailController::class, 'cancel'])
+                ->middleware('can:Dashboard.Transfers.Details.Cancel')->name('Dashboard.Transfers.Details.Cancel');
+            });
+
         });
     });
 });

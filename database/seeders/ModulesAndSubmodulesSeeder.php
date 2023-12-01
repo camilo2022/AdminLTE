@@ -19,7 +19,7 @@ class ModulesAndSubmodulesSeeder extends Seeder
     {
         $Configuracion = Module::create(['name' => 'Configuración', 'icon' => 'fas fa-cog']);
 
-        $Configuracion->roles()->sync([2, 3, 4], ['guard_name' => 'item']);
+        $Configuracion->roles()->sync([2, 3, 4]);
 
         Submodule::create([
             'name' => 'Usuarios',
@@ -47,7 +47,7 @@ class ModulesAndSubmodulesSeeder extends Seeder
 
         $Administracion = Module::create(['name' => 'Administración', 'icon' => 'fas fa-folder']);
 
-        $Administracion->roles()->sync([5, 6, 7, 8, 9, 10, 11], ['guard_name' => 'item']);
+        $Administracion->roles()->sync([5, 6, 7, 8, 9, 10, 11]);
 
         Submodule::create([
             'name' => 'Tipos de Documento',
@@ -107,7 +107,7 @@ class ModulesAndSubmodulesSeeder extends Seeder
 
         $Insumos = Module::create(['name' => 'Insumos', 'icon' => 'fas fa-reel']);
 
-        $Insumos->roles()->sync([12, 13, 14, 15, 16, 17], ['guard_name' => 'item']);
+        $Insumos->roles()->sync([12, 13, 14, 15, 16, 17]);
 
         Submodule::create([
             'name' => 'Tallas',
@@ -159,7 +159,7 @@ class ModulesAndSubmodulesSeeder extends Seeder
 
         $Existencias = Module::create(['name' => 'Existencias', 'icon' => 'fas fa-hundred-points']);
 
-        $Existencias->roles()->sync([18, 19, 20], ['guard_name' => 'item']);
+        $Existencias->roles()->sync([18, 19, 20]);
 
         Submodule::create([
             'name' => 'Productos',
@@ -187,7 +187,7 @@ class ModulesAndSubmodulesSeeder extends Seeder
 
         $Pedido = Module::create(['name' => 'Ventas', 'icon' => 'fas fa-money-bill']);
 
-        $Pedido->roles()->sync([21], ['guard_name' => 'item']);
+        $Pedido->roles()->sync([21]);
 
         Submodule::create([
             'name' => 'Pedidos',
@@ -199,7 +199,7 @@ class ModulesAndSubmodulesSeeder extends Seeder
 
         $Cartera = Module::create(['name' => 'Credito y Cartera', 'icon' => 'fas fa-credit-card']);
 
-        $Cartera->roles()->sync([22, 23, 24], ['guard_name' => 'item']);
+        $Cartera->roles()->sync([22, 23, 24]);
 
         Submodule::create([
             'name' => 'Clientes',
@@ -227,7 +227,7 @@ class ModulesAndSubmodulesSeeder extends Seeder
 
         $Despacho = Module::create(['name' => 'Despacho', 'icon' => 'fas fa-mailbox']);
 
-        $Despacho->roles()->sync([25, 26, 27], ['guard_name' => 'item']);
+        $Despacho->roles()->sync([25, 26, 27]);
 
         Submodule::create([
             'name' => 'Filtro',
@@ -255,7 +255,7 @@ class ModulesAndSubmodulesSeeder extends Seeder
 
         $Reportes = Module::create(['name' => 'Reportes', 'icon' => 'fas fa-chart-mixed-up-circle-currency']);
 
-        $Reportes->roles()->sync([28], ['guard_name' => 'item']);
+        $Reportes->roles()->sync([28]);
 
         Submodule::create([
             'name' => 'Ventas',

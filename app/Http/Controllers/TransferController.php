@@ -220,29 +220,10 @@ class TransferController extends Controller
     public function show($id)
     {
         try {
-            $tranfer = Transfer::with('details')->findOrFail($id);
-
-            return $this->successResponse(
-                $tranfer,
-                'La Transferencia fue encontrado exitosamente.',
-                204
-            );
-        } catch (ModelNotFoundException $e) {
-            return $this->errorResponse(
-                [
-                    'message' => $this->getMessage('ModelNotFoundException'),
-                    'error' => $e->getMessage()
-                ],
-                404
-            );
+            $tranfer = Transfer::findOrFail($id);
+            return view('Dashboard.Transfers.Index', compact('tranfer'));
         } catch (Exception $e) {
-            return $this->errorResponse(
-                [
-                    'message' => $this->getMessage('Exception'),
-                    'error' => $e->getMessage()
-                ],
-                500
-            );
+            return back()->with('danger', 'Ocurrió un error al cargar la vista: ' . $e->getMessage());
         }
     }
 
