@@ -42,6 +42,7 @@ class TransferApproveRequest extends FormRequest
     {
         return [
             'id' => ['required', 'exists:transfers,id'],
+            'to_observation' => ['nullable', 'string', 'max:255'],
         ];
     }
 
@@ -50,6 +51,8 @@ class TransferApproveRequest extends FormRequest
         return [
             'id.required' => 'El Identificador de la transferencia es requerido.',
             'id.exists' => 'El Identificador de la transferencia no es válido.',
+            'to_observation.string' => 'El campo Observacion de recibido de la transferencia debe ser una cadena de texto.',
+            'to_observation.max' => 'El campo Observacion de recibido de la transferencia no debe tener mas de 255 caracteres.',
         ];
     }
 }

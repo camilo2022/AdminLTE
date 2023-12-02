@@ -26,6 +26,7 @@ function EditSizeModalCleaned(size) {
 
     $("#name_e").val(size.name);
     $("#code_e").val(size.code);
+    $('#description_e').val(size.description);
 }
 
 function EditSize(id) {
@@ -47,6 +48,7 @@ function EditSize(id) {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
                     'name': $('#name_e').val(),
                     'code': $('#code_e').val(),
+                    'description': $('#description_e').val()
                 },
                 success: function (response) {
                     tableSizes.ajax.reload();
@@ -111,20 +113,26 @@ function AddIsValidClassEditSize() {
     if (!$('#code_e').hasClass('is-invalid')) {
         $('#code_e').addClass('is-valid');
     }
+    if (!$('#description_e').hasClass('is-invalid')) {
+        $('#description_e').addClass('is-valid');
+    }
 }
 
 function RemoveIsValidClassEditSize() {
     $('#name_e').removeClass('is-valid');
     $('#code_e').removeClass('is-valid');
+    $('#description_e').removeClass('is-valid');
 }
 
 function AddIsInvalidClassEditSize(input) {
     if (!$(`#${input}_e`).hasClass('is-valid')) {
-        $(`#${input}_e`).addClass('is-invalid');
+        $(`#${input}_e`).removeClass('is-valid');
     }
+    $(`#${input}_e`).addClass('is-invalid');
 }
 
 function RemoveIsInvalidClassEditSize() {
     $('#name_e').removeClass('is-invalid');
     $('#code_e').removeClass('is-invalid');
+    $('#description_e').removeClass('is-invalid');
 }

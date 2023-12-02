@@ -74,15 +74,15 @@ class User extends Authenticatable
         ->orWhere('address', 'like', '%' . $search . '%')
         ->orWhere('email', 'like', '%' . $search . '%')
         ->orWhereHas('area',
-            function ($subQueryArea) use ($search) {
-                $subQueryArea->where('id', 'like',  '%' . $search . '%')
+            function ($subQuery) use ($search) {
+                $subQuery->where('id', 'like',  '%' . $search . '%')
                 ->orWhere('name', 'like',  '%' . $search . '%')
                 ->orWhere('description', 'like',  '%' . $search . '%');
             }
         )
         ->orWhereHas('charge',
-            function ($subQueryArea) use ($search) {
-                $subQueryArea->where('id', 'like',  '%' . $search . '%')
+            function ($subQuery) use ($search) {
+                $subQuery->where('id', 'like',  '%' . $search . '%')
                 ->orWhere('name', 'like',  '%' . $search . '%')
                 ->orWhere('description', 'like',  '%' . $search . '%');
             }

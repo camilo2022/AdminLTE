@@ -20,6 +20,7 @@ use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class TransferController extends Controller
 {
@@ -41,7 +42,7 @@ class TransferController extends Controller
             $start_date = Carbon::parse($request->input('start_date'))->startOfDay();
             $end_date = Carbon::parse($request->input('end_date'))->endOfDay();
             //Consulta por nombre
-            $tranfers = Transfer::with([
+            $transfers = Transfer::with([
                     'send_user' => function ($query) { $query->withTrashed(); },
                     'receive_user' => function ($query) { $query->withTrashed(); },
                     'details',
@@ -56,12 +57,12 @@ class TransferController extends Controller
                         $query->filterByDate($start_date, $end_date);
                     }
                 )
+                ->transfersByAssingWarehouse()
                 ->orderBy($request->input('column'), $request->input('dir'))
-                ->withTrashed() //Trae los registros 'eliminados'
                 ->paginate($request->input('perPage'));
 
             return $this->successResponse(
-                new TransferIndexQueryCollection($tranfers),
+                new TransferIndexQueryCollection($transfers),
                 $this->getMessage('Success'),
                 200
             );
@@ -108,15 +109,17 @@ class TransferController extends Controller
     public function store(TransferStoreRequest $request)
     {
         try {
-            $tranfer = new Transfer();
-            $tranfer->from_user_id = Auth::user()->id;
-            $tranfer->from_date = Carbon::now()->format('Y-m-d H:i:s');
-            $tranfer->from_observation = $request->input('from_observation');
-            $tranfer->status = 'Pendiente';
-            $tranfer->save();
+            $transfer = new Transfer();
+            $transfer->from_user_id = Auth::user()->id;
+            $transfer->from_date = Carbon::now()->format('Y-m-d H:i:s');
+            $transfer->from_observation = $request->input('from_observation');
+            $transfer->status = 'Pendiente';
+            $transfer->save();
+
+            DB::statement('CALL transfers(?)', [$transfer->id]);
 
             return $this->successResponse(
-                $tranfer,
+                $transfer,
                 'La Transferencia fue registrado exitosamente.',
                 201
             );
@@ -180,12 +183,12 @@ class TransferController extends Controller
     public function update(TransferUpdateRequest $request, $id)
     {
         try {
-            $tranfer = Transfer::findOrFail($id);
-            $tranfer->from_observation = $request->input('from_observation');
-            $tranfer->save();
+            $transfer = Transfer::findOrFail($id);
+            $transfer->from_observation = $request->input('from_observation');
+            $transfer->save();
 
             return $this->successResponse(
-                $tranfer,
+                $transfer,
                 'La Transferencia fue actualizado exitosamente.',
                 200
             );
@@ -220,19 +223,36 @@ class TransferController extends Controller
     public function show($id)
     {
         try {
-            $tranfer = Transfer::findOrFail($id);
-            return view('Dashboard.Transfers.Index', compact('tranfer'));
+            return $this->successResponse(
+                Transfer::findOrFail($id),
+                'La Transferencia fue encontrado exitosamente.',
+                204
+            );
+        } catch (ModelNotFoundException $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('ModelNotFoundException'),
+                    'error' => $e->getMessage()
+                ],
+                404
+            );
         } catch (Exception $e) {
-            return back()->with('danger', 'Ocurrió un error al cargar la vista: ' . $e->getMessage());
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('Exception'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
         }
     }
 
     public function delete(TransferDeleteRequest $request)
     {
         try {
-            $tranfer = Transfer::with('details')->findOrFail($request->input('id'));
+            $transfer = Transfer::with('details')->findOrFail($request->input('id'));
 
-            foreach ($tranfer->details as $detail) {
+            foreach ($transfer->details as $detail) {
                 $inventory = Inventory::with('product', 'size', 'warehouse', 'color')
                 ->whereHas('product', fn($subQuery) => $subQuery->where('id', $detail->product_id))
                 ->whereHas('size', fn($subQuery) => $subQuery->where('id', $detail->size_id))
@@ -242,12 +262,16 @@ class TransferController extends Controller
 
                 $inventory->quantity += $detail->quantity;
                 $inventory->save();
+                $detail->status = 'Eliminado';
+                $detail->save();
                 $detail->delete();
             }
 
-            $tranfer->delete();
+            $transfer->status = 'Eliminado';
+            $transfer->save();
+            $transfer->delete();
             return $this->successResponse(
-                $tranfer,
+                $transfer,
                 'La Transferencia fue eliminada exitosamente.',
                 204
             );
@@ -273,11 +297,11 @@ class TransferController extends Controller
     public function approve(TransferApproveRequest $request)
     {
         try {
-            $tranfer = Transfer::with('details')->findOrFail($request->input('id'));
-            $tranfer->status = 'Aprobado';
-            $tranfer->save();
+            $transfer = Transfer::with('details')->findOrFail($request->input('id'));
+            $transfer->status = 'Aprobado';
+            $transfer->save();
 
-            foreach ($tranfer->details as $detail) {
+            foreach ($transfer->details as $detail) {
                 $inventory = Inventory::with('product', 'size', 'warehouse', 'color')
                 ->whereHas('product', fn($subQuery) => $subQuery->where('id', $detail->product_id))
                 ->whereHas('size', fn($subQuery) => $subQuery->where('id', $detail->size_id))
@@ -301,7 +325,7 @@ class TransferController extends Controller
             }
 
             return $this->successResponse(
-                $tranfer,
+                $transfer,
                 'La Transferencia fue aprobada exitosamente.',
                 200
             );
@@ -336,11 +360,11 @@ class TransferController extends Controller
     public function cancel(TransferCancelRequest $request)
     {
         try {
-            $tranfer = Transfer::with('details')->findOrFail($request->input('id'));
-            $tranfer->status = 'Cancelado';
-            $tranfer->save();
+            $transfer = Transfer::with('details')->findOrFail($request->input('id'));
+            $transfer->status = 'Cancelado';
+            $transfer->save();
 
-            foreach ($tranfer->details as $detail) {
+            foreach ($transfer->details as $detail) {
                 $inventory = Inventory::with('product', 'size', 'warehouse', 'color')
                 ->whereHas('product', fn($subQuery) => $subQuery->where('id', $detail->product_id))
                 ->whereHas('size', fn($subQuery) => $subQuery->where('id', $detail->size_id))
@@ -355,7 +379,7 @@ class TransferController extends Controller
             }
 
             return $this->successResponse(
-                $tranfer,
+                $transfer,
                 'La Transferencia fue cancelada exitosamente.',
                 200
             );

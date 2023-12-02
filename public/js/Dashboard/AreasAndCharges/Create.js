@@ -7,7 +7,6 @@ function CreateAreaAndChargesModal() {
         },
         success: function(response) {
             CreateAreaAndChargesModalCleaned();
-            CreateAreaAndChargesModalClothingLines(response.data);
             CreateAreaAndChargesAjaxSuccess(response);
             $('#CreateAreaAndChargesModal').modal('show');
         },
@@ -25,7 +24,6 @@ function CreateAreaAndChargesModalCleaned() {
     $('#description_c').val('');
     $('#CreateAreaAndChargesAddChargeButton').attr('data-count', 0);
     CreateAreaAndChargesAddCharge();
-    CreateAreaAndChargesModalResetSelect();
 }
 
 function CreateAreaAndCharges() {

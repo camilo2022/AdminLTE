@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Transfer;
 
+use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class TransferIndexQueryCollection extends ResourceCollection
@@ -14,6 +15,43 @@ class TransferIndexQueryCollection extends ResourceCollection
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            'transfers' => $this->collection->map(function ($transfer) {
+                return [
+                    'id' => $transfer->id,
+                    'consecutive' => $transfer->consecutive,
+                    'from_user_id' => $transfer->from_user_id,
+                    'from_user' => $transfer->from_user,
+                    'form_date' => $this->formatDate($transfer->form_date),
+                    'from_observation' => $transfer->from_observation,
+                    'to_user_id' => $transfer->to_user_id,
+                    'to_user' => $transfer->to_user,
+                    'to_date' => $this->formatDate($transfer->to_date),
+                    'to_observation' => $transfer->to_observation,
+                    'status' => $transfer->status,
+                    'created_at' => $this->formatDate($transfer->created_at),
+                    'updated_at' => $this->formatDate($transfer->updated_at)
+                ];
+            }),
+            'meta' => [
+                'pagination' => $this->paginationMeta(),
+            ],
+        ];
+    }
+
+    protected function formatDate($date)
+    {
+        return Carbon::parse($date)->format('Y-m-d H:i:s');
+    }
+
+    protected function paginationMeta()
+    {
+        return [
+            'total' => $this->total(),
+            'count' => $this->count(),
+            'per_page' => $this->perPage(),
+            'current_page' => $this->currentPage(),
+            'total_pages' => $this->lastPage(),
+        ];
     }
 }

@@ -39,22 +39,22 @@ class Module extends Model
         ->orWhere('name', 'like',  '%' . $search . '%')
         ->orWhere('icon', 'like', '%' . $search . '%')
         ->orWhereHas('roles',
-            function ($subQueryRole) use ($search) {
-                $subQueryRole->where('id', 'like',  '%' . $search . '%')
+            function ($subQuery) use ($search) {
+                $subQuery->where('id', 'like',  '%' . $search . '%')
                 ->orWhere('name', 'like',  '%' . $search . '%');
             }
         )
         ->orWhereHas('submodules',
-            function ($subQuerySubmodule) use ($search) {
-                $subQuerySubmodule->where('id', 'like',  '%' . $search . '%')
+            function ($subQuery) use ($search) {
+                $subQuery->where('id', 'like',  '%' . $search . '%')
                 ->orWhere('name', 'like',  '%' . $search . '%')
                 ->orWhere('url', 'like',  '%' . $search . '%')
                 ->orWhere('icon', 'like',  '%' . $search . '%');
             }
         )
         ->orWhereHas('submodules.permission',
-            function ($subQueryPermission) use ($search) {
-                $subQueryPermission->where('id', 'like',  '%' . $search . '%')
+            function ($subQuery) use ($search) {
+                $subQuery->where('id', 'like',  '%' . $search . '%')
                 ->orWhere('name', 'like',  '%' . $search . '%');
             }
         );
