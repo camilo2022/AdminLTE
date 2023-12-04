@@ -21,7 +21,7 @@ class BusinessIndexQueryCollection extends ResourceCollection
                     'id' => $business->id,
                     'name' => $business->name,
                     'document_number' => $business->document_number,
-                    'telephone_number' => $business->name,
+                    'telephone_number' => $business->telephone_number,
                     'email' => $business->email,
                     'country_id' => $business->country_id,
                     'country' => $business->country->name,

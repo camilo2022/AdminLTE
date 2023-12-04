@@ -73,6 +73,7 @@ function EditUserModalAreasGetCharge(select) {
                 'area_id':  $(select).val()
             },
             success: function(response) {
+                EditUserModalResetSelect('charge_id_e');
                 EditUserModalCharges(response.data);
             },
             error: function(xhr, textStatus, errorThrown) {

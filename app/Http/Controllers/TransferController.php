@@ -43,8 +43,8 @@ class TransferController extends Controller
             $end_date = Carbon::parse($request->input('end_date'))->endOfDay();
             //Consulta por nombre
             $transfers = Transfer::with([
-                    'send_user' => function ($query) { $query->withTrashed(); },
-                    'receive_user' => function ($query) { $query->withTrashed(); },
+                    'from_user' => function ($query) { $query->withTrashed(); },
+                    'to_user' => function ($query) { $query->withTrashed(); },
                     'details',
                 ])
                 ->when($request->filled('search'),
@@ -57,7 +57,7 @@ class TransferController extends Controller
                         $query->filterByDate($start_date, $end_date);
                     }
                 )
-                ->transfersByAssingWarehouse()
+                //->transfersByAssingWarehouse()
                 ->orderBy($request->input('column'), $request->input('dir'))
                 ->paginate($request->input('perPage'));
 
@@ -110,13 +110,12 @@ class TransferController extends Controller
     {
         try {
             $transfer = new Transfer();
+            $transfer->consecutive = DB::selectOne('CALL transfers()')->consecutive;
             $transfer->from_user_id = Auth::user()->id;
             $transfer->from_date = Carbon::now()->format('Y-m-d H:i:s');
             $transfer->from_observation = $request->input('from_observation');
             $transfer->status = 'Pendiente';
             $transfer->save();
-
-            DB::statement('CALL transfers(?)', [$transfer->id]);
 
             return $this->successResponse(
                 $transfer,

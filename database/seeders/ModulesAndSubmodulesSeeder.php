@@ -113,15 +113,15 @@ class ModulesAndSubmodulesSeeder extends Seeder
             'permission_id' => 90
         ]);
 
-        $Insumos = Module::create(['name' => 'Insumos', 'icon' => 'fas fa-reel']);
+        $Diseno = Module::create(['name' => 'Diseño', 'icon' => 'fas fa-reel']);
 
-        $Insumos->roles()->sync([13, 14, 15, 16, 17, 18]);
+        $Diseno->roles()->sync([13, 14, 15, 16, 17, 18]);
 
         Submodule::create([
             'name' => 'Tallas',
             'url' => '/Dashboard/Sizes/Index',
             'icon' => 'fas fa-arrow-up-9-1',
-            'module_id' => $Insumos->id,
+            'module_id' => $Diseno->id,
             'permission_id' => 98
         ]);
 
@@ -129,7 +129,7 @@ class ModulesAndSubmodulesSeeder extends Seeder
             'name' => 'Marcas',
             'url' => '/Dashboard/Trademarks/Index',
             'icon' => 'fas fa-registered',
-            'module_id' => $Insumos->id,
+            'module_id' => $Diseno->id,
             'permission_id' => 106
         ]);
 
@@ -137,7 +137,7 @@ class ModulesAndSubmodulesSeeder extends Seeder
             'name' => 'Modelos',
             'url' => '/Dashboard/Models/Index',
             'icon' => 'fas fa-scissors',
-            'module_id' => $Insumos->id,
+            'module_id' => $Diseno->id,
             'permission_id' => 114
         ]);
 
@@ -145,7 +145,7 @@ class ModulesAndSubmodulesSeeder extends Seeder
             'name' => 'Lineas',
             'url' => '/Dashboard/ClothingLines/Index',
             'icon' => 'fas fa-clothes-hanger',
-            'module_id' => $Insumos->id,
+            'module_id' => $Diseno->id,
             'permission_id' => 122
         ]);
 
@@ -153,7 +153,7 @@ class ModulesAndSubmodulesSeeder extends Seeder
             'name' => 'Categorización',
             'url' => '/Dashboard/CategoriesAndSubcategories/Index',
             'icon' => 'fas fa-shirt-long-sleeve',
-            'module_id' => $Insumos->id,
+            'module_id' => $Diseno->id,
             'permission_id' => 130
         ]);
 
@@ -161,7 +161,7 @@ class ModulesAndSubmodulesSeeder extends Seeder
             'name' => 'Colores',
             'url' => '/Dashboard/Colors/Index',
             'icon' => 'fas fa-palette',
-            'module_id' => $Insumos->id,
+            'module_id' => $Diseno->id,
             'permission_id' => 138
         ]);
 

@@ -22,15 +22,16 @@ class TransferIndexQueryCollection extends ResourceCollection
                     'consecutive' => $transfer->consecutive,
                     'from_user_id' => $transfer->from_user_id,
                     'from_user' => $transfer->from_user,
-                    'form_date' => $this->formatDate($transfer->form_date),
+                    'from_date' => $this->formatDate($transfer->from_date),
                     'from_observation' => $transfer->from_observation,
                     'to_user_id' => $transfer->to_user_id,
                     'to_user' => $transfer->to_user,
-                    'to_date' => $this->formatDate($transfer->to_date),
+                    'to_date' => $transfer->to_date == null ? $transfer->to_date : $this->formatDate($transfer->to_date),
                     'to_observation' => $transfer->to_observation,
                     'status' => $transfer->status,
                     'created_at' => $this->formatDate($transfer->created_at),
-                    'updated_at' => $this->formatDate($transfer->updated_at)
+                    'updated_at' => $this->formatDate($transfer->updated_at),
+                    'deleted_at' => $transfer->deleted_at
                 ];
             }),
             'meta' => [

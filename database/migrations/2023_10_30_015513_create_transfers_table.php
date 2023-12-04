@@ -33,36 +33,34 @@ return new class extends Migration
         DB::unprepared('DROP PROCEDURE IF EXISTS transfers');
 
         DB::unprepared('
-            CREATE PROCEDURE transfers(IN idParam INT)
-            BEGIN
-                DECLARE currentDate CHAR(8);
-                DECLARE lastConsecutive CHAR(12);
-                DECLARE registrationNumber INT;
+            CREATE PROCEDURE transfers()  
+                BEGIN
+                DECLARE consecutive VARCHAR(50);
 
-                -- Get the current date in "Ymd" format
-                SET currentDate = DATE_FORMAT(NOW(), "%Y%m%d");
+                SET @last_consecutive = (SELECT transfers.consecutive 
+                                         FROM transfers
+                                         WHERE transfers.created_at = (SELECT MAX(created_at) 
+                                                                        FROM transfers 
+                                                                        WHERE DATE(created_at) = CURRENT_DATE()));
+              
+                IF @last_consecutive IS NULL THEN
+                  SET consecutive = CONCAT(YEAR(NOW()), LPAD(MONTH(NOW()), 2, "0"), LPAD(DAY(NOW()), 2, "0"), "001");  
+                ELSE 
+                    SET @number = CAST(SUBSTR(@last_consecutive, 9) AS UNSIGNED) + 1;
+                  
+                    IF @number >= 1 AND @number < 10 THEN
+                        SET consecutive = CONCAT(SUBSTR(@last_consecutive, 1, 8), LPAD(@number, 3, "0"));
+                    ELSEIF @number >= 10 AND @number < 100 THEN  
+                        SET consecutive = CONCAT(SUBSTR(@last_consecutive, 1, 8), LPAD(@number, 2, "0"));
+                    ELSE
+                        SET consecutive = CONCAT(SUBSTR(@last_consecutive, 1, 8), @number);
+                    END IF;
+                END IF;
 
-                -- Get the last consecutive for the provided ID and current date
-                SELECT consecutive INTO lastConsecutive 
-                FROM transfers 
-                WHERE id = idParam AND DATE_FORMAT(created_at, "%Y%m%d") = currentDate
-                ORDER BY created_at DESC 
-                LIMIT 1;
-
-                -- Get the registration number (last 4 digits of the consecutive)
-                SET registrationNumber = IFNULL(CAST(SUBSTRING(lastConsecutive, -4) AS UNSIGNED) + 1, 1);
-
-                -- Format the registration number to 4 digits with leading zeros
-                SET registrationNumber = LPAD(registrationNumber, 4, "0");
-
-                -- Build the new consecutive
-                SET @new_consecutive = CONCAT(currentDate, registrationNumber);
-
-                -- Save the new consecutive in the "consecutive" field of the "transfers" table
-                UPDATE transfers SET consecutive = @new_consecutive WHERE id = idParam;
+                SELECT consecutive; 
+            
             END
         ');
-
     }
 
     /**

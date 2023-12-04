@@ -62,6 +62,7 @@ function CreateUserModalAreasGetCharge(select) {
                 'area_id':  $(select).val()
             },
             success: function(response) {
+                CreateUserModalResetSelect('charge_id_c');
                 CreateUserModalCharges(response.data);
             },
             error: function(xhr, textStatus, errorThrown) {

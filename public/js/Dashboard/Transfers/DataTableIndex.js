@@ -36,17 +36,17 @@ let tableTransfers = $('#transfers').DataTable({
         { data: 'id' },
         { data: 'consecutive' },
         { 
-            data: 'from_user',
+            data: 'from_user_id',
             render: function (data, type, row) {
-                return `${data.name} ${data.last_name}`;
+                return `${row.from_user.name} ${row.from_user.last_name}`;
             }
         },
-        { data: 'form_date' },
+        { data: 'from_date' },
         { data: 'from_observation' },
         { 
-            data: 'to_user',
+            data: 'to_user_id',
             render: function (data, type, row) {
-                return `${data.name} ${data.last_name}`;
+                return data === null ? '' : `${row.to_user.name} ${row.to_user.last_name}`;
             }
         },
         { data: 'to_date' },
@@ -78,7 +78,7 @@ let tableTransfers = $('#transfers').DataTable({
                     <i class="fas fa-eye text-white"></i>
                 </a>`;
 
-                if (data === null && row.status === 'Pendiente' && row.to_user_id === null) {
+                if (data === null && row.status == 'Pendiente' && row.to_user_id === null) {
                     btn += `<a onclick="EditTransferModal(${row.id})" type="button"
                     class="btn btn-primary btn-sm mr-2" title="Editar transferencia">
                         <i class="fas fa-pen text-white"></i>
