@@ -7,7 +7,7 @@ function CreateProductModal() {
         },
         success: function(response) {
             CreateProductModalCleaned();
-            CreateProductsModalCollection(response.data.collections);
+            CreateProductsModalCorreria(response.data.correrias);
             CreateProductsModalModel(response.data.models);
             CreateProductsModalTrademark(response.data.trademarks);
             CreateProductsModalClothingLine(response.data.clothing_lines);
@@ -23,7 +23,7 @@ function CreateProductModal() {
 }
 
 function CreateProductModalCleaned() {
-    CreateProductsModalResetSelect('collection_id_c');
+    CreateProductsModalResetSelect('correria_id_c');
     CreateProductsModalResetSelect('model_id_c');
     CreateProductsModalResetSelect('trademark_id_c');
     CreateProductsModalResetSelect('clothing_line_id_c');
@@ -69,10 +69,10 @@ function CreateProductsModalColors(colors) {
     });
 }
 
-function CreateProductsModalCollection(collections) {
-    collections.forEach(collection => {
-        let newOption = new Option(collection.name, collection.id, false, false);
-        $('#collection_id_c').append(newOption);
+function CreateProductsModalCorreria(correrias) {
+    correrias.forEach(correria => {
+        let newOption = new Option(correria.name, correria.id, false, false);
+        $('#correria_id_c').append(newOption);
     });
 }
 
@@ -161,7 +161,7 @@ function CreateProduct() {
     formData.append('code', $('#code_c').val());
     formData.append('price', $('#price_c').val());
     formData.append('description', $('#description_c').val());
-    formData.append('collection_id', $('#collection_id_c').val());
+    formData.append('correria_id', $('#correria_id_c').val());
     formData.append('clothing_line_id', $('#clothing_line_id_c').val());
     formData.append('category_id', $('#category_id_c').val());
     formData.append('subcategory_id', $('#subcategory_id_c').val());
@@ -283,8 +283,8 @@ function AddIsValidClassCreateProduct() {
     if (!$(`span[aria-labelledby="select2-trademark_id_c-container`).hasClass('is-invalid')) {
         $(`span[aria-labelledby="select2-trademark_id_c-container"]`).addClass('is-valid');
     }
-    if (!$(`span[aria-labelledby="select2-collection_id_c-container`).hasClass('is-invalid')) {
-        $(`span[aria-labelledby="select2-collection_id_c-container"]`).addClass('is-valid');
+    if (!$(`span[aria-labelledby="select2-correria_id_c-container`).hasClass('is-invalid')) {
+        $(`span[aria-labelledby="select2-correria_id_c-container"]`).addClass('is-valid');
     }
 }
 
@@ -297,7 +297,7 @@ function RemoveIsValidClassCreateProduct() {
     $(`span[aria-labelledby="select2-subcategory_id_c-container"]`).removeClass('is-valid');
     $(`span[aria-labelledby="select2-model_id_c-container"]`).removeClass('is-valid');
     $(`span[aria-labelledby="select2-trademark_id_c-container"]`).removeClass('is-valid');
-    $(`span[aria-labelledby="select2-collection_id_c-container"]`).removeClass('is-valid');
+    $(`span[aria-labelledby="select2-correria_id_c-container"]`).removeClass('is-valid');
 }
 
 function AddIsInvalidClassCreateProduct(input) {
@@ -318,5 +318,5 @@ function RemoveIsInvalidClassCreateProduct() {
     $(`span[aria-labelledby="select2-subcategory_id_c-container"]`).removeClass('is-invalid');
     $(`span[aria-labelledby="select2-model_id_c-container"]`).removeClass('is-invalid');
     $(`span[aria-labelledby="select2-trademark_id_c-container"]`).removeClass('is-invalid');
-    $(`span[aria-labelledby="select2-collection_id_c-container"]`).removeClass('is-invalid');
+    $(`span[aria-labelledby="select2-correria_id_c-container"]`).removeClass('is-invalid');
 }

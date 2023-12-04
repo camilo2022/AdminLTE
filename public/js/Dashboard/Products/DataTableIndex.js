@@ -8,7 +8,7 @@ let tableProducts = $('#products').DataTable({
             var columnMappings = {
                 0: 'id',
                 1: 'code',
-                2: 'description',
+                2: 'cost',
                 3: 'price',
                 4: 'clothing_line_id',
                 5: 'category_id',
@@ -37,7 +37,7 @@ let tableProducts = $('#products').DataTable({
     columns: [
         { data: 'id' },
         { data: 'code' },
-        { data: 'description' },
+        { data: 'cost' },
         { data: 'price' },
         {
             data: 'clothing_line',

@@ -107,13 +107,13 @@ class ModulesAndSubmodulesSeeder extends Seeder
 
         Submodule::create([
             'name' => 'Correrias',
-            'url' => '/Dashboard/Collections/Index',
+            'url' => '/Dashboard/Correrias/Index',
             'icon' => 'fas fa-rectangle-vertical-history',
             'module_id' => $Administracion->id,
             'permission_id' => 90
         ]);
 
-        $Diseno = Module::create(['name' => 'Diseño', 'icon' => 'fas fa-reel']);
+        $Diseno = Module::create(['name' => 'Diseño', 'icon' => 'fas fa-wand-magic-sparkles']);
 
         $Diseno->roles()->sync([13, 14, 15, 16, 17, 18]);
 

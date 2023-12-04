@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Resources\Collection;
+namespace App\Http\Resources\Tone;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class CollectionIndexQueryCollection extends ResourceCollection
+class ToneIndexQueryCollection extends ResourceCollection
 {
     /**
      * Transform the resource collection into an array.

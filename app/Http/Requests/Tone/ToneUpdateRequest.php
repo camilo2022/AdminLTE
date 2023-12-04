@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Collection;
+namespace App\Http\Requests\Tone;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CollectionIndexQueryRequest extends FormRequest
+class ToneUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

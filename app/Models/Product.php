@@ -17,13 +17,13 @@ class Product extends DBModel
 
     protected $fillable = [
         'code',
-        'description',
+        'cost',
         'clothing_line_id',
         'category_id',
         'subcategory_id',
         'model_id',
         'trademark_id',
-        'collection_id',
+        'correria_id',
         'price'
     ];
 
@@ -78,9 +78,9 @@ class Product extends DBModel
         return $this->belongsTo(Trademark::class, 'trademark_id');
     }
 
-    public function collection() : BelongsTo
+    public function correria() : BelongsTo
     {
-        return $this->belongsTo(Collection::class, 'collection_id');
+        return $this->belongsTo(Correria::class, 'correria_id');
     }
 
     public function scopeSearch($query, $search)
@@ -113,7 +113,7 @@ class Product extends DBModel
                 $subQuery->where('name', 'like',  '%' . $search . '%');
             }
         )
-        ->orWhereHas('collection',
+        ->orWhereHas('correria',
             function ($subQuery) use ($search) {
                 $subQuery->where('name', 'like',  '%' . $search . '%');
             }

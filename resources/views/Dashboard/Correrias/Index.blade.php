@@ -10,7 +10,7 @@
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item">Dashboard</li>
-                            <li class="breadcrumb-item">Collections</li>
+                            <li class="breadcrumb-item">Correrias</li>
                             <li class="breadcrumb-item">Index</li>
                         </ol>
                     </div><!-- /.col -->
@@ -54,7 +54,7 @@
                         <div class="card-header p-2">
                             <ul class="nav nav-pills">
                                 <li class="nav-item">
-                                    <a class="nav-link active" type="button" onclick="CreateCollectionModal()" title="Agregar correria">
+                                    <a class="nav-link active" type="button" onclick="CreateCorreriaModal()" title="Agregar correria">
                                         <i class="fas fa-plus"></i>
                                     </a>
                                 </li>
@@ -62,7 +62,7 @@
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table id="collections" class="table table-bordered table-hover dataTable dtr-inline">
+                                <table id="correrias" class="table table-bordered table-hover dataTable dtr-inline">
                                     <thead class="thead-dark">
                                         <tr>
                                             <th>#</th>
@@ -83,13 +83,13 @@
                 </div>
             </div>
         </div>
-        @include('Dashboard.Collections.Create')
-        @include('Dashboard.Collections.Edit')
+        @include('Dashboard.Correrias.Create')
+        @include('Dashboard.Correrias.Edit')
     </section>
 @endsection
 @section('script')
-    <script src="{{ asset('js/Dashboard/Collections/DataTableIndex.js') }}"></script>
-    <script src="{{ asset('js/Dashboard/Collections/Create.js') }}"></script>
-    <script src="{{ asset('js/Dashboard/Collections/Edit.js') }}"></script>
-    <script src="{{ asset('js/Dashboard/Collections/Delete.js') }}"></script>
+    <script src="{{ asset('js/Dashboard/Correrias/DataTableIndex.js') }}"></script>
+    <script src="{{ asset('js/Dashboard/Correrias/Create.js') }}"></script>
+    <script src="{{ asset('js/Dashboard/Correrias/Edit.js') }}"></script>
+    <script src="{{ asset('js/Dashboard/Correrias/Delete.js') }}"></script>
 @endsection

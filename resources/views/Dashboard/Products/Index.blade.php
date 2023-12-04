@@ -80,7 +80,7 @@
                                         <tr>
                                             <th>#</th>
                                             <th>Codigo</th>
-                                            <th>Descripcion</th>
+                                            <th>Costo</th>
                                             <th>Precio</th>
                                             <th>Linea</th>
                                             <th>Categoria</th>

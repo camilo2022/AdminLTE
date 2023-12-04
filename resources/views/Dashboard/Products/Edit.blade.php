@@ -29,7 +29,7 @@ aria-labelledby="exampleModalLabel" data-backdrop="static" aria-hidden="true">
                             </div>
                             <div class="col-lg-6">
                                 <div class="form-group">
-                                    <label for="price_e">Precio</label>
+                                    <label for="price_e">Precio de Venta</label>
                                     <div class="input-group">
                                         <input type="number" class="form-control" id="price_e" name="price">
                                         <div class="input-group-append">
@@ -44,9 +44,9 @@ aria-labelledby="exampleModalLabel" data-backdrop="static" aria-hidden="true">
                         <div class="row">
                             <div class="col-lg-6">
                                 <div class="form-group">
-                                    <label for="collection_id_e">Correria</label>
+                                    <label for="correria_id_e">Correria</label>
                                     <div class="input-group">
-                                        <select class="form-control select2" id="collection_id_e" name="collection_id" style="width: 87%">
+                                        <select class="form-control select2" id="correria_id_e" name="correria_id" style="width: 87%">
                                             <option value="">Seleccione</option>
                                         </select>
                                         <div class="input-group-append">

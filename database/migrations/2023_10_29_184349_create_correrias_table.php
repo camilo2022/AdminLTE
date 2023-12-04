@@ -14,7 +14,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('collections', function (Blueprint $table) {
+        Schema::create('correrias', function (Blueprint $table) {
             $table->id()->comment('Identificador de la correria.');
             $table->string('name')->unique()->comment('Nombre de la correria.');
             $table->string('code')->unique()->comment('Codigo de la correria.');
@@ -24,18 +24,18 @@ return new class extends Migration
             $table->softDeletes();
         });
 
-        DB::unprepared('DROP PROCEDURE IF EXISTS collections');
+        DB::unprepared('DROP PROCEDURE IF EXISTS correrias');
 
         DB::unprepared('
-            CREATE PROCEDURE collections(IN currentDateTime DATETIME)
+            CREATE PROCEDURE correrias(IN currentDateTime DATETIME)
             BEGIN
                 -- Actualizar los registros que no cumplen la condición
-                UPDATE collections
+                UPDATE correrias
                 SET deleted_at = currentDateTime
                 WHERE start_date > currentDateTime OR end_date < currentDateTime;
 
                 -- Restaurar los registros que cumplen la condición
-                UPDATE collections
+                UPDATE correrias
                 SET deleted_at = NULL
                 WHERE start_date <= currentDateTime AND end_date >= currentDateTime;
             END
@@ -49,6 +49,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('collections');
+        Schema::dropIfExists('correrias');
     }
 };

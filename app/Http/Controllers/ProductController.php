@@ -18,7 +18,7 @@ use App\Http\Resources\Product\ProductIndexQueryCollection;
 use App\Imports\Product\ProductImport;
 use App\Models\Category;
 use App\Models\ClothingLine;
-use App\Models\Collection;
+use App\Models\Correria;
 use App\Models\Color;
 use App\Models\Model;
 use App\Models\Product;
@@ -134,7 +134,7 @@ class ProductController extends Controller
                     'trademarks' => Trademark::all(),
                     'sizes' => Size::all(),
                     'colors' => Color::all(),
-                    'collections' => Collection::all()
+                    'correrias' => Correria::all()
                 ],
                 'Ingrese los datos para hacer la validacion y registro.',
                 200
@@ -156,14 +156,13 @@ class ProductController extends Controller
         try {
             $product = new Product();
             $product->code = $request->input('code');
-            $product->description = $request->input('description');
             $product->price = $request->input('price');
             $product->clothing_line_id = $request->input('clothing_line_id');
             $product->category_id = $request->input('category_id');
             $product->subcategory_id = $request->input('subcategory_id');
             $product->model_id = $request->input('model_id');
             $product->trademark_id = $request->input('trademark_id');
-            $product->collection_id = $request->input('collection_id');
+            $product->correria_id = $request->input('correria_id');
             $product->save();
 
             collect($request->input('colors'))->map(function ($color) use ($product){
@@ -253,7 +252,7 @@ class ProductController extends Controller
                         'subcategory' => function ($query) { $query->withTrashed(); },
                         'model' => function ($query) { $query->withTrashed(); },
                         'trademark' => function ($query) { $query->withTrashed(); },
-                        'collection' => function ($query) { $query->withTrashed(); },
+                        'correria' => function ($query) { $query->withTrashed(); },
                         'colors',
                         'sizes'
                     ])->findOrFail($id),
@@ -262,7 +261,7 @@ class ProductController extends Controller
                     'trademarks' => Trademark::all(),
                     'sizes' => Size::all(),
                     'colors' => Color::all(),
-                    'collections' => Collection::all()
+                    'correrias' => Correria::all()
                 ],
                 'El producto fue encontrado exitosamente.',
                 204
@@ -291,14 +290,13 @@ class ProductController extends Controller
         try {
             $product = Product::withTrashed()->findOrFail($id);
             $product->code = $request->input('code');
-            $product->description = $request->input('description');
             $product->price = $request->input('price');
             $product->clothing_line_id = $request->input('clothing_line_id');
             $product->category_id = $request->input('category_id');
             $product->subcategory_id = $request->input('subcategory_id');
             $product->model_id = $request->input('model_id');
             $product->trademark_id = $request->input('trademark_id');
-            $product->collection_id = $request->input('collection_id');
+            $product->correria_id = $request->input('correria_id');
             $product->save();
 
             $colors = collect($request->input('colors'))->map(function ($color) use ($product){
@@ -524,14 +522,13 @@ class ProductController extends Controller
             $products = $groups->map(function ($group, $index) {
                 return [
                     'code' => $index,
-                    'description' => $group->first()['description'],
                     'price' => $group->first()['price'],
                     'clothing_line_id' => $group->first()['clothing_line_id'],
                     'category_id' => $group->first()['category_id'],
                     'subcategory_id' => $group->first()['subcategory_id'],
                     'model_id' => $group->first()['model_id'],
                     'trademark_id' => $group->first()['trademark_id'],
-                    'collection_id' => $group->first()['collection_id'],
+                    'correria_id' => $group->first()['correria_id'],
                     'colors' => $group->pluck('color_id')->unique()->values()->toArray(),
                     'sizes' => $group->pluck('size_id')->unique()->values()->toArray(),
                 ];
@@ -541,14 +538,13 @@ class ProductController extends Controller
                 $product = (object) $product;
                 $productNew = new Product();
                 $productNew->code = $product->code;
-                $productNew->description = $product->description;
                 $productNew->price = $product->price;
                 $productNew->clothing_line_id = $product->clothing_line_id;
                 $productNew->category_id = $product->category_id;
                 $productNew->subcategory_id = $product->subcategory_id;
                 $productNew->model_id = $product->model_id;
                 $productNew->trademark_id = $product->trademark_id;
-                $productNew->collection_id = $product->collection_id;
+                $productNew->correria_id = $product->correria_id;
                 $productNew->save();
 
                 collect($product->colors)->map(function ($color) use ($productNew){

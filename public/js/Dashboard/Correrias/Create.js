@@ -1,24 +1,24 @@
-function CreateCollectionModal() {
+function CreateCorreriaModal() {
     $.ajax({
-        url: `/Dashboard/Collections/Create`,
+        url: `/Dashboard/Correrias/Create`,
         type: 'POST',
         data: {
             '_token': $('meta[name="csrf-token"]').attr('content')
         },
         success: function(response) {
-            CreateCollectionModalCleaned();
-            CreateCollectionAjaxSuccess(response);
-            $('#CreateCollectionModal').modal('show');
+            CreateCorreriaModalCleaned();
+            CreateCorreriaAjaxSuccess(response);
+            $('#CreateCorreriaModal').modal('show');
         },
         error: function(xhr, textStatus, errorThrown) {
-            CreateCollectionAjaxError(xhr);
+            CreateCorreriaAjaxError(xhr);
         }
     });
 }
 
-function CreateCollectionModalCleaned() {
-    RemoveIsValidClassCreateCollection();
-    RemoveIsInvalidClassCreateCollection();
+function CreateCorreriaModalCleaned() {
+    RemoveIsValidClassCreateCorreria();
+    RemoveIsInvalidClassCreateCorreria();
 
     $('#name_c').val('');
     $('#code_c').val('');
@@ -26,7 +26,7 @@ function CreateCollectionModalCleaned() {
     $('#end_date_c').val('');
 }
 
-function CreateCollection() {
+function CreateCorreria() {
     Swal.fire({
         title: '¿Desea guardar la correria?',
         text: 'La correria será creada.',
@@ -39,7 +39,7 @@ function CreateCollection() {
     }).then((result) => {
         if (result.value) {
             $.ajax({
-                url: `/Dashboard/Collections/Store`,
+                url: `/Dashboard/Correrias/Store`,
                 type: 'POST',
                 data: {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
@@ -49,12 +49,12 @@ function CreateCollection() {
                     'end_date': $('#end_date_c').val()
                 },
                 success: function(response) {
-                    tableCollections.ajax.reload();
-                    CreateCollectionAjaxSuccess(response);
+                    tableCorrerias.ajax.reload();
+                    CreateCorreriaAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableCollections.ajax.reload();
-                    CreateCollectionAjaxError(xhr);
+                    tableCorrerias.ajax.reload();
+                    CreateCorreriaAjaxError(xhr);
                 }
             });
         } else {
@@ -63,53 +63,53 @@ function CreateCollection() {
     });
 }
 
-function CreateCollectionAjaxSuccess(response) {
+function CreateCorreriaAjaxSuccess(response) {
     if(response.status === 200) {
         toastr.info(response.message);
-        $('#CreateCollectionModal').modal('hide');
+        $('#CreateCorreriaModal').modal('hide');
     }
 
     if(response.status === 201) {
         toastr.success(response.message);
-        $('#CreateCollectionModal').modal('hide');
+        $('#CreateCorreriaModal').modal('hide');
     }
 }
 
-function CreateCollectionAjaxError(xhr) {
+function CreateCorreriaAjaxError(xhr) {
     if(xhr.status === 403) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
-        $('#CreateCollectionModal').modal('hide');
+        $('#CreateCorreriaModal').modal('hide');
     }
 
     if(xhr.status === 404) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
-        $('#CreateCollectionModal').modal('hide');
+        $('#CreateCorreriaModal').modal('hide');
     }
 
     if(xhr.status === 419) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
-        $('#CreateCollectionModal').modal('hide');
+        $('#CreateCorreriaModal').modal('hide');
     }
 
     if(xhr.status === 422){
-        RemoveIsValidClassCreateCollection();
-        RemoveIsInvalidClassCreateCollection();
+        RemoveIsValidClassCreateCorreria();
+        RemoveIsInvalidClassCreateCorreria();
         $.each(xhr.responseJSON.errors, function(field, messages) {
-            AddIsInvalidClassCreateCollection(field);
+            AddIsInvalidClassCreateCorreria(field);
             $.each(messages, function(index, message) {
                 toastr.error(message);
             });
         });
-        AddIsValidClassCreateCollection();
+        AddIsValidClassCreateCorreria();
     }
 
     if(xhr.status === 500){
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
-        $('#CreateCollectionModal').modal('hide');
+        $('#CreateCorreriaModal').modal('hide');
     }
 }
 
-function AddIsValidClassCreateCollection() {
+function AddIsValidClassCreateCorreria() {
     if (!$('#name_c').hasClass('is-invalid')) {
       $('#name_c').addClass('is-valid');
     }
@@ -124,20 +124,20 @@ function AddIsValidClassCreateCollection() {
     }
 }
 
-function RemoveIsValidClassCreateCollection() {
+function RemoveIsValidClassCreateCorreria() {
     $('#name_c').removeClass('is-valid');
     $('#code_c').removeClass('is-valid');
     $('#start_date_c').removeClass('is-valid');
     $('#end_date_c').removeClass('is-valid');
 }
 
-function AddIsInvalidClassCreateCollection(input) {
+function AddIsInvalidClassCreateCorreria(input) {
     if (!$(`#${input}_c`).hasClass('is-valid')) {
         $(`#${input}_c`).addClass('is-invalid');
     }
 }
 
-function RemoveIsInvalidClassCreateCollection() {
+function RemoveIsInvalidClassCreateCorreria() {
     $('#name_c').removeClass('is-invalid');
     $('#code_c').removeClass('is-invalid');
     $('#start_date_c').removeClass('is-invalid');

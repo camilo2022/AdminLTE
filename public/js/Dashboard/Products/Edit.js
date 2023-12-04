@@ -8,7 +8,7 @@ function EditProductModal(id) {
         success: function(response) {
             tableProducts.ajax.reload();
             EditProductModalCleaned(response.data.product);
-            EditProductsModalCollection(response.data.collections);
+            EditProductsModalCorreria(response.data.correrias);
             EditProductsModalModel(response.data.models);
             EditProductsModalTrademark(response.data.trademarks);
             EditProductsModalClothingLine(response.data.clothing_lines);
@@ -25,7 +25,7 @@ function EditProductModal(id) {
 }
 
 function EditProductModalCleaned(product) {
-    EditProductsModalResetSelect('collection_id_e');
+    EditProductsModalResetSelect('correria_id_e');
     EditProductsModalResetSelect('model_id_e');
     EditProductsModalResetSelect('trademark_id_e');
     EditProductsModalResetSelect('clothing_line_id_e');
@@ -34,7 +34,7 @@ function EditProductModalCleaned(product) {
 
     $('#EditProductButton').attr('onclick', `EditProduct(${product.id})`);
     $('#EditProductButton').attr('data-id', product.id);
-    $('#EditProductButton').attr('data-collection_id', product.collection_id);
+    $('#EditProductButton').attr('data-correria_id', product.correria_id);
     $('#EditProductButton').attr('data-model_id', product.model_id);
     $('#EditProductButton').attr('data-trademark_id', product.trademark_id);
     $('#EditProductButton').attr('data-clothing_line_id', product.clothing_line_id);
@@ -84,15 +84,15 @@ function EditProductsModalColors(colors) {
     });
 }
 
-function EditProductsModalCollection(collections) {
-    collections.forEach(collection => {
-        let newOption = new Option(collection.name, collection.id, false, false);
-        $('#collection_id_e').append(newOption);
+function EditProductsModalCorreria(correrias) {
+    correrias.forEach(correria => {
+        let newOption = new Option(correria.name, correria.id, false, false);
+        $('#correria_id_e').append(newOption);
     });
-    let collection_id = $('#EditProductButton').attr('data-collection_id');
-    if(collection_id != '') {
-        $("#collection_id_e").val(collection_id).trigger('change');
-        $('#EditProductButton').attr('data-collection_id', '');
+    let correria_id = $('#EditProductButton').attr('data-correria_id');
+    if(correria_id != '') {
+        $("#correria_id_e").val(correria_id).trigger('change');
+        $('#EditProductButton').attr('data-correria_id', '');
     }
 }
 
@@ -208,7 +208,7 @@ function EditProduct(id) {
     formData.append('code', $('#code_e').val());
     formData.append('price', $('#price_e').val());
     formData.append('description', $('#description_e').val());
-    formData.append('collection_id', $('#collection_id_e').val());
+    formData.append('correria_id', $('#correria_id_e').val());
     formData.append('clothing_line_id', $('#clothing_line_id_e').val());
     formData.append('category_id', $('#category_id_e').val());
     formData.append('subcategory_id', $('#subcategory_id_e').val());
@@ -325,8 +325,8 @@ function AddIsValidClassEditProduct() {
     if (!$(`span[aria-labelledby="select2-trademark_id_e-container`).hasClass('is-invalid')) {
         $(`span[aria-labelledby="select2-trademark_id_e-container"]`).addClass('is-valid');
     }
-    if (!$(`span[aria-labelledby="select2-collection_id_e-container`).hasClass('is-invalid')) {
-        $(`span[aria-labelledby="select2-collection_id_e-container"]`).addClass('is-valid');
+    if (!$(`span[aria-labelledby="select2-correria_id_e-container`).hasClass('is-invalid')) {
+        $(`span[aria-labelledby="select2-correria_id_e-container"]`).addClass('is-valid');
     }
 }
 
@@ -339,7 +339,7 @@ function RemoveIsValidClassEditProduct() {
     $(`span[aria-labelledby="select2-subcategory_id_e-container"]`).removeClass('is-valid');
     $(`span[aria-labelledby="select2-model_id_e-container"]`).removeClass('is-valid');
     $(`span[aria-labelledby="select2-trademark_id_e-container"]`).removeClass('is-valid');
-    $(`span[aria-labelledby="select2-collection_id_e-container"]`).removeClass('is-valid');
+    $(`span[aria-labelledby="select2-correria_id_e-container"]`).removeClass('is-valid');
 }
 
 function AddIsInvalidClassEditProduct(input) {
@@ -360,5 +360,5 @@ function RemoveIsInvalidClassEditProduct() {
     $(`span[aria-labelledby="select2-subcategory_id_e-container"]`).removeClass('is-invalid');
     $(`span[aria-labelledby="select2-model_id_e-container"]`).removeClass('is-invalid');
     $(`span[aria-labelledby="select2-trademark_id_e-container"]`).removeClass('is-invalid');
-    $(`span[aria-labelledby="select2-collection_id_e-container"]`).removeClass('is-invalid');
+    $(`span[aria-labelledby="select2-correria_id_e-container"]`).removeClass('is-invalid');
 }

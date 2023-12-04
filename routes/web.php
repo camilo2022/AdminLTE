@@ -5,7 +5,7 @@ use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\BusinessController;
 use App\Http\Controllers\CategoriesAndSubcategoriesController;
 use App\Http\Controllers\ClothingLineController;
-use App\Http\Controllers\CollectionController;
+use App\Http\Controllers\CorreriaController;
 use App\Http\Controllers\ColorController;
 use App\Http\Controllers\DocumentTypeController;
 use App\Http\Controllers\HomeController;
@@ -357,28 +357,28 @@ Route::middleware(['auth'])->group(function () {
             ->middleware('can:Dashboard.Warehouses.Restore')->name('Dashboard.Warehouses.Restore');
         });
 
-        Route::prefix('/Collections')->group(function () {
+        Route::prefix('/Correrias')->group(function () {
 
-            Route::get('/Index', [CollectionController::class, 'index'])
-            ->middleware('can:Dashboard.Collections.Index')->name('Dashboard.Collections.Index');
+            Route::get('/Index', [CorreriaController::class, 'index'])
+            ->middleware('can:Dashboard.Correrias.Index')->name('Dashboard.Correrias.Index');
 
-            Route::post('/Index/Query', [CollectionController::class, 'indexQuery'])
-            ->middleware('can:Dashboard.Collections.Index.Query')->name('Dashboard.Collections.Index.Query');
+            Route::post('/Index/Query', [CorreriaController::class, 'indexQuery'])
+            ->middleware('can:Dashboard.Correrias.Index.Query')->name('Dashboard.Correrias.Index.Query');
 
-            Route::post('/Create', [CollectionController::class, 'create'])
-            ->middleware('can:Dashboard.Collections.Create')->name('Dashboard.Collections.Create');
+            Route::post('/Create', [CorreriaController::class, 'create'])
+            ->middleware('can:Dashboard.Correrias.Create')->name('Dashboard.Correrias.Create');
 
-            Route::post('/Store', [CollectionController::class, 'store'])
-            ->middleware('can:Dashboard.Collections.Store')->name('Dashboard.Collections.Store');
+            Route::post('/Store', [CorreriaController::class, 'store'])
+            ->middleware('can:Dashboard.Correrias.Store')->name('Dashboard.Correrias.Store');
 
-            Route::post('/Edit/{id}', [CollectionController::class, 'edit'])
-            ->middleware('can:Dashboard.Collections.Edit')->name('Dashboard.Collections.Edit');
+            Route::post('/Edit/{id}', [CorreriaController::class, 'edit'])
+            ->middleware('can:Dashboard.Correrias.Edit')->name('Dashboard.Correrias.Edit');
 
-            Route::put('/Update/{id}', [CollectionController::class, 'update'])
-            ->middleware('can:Dashboard.Collections.Update')->name('Dashboard.Collections.Update');
+            Route::put('/Update/{id}', [CorreriaController::class, 'update'])
+            ->middleware('can:Dashboard.Correrias.Update')->name('Dashboard.Correrias.Update');
 
-            Route::delete('/Delete', [CollectionController::class, 'delete'])
-            ->middleware('can:Dashboard.Collections.Delete')->name('Dashboard.Collections.Delete');
+            Route::delete('/Delete', [CorreriaController::class, 'delete'])
+            ->middleware('can:Dashboard.Correrias.Delete')->name('Dashboard.Correrias.Delete');
 
         });
 

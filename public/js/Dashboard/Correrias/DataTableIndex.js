@@ -1,8 +1,8 @@
-let tableCollections = $('#collections').DataTable({
+let tableCorrerias = $('#correrias').DataTable({
     processing: true,
     serverSide: true,
     ajax: {
-        url: `/Dashboard/Collections/Index/Query`,
+        url: `/Dashboard/Correrias/Index/Query`,
         type: 'POST',
         data: function (request) {
             var columnMappings = {
@@ -23,7 +23,7 @@ let tableCollections = $('#collections').DataTable({
         dataSrc: function (response) {
             response.recordsTotal = response.data.meta.pagination.count;
             response.recordsFiltered = response.data.meta.pagination.total;
-            return response.data.collections;
+            return response.data.correrias;
         },
         error: function (xhr, error, thrown) {
             toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
@@ -51,13 +51,13 @@ let tableCollections = $('#collections').DataTable({
 
                 let btn = `<div class="text-center" style="width: 100px;">`;
 
-                btn =  `<a onclick="EditCollectionModal(${row.id})" type="button"
+                btn =  `<a onclick="EditCorreriaModal(${row.id})" type="button"
                 class="btn btn-primary btn-sm mr-2" title="Editar correria">
                     <i class="fas fa-pen text-white"></i>
                 </a>`;
 
                 if (data === null) {
-                    btn += `<a onclick="DeleteCollection(${row.id})" type="button"
+                    btn += `<a onclick="DeleteCorreria(${row.id})" type="button"
                     class="btn btn-danger btn-sm" title="Eliminar correria">
                         <i class="fas fa-trash text-white"></i>
                     </a>`;

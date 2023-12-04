@@ -30,12 +30,12 @@ return new class extends Migration
             $table->string('dispatched_status')->nullable()->comment('Estado de despacho.');
             $table->datetime('dispatched_date')->nullable()->comment('Fecha de despacho.');
             $table->string('payment_status')->nullable()->comment('Estado de pago.');
-            $table->unsignedBigInteger('collection_id')->comment('Identificador de la correria.');
+            $table->unsignedBigInteger('correria_id')->comment('Identificador de la correria.');
             $table->foreign('client_id')->references('id')->on('clients')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('client_branch_id')->references('id')->on('client_branches')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('seller_user_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('wallet_user_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreign('collection_id')->references('id')->on('collections')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('correria_id')->references('id')->on('correrias')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });
     }

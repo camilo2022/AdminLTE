@@ -4,7 +4,7 @@ namespace App\Http\Requests\Collection;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CollectionIndexQueryRequest extends FormRequest
+class CollectionRestoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

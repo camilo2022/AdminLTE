@@ -28,7 +28,7 @@ class Order extends Model
         'dispatched_status',
         'dispatched_date',
         'payment_status',
-        'collection_id'
+        'correria_id'
     ];
 
     public function order_details() : HasMany
@@ -61,8 +61,8 @@ class Order extends Model
         return $this->belongsTo(User::class, 'wallet_user_id');
     }
 
-    public function collection() : BelongsTo
+    public function correria() : BelongsTo
     {
-        return $this->belongsTo(Collection::class, 'collection_id');
+        return $this->belongsTo(Correria::class, 'correria_id');
     }
 }

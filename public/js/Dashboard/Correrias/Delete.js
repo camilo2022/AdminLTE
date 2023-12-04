@@ -1,4 +1,4 @@
-function DeleteCollection(id) {
+function DeleteCorreria(id) {
     Swal.fire({
         title: '¿Desea eliminar la correria?',
         text: 'La correria será desactivada.',
@@ -11,19 +11,19 @@ function DeleteCollection(id) {
     }).then((result) => {
         if (result.value) {
             $.ajax({
-                url: `/Dashboard/Collections/Delete`,
+                url: `/Dashboard/Correrias/Delete`,
                 type: 'DELETE',
                 data: {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
                     'id': id
                 },
                 success: function(response) {
-                    tableCollections.ajax.reload();
-                    DeleteCollectionAjaxSuccess(response);
+                    tableCorrerias.ajax.reload();
+                    DeleteCorreriaAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableCollections.ajax.reload();
-                    DeleteCollectionAjaxError(xhr);
+                    tableCorrerias.ajax.reload();
+                    DeleteCorreriaAjaxError(xhr);
                 }
             });
         } else {
@@ -32,7 +32,7 @@ function DeleteCollection(id) {
     });
 }
 
-function DeleteCollectionAjaxSuccess(response) {
+function DeleteCorreriaAjaxSuccess(response) {
     if(response.status === 204) {
         toastr.success(response.message);
     }
@@ -42,7 +42,7 @@ function DeleteCollectionAjaxSuccess(response) {
     }
 }
 
-function DeleteCollectionAjaxError(xhr) {
+function DeleteCorreriaAjaxError(xhr) {
     if(xhr.status === 403) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
     }

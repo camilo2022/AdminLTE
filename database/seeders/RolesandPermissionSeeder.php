@@ -37,7 +37,7 @@ class RolesAndPermissionSeeder extends Seeder
 
         $Warehouses = Role::create(['name' => 'Warehouses']);
 
-        $Collections = Role::create(['name' => 'Collections']);
+        $Correrias = Role::create(['name' => 'Correrias']);
 
         $Sizes = Role::create(['name' => 'Sizes']);
 
@@ -174,13 +174,13 @@ class RolesAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Dashboard.Warehouses.Delete'])->syncRoles([$Warehouses]);
         Permission::create(['name' => 'Dashboard.Warehouses.Restore'])->syncRoles([$Warehouses]);
 
-        Permission::create(['name' => 'Dashboard.Collections.Index'])->syncRoles([$Collections]);
-        Permission::create(['name' => 'Dashboard.Collections.Index.Query'])->syncRoles([$Collections]);
-        Permission::create(['name' => 'Dashboard.Collections.Create'])->syncRoles([$Collections]);
-        Permission::create(['name' => 'Dashboard.Collections.Store'])->syncRoles([$Collections]);
-        Permission::create(['name' => 'Dashboard.Collections.Edit'])->syncRoles([$Collections]);
-        Permission::create(['name' => 'Dashboard.Collections.Update'])->syncRoles([$Collections]);
-        Permission::create(['name' => 'Dashboard.Collections.Delete'])->syncRoles([$Collections]);
+        Permission::create(['name' => 'Dashboard.Correrias.Index'])->syncRoles([$Correrias]);
+        Permission::create(['name' => 'Dashboard.Correrias.Index.Query'])->syncRoles([$Correrias]);
+        Permission::create(['name' => 'Dashboard.Correrias.Create'])->syncRoles([$Correrias]);
+        Permission::create(['name' => 'Dashboard.Correrias.Store'])->syncRoles([$Correrias]);
+        Permission::create(['name' => 'Dashboard.Correrias.Edit'])->syncRoles([$Correrias]);
+        Permission::create(['name' => 'Dashboard.Correrias.Update'])->syncRoles([$Correrias]);
+        Permission::create(['name' => 'Dashboard.Correrias.Delete'])->syncRoles([$Correrias]);
 
         Permission::create(['name' => 'Dashboard.Sizes.Index'])->syncRoles([$Sizes]);
         Permission::create(['name' => 'Dashboard.Sizes.Index.Query'])->syncRoles([$Sizes]);

@@ -20,7 +20,7 @@ class ProductIndexQueryCollection extends ResourceCollection
                 return [
                     'id' => $product->id,
                     'code' => $product->code,
-                    'description' => $product->description,
+                    'cost' => $product->cost,
                     'price' => $product->price,
                     'clothing_line' =>$product->clothing_line,
                     'category' => $product->category,
