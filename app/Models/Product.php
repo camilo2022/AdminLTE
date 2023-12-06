@@ -39,17 +39,17 @@ class Product extends DBModel
 
     public function colors() : BelongsToMany
     {
-        return $this->belongsToMany(Color::class, 'product_has_colors', 'product_id', 'color_id')
+        return $this->belongsToMany(Color::class, 'product_color_tone', 'product_id', 'color_id')
             ->withTimestamps()
-            ->using(ProductHasColor::class)
+            ->using(ProductColor::class)
             ->wherePivot('deleted_at', null);
     }
 
     public function sizes() : BelongsToMany
     {
-        return $this->belongsToMany(Size::class, 'product_has_sizes', 'product_id', 'size_id')
+        return $this->belongsToMany(Size::class, 'product_sizes', 'product_id', 'size_id')
             ->withTimestamps()
-            ->using(ProductHasSize::class)
+            ->using(ProductSize::class)
             ->wherePivot('deleted_at', null);
     }
 

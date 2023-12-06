@@ -2,10 +2,8 @@
 
 namespace Spatie\Permission\Models;
 
-use App\Models\Module;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Spatie\Permission\Contracts\Role as RoleContract;
 use Spatie\Permission\Exceptions\GuardDoesNotMatch;
 use Spatie\Permission\Exceptions\RoleAlreadyExists;
@@ -195,34 +193,5 @@ class Role extends Model implements RoleContract
         }
 
         return $this->permissions->contains($permission->getKeyName(), $permission->getKey());
-    }
-
-    public function modules(): BelongsToMany
-    {
-        return $this->belongsToMany(Module::class, 'model_has_roles', 'role_id', 'model_id')
-            ->where('model_type', Module::class);
-    }
-
-    public function scopeSearch($query, $search)
-    {
-        return $query->where('id', 'like', '%' . $search . '%')
-        ->orWhere('name', 'like', '%' . $search . '%')
-        ->orWhereHas('permissions',
-            function ($subQueryPermission) use ($search) {
-                $subQueryPermission->where('id', 'like',  '%' . $search . '%')
-                ->orWhere('name', 'like',  '%' . $search . '%');
-            }
-        ); 
-    }
-
-    public function scopeFilterByDate($query, $start_date, $end_date)
-    {
-        // Filtro por rango de fechas entre 'start_date' y 'end_date' en el campo 'created_at'
-        return $query->whereBetween('created_at', [$start_date, $end_date]);
-    }
-
-    public function scopeFindByName($query, $value)
-    {
-        return $query->where('name', $value)->firstOrFail();
     }
 }

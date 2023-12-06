@@ -15,10 +15,10 @@ return new class extends Migration
     {
         Schema::create('product_photos', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('product_id');
+            $table->unsignedBigInteger('product_color_tone_id');
             $table->string('name');
             $table->string('path');
-            $table->foreign('product_id')->references('id')->on('products')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('product_color_tone_id')->references('id')->on('product_color_tone')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });
     }

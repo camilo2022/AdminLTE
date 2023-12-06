@@ -12,7 +12,7 @@ use App\Http\Requests\Warehouse\WarehouseUpdateRequest;
 use App\Http\Resources\Warehose\WarehouseIndexQueryCollection;
 use App\Models\User;
 use App\Models\Warehouse;
-use App\Models\WarehouseHasUser;
+use App\Models\WarehouseUser;
 use App\Traits\ApiMessage;
 use App\Traits\ApiResponser;
 use Carbon\Carbon;
@@ -255,7 +255,7 @@ class WarehouseController extends Controller
     public function assignGestor(WarehouseAssignGestorRequest $request)
     {
         try {
-            $warehouse_has_users = new WarehouseHasUser();
+            $warehouse_has_users = new WarehouseUser();
             $warehouse_has_users->user_id = $request->input('user_id');
             $warehouse_has_users->warehouse_id = $request->input('warehouse_id');
             $warehouse_has_users->save();
@@ -298,7 +298,7 @@ class WarehouseController extends Controller
     public function removeGestor(WarehouseRemoveGestorRequest $request)
     {
         try {
-            $warehouse_has_users = WarehouseHasUser::where('user_id', '=', $request->input('user_id'))
+            $warehouse_has_users = WarehouseUser::where('user_id', '=', $request->input('user_id'))
             ->where('warehouse_id', '=', $request->input('warehouse_id'))->delete();
 
             return $this->successResponse(

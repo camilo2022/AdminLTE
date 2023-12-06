@@ -51,6 +51,8 @@ class RolesAndPermissionSeeder extends Seeder
 
         $Colors = Role::create(['name' => 'Colors']);
 
+        $Tones = Role::create(['name' => 'Tones']);
+
         $Products = Role::create(['name' => 'Products']);
 
         $Inventories = Role::create(['name' => 'Inventories']);
@@ -236,6 +238,15 @@ class RolesAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Dashboard.Colors.Delete'])->syncRoles([$Colors]);
         Permission::create(['name' => 'Dashboard.Colors.Restore'])->syncRoles([$Colors]);
 
+        Permission::create(['name' => 'Dashboard.Tones.Index'])->syncRoles([$Tones]);
+        Permission::create(['name' => 'Dashboard.Tones.Index.Query'])->syncRoles([$Tones]);
+        Permission::create(['name' => 'Dashboard.Tones.Create'])->syncRoles([$Tones]);
+        Permission::create(['name' => 'Dashboard.Tones.Store'])->syncRoles([$Tones]);
+        Permission::create(['name' => 'Dashboard.Tones.Edit'])->syncRoles([$Tones]);
+        Permission::create(['name' => 'Dashboard.Tones.Update'])->syncRoles([$Tones]);
+        Permission::create(['name' => 'Dashboard.Tones.Delete'])->syncRoles([$Tones]);
+        Permission::create(['name' => 'Dashboard.Tones.Restore'])->syncRoles([$Tones]);
+
         Permission::create(['name' => 'Dashboard.Products.Index'])->syncRoles([$Products]);
         Permission::create(['name' => 'Dashboard.Products.Index.Query'])->syncRoles([$Products]);
         Permission::create(['name' => 'Dashboard.Products.Create'])->syncRoles([$Products]);
@@ -243,6 +254,10 @@ class RolesAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Dashboard.Products.Edit'])->syncRoles([$Products]);
         Permission::create(['name' => 'Dashboard.Products.Update'])->syncRoles([$Products]);
         Permission::create(['name' => 'Dashboard.Products.Show'])->syncRoles([$Products]);
+        Permission::create(['name' => 'Dashboard.Products.AssignSize'])->syncRoles([$Products]);
+        Permission::create(['name' => 'Dashboard.Products.RemoveSize'])->syncRoles([$Products]);
+        Permission::create(['name' => 'Dashboard.Products.AssignColorTone'])->syncRoles([$Products]);
+        Permission::create(['name' => 'Dashboard.Products.RemoveColorTone'])->syncRoles([$Products]);
         Permission::create(['name' => 'Dashboard.Products.Destroy'])->syncRoles([$Products]);
         Permission::create(['name' => 'Dashboard.Products.Delete'])->syncRoles([$Products]);
         Permission::create(['name' => 'Dashboard.Products.Restore'])->syncRoles([$Products]);

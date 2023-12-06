@@ -17,6 +17,7 @@ use App\Http\Controllers\PaymentMethodController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\RolesAndPermissionsController;
 use App\Http\Controllers\SizeController;
+use App\Http\Controllers\ToneController;
 use App\Http\Controllers\TrademarkController;
 use App\Http\Controllers\TransferController;
 use App\Http\Controllers\TransferDetailController;
@@ -542,6 +543,33 @@ Route::middleware(['auth'])->group(function () {
 
             Route::put('/Restore', [ColorController::class, 'restore'])
             ->middleware('can:Dashboard.Colors.Restore')->name('Dashboard.Colors.Restore');
+        });
+
+        Route::prefix('/Tones')->group(function () {
+
+            Route::get('/Index', [ToneController::class, 'index'])
+            ->middleware('can:Dashboard.Tones.Index')->name('Dashboard.Tones.Index');
+
+            Route::post('/Index/Query', [ToneController::class, 'indexQuery'])
+            ->middleware('can:Dashboard.Tones.Index.Query')->name('Dashboard.Tones.Index.Query');
+
+            Route::post('/Create', [ToneController::class, 'create'])
+            ->middleware('can:Dashboard.Tones.Create')->name('Dashboard.Tones.Create');
+
+            Route::post('/Store', [ToneController::class, 'store'])
+            ->middleware('can:Dashboard.Tones.Store')->name('Dashboard.Tones.Store');
+
+            Route::post('/Edit/{id}', [ToneController::class, 'edit'])
+            ->middleware('can:Dashboard.Tones.Edit')->name('Dashboard.Tones.Edit');
+
+            Route::put('/Update/{id}', [ToneController::class, 'update'])
+            ->middleware('can:Dashboard.Tones.Update')->name('Dashboard.Tones.Update');
+
+            Route::delete('/Delete', [ToneController::class, 'delete'])
+            ->middleware('can:Dashboard.Tones.Delete')->name('Dashboard.Tones.Delete');
+
+            Route::put('/Restore', [ToneController::class, 'restore'])
+            ->middleware('can:Dashboard.Tones.Restore')->name('Dashboard.Tones.Restore');
         });
 
         Route::prefix('/Products')->group(function () {

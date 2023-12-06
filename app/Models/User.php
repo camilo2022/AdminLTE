@@ -63,7 +63,7 @@ class User extends Authenticatable
 
     public function warehouses() : BelongsToMany
     {
-        return $this->belongsToMany(Warehouse::class, 'warehouse_has_users', 'user_id', 'warehouse_id');
+        return $this->belongsToMany(Warehouse::class, 'warehouse_users', 'user_id', 'warehouse_id');
     }
 
     public function scopeSearch($query, $search)

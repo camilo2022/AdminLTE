@@ -4,12 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Exports\Product\ProductExport;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Product\ProductAssignColorToneRequest;
+use App\Http\Requests\Product\ProductAssignSizeRequest;
 use App\Http\Requests\Product\ProductCreateRequest;
 use App\Http\Requests\Product\ProductDeleteRequest;
 use App\Http\Requests\Product\ProductDestroyRequest;
 use App\Http\Requests\Product\ProductEditRequest;
 use App\Http\Requests\Product\ProductIndexQueryRequest;
 use App\Http\Requests\Product\ProductMasiveRequest;
+use App\Http\Requests\Product\ProductRemoveColorToneRequest;
+use App\Http\Requests\Product\ProductRemoveSizeRequest;
 use App\Http\Requests\Product\ProductRestoreRequest;
 use App\Http\Requests\Product\ProductStoreRequest;
 use App\Http\Requests\Product\ProductUpdateRequest;
@@ -22,8 +26,8 @@ use App\Models\Correria;
 use App\Models\Color;
 use App\Models\Model;
 use App\Models\Product;
-use App\Models\ProductHasColor;
-use App\Models\ProductHasSize;
+use App\Models\ProductColorTone;
+use App\Models\ProductSize;
 use App\Models\ProductPhoto;
 use App\Models\Size;
 use App\Models\Subcategory;
@@ -132,8 +136,6 @@ class ProductController extends Controller
                     'clothing_lines' => ClothingLine::all(),
                     'models' => Model::all(),
                     'trademarks' => Trademark::all(),
-                    'sizes' => Size::all(),
-                    'colors' => Color::all(),
                     'correrias' => Correria::all()
                 ],
                 'Ingrese los datos para hacer la validacion y registro.',
@@ -166,17 +168,17 @@ class ProductController extends Controller
             $product->save();
 
             collect($request->input('colors'))->map(function ($color) use ($product){
-                $productHasColor = new ProductHasColor();
-                $productHasColor->product_id = $product->id;
-                $productHasColor->color_id = $color;
-                $productHasColor->save();
+                $productColor = new ProductColorTone();
+                $productColor->product_id = $product->id;
+                $productColor->color_id = $color;
+                $productColor->save();
             });
 
             collect($request->input('sizes'))->map(function ($size) use ($product){
-                $productHasSize = new ProductHasSize();
-                $productHasSize->product_id = $product->id;
-                $productHasSize->size_id = $size;
-                $productHasSize->save();
+                $productSize = new ProductSize();
+                $productSize->product_id = $product->id;
+                $productSize->size_id = $size;
+                $productSize->save();
             });
 
             if ($request->hasFile('photos')) {
@@ -253,14 +255,10 @@ class ProductController extends Controller
                         'model' => function ($query) { $query->withTrashed(); },
                         'trademark' => function ($query) { $query->withTrashed(); },
                         'correria' => function ($query) { $query->withTrashed(); },
-                        'colors',
-                        'sizes'
                     ])->findOrFail($id),
                     'clothing_lines' => ClothingLine::all(),
                     'models' => Model::all(),
                     'trademarks' => Trademark::all(),
-                    'sizes' => Size::all(),
-                    'colors' => Color::all(),
                     'correrias' => Correria::all()
                 ],
                 'El producto fue encontrado exitosamente.',
@@ -300,28 +298,28 @@ class ProductController extends Controller
             $product->save();
 
             $colors = collect($request->input('colors'))->map(function ($color) use ($product){
-                $productHasColor = ProductHasColor::withTrashed()->where('color_id', '=', $color)->where('product_id', '=', $product->id)->first();
-                $productHasColor = !is_null($productHasColor) ? $productHasColor : new ProductHasColor();
-                $productHasColor->product_id = $product->id;
-                $productHasColor->color_id = $color;
-                $productHasColor->deleted_at = null;
-                $productHasColor->save();
-                return $productHasColor->id;
+                $productColor = ProductColorTone::withTrashed()->where('color_id', '=', $color)->where('product_id', '=', $product->id)->first();
+                $productColor = !is_null($productColor) ? $productColor : new ProductColorTone();
+                $productColor->product_id = $product->id;
+                $productColor->color_id = $color;
+                $productColor->deleted_at = null;
+                $productColor->save();
+                return $productColor->id;
             });
 
-            ProductHasColor::whereNotIn('id', $colors)->where('product_id', '=', $product->id)->delete();
+            ProductColorTone::whereNotIn('id', $colors)->where('product_id', '=', $product->id)->delete();
 
             $sizes = collect($request->input('sizes'))->map(function ($size) use ($product){
-                $productHasSize = ProductHasSize::withTrashed()->where('size_id', '=', $size)->where('product_id', '=', $product->id)->first();
-                $productHasSize = !is_null($productHasSize) ? $productHasSize : new ProductHasSize();
-                $productHasSize->product_id = $product->id;
-                $productHasSize->size_id = $size;
-                $productHasSize->deleted_at = null;
-                $productHasSize->save();
-                return $productHasSize->id;
+                $productSize = ProductSize::withTrashed()->where('size_id', '=', $size)->where('product_id', '=', $product->id)->first();
+                $productSize = !is_null($productSize) ? $productSize : new ProductSize();
+                $productSize->product_id = $product->id;
+                $productSize->size_id = $size;
+                $productSize->deleted_at = null;
+                $productSize->save();
+                return $productSize->id;
             });
 
-            ProductHasSize::whereNotIn('id', $sizes)->where('product_id', '=', $product->id)->delete();
+            ProductSize::whereNotIn('id', $sizes)->where('product_id', '=', $product->id)->delete();
 
             if ($request->hasFile('photos')) {
                 $photos = $request->file('photos');
@@ -370,17 +368,7 @@ class ProductController extends Controller
     public function show($id)
     {
         try {
-            $product = Product::with([
-                'clothing_line' => function ($query) { $query->withTrashed(); },
-                'category' => function ($query) { $query->withTrashed(); },
-                'subcategory' => function ($query) { $query->withTrashed(); },
-                'model' => function ($query) { $query->withTrashed(); },
-                'trademark' => function ($query) { $query->withTrashed(); },
-                'collection' => function ($query) { $query->withTrashed(); },
-                'photos',
-                'colors',
-                'sizes'
-            ])->findOrFail($id);
+            $product = Product::with('photos')->findOrFail($id);
 
             foreach ($product->photos as $photo) {
                 $photo->path = asset('storage/' . $photo->path);
@@ -400,6 +388,176 @@ class ProductController extends Controller
                 404
             );
         } catch (Exception $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('Exception'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        }
+    }
+
+    public function assignSize(ProductAssignSizeRequest $request)
+    {
+        try {
+            $product_sizes = new ProductSize();
+            $product_sizes->product_id = $request->input('product_id');
+            $product_sizes->size_id = $request->input('size_id');
+            $product_sizes->save();
+
+            return $this->successResponse(
+                $product_sizes,
+                'Talla de producto asignado exitosamente.',
+                200
+            );
+        } catch (ModelNotFoundException $e) {
+            // Manejar la excepción de la base de datos
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('ModelNotFoundException'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        } catch (QueryException $e) {
+            // Manejar la excepción de la base de datos
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('QueryException'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        } catch (Exception $e) {
+            // Devolver una respuesta de error en caso de excepción
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('Exception'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        }
+    }
+
+    public function removeSize(ProductRemoveSizeRequest $request)
+    {
+        try {
+            $product_sizes = ProductSize::where('product_id', '=', $request->input('product_id'))
+            ->where('size_id', '=', $request->input('size_id'))->delete();
+
+            return $this->successResponse(
+                $product_sizes,
+                'Talla de producto removido exitosamente.',
+                200
+            );
+        } catch (ModelNotFoundException $e) {
+            // Manejar la excepción de la base de datos
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('ModelNotFoundException'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        } catch (QueryException $e) {
+            // Manejar la excepción de la base de datos
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('QueryException'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        } catch (Exception $e) {
+            // Devolver una respuesta de error en caso de excepción
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('Exception'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        }
+    }
+
+    public function assignColorTone(ProductAssignColorToneRequest $request)
+    {
+        try {
+            $product_color_tone = new ProductColorTone();
+            $product_color_tone->product_id = $request->input('product_id');
+            $product_color_tone->color_id = $request->input('color_id');
+            $product_color_tone->tone_id = $request->input('tone_id');
+            $product_color_tone->save();
+
+            return $this->successResponse(
+                $product_color_tone,
+                'Color y tono de producto asignado exitosamente.',
+                200
+            );
+        } catch (ModelNotFoundException $e) {
+            // Manejar la excepción de la base de datos
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('ModelNotFoundException'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        } catch (QueryException $e) {
+            // Manejar la excepción de la base de datos
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('QueryException'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        } catch (Exception $e) {
+            // Devolver una respuesta de error en caso de excepción
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('Exception'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        }
+    }
+
+    public function removeColorTone(ProductRemoveColorToneRequest $request)
+    {
+        try {
+            $product_sizes = ProductColorTone::where('product_id', '=', $request->input('product_id'))
+            ->where('color_id', '=', $request->input('color_id'))
+            ->where('tone_id', '=', $request->input('tone_id'))->delete();
+
+            return $this->successResponse(
+                $product_sizes,
+                'Color y tono de producto removido exitosamente.',
+                200
+            );
+        } catch (ModelNotFoundException $e) {
+            // Manejar la excepción de la base de datos
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('ModelNotFoundException'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        } catch (QueryException $e) {
+            // Manejar la excepción de la base de datos
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('QueryException'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        } catch (Exception $e) {
+            // Devolver una respuesta de error en caso de excepción
             return $this->errorResponse(
                 [
                     'message' => $this->getMessage('Exception'),
@@ -548,17 +706,17 @@ class ProductController extends Controller
                 $productNew->save();
 
                 collect($product->colors)->map(function ($color) use ($productNew){
-                    $productHasColor = new ProductHasColor();
-                    $productHasColor->product_id = $productNew->id;
-                    $productHasColor->color_id = $color;
-                    $productHasColor->save();
+                    $productColor = new ProductColorTone();
+                    $productColor->product_id = $productNew->id;
+                    $productColor->color_id = $color;
+                    $productColor->save();
                 });
 
                 collect($product->sizes)->map(function ($size) use ($productNew){
-                    $productHasSize = new ProductHasSize();
-                    $productHasSize->product_id = $productNew->id;
-                    $productHasSize->size_id = $size;
-                    $productHasSize->save();
+                    $productSize = new ProductSize();
+                    $productSize->product_id = $productNew->id;
+                    $productSize->size_id = $size;
+                    $productSize->save();
                 });
             }
 
