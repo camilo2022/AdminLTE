@@ -1,7 +1,7 @@
-function DeleteSize(id) {
+function DeleteTransfer(id) {
     Swal.fire({
-        title: '¿Desea eliminar la talla?',
-        text: 'La talla será desactivada.',
+        title: '¿Desea eliminar la transferencia?',
+        text: 'La transferencia será desactivada.',
         icon: 'warning',
         showCancelButton: true,
         cancelButtonColor: '#DD6B55',
@@ -11,28 +11,28 @@ function DeleteSize(id) {
     }).then((result) => {
         if (result.value) {
             $.ajax({
-                url: `/Dashboard/Sizes/Delete`,
+                url: `/Dashboard/Transfers/Delete`,
                 type: 'DELETE',
                 data: {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
                     'id': id
                 },
                 success: function(response) {
-                    tableSizes.ajax.reload();
-                    DeleteSizeAjaxSuccess(response);
+                    tableTransfers.ajax.reload();
+                    DeleteTransferAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableSizes.ajax.reload();
-                    DeleteSizeAjaxError(xhr);
+                    tableTransfers.ajax.reload();
+                    DeleteTransferAjaxError(xhr);
                 }
             });
         } else {
-            toastr.info('La talla seleccionada no fue desactivada.')
+            toastr.info('La transferencia seleccionada no fue desactivada.')
         }
     });
 }
 
-function DeleteSizeAjaxSuccess(response) {
+function DeleteTransferAjaxSuccess(response) {
     if(response.status === 204) {
         toastr.success(response.message);
     }
@@ -42,7 +42,7 @@ function DeleteSizeAjaxSuccess(response) {
     }
 }
 
-function DeleteSizeAjaxError(xhr) {
+function DeleteTransferAjaxError(xhr) {
     if(xhr.status === 403) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
     }

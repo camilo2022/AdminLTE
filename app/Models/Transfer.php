@@ -17,9 +17,11 @@ class Transfer extends Model
     protected $table = 'transfers';
     protected $fillable = [
         'consecutive',
+        'from_warehouse_id',
         'from_user_id',
         'form_date',
         'from_observation',
+        'to_warehouse_id',
         'to_user_id',
         'to_date',
         'to_observation',
@@ -31,9 +33,19 @@ class Transfer extends Model
         return $this->hasMany(TransferDetail::class, 'transfer_id');
     }
 
+    public function from_warehouse() : BelongsTo
+    {
+        return $this->belongsTo(Warehouse::class, 'from_warehouse_id');
+    }
+
     public function from_user() : BelongsTo
     {
         return $this->belongsTo(User::class, 'from_user_id');
+    }
+
+    public function to_warehouse() : BelongsTo
+    {
+        return $this->belongsTo(Warehouse::class, 'to_warehouse_id');
     }
 
     public function to_user() : BelongsTo
@@ -44,6 +56,13 @@ class Transfer extends Model
     public function scopeSearch($query, $search)
     {
         return $query->where('consecutive', 'like', '%' . $search . '%')
+        ->orWhereHas('from_warehouse',
+            function ($subQuery) use ($search) {
+                $subQuery->where('id', 'like',  '%' . $search . '%')
+                ->orWhere('name', 'like',  '%' . $search . '%')
+                ->orWhere('code', 'like',  '%' . $search . '%');
+            }
+        )
         ->orWhereHas('from_user',
             function ($subQuery) use ($search) {
                 $subQuery->where('id', 'like',  '%' . $search . '%')
@@ -53,6 +72,13 @@ class Transfer extends Model
         )
         ->orWhere('form_date', 'like', '%' . $search . '%')
         ->orWhere('from_observation', 'like', '%' . $search . '%')
+        ->orWhereHas('to_warehouse',
+            function ($subQuery) use ($search) {
+                $subQuery->where('id', 'like',  '%' . $search . '%')
+                ->orWhere('name', 'like',  '%' . $search . '%')
+                ->orWhere('code', 'like',  '%' . $search . '%');
+            }
+        )
         ->orWhereHas('to_user',
             function ($subQuery) use ($search) {
                 $subQuery->where('id', 'like',  '%' . $search . '%')
@@ -78,9 +104,9 @@ class Transfer extends Model
                 $subQuery->where('user_id', '=', Auth::user()->id);
             }
         )
-        ->orWhereHas('to_user.warehouses',
+        ->orWhereHas('to_warehouse.users',
             function ($subQuery) {
-                $subQuery->where('user_id', '=', Auth::user()->id);
+                $subQuery->where('users.id', '=', Auth::user()->id);
             }
         );
     }

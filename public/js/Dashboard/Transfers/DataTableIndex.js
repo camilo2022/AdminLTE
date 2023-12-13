@@ -1,3 +1,4 @@
+let warehousesUser = [];
 let tableTransfers = $('#transfers').DataTable({
     processing: true,
     serverSide: true,
@@ -8,13 +9,15 @@ let tableTransfers = $('#transfers').DataTable({
             var columnMappings = {
                 0: 'id',
                 1: 'consecutive',
-                2: 'from_user_id',
-                3: 'form_date',
-                4: 'from_observation',
-                5: 'to_user_id',
-                6: 'to_date',
-                7: 'to_observation',
-                8: 'status'
+                2: 'from_warehouse_id',
+                3: 'from_user_id',
+                4: 'form_date',
+                5: 'from_observation',
+                6: 'to_warehouse_id',
+                7: 'to_user_id',
+                8: 'to_date',
+                9: 'to_observation',
+                10: 'status'
             };
             request._token = $('meta[name="csrf-token"]').attr('content');
             request.perPage = request.length;
@@ -24,9 +27,10 @@ let tableTransfers = $('#transfers').DataTable({
             request.dir = request.order[0].dir;
         },
         dataSrc: function (response) {
-            response.recordsTotal = response.data.meta.pagination.count;
-            response.recordsFiltered = response.data.meta.pagination.total;
-            return response.data.transfers;
+            response.recordsTotal = response.data.transfers.meta.pagination.count;
+            response.recordsFiltered = response.data.transfers.meta.pagination.total;
+            warehousesUser = response.data.warehouses;
+            return response.data.transfers.transfers;
         },
         error: function (xhr, error, thrown) {
             toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
@@ -36,6 +40,12 @@ let tableTransfers = $('#transfers').DataTable({
         { data: 'id' },
         { data: 'consecutive' },
         { 
+            data: 'from_warehouse_id',
+            render: function (data, type, row) {
+                return `${row.from_warehouse.name} - ${row.from_warehouse.code}`;
+            }
+        },
+        { 
             data: 'from_user_id',
             render: function (data, type, row) {
                 return `${row.from_user.name} ${row.from_user.last_name}`;
@@ -43,6 +53,12 @@ let tableTransfers = $('#transfers').DataTable({
         },
         { data: 'from_date' },
         { data: 'from_observation' },
+        { 
+            data: 'to_warehouse_id',
+            render: function (data, type, row) {
+                return `${row.to_warehouse.name} - ${row.to_warehouse.code}`;
+            }
+        },
         { 
             data: 'to_user_id',
             render: function (data, type, row) {
@@ -78,7 +94,7 @@ let tableTransfers = $('#transfers').DataTable({
                     <i class="fas fa-eye text-white"></i>
                 </a>`;
 
-                if (data === null && row.status == 'Pendiente' && row.to_user_id === null) {
+                if (data === null && row.status == 'Pendiente' && row.from_user_id === $('meta[name="user-id"]').attr('content')) {
                     btn += `<a onclick="EditTransferModal(${row.id})" type="button"
                     class="btn btn-primary btn-sm mr-2" title="Editar transferencia">
                         <i class="fas fa-pen text-white"></i>
@@ -88,7 +104,9 @@ let tableTransfers = $('#transfers').DataTable({
                     class="btn btn-danger btn-sm mr-2" title="Eliminar transferencia">
                         <i class="fas fa-trash text-white"></i>
                     </a>`;
-                } else if (data === null && row.status === 'Pendiente' && row.to_user_id !== null) {
+                } 
+                
+                if (data === null && row.status === 'Pendiente' && warehousesUser.includes(row.to_warehouse_id)) {
                     btn += `<a onclick="AprroveTransfer(${row.id})" type="button"
                     class="btn btn-success btn-sm mr-2" title="Aceptar transferencia">
                         <i class="fas fa-check text-white"></i>
@@ -107,11 +125,11 @@ let tableTransfers = $('#transfers').DataTable({
     columnDefs: [
         {
             orderable: true,
-            targets: [0, 1, 2, 3, 4, 5, 6, 7, 8]
+            targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
         },
         {
             orderable: false,
-            targets: [9]
+            targets: [11]
         }
     ],
     pagingType: 'full_numbers',

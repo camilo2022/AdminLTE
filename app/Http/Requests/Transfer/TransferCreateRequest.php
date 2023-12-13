@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class TransferStoreRequest extends FormRequest
+class TransferCreateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -39,9 +39,7 @@ class TransferStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'from_warehouse_id' => ['required', 'exists:warehouses,id'],
-            'to_warehouse_id' => ['required', 'exists:warehouses,id'],
-            'from_observation' => ['nullable', 'string', 'max:255']
+            'to_warehouse_id' => ['nullable', 'exists:warehouses,id']
         ];
     }
 
@@ -49,12 +47,8 @@ class TransferStoreRequest extends FormRequest
     public function messages()
     {
         return [
-            'from_warehouse_id.required' => 'El campo Bodega envia es requerido.',
-            'from_warehouse_id.exists' => 'El Identificador de la bodega de envio no es valido.',
             'to_warehouse_id.required' => 'El campo Bodega recibe es requerido.',
-            'to_warehouse_id.exists' => 'El Identificador de la bodega que recibe no es valido.',
-            'from_observation.string' => 'El campo Observacion del usuario que envia debe ser una cadena de texto.',
-            'from_observation.max' => 'El campo Observacion del usuario que envia no debe tener mas de 255 caracteres.',
+            'to_warehouse_id.exists' => 'El Identificador de la bodega que recibe no es valido.'
         ];
     }
 }

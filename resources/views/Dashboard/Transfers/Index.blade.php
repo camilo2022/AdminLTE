@@ -67,9 +67,11 @@
                                         <tr>
                                             <th>#</th>
                                             <th>Consecutivo</th>
+                                            <th>Bodega Envio</th>
                                             <th>Usuario Envio</th>
                                             <th>Fecha Envio</th>
                                             <th>Observacion Envio</th>
+                                            <th>Bodega Recibe</th>
                                             <th>Usuario Recibe</th>
                                             <th>Fecha Recibe</th>
                                             <th>Observacion Recibe</th>

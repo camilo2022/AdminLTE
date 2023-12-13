@@ -1,9 +1,9 @@
-<div class="modal" id="EditSizeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" data-backdrop="static" aria-hidden="true">
+<div class="modal" id="EditTransferModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" data-backdrop="static" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header w-100">
                 <div class="text-center w-100" style="background: white;">
-                    <label style="font-size:20px;font-weight:bold;">Edicion de Talla</label>
+                    <label style="font-size:20px;font-weight:bold;">Edicion de Transferencia</label>
                 </div>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
@@ -12,25 +12,38 @@
             <div class="modal-body">
                 <div class="col-lg-12">
                     <div class="form-group">
-                        <label for="name">Nombre</label>
+                        <label for="from_warehouse_id_e">Bodega Envia</label>
                         <div class="input-group">
-                            <input type="text" class="form-control" id="name_e" name="name">
+                            <select class="form-control select2" id="from_warehouse_id_e" name="from_warehouse_id" style="width: 90%" onchange="EditTransfersModalFromWarehoseGetToWarehouse(this)">
+                                <option value="">Seleccione</option>
+                            </select>
                             <div class="input-group-append">
                                 <span class="input-group-text">
-                                    <i class="fas fa-signature"></i>
+                                    <i class="fas fa-share-all"></i>
                                 </span>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-lg-12">
                     <div class="form-group">
-                        <label for="code">Codigo</label>
+                        <label for="to_warehouse_id_e">Bodega Recibe</label>
                         <div class="input-group">
-                            <input type="text" class="form-control" id="code_e" name="code">
+                            <select class="form-control select2" id="to_warehouse_id_e" name="to_warehouse_id" style="width: 90%">
+                                <option value="">Seleccione</option>
+                            </select>
                             <div class="input-group-append">
                                 <span class="input-group-text">
-                                    <i class="fas fa-code"></i>
+                                    <i class="fas fa-reply-all"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="from_observation_e">Descripcion</label>
+                        <div class="input-group">
+                            <textarea class="form-control" id="from_observation_e" name="from_observation" cols="30" rows="4"></textarea>
+                            <div class="input-group-append">
+                                <span class="input-group-text">
+                                    <i class="fas fa-text-size"></i>
                                 </span>
                             </div>
                         </div>
@@ -41,7 +54,7 @@
                 <button type="button" class="btn btn-secondary" data-dismiss="modal" title="Cerrar ventana">
                     <i class="fas fa-xmark"></i>
                 </button>
-                <button type="button" class="btn btn-primary" id="EditSizeButton" onclick="" title="Actualizar talla.">
+                <button type="button" class="btn btn-primary" id="EditTransferButton" onclick="" title="Actualizar transferencia.">
                     <i class="fas fa-floppy-disk"></i>
                 </button>
             </div>

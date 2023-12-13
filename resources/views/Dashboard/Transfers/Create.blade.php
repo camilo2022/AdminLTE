@@ -13,6 +13,32 @@
             <div class="modal-body">
                 <div class="col-lg-12">
                     <div class="form-group">
+                        <label for="from_warehouse_id_c">Bodega Envia</label>
+                        <div class="input-group">
+                            <select class="form-control select2" id="from_warehouse_id_c" name="from_warehouse_id" style="width: 90%" onchange="CreateTransfersModalFromWarehoseGetToWarehouse(this)">
+                                <option value="">Seleccione</option>
+                            </select>
+                            <div class="input-group-append">
+                                <span class="input-group-text">
+                                    <i class="fas fa-share-all"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="to_warehouse_id_c">Bodega Recibe</label>
+                        <div class="input-group">
+                            <select class="form-control select2" id="to_warehouse_id_c" name="to_warehouse_id" style="width: 90%">
+                                <option value="">Seleccione</option>
+                            </select>
+                            <div class="input-group-append">
+                                <span class="input-group-text">
+                                    <i class="fas fa-reply-all"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label for="from_observation_c">Descripcion</label>
                         <div class="input-group">
                             <textarea class="form-control" id="from_observation_c" name="from_observation" cols="30" rows="4"></textarea>

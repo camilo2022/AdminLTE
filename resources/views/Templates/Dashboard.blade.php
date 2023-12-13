@@ -395,6 +395,7 @@
             showConfirmButton: false,
             timer: 3000
         });
+        
         $('.select2').select2();
         $('.dropify').dropify();
 

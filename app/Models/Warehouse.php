@@ -27,7 +27,7 @@ class Warehouse extends Model
 
     public function users() : BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'warehouse_has_users', 'warehouse_id', 'user_id');
+        return $this->belongsToMany(User::class, 'warehouse_users', 'warehouse_id', 'user_id');
     }
 
     public function scopeSearch($query, $search)

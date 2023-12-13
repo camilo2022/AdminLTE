@@ -39,7 +39,8 @@ class TransferUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'from_observation' => ['nullable', 'string', 'max:255'],
+            'to_warehouse_id' => ['required', 'exists:warehouses,id'],
+            'from_observation' => ['nullable', 'string', 'max:255']
         ];
     }
 
@@ -47,8 +48,10 @@ class TransferUpdateRequest extends FormRequest
     public function messages()
     {
         return [
-            'from_observation.string' => 'El campo Observacion de envio de la transferencia debe ser una cadena de texto.',
-            'from_observation.max' => 'El campo Observacion de envio de la transferencia no debe tener mas de 255 caracteres.',
+            'to_warehouse_id.required' => 'El campo Bodega recibe es requerido.',
+            'to_warehouse_id.exists' => 'El Identificador de la bodega que recibe no es valido.',
+            'from_observation.string' => 'El campo Observacion del usuario que envia debe ser una cadena de texto.',
+            'from_observation.max' => 'El campo Observacion del usuario que envia no debe tener mas de 255 caracteres.',
         ];
     }
 }

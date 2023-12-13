@@ -6,21 +6,73 @@ function CreateTransferModal() {
             '_token': $('meta[name="csrf-token"]').attr('content')
         },
         success: function (response) {
+            tableTransfers.ajax.reload();
             CreateTransferModalCleaned();
+            CreateTransfersModalFromWarehose(response.data);
             CreateTransferAjaxSuccess(response);
             $('#CreateTransferModal').modal('show');
         },
         error: function (xhr, textStatus, errorThrown) {
+            tableTransfers.ajax.reload();
             CreateTransferAjaxError(xhr);
         }
     });
 }
 
 function CreateTransferModalCleaned() {
+    CreateTransfersModalResetSelect('from_warehouse_id_c');
+    CreateTransfersModalResetSelect('to_warehouse_id_c');
     RemoveIsValidClassCreateTransfer();
     RemoveIsInvalidClassCreateTransfer();
 
     $('#from_observation_c').val('');
+}
+
+function CreateTransfersModalResetSelect(id) {
+    const select = $(`#${id}`);
+    select.html('');
+    const defaultOption = $('<option>', {
+        value: '',
+        text: 'Seleccione'
+    });
+    select.append(defaultOption);
+    select.trigger('change');
+}
+
+function CreateTransfersModalFromWarehose(from_warehouses) {
+    from_warehouses.forEach(from_warehouse => {
+        let newOption = new Option(`${from_warehouse.name} - ${from_warehouse.code}`, from_warehouse.id, false, false);
+        $('#from_warehouse_id_c').append(newOption);
+    });
+}
+
+function CreateTransfersModalFromWarehoseGetToWarehouse(select) {
+    if($(select).val() == '') {
+        CreateTransfersModalResetSelect('to_warehouse_id_c');
+    } else {
+        $.ajax({
+            url: `/Dashboard/Transfers/Create`,
+            type: 'POST',
+            data: {
+                '_token': $('meta[name="csrf-token"]').attr('content'),
+                'from_warehouse_id':  $(select).val()
+            },
+            success: function(response) {
+                CreateTransfersModalResetSelect('to_warehouse_id_c');
+                CreateTransfersModalToWarehouse(response.data);
+            },
+            error: function(xhr, textStatus, errorThrown) {
+                CreateTransfersAjaxError(xhr);
+            }
+        });
+    }
+};
+
+function CreateTransfersModalToWarehouse(to_warehouses) {
+    to_warehouses.forEach(to_warehouse => {
+        let newOption = new Option(`${to_warehouse.name} - ${to_warehouse.code}`, to_warehouse.id, false, false);
+        $('#to_warehouse_id_c').append(newOption);
+    });
 }
 
 function CreateTransfer() {
@@ -40,6 +92,8 @@ function CreateTransfer() {
                 type: 'POST',
                 data: {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
+                    'from_warehouse_id': $('#from_warehouse_id_c').val(),
+                    'to_warehouse_id': $('#to_warehouse_id_c').val(),
                     'from_observation': $('#from_observation_c').val()
                 },
                 success: function (response) {
@@ -104,26 +158,34 @@ function CreateTransferAjaxError(xhr) {
 }
 
 function AddIsValidClassCreateTransfer() {
-    if (!$('#name_c').hasClass('is-invalid')) {
-        $('#name_c').addClass('is-valid');
+    if (!$(`span[aria-labelledby="select2-from_warehouse_id_c-container`).hasClass('is-invalid')) {
+        $(`span[aria-labelledby="select2-from_warehouse_id_c-container"]`).addClass('is-valid');
     }
-    if (!$('#code_c').hasClass('is-invalid')) {
-        $('#code_c').addClass('is-valid');
+    if (!$(`span[aria-labelledby="select2-to_warehouse_id_c-container`).hasClass('is-invalid')) {
+        $(`span[aria-labelledby="select2-to_warehouse_id_c-container"]`).addClass('is-valid');
+    }
+    if (!$('#from_observation_c').hasClass('is-invalid')) {
+        $('#from_observation_c').addClass('is-valid');
     }
 }
 
 function RemoveIsValidClassCreateTransfer() {
-    $('#name_c').removeClass('is-valid');
-    $('#code_c').removeClass('is-valid');
+    $(`span[aria-labelledby="select2-from_warehouse_id_c-container"]`).removeClass('is-valid');
+    $(`span[aria-labelledby="select2-to_warehouse_id_c-container"]`).removeClass('is-valid');
+    $('#from_observation_c').removeClass('is-valid');
 }
 
 function AddIsInvalidClassCreateTransfer(input) {
     if (!$(`#${input}_c`).hasClass('is-valid')) {
         $(`#${input}_c`).addClass('is-invalid');
     }
+    if (!$(`span[aria-labelledby="select2-${input}_c-container`).hasClass('is-valid')) {
+        $(`span[aria-labelledby="select2-${input}_c-container"]`).addClass('is-invalid');
+    }
 }
 
 function RemoveIsInvalidClassCreateTransfer() {
-    $('#name_c').removeClass('is-invalid');
-    $('#code_c').removeClass('is-invalid');
+    $(`span[aria-labelledby="select2-from_warehouse_id_c-container"]`).removeClass('is-invalid');
+    $(`span[aria-labelledby="select2-to_warehouse_id_c-container"]`).removeClass('is-invalid');
+    $('#from_observation_c').removeClass('is-invalid');
 }

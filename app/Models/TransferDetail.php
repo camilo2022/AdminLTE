@@ -5,12 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class TransferDetail extends Model
 {
     use HasFactory;
+    use SoftDeletes;
+    
     protected $table = 'transfer_details';
-
     protected $fillable = [
         'transfer_id',
         'product_id',
@@ -18,8 +20,6 @@ class TransferDetail extends Model
         'color_id',
         'tone_id',
         'quantity',
-        'from_warehouse_id',
-        'to_warehouse_id',
         'transfer_detail_status'
     ];
 
@@ -46,15 +46,5 @@ class TransferDetail extends Model
     public function tone() : BelongsTo
     {
         return $this->belongsTo(Tone::class, 'tone_id');
-    }
-
-    public function from_warehouse() : BelongsTo
-    {
-        return $this->belongsTo(Warehouse::class, 'from_warehouse_id');
-    }
-
-    public function to_warehouse() : BelongsTo
-    {
-        return $this->belongsTo(Warehouse::class, 'to_warehouse_id');
     }
 }

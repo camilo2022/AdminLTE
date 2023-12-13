@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Transfer\TransferApproveRequest;
 use App\Http\Requests\Transfer\TransferCancelRequest;
+use App\Http\Requests\Transfer\TransferCreateRequest;
 use App\Http\Requests\Transfer\TransferDeleteRequest;
 use App\Http\Requests\Transfer\TransferEditRequest;
 use App\Http\Requests\Transfer\TransferIndexQueryRequest;
@@ -13,6 +14,8 @@ use App\Http\Requests\Transfer\TransferUpdateRequest;
 use App\Http\Resources\Transfer\TransferIndexQueryCollection;
 use App\Models\Inventory;
 use App\Models\Transfer;
+use App\Models\User;
+use App\Models\Warehouse;
 use App\Traits\ApiMessage;
 use App\Traits\ApiResponser;
 use Carbon\Carbon;
@@ -43,9 +46,11 @@ class TransferController extends Controller
             $end_date = Carbon::parse($request->input('end_date'))->endOfDay();
             //Consulta por nombre
             $transfers = Transfer::with([
+                    'from_warehouse' => function ($query) { $query->withTrashed(); },
                     'from_user' => function ($query) { $query->withTrashed(); },
+                    'to_warehouse' => function ($query) { $query->withTrashed(); },
                     'to_user' => function ($query) { $query->withTrashed(); },
-                    'details',
+                    'details' => function ($query) { $query->withTrashed(); }
                 ])
                 ->when($request->filled('search'),
                     function ($query) use ($request) {
@@ -57,12 +62,21 @@ class TransferController extends Controller
                         $query->filterByDate($start_date, $end_date);
                     }
                 )
-                //->transfersByAssingWarehouse()
+                ->withTrashed()
+                ->transfersByAssingWarehouse()
                 ->orderBy($request->input('column'), $request->input('dir'))
                 ->paginate($request->input('perPage'));
 
             return $this->successResponse(
-                new TransferIndexQueryCollection($transfers),
+                [
+                    'warehouses' => Warehouse::with('users')
+                    ->whereHas('users',
+                        function ($subQuery) {
+                            $subQuery->where('user_id', Auth::user()->id);
+                        }
+                    )->pluck('id'),
+                    'transfers' => new TransferIndexQueryCollection($transfers)
+                ],
                 $this->getMessage('Success'),
                 200
             );
@@ -86,11 +100,19 @@ class TransferController extends Controller
         }
     }
 
-    public function create()
+    public function create(TransferCreateRequest $request)
     {
         try {
+            if($request->filled('from_warehouse_id')) {
+                return $this->successResponse(
+                    Warehouse::where('id', '!=', $request->input('from_warehouse_id'))->get(),
+                    'Bodegas encontradas con exito.',
+                    200
+                );
+            }
+
             return $this->successResponse(
-                '',
+                User::with('warehouses')->findOrFail(Auth::user()->id)->warehouses,
                 'Ingrese los datos para hacer la validacion y registro.',
                 200
             );
@@ -111,9 +133,11 @@ class TransferController extends Controller
         try {
             $transfer = new Transfer();
             $transfer->consecutive = DB::selectOne('CALL transfers()')->consecutive;
+            $transfer->from_warehouse_id = $request->input('from_warehouse_id');
             $transfer->from_user_id = Auth::user()->id;
             $transfer->from_date = Carbon::now()->format('Y-m-d H:i:s');
             $transfer->from_observation = $request->input('from_observation');
+            $transfer->to_warehouse_id = $request->input('to_warehouse_id');
             $transfer->status = 'Pendiente';
             $transfer->save();
 
@@ -152,11 +176,19 @@ class TransferController extends Controller
         }
     }
 
-    public function edit($id)
+    public function edit(TransferEditRequest $request, $id)
     {
+        if($request->filled('from_warehouse_id')) {
+            return $this->successResponse(
+                Warehouse::where('id', '!=', $request->input('from_warehouse_id'))->get(),
+                'Bodegas encontradas con exito.',
+                200
+            );
+        }
+
         try {
             return $this->successResponse(
-                Transfer::findOrFail($id),
+                Transfer::with('from_warehouse')->findOrFail($id),
                 'La Transferencia fue encontrado exitosamente.',
                 204
             );
@@ -184,6 +216,7 @@ class TransferController extends Controller
         try {
             $transfer = Transfer::findOrFail($id);
             $transfer->from_observation = $request->input('from_observation');
+            $transfer->to_warehouse_id = $request->input('to_warehouse_id');
             $transfer->save();
 
             return $this->successResponse(
