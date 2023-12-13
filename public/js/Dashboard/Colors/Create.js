@@ -134,5 +134,5 @@ function AddIsInvalidClassCreateColor(input) {
 function RemoveIsInvalidClassCreateColor() {
     $('#name_c').removeClass('is-invalid');
     $('#code_c').removeClass('is-invalid');
-    $('#value_c').removeClass('is-valid');
+    $('#value_c').removeClass('is-invalid');
 }

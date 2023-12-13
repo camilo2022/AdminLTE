@@ -9,11 +9,10 @@ function EditProductModal(id) {
             tableProducts.ajax.reload();
             EditProductModalCleaned(response.data.product);
             EditProductsModalCorreria(response.data.correrias);
+            EditProductsModalCollection(response.data.collections);
             EditProductsModalModel(response.data.models);
             EditProductsModalTrademark(response.data.trademarks);
             EditProductsModalClothingLine(response.data.clothing_lines);
-            EditProductsModalSizes(response.data.sizes);
-            EditProductsModalColors(response.data.colors);
             EditProductAjaxSuccess(response);
             $('#EditProductModal').modal('show');
         },
@@ -25,6 +24,7 @@ function EditProductModal(id) {
 }
 
 function EditProductModalCleaned(product) {
+    EditProductsModalResetSelect('collection_id_c');
     EditProductsModalResetSelect('correria_id_e');
     EditProductsModalResetSelect('model_id_e');
     EditProductsModalResetSelect('trademark_id_e');
@@ -35,20 +35,16 @@ function EditProductModalCleaned(product) {
     $('#EditProductButton').attr('onclick', `EditProduct(${product.id})`);
     $('#EditProductButton').attr('data-id', product.id);
     $('#EditProductButton').attr('data-correria_id', product.correria_id);
+    $('#EditProductButton').attr('data-collection_id', product.collection_id);
     $('#EditProductButton').attr('data-model_id', product.model_id);
     $('#EditProductButton').attr('data-trademark_id', product.trademark_id);
     $('#EditProductButton').attr('data-clothing_line_id', product.clothing_line_id);
     $('#EditProductButton').attr('data-category_id', product.category_id);
     $('#EditProductButton').attr('data-subcategory_id', product.subcategory_id);
-    $('#EditProductButton').attr('data-sizes', product.sizes.map(size => size.id));
-    $('#EditProductButton').attr('data-colors', product.colors.map(color => color.id));
 
     $('#code_e').val(product.code);
     $('#price_e').val(product.price);
-    $('#description_e').val(product.description);
-    $('#photos_e').val('');
-    $('#photos_e').dropify().data('dropify').destroy();
-    $('#photos_e').dropify().data('dropify').init();
+    $('#cost_e').val(product.cost);
 }
 
 function EditProductsModalResetSelect(id) {
@@ -62,26 +58,16 @@ function EditProductsModalResetSelect(id) {
     select.trigger('change');
 }
 
-function EditProductsModalSizes(sizes) {
-    $('#sizes_e').empty();
-    let selectedSizes = $('#EditProductButton').attr('data-sizes').replace(/\s/g, "").split(',').map(Number);
-    $.each(sizes, function(index, size) {
-        let checkSize = `<div class="row pl-2 icheck-primary">
-            <input type="checkbox" id="${size.code}" data-id="${size.id}" ${selectedSizes.includes(size.id) ? 'checked' : ''}>
-            <label for="${size.code}" class="mt-3 ml-3">${size.code}</label></div>`;
-        $('#sizes_e').append(checkSize);
+function EditProductsModalCollection(collections) {
+    collections.forEach(collection => {
+        let newOption = new Option(collection.name, collection.id, false, false);
+        $('#collection_id_e').append(newOption);
     });
-}
-
-function EditProductsModalColors(colors) {
-    $('#colors_e').empty();
-    let selectedColors = $('#EditProductButton').attr('data-colors').replace(/\s/g, "").split(',').map(Number);
-    $.each(colors, function(index, color) {
-        let checkColor = `<div class="row pl-2 icheck-primary">
-            <input type="checkbox" id="${color.value}" data-id="${color.id}" ${selectedColors.includes(color.id) ? 'checked' : ''}>
-            <label for="${color.value}" class="mt-3 ml-3">${color.name}</label></div>`;
-        $('#colors_e').append(checkColor);
-    });
+    let collection_id = $('#EditProductButton').attr('data-collection_id');
+    if(collection_id != '') {
+        $("#collection_id_e").val(collection_id).trigger('change');
+        $('#EditProductButton').attr('data-collection_id', '');
+    }
 }
 
 function EditProductsModalCorreria(correrias) {
@@ -203,29 +189,10 @@ function EditProductsModalSubcategory(subcategories) {
 }
 
 function EditProduct(id) {
-    let formData = new FormData();
-    formData.append('_token', $('meta[name="csrf-token"]').attr('content'));
-    formData.append('code', $('#code_e').val());
-    formData.append('price', $('#price_e').val());
-    formData.append('description', $('#description_e').val());
-    formData.append('correria_id', $('#correria_id_e').val());
-    formData.append('clothing_line_id', $('#clothing_line_id_e').val());
-    formData.append('category_id', $('#category_id_e').val());
-    formData.append('subcategory_id', $('#subcategory_id_e').val());
-    formData.append('model_id', $('#model_id_e').val());
-    formData.append('trademark_id', $('#trademark_id_e').val());
-    let sizes = $('#sizes_e input[type="checkbox"]:checked').map(function() {
-        return $(this).data('id');
-    }).get();
-    let colors = $('#colors_e input[type="checkbox"]:checked').map(function() {
-        return $(this).data('id');
-    }).get();
-    formData.append('sizes', JSON.stringify(sizes));
-    formData.append('colors', JSON.stringify(colors));
-    let files = $('#photos_e')[0].files;
+    /* let files = $('#photos_e')[0].files;
     $.each(files, function(index, file) {
         formData.append('photos[]', file);
-    });
+    }); */
 
     Swal.fire({
         title: '¿Desea actualizar el producto?',
@@ -240,10 +207,20 @@ function EditProduct(id) {
         if (result.value) {
             $.ajax({
                 url: `/Dashboard/Products/Update/${id}`,
-                type: 'POST',
-                data: formData,
-                processData: false,
-                contentType: false,
+                type: 'PUT',
+                data: {
+                    '_token': $('meta[name="csrf-token"]').attr('content'),
+                    'code': $('#code_e').val(),
+                    'price': $('#price_e').val(),
+                    'cost': $('#cost_e').val(),
+                    'correria_id': $('#correria_id_e').val(),
+                    'clothing_line_id': $('#clothing_line_id_e').val(),
+                    'category_id': $('#category_id_e').val(),
+                    'collection_id': $('#collection_id_e').val(),
+                    'subcategory_id': $('#subcategory_id_e').val(),
+                    'model_id': $('#model_id_e').val(),
+                    'trademark_id': $('#trademark_id_e').val(),
+                },
                 success: function(response) {
                     tableProducts.ajax.reload();
                     EditProductAjaxSuccess(response);
@@ -307,8 +284,8 @@ function AddIsValidClassEditProduct() {
     if (!$('#price_e').hasClass('is-invalid')) {
         $('#price_e').addClass('is-valid');
     }
-    if (!$('#description_e').hasClass('is-invalid')) {
-        $('#description_e').addClass('is-valid');
+    if (!$('#cost_e').hasClass('is-invalid')) {
+        $('#cost_e').addClass('is-valid');
     }
     if (!$(`span[aria-labelledby="select2-clothing_line_id_e-container`).hasClass('is-invalid')) {
         $(`span[aria-labelledby="select2-clothing_line_id_e-container"]`).addClass('is-valid');
@@ -333,7 +310,7 @@ function AddIsValidClassEditProduct() {
 function RemoveIsValidClassEditProduct() {
     $('#code_e').removeClass('is-valid');
     $('#price_e').removeClass('is-valid');
-    $('#description_e').removeClass('is-valid');
+    $('#cost_e').removeClass('is-valid');
     $(`span[aria-labelledby="select2-clothing_line_id_e-container"]`).removeClass('is-valid');
     $(`span[aria-labelledby="select2-category_id_e-container"]`).removeClass('is-valid');
     $(`span[aria-labelledby="select2-subcategory_id_e-container"]`).removeClass('is-valid');
@@ -354,7 +331,7 @@ function AddIsInvalidClassEditProduct(input) {
 function RemoveIsInvalidClassEditProduct() {
     $('#code_e').removeClass('is-invalid');
     $('#price_e').removeClass('is-invalid');
-    $('#description_e').removeClass('is-invalid');
+    $('#cost_e').removeClass('is-invalid');
     $(`span[aria-labelledby="select2-clothing_line_id_e-container"]`).removeClass('is-invalid');
     $(`span[aria-labelledby="select2-category_id_e-container"]`).removeClass('is-invalid');
     $(`span[aria-labelledby="select2-subcategory_id_e-container"]`).removeClass('is-invalid');

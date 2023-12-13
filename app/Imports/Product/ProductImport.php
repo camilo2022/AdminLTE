@@ -16,14 +16,28 @@ use Maatwebsite\Excel\Events\AfterSheet;
 
 HeadingRowFormatter::default('none');
 
-class ProductImport implements WithMultipleSheets
+class ProductImport implements  ToCollection, WithHeadingRow, WithEvents
 {
-    public function sheets() : array
+    public $sheetNames;
+    public $sheetData;
+
+    public function __construct()
+    {
+        $this->sheetNames = [];
+        $this->sheetData = [];
+    }
+
+    public function collection(Collection $collection)
+    {
+        $this->sheetData[] = $collection;
+    }
+
+    public function registerEvents(): array
     {
         return [
-            'Products' => new ProductImport(),
-            'ProductsSizes' => new ProductSizeImport(),
-            'ProductsColorsTones' => new ProductColorToneImport()
+            BeforeSheet::class => function (BeforeSheet $event) {
+                $this->sheetNames[] = $event->getSheet()->getTitle();
+            }
         ];
     }
 }

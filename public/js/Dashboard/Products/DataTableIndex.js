@@ -15,7 +15,8 @@ let tableProducts = $('#products').DataTable({
                 6: 'subcategory_id',
                 7: 'model_id',
                 8: 'trademark_id',
-                9: 'collection_id',
+                9: 'correria_id',
+                10: 'collection_id',
                 12: 'deleted_at'
             };
             request._token = $('meta[name="csrf-token"]').attr('content');
@@ -70,17 +71,23 @@ let tableProducts = $('#products').DataTable({
             }
         },
         {
+            data: 'correria',
+            render: function (data, type, row) {
+                return data.name;
+            }
+        },
+        {
             data: 'collection',
             render: function (data, type, row) {
                 return data.name;
             }
         },
         {
-            data: 'colors',
+            data: 'colors_tones',
             render: function(data, type, row) {
                 let div = `<div>`;
-                $.each(data, function(index, color) {
-                    div += `<span class="badge mr-1" style="background:${color.value};">${color.name} - ${color.code}</span>`;
+                $.each(data, function(index, color_tone) {
+                    div += `<span class="badge mr-1" style="background:${color_tone.color.value};">${color_tone.color.name} - ${color_tone.color.code} | ${color_tone.tone.name}</span>`;
                 });
                 div += `</div>`;
 
@@ -143,11 +150,11 @@ let tableProducts = $('#products').DataTable({
         {
             targets: 0,
             orderable: true,
-            targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 12]
+            targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 13]
         },
         {
             orderable: false,
-            targets: [10, 11, 13]
+            targets: [11, 12, 14]
         },
     ],
     pagingType: 'full_numbers',

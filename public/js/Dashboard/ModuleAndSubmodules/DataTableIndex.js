@@ -50,7 +50,7 @@ let tableModulesAndSubmodules = $('#modulesAndSubmodules').DataTable({
         {
             data: null,
             render: function(data, type, row) {
-                let div = `<div>`;
+                let div = `<div">`;
                 $.each(data.submodules, function(index, submodule) {
                     div += `<span>${submodule.name}</span><br>`;
                 });

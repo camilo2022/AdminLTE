@@ -14,7 +14,9 @@ use Maatwebsite\Excel\Events\AfterImport;
 use Maatwebsite\Excel\Events\BeforeSheet;
 use Maatwebsite\Excel\Events\AfterSheet;
 
-class ProductColorToneImport implements ToCollection
+HeadingRowFormatter::default('none');
+
+class ProductColorToneImport implements  ToCollection, WithHeadingRow, WithEvents
 {
     public $sheetNames;
     public $sheetData;

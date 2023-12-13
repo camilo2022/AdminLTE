@@ -589,7 +589,7 @@ Route::middleware(['auth'])->group(function () {
             Route::post('/Edit/{id}', [ProductController::class, 'edit'])
             ->middleware('can:Dashboard.Products.Edit')->name('Dashboard.Products.Edit');
 
-            Route::post('/Update/{id}', [ProductController::class, 'update'])
+            Route::put('/Update/{id}', [ProductController::class, 'update'])
             ->middleware('can:Dashboard.Products.Update')->name('Dashboard.Products.Update');
 
             Route::post('/Show/{id}', [ProductController::class, 'show'])

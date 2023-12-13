@@ -27,8 +27,6 @@ class ProductStoreRequest extends FormRequest
     protected function prepareForValidation()
     {
         $this->merge([
-            'sizes' => json_decode($this->input('sizes')),
-            'colors' => json_decode($this->input('colors')),
             'photos' => json_decode($this->input('photos')),
         ]);
     }
@@ -54,18 +52,16 @@ class ProductStoreRequest extends FormRequest
             'code' => ['required', 'string', 'unique:products,code', 'max:255'],
             'description' => ['nullable', 'string', 'max:255'],
             'price' => ['required', 'numeric', 'between:0,999999.99'],
+            'cost' => ['required', 'numeric', 'between:0,999999.99'],
             'clothing_line_id' => ['required', 'exists:clothing_lines,id'],
             'category_id' => ['required', 'exists:categories,id'],
             'subcategory_id' => ['required', 'exists:subcategories,id'],
             'model_id' => ['required', 'exists:models,id'],
             'trademark_id' => ['required', 'exists:trademarks,id'],
             'correria_id' => ['required', 'exists:correrias,id'],
-            'colors' => ['required', 'array'],
-            'colors.*' => ['exists:colors,id'],
-            'sizes' => ['required', 'array'],
-            'sizes.*' => ['exists:sizes,id'],
-            'photos' => ['nullable', 'array'],
-            'photos.*' => ['mimes:jpeg,jpg,png,gif', 'max:10000',  new ImageDimension(100, 1920, 100, 1080, function($attr, $value){ return $value->getClientOriginalName(); })]
+            'collection_id' => ['required', 'exists:collections,id'],
+            /* 'photos' => ['nullable', 'array'],
+            'photos.*' => ['mimes:jpeg,jpg,png,gif', 'max:10000',  new ImageDimension(100, 1920, 100, 1080, function($attr, $value){ return $value->getClientOriginalName(); })] */
         ];
     }
 
@@ -81,6 +77,9 @@ class ProductStoreRequest extends FormRequest
             'price.required' => 'El campo Precio del producto es requerido.',
             'price.string' => 'El campo Precio del producto debe ser numerico.',
             'price.between' => 'El campo Precio del producto debe estar en un rango de 0 a 999999.99.',
+            'cost.required' => 'El campo Costo del producto es requerido.',
+            'cost.string' => 'El campo Costo del producto debe ser numerico.',
+            'cost.between' => 'El campo Costo del producto debe estar en un rango de 0 a 999999.99.',
             'clothing_line_id.required' => 'El campo Linea del producto es requerido.',
             'clothing_line_id.exists' => 'El Identificador de la linea del producto no es valido.',
             'category_id.required' => 'El campo Categoria del producto es requerido.',
@@ -93,12 +92,8 @@ class ProductStoreRequest extends FormRequest
             'trademark_id.exists' => 'El Identificador de la marca del producto no es valido.',
             'correria_id.required' => 'El campo Correria del producto es requerido.',
             'correria_id.exists' => 'El Identificador de la correria del producto no es valido.',
-            'colors.required' => 'El campo Colores del producto es requerido.',
-            'colors.array' => 'El campo Colores del producto debe ser un arreglo.',
-            'colors.*.exists' => 'El Identificador del color no es valido.',
-            'sizes.required' => 'El campo Tallas del producto es requerido.',
-            'sizes.array' => 'El campo Tallas del producto debe ser un arreglo.',
-            'sizes.*.exists' => 'El Identificador de la talla no es valido.',
+            'collection_id.required' => 'El campo Coleccion del producto es requerido.',
+            'collection_id.exists' => 'El Identificador de la coleccion del producto no es valido.',
             'photos.array' => 'El campo Fotos del producto debe ser un arreglo.',
             'photos.*.mimes' => 'El Archivo debe tener una extensión válida (jpeg, jpg, png, gif).',
             'photos.*.max' => 'El Archivo no debe superar los 10 MB.',

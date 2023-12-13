@@ -98,21 +98,31 @@ function UploadProductAjaxError(xhr) {
 
             $.each(xhr.responseJSON.error.errors, function (key, value) {
                 if (xhr.responseJSON.error.errors.hasOwnProperty(key)) {
-                    let matchs = key.match(/products\.(\d+)\.(\w+)/);
-                    if (matchs) {
-                        let rowIndex = parseInt(matchs[1]) + 1;
-                        let fieldName = matchs[2];
+                    let matchProduct = key.match(/Products\.(\d+)\.(\w+)/);
+                    if (matchProduct) {
+                        let rowIndex = parseInt(matchProduct[1]) + 1;
+                        let fieldName = matchProduct[2];
                         let errorMessages = xhr.responseJSON.error.errors[key];
                         $.each(errorMessages, function (_, errorMessage) {
                             errorInfo.push(`Fila ${rowIndex}: ${fieldName} - ${errorMessage}`);
                         });
                     }
-                    let match = key.match(/products\.(\d+)/);
-                    if (match) {
-                        let rowIndex = parseInt(match[1]) + 1;
+                    let matchProductsSizes = key.match(/ProductsSizes\.(\d+)\.(\w+)/);
+                    if (matchProductsSizes) {
+                        let rowIndex = parseInt(matchProductsSizes[1]) + 1;
+                        let fieldName = matchProductsSizes[2];
                         let errorMessages = xhr.responseJSON.error.errors[key];
-                        $.each(errorMessages, function (index, errorMessage) {
-                            errorInfo.push(`Fila ${rowIndex}: ${errorMessage}`);
+                        $.each(errorMessages, function (_, errorMessage) {
+                            errorInfo.push(`Fila ${rowIndex}: ${fieldName} - ${errorMessage}`);
+                        });
+                    }
+                    let matchProductsColorsTones = key.match(/ProductsColorsTones\.(\d+)\.(\w+)/);
+                    if (matchProductsColorsTones) {
+                        let rowIndex = parseInt(matchProductsColorsTones[1]) + 1;
+                        let fieldName = matchProductsColorsTones[2];
+                        let errorMessages = xhr.responseJSON.error.errors[key];
+                        $.each(errorMessages, function (_, errorMessage) {
+                            errorInfo.push(`Fila ${rowIndex}: ${fieldName} - ${errorMessage}`);
                         });
                     }
                 }
@@ -120,14 +130,12 @@ function UploadProductAjaxError(xhr) {
 
             let errorString = errorInfo.join('\n');
             let blob = new Blob([errorString], { type: 'text/plain' });
-            let link = $('<a>').attr({
-                href: window.URL.createObjectURL(blob),
-                download: 'errores.txt'
-            });
-
-            $('body').append(link);
+            let link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blob);
+            link.download = 'errores.txt';
+            document.body.appendChild(link);
             link.click();
-            link.remove();
+            document.body.removeChild(link);
         }
     }
 

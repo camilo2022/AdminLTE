@@ -40,6 +40,8 @@ class ProductExport implements FromArray, Responsable, WithHeadings, WithTitle
             'id modelo',
             'color',
             'id color',
+            'tono',
+            'id tono',
             'talla',
             'id talla',
         ];
@@ -57,7 +59,7 @@ class ProductExport implements FromArray, Responsable, WithHeadings, WithTitle
             
             foreach($this->products as $product) {
                 foreach($product->sizes as $size) {
-                    foreach($product->colors as $color) {
+                    foreach($product->colors_tones as $color_tone) {
                         $fila = [
                             'id' => $product->id,
                             'codigo' => $product->code,
@@ -75,8 +77,10 @@ class ProductExport implements FromArray, Responsable, WithHeadings, WithTitle
                             'id marca' => $product->trademark_id,
                             'modelo' => $product->model->name,
                             'id modelo' => $product->model_id,
-                            'color' => $color->name,
-                            'id color' => $color->id,
+                            'color' => $color_tone->color->name,
+                            'id color' => $color_tone->color->id,
+                            'tono' => $color_tone->tone->name,
+                            'id tono' => $color_tone->tone->id,
                             'talla' => $size->name,
                             'id talla' => $size->id,
                         ];

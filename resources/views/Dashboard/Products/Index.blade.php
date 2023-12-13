@@ -88,6 +88,7 @@
                                             <th>Modelo</th>
                                             <th>Marca</th>
                                             <th>Correria</th>
+                                            <th>Coleccion</th>
                                             <th>Colores</th>
                                             <th>Tallas</th>
                                             <th>Estado</th>

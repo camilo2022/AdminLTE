@@ -20,12 +20,16 @@ return new class extends Migration
             $table->unsignedBigInteger('from_user_id');
             $table->datetime('from_date');
             $table->string('from_observation')->nullable();
+            $table->unsignedBigInteger('from_warehouse_id');
             $table->unsignedBigInteger('to_user_id')->nullable();
             $table->datetime('to_date')->nullable();
             $table->string('to_observation')->nullable();
+            $table->unsignedBigInteger('to_warehouse_id');
             $table->string('status');
             $table->foreign('from_user_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('to_user_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('from_warehouse_id')->references('id')->on('warehouses')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('to_warehouse_id')->references('id')->on('warehouses')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();
         });

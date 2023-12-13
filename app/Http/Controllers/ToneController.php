@@ -105,7 +105,7 @@ class ToneController extends Controller
 
             return $this->successResponse(
                 $tone,
-                'El tono fue registrada exitosamente.',
+                'El tono fue registrado exitosamente.',
                 201
             );
         } catch (ModelNotFoundException $e) {
@@ -145,7 +145,7 @@ class ToneController extends Controller
 
             return $this->successResponse(
                 $tone,
-                'El tono fue encontrada exitosamente.',
+                'El tono fue encontrado exitosamente.',
                 204
             );
         } catch (ModelNotFoundException $e) {
@@ -176,7 +176,7 @@ class ToneController extends Controller
 
             return $this->successResponse(
                 $tone,
-                'El tono fue actualizada exitosamente.',
+                'El tono fue actualizado exitosamente.',
                 200
             );
         } catch (ModelNotFoundException $e) {
@@ -213,7 +213,7 @@ class ToneController extends Controller
             $tone = Tone::withTrashed()->findOrFail($request->input('id'))->delete();
             return $this->successResponse(
                 $tone,
-                'El tono fue eliminada exitosamente.',
+                'El tono fue eliminado exitosamente.',
                 204
             );
         } catch (ModelNotFoundException $e) {
@@ -241,7 +241,7 @@ class ToneController extends Controller
             $tone = Tone::withTrashed()->findOrFail($request->input('id'))->restore();
             return $this->successResponse(
                 $tone,
-                'El tono fue restaurada exitosamente.',
+                'El tono fue restaurado exitosamente.',
                 204
             );
         } catch (ModelNotFoundException $e) {

@@ -27,8 +27,15 @@ class ProductIndexQueryCollection extends ResourceCollection
                     'subcategory' =>$product->subcategory,
                     'model' => $product->model,
                     'trademark' => $product->trademark,
+                    'correria' => $product->correria,
                     'collection' => $product->collection,
-                    'colors' => $product->colors,
+                    'colors_tones' => $product->colors_tones->map(function ($color_tone) {
+                            return [
+                                'color' => $color_tone->color,
+                                'tone' => $color_tone->tone
+                            ];
+                        }
+                    )->toArray(),
                     'sizes' => $product->sizes,
                     'created_at' => $this->formatDate($product->created_at),
                     'updated_at' => $this->formatDate($product->updated_at),

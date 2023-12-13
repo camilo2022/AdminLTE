@@ -6,23 +6,25 @@ function CreateProductModal() {
             '_token': $('meta[name="csrf-token"]').attr('content')
         },
         success: function(response) {
+            tableProducts.ajax.reload();
             CreateProductModalCleaned();
             CreateProductsModalCorreria(response.data.correrias);
+            CreateProductsModalCollection(response.data.collections);
             CreateProductsModalModel(response.data.models);
             CreateProductsModalTrademark(response.data.trademarks);
             CreateProductsModalClothingLine(response.data.clothing_lines);
-            CreateProductsModalSizes(response.data.sizes);
-            CreateProductsModalColors(response.data.colors);
             CreateProductAjaxSuccess(response);
             $('#CreateProductModal').modal('show');
         },
         error: function(xhr, textStatus, errorThrown) {
+            tableProducts.ajax.reload();
             CreateProductAjaxError(xhr);
         }
     });
 }
 
 function CreateProductModalCleaned() {
+    CreateProductsModalResetSelect('collection_id_c');
     CreateProductsModalResetSelect('correria_id_c');
     CreateProductsModalResetSelect('model_id_c');
     CreateProductsModalResetSelect('trademark_id_c');
@@ -32,10 +34,10 @@ function CreateProductModalCleaned() {
 
     $('#code_c').val('');
     $('#price_c').val('');
-    $('#description_c').val('');
-    $('#photos_c').val('');
+    $('#cost_c').val('');
+    /* $('#photos_c').val('');
     $('#photos_c').dropify().data('dropify').destroy();
-    $('#photos_c').dropify().data('dropify').init();
+    $('#photos_c').dropify().data('dropify').init(); */
 }
 
 function CreateProductsModalResetSelect(id) {
@@ -49,23 +51,10 @@ function CreateProductsModalResetSelect(id) {
     select.trigger('change');
 }
 
-function CreateProductsModalSizes(sizes) {
-    $('#sizes_c').empty();
-    $.each(sizes, function(index, size) {
-        let checkSize = `<div class="row pl-2 icheck-primary">
-            <input type="checkbox" id="${size.code}" data-id="${size.id}">
-            <label for="${size.code}" class="mt-3 ml-3">${size.code}</label></div>`;
-        $('#sizes_c').append(checkSize);
-    });
-}
-
-function CreateProductsModalColors(colors) {
-    $('#colors_c').empty();
-    $.each(colors, function(index, color) {
-        let checkColor = `<div class="row pl-2 icheck-primary">
-            <input type="checkbox" id="${color.value}" data-id="${color.id}">
-            <label for="${color.value}" class="mt-3 ml-3">${color.name}</label></div>`;
-        $('#colors_c').append(checkColor);
+function CreateProductsModalCollection(collections) {
+    collections.forEach(collection => {
+        let newOption = new Option(collection.name, collection.id, false, false);
+        $('#collection_id_c').append(newOption);
     });
 }
 
@@ -156,29 +145,10 @@ function CreateProductsModalSubcategory(subcategories) {
 }
 
 function CreateProduct() {
-    let formData = new FormData();
-    formData.append('_token', $('meta[name="csrf-token"]').attr('content'));
-    formData.append('code', $('#code_c').val());
-    formData.append('price', $('#price_c').val());
-    formData.append('description', $('#description_c').val());
-    formData.append('correria_id', $('#correria_id_c').val());
-    formData.append('clothing_line_id', $('#clothing_line_id_c').val());
-    formData.append('category_id', $('#category_id_c').val());
-    formData.append('subcategory_id', $('#subcategory_id_c').val());
-    formData.append('model_id', $('#model_id_c').val());
-    formData.append('trademark_id', $('#trademark_id_c').val());
-    let sizes = $('#sizes_c input[type="checkbox"]:checked').map(function() {
-        return $(this).data('id');
-    }).get();
-    let colors = $('#colors_c input[type="checkbox"]:checked').map(function() {
-        return $(this).data('id');
-    }).get();
-    formData.append('sizes', JSON.stringify(sizes));
-    formData.append('colors', JSON.stringify(colors));
-    let files = $('#photos_c')[0].files;
+    /* let files = $('#photos_c')[0].files;
     for (var i = 0; i < files.length; i++) {
         formData.append('photos[]', files[i]);
-    }
+    } */
 
     Swal.fire({
         title: '¿Desea guardar el producto?',
@@ -194,9 +164,20 @@ function CreateProduct() {
             $.ajax({
                 url: `/Dashboard/Products/Store`,
                 type: 'POST',
-                data: formData,
-                processData: false,
-                contentType: false,
+                data: {
+                    '_token': $('meta[name="csrf-token"]').attr('content'),
+                    'code': $('#code_c').val(),
+                    'price': $('#price_c').val(),
+                    'cost': $('#cost_c').val(),
+                    'description': $('#cost_c').val(),
+                    'correria_id': $('#correria_id_c').val(),
+                    'clothing_line_id': $('#clothing_line_id_c').val(),
+                    'category_id': $('#category_id_c').val(),
+                    'collection_id': $('#collection_id_c').val(),
+                    'subcategory_id': $('#subcategory_id_c').val(),
+                    'model_id': $('#model_id_c').val(),
+                    'trademark_id': $('#trademark_id_c').val(),
+                },
                 success: function(response) {
                     tableProducts.ajax.reload();
                     CreateProductAjaxSuccess(response);
@@ -265,8 +246,8 @@ function AddIsValidClassCreateProduct() {
     if (!$('#price_c').hasClass('is-invalid')) {
         $('#price_c').addClass('is-valid');
     }
-    if (!$('#description_c').hasClass('is-invalid')) {
-        $('#description_c').addClass('is-valid');
+    if (!$('#cost_c').hasClass('is-invalid')) {
+        $('#cost_c').addClass('is-valid');
     }
     if (!$(`span[aria-labelledby="select2-clothing_line_id_c-container`).hasClass('is-invalid')) {
         $(`span[aria-labelledby="select2-clothing_line_id_c-container"]`).addClass('is-valid');
@@ -286,18 +267,22 @@ function AddIsValidClassCreateProduct() {
     if (!$(`span[aria-labelledby="select2-correria_id_c-container`).hasClass('is-invalid')) {
         $(`span[aria-labelledby="select2-correria_id_c-container"]`).addClass('is-valid');
     }
+    if (!$(`span[aria-labelledby="select2-collection_id_c-container`).hasClass('is-invalid')) {
+        $(`span[aria-labelledby="select2-collection_id_c-container"]`).addClass('is-valid');
+    }
 }
 
 function RemoveIsValidClassCreateProduct() {
     $('#code_c').removeClass('is-valid');
     $('#price_c').removeClass('is-valid');
-    $('#description_c').removeClass('is-valid');
+    $('#cost_c').removeClass('is-valid');
     $(`span[aria-labelledby="select2-clothing_line_id_c-container"]`).removeClass('is-valid');
     $(`span[aria-labelledby="select2-category_id_c-container"]`).removeClass('is-valid');
     $(`span[aria-labelledby="select2-subcategory_id_c-container"]`).removeClass('is-valid');
     $(`span[aria-labelledby="select2-model_id_c-container"]`).removeClass('is-valid');
     $(`span[aria-labelledby="select2-trademark_id_c-container"]`).removeClass('is-valid');
     $(`span[aria-labelledby="select2-correria_id_c-container"]`).removeClass('is-valid');
+    $(`span[aria-labelledby="select2-collection_id_c-container"]`).removeClass('is-valid');
 }
 
 function AddIsInvalidClassCreateProduct(input) {
@@ -312,11 +297,12 @@ function AddIsInvalidClassCreateProduct(input) {
 function RemoveIsInvalidClassCreateProduct() {
     $('#code_c').removeClass('is-invalid');
     $('#price_c').removeClass('is-invalid');
-    $('#description_c').removeClass('is-invalid');
+    $('#cost_c').removeClass('is-invalid');
     $(`span[aria-labelledby="select2-clothing_line_id_c-container"]`).removeClass('is-invalid');
     $(`span[aria-labelledby="select2-category_id_c-container"]`).removeClass('is-invalid');
     $(`span[aria-labelledby="select2-subcategory_id_c-container"]`).removeClass('is-invalid');
     $(`span[aria-labelledby="select2-model_id_c-container"]`).removeClass('is-invalid');
     $(`span[aria-labelledby="select2-trademark_id_c-container"]`).removeClass('is-invalid');
     $(`span[aria-labelledby="select2-correria_id_c-container"]`).removeClass('is-invalid');
+    $(`span[aria-labelledby="select2-collection_id_c-container"]`).removeClass('is-invalid');
 }

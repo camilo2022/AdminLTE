@@ -57,6 +57,8 @@
     <!-- Dropify -->
     <link rel="stylesheet" href="{{ asset('css/plugins/dropify/dropify.css') }}">
     <link rel="stylesheet" href="{{ asset('css/plugins/dropify/dropify.min.css') }}">
+    <!-- Dropzone -->
+    <link rel="stylesheet" href="{{ asset('css/plugins/dropzone/dropzone.min.css') }}">
     <style>
 
     </style>
@@ -379,6 +381,9 @@
     <!-- Dropify -->
     <script src="{{ asset('js/dropify/dropify.js') }}"></script>
     <script src="{{ asset('js/dropify/dropify.min.js') }}"></script>
+
+    <!-- Dropify -->
+    <script src="{{ asset('js/dropzone/dropzone.min.js') }}"></script>
 
     <script src="{{ asset('js/dist/js/Validators.js') }}"></script>
 

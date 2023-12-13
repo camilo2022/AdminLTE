@@ -12,173 +12,133 @@
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-lg-8">
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <div class="form-group">
-                                    <label for="code_c">Codigo</label>
-                                    <div class="input-group">
-                                        <input type="text" class="form-control" id="code_c" name="code">
-                                        <div class="input-group-append">
-                                            <span class="input-group-text">
-                                                <i class="fas fa-code"></i>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="form-group">
-                                    <label for="price_c">Precio de Venta</label>
-                                    <div class="input-group">
-                                        <input type="number" class="form-control" id="price_c" name="price">
-                                        <div class="input-group-append">
-                                            <span class="input-group-text">
-                                                <i class="fas fa-dollar-sign"></i>
-                                            </span>
-                                        </div>
-                                    </div>
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <label for="code_c">Codigo</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="code_c" name="code">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-code"></i>
+                                    </span>
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <div class="form-group">
-                                    <label for="correria_id_c">Correria</label>
-                                    <div class="input-group">
-                                        <select class="form-control select2" id="correria_id_c" name="correria_id" style="width: 87%">
-                                            <option value="">Seleccione</option>
-                                        </select>
-                                        <div class="input-group-append">
-                                            <span class="input-group-text">
-                                                <i class="fas fa-rectangle-vertical-history"></i>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="form-group">
-                                    <label for="clothing_line_id_c">Lineas</label>
-                                    <div class="input-group">
-                                        <select class="form-control select2" id="clothing_line_id_c" name="clothing_line_id" style="width: 87%" onchange="CreateProductsModalClothingLineGetCategory(this)">
-                                            <option value="">Seleccione</option>
-                                        </select>
-                                        <div class="input-group-append">
-                                            <span class="input-group-text">
-                                                <i class="fas fa-clothes-hanger"></i>
-                                            </span>
-                                        </div>
-                                    </div>
+                        <div class="form-group">
+                            <label for="clothing_line_id_c">Lineas</label>
+                            <div class="input-group">
+                                <select class="form-control select2" id="clothing_line_id_c" name="clothing_line_id" style="width: 87%" onchange="CreateProductsModalClothingLineGetCategory(this)">
+                                    <option value="">Seleccione</option>
+                                </select>
+                                <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-clothes-hanger"></i>
+                                    </span>
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <div class="form-group">
-                                    <label for="category_id_c">Categoria</label>
-                                    <div class="input-group">
-                                        <select class="form-control select2" id="category_id_c" name="category_id" style="width: 86%" onchange="CreateProductsModalCategoryGetSubcategory(this)">
-                                            <option value="">Seleccione</option>
-                                        </select>
-                                        <div class="input-group-append">
-                                            <span class="input-group-text">
-                                                <i class="fas fa-shirt"></i>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="form-group">
-                                    <label for="subcategory_id_c">Subcategoria</label>
-                                    <div class="input-group">
-                                        <select class="form-control select2" id="subcategory_id_c" name="subcategory_id" style="width: 89%">
-                                            <option value="">Seleccione</option>
-                                        </select>
-                                        <div class="input-group-append">
-                                            <span class="input-group-text">
-                                                <i class="fas fa-shirt-tank-top"></i>
-                                            </span>
-                                        </div>
-                                    </div>
+                        <div class="form-group">
+                            <label for="category_id_c">Categoria</label>
+                            <div class="input-group">
+                                <select class="form-control select2" id="category_id_c" name="category_id" style="width: 86%" onchange="CreateProductsModalCategoryGetSubcategory(this)">
+                                    <option value="">Seleccione</option>
+                                </select>
+                                <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-shirt"></i>
+                                    </span>
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <div class="form-group">
-                                    <label for="model_id_c">Modelo</label>
-                                    <div class="input-group">
-                                        <select class="form-control select2" id="model_id_c" name="model_id" style="width: 87%">
-                                            <option value="">Seleccione</option>
-                                        </select>
-                                        <div class="input-group-append">
-                                            <span class="input-group-text">
-                                                <i class="fas fa-scissors"></i>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="form-group">
-                                    <label for="trademark_id_c">Marca</label>
-                                    <div class="input-group">
-                                        <select class="form-control select2" id="trademark_id_c" name="trademark_id" style="width: 88%">
-                                            <option value="">Seleccione</option>
-                                        </select>
-                                        <div class="input-group-append">
-                                            <span class="input-group-text">
-                                                <i class="fas fa-registered"></i>
-                                            </span>
-                                        </div>
-                                    </div>
+                        <div class="form-group">
+                            <label for="subcategory_id_c">Subcategoria</label>
+                            <div class="input-group">
+                                <select class="form-control select2" id="subcategory_id_c" name="subcategory_id" style="width: 89%">
+                                    <option value="">Seleccione</option>
+                                </select>
+                                <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-shirt-tank-top"></i>
+                                    </span>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-4">
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <div class="form-group">
-                                    <label for="description_c">Descripcion</label>
-                                    <div class="input-group">
-                                        <textarea class="form-control" id="description_c" name="description" cols="30" rows="2"></textarea>
-                                        <div class="input-group-append">
-                                            <span class="input-group-text">
-                                                <i class="fas fa-text-size"></i>
-                                            </span>
-                                        </div>
-                                    </div>
+                        <div class="form-group">
+                            <label for="collection_id_c">Coleccion</label>
+                            <div class="input-group">
+                                <select class="form-control select2" id="collection_id_c" name="collection" style="width: 87%">
+                                    <option value="">Seleccione</option>
+                                </select>
+                                <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-rectangle-history"></i>
+                                    </span>
                                 </div>
                             </div>
-                            <div class="col-lg-12" style="height: 175px !important;">
-                                <div class="form-group">
-                                    <label for="photos_c">Fotografias</label>
-                                    <div class="input-group">
-                                        <input type="file" class="form-control dropify" id="photos_c" multiple name="photos"
-                                        accept=".jpg, .jpeg, .png, .gif">
-                                    </div>
+                        </div>  
+                        <div class="form-group">
+                            <label for="correria_id_c">Correria</label>
+                            <div class="input-group">
+                                <select class="form-control select2" id="correria_id_c" name="correria_id" style="width: 87%">
+                                    <option value="">Seleccione</option>
+                                </select>
+                                <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-rectangle-vertical-history"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>  
+                        <div class="form-group">
+                            <label for="model_id_c">Modelo</label>
+                            <div class="input-group">
+                                <select class="form-control select2" id="model_id_c" name="model_id" style="width: 87%">
+                                    <option value="">Seleccione</option>
+                                </select>
+                                <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-scissors"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="trademark_id_c">Marca</label>
+                            <div class="input-group">
+                                <select class="form-control select2" id="trademark_id_c" name="trademark_id" style="width: 88%">
+                                    <option value="">Seleccione</option>
+                                </select>
+                                <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-registered"></i>
+                                    </span>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-12">
+                    <div class="col-lg-4">
                         <div class="form-group">
-                            <label for="sizes_c">Tallas</label>
-                            <div class="input-group" id="sizes_c">
-
+                            <label for="price_c">Precio de Venta</label>
+                            <div class="input-group">
+                                <input type="number" class="form-control" id="price_c" name="price">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-dollar-sign"></i>
+                                    </span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-lg-12">
                         <div class="form-group">
-                            <label for="colors_c">Colores</label>
-                            <div class="input-group" id="colors_c">
-
+                            <label for="cost_c">Costo de fabricacion</label>
+                            <div class="input-group">
+                                <input type="number" class="form-control" id="cost_c" name="cost">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-coin"></i>
+                                    </span>
+                                </div>
                             </div>
                         </div>
                     </div>

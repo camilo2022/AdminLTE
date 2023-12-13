@@ -16,9 +16,10 @@ class TransferDetail extends Model
         'product_id',
         'size_id',
         'color_id',
+        'tone_id',
         'quantity',
-        'send_warehouse_id',
-        'receive_warehouse_id',
+        'from_warehouse_id',
+        'to_warehouse_id',
         'transfer_detail_status'
     ];
 
@@ -42,13 +43,18 @@ class TransferDetail extends Model
         return $this->belongsTo(Color::class, 'color_id');
     }
 
-    public function send_warehouse() : BelongsTo
+    public function tone() : BelongsTo
     {
-        return $this->belongsTo(Warehouse::class, 'send_warehouse_id');
+        return $this->belongsTo(Tone::class, 'tone_id');
     }
 
-    public function receive_warehouse() : BelongsTo
+    public function from_warehouse() : BelongsTo
     {
-        return $this->belongsTo(Warehouse::class, 'receive_warehouse_id');
+        return $this->belongsTo(Warehouse::class, 'from_warehouse_id');
+    }
+
+    public function to_warehouse() : BelongsTo
+    {
+        return $this->belongsTo(Warehouse::class, 'to_warehouse_id');
     }
 }

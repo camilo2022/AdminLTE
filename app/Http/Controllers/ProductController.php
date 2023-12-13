@@ -19,17 +19,16 @@ use App\Http\Requests\Product\ProductStoreRequest;
 use App\Http\Requests\Product\ProductUpdateRequest;
 use App\Http\Requests\Product\ProductUploadRequest;
 use App\Http\Resources\Product\ProductIndexQueryCollection;
-use App\Imports\Product\ProductImport;
+use App\Imports\Product\ProductImportSheets;
 use App\Models\Category;
 use App\Models\ClothingLine;
+use App\Models\Collection;
 use App\Models\Correria;
-use App\Models\Color;
 use App\Models\Model;
 use App\Models\Product;
 use App\Models\ProductColorTone;
 use App\Models\ProductSize;
 use App\Models\ProductPhoto;
-use App\Models\Size;
 use App\Models\Subcategory;
 use App\Models\Trademark;
 use App\Traits\ApiMessage;
@@ -70,7 +69,8 @@ class ProductController extends Controller
                     'model' => function ($query) { $query->withTrashed(); },
                     'trademark' => function ($query) { $query->withTrashed(); },
                     'collection' => function ($query) { $query->withTrashed(); },
-                    'colors',
+                    'colors_tones.color' => function ($query) { $query->withTrashed(); },
+                    'colors_tones.tone' => function ($query) { $query->withTrashed(); },
                     'sizes'
                 ])
                 ->when($request->filled('search'),
@@ -132,11 +132,12 @@ class ProductController extends Controller
             }
 
             return $this->successResponse(
-                (object) [
+                [
                     'clothing_lines' => ClothingLine::all(),
                     'models' => Model::all(),
                     'trademarks' => Trademark::all(),
-                    'correrias' => Correria::all()
+                    'correrias' => Correria::all(),
+                    'collections' => Collection::all()
                 ],
                 'Ingrese los datos para hacer la validacion y registro.',
                 200
@@ -159,29 +160,17 @@ class ProductController extends Controller
             $product = new Product();
             $product->code = $request->input('code');
             $product->price = $request->input('price');
+            $product->cost = $request->input('cost');
             $product->clothing_line_id = $request->input('clothing_line_id');
             $product->category_id = $request->input('category_id');
             $product->subcategory_id = $request->input('subcategory_id');
             $product->model_id = $request->input('model_id');
             $product->trademark_id = $request->input('trademark_id');
             $product->correria_id = $request->input('correria_id');
+            $product->collection_id = $request->input('collection_id');
             $product->save();
 
-            collect($request->input('colors'))->map(function ($color) use ($product){
-                $productColor = new ProductColorTone();
-                $productColor->product_id = $product->id;
-                $productColor->color_id = $color;
-                $productColor->save();
-            });
-
-            collect($request->input('sizes'))->map(function ($size) use ($product){
-                $productSize = new ProductSize();
-                $productSize->product_id = $product->id;
-                $productSize->size_id = $size;
-                $productSize->save();
-            });
-
-            if ($request->hasFile('photos')) {
+            /* if ($request->hasFile('photos')) {
                 $photos = $request->file('photos');
                 foreach ($photos as $photo) {
                     $productPhoto = new ProductPhoto();
@@ -190,7 +179,7 @@ class ProductController extends Controller
                     $productPhoto->path = $photo->store('Products/' . $product->id, 'public');
                     $productPhoto->save();
                 }
-            }
+            } */
 
             return $this->successResponse(
                 $product,
@@ -247,7 +236,7 @@ class ProductController extends Controller
             }
 
             return $this->successResponse(
-                (object) [
+                [
                     'product' => Product::with([
                         'clothing_line' => function ($query) { $query->withTrashed(); },
                         'category' => function ($query) { $query->withTrashed(); },
@@ -255,11 +244,13 @@ class ProductController extends Controller
                         'model' => function ($query) { $query->withTrashed(); },
                         'trademark' => function ($query) { $query->withTrashed(); },
                         'correria' => function ($query) { $query->withTrashed(); },
+                        'collection' => function ($query) { $query->withTrashed(); },
                     ])->findOrFail($id),
                     'clothing_lines' => ClothingLine::all(),
                     'models' => Model::all(),
                     'trademarks' => Trademark::all(),
-                    'correrias' => Correria::all()
+                    'correrias' => Correria::all(),
+                    'collections' => Collection::all()
                 ],
                 'El producto fue encontrado exitosamente.',
                 204
@@ -289,48 +280,15 @@ class ProductController extends Controller
             $product = Product::withTrashed()->findOrFail($id);
             $product->code = $request->input('code');
             $product->price = $request->input('price');
+            $product->cost = $request->input('cost');
             $product->clothing_line_id = $request->input('clothing_line_id');
             $product->category_id = $request->input('category_id');
             $product->subcategory_id = $request->input('subcategory_id');
             $product->model_id = $request->input('model_id');
             $product->trademark_id = $request->input('trademark_id');
             $product->correria_id = $request->input('correria_id');
+            $product->collection_id = $request->input('collection_id');
             $product->save();
-
-            $colors = collect($request->input('colors'))->map(function ($color) use ($product){
-                $productColor = ProductColorTone::withTrashed()->where('color_id', '=', $color)->where('product_id', '=', $product->id)->first();
-                $productColor = !is_null($productColor) ? $productColor : new ProductColorTone();
-                $productColor->product_id = $product->id;
-                $productColor->color_id = $color;
-                $productColor->deleted_at = null;
-                $productColor->save();
-                return $productColor->id;
-            });
-
-            ProductColorTone::whereNotIn('id', $colors)->where('product_id', '=', $product->id)->delete();
-
-            $sizes = collect($request->input('sizes'))->map(function ($size) use ($product){
-                $productSize = ProductSize::withTrashed()->where('size_id', '=', $size)->where('product_id', '=', $product->id)->first();
-                $productSize = !is_null($productSize) ? $productSize : new ProductSize();
-                $productSize->product_id = $product->id;
-                $productSize->size_id = $size;
-                $productSize->deleted_at = null;
-                $productSize->save();
-                return $productSize->id;
-            });
-
-            ProductSize::whereNotIn('id', $sizes)->where('product_id', '=', $product->id)->delete();
-
-            if ($request->hasFile('photos')) {
-                $photos = $request->file('photos');
-                foreach ($photos as $photo) {
-                    $productPhoto = new ProductPhoto();
-                    $productPhoto->product_id = $product->id;
-                    $productPhoto->name = $photo->getClientOriginalName();
-                    $productPhoto->path = $photo->store('Products/' . $product->id, 'public');
-                    $productPhoto->save();
-                }
-            }
 
             return $this->successResponse(
                 $product,
@@ -659,11 +617,13 @@ class ProductController extends Controller
     public function upload(ProductUploadRequest $request)
     {
         try {
-            $products = Excel::toCollection(new ProductImport, $request->file('products'))->first();
+            $products = Excel::toCollection(new ProductImportSheets, $request->file('products'));
 
             $productsValidate = new ProductMasiveRequest();
             $productsValidate->merge([
-                'products' => $products->toArray(),
+                'Products' => $products['Products']->toArray(),
+                'ProductsSizes' => $products['ProductsSizes']->toArray(),
+                'ProductsColorsTones' => $products['ProductsColorsTones']->toArray(),
             ]);
 
             $validator = Validator::make(
@@ -676,49 +636,62 @@ class ProductController extends Controller
                 throw new ValidationException($validator);
             }
 
-            $groups = $products->groupBy('code');
-            $products = $groups->map(function ($group, $index) {
-                return [
-                    'code' => $index,
-                    'price' => $group->first()['price'],
-                    'clothing_line_id' => $group->first()['clothing_line_id'],
-                    'category_id' => $group->first()['category_id'],
-                    'subcategory_id' => $group->first()['subcategory_id'],
-                    'model_id' => $group->first()['model_id'],
-                    'trademark_id' => $group->first()['trademark_id'],
-                    'correria_id' => $group->first()['correria_id'],
-                    'colors' => $group->pluck('color_id')->unique()->values()->toArray(),
-                    'sizes' => $group->pluck('size_id')->unique()->values()->toArray(),
-                ];
-            })->values();
+            $products = [];
+            foreach ($productsValidate->Products as $product) {
+                $products[$product['code']] = $product;
+            }
 
-            foreach($products as $product) {
+            // Combinar información de tallas y colores_tones en los productos
+            foreach ($productsValidate->ProductsSizes as $size) {
+                $products[$size['code']]['sizes'][] = ['size_id' => $size['size_id']];
+            }
+
+            foreach ($productsValidate->ProductsColorsTones as $colorTone) {
+                $products[$colorTone['code']]['colors_tones'][] = ['color_id' => $colorTone['color_id'], 'tone_id' => $colorTone['tone_id']];
+            }
+
+            // Extraer los productos del array asociativo
+            $products = array_values($products);
+            
+            $products = collect($products)->map(function ($product) {
                 $product = (object) $product;
+            
                 $productNew = new Product();
                 $productNew->code = $product->code;
                 $productNew->price = $product->price;
+                $productNew->cost = $product->cost;
                 $productNew->clothing_line_id = $product->clothing_line_id;
                 $productNew->category_id = $product->category_id;
                 $productNew->subcategory_id = $product->subcategory_id;
                 $productNew->model_id = $product->model_id;
                 $productNew->trademark_id = $product->trademark_id;
                 $productNew->correria_id = $product->correria_id;
+                $productNew->collection_id = $product->collection_id;
                 $productNew->save();
-
-                collect($product->colors)->map(function ($color) use ($productNew){
-                    $productColor = new ProductColorTone();
-                    $productColor->product_id = $productNew->id;
-                    $productColor->color_id = $color;
-                    $productColor->save();
+            
+                // Map para sizes
+                $product->sizes = collect($product->sizes)->map(function ($productSizes) use ($productNew) {
+                    $productSizes = (object) $productSizes;
+                    $productSizesNew = new ProductSize();
+                    $productSizesNew->product_id = $productNew->id;
+                    $productSizesNew->size_id = $productSizes->size_id;
+                    $productSizesNew->save();
+                    return $productSizes;
                 });
-
-                collect($product->sizes)->map(function ($size) use ($productNew){
-                    $productSize = new ProductSize();
-                    $productSize->product_id = $productNew->id;
-                    $productSize->size_id = $size;
-                    $productSize->save();
+            
+                // Map para colors_tones
+                $product->colors_tones = collect($product->colors_tones)->map(function ($productColorsTones) use ($productNew) {
+                    $productColorsTones = (object) $productColorsTones;
+                    $productColorsTonesNew = new ProductColorTone();
+                    $productColorsTonesNew->product_id = $productNew->id;
+                    $productColorsTonesNew->color_id = $productColorsTones->color_id;
+                    $productColorsTonesNew->tone_id = $productColorsTones->tone_id;
+                    $productColorsTonesNew->save();
+                    return $productColorsTones;
                 });
-            }
+            
+                return $product;
+            });
 
             return $this->successResponse(
                 '',
@@ -756,7 +729,8 @@ class ProductController extends Controller
                     'model' => function ($query) { $query->withTrashed(); },
                     'trademark' => function ($query) { $query->withTrashed(); },
                     'collection' => function ($query) { $query->withTrashed(); },
-                    'colors',
+                    'colors_tones.color' => function ($query) { $query->withTrashed(); },
+                    'colors_tones.tone' => function ($query) { $query->withTrashed(); },
                     'sizes'
                 ])
                 ->get();

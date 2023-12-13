@@ -8,15 +8,19 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use OwenIt\Auditing\Contracts\Auditable;
+use OwenIt\Auditing\Auditable as AuditableModel;
 
-class Product extends DBModel
+class Product extends DBModel implements Auditable
 {
     use HasFactory;
-    use SoftDeletes;
-    protected $table = 'products';
+    use SoftDeletes;    
+    use AuditableModel;
 
+    protected $table = 'products';
     protected $fillable = [
         'code',
+        'price',
         'cost',
         'clothing_line_id',
         'category_id',
@@ -24,7 +28,20 @@ class Product extends DBModel
         'model_id',
         'trademark_id',
         'correria_id',
-        'price'
+        'collection_id'
+    ];
+
+    protected $auditInclude = [
+        'code',
+        'price',
+        'cost',
+        'clothing_line_id',
+        'category_id',
+        'subcategory_id',
+        'model_id',
+        'trademark_id',
+        'correria_id',
+        'collection_id'
     ];
 
     public function inventories() : HasMany
@@ -37,12 +54,9 @@ class Product extends DBModel
         return $this->hasMany(ProductPhoto::class, 'product_id');
     }
 
-    public function colors() : BelongsToMany
+    public function colors_tones() : HasMany
     {
-        return $this->belongsToMany(Color::class, 'product_color_tone', 'product_id', 'color_id')
-            ->withTimestamps()
-            ->using(ProductColor::class)
-            ->wherePivot('deleted_at', null);
+        return $this->hasMany(ProductColorTone::class, 'product_id');
     }
 
     public function sizes() : BelongsToMany
@@ -83,11 +97,16 @@ class Product extends DBModel
         return $this->belongsTo(Correria::class, 'correria_id');
     }
 
+    public function collection() : BelongsTo
+    {
+        return $this->belongsTo(Collection::class, 'collection_id');
+    }
+
     public function scopeSearch($query, $search)
     {
         return $query->where('code', 'like', '%' . $search . '%')
-        ->orWhere('description', 'like', '%' . $search . '%')
         ->orWhere('price', 'like', '%' . $search . '%')
+        ->orWhere('cost', 'like', '%' . $search . '%')
         ->orWhereHas('clothing_line',
             function ($subQuery) use ($search) {
                 $subQuery->where('name', 'like',  '%' . $search . '%');
@@ -114,6 +133,11 @@ class Product extends DBModel
             }
         )
         ->orWhereHas('correria',
+            function ($subQuery) use ($search) {
+                $subQuery->where('name', 'like',  '%' . $search . '%');
+            }
+        )
+        ->orWhereHas('collection',
             function ($subQuery) use ($search) {
                 $subQuery->where('name', 'like',  '%' . $search . '%');
             }

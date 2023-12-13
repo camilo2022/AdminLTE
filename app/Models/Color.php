@@ -21,7 +21,7 @@ class Color extends Model
 
     public function products() : BelongsToMany
     {
-        return $this->belongsToMany(Product::class, 'product_has_colors', 'color_id', 'product_id');
+        return $this->belongsToMany(Product::class, 'product_color_tone', 'color_id', 'product_id');
     }
 
     public function scopeSearch($query, $search)

@@ -4,14 +4,16 @@ namespace App\Imports\Product;
 
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
+use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 
-class ProductImportSheets implements ToCollection
+class ProductImportSheets implements WithMultipleSheets
 {
-    /**
-    * @param Collection $collection
-    */
-    public function collection(Collection $collection)
+    public function sheets() : array
     {
-        //
+        return [
+            'Products' => new ProductImport(),
+            'ProductsSizes' => new ProductSizeImport(),
+            'ProductsColorsTones' => new ProductColorToneImport()
+        ];
     }
 }

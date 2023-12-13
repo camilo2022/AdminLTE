@@ -19,11 +19,13 @@ return new class extends Migration
             $table->unsignedBigInteger('size_id');
             $table->unsignedBigInteger('warehouse_id');
             $table->unsignedBigInteger('color_id');
+            $table->unsignedBigInteger('tone_id');
             $table->unsignedBigInteger('quantity')->default(0);
             $table->foreign('product_id')->references('id')->on('products')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('size_id')->references('id')->on('sizes')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('warehouse_id')->references('id')->on('warehouses')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('color_id')->references('id')->on('colors')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('tone_id')->references('id')->on('tones')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });
     }
