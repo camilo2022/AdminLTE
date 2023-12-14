@@ -39,6 +39,8 @@ class RolesAndPermissionSeeder extends Seeder
 
         $Correrias = Role::create(['name' => 'Correrias']);
 
+        $Collections = Role::create(['name' => 'Collections']);
+
         $Sizes = Role::create(['name' => 'Sizes']);
 
         $Trademarks = Role::create(['name' => 'Trademarks']);
@@ -183,6 +185,15 @@ class RolesAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Dashboard.Correrias.Edit'])->syncRoles([$Correrias]);
         Permission::create(['name' => 'Dashboard.Correrias.Update'])->syncRoles([$Correrias]);
         Permission::create(['name' => 'Dashboard.Correrias.Delete'])->syncRoles([$Correrias]);
+
+        Permission::create(['name' => 'Dashboard.Collections.Index'])->syncRoles([$Collections]);
+        Permission::create(['name' => 'Dashboard.Collections.Index.Query'])->syncRoles([$Collections]);
+        Permission::create(['name' => 'Dashboard.Collections.Create'])->syncRoles([$Collections]);
+        Permission::create(['name' => 'Dashboard.Collections.Store'])->syncRoles([$Collections]);
+        Permission::create(['name' => 'Dashboard.Collections.Edit'])->syncRoles([$Collections]);
+        Permission::create(['name' => 'Dashboard.Collections.Update'])->syncRoles([$Collections]);
+        Permission::create(['name' => 'Dashboard.Collections.Delete'])->syncRoles([$Collections]);
+        Permission::create(['name' => 'Dashboard.Collections.Restore'])->syncRoles([$Collections]);
 
         Permission::create(['name' => 'Dashboard.Sizes.Index'])->syncRoles([$Sizes]);
         Permission::create(['name' => 'Dashboard.Sizes.Index.Query'])->syncRoles([$Sizes]);

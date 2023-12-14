@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\BusinessController;
 use App\Http\Controllers\CategoriesAndSubcategoriesController;
 use App\Http\Controllers\ClothingLineController;
+use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\CorreriaController;
 use App\Http\Controllers\ColorController;
 use App\Http\Controllers\DocumentTypeController;
@@ -133,6 +134,7 @@ Route::middleware(['auth'])->group(function () {
 
             Route::delete('/Delete', [RolesAndPermissionsController::class, 'delete'])
             ->middleware('can:Dashboard.RolesAndPermissions.Delete')->name('Dashboard.RolesAndPermissions.Delete');
+        
         });
 
         Route::prefix('/ModulesAndSubmodules')->group(function () {
@@ -185,6 +187,7 @@ Route::middleware(['auth'])->group(function () {
 
             Route::put('/Restore', [AreasAndChargesController::class, 'restore'])
             ->middleware('can:Dashboard.AreasAndCharges.Restore')->name('Dashboard.AreasAndCharges.Restore');
+        
         });
 
         Route::prefix('/DocumentTypes')->group(function () {
@@ -212,6 +215,7 @@ Route::middleware(['auth'])->group(function () {
 
             Route::put('/Restore', [DocumentTypeController::class, 'restore'])
             ->middleware('can:Dashboard.DocumentTypes.Restore')->name('Dashboard.DocumentTypes.Restore');
+        
         });
 
         Route::prefix('/Transporters')->group(function () {
@@ -239,6 +243,7 @@ Route::middleware(['auth'])->group(function () {
 
             Route::put('/Restore', [TransporterController::class, 'restore'])
             ->middleware('can:Dashboard.Transporters.Restore')->name('Dashboard.Transporters.Restore');
+        
         });
 
         Route::prefix('/PaymentMethods')->group(function () {
@@ -266,6 +271,7 @@ Route::middleware(['auth'])->group(function () {
 
             Route::put('/Restore', [PaymentMethodController::class, 'restore'])
             ->middleware('can:Dashboard.PaymentMethods.Restore')->name('Dashboard.PaymentMethods.Restore');
+        
         });
 
         Route::prefix('/PackageTypes')->group(function () {
@@ -293,6 +299,7 @@ Route::middleware(['auth'])->group(function () {
 
             Route::put('/Restore', [PackageTypeController::class, 'restore'])
             ->middleware('can:Dashboard.PackageTypes.Restore')->name('Dashboard.PackageTypes.Restore');
+        
         });
 
         Route::prefix('/Businesses')->group(function () {
@@ -320,6 +327,7 @@ Route::middleware(['auth'])->group(function () {
 
             Route::put('/Restore', [BusinessController::class, 'restore'])
             ->middleware('can:Dashboard.Businesses.Restore')->name('Dashboard.Businesses.Restore');
+        
         });
 
         Route::prefix('/Warehouses')->group(function () {
@@ -356,6 +364,7 @@ Route::middleware(['auth'])->group(function () {
 
             Route::put('/Restore', [WarehouseController::class, 'restore'])
             ->middleware('can:Dashboard.Warehouses.Restore')->name('Dashboard.Warehouses.Restore');
+        
         });
 
         Route::prefix('/Correrias')->group(function () {
@@ -380,6 +389,34 @@ Route::middleware(['auth'])->group(function () {
 
             Route::delete('/Delete', [CorreriaController::class, 'delete'])
             ->middleware('can:Dashboard.Correrias.Delete')->name('Dashboard.Correrias.Delete');
+
+        });
+
+        Route::prefix('/Collections')->group(function () {
+
+            Route::get('/Index', [CollectionController::class, 'index'])
+            ->middleware('can:Dashboard.Collections.Index')->name('Dashboard.Collections.Index');
+
+            Route::post('/Index/Query', [CollectionController::class, 'indexQuery'])
+            ->middleware('can:Dashboard.Collections.Index.Query')->name('Dashboard.Collections.Index.Query');
+
+            Route::post('/Create', [CollectionController::class, 'create'])
+            ->middleware('can:Dashboard.Collections.Create')->name('Dashboard.Collections.Create');
+
+            Route::post('/Store', [CollectionController::class, 'store'])
+            ->middleware('can:Dashboard.Collections.Store')->name('Dashboard.Collections.Store');
+
+            Route::post('/Edit/{id}', [CollectionController::class, 'edit'])
+            ->middleware('can:Dashboard.Collections.Edit')->name('Dashboard.Collections.Edit');
+
+            Route::put('/Update/{id}', [CollectionController::class, 'update'])
+            ->middleware('can:Dashboard.Collections.Update')->name('Dashboard.Collections.Update');
+
+            Route::delete('/Delete', [CollectionController::class, 'delete'])
+            ->middleware('can:Dashboard.Collections.Delete')->name('Dashboard.Collections.Delete');
+
+            Route::put('/Restore', [CollectionController::class, 'restore'])
+            ->middleware('can:Dashboard.Collections.Restore')->name('Dashboard.Collections.Restore');
 
         });
 
@@ -408,6 +445,7 @@ Route::middleware(['auth'])->group(function () {
 
             Route::put('/Restore', [SizeController::class, 'restore'])
             ->middleware('can:Dashboard.Sizes.Restore')->name('Dashboard.Sizes.Restore');
+
         });
 
         Route::prefix('/Trademarks')->group(function () {
@@ -435,6 +473,7 @@ Route::middleware(['auth'])->group(function () {
 
             Route::put('/Restore', [TrademarkController::class, 'restore'])
             ->middleware('can:Dashboard.Trademarks.Restore')->name('Dashboard.Trademarks.Restore');
+
         });
 
         Route::prefix('/Models')->group(function () {
@@ -462,6 +501,7 @@ Route::middleware(['auth'])->group(function () {
 
             Route::put('/Restore', [ModelController::class, 'restore'])
             ->middleware('can:Dashboard.Models.Restore')->name('Dashboard.Models.Restore');
+        
         });
 
         Route::prefix('/ClothingLines')->group(function () {
@@ -489,6 +529,7 @@ Route::middleware(['auth'])->group(function () {
 
             Route::put('/Restore', [ClothingLineController::class, 'restore'])
             ->middleware('can:Dashboard.ClothingLines.Restore')->name('Dashboard.ClothingLines.Restore');
+        
         });
 
         Route::prefix('/CategoriesAndSubcategories')->group(function () {
@@ -516,6 +557,7 @@ Route::middleware(['auth'])->group(function () {
 
             Route::put('/Restore', [CategoriesAndSubcategoriesController::class, 'restore'])
             ->middleware('can:Dashboard.CategoriesAndSubcategories.Restore')->name('Dashboard.CategoriesAndSubcategories.Restore');
+        
         });
 
         Route::prefix('/Colors')->group(function () {
@@ -543,6 +585,7 @@ Route::middleware(['auth'])->group(function () {
 
             Route::put('/Restore', [ColorController::class, 'restore'])
             ->middleware('can:Dashboard.Colors.Restore')->name('Dashboard.Colors.Restore');
+        
         });
 
         Route::prefix('/Tones')->group(function () {
@@ -570,6 +613,7 @@ Route::middleware(['auth'])->group(function () {
 
             Route::put('/Restore', [ToneController::class, 'restore'])
             ->middleware('can:Dashboard.Tones.Restore')->name('Dashboard.Tones.Restore');
+        
         });
 
         Route::prefix('/Products')->group(function () {
@@ -609,6 +653,7 @@ Route::middleware(['auth'])->group(function () {
 
             Route::post('/Download', [ProductController::class, 'download'])
             ->middleware('can:Dashboard.Products.Download')->name('Dashboard.Products.Download');
+        
         });
 
         Route::prefix('/Inventories')->group(function () {
@@ -624,6 +669,7 @@ Route::middleware(['auth'])->group(function () {
 
             Route::post('/Download', [InventoryController::class, 'download'])
             ->middleware('can:Dashboard.Inventories.Download')->name('Dashboard.Inventories.Download');
+        
         });
 
         Route::prefix('/Transfers')->group(function () {
@@ -686,6 +732,7 @@ Route::middleware(['auth'])->group(function () {
 
                 Route::put('/Cancel', [TransferDetailController::class, 'cancel'])
                 ->middleware('can:Dashboard.Transfers.Details.Cancel')->name('Dashboard.Transfers.Details.Cancel');
+            
             });
 
         });

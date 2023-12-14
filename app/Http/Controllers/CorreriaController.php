@@ -233,7 +233,6 @@ class CorreriaController extends Controller
             }
 
             $correria->delete();
-            $correria->save();
 
             return $this->successResponse(
                 $correria,

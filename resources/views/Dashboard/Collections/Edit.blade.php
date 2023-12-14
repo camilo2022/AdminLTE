@@ -1,10 +1,10 @@
-<div class="modal fade bd-example-modal-lg" id="CreateCollectionModal" tabindex="-1" role="dialog"
+<div class="modal fade bd-example-modal-lg" id="EditCollectionModal" tabindex="-1" role="dialog"
     aria-labelledby="exampleModalLabel" data-backdrop="static" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header w-100">
                 <div class="text-center w-100" style="background: white;">
-                    <label style="font-size:20px;font-weight:bold;">Creacion de Coleccion</label>
+                    <label style="font-size:20px;font-weight:bold;">Edicion de Coleccion</label>
                 </div>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
@@ -15,7 +15,7 @@
                     <div class="form-group">
                         <label for="name">Nombre</label>
                         <div class="input-group">
-                            <input type="text" class="form-control" id="name_c" name="name">
+                            <input type="text" class="form-control" id="name_e" name="name">
                             <div class="input-group-append">
                                 <span class="input-group-text">
                                     <i class="fas fa-signature"></i>
@@ -26,7 +26,7 @@
                     <div class="form-group">
                         <label for="code">Codigo</label>
                         <div class="input-group">
-                            <input type="text" class="form-control" id="code_c" name="code">
+                            <input type="text" class="form-control" id="code_e" name="code">
                             <div class="input-group-append">
                                 <span class="input-group-text">
                                     <i class="fas fa-code"></i>
@@ -40,7 +40,7 @@
                 <button type="button" class="btn btn-secondary" data-dismiss="modal" title="Cerrar ventana">
                     <i class="fas fa-xmark"></i>
                 </button>
-                <button type="button" class="btn btn-primary" id="CreateCollectionButton" onclick="CreateCollection()" title="Guardar coleccion.">
+                <button type="button" class="btn btn-primary" id="EditCollectionButton" onclick="" title="Actualizar coleccion.">
                     <i class="fas fa-floppy-disk"></i>
                 </button>
             </div>
