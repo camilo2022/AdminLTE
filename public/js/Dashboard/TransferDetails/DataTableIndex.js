@@ -1,23 +1,20 @@
-let warehousesUser = [];
-let tableTransfers = $('#transfers').DataTable({
+let warehousesUser2 = [];
+let tableTransferDetails = $('#transferDetails').DataTable({
     processing: true,
     serverSide: true,
     ajax: {
-        url: `/Dashboard/Transfers/Index/Query`,
+        url: `/Dashboard/Transfers/Details/Index/Query`,
         type: 'POST',
         data: function (request) {
             var columnMappings = {
                 0: 'id',
-                1: 'consecutive',
-                2: 'from_warehouse_id',
-                3: 'from_user_id',
-                4: 'form_date',
-                5: 'from_observation',
-                6: 'to_warehouse_id',
-                7: 'to_user_id',
-                8: 'to_date',
-                9: 'to_observation',
-                10: 'status'
+                1: 'transfer_id',
+                2: 'product_id',
+                3: 'size_id',
+                4: 'color_id',
+                5: 'tone_id',
+                6: 'quantity',
+                7: 'status',
             };
             request._token = $('meta[name="csrf-token"]').attr('content');
             request.perPage = request.length;
@@ -25,12 +22,13 @@ let tableTransfers = $('#transfers').DataTable({
             request.search = request.search.value;
             request.column = columnMappings[request.order[0].column];
             request.dir = request.order[0].dir;
+            request.transfer_id = $('#ShowTransferButton').attr('data-id');
         },
         dataSrc: function (response) {
-            response.recordsTotal = response.data.transfers.meta.pagination.count;
-            response.recordsFiltered = response.data.transfers.meta.pagination.total;
-            warehousesUser = response.data.warehouses;
-            return response.data.transfers.transfers;
+            response.recordsTotal = response.data.transferDetails.meta.pagination.count;
+            response.recordsFiltered = response.data.transferDetails.meta.pagination.total;
+            warehousesUser2 = response.data.warehouses;
+            return response.data.transferDetails.transferDetails;
         },
         error: function (xhr, error, thrown) {
             toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
@@ -38,35 +36,37 @@ let tableTransfers = $('#transfers').DataTable({
     },
     columns: [
         { data: 'id' },
-        { data: 'consecutive' },
         {
-            data: 'from_warehouse_id',
+            data: 'transfer_id',
             render: function (data, type, row) {
-                return `${row.from_warehouse.name} - ${row.from_warehouse.code}`;
+                return row.transfer.consecutive;
             }
         },
         {
-            data: 'from_user_id',
+            data: 'product_id',
             render: function (data, type, row) {
-                return `${row.from_user.name} ${row.from_user.last_name}`;
-            }
-        },
-        { data: 'from_date' },
-        { data: 'from_observation' },
-        {
-            data: 'to_warehouse_id',
-            render: function (data, type, row) {
-                return `${row.to_warehouse.name} - ${row.to_warehouse.code}`;
+                return row.product.code;
             }
         },
         {
-            data: 'to_user_id',
+            data: 'size_id',
             render: function (data, type, row) {
-                return data === null ? '' : `${row.to_user.name} ${row.to_user.last_name}`;
+                return row.size.code;
             }
         },
-        { data: 'to_date' },
-        { data: 'to_observation' },
+        {
+            data: 'color_id',
+            render: function (data, type, row) {
+                return `${row.color.name} | ${row.color.code}`;
+            }
+        },
+        {
+            data: 'tone_id',
+            render: function (data, type, row) {
+                return row.tone.name;
+            }
+        },
+        { data: 'quantity' },
         {
             data: 'status',
             render: function (data, type, row) {
@@ -89,33 +89,31 @@ let tableTransfers = $('#transfers').DataTable({
             render: function (data, type, row) {
                 let btn = `<div class="text-center" style="width: 100%;">`;
 
-                btn += `<a onclick="ShowTransferModal(${row.id})" type="button"
-                class="btn btn-info btn-sm mr-2" title="Visualizar transferencia">
-                    <i class="fas fa-eye text-white"></i>
-                </a>`;
-
-                if (data === null && row.status == 'Pendiente' && row.from_user_id == $('meta[name="user-id"]').attr('content')) {
-                    btn += `<a onclick="EditTransferModal(${row.id})" type="button"
-                    class="btn btn-primary btn-sm mr-2" title="Editar transferencia">
+                if (data === null && row.transfer.status == 'Pendiente' && row.transfer.from_user_id == $('meta[name="user-id"]').attr('content')) {
+                    btn += `<a onclick="EditTransferDetailModal(${row.id})" type="button"
+                    class="btn btn-primary btn-sm mr-2" title="Editar detalle de la transferencia">
                         <i class="fas fa-pen text-white"></i>
                     </a>`;
 
-                    btn += `<a onclick="DeleteTransfer(${row.id})" type="button"
-                    class="btn btn-danger btn-sm mr-2" title="Eliminar transferencia">
+                    btn += `<a onclick="DeleteTransferDetail(${row.id})" type="button"
+                    class="btn btn-danger btn-sm mr-2" title="Eliminar detalle de la transferencia">
                         <i class="fas fa-trash text-white"></i>
                     </a>`;
                 }
 
-                if (data === null && row.status === 'Pendiente' && warehousesUser.includes(row.to_warehouse_id)) {
-                    btn += `<a onclick="AprroveTransfer(${row.id})" type="button"
-                    class="btn btn-success btn-sm mr-2" title="Aceptar transferencia">
-                        <i class="fas fa-check text-white"></i>
-                    </a>`;
-
-                    btn += `<a onclick="CancelTransfer(${row.id})" type="button"
-                    class="btn bg-orange btn-sm mr-2" title="Cancelar transferencia">
-                        <i class="fas fa-xmark text-white"></i>
-                    </a>`;
+                if (data === null && row.transfer.status === 'Pendiente' && warehousesUser2.includes(row.transfer.to_warehouse_id)) {
+                    if(row.status === 'Cancelado') {
+                        btn += `<a onclick="PendingTransferDetail(${row.id})" type="button"
+                        class="btn btn-info btn-sm mr-2" title="Pendiente detalle de la transferencia">
+                            <i class="fas fa-hourglass-end text-white"></i>
+                        </a>`;
+                    }
+                    if(row.status === 'Pendiente') {
+                        btn += `<a onclick="CancelTransferDetail(${row.id})" type="button"
+                        class="btn bg-orange btn-sm mr-2" title="Cancelar detalle de la transferencia">
+                            <i class="fas fa-xmark text-white"></i>
+                        </a>`;
+                    }
                 }
                 btn += `</div>`;
                 return btn;
@@ -125,11 +123,11 @@ let tableTransfers = $('#transfers').DataTable({
     columnDefs: [
         {
             orderable: true,
-            targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+            targets: [0, 1, 2, 3, 4, 5, 6, 7]
         },
         {
             orderable: false,
-            targets: [11]
+            targets: [8]
         }
     ],
     pagingType: 'full_numbers',

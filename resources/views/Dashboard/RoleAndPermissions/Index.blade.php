@@ -62,7 +62,7 @@
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table id="rolesAndPermissions" class="table table-bordered table-hover dataTable dtr-inline">
+                                <table id="rolesAndPermissions" class="table table-bordered table-hover dataTable dtr-inline w-100">
                                     <thead class="thead-dark">
                                         <tr>
                                             <th colspan="3">Información</th>

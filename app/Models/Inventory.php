@@ -16,6 +16,7 @@ class Inventory extends Model
         'size_id',
         'warehouse_id',
         'color_id',
+        'tone_id',
         'quantity'
     ];
 

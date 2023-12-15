@@ -122,7 +122,7 @@ let tableProducts = $('#products').DataTable({
                 let btn = `<div class="text-center" style="width: 150px;">`;
                 if (data === null) {
                     btn += `<a onclick="ShowProductModal(${row.id})" type="button"
-                    class="btn btn-success btn-sm mr-2" title="Visualizar producto">
+                    class="btn btn-info btn-sm mr-2" title="Visualizar producto">
                         <i class="fas fa-eye text-white"></i>
                     </a>`;
 

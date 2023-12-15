@@ -39,7 +39,7 @@ class TransferDetailIndexQueryRequest extends FormRequest
     public function rules()
     {
         return [
-            'transfer_id' => ['required', 'exists:transfers,id'],
+            'transfer_id' => ['nullable', 'exists:transfers,id'],
             'start_date' => ['nullable', 'date'],
             'end_date' => ['nullable', 'date', 'after_or_equal:start_date'],
             'perPage' => ['required', 'numeric'],

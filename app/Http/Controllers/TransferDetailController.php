@@ -15,7 +15,6 @@ use App\Http\Resources\TransferDetail\TransferDetailIndexQueryCollection;
 use App\Models\Inventory;
 use App\Models\Product;
 use App\Models\TransferDetail;
-use App\Models\User;
 use App\Models\Warehouse;
 use App\Traits\ApiMessage;
 use App\Traits\ApiResponser;
@@ -37,9 +36,11 @@ class TransferDetailController extends Controller
             $end_date = Carbon::parse($request->input('end_date'))->endOfDay();
             //Consulta por nombre
             $tranferDetails = TransferDetail::with([
-                    'send_user' => function ($query) { $query->withTrashed(); },
-                    'receive_user' => function ($query) { $query->withTrashed(); },
-                    'details',
+                    'transfer' => function ($query) { $query->withTrashed(); },
+                    'product' => function ($query) { $query->withTrashed(); },
+                    'size' => function ($query) { $query->withTrashed(); },
+                    'color' => function ($query) { $query->withTrashed(); },
+                    'tone' => function ($query) { $query->withTrashed(); },
                 ])
                 ->when($request->filled('search'),
                     function ($query) use ($request) {
@@ -56,7 +57,15 @@ class TransferDetailController extends Controller
                 ->paginate($request->input('perPage'));
 
             return $this->successResponse(
-                new TransferDetailIndexQueryCollection($tranferDetails),
+                [
+                    'warehouses' => Warehouse::with('users')
+                    ->whereHas('users',
+                        function ($subQuery) {
+                            $subQuery->where('user_id', Auth::user()->id);
+                        }
+                    )->pluck('id'),
+                    'transferDetails' => new TransferDetailIndexQueryCollection($tranferDetails)
+                ],
                 $this->getMessage('Success'),
                 200
             );
@@ -83,41 +92,31 @@ class TransferDetailController extends Controller
     public function create(TransferDetailCreateRequest $request)
     {
         try {
-            if($request->filled('warehouse_id') && $request->filled('product_id') && $request->filled('color_id')) {
+            if($request->filled('warehouse_id') && $request->filled('product_id') && $request->filled('color_id') && $request->filled('tone_id')) {
                 return $this->successResponse(
-                    Inventory::with('product', 'warehouse', 'color')
-                    ->whereHas('product', fn($subQuery) => $subQuery->where('id', $request->input('product_id')))
-                    ->whereHas('warehouse', fn($subQuery) => $subQuery->where('id', $request->input('warehouse_id')))
-                    ->whereHas('color', fn($subQuery) => $subQuery->where('id', $request->input('color_id')))
-                    ->get(),
-                    'Subcategorias encontradas con exito.',
-                    200
-                );
-            }
-
-            if($request->filled('warehouse_id')) {
-                return $this->successResponse(
-                    [
-                        'products' => Product::with('inventories')
-                        ->whereHas('inventories', fn($subQuery) => $subQuery->where('warehouse_id', $request->input('warehouse_id')))
+                    Inventory::with('product', 'warehouse', 'color', 'tone')
+                        ->whereHas('product', fn($subQuery) => $subQuery->where('id', $request->input('product_id')))
+                        ->whereHas('warehouse', fn($subQuery) => $subQuery->where('id', $request->input('warehouse_id')))
+                        ->whereHas('color', fn($subQuery) => $subQuery->where('id', $request->input('color_id')))
+                        ->whereHas('tone', fn($subQuery) => $subQuery->where('id', $request->input('tone_id')))
                         ->get(),
-                        'warehouses' => Warehouse::all()
-                    ],
-                    'Subcategorias encontradas con exito.',
+                    'Inventario encontrado con exito.',
                     200
                 );
             }
 
             if($request->filled('product_id')) {
                 return $this->successResponse(
-                    Product::with('colors')->findOrFail($request->input('product_id'))->colors,
-                    'Subcategorias encontradas con exito.',
+                    Product::with('colors_tones.color', 'colors_tones.tone')->findOrFail($request->input('product_id')),
+                    'Colores y tonos del producto encontrados con exito.',
                     200
                 );
             }
 
             return $this->successResponse(
-                User::with('warehouses')->findOrFail(Auth::user()->id)->warehouses,
+                Product::with('inventories.warehouse')
+                    ->whereHas('inventories.warehouse', fn($subQuery) => $subQuery->where('id', $request->input('warehouse_id')))
+                    ->get(),
                 'Ingrese los datos para hacer la validacion y registro.',
                 200
             );
@@ -141,9 +140,8 @@ class TransferDetailController extends Controller
             $tranferDetail->product_id = $request->input('product_id');
             $tranferDetail->size_id = $request->input('size_id');
             $tranferDetail->color_id = $request->input('color_id');
+            $tranferDetail->tone_id = $request->input('tone_id');
             $tranferDetail->quantity = $request->input('quantity');
-            $tranferDetail->from_warehouse_id = $request->input('from_warehouse_id');
-            $tranferDetail->to_warehouse_id = $request->input('to_warehouse_id');
             $tranferDetail->status = 'Pendiente';
             $tranferDetail->save();
 
@@ -185,44 +183,21 @@ class TransferDetailController extends Controller
     public function edit(TransferDetailEditRequest $request, $id)
     {
         try {
-            if($request->filled('warehouse_id') && $request->filled('product_id') && $request->filled('color_id')) {
+            if($request->filled('warehouse_id') && $request->filled('product_id') && $request->filled('color_id') && $request->filled('tone_id')) {
                 return $this->successResponse(
-                    Inventory::with('product', 'warehouse', 'color')
-                    ->whereHas('product', fn($subQuery) => $subQuery->where('id', $request->input('product_id')))
-                    ->whereHas('warehouse', fn($subQuery) => $subQuery->where('id', $request->input('warehouse_id')))
-                    ->whereHas('color', fn($subQuery) => $subQuery->where('id', $request->input('color_id')))
-                    ->get(),
-                    'Subcategorias encontradas con exito.',
-                    200
-                );
-            }
-
-            if($request->filled('warehouse_id')) {
-                return $this->successResponse(
-                    [
-                        'products' => Product::with('inventories')
-                        ->whereHas('inventories', fn($subQuery) => $subQuery->where('warehouse_id', $request->input('warehouse_id')))
+                    Inventory::with('product', 'warehouse', 'color', 'tone')
+                        ->whereHas('product', fn($subQuery) => $subQuery->where('id', $request->input('product_id')))
+                        ->whereHas('warehouse', fn($subQuery) => $subQuery->where('id', $request->input('warehouse_id')))
+                        ->whereHas('color', fn($subQuery) => $subQuery->where('id', $request->input('color_id')))
+                        ->whereHas('tone', fn($subQuery) => $subQuery->where('id', $request->input('tone_id')))
                         ->get(),
-                        'warehouses' => Warehouse::all()
-                    ],
-                    'Subcategorias encontradas con exito.',
-                    200
-                );
-            }
-
-            if($request->filled('product_id')) {
-                return $this->successResponse(
-                    [
-                        Product::with('colors')->findOrFail($request->input('product_id'))->colors,
-                        User::with('warehouses')->findOrFail(Auth::user()->id)->warehouses
-                    ],
-                    'Subcategorias encontradas con exito.',
+                    'Inventario encontrado con exito.',
                     200
                 );
             }
 
             return $this->successResponse(
-                TransferDetail::findOrFail($id),
+                TransferDetail::with('product', 'size', 'color', 'tone')->findOrFail($id),
                 'El Detalle de la transferencia fue encontrado exitosamente.',
                 204
             );
@@ -249,12 +224,7 @@ class TransferDetailController extends Controller
     {
         try {
             $tranferDetail = TransferDetail::findOrFail($id);
-            $tranferDetail->product_id = $request->input('product_id');
-            $tranferDetail->size_id = $request->input('size_id');
-            $tranferDetail->color_id = $request->input('color_id');
             $tranferDetail->quantity = $request->input('quantity');
-            $tranferDetail->from_warehouse_id = $request->input('from_warehouse_id');
-            $tranferDetail->to_warehouse_id = $request->input('to_warehouse_id');
             $tranferDetail->save();
 
             return $this->successResponse(
@@ -295,12 +265,13 @@ class TransferDetailController extends Controller
         try {
             $tranferDetail = TransferDetail::findOrFail($request->input('id'));
 
-            $inventory = Inventory::with('product', 'size', 'warehouse', 'color')
-            ->whereHas('product', fn($subQuery) => $subQuery->where('id', $tranferDetail->product_id))
-            ->whereHas('size', fn($subQuery) => $subQuery->where('id', $tranferDetail->size_id))
-            ->whereHas('warehouse', fn($subQuery) => $subQuery->where('id', $tranferDetail->from_warehouse_id))
-            ->whereHas('color', fn($subQuery) => $subQuery->where('id', $tranferDetail->color_id))
-            ->first();
+            $inventory = Inventory::with('product', 'size', 'warehouse', 'color', 'tone')
+                ->whereHas('product', fn($subQuery) => $subQuery->where('id', $tranferDetail->product_id))
+                ->whereHas('size', fn($subQuery) => $subQuery->where('id', $tranferDetail->size_id))
+                ->whereHas('warehouse', fn($subQuery) => $subQuery->where('id', $tranferDetail->from_warehouse_id))
+                ->whereHas('color', fn($subQuery) => $subQuery->where('id', $tranferDetail->color_id))
+                ->whereHas('tone', fn($subQuery) => $subQuery->where('id', $tranferDetail->tone_id))
+                ->first();
 
             $inventory->quantity += $tranferDetail->quantity;
             $inventory->save();

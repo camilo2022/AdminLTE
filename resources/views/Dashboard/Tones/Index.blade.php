@@ -62,7 +62,7 @@
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table id="tones" class="table table-bordered table-hover dataTable dtr-inline nowrap">
+                                <table id="tones" class="table table-bordered table-hover dataTable dtr-inline nowrap w-100">
                                     <thead class="thead-dark">
                                         <tr>
                                             <th>#</th>

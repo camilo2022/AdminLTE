@@ -1,44 +1,48 @@
-function RestoreSize(id) {
+function ApproveTransfer(id) {
     Swal.fire({
-        title: '¿Desea restaurar la talla?',
-        text: 'La talla será restaurada.',
+        title: '¿Desea aprovar la transferencia?',
+        text: 'La transferencia será aprovada.',
         icon: 'warning',
         showCancelButton: true,
         cancelButtonColor: '#DD6B55',
         confirmButtonColor: '#3085d6',
-        confirmButtonText: 'Si, restaurar!',
-        cancelButtonText: 'No, cancelar!'
+        confirmButtonText: 'Si, aprovar!',
+        cancelButtonText: 'No, cancelar!',
     }).then((result) => {
         if (result.value) {
             $.ajax({
-                url: '/Dashboard/Sizes/Restore',
+                url: `/Dashboard/Transfers/Approve`,
                 type: 'PUT',
                 data: {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
                     'id': id
                 },
                 success: function(response) {
-                    tableSizes.ajax.reload();
-                    RestoreSizeAjaxSuccess(response);
+                    tableTransfers.ajax.reload();
+                    ApproveTransferAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableSize.ajax.reload();
-                    RestoreSizeAjaxError(xhr);
+                    tableTransfers.ajax.reload();
+                    ApproveTransferAjaxError(xhr);
                 }
             });
         } else {
-            toastr.info('La talla seleccionada no fue restaurada.')
+            toastr.info('La transferencia seleccionada no fue aprovada.')
         }
     });
 }
 
-function RestoreSizeAjaxSuccess(response) {
+function ApproveTransferAjaxSuccess(response) {
     if(response.status === 204) {
         toastr.success(response.message);
     }
+
+    if(response.status === 422) {
+        toastr.warning(response.message);
+    }
 }
 
-function RestoreSizeAjaxError(xhr) {
+function ApproveTransferAjaxError(xhr) {
     if(xhr.status === 403) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
     }

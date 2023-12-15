@@ -6,10 +6,9 @@ function EditTransferModal(id) {
             '_token': $('meta[name="csrf-token"]').attr('content')
         },
         success: function (response) {
-            console.log(response);
             tableTransfers.ajax.reload();
-            EditTransferModalCleaned(response.data.transfer);
-            EditTransfersModalFromWarehose(response.data.transfer.from_warehouse);
+            EditTransferModalCleaned(response.data);
+            EditTransfersModalFromWarehose(response.data.from_warehouse);
             EditTransferAjaxSuccess(response);
             $('#EditTransferModal').modal('show');
         },

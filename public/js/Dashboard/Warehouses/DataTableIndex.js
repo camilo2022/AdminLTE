@@ -49,7 +49,7 @@ let tableWarehouses = $('#warehouses').DataTable({
                 let btn = `<div class="text-center" style="width: 150px;">`;
                 if (data === null) {
                     btn += `<a onclick="ShowWarehouseModal(${row.id})" type="button"
-                    class="btn btn-success btn-sm mr-2" title="Asignar y remover encargados a bodega">
+                    class="btn btn-info btn-sm mr-2" title="Asignar y remover encargados a bodega">
                         <i class="fas fa-eye text-white"></i>
                     </a>`;
 

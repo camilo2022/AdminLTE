@@ -11,7 +11,7 @@ class TransferDetail extends Model
 {
     use HasFactory;
     use SoftDeletes;
-    
+
     protected $table = 'transfer_details';
     protected $fillable = [
         'transfer_id',
@@ -20,7 +20,7 @@ class TransferDetail extends Model
         'color_id',
         'tone_id',
         'quantity',
-        'transfer_detail_status'
+        'status'
     ];
 
     public function transfer() : BelongsTo
@@ -46,5 +46,47 @@ class TransferDetail extends Model
     public function tone() : BelongsTo
     {
         return $this->belongsTo(Tone::class, 'tone_id');
+    }
+
+    public function scopeSearch($query, $search)
+    {
+        return $query->whereHas('transfer',
+            function ($subQuery) use ($search) {
+                $subQuery->where('id', 'like',  '%' . $search . '%')
+                ->orWhere('consecutive', 'like',  '%' . $search . '%');
+            }
+        )
+        ->orWhereHas('product',
+            function ($subQuery) use ($search) {
+                $subQuery->where('id', 'like',  '%' . $search . '%')
+                ->orWhere('code', 'like',  '%' . $search . '%');
+            }
+        )
+        ->orWhereHas('size',
+            function ($subQuery) use ($search) {
+                $subQuery->where('id', 'like',  '%' . $search . '%')
+                ->orWhere('name', 'like',  '%' . $search . '%')
+                ->orWhere('code', 'like',  '%' . $search . '%');
+            }
+        )
+        ->orWhereHas('color',
+            function ($subQuery) use ($search) {
+                $subQuery->where('id', 'like',  '%' . $search . '%')
+                ->orWhere('name', 'like',  '%' . $search . '%')
+                ->orWhere('code', 'like',  '%' . $search . '%');
+            }
+        )
+        ->orWhereHas('tone',
+            function ($subQuery) use ($search) {
+                $subQuery->where('id', 'like',  '%' . $search . '%')
+                ->orWhere('name', 'like',  '%' . $search . '%');
+            }
+        );
+    }
+
+    public function scopeFilterByDate($query, $start_date, $end_date)
+    {
+        // Filtro por rango de fechas entre 'start_date' y 'end_date' en el campo 'created_at'
+        return $query->whereBetween('created_at', [$start_date, $end_date]);
     }
 }

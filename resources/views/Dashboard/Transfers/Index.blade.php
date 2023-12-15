@@ -62,7 +62,7 @@
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table id="transfers" class="table table-bordered table-hover dataTable dtr-inline nowrap">
+                                <table id="transfers" class="table table-bordered table-hover dataTable dtr-inline nowrap w-100">
                                     <thead class="thead-dark">
                                         <tr>
                                             <th>#</th>
@@ -90,12 +90,22 @@
         </div>
         @include('Dashboard.Transfers.Create')
         @include('Dashboard.Transfers.Edit')
+        @include('Dashboard.Transfers.Show')
     </section>
 @endsection
 @section('script')
-    <script src="{{ asset('js/Dashboard/Transfers/DataTableIndex.js') }}"></script>
-    <script src="{{ asset('js/Dashboard/Transfers/Create.js') }}"></script>
-    <script src="{{ asset('js/Dashboard/Transfers/Edit.js') }}"></script>
-    <script src="{{ asset('js/Dashboard/Transfers/Delete.js') }}"></script>
-    <script src="{{ asset('js/Dashboard/Transfers/Restore.js') }}"></script>
+<script src="{{ asset('js/Dashboard/Transfers/DataTableIndex.js') }}"></script>
+<script src="{{ asset('js/Dashboard/Transfers/Create.js') }}"></script>
+<script src="{{ asset('js/Dashboard/Transfers/Edit.js') }}"></script>
+<script src="{{ asset('js/Dashboard/Transfers/Show.js') }}"></script>
+<script src="{{ asset('js/Dashboard/Transfers/Delete.js') }}"></script>
+<script src="{{ asset('js/Dashboard/Transfers/Approve.js') }}"></script>
+<script src="{{ asset('js/Dashboard/Transfers/Cancel.js') }}"></script>
+
+<script src="{{ asset('js/Dashboard/TransferDetails/DataTableIndex.js') }}"></script>
+{{-- <script src="{{ asset('js/Dashboard/TransferDetails/Create.js') }}"></script>
+<script src="{{ asset('js/Dashboard/TransferDetails/Edit.js') }}"></script>
+<script src="{{ asset('js/Dashboard/TransferDetails/Delete.js') }}"></script>
+<script src="{{ asset('js/Dashboard/TransferDetails/Pending.js') }}"></script>
+<script src="{{ asset('js/Dashboard/TransferDetails/Cancel.js') }}"></script> --}}
 @endsection

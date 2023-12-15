@@ -28,6 +28,7 @@ return new class extends Migration
             $table->foreign('color_id')->references('id')->on('colors')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('tone_id')->references('id')->on('tones')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
