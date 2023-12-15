@@ -27,6 +27,8 @@ class InventoryIndexQueryCollection extends ResourceCollection
                     'warehouse' =>$inventory->warehouse,
                     'color_id' => $inventory->color_id,
                     'color' => $inventory->color,
+                    'tone_id' => $inventory->tone_id,
+                    'tone' => $inventory->tone,
                     'quantity' => $inventory->quantity,
                     'created_at' => $this->formatDate($inventory->created_at),
                     'updated_at' => $this->formatDate($inventory->updated_at),

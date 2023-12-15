@@ -56,6 +56,8 @@ class InventoryExport implements FromArray, Responsable, WithHeadings, WithTitle
                     'warehouse_code' => $inventory->warehouse->code,
                     'color_id' => $inventory->color_id,
                     'color_code' => $inventory->color->code,
+                    'tone_id' => $inventory->tone_id,
+                    'tone' => $inventory->tone->name,
                     'quantity' => $inventory->quantity
                 ]);
                 $i++;

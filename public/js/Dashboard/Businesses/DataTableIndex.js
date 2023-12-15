@@ -60,7 +60,7 @@ let tableBusinesses = $('#businesses').DataTable({
         {
             data: 'deleted_at',
             render: function (data, type, row) {
-                let btn = `<div class="text-center" style="width: 100px;">`;
+                let btn = `<div class="text-center" style="width: 100%;">`;
                 if (data === null) {
                     btn += `<a onclick="EditBusinessModal(${row.id})" type="button"
                     class="btn btn-primary btn-sm mr-2" title="Editar empresa">

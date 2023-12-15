@@ -11,7 +11,8 @@ let tableInventories = $('#inventories').DataTable({
                 2: 'size_id',
                 3: 'warehouse_id',
                 4: 'color_id',
-                5: 'quantity',
+                5: 'tone_id',
+                6: 'quantity',
             };
             request._token = $('meta[name="csrf-token"]').attr('content');
             request.perPage = request.length;
@@ -53,6 +54,12 @@ let tableInventories = $('#inventories').DataTable({
             data: 'color',
             render: function (data, type, row) {
                 return `${data.name} - ${data.code}`;
+            }
+        },
+        {
+            data: 'tone',
+            render: function (data, type, row) {
+                return data.name;
             }
         },
         {data: 'quantity'}

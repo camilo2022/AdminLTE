@@ -90,4 +90,5 @@
     <script src="{{ asset('js/Dashboard/Collections/Create.js') }}"></script>
     <script src="{{ asset('js/Dashboard/Collections/Edit.js') }}"></script>
     <script src="{{ asset('js/Dashboard/Collections/Delete.js') }}"></script>
+    <script src="{{ asset('js/Dashboard/Collections/Restore.js') }}"></script>
 @endsection

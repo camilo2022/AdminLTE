@@ -44,6 +44,7 @@ class InventoryController extends Controller
                     'size' => function ($query) { $query->withTrashed(); },
                     'warehouse' => function ($query) { $query->withTrashed(); },
                     'color' => function ($query) { $query->withTrashed(); },
+                    'tone' => function ($query) { $query->withTrashed(); },
                 ])
                 ->when($request->filled('search'),
                     function ($query) use ($request) {
@@ -103,13 +104,14 @@ class InventoryController extends Controller
                 throw new ValidationException($validator);
             }
 
-            $groups = $inventories->groupBy('product_id', 'size_id', 'warehouse_id', 'color_id');
+            $groups = $inventories->groupBy('product_id', 'size_id', 'warehouse_id', 'color_id', 'tone_id');
             $inventories = $groups->map(function ($group) {
                 return [
                     'product_id' => $group->first()['product_id'],
                     'size_id' => $group->first()['size_id'],
                     'warehouse_id' => $group->first()['warehouse_id'],
                     'color_id' => $group->first()['color_id'],
+                    'tone_id' => $group->first()['tone_id'],
                     'quantity' => $group->sum('quantity')
                 ];
             });
@@ -118,7 +120,7 @@ class InventoryController extends Controller
                 $inventory = (object) $inventory;
                 $existInventory = Inventory::where('product_id', '=', $inventory->product_id)
                 ->where('size_id', '=', $inventory->size_id)->where('warehouse_id', '=', $inventory->warehouse_id)
-                ->where('color_id', '=', $inventory->color_id)->first();
+                ->where('color_id', '=', $inventory->color_id)->where('tone_id', '=', $inventory->tone_id)->first();
 
                 if($existInventory) {
                     $existInventory->quantity += ($existInventory->quantity + $inventory->quantity) >= 0 ? $inventory->quantity : 0;
@@ -129,6 +131,7 @@ class InventoryController extends Controller
                     $inventoryNew->size_id = $inventory->size_id;
                     $inventoryNew->warehouse_id = $inventory->warehouse_id;
                     $inventoryNew->color_id = $inventory->color_id;
+                    $inventoryNew->tone_id = $inventory->tone_id;
                     $inventoryNew->quantity = $inventory->quantity >= 0 ? $inventory->quantity : 0;
                     $inventoryNew->save();
                 }
@@ -168,6 +171,7 @@ class InventoryController extends Controller
                     'size' => function ($query) { $query->withTrashed(); },
                     'warehouse' => function ($query) { $query->withTrashed(); },
                     'color' => function ($query) { $query->withTrashed(); },
+                    'tone' => function ($query) { $query->withTrashed(); },
                 ])
                 ->get();
 

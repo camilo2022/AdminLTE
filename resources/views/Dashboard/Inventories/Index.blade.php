@@ -78,6 +78,7 @@
                                             <th>Talla</th>
                                             <th>Bodega</th>
                                             <th>Color</th>
+                                            <th>Tono</th>
                                             <th>Cantidad</th>
                                         </tr>
                                     </thead>

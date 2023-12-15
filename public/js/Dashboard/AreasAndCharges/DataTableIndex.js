@@ -75,7 +75,7 @@ let tableAreasAndCharges = $('#areasAndCharges').DataTable({
         {
             data: 'deleted_at',
             render: function (data, type, row) {
-                let btn = `<div class="text-center" style="width: 100px;">`;
+                let btn = `<div class="text-center" style="width: 100%;">`;
                 if (data === null) {
                     btn += `<a onclick="EditAreaAndChargesModal(${row.id})" type="button"
                     class="btn btn-primary btn-sm mr-2" title="Editar area y cargos">

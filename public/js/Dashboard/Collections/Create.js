@@ -1,32 +1,30 @@
-function CreateCorreriaModal() {
+function CreateCollectionModal() {
     $.ajax({
-        url: `/Dashboard/Correrias/Create`,
+        url: `/Dashboard/Collections/Create`,
         type: 'POST',
         data: {
             '_token': $('meta[name="csrf-token"]').attr('content')
         },
         success: function(response) {
-            CreateCorreriaModalCleaned();
-            CreateCorreriaAjaxSuccess(response);
-            $('#CreateCorreriaModal').modal('show');
+            CreateCollectionModalCleaned();
+            CreateCollectionAjaxSuccess(response);
+            $('#CreateCollectionModal').modal('show');
         },
         error: function(xhr, textStatus, errorThrown) {
-            CreateCorreriaAjaxError(xhr);
+            CreateCollectionAjaxError(xhr);
         }
     });
 }
 
-function CreateCorreriaModalCleaned() {
-    RemoveIsValidClassCreateCorreria();
-    RemoveIsInvalidClassCreateCorreria();
+function CreateCollectionModalCleaned() {
+    RemoveIsValidClassCreateCollection();
+    RemoveIsInvalidClassCreateCollection();
 
     $('#name_c').val('');
     $('#code_c').val('');
-    $('#start_date_c').val('');
-    $('#end_date_c').val('');
 }
 
-function CreateCorreria() {
+function CreateCollection() {
     Swal.fire({
         title: '¿Desea guardar la correria?',
         text: 'La correria será creada.',
@@ -39,22 +37,20 @@ function CreateCorreria() {
     }).then((result) => {
         if (result.value) {
             $.ajax({
-                url: `/Dashboard/Correrias/Store`,
+                url: `/Dashboard/Collections/Store`,
                 type: 'POST',
                 data: {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
                     'name': $('#name_c').val(),
                     'code': $('#code_c').val(),
-                    'start_date': $('#start_date_c').val(),
-                    'end_date': $('#end_date_c').val()
                 },
                 success: function(response) {
-                    tableCorrerias.ajax.reload();
-                    CreateCorreriaAjaxSuccess(response);
+                    tableCollections.ajax.reload();
+                    CreateCollectionAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableCorrerias.ajax.reload();
-                    CreateCorreriaAjaxError(xhr);
+                    tableCollections.ajax.reload();
+                    CreateCollectionAjaxError(xhr);
                 }
             });
         } else {
@@ -63,91 +59,73 @@ function CreateCorreria() {
     });
 }
 
-function CreateCorreriaAjaxSuccess(response) {
+function CreateCollectionAjaxSuccess(response) {
     if(response.status === 200) {
         toastr.info(response.message);
-        $('#CreateCorreriaModal').modal('hide');
+        $('#CreateCollectionModal').modal('hide');
     }
 
     if(response.status === 201) {
         toastr.success(response.message);
-        $('#CreateCorreriaModal').modal('hide');
+        $('#CreateCollectionModal').modal('hide');
     }
 }
 
-function CreateCorreriaAjaxError(xhr) {
+function CreateCollectionAjaxError(xhr) {
     if(xhr.status === 403) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
-        $('#CreateCorreriaModal').modal('hide');
+        $('#CreateCollectionModal').modal('hide');
     }
 
     if(xhr.status === 404) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
-        $('#CreateCorreriaModal').modal('hide');
+        $('#CreateCollectionModal').modal('hide');
     }
 
     if(xhr.status === 419) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
-        $('#CreateCorreriaModal').modal('hide');
+        $('#CreateCollectionModal').modal('hide');
     }
 
     if(xhr.status === 422){
-        RemoveIsValidClassCreateCorreria();
-        RemoveIsInvalidClassCreateCorreria();
+        RemoveIsValidClassCreateCollection();
+        RemoveIsInvalidClassCreateCollection();
         $.each(xhr.responseJSON.errors, function(field, messages) {
-            AddIsInvalidClassCreateCorreria(field);
+            AddIsInvalidClassCreateCollection(field);
             $.each(messages, function(index, message) {
                 toastr.error(message);
             });
         });
-        AddIsValidClassCreateCorreria();
+        AddIsValidClassCreateCollection();
     }
 
     if(xhr.status === 500){
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
-        $('#CreateCorreriaModal').modal('hide');
+        $('#CreateCollectionModal').modal('hide');
     }
 }
 
-function AddIsValidClassCreateCorreria() {
+function AddIsValidClassCreateCollection() {
     if (!$('#name_c').hasClass('is-invalid')) {
       $('#name_c').addClass('is-valid');
     }
     if (!$('#code_c').hasClass('is-invalid')) {
       $('#code_c').addClass('is-valid');
     }
-    if (!$('#start_date_c').hasClass('is-invalid')) {
-      $('#start_date_c').addClass('is-valid');
-    }
-    if (!$('#end_date_c').hasClass('is-invalid')) {
-      $('#end_date_c').addClass('is-valid');
-    }
 }
 
-function RemoveIsValidClassCreateCorreria() {
+function RemoveIsValidClassCreateCollection() {
     $('#name_c').removeClass('is-valid');
     $('#code_c').removeClass('is-valid');
-    $('#start_date_c').removeClass('is-valid');
-    $('#end_date_c').removeClass('is-valid');
 }
 
-function AddIsInvalidClassCreateCorreria(input) {
+function AddIsInvalidClassCreateCollection(input) {
     if (!$(`#${input}_c`).hasClass('is-valid')) {
         $(`#${input}_c`).addClass('is-invalid');
     }
 }
 
-function RemoveIsInvalidClassCreateCorreria() {
+function RemoveIsInvalidClassCreateCollection() {
     $('#name_c').removeClass('is-invalid');
     $('#code_c').removeClass('is-invalid');
-    $('#start_date_c').removeClass('is-invalid');
-    $('#end_date_c').removeClass('is-invalid');
 }
-
-$('#start_date_create').datetimepicker({
-    format: 'L'
-});
-
-$('#end_date_create').datetimepicker({
-    format: 'L'
-});

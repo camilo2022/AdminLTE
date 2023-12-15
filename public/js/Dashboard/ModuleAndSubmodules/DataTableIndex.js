@@ -32,7 +32,7 @@ let tableModulesAndSubmodules = $('#modulesAndSubmodules').DataTable({
         {
             data: null,
             render: function(data, type, row) {
-                return `<i class="${data.icon}"></i>'`;
+                return `<i class="${data.icon}"></i>`;
             }
         },
         {

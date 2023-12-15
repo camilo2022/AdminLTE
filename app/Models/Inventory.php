@@ -39,6 +39,11 @@ class Inventory extends Model
         return $this->belongsTo(Color::class, 'color_id');
     }
 
+    public function tone() : BelongsTo
+    {
+        return $this->belongsTo(Tone::class, 'tone_id');
+    }
+
     public function scopeSearch($query, $search)
     {
         return $query->where('quantity', 'like', '%' . $search . '%')
@@ -62,6 +67,11 @@ class Inventory extends Model
             function ($subQuery) use ($search) {
                 $subQuery->where('name', 'like',  '%' . $search . '%')
                 ->orWhere('code', 'like',  '%' . $search . '%');
+            }
+        )
+        ->orWhereHas('tone',
+            function ($subQuery) use ($search) {
+                $subQuery->where('name', 'like',  '%' . $search . '%');
             }
         );
     }

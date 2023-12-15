@@ -46,6 +46,7 @@ class InventoryMasiveRequest extends FormRequest
             'inventories.*.size_id' => ['required', 'exists:sizes,id'],
             'inventories.*.warehouse_id' => ['required', 'exists:warehouses,id'],
             'inventories.*.color_id' => ['required', 'exists:colors,id'],
+            'inventories.*.tone_id' => ['required', 'exists:tones,id'],
             'inventories.*.quantity' => ['required', 'numeric'],
         ];
     }
@@ -61,6 +62,8 @@ class InventoryMasiveRequest extends FormRequest
             'inventories.*.warehouse_id.exists' => 'El Identificador de la bodega no es valido.',
             'inventories.*.color_id.required' => 'El campo Identificador del color es requerido.',
             'inventories.*.color_id.exists' => 'El Identificador del color no es valido.',
+            'inventories.*.tone_id.required' => 'El campo Identificador del tono es requerido.',
+            'inventories.*.tone_id.exists' => 'El Identificador del tono no es valido.',
             'inventories.*.quantity.required' => 'El campo Cantidad de inventario es requerido.',
             'inventories.*.quantity.numeric' => 'El campo Cantidad de inventario debe ser un valor numerico.',
         ];

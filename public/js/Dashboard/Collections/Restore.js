@@ -1,48 +1,44 @@
-function DeleteCollection(id) {
+function RestoreCollection(id) {
     Swal.fire({
-        title: '¿Desea eliminar la coleccion?',
-        text: 'La coleccion será desactivada.',
+        title: '¿Desea restaurar la coleccion?',
+        text: 'La coleccion será restaurada.',
         icon: 'warning',
         showCancelButton: true,
         cancelButtonColor: '#DD6B55',
         confirmButtonColor: '#3085d6',
-        confirmButtonText: 'Si, eliminar!',
-        cancelButtonText: 'No, cancelar!',
+        confirmButtonText: 'Si, restaurar!',
+        cancelButtonText: 'No, cancelar!'
     }).then((result) => {
         if (result.value) {
             $.ajax({
-                url: `/Dashboard/Collections/Delete`,
-                type: 'DELETE',
+                url: '/Dashboard/Collections/Restore',
+                type: 'PUT',
                 data: {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
                     'id': id
                 },
                 success: function(response) {
                     tableCollections.ajax.reload();
-                    DeleteCollectionAjaxSuccess(response);
+                    RestoreCollectionAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
                     tableCollections.ajax.reload();
-                    DeleteCollectionAjaxError(xhr);
+                    RestoreCollectionAjaxError(xhr);
                 }
             });
         } else {
-            toastr.info('La coleccion seleccionada no fue desactivada.');
+            toastr.info('La coleccion seleccionada no fue restaurada.')
         }
     });
 }
 
-function DeleteCollectionAjaxSuccess(response) {
+function RestoreCollectionAjaxSuccess(response) {
     if(response.status === 204) {
         toastr.success(response.message);
     }
-
-    if(response.status === 422) {
-        toastr.warning(response.message);
-    }
 }
 
-function DeleteCollectionAjaxError(xhr) {
+function RestoreCollectionAjaxError(xhr) {
     if(xhr.status === 403) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
     }

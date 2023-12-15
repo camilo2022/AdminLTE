@@ -73,4 +73,3 @@ class CorreriaStoreRequest extends FormRequest
         ];
     }
 }
-

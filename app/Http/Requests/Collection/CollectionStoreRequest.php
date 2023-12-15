@@ -3,6 +3,8 @@
 namespace App\Http\Requests\Collection;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class CollectionStoreRequest extends FormRequest
 {
@@ -11,9 +13,22 @@ class CollectionStoreRequest extends FormRequest
      *
      * @return bool
      */
+    protected function failedValidation(Validator $validator)
+    {
+        // Lanzar una excepción de validación con los errores de validación obtenidos
+        throw new HttpResponseException(response()->json([
+            'message' => 'Error de validación.',
+            'errors' => $validator->errors()
+        ], 422));
+    }
+    /**
+     * Determine if the user is authorized to make this request.
+     *
+     * @return bool
+     */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +39,21 @@ class CollectionStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'name' => ['required', 'string', 'unique:collections,name'],
+            'code' => ['required', 'string', 'unique:collections,code']
+        ];
+    }
+
+
+    public function messages()
+    {
+        return [
+            'name.required' => 'El campo Nombre de la coleccion es requerido.',
+            'name.string' => 'El campo Nombre de la coleccion debe ser una cadena de texto.',
+            'name.unique' => 'El campo Nombre de la coleccion ya existe en la base de datos.',
+            'code.required' => 'El campo Codigo de la coleccion es requerido.',
+            'code.string' => 'El campo Codigo de la coleccion debe ser una cadena de texto.',
+            'code.unique' => 'El campo Codigo de la coleccion ya existe en la base de datos.',
         ];
     }
 }
