@@ -103,9 +103,9 @@
 <script src="{{ asset('js/Dashboard/Transfers/Cancel.js') }}"></script>
 
 <script src="{{ asset('js/Dashboard/TransferDetails/DataTableIndex.js') }}"></script>
-{{-- <script src="{{ asset('js/Dashboard/TransferDetails/Create.js') }}"></script>
+<!-- <script src="{{ asset('js/Dashboard/TransferDetails/Create.js') }}"></script>
 <script src="{{ asset('js/Dashboard/TransferDetails/Edit.js') }}"></script>
 <script src="{{ asset('js/Dashboard/TransferDetails/Delete.js') }}"></script>
 <script src="{{ asset('js/Dashboard/TransferDetails/Pending.js') }}"></script>
-<script src="{{ asset('js/Dashboard/TransferDetails/Cancel.js') }}"></script> --}}
+<script src="{{ asset('js/Dashboard/TransferDetails/Cancel.js') }}"></script> -->
 @endsection

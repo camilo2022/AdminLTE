@@ -261,7 +261,7 @@ class TransferController extends Controller
     {
         try {
             return $this->successResponse(
-                Transfer::findOrFail($id),
+                Transfer::withTrashed()->findOrFail($id),
                 'La Transferencia fue encontrado exitosamente.',
                 204
             );
@@ -293,7 +293,7 @@ class TransferController extends Controller
                 $inventory = Inventory::with('product', 'size', 'warehouse', 'color', 'tone')
                     ->whereHas('product', fn($subQuery) => $subQuery->where('id', $detail->product_id))
                     ->whereHas('size', fn($subQuery) => $subQuery->where('id', $detail->size_id))
-                    ->whereHas('warehouse', fn($subQuery) => $subQuery->where('id', $detail->from_warehouse_id))
+                    ->whereHas('warehouse', fn($subQuery) => $subQuery->where('id', $transfer->from_warehouse_id))
                     ->whereHas('color', fn($subQuery) => $subQuery->where('id', $detail->color_id))
                     ->whereHas('tone', fn($subQuery) => $subQuery->where('id', $detail->tone_id))
                     ->first();
@@ -344,18 +344,28 @@ class TransferController extends Controller
                     ->whereHas('product', fn($subQuery) => $subQuery->where('id', $detail->product_id))
                     ->whereHas('size', fn($subQuery) => $subQuery->where('id', $detail->size_id))
                     ->when($detail->status == 'Pendiente',
-                        function ($query) use ($detail) {
-                            $query->whereHas('warehouse', fn($subQuery) => $subQuery->where('id', $detail->from_warehouse_id));
+                        function ($query) use ($transfer) {
+                            $query->whereHas('warehouse', fn($subQuery) => $subQuery->where('id', $transfer->to_warehouse_id));
                         }
                     )
                     ->when($detail->status == 'Cancelado',
-                        function ($query) use ($detail) {
-                            $query->whereHas('warehouse', fn($subQuery) => $subQuery->where('id', $detail->to_warehouse_id));
+                        function ($query) use ($transfer) {
+                            $query->whereHas('warehouse', fn($subQuery) => $subQuery->where('id', $transfer->from_warehouse_id));
                         }
                     )
                     ->whereHas('color', fn($subQuery) => $subQuery->where('id', $detail->color_id))
                     ->whereHas('tone', fn($subQuery) => $subQuery->where('id', $detail->tone_id))
                     ->first();
+                
+                if(!$inventory && $detail->status == 'Pendiente') {
+                    $inventory = new Inventory();
+                    $inventory->product_id = $detail->product_id;
+                    $inventory->size_id = $detail->size_id;
+                    $inventory->warehouse_id = $transfer->to_warehouse_id;
+                    $inventory->color_id = $detail->color_id;
+                    $inventory->tone_id = $detail->tone_id;
+                    $inventory->save();
+                }
 
                 $inventory->quantity += $detail->quantity;
                 $inventory->save();
@@ -405,7 +415,7 @@ class TransferController extends Controller
                 $inventory = Inventory::with('product', 'size', 'warehouse', 'color')
                     ->whereHas('product', fn($subQuery) => $subQuery->where('id', $detail->product_id))
                     ->whereHas('size', fn($subQuery) => $subQuery->where('id', $detail->size_id))
-                    ->whereHas('warehouse', fn($subQuery) => $subQuery->where('id', $detail->from_warehouse_id))
+                    ->whereHas('warehouse', fn($subQuery) => $subQuery->where('id', $transfer->from_warehouse_id))
                     ->whereHas('color', fn($subQuery) => $subQuery->where('id', $detail->color_id))
                     ->whereHas('tone', fn($subQuery) => $subQuery->where('id', $detail->tone_id))
                     ->first();

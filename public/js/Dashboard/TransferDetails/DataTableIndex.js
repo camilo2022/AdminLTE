@@ -72,7 +72,7 @@ let tableTransferDetails = $('#transferDetails').DataTable({
             render: function (data, type, row) {
                 switch (data) {
                     case 'Cancelado':
-                        return `<h5><span class="badge badge-outline badge-warning"><i class="fas fa-xmark mr-2"></i>Cancelado</span></h5>`;
+                        return `<h5><span class="badge badge-outline badge-warning text-white"><i class="fas fa-xmark mr-2 text-white"></i>Cancelado</span></h5>`;
                     case 'Eliminado':
                         return `<h5><span class="badge badge-outline badge-danger"><i class="fas fa-trash mr-2"></i>Eliminado</span></h5>`;
                     case 'Pendiente':

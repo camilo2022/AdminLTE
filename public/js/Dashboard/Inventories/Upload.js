@@ -120,14 +120,12 @@ function UploadInventoryAjaxError(xhr) {
 
             let errorString = errorInfo.join('\n');
             let blob = new Blob([errorString], { type: 'text/plain' });
-            let link = $('<a>').attr({
-                href: window.URL.createObjectURL(blob),
-                download: 'errores.txt'
-            });
-
-            $('body').append(link);
+            let link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blob);
+            link.download = 'errores.txt';
+            document.body.appendChild(link);
             link.click();
-            link.remove();
+            document.body.removeChild(link);
         }
     }
 

@@ -33,7 +33,7 @@ function CancelTransfer(id) {
 }
 
 function CancelTransferAjaxSuccess(response) {
-    if(response.status === 204) {
+    if(response.status === 200) {
         toastr.success(response.message);
     }
 

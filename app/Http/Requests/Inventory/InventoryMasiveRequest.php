@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests\Inventory;
 
+use App\Rules\ExistsProductColorTone;
+use App\Rules\ExistsProductSize;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
@@ -42,6 +44,7 @@ class InventoryMasiveRequest extends FormRequest
     {
 
         return [
+            'inventories.*' => ['required', new ExistsProductSize, new ExistsProductColorTone],
             'inventories.*.product_id' => ['required', 'exists:products,id'],
             'inventories.*.size_id' => ['required', 'exists:sizes,id'],
             'inventories.*.warehouse_id' => ['required', 'exists:warehouses,id'],

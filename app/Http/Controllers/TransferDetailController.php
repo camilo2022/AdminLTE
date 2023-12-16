@@ -52,6 +52,7 @@ class TransferDetailController extends Controller
                         $query->filterByDate($start_date, $end_date);
                     }
                 )
+                ->withTrashed()
                 ->where('transfer_id', '=', $request->input('transfer_id'))
                 ->orderBy($request->input('column'), $request->input('dir'))
                 ->paginate($request->input('perPage'));

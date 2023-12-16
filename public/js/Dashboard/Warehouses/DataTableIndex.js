@@ -46,7 +46,7 @@ let tableWarehouses = $('#warehouses').DataTable({
         {
             data: 'deleted_at',
             render: function (data, type, row) {
-                let btn = `<div class="text-center" style="width: 150px;">`;
+                let btn = `<div class="text-center" style="width: 100%;">`;
                 if (data === null) {
                     btn += `<a onclick="ShowWarehouseModal(${row.id})" type="button"
                     class="btn btn-info btn-sm mr-2" title="Asignar y remover encargados a bodega">

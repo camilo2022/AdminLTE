@@ -72,7 +72,7 @@ let tableTransfers = $('#transfers').DataTable({
             render: function (data, type, row) {
                 switch (data) {
                     case 'Cancelado':
-                        return `<h5><span class="badge badge-outline badge-warning"><i class="fas fa-xmark mr-2"></i>Cancelado</span></h5>`;
+                        return `<h5><span class="badge badge-outline badge-warning text-white"><i class="fas fa-xmark mr-2 text-white"></i>Cancelado</span></h5>`;
                     case 'Eliminado':
                         return `<h5><span class="badge badge-outline badge-danger"><i class="fas fa-trash mr-2"></i>Eliminado</span></h5>`;
                     case 'Pendiente':
@@ -107,7 +107,7 @@ let tableTransfers = $('#transfers').DataTable({
                 }
 
                 if (data === null && row.status === 'Pendiente' && warehousesUser.includes(row.to_warehouse_id)) {
-                    btn += `<a onclick="AprroveTransfer(${row.id})" type="button"
+                    btn += `<a onclick="ApproveTransfer(${row.id})" type="button"
                     class="btn btn-success btn-sm mr-2" title="Aceptar transferencia">
                         <i class="fas fa-check text-white"></i>
                     </a>`;
