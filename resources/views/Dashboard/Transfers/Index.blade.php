@@ -91,6 +91,8 @@
         @include('Dashboard.Transfers.Create')
         @include('Dashboard.Transfers.Edit')
         @include('Dashboard.Transfers.Show')
+        @include('Dashboard.TransferDetails.Create')
+        @include('Dashboard.TransferDetails.Edit')
     </section>
 @endsection
 @section('script')
@@ -103,8 +105,8 @@
 <script src="{{ asset('js/Dashboard/Transfers/Cancel.js') }}"></script>
 
 <script src="{{ asset('js/Dashboard/TransferDetails/DataTableIndex.js') }}"></script>
-<!-- <script src="{{ asset('js/Dashboard/TransferDetails/Create.js') }}"></script>
-<script src="{{ asset('js/Dashboard/TransferDetails/Edit.js') }}"></script>
+<script src="{{ asset('js/Dashboard/TransferDetails/Create.js') }}"></script>
+<!-- <script src="{{ asset('js/Dashboard/TransferDetails/Edit.js') }}"></script>
 <script src="{{ asset('js/Dashboard/TransferDetails/Delete.js') }}"></script>
 <script src="{{ asset('js/Dashboard/TransferDetails/Pending.js') }}"></script>
 <script src="{{ asset('js/Dashboard/TransferDetails/Cancel.js') }}"></script> -->

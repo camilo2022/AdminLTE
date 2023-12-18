@@ -1,34 +1,35 @@
-function CreateTransferModal() {
+function CreateTransferDetailModal() {
     $.ajax({
-        url: `/Dashboard/Transfers/Create`,
+        url: `/Dashboard/Transfers/Details/Create`,
         type: 'POST',
         data: {
-            '_token': $('meta[name="csrf-token"]').attr('content')
+            '_token': $('meta[name="csrf-token"]').attr('content'),
+            
         },
         success: function (response) {
-            tableTransfers.ajax.reload();
-            CreateTransferModalCleaned();
-            CreateTransfersModalFromWarehose(response.data);
-            CreateTransferAjaxSuccess(response);
-            $('#CreateTransferModal').modal('show');
+            tableTransferDetails.ajax.reload();
+            CreateTransferDetailModalCleaned();
+            CreateTransferDetailsModalFromWarehose(response.data);
+            CreateTransferDetailAjaxSuccess(response);
+            $('#CreateTransferDetailModal').modal('show');
         },
         error: function (xhr, textStatus, errorThrown) {
-            tableTransfers.ajax.reload();
-            CreateTransferAjaxError(xhr);
+            tableTransferDetails.ajax.reload();
+            CreateTransferDetailAjaxError(xhr);
         }
     });
 }
 
-function CreateTransferModalCleaned() {
-    CreateTransfersModalResetSelect('from_warehouse_id_c');
-    CreateTransfersModalResetSelect('to_warehouse_id_c');
-    RemoveIsValidClassCreateTransfer();
-    RemoveIsInvalidClassCreateTransfer();
+function CreateTransferDetailModalCleaned() {
+    CreateTransferDetailsModalResetSelect('from_warehouse_id_c');
+    CreateTransferDetailsModalResetSelect('to_warehouse_id_c');
+    RemoveIsValidClassCreateTransferDetail();
+    RemoveIsInvalidClassCreateTransferDetail();
 
     $('#from_observation_c').val('');
 }
 
-function CreateTransfersModalResetSelect(id) {
+function CreateTransferDetailsModalResetSelect(id) {
     const select = $(`#${id}`);
     select.html('');
     const defaultOption = $('<option>', {
@@ -39,43 +40,43 @@ function CreateTransfersModalResetSelect(id) {
     select.trigger('change');
 }
 
-function CreateTransfersModalFromWarehose(from_warehouses) {
+function CreateTransferDetailsModalFromWarehose(from_warehouses) {
     from_warehouses.forEach(from_warehouse => {
         let newOption = new Option(`${from_warehouse.name} - ${from_warehouse.code}`, from_warehouse.id, false, false);
         $('#from_warehouse_id_c').append(newOption);
     });
 }
 
-function CreateTransfersModalFromWarehoseGetToWarehouse(select) {
+function CreateTransferDetailsModalFromWarehoseGetToWarehouse(select) {
     if($(select).val() == '') {
-        CreateTransfersModalResetSelect('to_warehouse_id_c');
+        CreateTransferDetailsModalResetSelect('to_warehouse_id_c');
     } else {
         $.ajax({
-            url: `/Dashboard/Transfers/Create`,
+            url: `/Dashboard/TransferDetails/Create`,
             type: 'POST',
             data: {
                 '_token': $('meta[name="csrf-token"]').attr('content'),
                 'from_warehouse_id':  $(select).val()
             },
             success: function(response) {
-                CreateTransfersModalResetSelect('to_warehouse_id_c');
-                CreateTransfersModalToWarehouse(response.data);
+                CreateTransferDetailsModalResetSelect('to_warehouse_id_c');
+                CreateTransferDetailsModalToWarehouse(response.data);
             },
             error: function(xhr, textStatus, errorThrown) {
-                CreateTransfersAjaxError(xhr);
+                CreateTransferDetailsAjaxError(xhr);
             }
         });
     }
 };
 
-function CreateTransfersModalToWarehouse(to_warehouses) {
+function CreateTransferDetailsModalToWarehouse(to_warehouses) {
     to_warehouses.forEach(to_warehouse => {
         let newOption = new Option(`${to_warehouse.name} - ${to_warehouse.code}`, to_warehouse.id, false, false);
         $('#to_warehouse_id_c').append(newOption);
     });
 }
 
-function CreateTransfer() {
+function CreateTransferDetail() {
     Swal.fire({
         title: '¿Desea guardar la transferencia?',
         text: 'La transferencia será creada.',
@@ -88,7 +89,7 @@ function CreateTransfer() {
     }).then((result) => {
         if (result.value) {
             $.ajax({
-                url: `/Dashboard/Transfers/Store`,
+                url: `/Dashboard/TransferDetails/Store`,
                 type: 'POST',
                 data: {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
@@ -97,12 +98,12 @@ function CreateTransfer() {
                     'from_observation': $('#from_observation_c').val()
                 },
                 success: function (response) {
-                    tableTransfers.ajax.reload();
-                    CreateTransferAjaxSuccess(response);
+                    tableTransferDetails.ajax.reload();
+                    CreateTransferDetailAjaxSuccess(response);
                 },
                 error: function (xhr, textStatus, errorThrown) {
-                    tableTransfers.ajax.reload();
-                    CreateTransferAjaxError(xhr);
+                    tableTransferDetails.ajax.reload();
+                    CreateTransferDetailAjaxError(xhr);
                 }
             });
         } else {
@@ -111,53 +112,53 @@ function CreateTransfer() {
     });
 }
 
-function CreateTransferAjaxSuccess(response) {
+function CreateTransferDetailAjaxSuccess(response) {
     if (response.status === 200) {
         toastr.info(response.message);
-        $('#CreateTransferModal').modal('hide');
+        $('#CreateTransferDetailModal').modal('hide');
     }
 
     if (response.status === 201) {
         toastr.success(response.message);
-        $('#CreateTransferModal').modal('hide');
+        $('#CreateTransferDetailModal').modal('hide');
     }
 }
 
-function CreateTransferAjaxError(xhr) {
+function CreateTransferDetailAjaxError(xhr) {
     if (xhr.status === 403) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
-        $('#CreateTransferModal').modal('hide');
+        $('#CreateTransferDetailModal').modal('hide');
     }
 
     if (xhr.status === 404) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
-        $('#CreateTransferModal').modal('hide');
+        $('#CreateTransferDetailModal').modal('hide');
     }
 
     if (xhr.status === 419) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
-        $('#CreateTransferModal').modal('hide');
+        $('#CreateTransferDetailModal').modal('hide');
     }
 
     if (xhr.status === 422) {
-        RemoveIsValidClassCreateTransfer();
-        RemoveIsInvalidClassCreateTransfer();
+        RemoveIsValidClassCreateTransferDetail();
+        RemoveIsInvalidClassCreateTransferDetail();
         $.each(xhr.responseJSON.errors, function (field, messages) {
-            AddIsInvalidClassCreateTransfer(field);
+            AddIsInvalidClassCreateTransferDetail(field);
             $.each(messages, function (index, message) {
                 toastr.error(message);
             });
         });
-        AddIsValidClassCreateTransfer();
+        AddIsValidClassCreateTransferDetail();
     }
 
     if (xhr.status === 500) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
-        $('#CreateTransferModal').modal('hide');
+        $('#CreateTransferDetailModal').modal('hide');
     }
 }
 
-function AddIsValidClassCreateTransfer() {
+function AddIsValidClassCreateTransferDetail() {
     if (!$(`span[aria-labelledby="select2-from_warehouse_id_c-container`).hasClass('is-invalid')) {
         $(`span[aria-labelledby="select2-from_warehouse_id_c-container"]`).addClass('is-valid');
     }
@@ -169,13 +170,13 @@ function AddIsValidClassCreateTransfer() {
     }
 }
 
-function RemoveIsValidClassCreateTransfer() {
+function RemoveIsValidClassCreateTransferDetail() {
     $(`span[aria-labelledby="select2-from_warehouse_id_c-container"]`).removeClass('is-valid');
     $(`span[aria-labelledby="select2-to_warehouse_id_c-container"]`).removeClass('is-valid');
     $('#from_observation_c').removeClass('is-valid');
 }
 
-function AddIsInvalidClassCreateTransfer(input) {
+function AddIsInvalidClassCreateTransferDetail(input) {
     if (!$(`#${input}_c`).hasClass('is-valid')) {
         $(`#${input}_c`).addClass('is-invalid');
     }
@@ -184,7 +185,7 @@ function AddIsInvalidClassCreateTransfer(input) {
     }
 }
 
-function RemoveIsInvalidClassCreateTransfer() {
+function RemoveIsInvalidClassCreateTransferDetail() {
     $(`span[aria-labelledby="select2-from_warehouse_id_c-container"]`).removeClass('is-invalid');
     $(`span[aria-labelledby="select2-to_warehouse_id_c-container"]`).removeClass('is-invalid');
     $('#from_observation_c').removeClass('is-invalid');

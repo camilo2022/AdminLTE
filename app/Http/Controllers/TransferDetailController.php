@@ -115,8 +115,8 @@ class TransferDetailController extends Controller
             }
 
             return $this->successResponse(
-                Product::with('inventories.warehouse')
-                    ->whereHas('inventories.warehouse', fn($subQuery) => $subQuery->where('id', $request->input('warehouse_id')))
+                Product::with('inventories', 'sizes')
+                    ->whereHas('inventories', fn($subQuery) => $subQuery->where('warehouse_id', $request->input('warehouse_id')))
                     ->get(),
                 'Ingrese los datos para hacer la validacion y registro.',
                 200
