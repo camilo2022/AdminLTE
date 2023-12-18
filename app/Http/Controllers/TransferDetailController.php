@@ -93,11 +93,11 @@ class TransferDetailController extends Controller
     public function create(TransferDetailCreateRequest $request)
     {
         try {
-            if($request->filled('warehouse_id') && $request->filled('product_id') && $request->filled('color_id') && $request->filled('tone_id')) {
+            if($request->filled('from_warehouse_id') && $request->filled('product_id') && $request->filled('color_id') && $request->filled('tone_id')) {
                 return $this->successResponse(
                     Inventory::with('product', 'warehouse', 'color', 'tone')
                         ->whereHas('product', fn($subQuery) => $subQuery->where('id', $request->input('product_id')))
-                        ->whereHas('warehouse', fn($subQuery) => $subQuery->where('id', $request->input('warehouse_id')))
+                        ->whereHas('warehouse', fn($subQuery) => $subQuery->where('id', $request->input('from_warehouse_id')))
                         ->whereHas('color', fn($subQuery) => $subQuery->where('id', $request->input('color_id')))
                         ->whereHas('tone', fn($subQuery) => $subQuery->where('id', $request->input('tone_id')))
                         ->get(),
@@ -108,15 +108,15 @@ class TransferDetailController extends Controller
 
             if($request->filled('product_id')) {
                 return $this->successResponse(
-                    Product::with('colors_tones.color', 'colors_tones.tone')->findOrFail($request->input('product_id')),
+                    Product::with('colors_tones.color', 'colors_tones.tone', 'sizes')->findOrFail($request->input('product_id')),
                     'Colores y tonos del producto encontrados con exito.',
                     200
                 );
             }
 
             return $this->successResponse(
-                Product::with('inventories', 'sizes')
-                    ->whereHas('inventories', fn($subQuery) => $subQuery->where('warehouse_id', $request->input('warehouse_id')))
+                Product::with('inventories')
+                    ->whereHas('inventories', fn($subQuery) => $subQuery->where('warehouse_id', $request->input('from_warehouse_id')))
                     ->get(),
                 'Ingrese los datos para hacer la validacion y registro.',
                 200

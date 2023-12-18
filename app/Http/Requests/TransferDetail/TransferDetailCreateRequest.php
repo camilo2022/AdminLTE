@@ -41,7 +41,7 @@ class TransferDetailCreateRequest extends FormRequest
     public function rules()
     {
         return [
-            'warehouse_id' => ['nullable', 'exists:warehouses,id'],
+            'from_warehouse_id' => ['nullable', 'exists:warehouses,id'],
             'product_id' => ['nullable', 'exists:products,id'],
             'color_id' => ['nullable', 'exists:colors,id'],
         ];
@@ -50,7 +50,7 @@ class TransferDetailCreateRequest extends FormRequest
     public function messages()
     {
         return [
-            'warehouse_id.exists' => 'El Identificador de la bodega no es valido.',
+            'from_warehouse_id.exists' => 'El Identificador de la bodega no es valido.',
             'product_id.exists' => 'El Identificador del producto no es valido.',
             'color_id.exists' => 'El Identificador del color no es valido.',
         ];

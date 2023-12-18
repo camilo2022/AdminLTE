@@ -21,6 +21,7 @@ function ShowTransferModal(id) {
 
 function ShowTransferModalCleaned(transfer) {
     $('#ShowTransferButton').attr('data-id', transfer.id);
+    $('#ShowTransferButton').attr('data-from_warehouse_id', transfer.from_warehouse_id);
     /*  $("#name_s").val(data.transfer.name);
     $("#code_s").val(data.transfer.code);
     $('#users_s').empty(); */

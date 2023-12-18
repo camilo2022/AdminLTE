@@ -1,15 +1,16 @@
 function CreateTransferDetailModal() {
+
     $.ajax({
         url: `/Dashboard/Transfers/Details/Create`,
         type: 'POST',
         data: {
             '_token': $('meta[name="csrf-token"]').attr('content'),
-            
+            'warehouse_id': $('#EditTransferButton').attr('data-from_warehouse_id')
         },
         success: function (response) {
             tableTransferDetails.ajax.reload();
             CreateTransferDetailModalCleaned();
-            CreateTransferDetailsModalFromWarehose(response.data);
+            CreateTransferDetailsModalProduct(response.data);
             CreateTransferDetailAjaxSuccess(response);
             $('#CreateTransferDetailModal').modal('show');
         },
@@ -21,8 +22,7 @@ function CreateTransferDetailModal() {
 }
 
 function CreateTransferDetailModalCleaned() {
-    CreateTransferDetailsModalResetSelect('from_warehouse_id_c');
-    CreateTransferDetailsModalResetSelect('to_warehouse_id_c');
+    CreateTransferDetailsModalResetSelect('product_id_c');
     RemoveIsValidClassCreateTransferDetail();
     RemoveIsInvalidClassCreateTransferDetail();
 
@@ -40,19 +40,19 @@ function CreateTransferDetailsModalResetSelect(id) {
     select.trigger('change');
 }
 
-function CreateTransferDetailsModalFromWarehose(from_warehouses) {
-    from_warehouses.forEach(from_warehouse => {
-        let newOption = new Option(`${from_warehouse.name} - ${from_warehouse.code}`, from_warehouse.id, false, false);
-        $('#from_warehouse_id_c').append(newOption);
+function CreateTransferDetailsModalProduct(products) {
+    $.each(products, function(index, product) {
+        $('#product_id_c').append(new Option(product.code, product.id, false, false));
     });
 }
 
-function CreateTransferDetailsModalFromWarehoseGetToWarehouse(select) {
+function CreateTransferDetailsModalProductGetColorToneSizes(select) {
     if($(select).val() == '') {
-        CreateTransferDetailsModalResetSelect('to_warehouse_id_c');
+        CreateTransferDetailsModalResetSelect('product_id_c');
+        CreateTransferDetailsModalResetSelect('color_id_tone_id_c');
     } else {
         $.ajax({
-            url: `/Dashboard/TransferDetails/Create`,
+            url: `/Dashboard/Transfers/Details/Create`,
             type: 'POST',
             data: {
                 '_token': $('meta[name="csrf-token"]').attr('content'),
@@ -60,7 +60,7 @@ function CreateTransferDetailsModalFromWarehoseGetToWarehouse(select) {
             },
             success: function(response) {
                 CreateTransferDetailsModalResetSelect('to_warehouse_id_c');
-                CreateTransferDetailsModalToWarehouse(response.data);
+                CreateTransferDetailsModalColorTone(response.data);
             },
             error: function(xhr, textStatus, errorThrown) {
                 CreateTransferDetailsAjaxError(xhr);
@@ -69,10 +69,15 @@ function CreateTransferDetailsModalFromWarehoseGetToWarehouse(select) {
     }
 };
 
-function CreateTransferDetailsModalToWarehouse(to_warehouses) {
-    to_warehouses.forEach(to_warehouse => {
-        let newOption = new Option(`${to_warehouse.name} - ${to_warehouse.code}`, to_warehouse.id, false, false);
-        $('#to_warehouse_id_c').append(newOption);
+function CreateTransferDetailsModalColorTone(colors_tones) {
+    $.each(colors_tones, function(index, color_tone) {
+        $('#color_id_tone_id_c').append(new Option(`${color_tone.color.name} - ${color_tone.tone.name}`, `${color_tone.color.id}-${color_tone.tone.id}`, false, false));
+    });
+}
+
+function CreateTransferDetailsModalSizes(sizes) {
+    $.each(sizes, function(index, size) {
+        $('#size_id_c').append(new Option(size.name, size.id, false, false));
     });
 }
 
