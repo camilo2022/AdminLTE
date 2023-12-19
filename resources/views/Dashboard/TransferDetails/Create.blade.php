@@ -54,7 +54,7 @@
                     <div class="form-group">
                         <label for="quantity_c">Cantidad</label>
                         <div class="input-group">
-                            <input class="form-control" type="number" id="quantity_c" name="quantity" min="0" max="0"/>
+                            <input type="number" class="form-control" id="quantity_c" name="quantity" min="0" max="10">
                             <div class="input-group-append">
                                 <span class="input-group-text">
                                     <i class="fas fa-hashtag"></i>
@@ -65,6 +65,9 @@
                 </div>
             </div>
             <div class="modal-footer">
+                <button type="button" class="btn btn-success" title="Limpiar formulario" onclick="CreateTransferDetailModal()">
+                    <i class="fas fa-broom-wide"></i>
+                </button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal" title="Cerrar ventana">
                     <i class="fas fa-xmark"></i>
                 </button>

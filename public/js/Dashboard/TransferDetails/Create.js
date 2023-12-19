@@ -1,5 +1,4 @@
 function CreateTransferDetailModal() {
-
     $.ajax({
         url: `/Dashboard/Transfers/Details/Create`,
         type: 'POST',
@@ -22,6 +21,7 @@ function CreateTransferDetailModal() {
 }
 
 function CreateTransferDetailModalCleaned() {
+    $('#CreateTransferDetailModal').modal('hide');
     CreateTransferDetailsModalResetSelect('product_id_c');
     RemoveIsValidClassCreateTransferDetail();
     RemoveIsInvalidClassCreateTransferDetail();
@@ -108,7 +108,7 @@ function CreateTransferDetailsModalColorToneSizesGetQuantity() {
             }
         });
     }
-    
+
 };
 
 function CreateTransferDetail() {
@@ -128,13 +128,19 @@ function CreateTransferDetail() {
                 type: 'POST',
                 data: {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
-                    'from_warehouse_id': $('#from_warehouse_id_c').val(),
-                    'to_warehouse_id': $('#to_warehouse_id_c').val(),
-                    'from_observation': $('#from_observation_c').val()
+                    'from_warehouse_id': $('#ShowTransferButton').attr('data-from_warehouse_id'),
+                    'transfer_id': $('#ShowTransferButton').attr('data-id'),
+                    'product_id': $('#product_id_c').val(),
+                    'color_id':  $('#color_id_tone_id_c').val().split('-')[0],
+                    'tone_id':  $('#color_id_tone_id_c').val().split('-')[1],
+                    'size_id':  $('#size_id_c').val(),
+                    'quantity': $('#quantity_c').val()
                 },
                 success: function (response) {
                     tableTransferDetails.ajax.reload();
                     CreateTransferDetailAjaxSuccess(response);
+                    $('#CreateTransferDetailModal').modal('show');
+                    $('#size_id_c').val('');
                 },
                 error: function (xhr, textStatus, errorThrown) {
                     tableTransferDetails.ajax.reload();
@@ -194,26 +200,35 @@ function CreateTransferDetailAjaxError(xhr) {
 }
 
 function AddIsValidClassCreateTransferDetail() {
-    if (!$(`span[aria-labelledby="select2-from_warehouse_id_c-container`).hasClass('is-invalid')) {
-        $(`span[aria-labelledby="select2-from_warehouse_id_c-container"]`).addClass('is-valid');
+    if (!$(`span[aria-labelledby="select2-product_id_c-container`).hasClass('is-invalid')) {
+        $(`span[aria-labelledby="select2-product_id_c-container"]`).addClass('is-valid');
     }
-    if (!$(`span[aria-labelledby="select2-to_warehouse_id_c-container`).hasClass('is-invalid')) {
-        $(`span[aria-labelledby="select2-to_warehouse_id_c-container"]`).addClass('is-valid');
+    if (!$(`span[aria-labelledby="select2-color_id_tone_id_c-container`).hasClass('is-invalid')) {
+        $(`span[aria-labelledby="select2-color_id_tone_id_c-container"]`).addClass('is-valid');
     }
-    if (!$('#from_observation_c').hasClass('is-invalid')) {
-        $('#from_observation_c').addClass('is-valid');
+    if (!$(`span[aria-labelledby="select2-size_id_c-container`).hasClass('is-invalid')) {
+        $(`span[aria-labelledby="select2-size_id_c-container"]`).addClass('is-valid');
+    }
+    if (!$('#quantity_c').hasClass('is-invalid')) {
+        $('#quantity_c').addClass('is-valid');
     }
 }
 
 function RemoveIsValidClassCreateTransferDetail() {
-    $(`span[aria-labelledby="select2-from_warehouse_id_c-container"]`).removeClass('is-valid');
-    $(`span[aria-labelledby="select2-to_warehouse_id_c-container"]`).removeClass('is-valid');
-    $('#from_observation_c').removeClass('is-valid');
+    $(`span[aria-labelledby="select2-product_id_c-container"]`).removeClass('is-valid');
+    $(`span[aria-labelledby="select2-color_id_tone_id_c-container"]`).removeClass('is-valid');
+    $(`span[aria-labelledby="select2-size_id_c-container"]`).removeClass('is-valid');
+    $('#quantity_c').removeClass('is-valid');
 }
 
 function AddIsInvalidClassCreateTransferDetail(input) {
     if (!$(`#${input}_c`).hasClass('is-valid')) {
         $(`#${input}_c`).addClass('is-invalid');
+    }
+    if(input == 'color_id' || input == 'tone_id') {
+        if (!$(`span[aria-labelledby="select2-color_id_tone_id_c-container`).hasClass('is-valid')) {
+            $(`span[aria-labelledby="select2-color_id_tone_id_c-container"]`).addClass('is-invalid');
+        }
     }
     if (!$(`span[aria-labelledby="select2-${input}_c-container`).hasClass('is-valid')) {
         $(`span[aria-labelledby="select2-${input}_c-container"]`).addClass('is-invalid');
@@ -221,7 +236,8 @@ function AddIsInvalidClassCreateTransferDetail(input) {
 }
 
 function RemoveIsInvalidClassCreateTransferDetail() {
-    $(`span[aria-labelledby="select2-from_warehouse_id_c-container"]`).removeClass('is-invalid');
-    $(`span[aria-labelledby="select2-to_warehouse_id_c-container"]`).removeClass('is-invalid');
-    $('#from_observation_c').removeClass('is-invalid');
+    $(`span[aria-labelledby="select2-product_id_c-container"]`).removeClass('is-invalid');
+    $(`span[aria-labelledby="select2-color_id_tone_id_c-container"]`).removeClass('is-invalid');
+    $(`span[aria-labelledby="select2-size_id_c-container"]`).removeClass('is-invalid');
+    $('#quantity_c').removeClass('is-invalid');
 }

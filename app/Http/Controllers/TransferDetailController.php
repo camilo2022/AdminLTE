@@ -137,6 +137,16 @@ class TransferDetailController extends Controller
     public function store(TransferDetailStoreRequest $request)
     {
         try {
+            $inventory = Inventory::with('product', 'warehouse', 'color', 'tone', 'size')
+                ->whereHas('product', fn($subQuery) => $subQuery->where('id', $request->input('product_id')))
+                ->whereHas('warehouse', fn($subQuery) => $subQuery->where('id', $request->input('from_warehouse_id')))
+                ->whereHas('color', fn($subQuery) => $subQuery->where('id', $request->input('color_id')))
+                ->whereHas('tone', fn($subQuery) => $subQuery->where('id', $request->input('tone_id')))
+                ->whereHas('size', fn($subQuery) => $subQuery->where('id', $request->input('size_id')))
+                ->firstOrFail();
+            $inventory->quantity-= $request->input('quantity');
+            $inventory->save();
+
             $tranferDetail = new TransferDetail();
             $tranferDetail->transfer_id = $request->input('transfer_id');
             $tranferDetail->product_id = $request->input('product_id');
@@ -185,21 +195,22 @@ class TransferDetailController extends Controller
     public function edit(TransferDetailEditRequest $request, $id)
     {
         try {
-            if($request->filled('warehouse_id') && $request->filled('product_id') && $request->filled('color_id') && $request->filled('tone_id')) {
+            if($request->filled('from_warehouse_id') && $request->filled('product_id') && $request->filled('color_id') && $request->filled('tone_id') && $request->filled('size_id')) {
                 return $this->successResponse(
-                    Inventory::with('product', 'warehouse', 'color', 'tone')
+                    Inventory::with('product', 'warehouse', 'color', 'tone', 'size')
                         ->whereHas('product', fn($subQuery) => $subQuery->where('id', $request->input('product_id')))
-                        ->whereHas('warehouse', fn($subQuery) => $subQuery->where('id', $request->input('warehouse_id')))
+                        ->whereHas('warehouse', fn($subQuery) => $subQuery->where('id', $request->input('from_warehouse_id')))
                         ->whereHas('color', fn($subQuery) => $subQuery->where('id', $request->input('color_id')))
                         ->whereHas('tone', fn($subQuery) => $subQuery->where('id', $request->input('tone_id')))
-                        ->get(),
+                        ->whereHas('size', fn($subQuery) => $subQuery->where('id', $request->input('size_id')))
+                        ->first(),
                     'Inventario encontrado con exito.',
                     200
                 );
             }
 
             return $this->successResponse(
-                TransferDetail::with('product', 'size', 'color', 'tone')->findOrFail($id),
+                TransferDetail::with('product', 'size', 'color', 'tone', 'size')->findOrFail($id),
                 'El Detalle de la transferencia fue encontrado exitosamente.',
                 204
             );
@@ -226,6 +237,18 @@ class TransferDetailController extends Controller
     {
         try {
             $tranferDetail = TransferDetail::findOrFail($id);
+
+            $inventory = Inventory::with('product', 'warehouse', 'color', 'tone', 'size')
+                ->whereHas('product', fn($subQuery) => $subQuery->where('id', $request->input('product_id')))
+                ->whereHas('warehouse', fn($subQuery) => $subQuery->where('id', $request->input('from_warehouse_id')))
+                ->whereHas('color', fn($subQuery) => $subQuery->where('id', $request->input('color_id')))
+                ->whereHas('tone', fn($subQuery) => $subQuery->where('id', $request->input('tone_id')))
+                ->whereHas('size', fn($subQuery) => $subQuery->where('id', $request->input('size_id')))
+                ->firstOrFail();
+                
+            $inventory->quantity = ($inventory->quantity + $tranferDetail->quantity) - $request->input('quantity');
+            $inventory->save();
+
             $tranferDetail->quantity = $request->input('quantity');
             $tranferDetail->save();
 
@@ -265,14 +288,14 @@ class TransferDetailController extends Controller
     public function delete(TransferDetailDeleteRequest $request)
     {
         try {
-            $tranferDetail = TransferDetail::findOrFail($request->input('id'));
+            $tranferDetail = TransferDetail::with('transfer')->findOrFail($request->input('id'));
 
-            $inventory = Inventory::with('product', 'size', 'warehouse', 'color', 'tone')
+            $inventory = Inventory::with('product', 'warehouse', 'color', 'tone', 'size')
                 ->whereHas('product', fn($subQuery) => $subQuery->where('id', $tranferDetail->product_id))
-                ->whereHas('size', fn($subQuery) => $subQuery->where('id', $tranferDetail->size_id))
-                ->whereHas('warehouse', fn($subQuery) => $subQuery->where('id', $tranferDetail->from_warehouse_id))
+                ->whereHas('warehouse', fn($subQuery) => $subQuery->where('id', $tranferDetail->transfer->from_warehouse_id))
                 ->whereHas('color', fn($subQuery) => $subQuery->where('id', $tranferDetail->color_id))
                 ->whereHas('tone', fn($subQuery) => $subQuery->where('id', $tranferDetail->tone_id))
+                ->whereHas('size', fn($subQuery) => $subQuery->where('id', $tranferDetail->size_id))
                 ->first();
 
             $inventory->quantity += $tranferDetail->quantity;
