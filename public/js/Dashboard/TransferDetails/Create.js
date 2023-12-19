@@ -5,7 +5,7 @@ function CreateTransferDetailModal() {
         type: 'POST',
         data: {
             '_token': $('meta[name="csrf-token"]').attr('content'),
-            'warehouse_id': $('#EditTransferButton').attr('data-from_warehouse_id')
+            'from_warehouse_id': $('#ShowTransferButton').attr('data-from_warehouse_id')
         },
         success: function (response) {
             tableTransferDetails.ajax.reload();
@@ -26,7 +26,8 @@ function CreateTransferDetailModalCleaned() {
     RemoveIsValidClassCreateTransferDetail();
     RemoveIsInvalidClassCreateTransferDetail();
 
-    $('#from_observation_c').val('');
+    $('#quantity_c').val('');
+    $('#quantity_c').attr('max', 0);
 }
 
 function CreateTransferDetailsModalResetSelect(id) {
@@ -38,6 +39,7 @@ function CreateTransferDetailsModalResetSelect(id) {
     });
     select.append(defaultOption);
     select.trigger('change');
+    $('#quantity_c').attr('max', 0);
 }
 
 function CreateTransferDetailsModalProduct(products) {
@@ -48,7 +50,7 @@ function CreateTransferDetailsModalProduct(products) {
 
 function CreateTransferDetailsModalProductGetColorToneSizes(select) {
     if($(select).val() == '') {
-        CreateTransferDetailsModalResetSelect('product_id_c');
+        CreateTransferDetailsModalResetSelect('size_id_c');
         CreateTransferDetailsModalResetSelect('color_id_tone_id_c');
     } else {
         $.ajax({
@@ -56,35 +58,63 @@ function CreateTransferDetailsModalProductGetColorToneSizes(select) {
             type: 'POST',
             data: {
                 '_token': $('meta[name="csrf-token"]').attr('content'),
-                'from_warehouse_id':  $(select).val()
+                'product_id':  $(select).val()
             },
             success: function(response) {
-                CreateTransferDetailsModalResetSelect('to_warehouse_id_c');
-                CreateTransferDetailsModalColorTone(response.data);
+                CreateTransferDetailsModalResetSelect('size_id_c');
+                CreateTransferDetailsModalResetSelect('color_id_tone_id_c');
+                CreateTransferDetailsModalColorTone(response.data.colors_tones);
+                CreateTransferDetailsModalSizes(response.data.sizes);
             },
             error: function(xhr, textStatus, errorThrown) {
-                CreateTransferDetailsAjaxError(xhr);
+                CreateTransferDetailAjaxError(xhr);
             }
         });
     }
 };
 
 function CreateTransferDetailsModalColorTone(colors_tones) {
-    $.each(colors_tones, function(index, color_tone) {
-        $('#color_id_tone_id_c').append(new Option(`${color_tone.color.name} - ${color_tone.tone.name}`, `${color_tone.color.id}-${color_tone.tone.id}`, false, false));
+    colors_tones.forEach(color_tone => {
+        let newOption = new Option(`${color_tone.color.name} - ${color_tone.tone.name}`, `${color_tone.color.id}-${color_tone.tone.id}`, false, false);
+        $('#color_id_tone_id_c').append(newOption);
     });
 }
 
 function CreateTransferDetailsModalSizes(sizes) {
-    $.each(sizes, function(index, size) {
-        $('#size_id_c').append(new Option(size.name, size.id, false, false));
+    sizes.forEach(size => {
+        let newOption = new Option(size.name, size.id, false, false);
+        $('#size_id_c').append(newOption);
     });
 }
 
+function CreateTransferDetailsModalColorToneSizesGetQuantity() {
+    if($('#size_id_c').val() !== '' && $('#color_id_tone_id_c').val() !== '') {
+        $.ajax({
+            url: `/Dashboard/Transfers/Details/Create`,
+            type: 'POST',
+            data: {
+                '_token': $('meta[name="csrf-token"]').attr('content'),
+                'from_warehouse_id': $('#ShowTransferButton').attr('data-from_warehouse_id'),
+                'product_id':  $('#product_id_c').val(),
+                'color_id':  $('#color_id_tone_id_c').val().split('-')[0],
+                'tone_id':  $('#color_id_tone_id_c').val().split('-')[1],
+                'size_id':  $('#size_id_c').val(),
+            },
+            success: function(response) {
+                $('#quantity_c').attr('max', response.quantity);
+            },
+            error: function(xhr, textStatus, errorThrown) {
+                CreateTransferDetailAjaxError(xhr);
+            }
+        });
+    }
+    
+};
+
 function CreateTransferDetail() {
     Swal.fire({
-        title: '¿Desea guardar la transferencia?',
-        text: 'La transferencia será creada.',
+        title: '¿Desea guardar el detalle de la transferencia?',
+        text: 'El detalle de la transferencia será creado.',
         icon: 'warning',
         showCancelButton: true,
         cancelButtonColor: '#DD6B55',
@@ -94,7 +124,7 @@ function CreateTransferDetail() {
     }).then((result) => {
         if (result.value) {
             $.ajax({
-                url: `/Dashboard/TransferDetails/Store`,
+                url: `/Dashboard/Transfers/Details/Store`,
                 type: 'POST',
                 data: {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
@@ -112,7 +142,7 @@ function CreateTransferDetail() {
                 }
             });
         } else {
-            toastr.info('La transferencia no fue creada.')
+            toastr.info('El detalle de la transferencia no fue creado.')
         }
     });
 }

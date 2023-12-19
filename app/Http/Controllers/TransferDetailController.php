@@ -93,14 +93,15 @@ class TransferDetailController extends Controller
     public function create(TransferDetailCreateRequest $request)
     {
         try {
-            if($request->filled('from_warehouse_id') && $request->filled('product_id') && $request->filled('color_id') && $request->filled('tone_id')) {
+            if($request->filled('from_warehouse_id') && $request->filled('product_id') && $request->filled('color_id') && $request->filled('tone_id') && $request->filled('size_id')) {
                 return $this->successResponse(
-                    Inventory::with('product', 'warehouse', 'color', 'tone')
+                    Inventory::with('product', 'warehouse', 'color', 'tone', 'size')
                         ->whereHas('product', fn($subQuery) => $subQuery->where('id', $request->input('product_id')))
                         ->whereHas('warehouse', fn($subQuery) => $subQuery->where('id', $request->input('from_warehouse_id')))
                         ->whereHas('color', fn($subQuery) => $subQuery->where('id', $request->input('color_id')))
                         ->whereHas('tone', fn($subQuery) => $subQuery->where('id', $request->input('tone_id')))
-                        ->get(),
+                        ->whereHas('size', fn($subQuery) => $subQuery->where('id', $request->input('size_id')))
+                        ->first(),
                     'Inventario encontrado con exito.',
                     200
                 );
@@ -109,7 +110,7 @@ class TransferDetailController extends Controller
             if($request->filled('product_id')) {
                 return $this->successResponse(
                     Product::with('colors_tones.color', 'colors_tones.tone', 'sizes')->findOrFail($request->input('product_id')),
-                    'Colores y tonos del producto encontrados con exito.',
+                    'Colores, tonos y tallas del producto encontrados con exito.',
                     200
                 );
             }
