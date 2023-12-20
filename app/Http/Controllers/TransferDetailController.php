@@ -336,7 +336,7 @@ class TransferDetailController extends Controller
             return $this->successResponse(
                 $tranferDetail,
                 'El Detalle de la transferencia fue aprobado exitosamente.',
-                200
+                204
             );
         } catch (ModelNotFoundException $e) {
             return $this->errorResponse(
@@ -376,7 +376,7 @@ class TransferDetailController extends Controller
             return $this->successResponse(
                 $tranferDetail,
                 'El Detalle de la transferencia fue cancelado exitosamente.',
-                200
+                204
             );
         } catch (ModelNotFoundException $e) {
             return $this->errorResponse(

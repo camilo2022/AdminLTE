@@ -336,8 +336,6 @@ class TransferController extends Controller
     {
         try {
             $transfer = Transfer::with('details')->findOrFail($request->input('id'));
-            $transfer->status = 'Aprobado';
-            $transfer->save();
 
             foreach ($transfer->details as $detail) {
                 $inventory = Inventory::with('product', 'size', 'warehouse', 'color', 'tone')
@@ -372,6 +370,12 @@ class TransferController extends Controller
                 $detail->status = $detail->status == 'Pendiente' ? 'Aprobado' : $detail->status;
                 $detail->save();
             }
+            
+            $transfer->to_user_id = Auth::user()->id;
+            $transfer->to_date = Carbon::now()->format('Y-m-d H:i:s');
+            $transfer->to_observation = $request->input('to_observation');
+            $transfer->status = 'Aprobado';
+            $transfer->save();
 
             return $this->successResponse(
                 $transfer,
@@ -426,6 +430,9 @@ class TransferController extends Controller
                 $detail->save();
             }
 
+            $transfer->to_user_id = Auth::user()->id;
+            $transfer->to_date = Carbon::now()->format('Y-m-d H:i:s');
+            $transfer->to_observation = $request->input('to_observation');
             $transfer->status = 'Cancelado';
             $transfer->save();
 

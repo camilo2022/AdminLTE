@@ -10,14 +10,8 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 
 class TransferDetailUpdateRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
     protected function failedValidation(Validator $validator)
     {
-        // Lanzar una excepción de validación con los errores de validación obtenidos
         throw new HttpResponseException(response()->json([
             'message' => 'Error de validación.',
             'errors' => $validator->errors()
@@ -43,21 +37,12 @@ class TransferDetailUpdateRequest extends FormRequest
             'product_size' => $this->input('product_id')
         ]);
     }
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
+    
     public function authorize()
     {
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, mixed>
-     */
     public function rules()
     {
         return [
@@ -72,7 +57,6 @@ class TransferDetailUpdateRequest extends FormRequest
             'product_size' => ['exists:product_sizes,product_id,size_id,' . $this->input('size_id')]
         ];
     }
-
 
     public function messages()
     {
@@ -92,10 +76,10 @@ class TransferDetailUpdateRequest extends FormRequest
             'size_id.exists' => 'El Identificador de la talla no es valido.',
             'quantity.required' => 'El campo Cantidad es requerido.',
             'quantity.numeric' => 'El campo Cantidad debe ser numerico.',
-            'quantity.min' => 'El valor minimo del campo Cantidad debe ser :min.',
-            'quantity.max' => 'El valor maximo del campo Cantidad debe ser :max.',
-            'product_color_tone.exists' => 'El Producto, Color y Tono no son validos.',
-            'product_size.exists' => 'El Producto y Talla no son validos.',
+            'quantity.min' => 'La cantidad minima a tranferir debe ser de :min unidades.',
+            'quantity.max' => 'La cantidad maxima disponible a transferir es de :max unidades.',
+            'product_color_tone.exists' => 'El color y tono no estan asociados al producto.',
+            'product_size.exists' => 'La talla no esta asociada el producto.',
         ];
     }
 }

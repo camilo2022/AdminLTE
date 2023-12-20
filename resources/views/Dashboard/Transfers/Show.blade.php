@@ -16,7 +16,7 @@
                         <div class="card">
                             <div class="card-header p-2">
                                 <ul class="nav nav-pills">
-                                    <li class="nav-item">
+                                    <li class="nav-item" id="CreateTransferDetail">
                                         <a class="nav-link active" type="button" onclick="CreateTransferDetailModal()" title="Agregar detalle de la transferencia.">
                                             <i class="fas fa-plus"></i>
                                         </a>

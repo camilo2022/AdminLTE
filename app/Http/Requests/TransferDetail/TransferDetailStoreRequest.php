@@ -9,14 +9,8 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 
 class TransferDetailStoreRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
     protected function failedValidation(Validator $validator)
     {
-        // Lanzar una excepción de validación con los errores de validación obtenidos
         throw new HttpResponseException(response()->json([
             'message' => 'Error de validación.',
             'errors' => $validator->errors()
@@ -40,27 +34,18 @@ class TransferDetailStoreRequest extends FormRequest
             'product_size' => $this->input('product_id')
         ]);
     }
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
+    
     public function authorize()
     {
         return true;
     }
-
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, mixed>
-     */
+    
     public function rules()
     {
         return [
             'from_warehouse_id' => ['required', 'exists:warehouses,id'],
             'transfer_id' => ['required', 'exists:transfers,id'],
-            'product_id' => ['required', 'exists:products,id', 'unique:transfer_details,product_id,transfer_id,' . $this->input('transfer_id') . ',color_id,' . $this->input('color_id') . ',tone_id,' . $this->input('tone_id') . ',size_id,' . $this->input('size_id') . 'deleted_at,NULL'],
+            'product_id' => ['required', 'exists:products,id', 'unique:transfer_details,product_id,NULL,id,transfer_id,' . $this->input('transfer_id') . ',color_id,' . $this->input('color_id') . ',tone_id,' . $this->input('tone_id') . ',size_id,' . $this->input('size_id') . ',deleted_at,NULL'],
             'color_id' => ['required', 'exists:colors,id'],
             'tone_id' => ['required', 'exists:tones,id'],
             'size_id' => ['required', 'exists:sizes,id'],
@@ -69,7 +54,6 @@ class TransferDetailStoreRequest extends FormRequest
             'product_size' => ['exists:product_sizes,product_id,size_id,' . $this->input('size_id')]
         ];
     }
-
 
     public function messages()
     {
@@ -89,10 +73,10 @@ class TransferDetailStoreRequest extends FormRequest
             'size_id.exists' => 'El Identificador de la talla no es valido.',
             'quantity.required' => 'El campo Cantidad es requerido.',
             'quantity.numeric' => 'El campo Cantidad debe ser numerico.',
-            'quantity.min' => 'El valor minimo del campo Cantidad debe ser :min.',
-            'quantity.max' => 'El valor maximo del campo Cantidad debe ser :max.',
-            'product_color_tone.exists' => 'El Producto, Color y Tono no son validos.',
-            'product_size.exists' => 'El Producto y Talla no son validos.',
+            'quantity.min' => 'La cantidad minima a tranferir debe ser de :min unidades.',
+            'quantity.max' => 'La cantidad maxima disponible a transferir es de :max unidades.',
+            'product_color_tone.exists' => 'El color y tono no estan asociados al producto.',
+            'product_size.exists' => 'La talla no esta asociada el producto.',
         ];
     }
 }

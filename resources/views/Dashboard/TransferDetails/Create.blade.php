@@ -61,6 +61,7 @@
                                 </span>
                             </div>
                         </div>
+                        <small id="message_quantity_c"></small>
                     </div>
                 </div>
             </div>

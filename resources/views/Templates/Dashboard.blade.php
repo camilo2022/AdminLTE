@@ -416,8 +416,6 @@
                     select2Width = '87%';
                 } else if (windowWidth >= 400 && windowWidth < 992) {
                     select2Width = '87%';
-                } else {
-                    select2Width = '80%';
                 }
                 // Aplicar el ancho calculado a las clases específicas de select2
                 $('.select2, .select2-container, .select2-container--default, .select2-container--focus').css('width', select2Width);

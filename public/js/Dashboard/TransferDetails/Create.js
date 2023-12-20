@@ -28,6 +28,7 @@ function CreateTransferDetailModalCleaned() {
 
     $('#quantity_c').val('');
     $('#quantity_c').attr('max', 0);
+    $('#message_quantity_c').val('');
 }
 
 function CreateTransferDetailsModalResetSelect(id) {
@@ -101,14 +102,14 @@ function CreateTransferDetailsModalColorToneSizesGetQuantity() {
                 'size_id':  $('#size_id_c').val(),
             },
             success: function(response) {
-                $('#quantity_c').attr('max', response.quantity);
+                $('#quantity_c').attr('max', response.data.quantity);
+                $('#message_quantity_c').text(`${response.data.quantity} unidades disponibles.`);
             },
             error: function(xhr, textStatus, errorThrown) {
                 CreateTransferDetailAjaxError(xhr);
             }
         });
     }
-
 };
 
 function CreateTransferDetail() {
@@ -140,7 +141,10 @@ function CreateTransferDetail() {
                     tableTransferDetails.ajax.reload();
                     CreateTransferDetailAjaxSuccess(response);
                     $('#CreateTransferDetailModal').modal('show');
-                    $('#size_id_c').val('');
+                    $('#size_id_c').val('').trigger('change');
+                    $('#quantity_c').val('');
+                    RemoveIsValidClassCreateTransferDetail();
+                    RemoveIsInvalidClassCreateTransferDetail();
                 },
                 error: function (xhr, textStatus, errorThrown) {
                     tableTransferDetails.ajax.reload();
