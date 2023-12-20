@@ -29,20 +29,14 @@ function CreateTransferModalCleaned() {
 }
 
 function CreateTransfersModalResetSelect(id) {
-    const select = $(`#${id}`);
-    select.html('');
-    const defaultOption = $('<option>', {
-        value: '',
-        text: 'Seleccione'
-    });
-    select.append(defaultOption);
-    select.trigger('change');
+    $(`#${id}`).html('')
+    $(`#${id}`).append(new Option('Seleccione', '', false, false));
+    $(`#${id}`).trigger('change');
 }
 
 function CreateTransfersModalFromWarehose(from_warehouses) {
     from_warehouses.forEach(from_warehouse => {
-        let newOption = new Option(`${from_warehouse.name} - ${from_warehouse.code}`, from_warehouse.id, false, false);
-        $('#from_warehouse_id_c').append(newOption);
+        $('#from_warehouse_id_c').append(new Option(`${from_warehouse.name} - ${from_warehouse.code}`, from_warehouse.id, false, false));
     });
 }
 
@@ -70,8 +64,7 @@ function CreateTransfersModalFromWarehoseGetToWarehouse(select) {
 
 function CreateTransfersModalToWarehouse(to_warehouses) {
     to_warehouses.forEach(to_warehouse => {
-        let newOption = new Option(`${to_warehouse.name} - ${to_warehouse.code}`, to_warehouse.id, false, false);
-        $('#to_warehouse_id_c').append(newOption);
+        $('#to_warehouse_id_c').append(new Option(`${to_warehouse.name} - ${to_warehouse.code}`, to_warehouse.id, false, false));
     });
 }
 

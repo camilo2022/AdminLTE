@@ -33,20 +33,14 @@ function CreateUserModalCleaned() {
 }
 
 function CreateUserModalResetSelect(id) {
-    const select = $(`#${id}`);
-    select.html('');
-    const defaultOption = $('<option>', {
-        value: '',
-        text: 'Seleccione'
-    });
-    select.append(defaultOption);
-    select.trigger('change');
+    $(`#${id}`).html('')
+    $(`#${id}`).append(new Option('Seleccione', '', false, false));
+    $(`#${id}`).trigger('change');
 }
 
 function CreateUserModalAreas(areas) {
     areas.forEach(area => {
-        let newOption = new Option(area.name, area.id, false, false);
-        $('#area_id_c').append(newOption);
+        $('#area_id_c').append(new Option(area.name, area.id, false, false));
     });
 }
 
@@ -74,8 +68,7 @@ function CreateUserModalAreasGetCharge(select) {
 
 function CreateUserModalCharges(charges) {
     charges.forEach(charge => {
-        let newOption = new Option(charge.name, charge.id, false, false);
-        $('#charge_id_c').append(newOption);
+        $('#charge_id_c').append(new Option(charge.name, charge.id, false, false));
     });
 }
 

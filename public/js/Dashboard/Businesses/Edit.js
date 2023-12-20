@@ -40,20 +40,14 @@ function EditBusinessModalCleaned(business) {
 }
 
 function EditBusinessModalResetSelect(id) {
-    const select = $(`#${id}`);
-    select.html('');
-    const defaultOption = $('<option>', {
-        value: '',
-        text: 'Seleccione'
-    });
-    select.append(defaultOption);
-    select.trigger('change');
+    $(`#${id}`).html('')
+    $(`#${id}`).append(new Option('Seleccione', '', false, false));
+    $(`#${id}`).trigger('change');
 }
 
 function EditBusinessModalCountry(countries) {
     countries.forEach(country => {
-        let newOption = new Option(country.name, country.id, false, false);
-        $('#country_id_e').append(newOption);
+        $('#country_id_e').append(new Option(country.name, country.id, false, false));
     });
     let country_id = $('#EditBusinessButton').attr('data-country_id');
     if(country_id != '') {
@@ -86,8 +80,7 @@ function EditBusinessModalCountryGetDepartament(select) {
 
 function EditBusinessModalDepartament(departaments) {
     departaments.forEach(departament => {
-        let newOption = new Option(departament.name, departament.id, false, false);
-        $('#departament_id_e').append(newOption);
+        $('#departament_id_e').append(new Option(departament.name, departament.id, false, false));
     });
     let departament_id = $('#EditBusinessButton').attr('data-departament_id');
     if(departament_id != '') {
@@ -121,8 +114,7 @@ function EditBusinessModalDepartamentGetCity(select) {
 
 function EditBusinessModalCity(cities) {
     cities.forEach(city => {
-        let newOption = new Option(city.name, city.id, false, false);
-        $('#city_id_e').append(newOption);
+        $('#city_id_e').append(new Option(city.name, city.id, false, false));
     });
     let city_id = $('#EditBusinessButton').attr('data-city_id');
     if(city_id != '') {

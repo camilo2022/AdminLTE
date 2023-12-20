@@ -1,98 +1,85 @@
-function EditTransferModal(id) {
+function EditTransferDetailModal(id) {
     $.ajax({
-        url: `/Dashboard/Transfers/Edit/${id}`,
+        url: `/Dashboard/Transfers/Details/Edit/${id}`,
         type: 'POST',
         data: {
             '_token': $('meta[name="csrf-token"]').attr('content')
         },
         success: function (response) {
-            tableTransfers.ajax.reload();
-            EditTransferModalCleaned(response.data);
-            EditTransfersModalFromWarehose(response.data.from_warehouse);
-            EditTransferAjaxSuccess(response);
-            $('#EditTransferModal').modal('show');
+            tableTransferDetails.ajax.reload();
+            EditTransferDetailModalCleaned(response.data);
+            EditTransferDetailModalProduct(response.data.product);
+            EditTransferDetailModalColorTone(response.data);
+            EditTransferDetailModalSizes(response.data.size);
+            EditTransferDetailAjaxSuccess(response);
+            $('#EditTransferDetailModal').modal('show');
         },
         error: function (xhr, textStatus, errorThrown) {
-            tableTransfers.ajax.reload();
-            EditTransferAjaxError(xhr);
+            tableTransferDetails.ajax.reload();
+            EditTransferDetailAjaxError(xhr);
         }
     });
 }
 
-function EditTransferModalCleaned(transfer) {
-    EditTransfersModalResetSelect('from_warehouse_id_e');
-    EditTransfersModalResetSelect('to_warehouse_id_e');
-    RemoveIsValidClassEditTransfer();
-    RemoveIsInvalidClassEditTransfer();
+function EditTransferDetailModalCleaned(transferDetail) {
+    RemoveIsValidClassEditTransferDetail();
+    RemoveIsInvalidClassEditTransferDetail();
 
-    $('#EditTransferButton').attr('onclick', `EditTransfer(${transfer.id})`);
-    $('#EditTransferButton').attr('data-id', transfer.id);
-    $('#EditTransferButton').attr('data-from_warehouse_id', transfer.from_warehouse_id);
-    $('#EditTransferButton').attr('data-to_warehouse_id', transfer.to_warehouse_id);
+    $('#EditTransferDetailButton').attr('onclick', `EditTransferDetail(${transferDetail.id})`);
+    $('#EditTransferDetailButton').attr('data-id', transferDetail.id);
 
-    $('#from_observation_e').val(transfer.from_observation);
+    $('#quantity_e').val(transferDetail.quantity);
+    $('#quantity_e').attr('max', 0);
+    $('#message_quantity_e').text('');
 }
 
-function EditTransfersModalResetSelect(id) {
-    const select = $(`#${id}`);
-    select.html('');
-    const defaultOption = $('<option>', {
-        value: '',
-        text: 'Seleccione'
-    });
-    select.append(defaultOption);
-    select.trigger('change');
+function EditTransferDetailModalProduct(product) {
+    $('#product_id_e').html('');
+    $('#product_id_e').append(new Option(product.code, product.id, false, false));
+    $('#product_id_e').trigger('change');
 }
 
-function EditTransfersModalFromWarehose(from_warehouse) {
-    let newOption = new Option(`${from_warehouse.name} - ${from_warehouse.code}`, from_warehouse.id, false, false);
-    $('#from_warehouse_id_e').html('').append(newOption);
-    let from_warehouse_id = $('#EditTransferButton').attr('data-from_warehouse_id');
-    if(from_warehouse_id != '') {
-        $("#from_warehouse_id_e").val(from_warehouse_id).trigger('change');
-        $('#EditTransferButton').attr('data-from_warehouse_id', '');
-    }
+function EditTransferDetailModalColorTone(color_tone) {
+    $('#color_id_tone_id_e').html('');
+    $('#color_id_tone_id_e').append(`${color_tone.color.name} - ${color_tone.tone.name}`, `${color_tone.color.id}-${color_tone.tone.id}`, false, false);
+    $('#color_id_tone_id_e').trigger('change');
 }
 
-function EditTransfersModalFromWarehoseGetToWarehouse(select) {
-    if($(select).val() == '') {
-        EditTransfersModalResetSelect('to_warehouse_id_e');
-    } else {
-        let id = $('#EditTransferButton').attr('data-id');
+function EditTransferDetailModalSizes(size) {
+    $('#size_id_e').html('');
+    $('#size_id_e').append(new Option(size.name, size.id, false, false));
+    $('#size_id_e').trigger('change');
+}
+
+function EditTransferDetailModalColorToneSizesGetQuantity() {
+    if($('#product_id_e').val() !== '' && $('#size_id_e').val() !== '' && $('#color_id_tone_id_e').val() !== '') {
+        let id = $('#EditTransferDetailButton').attr('data-id');
         $.ajax({
-            url: `/Dashboard/Transfers/Edit/${id}`,
+            url: `/Dashboard/Transfers/Details/Edit/${id}`,
             type: 'POST',
             data: {
                 '_token': $('meta[name="csrf-token"]').attr('content'),
-                'from_warehouse_id':  $(select).val()
+                'from_warehouse_id': $('#ShowTransferButton').attr('data-from_warehouse_id'),
+                'product_id':  $('#product_id_e').val(),
+                'color_id':  $('#color_id_tone_id_e').val().split('-')[0],
+                'tone_id':  $('#color_id_tone_id_e').val().split('-')[1],
+                'size_id':  $('#size_id_e').val(),
             },
             success: function(response) {
-                EditTransfersModalResetSelect('to_warehouse_id_e');
-                EditTransfersModalToWarehouse(response.data);
+                $('#quantity_e').attr('max', response.data.quantity);
+                $('#message_quantity_e').text(`${response.data.quantity} unidades disponibles.`);
             },
             error: function(xhr, textStatus, errorThrown) {
-                EditTransfersAjaxError(xhr);
+                EditTransferDetailAjaxError(xhr);
             }
         });
     }
 };
 
-function EditTransfersModalToWarehouse(to_warehouses) {
-    to_warehouses.forEach(to_warehouse => {
-        let newOption = new Option(`${to_warehouse.name} - ${to_warehouse.code}`, to_warehouse.id, false, false);
-        $('#to_warehouse_id_e').append(newOption);
-    });
-    let to_warehouse_id = $('#EditTransferButton').attr('data-to_warehouse_id');
-    if(to_warehouse_id != '') {
-        $("#to_warehouse_id_e").val(to_warehouse_id).trigger('change');
-        $('#EditTransferButton').attr('data-to_warehouse_id', '');
-    }
-}
-
-function EditTransfer(id) {
+function EditTransferDetail(id) {
     Swal.fire({
-        title: '¿Desea actualizar la transferencia?',
-        text: 'La transferencia se actualizara.',
+        title: '¿Desea actualizar el detalle de la transferencia?',
+        text: 'El detalle de la transferencia será actualizado.',
         icon: 'warning',
         showCancelButton: true,
         cancelButtonColor: '#DD6B55',
@@ -102,98 +89,113 @@ function EditTransfer(id) {
     }).then((result) => {
         if (result.value) {
             $.ajax({
-                url: `/Dashboard/Transfers/Update/${id}`,
+                url: `/Dashboard/Transfers/Details/Update/${id}`,
                 type: 'PUT',
                 data: {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
-                    'to_warehouse_id': $('#to_warehouse_id_e').val(),
-                    'from_observation': $('#from_observation_e').val()
+                    'from_warehouse_id': $('#ShowTransferButton').attr('data-from_warehouse_id'),
+                    'transfer_id': $('#ShowTransferButton').attr('data-id'),
+                    'product_id': $('#product_id_e').val(),
+                    'color_id':  $('#color_id_tone_id_e').val().split('-')[0],
+                    'tone_id':  $('#color_id_tone_id_e').val().split('-')[1],
+                    'size_id':  $('#size_id_e').val(),
+                    'quantity': $('#quantity_e').val()
                 },
                 success: function (response) {
-                    tableTransfers.ajax.reload();
-                    EditTransferAjaxSuccess(response);
+                    tableTransferDetails.ajax.reload();
+                    EditTransferDetailAjaxSuccess(response);
                 },
                 error: function (xhr, textStatus, errorThrown) {
-                    tableTransfers.ajax.reload();
-                    EditTransferAjaxError(xhr);
+                    tableTransferDetails.ajax.reload();
+                    EditTransferDetailAjaxError(xhr);
                 }
             });
         } else {
-            toastr.info('La transferencia no fue actualizada.')
+            toastr.info('El detalle de la transferencia no fue actualizado.')
         }
     });
 }
 
-function EditTransferAjaxSuccess(response) {
+function EditTransferDetailAjaxSuccess(response) {
     if (response.status === 200) {
         toastr.success(response.message);
-        $('#EditTransferModal').modal('hide');
+        $('#EditTransferDetailModal').modal('hide');
     }
 }
 
-function EditTransferAjaxError(xhr) {
+function EditTransferDetailAjaxError(xhr) {
     if (xhr.status === 403) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
-        $('#EditTransferModal').modal('hide');
+        $('#EditTransferDetailModal').modal('hide');
     }
 
     if (xhr.status === 404) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
-        $('#EditTransferModal').modal('hide');
+        $('#EditTransferDetailModal').modal('hide');
     }
 
     if (xhr.status === 419) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
-        $('#EditTransferModal').modal('hide');
+        $('#EditTransferDetailModal').modal('hide');
     }
 
     if (xhr.status === 422) {
-        RemoveIsValidClassEditTransfer();
-        RemoveIsInvalidClassEditTransfer();
+        RemoveIsValidClassEditTransferDetail();
+        RemoveIsInvalidClassEditTransferDetail();
         $.each(xhr.responseJSON.errors, function (field, messages) {
-            AddIsInvalidClassEditTransfer(field);
+            AddIsInvalidClassEditTransferDetail(field);
             $.each(messages, function (index, message) {
                 toastr.error(message);
             });
         });
-        AddIsValidClassEditTransfer();
+        AddIsValidClassEditTransferDetail();
     }
 
     if (xhr.status === 500) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
-        $('#EditTransferModal').modal('hide');
+        $('#EditTransferDetailModal').modal('hide');
     }
 }
 
-function AddIsValidClassEditTransfer() {
-    if (!$(`span[aria-labelledby="select2-from_warehouse_id_e-container`).hasClass('is-invalid')) {
-        $(`span[aria-labelledby="select2-from_warehouse_id_e-container"]`).addClass('is-valid');
+function AddIsValidClassEditTransferDetail() {
+    if (!$(`span[aria-labelledby="select2-product_id_e-container`).hasClass('is-invalid')) {
+        $(`span[aria-labelledby="select2-product_id_e-container"]`).addClass('is-valid');
     }
-    if (!$(`span[aria-labelledby="select2-to_warehouse_id_e-container`).hasClass('is-invalid')) {
-        $(`span[aria-labelledby="select2-to_warehouse_id_e-container"]`).addClass('is-valid');
+    if (!$(`span[aria-labelledby="select2-color_id_tone_id_e-container`).hasClass('is-invalid')) {
+        $(`span[aria-labelledby="select2-color_id_tone_id_e-container"]`).addClass('is-valid');
     }
-    if (!$('#from_observation_e').hasClass('is-invalid')) {
-        $('#from_observation_e').addClass('is-valid');
+    if (!$(`span[aria-labelledby="select2-size_id_e-container`).hasClass('is-invalid')) {
+        $(`span[aria-labelledby="select2-size_id_e-container"]`).addClass('is-valid');
+    }
+    if (!$('#quantity_e').hasClass('is-invalid')) {
+        $('#quantity_e').addClass('is-valid');
     }
 }
 
-function RemoveIsValidClassEditTransfer() {
-    $(`span[aria-labelledby="select2-from_warehouse_id_e-container"]`).removeClass('is-valid');
-    $(`span[aria-labelledby="select2-to_warehouse_id_e-container"]`).removeClass('is-valid');
-    $('#from_observation_e').removeClass('is-valid');
+function RemoveIsValidClassEditTransferDetail() {
+    $(`span[aria-labelledby="select2-product_id_e-container"]`).removeClass('is-valid');
+    $(`span[aria-labelledby="select2-color_id_tone_id_e-container"]`).removeClass('is-valid');
+    $(`span[aria-labelledby="select2-size_id_e-container"]`).removeClass('is-valid');
+    $('#quantity_e').removeClass('is-valid');
 }
 
-function AddIsInvalidClassEditTransfer(input) {
+function AddIsInvalidClassEditTransferDetail(input) {
     if (!$(`#${input}_e`).hasClass('is-valid')) {
         $(`#${input}_e`).addClass('is-invalid');
+    }
+    if(input == 'color_id' || input == 'tone_id') {
+        if (!$(`span[aria-labelledby="select2-color_id_tone_id_e-container`).hasClass('is-valid')) {
+            $(`span[aria-labelledby="select2-color_id_tone_id_e-container"]`).addClass('is-invalid');
+        }
     }
     if (!$(`span[aria-labelledby="select2-${input}_e-container`).hasClass('is-valid')) {
         $(`span[aria-labelledby="select2-${input}_e-container"]`).addClass('is-invalid');
     }
 }
 
-function RemoveIsInvalidClassEditTransfer() {
-    $(`span[aria-labelledby="select2-from_warehouse_id_e-container"]`).removeClass('is-invalid');
-    $(`span[aria-labelledby="select2-to_warehouse_id_e-container"]`).removeClass('is-invalid');
-    $('#from_observation_e').removeClass('is-invalid');
+function RemoveIsInvalidClassEditTransferDetail() {
+    $(`span[aria-labelledby="select2-product_id_e-container"]`).removeClass('is-invalid');
+    $(`span[aria-labelledby="select2-color_id_tone_id_e-container"]`).removeClass('is-invalid');
+    $(`span[aria-labelledby="select2-size_id_e-container"]`).removeClass('is-invalid');
+    $('#quantity_e').removeClass('is-invalid');
 }

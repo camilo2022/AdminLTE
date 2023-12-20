@@ -18,15 +18,15 @@ function EditClothingLineModal(id) {
     });
 }
 
-function EditClothingLineModalCleaned(trademark) {
+function EditClothingLineModalCleaned(clothingLine) {
     RemoveIsValidClassEditClothingLine();
     RemoveIsInvalidClassEditClothingLine();
 
-    $('#EditClothingLineButton').attr('onclick', `EditClothingLine(${trademark.id})`);
+    $('#EditClothingLineButton').attr('onclick', `EditClothingLine(${clothingLine.id})`);
 
-    $("#name_e").val(trademark.name);
-    $("#code_e").val(trademark.code);
-    $('#description_e').val(trademark.description);
+    $("#name_e").val(clothingLine.name);
+    $("#code_e").val(clothingLine.code);
+    $('#description_e').val(clothingLine.description);
 }
 
 function EditClothingLine(id) {

@@ -54,20 +54,18 @@
                     <div class="form-group">
                         <label for="quantity_e">Cantidad</label>
                         <div class="input-group">
-                            <input type="number" class="form-control" id="quantity_e" name="quantity" min="0" max="10">
+                            <input type="number" class="form-control" id="quantity_e" name="quantity" min="0" max="0">
                             <div class="input-group-append">
                                 <span class="input-group-text">
                                     <i class="fas fa-hashtag"></i>
                                 </span>
                             </div>
                         </div>
+                        <small id="message_quantity_e"></small>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-success" title="Limpiar formulario" onclick="EditTransferDetailModal()">
-                    <i class="fas fa-broom-wide"></i>
-                </button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal" title="Cerrar ventana">
                     <i class="fas fa-xmark"></i>
                 </button>

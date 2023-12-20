@@ -41,48 +41,38 @@ function CreateProductModalCleaned() {
 }
 
 function CreateProductsModalResetSelect(id) {
-    const select = $(`#${id}`);
-    select.html('');
-    const defaultOption = $('<option>', {
-        value: '',
-        text: 'Seleccione'
-    });
-    select.append(defaultOption);
-    select.trigger('change');
+    $(`#${id}`).html('')
+    $(`#${id}`).append(new Option('Seleccione', '', false, false));
+    $(`#${id}`).trigger('change');
 }
 
 function CreateProductsModalCollection(collections) {
     collections.forEach(collection => {
-        let newOption = new Option(collection.name, collection.id, false, false);
-        $('#collection_id_c').append(newOption);
+        $('#collection_id_c').append(new Option(collection.name, collection.id, false, false));
     });
 }
 
 function CreateProductsModalCorreria(correrias) {
     correrias.forEach(correria => {
-        let newOption = new Option(correria.name, correria.id, false, false);
-        $('#correria_id_c').append(newOption);
+        $('#correria_id_c').append(new Option(correria.name, correria.id, false, false));
     });
 }
 
 function CreateProductsModalModel(models) {
     models.forEach(model => {
-        let newOption = new Option(model.name, model.id, false, false);
-        $('#model_id_c').append(newOption);
+        $('#model_id_c').append(new Option(model.name, model.id, false, false));
     });
 }
 
 function CreateProductsModalTrademark(trademarks) {
     trademarks.forEach(trademark => {
-        let newOption = new Option(trademark.name, trademark.id, false, false);
-        $('#trademark_id_c').append(newOption);
+        $('#trademark_id_c').append(new Option(trademark.name, trademark.id, false, false));
     });
 }
 
 function CreateProductsModalClothingLine(clothing_lines) {
     clothing_lines.forEach(clothing_line => {
-        let newOption = new Option(clothing_line.name, clothing_line.id, false, false);
-        $('#clothing_line_id_c').append(newOption);
+        $('#clothing_line_id_c').append(new Option(clothing_line.name, clothing_line.id, false, false));
     });
 }
 
@@ -110,8 +100,7 @@ function CreateProductsModalClothingLineGetCategory(select) {
 
 function CreateProductsModalCategory(categories) {
     categories.forEach(category => {
-        let newOption = new Option(category.name, category.id, false, false);
-        $('#category_id_c').append(newOption);
+        $('#category_id_c').append(new Option(category.name, category.id, false, false));
     });
 }
 
@@ -139,8 +128,7 @@ function CreateProductsModalCategoryGetSubcategory(select) {
 
 function CreateProductsModalSubcategory(subcategories) {
     subcategories.forEach(subcategory => {
-        let newOption = new Option(subcategory.name, subcategory.id, false, false);
-        $('#subcategory_id_c').append(newOption);
+        $('#subcategory_id_c').append(new Option(subcategory.name, subcategory.id, false, false));
     });
 }
 

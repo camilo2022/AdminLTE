@@ -54,7 +54,7 @@
                     <div class="form-group">
                         <label for="quantity_c">Cantidad</label>
                         <div class="input-group">
-                            <input type="number" class="form-control" id="quantity_c" name="quantity" min="0" max="10">
+                            <input type="number" class="form-control" id="quantity_c" name="quantity" min="0" max="0">
                             <div class="input-group-append">
                                 <span class="input-group-text">
                                     <i class="fas fa-hashtag"></i>

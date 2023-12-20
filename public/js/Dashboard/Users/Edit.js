@@ -38,20 +38,14 @@ function EditUserModalCleaned(user) {
 }
 
 function EditUserModalResetSelect(id) {
-    const select = $(`#${id}`);
-    select.html('');
-    const defaultOption = $('<option>', {
-        value: '',
-        text: 'Seleccione'
-    });
-    select.append(defaultOption);
-    select.trigger('change');
+    $(`#${id}`).html('')
+    $(`#${id}`).append(new Option('Seleccione', '', false, false));
+    $(`#${id}`).trigger('change');
 }
 
 function EditUserModalAreas(areas) {
     areas.forEach(area => {
-        let newOption = new Option(area.name, area.id, false, false);
-        $('#area_id_e').append(newOption);
+        $('#area_id_e').append(new Option(area.name, area.id, false, false));
     });
     let area_id = $('#EditUserButton').attr('data-area_id');
     if(area_id != '') {
@@ -85,8 +79,7 @@ function EditUserModalAreasGetCharge(select) {
 
 function EditUserModalCharges(charges) {
     charges.forEach(charge => {
-        let newOption = new Option(charge.name, charge.id, false, false);
-        $('#charge_id_e').append(newOption);
+        $('#charge_id_e').append(new Option(charge.name, charge.id, false, false));
     });
     let charge_id = $('#EditUserButton').attr('data-charge_id');
     if(charge_id != '') {

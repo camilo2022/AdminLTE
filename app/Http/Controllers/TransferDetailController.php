@@ -210,7 +210,12 @@ class TransferDetailController extends Controller
             }
 
             return $this->successResponse(
-                TransferDetail::with('product', 'size', 'color', 'tone', 'size')->findOrFail($id),
+                TransferDetail::with([
+                    'product' => function ($query) { $query->withTrashed(); },
+                    'size' => function ($query) { $query->withTrashed(); },
+                    'color' => function ($query) { $query->withTrashed(); },
+                    'tone' => function ($query) { $query->withTrashed(); },
+                ])->findOrFail($id),
                 'El Detalle de la transferencia fue encontrado exitosamente.',
                 204
             );
@@ -245,7 +250,7 @@ class TransferDetailController extends Controller
                 ->whereHas('tone', fn($subQuery) => $subQuery->where('id', $request->input('tone_id')))
                 ->whereHas('size', fn($subQuery) => $subQuery->where('id', $request->input('size_id')))
                 ->firstOrFail();
-                
+
             $inventory->quantity = ($inventory->quantity + $tranferDetail->quantity) - $request->input('quantity');
             $inventory->save();
 

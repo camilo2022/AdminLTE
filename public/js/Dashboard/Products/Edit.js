@@ -48,20 +48,14 @@ function EditProductModalCleaned(product) {
 }
 
 function EditProductsModalResetSelect(id) {
-    const select = $(`#${id}`);
-    select.html('');
-    const defaultOption = $('<option>', {
-        value: '',
-        text: 'Seleccione'
-    });
-    select.append(defaultOption);
-    select.trigger('change');
+    $(`#${id}`).html('')
+    $(`#${id}`).append(new Option('Seleccione', '', false, false));
+    $(`#${id}`).trigger('change');
 }
 
 function EditProductsModalCollection(collections) {
     collections.forEach(collection => {
-        let newOption = new Option(collection.name, collection.id, false, false);
-        $('#collection_id_e').append(newOption);
+        $('#collection_id_e').append(new Option(collection.name, collection.id, false, false));
     });
     let collection_id = $('#EditProductButton').attr('data-collection_id');
     if(collection_id != '') {
@@ -72,8 +66,7 @@ function EditProductsModalCollection(collections) {
 
 function EditProductsModalCorreria(correrias) {
     correrias.forEach(correria => {
-        let newOption = new Option(correria.name, correria.id, false, false);
-        $('#correria_id_e').append(newOption);
+        $('#correria_id_e').append(new Option(correria.name, correria.id, false, false));
     });
     let correria_id = $('#EditProductButton').attr('data-correria_id');
     if(correria_id != '') {
@@ -84,8 +77,7 @@ function EditProductsModalCorreria(correrias) {
 
 function EditProductsModalModel(models) {
     models.forEach(model => {
-        let newOption = new Option(model.name, model.id, false, false);
-        $('#model_id_e').append(newOption);
+        $('#model_id_e').append(new Option(model.name, model.id, false, false));
     });
     let model_id = $('#EditProductButton').attr('data-model_id');
     if(model_id != '') {
@@ -96,8 +88,7 @@ function EditProductsModalModel(models) {
 
 function EditProductsModalTrademark(trademarks) {
     trademarks.forEach(trademark => {
-        let newOption = new Option(trademark.name, trademark.id, false, false);
-        $('#trademark_id_e').append(newOption);
+        $('#trademark_id_e').append(new Option(trademark.name, trademark.id, false, false));
     });
     let trademark_id = $('#EditProductButton').attr('data-trademark_id');
     if(trademark_id != '') {
@@ -108,9 +99,9 @@ function EditProductsModalTrademark(trademarks) {
 
 function EditProductsModalClothingLine(clothing_lines) {
     clothing_lines.forEach(clothing_line => {
-        let newOption = new Option(clothing_line.name, clothing_line.id, false, false);
-        $('#clothing_line_id_e').append(newOption);
+        $('#clothing_line_id_e').append(new Option(clothing_line.name, clothing_line.id, false, false));
     });
+
     let clothing_line_id = $('#EditProductButton').attr('data-clothing_line_id');
     if(clothing_line_id != '') {
         $("#clothing_line_id_e").val(clothing_line_id).trigger('change');
@@ -143,8 +134,7 @@ function EditProductsModalClothingLineGetCategory(select) {
 
 function EditProductsModalCategory(categories) {
     categories.forEach(category => {
-        let newOption = new Option(category.name, category.id, false, false);
-        $('#category_id_e').append(newOption);
+        $('#category_id_e').append(new Option(category.name, category.id, false, false));
     });
     let category_id = $('#EditProductButton').attr('data-category_id');
     if(category_id != '') {
@@ -178,8 +168,7 @@ function EditProductsModalCategoryGetSubcategory(select) {
 
 function EditProductsModalSubcategory(subcategories) {
     subcategories.forEach(subcategory => {
-        let newOption = new Option(subcategory.name, subcategory.id, false, false);
-        $('#subcategory_id_e').append(newOption);
+        $('#subcategory_id_e').append(new Option(subcategory.name, subcategory.id, false, false));
     });
     let subcategory_id = $('#EditProductButton').attr('data-subcategory_id');
     if(subcategory_id != '') {

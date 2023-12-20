@@ -9,7 +9,7 @@ function CreateTransferDetailModal() {
         success: function (response) {
             tableTransferDetails.ajax.reload();
             CreateTransferDetailModalCleaned();
-            CreateTransferDetailsModalProduct(response.data);
+            CreateTransferDetailModalProduct(response.data);
             CreateTransferDetailAjaxSuccess(response);
             $('#CreateTransferDetailModal').modal('show');
         },
@@ -28,31 +28,26 @@ function CreateTransferDetailModalCleaned() {
 
     $('#quantity_c').val('');
     $('#quantity_c').attr('max', 0);
-    $('#message_quantity_c').val('');
+    $('#message_quantity_c').text('');
 }
 
-function CreateTransferDetailsModalResetSelect(id) {
-    const select = $(`#${id}`);
-    select.html('');
-    const defaultOption = $('<option>', {
-        value: '',
-        text: 'Seleccione'
-    });
-    select.append(defaultOption);
-    select.trigger('change');
+function CreateTransferDetailModalResetSelect(id) {
+    $(`#${id}`).html('')
+    $(`#${id}`).append(new Option('Seleccione', '', false, false));
+    $(`#${id}`).trigger('change');
     $('#quantity_c').attr('max', 0);
 }
 
-function CreateTransferDetailsModalProduct(products) {
+function CreateTransferDetailModalProduct(products) {
     $.each(products, function(index, product) {
         $('#product_id_c').append(new Option(product.code, product.id, false, false));
     });
 }
 
-function CreateTransferDetailsModalProductGetColorToneSizes(select) {
+function CreateTransferDetailModalProductGetColorToneSizes(select) {
     if($(select).val() == '') {
-        CreateTransferDetailsModalResetSelect('size_id_c');
-        CreateTransferDetailsModalResetSelect('color_id_tone_id_c');
+        CreateTransferDetailModalResetSelect('size_id_c');
+        CreateTransferDetailModalResetSelect('color_id_tone_id_c');
     } else {
         $.ajax({
             url: `/Dashboard/Transfers/Details/Create`,
@@ -62,10 +57,10 @@ function CreateTransferDetailsModalProductGetColorToneSizes(select) {
                 'product_id':  $(select).val()
             },
             success: function(response) {
-                CreateTransferDetailsModalResetSelect('size_id_c');
-                CreateTransferDetailsModalResetSelect('color_id_tone_id_c');
-                CreateTransferDetailsModalColorTone(response.data.colors_tones);
-                CreateTransferDetailsModalSizes(response.data.sizes);
+                CreateTransferDetailModalResetSelect('size_id_c');
+                CreateTransferDetailModalResetSelect('color_id_tone_id_c');
+                CreateTransferDetailModalColorTone(response.data.colors_tones);
+                CreateTransferDetailModalSizes(response.data.sizes);
             },
             error: function(xhr, textStatus, errorThrown) {
                 CreateTransferDetailAjaxError(xhr);
@@ -74,21 +69,19 @@ function CreateTransferDetailsModalProductGetColorToneSizes(select) {
     }
 };
 
-function CreateTransferDetailsModalColorTone(colors_tones) {
+function CreateTransferDetailModalColorTone(colors_tones) {
     colors_tones.forEach(color_tone => {
-        let newOption = new Option(`${color_tone.color.name} - ${color_tone.tone.name}`, `${color_tone.color.id}-${color_tone.tone.id}`, false, false);
-        $('#color_id_tone_id_c').append(newOption);
+        $('#color_id_tone_id_c').append(new Option(`${color_tone.color.name} - ${color_tone.tone.name}`, `${color_tone.color.id}-${color_tone.tone.id}`, false, false));
     });
 }
 
-function CreateTransferDetailsModalSizes(sizes) {
+function CreateTransferDetailModalSizes(sizes) {
     sizes.forEach(size => {
-        let newOption = new Option(size.name, size.id, false, false);
-        $('#size_id_c').append(newOption);
+        $('#size_id_c').append(new Option(size.name, size.id, false, false));
     });
 }
 
-function CreateTransferDetailsModalColorToneSizesGetQuantity() {
+function CreateTransferDetailModalColorToneSizesGetQuantity() {
     if($('#size_id_c').val() !== '' && $('#color_id_tone_id_c').val() !== '') {
         $.ajax({
             url: `/Dashboard/Transfers/Details/Create`,

@@ -32,20 +32,14 @@ function CreateBusinessModalCleaned() {
 }
 
 function CreateBusinessModalResetSelect(id) {
-    const select = $(`#${id}`);
-    select.html('');
-    const defaultOption = $('<option>', {
-        value: '',
-        text: 'Seleccione'
-    });
-    select.append(defaultOption);
-    select.trigger('change');
+    $(`#${id}`).html('')
+    $(`#${id}`).append(new Option('Seleccione', '', false, false));
+    $(`#${id}`).trigger('change');
 }
 
 function CreateBusinessModalCountry(countries) {
     countries.forEach(country => {
-        let newOption = new Option(country.name, country.id, false, false);
-        $('#country_id_c').append(newOption);
+        $('#country_id_c').append(new Option(country.name, country.id, false, false));
     });
 }
 
@@ -73,8 +67,7 @@ function CreateBusinessModalCountryGetDepartament(select) {
 
 function CreateBusinessModalDepartament(departaments) {
     departaments.forEach(departament => {
-        let newOption = new Option(departament.name, departament.id, false, false);
-        $('#departament_id_c').append(newOption);
+        $('#departament_id_c').append(new Option(departament.name, departament.id, false, false));
     });
 }
 
@@ -102,8 +95,7 @@ function CreateBusinessModalDepartamentGetCity(select) {
 
 function CreateBusinessModalCity(cities) {
     cities.forEach(city => {
-        let newOption = new Option(city.name, city.id, false, false);
-        $('#city_id_c').append(newOption);
+        $('#city_id_c').append(new Option(city.name, city.id, false, false));
     });
 }
 

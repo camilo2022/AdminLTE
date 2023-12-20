@@ -36,20 +36,14 @@ function EditCategoryAndSubcategoriesModalCleaned(categoryAndSubcategories) {
 }
 
 function EditCategoryAndSubcategoriesModalResetSelect() {
-    const select = $('#clothing_line_id_e');
-    select.html('');
-    const defaultOption = $('<option>', {
-        value: '',
-        text: 'Seleccione'
-    });
-    select.append(defaultOption);
-    select.trigger('change');
+    $(`#clothing_line_id_e`).html('')
+    $(`#clothing_line_id_e`).append(new Option('Seleccione', '', false, false));
+    $(`#clothing_line_id_e`).trigger('change');
 }
 
 function EditCategoryAndSubcategoriesModalClothingLines(clothingLines) {
     clothingLines.forEach(clothingLine => {
-        let newOption = new Option(clothingLine.name, clothingLine.id, false, false);
-        $('#clothing_line_id_e').append(newOption);
+        $('#clothing_line_id_e').append(new Option(clothingLine.name, clothingLine.id, false, false));
     });
     let clothing_line_id = $('#EditCategoryAndSubcategoriesButton').attr('data-clothing_line_id');
     if(clothing_line_id != '') {

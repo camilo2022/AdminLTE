@@ -1,7 +1,7 @@
-function DeleteTransfer(id) {
+function DeleteTransferDetail(id) {
     Swal.fire({
-        title: '¿Desea eliminar la transferencia?',
-        text: 'La transferencia será desactivada.',
+        title: '¿Desea eliminar el detalle de la transferencia?',
+        text: 'El detalle de la transferencia será eliminado.',
         icon: 'warning',
         showCancelButton: true,
         cancelButtonColor: '#DD6B55',
@@ -11,7 +11,7 @@ function DeleteTransfer(id) {
     }).then((result) => {
         if (result.value) {
             $.ajax({
-                url: `/Dashboard/Transfers/Delete`,
+                url: `/Dashboard/Transfers/Details/Delete`,
                 type: 'DELETE',
                 data: {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
@@ -19,20 +19,20 @@ function DeleteTransfer(id) {
                 },
                 success: function(response) {
                     tableTransfers.ajax.reload();
-                    DeleteTransferAjaxSuccess(response);
+                    DeleteTransferDetailAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
                     tableTransfers.ajax.reload();
-                    DeleteTransferAjaxError(xhr);
+                    DeleteTransferDetailAjaxError(xhr);
                 }
             });
         } else {
-            toastr.info('La transferencia seleccionada no fue desactivada.')
+            toastr.info('El detalle de la transferencia seleccionada no fue eliminado.')
         }
     });
 }
 
-function DeleteTransferAjaxSuccess(response) {
+function DeleteTransferDetailAjaxSuccess(response) {
     if(response.status === 204) {
         toastr.success(response.message);
     }
@@ -42,7 +42,7 @@ function DeleteTransferAjaxSuccess(response) {
     }
 }
 
-function DeleteTransferAjaxError(xhr) {
+function DeleteTransferDetailAjaxError(xhr) {
     if(xhr.status === 403) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
     }
