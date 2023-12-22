@@ -18,11 +18,11 @@ function DeleteTransferDetail(id) {
                     'id': id
                 },
                 success: function(response) {
-                    tableTransfers.ajax.reload();
+                    tableTransferDetails.ajax.reload();
                     DeleteTransferDetailAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableTransfers.ajax.reload();
+                    tableTransferDetails.ajax.reload();
                     DeleteTransferDetailAjaxError(xhr);
                 }
             });

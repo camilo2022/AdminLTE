@@ -305,8 +305,11 @@ class TransferDetailController extends Controller
 
             $inventory->quantity += $tranferDetail->quantity;
             $inventory->save();
-
+            
+            $tranferDetail->status = 'Eliminado';
+            $tranferDetail->save();
             $tranferDetail->delete();
+            
             return $this->successResponse(
                 $tranferDetail,
                 'El Detalle de la transferencia fue eliminado exitosamente.',

@@ -48,7 +48,7 @@ class TransferDetailUpdateRequest extends FormRequest
         return [
             'from_warehouse_id' => ['required', 'exists:warehouses,id'],
             'transfer_id' => ['required', 'exists:transfers,id'],
-            'product_id' => ['required', 'exists:products,id', 'unique:transfer_details,product_id,transfer_id,' . $this->input('transfer_id') . ',color_id,' . $this->input('color_id') . ',tone_id,' . $this->input('tone_id') . ',size_id,' . $this->input('size_id') . 'deleted_at,NULL,' . $this->route('id') . ',id'],
+            'product_id' => ['required', 'exists:products,id', 'unique:transfer_details,product_id,' . $this->route('id') . ',id,transfer_id,' . $this->input('transfer_id') . ',color_id,' . $this->input('color_id') . ',tone_id,' . $this->input('tone_id') . ',size_id,' . $this->input('size_id') . ',deleted_at,NULL'],
             'color_id' => ['required', 'exists:colors,id'],
             'tone_id' => ['required', 'exists:tones,id'],
             'size_id' => ['required', 'exists:sizes,id'],

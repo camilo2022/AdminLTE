@@ -22,7 +22,7 @@ function CreateTransferDetailModal() {
 
 function CreateTransferDetailModalCleaned() {
     $('#CreateTransferDetailModal').modal('hide');
-    CreateTransferDetailsModalResetSelect('product_id_c');
+    CreateTransferDetailModalResetSelect('product_id_c');
     RemoveIsValidClassCreateTransferDetail();
     RemoveIsInvalidClassCreateTransferDetail();
 
@@ -136,6 +136,7 @@ function CreateTransferDetail() {
                     $('#CreateTransferDetailModal').modal('show');
                     $('#size_id_c').val('').trigger('change');
                     $('#quantity_c').val('');
+                    $('#message_quantity_c').text('');
                     RemoveIsValidClassCreateTransferDetail();
                     RemoveIsInvalidClassCreateTransferDetail();
                 },

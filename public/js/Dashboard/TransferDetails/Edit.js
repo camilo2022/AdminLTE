@@ -36,19 +36,19 @@ function EditTransferDetailModalCleaned(transferDetail) {
 function EditTransferDetailModalProduct(product) {
     $('#product_id_e').html('');
     $('#product_id_e').append(new Option(product.code, product.id, false, false));
-    $('#product_id_e').trigger('change');
+    $('#product_id_e').val(product.id).trigger('change');
 }
 
 function EditTransferDetailModalColorTone(color_tone) {
     $('#color_id_tone_id_e').html('');
-    $('#color_id_tone_id_e').append(`${color_tone.color.name} - ${color_tone.tone.name}`, `${color_tone.color.id}-${color_tone.tone.id}`, false, false);
-    $('#color_id_tone_id_e').trigger('change');
+    $('#color_id_tone_id_e').append(new Option(`${color_tone.color.name} - ${color_tone.tone.name}`, `${color_tone.color.id}-${color_tone.tone.id}`, false, false));
+    $('#color_id_tone_id_e').val(`${color_tone.color.id}-${color_tone.tone.id}`).trigger('change');
 }
 
 function EditTransferDetailModalSizes(size) {
     $('#size_id_e').html('');
     $('#size_id_e').append(new Option(size.name, size.id, false, false));
-    $('#size_id_e').trigger('change');
+    $('#size_id_e').val(size.id).trigger('change');
 }
 
 function EditTransferDetailModalColorToneSizesGetQuantity() {
@@ -67,7 +67,7 @@ function EditTransferDetailModalColorToneSizesGetQuantity() {
             },
             success: function(response) {
                 $('#quantity_e').attr('max', response.data.quantity);
-                $('#message_quantity_e').text(`${response.data.quantity} unidades disponibles.`);
+                $('#message_quantity_e').text(`${parseInt($('#quantity_e').val()) + response.data.quantity} unidades disponibles.`);
             },
             error: function(xhr, textStatus, errorThrown) {
                 EditTransferDetailAjaxError(xhr);

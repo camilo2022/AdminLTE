@@ -15,7 +15,7 @@
                     <div class="form-group">
                         <label for="product_id_c">Productos</label>
                         <div class="input-group">
-                            <select class="form-control select2" id="product_id_c" name="product_id" style="width: 90%" onchange="CreateTransferDetailsModalProductGetColorToneSizes(this)">
+                            <select class="form-control select2" id="product_id_c" name="product_id" style="width: 90%" onchange="CreateTransferDetailModalProductGetColorToneSizes(this)">
                                 <option value="">Seleccione</option>
                             </select>
                             <div class="input-group-append">
@@ -28,7 +28,7 @@
                     <div class="form-group">
                         <label for="color_id_tone_id_c">Colores y Tonos</label>
                         <div class="input-group">
-                            <select class="form-control select2" id="color_id_tone_id_c" name="color_id_tone_id" style="width: 90%" onchange="CreateTransferDetailsModalColorToneSizesGetQuantity()">
+                            <select class="form-control select2" id="color_id_tone_id_c" name="color_id_tone_id" style="width: 90%" onchange="CreateTransferDetailModalColorToneSizesGetQuantity()">
                                 <option value="">Seleccione</option>
                             </select>
                             <div class="input-group-append">
@@ -41,7 +41,7 @@
                     <div class="form-group">
                         <label for="size_id_c">Tallas</label>
                         <div class="input-group">
-                            <select class="form-control select2" id="size_id_c" name="size_id" style="width: 90%" onchange="CreateTransferDetailsModalColorToneSizesGetQuantity()">
+                            <select class="form-control select2" id="size_id_c" name="size_id" style="width: 90%" onchange="CreateTransferDetailModalColorToneSizesGetQuantity()">
                                 <option value="">Seleccione</option>
                             </select>
                             <div class="input-group-append">
