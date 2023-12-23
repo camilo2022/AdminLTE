@@ -13,9 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('people_types', function (Blueprint $table) {
-            $table->id();
+        Schema::create('person_types', function (Blueprint $table) {
+            $table->id()->comment('Identificador del tipo de persona');
+            $table->string('name')->unique()->comment('Nombre del tipo de persona');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -26,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('people_types');
+        Schema::dropIfExists('person_types');
     }
 };

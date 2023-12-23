@@ -24,12 +24,12 @@ class ProductUpdateRequest extends FormRequest
         ], 422));
     }
 
-    protected function prepareForValidation()
+    /* protected function prepareForValidation()
     {
         $this->merge([
             'photos' => json_decode($this->input('photos')),
         ]);
-    }
+    } */
 
     /**
      * Determine if the user is authorized to make this request.

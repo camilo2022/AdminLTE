@@ -13,9 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('people_references', function (Blueprint $table) {
-            $table->id();
+        Schema::create('client_types', function (Blueprint $table) {
+            $table->id()->comment('Identificador del tipo de cliente');
+            $table->string('name')->unique()->comment('Nombre del tipo de cliente');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -26,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('people_references');
+        Schema::dropIfExists('client_types');
     }
 };

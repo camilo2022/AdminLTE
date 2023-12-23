@@ -47,7 +47,7 @@ class ProductMasiveRequest extends FormRequest
             'Products.*.description' => ['nullable', 'string', 'max:255'],
             'Products.*.price' => ['required', 'numeric', 'between:0,999999.99'],
             'Products.*.cost' => ['required', 'numeric', 'between:0,999999.99'],
-            'Products.*.clothing_line_id' => ['required'],
+            'Products.*.clothing_line_id' => ['required', 'exists:clothing_lines,id'],
             'Products.*.category_id' => ['required', 'exists:categories,id'],
             'Products.*.subcategory_id' => ['required', 'exists:subcategories,id'],
             'Products.*.model_id' => ['required', 'exists:models,id'],

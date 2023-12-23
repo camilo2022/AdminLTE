@@ -13,9 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('people', function (Blueprint $table) {
-            $table->id();
+        Schema::create('sale_channels', function (Blueprint $table) {
+            $table->id()->comment('Identificador del canal de venta');
+            $table->string('name')->unique()->comment('Nombre del canal de venta');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -26,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('people');
+        Schema::dropIfExists('sale_channels');
     }
 };
