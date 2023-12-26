@@ -4,6 +4,7 @@ use App\Http\Controllers\AreasAndChargesController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\BusinessController;
 use App\Http\Controllers\CategoriesAndSubcategoriesController;
+use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ClothingLineController;
 use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\CorreriaController;
@@ -732,6 +733,71 @@ Route::middleware(['auth'])->group(function () {
 
                 Route::put('/Cancel', [TransferDetailController::class, 'cancel'])
                 ->middleware('can:Dashboard.Transfers.Details.Cancel')->name('Dashboard.Transfers.Details.Cancel');
+            
+            });
+
+        });
+
+        Route::prefix('/Clients')->group(function () {
+
+            Route::get('/Index', [ClientController::class, 'index'])
+            ->middleware('can:Dashboard.Clients.Index')->name('Dashboard.Clients.Index');
+
+            Route::post('/Index/Query', [ClientController::class, 'indexQuery'])
+            ->middleware('can:Dashboard.Clients.Index.Query')->name('Dashboard.Clients.Index.Query');
+
+            Route::post('/Create', [ClientController::class, 'create'])
+            ->middleware('can:Dashboard.Clients.Create')->name('Dashboard.Clients.Create');
+
+            Route::post('/Store', [ClientController::class, 'store'])
+            ->middleware('can:Dashboard.Clients.Store')->name('Dashboard.Clients.Store');
+
+            Route::post('/Edit/{id}', [ClientController::class, 'edit'])
+            ->middleware('can:Dashboard.Clients.Edit')->name('Dashboard.Clients.Edit');
+
+            Route::put('/Update/{id}', [ClientController::class, 'update'])
+            ->middleware('can:Dashboard.Clients.Update')->name('Dashboard.Clients.Update');
+
+            Route::post('/Show/{id}', [ClientController::class, 'show'])
+            ->middleware('can:Dashboard.Clients.Show')->name('Dashboard.Clients.Show');
+
+            Route::get('/Quota', [ClientController::class, 'quota'])
+            ->middleware('can:Dashboard.Clients.Quota')->name('Dashboard.Clients.Quota');
+
+            Route::post('/Quota/Query', [ClientController::class, 'quotaQuery'])
+            ->middleware('can:Dashboard.Clients.Quota.Query')->name('Dashboard.Clients.Quota.Query');
+
+            Route::delete('/Delete', [ClientController::class, 'delete'])
+            ->middleware('can:Dashboard.Clients.Delete')->name('Dashboard.Clients.Delete');
+
+            Route::put('/Restore', [ClientController::class, 'restore'])
+            ->middleware('can:Dashboard.Clients.Restore')->name('Dashboard.Clients.Restore');
+
+            Route::prefix('/Details')->group(function () {
+
+                Route::post('/Index/Query', [TransferDetailController::class, 'indexQuery'])
+                ->middleware('can:Dashboard.Clients.Details.Index.Query')->name('Dashboard.Clients.Details.Index.Query');
+
+                Route::post('/Create', [TransferDetailController::class, 'create'])
+                ->middleware('can:Dashboard.Clients.Details.Create')->name('Dashboard.Clients.Details.Create');
+
+                Route::post('/Store', [TransferDetailController::class, 'store'])
+                ->middleware('can:Dashboard.Clients.Details.Store')->name('Dashboard.Clients.Details.Store');
+
+                Route::post('/Edit/{id}', [TransferDetailController::class, 'edit'])
+                ->middleware('can:Dashboard.Clients.Details.Edit')->name('Dashboard.Clients.Details.Edit');
+
+                Route::put('/Update/{id}', [TransferDetailController::class, 'update'])
+                ->middleware('can:Dashboard.Clients.Details.Update')->name('Dashboard.Clients.Details.Update');
+
+                Route::delete('/Delete', [TransferDetailController::class, 'delete'])
+                ->middleware('can:Dashboard.Clients.Details.Delete')->name('Dashboard.Clients.Details.Delete');
+
+                Route::put('/Pending', [TransferDetailController::class, 'pending'])
+                ->middleware('can:Dashboard.Clients.Details.Pending')->name('Dashboard.Clients.Details.Pending');
+
+                Route::put('/Cancel', [TransferDetailController::class, 'cancel'])
+                ->middleware('can:Dashboard.Clients.Details.Cancel')->name('Dashboard.Clients.Details.Cancel');
             
             });
 

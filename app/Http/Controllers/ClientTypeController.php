@@ -2,24 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\CategoriesAndSubcategories\CategoriesAndSubcategoriesDeleteRequest;
-use App\Http\Requests\CategoriesAndSubcategories\CategoriesAndSubcategoriesIndexQueryRequest;
-use App\Http\Requests\CategoriesAndSubcategories\CategoriesAndSubcategoriesRestoreRequest;
-use App\Http\Requests\CategoriesAndSubcategories\CategoriesAndSubcategoriesStoreRequest;
-use App\Http\Requests\CategoriesAndSubcategories\CategoriesAndSubcategoriesUpdateRequest;
-use App\Http\Resources\CategoriesAndSubcategories\CategoriesAndSubcategoriesIndexQueryCollection;
-use App\Models\Category;
-use App\Models\ClothingLine;
-use App\Models\Subcategory;
-use App\Traits\ApiResponser;
+use App\Http\Requests\ClientType\ClientTypeDeleteRequest;
+use App\Http\Requests\ClientType\ClientTypeIndexQueryRequest;
+use App\Http\Requests\ClientType\ClientTypeRestoreRequest;
+use App\Http\Requests\ClientType\ClientTypeStoreRequest;
+use App\Http\Requests\ClientType\ClientTypeUpdateRequest;
+use App\Http\Resources\ClientType\ClientTypeIndexQueryCollection;
+use App\Models\ClientType;
 use App\Traits\ApiMessage;
+use App\Traits\ApiResponser;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 
-class CategoriesAndSubcategoriesController extends Controller
+class ClientTypeController extends Controller
 {
     use ApiResponser;
     use ApiMessage;
@@ -27,23 +24,19 @@ class CategoriesAndSubcategoriesController extends Controller
     public function index()
     {
         try {
-            return view('Dashboard.CategoriesAndSubcategories.Index');
+            return view('Dashboard.ClientTypes.Index');
         } catch (Exception $e) {
             return back()->with('danger', 'Ocurrió un error al cargar la vista: ' . $e->getMessage());
         }
     }
 
-    public function indexQuery(CategoriesAndSubcategoriesIndexQueryRequest $request)
+    public function indexQuery(ClientTypeIndexQueryRequest $request)
     {
-        try{
+        try {
             $start_date = Carbon::parse($request->input('start_date'))->startOfDay();
             $end_date = Carbon::parse($request->input('end_date'))->endOfDay();
-            // Consultar roles con relaciones y aplicar filtros
-            $categoriesAndSubcategories = Category::with([
-                    'clothing_line' => function ($query) { $query->withTrashed(); },
-                    'subcategories' => function ($query) { $query->withTrashed(); }
-                ])
-                ->when($request->filled('search'),
+            //Consulta por nombre
+            $clientTypes = ClientType::when($request->filled('search'),
                     function ($query) use ($request) {
                         $query->search($request->input('search'));
                     }
@@ -56,9 +49,9 @@ class CategoriesAndSubcategoriesController extends Controller
                 ->orderBy($request->input('column'), $request->input('dir'))
                 ->withTrashed() //Trae los registros 'eliminados'
                 ->paginate($request->input('perPage'));
-            // Devolver una respuesta exitosa con los roles y permisos paginados
+
             return $this->successResponse(
-                new CategoriesAndSubcategoriesIndexQueryCollection($categoriesAndSubcategories),
+                new ClientTypeIndexQueryCollection($clientTypes),
                 $this->getMessage('Success'),
                 200
             );
@@ -72,7 +65,6 @@ class CategoriesAndSubcategoriesController extends Controller
                 500
             );
         } catch (Exception $e) {
-            // Devolver una respuesta de error en caso de excepción
             return $this->errorResponse(
                 [
                     'message' => $this->getMessage('Exception'),
@@ -87,7 +79,7 @@ class CategoriesAndSubcategoriesController extends Controller
     {
         try {
             return $this->successResponse(
-                ClothingLine::all(),
+                '',
                 'Ingrese los datos para hacer la validacion y registro.',
                 200
             );
@@ -103,38 +95,27 @@ class CategoriesAndSubcategoriesController extends Controller
         }
     }
 
-    public function store(CategoriesAndSubcategoriesStoreRequest $request)
+    public function store(ClientTypeStoreRequest $request)
     {
         try {
-            $category = new Category();
-            $category->clothing_line_id = $request->input('clothing_line_id');
-            $category->name = $request->input('name');
-            $category->code = $request->input('code');
-            $category->description = $request->input('description');
-            $category->save();
-
-            collect($request->input('subcategories'))->map(function ($subcategory) use ($category){
-                $subcategory = (object) $subcategory;
-                $subcategoryNew = new Subcategory();
-                $subcategoryNew->category_id = $category->id;
-                $subcategoryNew->name = $subcategory->name;
-                $subcategoryNew->code = $subcategory->code;
-                $subcategoryNew->description = $subcategory->description;
-                $subcategoryNew->save();
-            });
+            $clientType = new ClientType();
+            $clientType->name = $request->input('name');
+            $clientType->code = $request->input('code');
+            $clientType->save();
 
             return $this->successResponse(
-                $category,
-                'Categoria y subcategorias registrados exitosamente.',
+                $clientType,
+                'El tipo de cliente fue registrado exitosamente.',
                 201
             );
         } catch (ModelNotFoundException $e) {
+            // Manejar la excepción de la base de datos
             return $this->errorResponse(
                 [
                     'message' => $this->getMessage('ModelNotFoundException'),
                     'error' => $e->getMessage()
                 ],
-                404
+                500
             );
         } catch (QueryException $e) {
             // Manejar la excepción de la base de datos
@@ -146,7 +127,7 @@ class CategoriesAndSubcategoriesController extends Controller
                 500
             );
         } catch (Exception $e) {
-            // Deshacer la transacción en caso de excepción y devolver una respuesta de error
+            // Devolver una respuesta de error en caso de excepción
             return $this->errorResponse(
                 [
                     'message' => $this->getMessage('Exception'),
@@ -161,15 +142,8 @@ class CategoriesAndSubcategoriesController extends Controller
     {
         try {
             return $this->successResponse(
-                [
-                    'category' => Category::with([
-                        'clothing_line' => function ($query) { $query->withTrashed(); },
-                        'subcategories' => function ($query) { $query->withTrashed(); }
-                    ])
-                    ->findOrFail($id),
-                    'clothingLines' => ClothingLine::all()
-                ],
-                'La categoria y subcategorias fueron encontrados exitosamente.',
+                ClientType::withTrashed()->findOrFail($id),
+                'El tipo de cliente fue encontrado exitosamente.',
                 204
             );
         } catch (ModelNotFoundException $e) {
@@ -191,30 +165,17 @@ class CategoriesAndSubcategoriesController extends Controller
         }
     }
 
-    public function update(CategoriesAndSubcategoriesUpdateRequest $request, $id)
+    public function update(ClientTypeUpdateRequest $request, $id)
     {
         try {
-            $category = Category::findOrFail($id);
-            $category->clothing_line_id = $request->input('clothing_line_id');
-            $category->name = $request->input('name');
-            $category->code = $request->input('code');
-            $category->description = $request->input('description');
-            $category->save();
-
-            collect($request->input('subcategories'))->map(function ($subcategory) use ($category){
-                $subcategory = (object) $subcategory;
-                $subcategoryNew = isset($subcategory->id) ? Subcategory::withTrashed()->find($subcategory->id) : new Subcategory();
-                $subcategoryNew->category_id = $category->id;
-                $subcategoryNew->name = $subcategory->name;
-                $subcategoryNew->code = $subcategory->code;
-                $subcategoryNew->description = $subcategory->description;
-                $subcategoryNew->deleted_at = filter_var($subcategory->status, FILTER_VALIDATE_BOOLEAN) ? null : Carbon::now()->format('Y-m-d H:i:s');
-                $subcategoryNew->save();
-            });
+            $clientType = ClientType::withTrashed()->findOrFail($id);
+            $clientType->name = $request->input('name');
+            $clientType->code = $request->input('code');
+            $clientType->save();
 
             return $this->successResponse(
-                $category,
-                'Categoria y subcategorias actualizadas exitosamente.',
+                $clientType,
+                'El tipo de cliente fue actualizada exitosamente.',
                 200
             );
         } catch (ModelNotFoundException $e) {
@@ -235,7 +196,6 @@ class CategoriesAndSubcategoriesController extends Controller
                 500
             );
         } catch (Exception $e) {
-            // Deshacer la transacción en caso de excepción y devolver una respuesta de error
             return $this->errorResponse(
                 [
                     'message' => $this->getMessage('Exception'),
@@ -246,18 +206,13 @@ class CategoriesAndSubcategoriesController extends Controller
         }
     }
 
-    public function delete(CategoriesAndSubcategoriesDeleteRequest $request)
+    public function delete(ClientTypeDeleteRequest $request)
     {
         try {
-            // Eliminar categoria y subcategorias
-            $category = Category::findOrFail($request->input('id'));
-            // Eliminar la categoría y sus subcategorías
-            $category->subcategories()->delete();
-            $category->delete();
-            // Devolver una respuesta exitosa
+            $clientType = ClientType::withTrashed()->findOrFail($request->input('id'))->delete();
             return $this->successResponse(
-                $category,
-                'Categoria y subcategorias eliminadas exitosamente.',
+                $clientType,
+                'El tipo de cliente fue eliminada exitosamente.',
                 204
             );
         } catch (ModelNotFoundException $e) {
@@ -269,7 +224,6 @@ class CategoriesAndSubcategoriesController extends Controller
                 404
             );
         } catch (Exception $e) {
-            // Deshacer la transacción en caso de excepción y devolver una respuesta de error
             return $this->errorResponse(
                 [
                     'message' => $this->getMessage('Exception'),
@@ -280,17 +234,13 @@ class CategoriesAndSubcategoriesController extends Controller
         }
     }
 
-    public function restore(CategoriesAndSubcategoriesRestoreRequest $request)
+    public function restore(ClientTypeRestoreRequest $request)
     {
         try {
-            // Restaurar categoria y subcategorias
-            $category = Category::withTrashed()->findOrFail($request->input('id'));
-            // Restaurar la categoría y sus subcategorías
-            $category->subcategories()->restore();
-            $category->restore();
+            $clientType = ClientType::withTrashed()->findOrFail($request->input('id'))->restore();
             return $this->successResponse(
-                $category,
-                'Categoria y subcategorias fueron restauradas exitosamente.',
+                $clientType,
+                'El tipo de cliente fue restaurado exitosamente.',
                 204
             );
         } catch (ModelNotFoundException $e) {

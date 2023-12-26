@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Client;
+namespace App\Http\Requests\PersonType;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ClientShowQueryRequest extends FormRequest
+class PersonTypeStoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

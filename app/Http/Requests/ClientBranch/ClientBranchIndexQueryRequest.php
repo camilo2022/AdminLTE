@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class ClientBranchEditRequest extends FormRequest
+class ClientBranchIndexQueryRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -39,9 +39,10 @@ class ClientBranchEditRequest extends FormRequest
     public function rules()
     {
         return [
-            'country_id' => ['nullable', 'exists:countries,id'],
-            'departament_id' => ['nullable', 'exists:departaments,id'],
-            'city_id' => ['nullable', 'exists:cities,id'],
+            'client_id' => ['nullable', 'exists:clients,id'],
+            'start_date' => ['nullable', 'date'],
+            'end_date' => ['nullable', 'date', 'after_or_equal:start_date'],
+            'perPage' => ['required', 'numeric'],
         ];
     }
 
@@ -49,9 +50,14 @@ class ClientBranchEditRequest extends FormRequest
     public function messages()
     {
         return [
-            'country_id.exists' => 'El Identificador del pais no es valido.',
-            'departament_id.exists' => 'El Identificador del departamento no es valido.',
-            'city_id.exists' => 'El identificador de la ciudad no es valido.',
+            'client_id.required' => 'El Identificador del cliente es requerido.',
+            'client_id.exists' => 'El Identificador del cliente no es válido.',
+            'start_date.required' => 'El campo Fecha de inicio es requerido.',
+            'start_date.date' => 'El campo Fecha de inicio debe ser una fecha válida.',
+            'end_date.date' => 'El campo Fecha de fin debe ser una fecha válida.',
+            'end_date.after_or_equal' => 'El campo Fecha de fin debe ser igual o posterior a la Fecha de inicio.',
+            'perPage.numeric' => 'El campo Numero de registros por página debe ser un valor numérico.',
+            'perPage.required' => 'El campo Numero de registros por página es requerido.'
         ];
     }
 }

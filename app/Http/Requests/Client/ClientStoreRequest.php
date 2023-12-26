@@ -25,8 +25,8 @@ class ClientStoreRequest extends FormRequest
     protected function prepareForValidation()
     {
         $this->merge([
-            'country_departament' => $this->input('country_id'),
-            'departament_city' => $this->input('departament_id'),
+            'country_departament' => $this->input('departament_id'),
+            'departament_city' => $this->input('city_id'),
         ]);
     }
 
@@ -58,9 +58,11 @@ class ClientStoreRequest extends FormRequest
             'city_id' => ['required', 'exists:cities,id'],
             'address' => ['required', 'string', 'max:255'],
             'neighborhood' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'unique:businesses,email', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255'],
             'telephone_number_first' => ['required', 'string', 'size:10'],
-            'telephone_number_second' => ['nullable', 'string', 'size:10']
+            'telephone_number_second' => ['nullable', 'string', 'size:10'],
+            'country_departament' => ['exists:departaments,id,country_id,' . $this->input('country_id')],
+            'departament_city' => ['exists:cities,id,departament_id,' . $this->input('departament_id')]
         ];
     }
 
@@ -97,13 +99,14 @@ class ClientStoreRequest extends FormRequest
             'email.required' => 'El campo Correo electronico del cliente es requerido.',
             'email.string' => 'El campo Correo electronico del cliente debe ser una cadena de caracteres.',
             'email.email' => 'El campo Correo electronico del cliente debe ser una dirección de correo electrónico válida.',
-            'email.unique' => 'El Correo electronico ya ha sido tomado.',
             'email.max' => 'El campo Correo electronico del cliente no debe exceder los 255 caracteres.',
             'telephone_number_first.required' => 'El campo Numero de telefono del cliente es requerido.',
             'telephone_number_first.numeric' => 'El campo Numero de telefono del cliente debe ser una cadena de digitos.',
             'telephone_number_first.size' => 'El campo Numero de telefono del cliente debe tener 10 caracteres.',
             'telephone_number_second.numeric' => 'El campo Numero de telefono del cliente debe ser una cadena de digitos.',
             'telephone_number_second.size' => 'El campo Numero de telefono del cliente debe tener 10 caracteres.',
+            'country_departament.exists' => 'El departamento no pertenece al pais seleccionado.',
+            'departament_city.exists' => 'La ciudad no pertenece al departamento seleccionado.',
         ];
     }
 }

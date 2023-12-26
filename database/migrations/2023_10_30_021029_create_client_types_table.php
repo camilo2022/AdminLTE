@@ -14,8 +14,9 @@ return new class extends Migration
     public function up()
     {
         Schema::create('client_types', function (Blueprint $table) {
-            $table->id()->comment('Identificador del tipo de cliente');
-            $table->string('name')->unique()->comment('Nombre del tipo de cliente');
+            $table->id()->comment('Identificador del tipo cliente');
+            $table->string('name')->unique()->comment('Nombre del tipo cliente');
+            $table->string('code')->unique()->comment('Codigo del tipo cliente');
             $table->timestamps();
             $table->softDeletes();
         });

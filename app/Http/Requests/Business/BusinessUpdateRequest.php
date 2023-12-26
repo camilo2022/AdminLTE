@@ -21,6 +21,15 @@ class BusinessUpdateRequest extends FormRequest
             'errors' => $validator->errors()
         ], 422));
     }
+
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'country_departament' => $this->input('departament_id'),
+            'departament_city' => $this->input('city_id'),
+        ]);
+    }
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -48,7 +57,9 @@ class BusinessUpdateRequest extends FormRequest
             'city_id' => ['required', 'exists:cities,id'],
             'address' => ['required', 'string', 'max:255'],
             'neighbourhood' => ['required', 'string', 'max:255'],
-            'description' => ['nullable', 'string', 'max:255']
+            'description' => ['nullable', 'string', 'max:255'],
+            'country_departament' => ['exists:departaments,id,country_id,' . $this->input('country_id')],
+            'departament_city' => ['exists:cities,id,departament_id,' . $this->input('departament_id')]
         ];
     }
 
@@ -87,6 +98,8 @@ class BusinessUpdateRequest extends FormRequest
             'neighbourhood.max' => 'El campo Barrio de la empresa no debe exceder los 255 caracteres.',
             'description.string' => 'El campo Descripcion de la empresa debe ser una cadena de caracteres.',
             'description.max' => 'El campo Descripcion de la empresa no debe exceder los 255 caracteres.',
+            'country_departament.exists' => 'El departamento no pertenece al pais seleccionado.',
+            'departament_city.exists' => 'La ciudad no pertenece al departamento seleccionado.',
         ];
     }
 }

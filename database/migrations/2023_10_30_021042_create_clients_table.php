@@ -32,6 +32,9 @@ return new class extends Migration
             $table->foreign('person_type_id')->references('id')->on('person_types')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('client_type_id')->references('id')->on('client_types')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('document_type_id')->references('id')->on('document_types')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('country_id')->references('id')->on('countries')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('departament_id')->references('id')->on('departaments')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('city_id')->references('id')->on('cities')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();
         });

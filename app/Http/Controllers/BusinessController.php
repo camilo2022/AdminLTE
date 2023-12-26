@@ -189,7 +189,7 @@ class BusinessController extends Controller
             }
 
             return $this->successResponse(
-                (object) [
+                [
                     'business' => Business::withTrashed()->findOrFail($id),
                     'countries' => Country::all()
                 ],

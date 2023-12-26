@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Resources\Client;
+namespace App\Http\Resources\PersonType;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class ClientShowQueryCollection extends ResourceCollection
+class PersonTypeIndexQueryCollection extends ResourceCollection
 {
     /**
      * Transform the resource collection into an array.

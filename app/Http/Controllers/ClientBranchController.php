@@ -3,83 +3,314 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Http\Requests\ClientBranch\ClientBranchCreateRequest;
+use App\Http\Requests\ClientBranch\ClientBranchDeleteRequest;
+use App\Http\Requests\ClientBranch\ClientBranchEditRequest;
+use App\Http\Requests\ClientBranch\ClientBranchIndexQueryRequest;
+use App\Http\Requests\ClientBranch\ClientBranchRestoreRequest;
+use App\Http\Requests\ClientBranch\ClientBranchStoreRequest;
+use App\Http\Requests\ClientBranch\ClientBranchUpdateRequest;
+use App\Http\Resources\ClientBranch\ClientBranchIndexQueryCollection;
+use App\Models\City;
+use App\Models\ClientBranch;
+use App\Models\Country;
+use App\Models\Departament;
+use App\Traits\ApiMessage;
+use App\Traits\ApiResponser;
+use Carbon\Carbon;
+use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Database\QueryException;
 
 class ClientBranchController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    use ApiResponser;
+    use ApiMessage;
+
+    public function indexQuery(ClientBranchIndexQueryRequest $request)
     {
-        //
+        try {
+            $start_date = Carbon::parse($request->input('start_date'))->startOfDay();
+            $end_date = Carbon::parse($request->input('end_date'))->endOfDay();
+            //Consulta por nombre
+            $clientBranchBranches = ClientBranch::with(['country', 'departament', 'city',
+                'client' => function ($query) { $query->withTrashed(); },
+                ])
+                ->when($request->filled('search'),
+                    function ($query) use ($request) {
+                        $query->search($request->input('search'));
+                    }
+                )
+                ->when($request->filled('start_date') && $request->filled('end_date'),
+                    function ($query) use ($start_date, $end_date) {
+                        $query->filterByDate($start_date, $end_date);
+                    }
+                )
+                ->orderBy($request->input('column'), $request->input('dir'))
+                ->withTrashed() //Trae los registros 'eliminados'
+                ->paginate($request->input('perPage'));
+
+            return $this->successResponse(
+                new ClientBranchIndexQueryCollection($clientBranchBranches),
+                $this->getMessage('Success'),
+                200
+            );
+        } catch (QueryException $e) {
+            // Manejar la excepción de la base de datos
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('QueryException'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        } catch (Exception $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('Exception'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        }
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function create(ClientBranchCreateRequest $request)
     {
-        //
+        try {
+            if($request->filled('country_id')) {
+                return $this->successResponse(
+                    Departament::where('country_id', '=', $request->input('country_id'))->get(),
+                    'Departamentos encontrados con exito.',
+                    200
+                );
+            }
+
+            if($request->filled('departament_id')) {
+                return $this->successResponse(
+                    City::where('departament_id', '=', $request->input('departament_id'))->get(),
+                    'Ciudades encontradas con exito.',
+                    200
+                );
+            }
+            
+            return $this->successResponse(
+                Country::all(),
+                'Ingrese los datos para hacer la validacion y registro.',
+                200
+            );
+        } catch (Exception $e) {
+            // Devolver una respuesta de error en caso de excepción
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('Exception'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function store(ClientBranchStoreRequest $request)
     {
-        //
+        try {
+            $clientBranch = new ClientBranch();
+            $clientBranch->client_id = $request->input('client_id');
+            $clientBranch->code = $request->input('code');
+            $clientBranch->country_id = $request->input('country_id');
+            $clientBranch->departament_id = $request->input('departament_id');
+            $clientBranch->city_id = $request->input('city_id');
+            $clientBranch->address = $request->input('address');
+            $clientBranch->neighbourhood = $request->input('neighbourhood');
+            $clientBranch->description = $request->input('description');
+            $clientBranch->email = $request->input('email');
+            $clientBranch->telephone_number_first = $request->input('telephone_number_first');
+            $clientBranch->telephone_number_second = $request->input('telephone_number_second');
+            $clientBranch->save();
+
+            return $this->successResponse(
+                $clientBranch,
+                'La sucursal del cliente fue registrada exitosamente.',
+                201
+            );
+        } catch (ModelNotFoundException $e) {
+            // Manejar la excepción de la base de datos
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('ModelNotFoundException'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        } catch (QueryException $e) {
+            // Manejar la excepción de la base de datos
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('QueryException'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        } catch (Exception $e) {
+            // Devolver una respuesta de error en caso de excepción
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('Exception'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+    public function edit(ClientBranchEditRequest $request, $id)
     {
-        //
+        try {
+            if($request->filled('country_id')) {
+                return $this->successResponse(
+                    Departament::where('country_id', '=', $request->input('country_id'))->get(),
+                    'Departamentos encontrados con exito.',
+                    200
+                );
+            }
+
+            if($request->filled('departament_id')) {
+                return $this->successResponse(
+                    City::where('departament_id', '=', $request->input('departament_id'))->get(),
+                    'Ciudades encontradas con exito.',
+                    200
+                );
+            }
+
+            return $this->successResponse(
+                [
+                    'clients' => ClientBranch::withTrashed()->findOrFail($id),
+                    'countries' => Country::all(),
+                ],
+                'La sucursal del cliente fue encontrada exitosamente.',
+                204
+            );
+        } catch (ModelNotFoundException $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('ModelNotFoundException'),
+                    'error' => $e->getMessage()
+                ],
+                404
+            );
+        } catch (Exception $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('Exception'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
+    public function update(ClientBranchUpdateRequest $request, $id)
     {
-        //
+        try {
+            $clientBranch = ClientBranch::withTrashed()->findOrFail($id);
+            $clientBranch->code = $request->input('code');
+            $clientBranch->country_id = $request->input('country_id');
+            $clientBranch->departament_id = $request->input('departament_id');
+            $clientBranch->city_id = $request->input('city_id');
+            $clientBranch->address = $request->input('address');
+            $clientBranch->neighbourhood = $request->input('neighbourhood');
+            $clientBranch->description = $request->input('description');
+            $clientBranch->email = $request->input('email');
+            $clientBranch->telephone_number_first = $request->input('telephone_number_first');
+            $clientBranch->telephone_number_second = $request->input('telephone_number_second');
+            $clientBranch->save();
+
+            return $this->successResponse(
+                $clientBranch,
+                'La sucursal del cliente fue actualizada exitosamente.',
+                200
+            );
+        } catch (ModelNotFoundException $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('ModelNotFoundException'),
+                    'error' => $e->getMessage()
+                ],
+                404
+            );
+        } catch (QueryException $e) {
+            // Manejar la excepción de la base de datos
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('QueryException'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        } catch (Exception $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('Exception'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        }
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
+    public function delete(ClientBranchDeleteRequest $request)
     {
-        //
+        try {
+            $clientBranch = ClientBranch::withTrashed()->findOrFail($request->input('id'))->delete();
+            return $this->successResponse(
+                $clientBranch,
+                'La sucursal del cliente fue eliminada exitosamente.',
+                204
+            );
+        } catch (ModelNotFoundException $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('ModelNotFoundException'),
+                    'error' => $e->getMessage()
+                ],
+                404
+            );
+        } catch (Exception $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('Exception'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
+    public function restore(ClientBranchRestoreRequest $request)
     {
-        //
+        try {
+            $clientBranch = ClientBranch::withTrashed()->findOrFail($request->input('id'))->restore();
+            return $this->successResponse(
+                $clientBranch,
+                'La sucursal del cliente fue restaurada exitosamente.',
+                204
+            );
+        } catch (ModelNotFoundException $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('ModelNotFoundException'),
+                    'error' => $e->getMessage()
+                ],
+                404
+            );
+        } catch (Exception $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('Exception'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        }
     }
 }

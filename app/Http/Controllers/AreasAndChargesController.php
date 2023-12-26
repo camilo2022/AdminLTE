@@ -157,8 +157,7 @@ class AreasAndChargesController extends Controller
             return $this->successResponse(
                 Area::with([
                     'charges' => function ($query) { $query->withTrashed(); }
-                ])
-                ->findOrFail($id),
+                ])->withTrashed()->findOrFail($id),
                 'El area y cargos fueron encontrados exitosamente.',
                 204
             );
@@ -184,7 +183,7 @@ class AreasAndChargesController extends Controller
     public function update(AreasAndChargesUpdateRequest $request, $id)
     {
         try {
-            $area = Area::findOrFail($id);
+            $area = Area::withTrashed()->findOrFail($id);
             $area->name = $request->input('name');
             $area->description = $request->input('description');
             $area->save();
@@ -237,7 +236,7 @@ class AreasAndChargesController extends Controller
     {
         try {
             // Eliminar categoria y subcategorias
-            $area = Area::findOrFail($request->input('id'));
+            $area = Area::withTrashed()->findOrFail($request->input('id'));
             // Eliminar la categoría y sus subcategorías
             $area->charges()->delete();
             $area->delete();

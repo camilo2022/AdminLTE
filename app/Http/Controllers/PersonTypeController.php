@@ -2,24 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\CategoriesAndSubcategories\CategoriesAndSubcategoriesDeleteRequest;
-use App\Http\Requests\CategoriesAndSubcategories\CategoriesAndSubcategoriesIndexQueryRequest;
-use App\Http\Requests\CategoriesAndSubcategories\CategoriesAndSubcategoriesRestoreRequest;
-use App\Http\Requests\CategoriesAndSubcategories\CategoriesAndSubcategoriesStoreRequest;
-use App\Http\Requests\CategoriesAndSubcategories\CategoriesAndSubcategoriesUpdateRequest;
-use App\Http\Resources\CategoriesAndSubcategories\CategoriesAndSubcategoriesIndexQueryCollection;
-use App\Models\Category;
-use App\Models\ClothingLine;
-use App\Models\Subcategory;
-use App\Traits\ApiResponser;
+use App\Http\Requests\PersonType\PersonTypeDeleteRequest;
+use App\Http\Requests\PersonType\PersonTypeIndexQueryRequest;
+use App\Http\Requests\PersonType\PersonTypeRestoreRequest;
+use App\Http\Requests\PersonType\PersonTypeStoreRequest;
+use App\Http\Requests\PersonType\PersonTypeUpdateRequest;
+use App\Http\Resources\PersonType\PersonTypeIndexQueryCollection;
+use App\Models\PersonType;
 use App\Traits\ApiMessage;
+use App\Traits\ApiResponser;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 
-class CategoriesAndSubcategoriesController extends Controller
+class PersonTypeController extends Controller
 {
     use ApiResponser;
     use ApiMessage;
@@ -27,23 +24,19 @@ class CategoriesAndSubcategoriesController extends Controller
     public function index()
     {
         try {
-            return view('Dashboard.CategoriesAndSubcategories.Index');
+            return view('Dashboard.PersonTypes.Index');
         } catch (Exception $e) {
             return back()->with('danger', 'Ocurrió un error al cargar la vista: ' . $e->getMessage());
         }
     }
 
-    public function indexQuery(CategoriesAndSubcategoriesIndexQueryRequest $request)
+    public function indexQuery(PersonTypeIndexQueryRequest $request)
     {
-        try{
+        try {
             $start_date = Carbon::parse($request->input('start_date'))->startOfDay();
             $end_date = Carbon::parse($request->input('end_date'))->endOfDay();
-            // Consultar roles con relaciones y aplicar filtros
-            $categoriesAndSubcategories = Category::with([
-                    'clothing_line' => function ($query) { $query->withTrashed(); },
-                    'subcategories' => function ($query) { $query->withTrashed(); }
-                ])
-                ->when($request->filled('search'),
+            //Consulta por nombre
+            $personTypes = PersonType::when($request->filled('search'),
                     function ($query) use ($request) {
                         $query->search($request->input('search'));
                     }
@@ -56,9 +49,9 @@ class CategoriesAndSubcategoriesController extends Controller
                 ->orderBy($request->input('column'), $request->input('dir'))
                 ->withTrashed() //Trae los registros 'eliminados'
                 ->paginate($request->input('perPage'));
-            // Devolver una respuesta exitosa con los roles y permisos paginados
+
             return $this->successResponse(
-                new CategoriesAndSubcategoriesIndexQueryCollection($categoriesAndSubcategories),
+                new PersonTypeIndexQueryCollection($personTypes),
                 $this->getMessage('Success'),
                 200
             );
@@ -72,7 +65,6 @@ class CategoriesAndSubcategoriesController extends Controller
                 500
             );
         } catch (Exception $e) {
-            // Devolver una respuesta de error en caso de excepción
             return $this->errorResponse(
                 [
                     'message' => $this->getMessage('Exception'),
@@ -87,7 +79,7 @@ class CategoriesAndSubcategoriesController extends Controller
     {
         try {
             return $this->successResponse(
-                ClothingLine::all(),
+                '',
                 'Ingrese los datos para hacer la validacion y registro.',
                 200
             );
@@ -103,38 +95,27 @@ class CategoriesAndSubcategoriesController extends Controller
         }
     }
 
-    public function store(CategoriesAndSubcategoriesStoreRequest $request)
+    public function store(PersonTypeStoreRequest $request)
     {
         try {
-            $category = new Category();
-            $category->clothing_line_id = $request->input('clothing_line_id');
-            $category->name = $request->input('name');
-            $category->code = $request->input('code');
-            $category->description = $request->input('description');
-            $category->save();
-
-            collect($request->input('subcategories'))->map(function ($subcategory) use ($category){
-                $subcategory = (object) $subcategory;
-                $subcategoryNew = new Subcategory();
-                $subcategoryNew->category_id = $category->id;
-                $subcategoryNew->name = $subcategory->name;
-                $subcategoryNew->code = $subcategory->code;
-                $subcategoryNew->description = $subcategory->description;
-                $subcategoryNew->save();
-            });
+            $personType = new PersonType();
+            $personType->name = $request->input('name');
+            $personType->code = $request->input('code');
+            $personType->save();
 
             return $this->successResponse(
-                $category,
-                'Categoria y subcategorias registrados exitosamente.',
+                $personType,
+                'El tipo de persona fue registrado exitosamente.',
                 201
             );
         } catch (ModelNotFoundException $e) {
+            // Manejar la excepción de la base de datos
             return $this->errorResponse(
                 [
                     'message' => $this->getMessage('ModelNotFoundException'),
                     'error' => $e->getMessage()
                 ],
-                404
+                500
             );
         } catch (QueryException $e) {
             // Manejar la excepción de la base de datos
@@ -146,7 +127,7 @@ class CategoriesAndSubcategoriesController extends Controller
                 500
             );
         } catch (Exception $e) {
-            // Deshacer la transacción en caso de excepción y devolver una respuesta de error
+            // Devolver una respuesta de error en caso de excepción
             return $this->errorResponse(
                 [
                     'message' => $this->getMessage('Exception'),
@@ -161,15 +142,8 @@ class CategoriesAndSubcategoriesController extends Controller
     {
         try {
             return $this->successResponse(
-                [
-                    'category' => Category::with([
-                        'clothing_line' => function ($query) { $query->withTrashed(); },
-                        'subcategories' => function ($query) { $query->withTrashed(); }
-                    ])
-                    ->findOrFail($id),
-                    'clothingLines' => ClothingLine::all()
-                ],
-                'La categoria y subcategorias fueron encontrados exitosamente.',
+                PersonType::withTrashed()->findOrFail($id),
+                'El tipo de persona fue encontrado exitosamente.',
                 204
             );
         } catch (ModelNotFoundException $e) {
@@ -191,30 +165,17 @@ class CategoriesAndSubcategoriesController extends Controller
         }
     }
 
-    public function update(CategoriesAndSubcategoriesUpdateRequest $request, $id)
+    public function update(PersonTypeUpdateRequest $request, $id)
     {
         try {
-            $category = Category::findOrFail($id);
-            $category->clothing_line_id = $request->input('clothing_line_id');
-            $category->name = $request->input('name');
-            $category->code = $request->input('code');
-            $category->description = $request->input('description');
-            $category->save();
-
-            collect($request->input('subcategories'))->map(function ($subcategory) use ($category){
-                $subcategory = (object) $subcategory;
-                $subcategoryNew = isset($subcategory->id) ? Subcategory::withTrashed()->find($subcategory->id) : new Subcategory();
-                $subcategoryNew->category_id = $category->id;
-                $subcategoryNew->name = $subcategory->name;
-                $subcategoryNew->code = $subcategory->code;
-                $subcategoryNew->description = $subcategory->description;
-                $subcategoryNew->deleted_at = filter_var($subcategory->status, FILTER_VALIDATE_BOOLEAN) ? null : Carbon::now()->format('Y-m-d H:i:s');
-                $subcategoryNew->save();
-            });
+            $personType = PersonType::withTrashed()->findOrFail($id);
+            $personType->name = $request->input('name');
+            $personType->code = $request->input('code');
+            $personType->save();
 
             return $this->successResponse(
-                $category,
-                'Categoria y subcategorias actualizadas exitosamente.',
+                $personType,
+                'El tipo de persona fue actualizada exitosamente.',
                 200
             );
         } catch (ModelNotFoundException $e) {
@@ -235,7 +196,6 @@ class CategoriesAndSubcategoriesController extends Controller
                 500
             );
         } catch (Exception $e) {
-            // Deshacer la transacción en caso de excepción y devolver una respuesta de error
             return $this->errorResponse(
                 [
                     'message' => $this->getMessage('Exception'),
@@ -246,18 +206,13 @@ class CategoriesAndSubcategoriesController extends Controller
         }
     }
 
-    public function delete(CategoriesAndSubcategoriesDeleteRequest $request)
+    public function delete(PersonTypeDeleteRequest $request)
     {
         try {
-            // Eliminar categoria y subcategorias
-            $category = Category::findOrFail($request->input('id'));
-            // Eliminar la categoría y sus subcategorías
-            $category->subcategories()->delete();
-            $category->delete();
-            // Devolver una respuesta exitosa
+            $personType = PersonType::withTrashed()->findOrFail($request->input('id'))->delete();
             return $this->successResponse(
-                $category,
-                'Categoria y subcategorias eliminadas exitosamente.',
+                $personType,
+                'El tipo de persona fue eliminada exitosamente.',
                 204
             );
         } catch (ModelNotFoundException $e) {
@@ -269,7 +224,6 @@ class CategoriesAndSubcategoriesController extends Controller
                 404
             );
         } catch (Exception $e) {
-            // Deshacer la transacción en caso de excepción y devolver una respuesta de error
             return $this->errorResponse(
                 [
                     'message' => $this->getMessage('Exception'),
@@ -280,17 +234,13 @@ class CategoriesAndSubcategoriesController extends Controller
         }
     }
 
-    public function restore(CategoriesAndSubcategoriesRestoreRequest $request)
+    public function restore(PersonTypeRestoreRequest $request)
     {
         try {
-            // Restaurar categoria y subcategorias
-            $category = Category::withTrashed()->findOrFail($request->input('id'));
-            // Restaurar la categoría y sus subcategorías
-            $category->subcategories()->restore();
-            $category->restore();
+            $personType = PersonType::withTrashed()->findOrFail($request->input('id'))->restore();
             return $this->successResponse(
-                $category,
-                'Categoria y subcategorias fueron restauradas exitosamente.',
+                $personType,
+                'El tipo de persona fue restaurado exitosamente.',
                 204
             );
         } catch (ModelNotFoundException $e) {

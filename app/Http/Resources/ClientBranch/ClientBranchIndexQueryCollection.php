@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Resources\Client;
+namespace App\Http\Resources\ClientBranch;
 
 use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class ClientIndexQueryCollection extends ResourceCollection
+class ClientBranchIndexQueryCollection extends ResourceCollection
 {
     /**
      * Transform the resource collection into an array.
@@ -19,14 +19,9 @@ class ClientIndexQueryCollection extends ResourceCollection
             'clients' => $this->collection->map(function ($clients) {
                 return [
                     'id' => $clients->id,
-                    'name' => $clients->name,
-                    'person_type_id' => $clients->person_type_id,
-                    'person_type' => $clients->person_type,
-                    'client_type_id' => $clients->client_type_id,
-                    'client_type' => $clients->client_type,
-                    'document_type_id' => $clients->document_type_id,
-                    'document_type' => $clients->document_type,
-                    'document_number' => $clients->document_number,
+                    'client_id' => $clients->client_id,
+                    'client' => $clients->client,
+                    'code' => $clients->code,
                     'country_id' => $clients->country_id,
                     'country' => $clients->country->name,
                     'departament_id' => $clients->departament_id,
@@ -35,10 +30,10 @@ class ClientIndexQueryCollection extends ResourceCollection
                     'city' => $clients->city->name,
                     'address' => $clients->address,
                     'neighbourhood' => $clients->neighbourhood,
+                    'description' => $clients->description,
                     'email' => $clients->email,
                     'telephone_number_first' => $clients->telephone_number_first,
                     'telephone_number_second' => $clients->telephone_number_second,
-                    'quota' => $clients->quota,
                     'created_at' => $this->formatDate($clients->created_at),
                     'updated_at' => $this->formatDate($clients->updated_at),
                     'deleted_at' => $clients->deleted_at
