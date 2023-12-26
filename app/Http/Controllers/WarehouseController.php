@@ -50,8 +50,8 @@ class WarehouseController extends Controller
                         $query->filterByDate($start_date, $end_date);
                     }
                 )
-                ->orderBy($request->input('column'), $request->input('dir'))
                 ->withTrashed() //Trae los registros 'eliminados'
+                ->orderBy($request->input('column'), $request->input('dir'))
                 ->paginate($request->input('perPage'));
 
             return $this->successResponse(
@@ -222,7 +222,9 @@ class WarehouseController extends Controller
 
             foreach ($users as $user) {
                 $warehousesId = $user->warehouses->pluck('id')->all();
-                $user->admin = in_array($id, $warehousesId);
+                $user->merge([
+                    'admin' => in_array($id, $warehousesId)
+                ]);
             }
 
             return $this->successResponse(

@@ -7,7 +7,7 @@ use App\Http\Requests\Client\ClientCreateRequest;
 use App\Http\Requests\Client\ClientDeleteRequest;
 use App\Http\Requests\Client\ClientEditRequest;
 use App\Http\Requests\Client\ClientIndexQueryRequest;
-use App\Http\Requests\Client\ClientQuotaQueryRequest;
+use App\Http\Requests\Client\ClientQuotaRequest;
 use App\Http\Requests\Client\ClientRestoreRequest;
 use App\Http\Requests\Client\ClientStoreRequest;
 use App\Http\Requests\Client\ClientUpdateRequest;
@@ -61,8 +61,8 @@ class ClientController extends Controller
                         $query->filterByDate($start_date, $end_date);
                     }
                 )
-                ->orderBy($request->input('column'), $request->input('dir'))
                 ->withTrashed() //Trae los registros 'eliminados'
+                ->orderBy($request->input('column'), $request->input('dir'))
                 ->paginate($request->input('perPage'));
 
             return $this->successResponse(
@@ -108,7 +108,7 @@ class ClientController extends Controller
                     200
                 );
             }
-            
+
             return $this->successResponse(
                 [
                     'countries' => Country::all(),
@@ -286,10 +286,9 @@ class ClientController extends Controller
         }
     }
 
-    public function quota($id)
+    public function show($id)
     {
         try {
-
             return $this->successResponse(
                 Client::withTrashed()->findOrFail($id),
                 'El cliente fue encontrado exitosamente.',
@@ -314,7 +313,7 @@ class ClientController extends Controller
         }
     }
 
-    public function quotaQuery(ClientQuotaQueryRequest $request, $id)
+    public function quota(ClientQuotaRequest $request, $id)
     {
         try {
             $client = Client::withTrashed()->findOrFail($id);
@@ -342,33 +341,6 @@ class ClientController extends Controller
                     'error' => $e->getMessage()
                 ],
                 500
-            );
-        } catch (Exception $e) {
-            return $this->errorResponse(
-                [
-                    'message' => $this->getMessage('Exception'),
-                    'error' => $e->getMessage()
-                ],
-                500
-            );
-        }
-    }
-
-    public function show($id)
-    {
-        try {
-            return $this->successResponse(
-                Client::withTrashed()->findOrFail($id),
-                'El cliente fue encontrado exitosamente.',
-                204
-            );
-        } catch (ModelNotFoundException $e) {
-            return $this->errorResponse(
-                [
-                    'message' => $this->getMessage('ModelNotFoundException'),
-                    'error' => $e->getMessage()
-                ],
-                404
             );
         } catch (Exception $e) {
             return $this->errorResponse(

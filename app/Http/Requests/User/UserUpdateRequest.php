@@ -8,36 +8,26 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 
 class UserUpdateRequest extends FormRequest
 {
-      /**
-     * Maneja una solicitud fallida de validación.
-     *
-     * @param \Illuminate\Contracts\Validation\Validator $validator
-     * @throws \Illuminate\Validation\ValidationException
-     */
     protected function failedValidation(Validator $validator)
     {
-        // Lanzar una excepción de validación con los errores de validación obtenidos
         throw new HttpResponseException(response()->json([
             'message' => 'Error de validación.',
             'errors' => $validator->errors()
         ], 422));
     }
 
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'area_charge' => $this->input('charge_id'),
+        ]);
+    }
+
     public function authorize()
     {
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, mixed>
-     */
     public function rules()
     {
         return [
@@ -49,10 +39,10 @@ class UserUpdateRequest extends FormRequest
             'email' => 'required|string|email|max:255|unique:users,email,' . $this->route('id'),
             'area_id' => ['required', 'exists:areas,id'],
             'charge_id' => ['required', 'exists:charges,id'],
+            'area_charge' => ['exists:charges,id,charge_id,' . $this->input('charge_id')],
         ];
     }
 
-    // Mensajes de error personalizados para cada regla de validación
     public function messages()
     {
         return [
@@ -64,17 +54,12 @@ class UserUpdateRequest extends FormRequest
             'min' => 'El campo :attribute debe tener al menos :min caracteres.',
             'size' => 'El campo :attribute debe tener :size caracteres.',
             'exists' => 'El campo :attribute no es valido.',
+            'country_departament.exists' => 'El cargo no pertenece al area seleccionada.',
         ];
     }
 
-    /**
-     * Obtiene los atributos personalizados de los campos.
-     *
-     * @return array
-     */
     public function attributes()
     {
-        // Nombres personalizados para cada campo de la solicitud
         return [
             'name' => 'nombre',
             'last_name' => 'apellido',

@@ -11,8 +11,8 @@ class ProductSize extends Pivot
 {
     use HasFactory;
     use SoftDeletes;
+    
     protected $table = 'product_sizes';
-
     protected $fillable = [
         'product_id',
         'size_id',

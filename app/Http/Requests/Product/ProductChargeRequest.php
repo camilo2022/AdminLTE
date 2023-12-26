@@ -1,17 +1,19 @@
 <?php
 
-namespace App\Http\Requests\Client;
+namespace App\Http\Requests\Product;
 
+use App\Rules\ImageDimension;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class ClientQuotaQueryRequest extends FormRequest
+class ProductChargeRequest extends FormRequest
 {
     /**
-     * Determine if the user is authorized to make this request.
+     * Maneja una solicitud fallida de validación.
      *
-     * @return bool
+     * @param \Illuminate\Contracts\Validation\Validator $validator
+     * @throws \Illuminate\Validation\ValidationException
      */
     protected function failedValidation(Validator $validator)
     {
@@ -25,8 +27,7 @@ class ClientQuotaQueryRequest extends FormRequest
     protected function prepareForValidation()
     {
         $this->merge([
-            'country_departament' => $this->input('departament_id'),
-            'departament_city' => $this->input('city_id'),
+            'photos' => json_decode($this->input('photos')),
         ]);
     }
 
@@ -48,16 +49,17 @@ class ClientQuotaQueryRequest extends FormRequest
     public function rules()
     {
         return [
-            'quota' => ['required', 'numeric'],
+            'photos' => ['required', 'array'],
+            'photos.*' => ['mimes:jpeg,jpg,png,gif', 'max:10000',  new ImageDimension(100, 1920, 100, 1080, function($attr, $value){ return $value->getClientOriginalName(); })]
         ];
     }
-
 
     public function messages()
     {
         return [
-            'quota.required' => 'El campo Cupo del cliente es requerido.',
-            'quota.string' => 'El campo Cupo del cliente debe ser numerico.',
+            'photos.array' => 'El campo Fotos del producto debe ser un arreglo.',
+            'photos.*.mimes' => 'El Archivo debe tener una extensión válida (jpeg, jpg, png, gif).',
+            'photos.*.max' => 'El Archivo no debe superar los 10 MB.'
         ];
     }
 }

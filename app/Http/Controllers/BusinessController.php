@@ -53,8 +53,8 @@ class BusinessController extends Controller
                         $query->filterByDate($start_date, $end_date);
                     }
                 )
-                ->orderBy($request->input('column'), $request->input('dir'))
                 ->withTrashed() //Trae los registros 'eliminados'
+                ->orderBy($request->input('column'), $request->input('dir'))
                 ->paginate($request->input('perPage'));
 
             return $this->successResponse(
@@ -100,7 +100,7 @@ class BusinessController extends Controller
                     200
                 );
             }
-            
+
             return $this->successResponse(
                 Country::all(),
                 'Ingrese los datos para hacer la validacion y registro.',

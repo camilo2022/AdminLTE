@@ -27,6 +27,26 @@ class ClientBranchController extends Controller
     use ApiResponser;
     use ApiMessage;
 
+    public function index()
+    {
+        try {
+            return $this->successResponse(
+                '',
+                'Cargando registros de las sucursales del cliente.',
+                200
+            );
+        } catch (Exception $e) {
+            // Devolver una respuesta de error en caso de excepción
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('Exception'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        }
+    }
+
     public function indexQuery(ClientBranchIndexQueryRequest $request)
     {
         try {
@@ -34,7 +54,7 @@ class ClientBranchController extends Controller
             $end_date = Carbon::parse($request->input('end_date'))->endOfDay();
             //Consulta por nombre
             $clientBranchBranches = ClientBranch::with(['country', 'departament', 'city',
-                'client' => function ($query) { $query->withTrashed(); },
+                    'client' => function ($query) { $query->withTrashed(); },
                 ])
                 ->when($request->filled('search'),
                     function ($query) use ($request) {
@@ -46,8 +66,9 @@ class ClientBranchController extends Controller
                         $query->filterByDate($start_date, $end_date);
                     }
                 )
-                ->orderBy($request->input('column'), $request->input('dir'))
                 ->withTrashed() //Trae los registros 'eliminados'
+                ->where('client_id', '=', $request->input('client_id'))
+                ->orderBy($request->input('column'), $request->input('dir'))
                 ->paginate($request->input('perPage'));
 
             return $this->successResponse(
@@ -93,7 +114,7 @@ class ClientBranchController extends Controller
                     200
                 );
             }
-            
+
             return $this->successResponse(
                 Country::all(),
                 'Ingrese los datos para hacer la validacion y registro.',

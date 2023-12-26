@@ -6,6 +6,7 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Validation\Rule;
+use Illuminate\Http\Request;
 
 class ProductMasiveRequest extends FormRequest
 {
@@ -23,6 +24,11 @@ class ProductMasiveRequest extends FormRequest
             'errors' => $validator->errors()
         ], 422));
     }
+    
+    protected function getIndex()
+    {
+        return explode('.', Request::route()->parameterNames()[0])[1];
+    }
 
     /**
      * Determine if the user is authorized to make this request.
@@ -39,9 +45,9 @@ class ProductMasiveRequest extends FormRequest
      *
      * @return array<string, mixed>
      */
+
     public function rules()
     {
-
         return [
             'Products.*.code' => ['required', 'string', 'max:255', 'unique:products,code'],
             'Products.*.description' => ['nullable', 'string', 'max:255'],
@@ -54,6 +60,8 @@ class ProductMasiveRequest extends FormRequest
             'Products.*.trademark_id' => ['required', 'exists:trademarks,id'],
             'Products.*.correria_id' => ['required', 'exists:correrias,id'],
             'Products.*.collection_id' => ['required', 'exists:collections,id'],
+            'Products.*.clothingLine_category' => ['exists:categories,id,clothing_line_id,' . $this->input('Products.' . $this->getIndex() . '.clothing_line_id')],
+            'Products.*.category_subcategory' => ['exists:subcategories,id,category_id,' . $this->input('Products.' . $this->getIndex() . '.category_id')],
             'ProductsSizes.*.code' => ['required', 'string', 'max:255', Rule::in(collect($this->Products)->pluck('code'))],
             'ProductsSizes.*.size_id' => ['required', 'exists:sizes,id'],
             'ProductsColorsTones.*.code' => ['required', 'string', 'max:255', Rule::in(collect($this->Products)->pluck('code'))],
@@ -91,6 +99,8 @@ class ProductMasiveRequest extends FormRequest
             'Products.*.correria_id.exists' => 'Pag. 1 | Identificador de la correria del producto no es valido.',
             'Products.*.collection_id.required' => 'Pag. 1 | El campo Coleccion del producto es requerido.',
             'Products.*.collection_id.exists' => 'Pag. 1 | Identificador de la coleccion del producto no es valido.',
+            'Products.*.clothingLine_category.exists' => 'Pag. 1 | La categoria no pertenece a la linea de producto seleccionada.',
+            'Products.*.category_subcategory.exists' => 'Pag. 1 | La subcategoria no pertenece a la categoria seleccionada.',
             'ProductsSizes.*.code.required' => 'Pag. 2 | El campo Codigo del producto es requerido.',
             'ProductsSizes.*.code.string' => 'Pag. 2 | El campo Codigo del producto debe ser una cadena de texto.',
             'ProductsSizes.*.code.max' => 'Pag. 2 | El campo Codigo del producto no debe tener mas de 255 caracteres.',

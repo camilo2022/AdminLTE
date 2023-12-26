@@ -9,8 +9,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class ProductPhoto extends Model
 {
     use HasFactory;
+    
     protected $table = 'product_photos';
-
     protected $fillable = [
         'product_color_tone_id',
         'name',

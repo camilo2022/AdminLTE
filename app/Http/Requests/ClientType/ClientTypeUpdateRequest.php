@@ -3,28 +3,43 @@
 namespace App\Http\Requests\ClientType;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class ClientTypeUpdateRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
+    protected function failedValidation(Validator $validator)
     {
-        return false;
+        throw new HttpResponseException(response()->json([
+            'message' => 'Error de validación.',
+            'errors' => $validator->errors()
+        ], 422));
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, mixed>
-     */
+    public function authorize()
+    {
+        return true;
+    }
+
     public function rules()
     {
         return [
-            //
+            'name' => ['required', 'string', 'unique:client_types,name,' . $this->route('id') .',id', 'max:255'],
+            'code' => ['required', 'string', 'unique:client_types,code,' . $this->route('id') .',id', 'max:255']
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'name.required' => 'El campo Nombre del tipo de Documento es requerido.',
+            'name.string' => 'El campo Nombre del tipo de Documento debe ser una cadena de texto.',
+            'name.unique' => 'El campo Nombre del tipo de Documento ya existe en la base de datos.',
+            'name.max' => 'El campo Nombre del tipo de Documento no debe exceder los 255 caracteres.',
+            'code.required' => 'El campo Codigo del tipo de Documento es requerido.',
+            'code.string' => 'El campo Codigo del tipo de Documento debe ser una cadena de texto.',
+            'code.unique' => 'El campo Codigo del tipo de Documento ya existe en la base de datos.',
+            'code.max' => 'El campo Codigo del tipo de Documento no debe exceder los 255 caracteres.',
         ];
     }
 }

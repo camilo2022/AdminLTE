@@ -46,8 +46,8 @@ class PersonTypeController extends Controller
                         $query->filterByDate($start_date, $end_date);
                     }
                 )
-                ->orderBy($request->input('column'), $request->input('dir'))
                 ->withTrashed() //Trae los registros 'eliminados'
+                ->orderBy($request->input('column'), $request->input('dir'))
                 ->paginate($request->input('perPage'));
 
             return $this->successResponse(
@@ -101,6 +101,7 @@ class PersonTypeController extends Controller
             $personType = new PersonType();
             $personType->name = $request->input('name');
             $personType->code = $request->input('code');
+            $personType->require_references = $request->input('require_references');
             $personType->save();
 
             return $this->successResponse(
@@ -171,6 +172,7 @@ class PersonTypeController extends Controller
             $personType = PersonType::withTrashed()->findOrFail($id);
             $personType->name = $request->input('name');
             $personType->code = $request->input('code');
+            $personType->require_references = $request->input('require_references');
             $personType->save();
 
             return $this->successResponse(

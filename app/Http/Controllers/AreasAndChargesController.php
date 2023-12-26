@@ -50,8 +50,8 @@ class AreasAndChargesController extends Controller
                         $query->filterByDate($start_date, $end_date);
                     }
                 )
-                ->orderBy($request->input('column'), $request->input('dir'))
                 ->withTrashed() //Trae los registros 'eliminados'
+                ->orderBy($request->input('column'), $request->input('dir'))
                 ->paginate($request->input('perPage'));
             // Devolver una respuesta exitosa con los roles y permisos paginados
             return $this->successResponse(

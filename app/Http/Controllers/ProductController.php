@@ -6,6 +6,7 @@ use App\Exports\Product\ProductExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Product\ProductAssignColorToneRequest;
 use App\Http\Requests\Product\ProductAssignSizeRequest;
+use App\Http\Requests\Product\ProductChargeRequest;
 use App\Http\Requests\Product\ProductCreateRequest;
 use App\Http\Requests\Product\ProductDeleteRequest;
 use App\Http\Requests\Product\ProductDestroyRequest;
@@ -83,8 +84,8 @@ class ProductController extends Controller
                         $query->filterByDate($start_date, $end_date);
                     }
                 )
-                ->orderBy($request->input('column'), $request->input('dir'))
                 ->withTrashed() //Trae los registros 'eliminados'
+                ->orderBy($request->input('column'), $request->input('dir'))
                 ->paginate($request->input('perPage'));
 
             return $this->successResponse(
@@ -169,17 +170,6 @@ class ProductController extends Controller
             $product->correria_id = $request->input('correria_id');
             $product->collection_id = $request->input('collection_id');
             $product->save();
-
-            /* if ($request->hasFile('photos')) {
-                $photos = $request->file('photos');
-                foreach ($photos as $photo) {
-                    $productPhoto = new ProductPhoto();
-                    $productPhoto->product_id = $product->id;
-                    $productPhoto->name = $photo->getClientOriginalName();
-                    $productPhoto->path = $photo->store('Products/' . $product->id, 'public');
-                    $productPhoto->save();
-                }
-            } */
 
             return $this->successResponse(
                 $product,
@@ -526,6 +516,52 @@ class ProductController extends Controller
         }
     }
 
+    public function charge(ProductChargeRequest $request)
+    {
+        try {
+            $photos = $request->file('photos');
+            foreach ($photos as $photo) {
+                $productPhoto = new ProductPhoto();
+                $productPhoto->product_id = $request->input('product_color_tone_id');
+                $productPhoto->name = $photo->getClientOriginalName();
+                $productPhoto->path = Storage::disk('public')->put('Products/' . $request->input('product_color_tone_id'), $photo);
+                $productPhoto->save();
+            }
+            return $this->successResponse(
+                '',
+                'La imagen del producto fue cargada exitosamente.',
+                201
+            );
+        } catch (ModelNotFoundException $e) {
+            // Manejar la excepción de la base de datos
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('ModelNotFoundException'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        } catch (QueryException $e) {
+            // Manejar la excepción de la base de datos
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('QueryException'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        } catch (Exception $e) {
+            // Devolver una respuesta de error en caso de excepción
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('Exception'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        }
+    }
+
     public function destroy(ProductDestroyRequest $request)
     {
         try {
@@ -619,6 +655,13 @@ class ProductController extends Controller
         try {
             $products = Excel::toCollection(new ProductImportSheets, $request->file('products'));
 
+            foreach($products['Products'] as $product) {
+                $product->merge([
+                    'clothingLine_category' => $product->category_id,
+                    'category_subcategory' => $product->subcategory_id,
+                ]);
+            }
+
             $productsValidate = new ProductMasiveRequest();
             $productsValidate->merge([
                 'Products' => $products['Products']->toArray(),
@@ -652,10 +695,10 @@ class ProductController extends Controller
 
             // Extraer los productos del array asociativo
             $products = array_values($products);
-            
+
             $products = collect($products)->map(function ($product) {
                 $product = (object) $product;
-            
+
                 $productNew = new Product();
                 $productNew->code = $product->code;
                 $productNew->price = $product->price;
@@ -668,7 +711,7 @@ class ProductController extends Controller
                 $productNew->correria_id = $product->correria_id;
                 $productNew->collection_id = $product->collection_id;
                 $productNew->save();
-            
+
                 // Map para sizes
                 $product->sizes = collect($product->sizes)->map(function ($productSizes) use ($productNew) {
                     $productSizes = (object) $productSizes;
@@ -678,7 +721,7 @@ class ProductController extends Controller
                     $productSizesNew->save();
                     return $productSizes;
                 });
-            
+
                 // Map para colors_tones
                 $product->colors_tones = collect($product->colors_tones)->map(function ($productColorsTones) use ($productNew) {
                     $productColorsTones = (object) $productColorsTones;
@@ -689,7 +732,7 @@ class ProductController extends Controller
                     $productColorsTonesNew->save();
                     return $productColorsTones;
                 });
-            
+
                 return $product;
             });
 
