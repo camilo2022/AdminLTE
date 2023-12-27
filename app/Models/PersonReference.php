@@ -5,10 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class PersonReference extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
     protected $table = 'people_references';
     protected $fillable = [
@@ -42,7 +44,7 @@ class PersonReference extends Model
         return $this->belongsTo(Country::class, 'country_id');
     }
 
-    public function departament_id() : BelongsTo
+    public function departament() : BelongsTo
     {
         return $this->belongsTo(Departament::class, 'departament_id');
     }
@@ -50,5 +52,43 @@ class PersonReference extends Model
     public function city() : BelongsTo
     {
         return $this->belongsTo(City::class, 'city_id');
+    }
+
+    public function scopeSearch($query, $search)
+    {
+        return $query->where('name', 'like', '%' . $search . '%')
+        ->orWhere('last_name', 'like', '%' . $search . '%')
+        ->orWhereHas('document_type',
+            function ($subQuery) use ($search) {
+                $subQuery->where('name', 'like', '%' . $search . '%');
+            }
+        )
+        ->orWhere('document_number', 'like', '%' . $search . '%')
+        ->orWhereHas('country',
+            function ($subQuery) use ($search) {
+                $subQuery->where('name', 'like', '%' . $search . '%');
+            }
+        )
+        ->orWhereHas('departament',
+            function ($subQuery) use ($search) {
+                $subQuery->where('name', 'like', '%' . $search . '%');
+            }
+        )
+        ->orWhereHas('city',
+            function ($subQuery) use ($search) {
+                $subQuery->where('name', 'like', '%' . $search . '%');
+            }
+        )
+        ->orWhere('address', 'like', '%' . $search . '%')
+        ->orWhere('neighborhood', 'like', '%' . $search . '%')
+        ->orWhere('email', 'like', '%' . $search . '%')
+        ->orWhere('telephone_number_first', 'like', '%' . $search . '%')
+        ->orWhere('telephone_number_second', 'like', '%' . $search . '%');
+    }
+
+    public function scopeFilterByDate($query, $start_date, $end_date)
+    {
+        // Filtro por rango de fechas entre 'start_date' y 'end_date' en el campo 'created_at'
+        return $query->whereBetween('created_at', [$start_date, $end_date]);
     }
 }

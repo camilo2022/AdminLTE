@@ -48,7 +48,7 @@ class Person extends Model
         return $this->belongsTo(Country::class, 'country_id');
     }
 
-    public function departament_id() : BelongsTo
+    public function departament() : BelongsTo
     {
         return $this->belongsTo(Departament::class, 'departament_id');
     }

@@ -16,32 +16,32 @@ class ClientIndexQueryCollection extends ResourceCollection
     public function toArray($request)
     {
         return [
-            'clients' => $this->collection->map(function ($clients) {
+            'clients' => $this->collection->map(function ($client) {
                 return [
-                    'id' => $clients->id,
-                    'name' => $clients->name,
-                    'person_type_id' => $clients->person_type_id,
-                    'person_type' => $clients->person_type,
-                    'client_type_id' => $clients->client_type_id,
-                    'client_type' => $clients->client_type,
-                    'document_type_id' => $clients->document_type_id,
-                    'document_type' => $clients->document_type,
-                    'document_number' => $clients->document_number,
-                    'country_id' => $clients->country_id,
-                    'country' => $clients->country->name,
-                    'departament_id' => $clients->departament_id,
-                    'departament' => $clients->departament->name,
-                    'city_id' => $clients->city_id,
-                    'city' => $clients->city->name,
-                    'address' => $clients->address,
-                    'neighbourhood' => $clients->neighbourhood,
-                    'email' => $clients->email,
-                    'telephone_number_first' => $clients->telephone_number_first,
-                    'telephone_number_second' => $clients->telephone_number_second,
-                    'quota' => $clients->quota,
-                    'created_at' => $this->formatDate($clients->created_at),
-                    'updated_at' => $this->formatDate($clients->updated_at),
-                    'deleted_at' => $clients->deleted_at
+                    'id' => $client->id,
+                    'name' => $client->name,
+                    'person_type_id' => $client->person_type_id,
+                    'person_type' => $client->person_type,
+                    'client_type_id' => $client->client_type_id,
+                    'client_type' => $client->client_type,
+                    'document_type_id' => $client->document_type_id,
+                    'document_type' => $client->document_type,
+                    'document_number' => $client->document_number,
+                    'country_id' => $client->country_id,
+                    'country' => $client->country->name,
+                    'departament_id' => $client->departament_id,
+                    'departament' => $client->departament->name,
+                    'city_id' => $client->city_id,
+                    'city' => $client->city->name,
+                    'address' => $client->address,
+                    'neighbourhood' => $client->neighbourhood,
+                    'email' => $client->email,
+                    'telephone_number_first' => $client->telephone_number_first,
+                    'telephone_number_second' => $client->telephone_number_second,
+                    'quota' => $client->quota,
+                    'created_at' => $this->formatDate($client->created_at),
+                    'updated_at' => $this->formatDate($client->updated_at),
+                    'deleted_at' => $client->deleted_at
                 ];
             }),
             'meta' => [

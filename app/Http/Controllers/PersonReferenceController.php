@@ -2,23 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Client\ClientCreateRequest;
-use App\Http\Requests\Client\ClientDeleteRequest;
-use App\Http\Requests\Client\ClientEditRequest;
-use App\Http\Requests\Client\ClientIndexQueryRequest;
-use App\Http\Requests\Client\ClientQuotaRequest;
-use App\Http\Requests\Client\ClientRestoreRequest;
-use App\Http\Requests\Client\ClientStoreRequest;
-use App\Http\Requests\Client\ClientUpdateRequest;
-use App\Http\Resources\Client\ClientIndexQueryCollection;
+use App\Http\Requests\PersonReference\PersonReferenceCreateRequest;
+use App\Http\Requests\PersonReference\PersonReferenceDeleteRequest;
+use App\Http\Requests\PersonReference\PersonReferenceEditRequest;
+use App\Http\Requests\PersonReference\PersonReferenceIndexQueryRequest;
+use App\Http\Requests\PersonReference\PersonReferenceRestoreRequest;
+use App\Http\Requests\PersonReference\PersonReferenceStoreRequest;
+use App\Http\Requests\PersonReference\PersonReferenceUpdateRequest;
+use App\Http\Resources\PersonReference\PersonReferenceIndexQueryCollection;
 use App\Models\City;
-use App\Models\Client;
-use App\Models\ClientType;
 use App\Models\Country;
 use App\Models\Departament;
-use App\Models\DocumentType;
-use App\Models\PersonType;
+use App\Models\PersonReference;
 use App\Traits\ApiMessage;
 use App\Traits\ApiResponser;
 use Carbon\Carbon;
@@ -26,7 +21,7 @@ use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 
-class ClientController extends Controller
+class PersonReferenceController extends Controller
 {
     use ApiResponser;
     use ApiMessage;
@@ -34,21 +29,37 @@ class ClientController extends Controller
     public function index()
     {
         try {
-            return view('Dashboard.Clients.Index');
+            return $this->successResponse(
+                '',
+                'Cargando registros de las referencias personales.',
+                204
+            );
+        } catch (ModelNotFoundException $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('ModelNotFoundException'),
+                    'error' => $e->getMessage()
+                ],
+                404
+            );
         } catch (Exception $e) {
-            return back()->with('danger', 'Ocurrió un error al cargar la vista: ' . $e->getMessage());
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('Exception'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
         }
     }
 
-    public function indexQuery(ClientIndexQueryRequest $request)
+    public function indexQuery(PersonReferenceIndexQueryRequest $request)
     {
         try {
             $start_date = Carbon::parse($request->input('start_date'))->startOfDay();
             $end_date = Carbon::parse($request->input('end_date'))->endOfDay();
             //Consulta por nombre
-            $clients = Client::with(['country', 'departament', 'city',
-                    'person_type' => function ($query) { $query->withTrashed(); },
-                    'client_type' => function ($query) { $query->withTrashed(); },
+            $peopleReferences = PersonReference::with(['person', 'country', 'departament', 'city',
                     'document_type' => function ($query) { $query->withTrashed(); }
                 ])
                 ->when($request->filled('search'),
@@ -62,11 +73,12 @@ class ClientController extends Controller
                     }
                 )
                 ->withTrashed() //Trae los registros 'eliminados'
+                ->where('person_id', '=', $request->input('person_id'))
                 ->orderBy($request->input('column'), $request->input('dir'))
                 ->paginate($request->input('perPage'));
 
             return $this->successResponse(
-                new ClientIndexQueryCollection($clients),
+                new PersonReferenceIndexQueryCollection($peopleReferences),
                 $this->getMessage('Success'),
                 200
             );
@@ -90,7 +102,7 @@ class ClientController extends Controller
         }
     }
 
-    public function create(ClientCreateRequest $request)
+    public function create(PersonReferenceCreateRequest $request)
     {
         try {
             if($request->filled('country_id')) {
@@ -110,12 +122,7 @@ class ClientController extends Controller
             }
 
             return $this->successResponse(
-                [
-                    'countries' => Country::all(),
-                    'person_types' => PersonType::all(),
-                    'client_types' => ClientType::all(),
-                    'document_types' => DocumentType::all()
-                ],
+                Country::all(),
                 'Ingrese los datos para hacer la validacion y registro.',
                 200
             );
@@ -131,28 +138,28 @@ class ClientController extends Controller
         }
     }
 
-    public function store(ClientStoreRequest $request)
+    public function store(PersonReferenceStoreRequest $request)
     {
         try {
-            $client = new Client();
-            $client->name = $request->input('name');
-            $client->person_type_id = $request->input('person_type_id');
-            $client->client_type_id = $request->input('client_type_id');
-            $client->document_type_id = $request->input('document_type_id');
-            $client->document_number = $request->input('document_number');
-            $client->country_id = $request->input('country_id');
-            $client->departament_id = $request->input('departament_id');
-            $client->city_id = $request->input('city_id');
-            $client->address = $request->input('address');
-            $client->neighbourhood = $request->input('neighbourhood');
-            $client->email = $request->input('email');
-            $client->telephone_number_first = $request->input('telephone_number_first');
-            $client->telephone_number_second = $request->input('telephone_number_second');
-            $client->save();
+            $personReference = new PersonReference();
+            $personReference->person_id = $request->input('person_id');
+            $personReference->name = $request->input('name');
+            $personReference->last_name = $request->input('last_name');
+            $personReference->document_type_id = $request->input('document_type_id');
+            $personReference->document_number = $request->input('document_number');
+            $personReference->country_id = $request->input('country_id');
+            $personReference->departament_id = $request->input('departament_id');
+            $personReference->city_id = $request->input('city_id');
+            $personReference->address = $request->input('address');
+            $personReference->neighbourhood = $request->input('neighbourhood');
+            $personReference->email = $request->input('email');
+            $personReference->telephone_number_first = $request->input('telephone_number_first');
+            $personReference->telephone_number_second = $request->input('telephone_number_second');
+            $personReference->save();
 
             return $this->successResponse(
-                $client,
-                'El cliente fue registrado exitosamente.',
+                $personReference,
+                'La referencia personal fue registrada exitosamente.',
                 201
             );
         } catch (ModelNotFoundException $e) {
@@ -185,7 +192,7 @@ class ClientController extends Controller
         }
     }
 
-    public function edit(ClientEditRequest $request, $id)
+    public function edit(PersonReferenceEditRequest $request, $id)
     {
         try {
             if($request->filled('country_id')) {
@@ -206,13 +213,10 @@ class ClientController extends Controller
 
             return $this->successResponse(
                 [
-                    'client' => Client::withTrashed()->findOrFail($id),
-                    'countries' => Country::all(),
-                    'person_types' => PersonType::all(),
-                    'client_types' => ClientType::all(),
-                    'document_types' => DocumentType::all()
+                    'personReferece' => PersonReference::withTrashed()->findOrFail($id),
+                    'countries' => Country::all()
                 ],
-                'El cliente fue encontrado exitosamente.',
+                'La referencia personal fue encontrada exitosamente.',
                 204
             );
         } catch (ModelNotFoundException $e) {
@@ -234,28 +238,27 @@ class ClientController extends Controller
         }
     }
 
-    public function update(ClientUpdateRequest $request, $id)
+    public function update(PersonReferenceUpdateRequest $request, $id)
     {
         try {
-            $client = Client::withTrashed()->findOrFail($id);
-            $client->name = $request->input('name');
-            $client->person_type_id = $request->input('person_type_id');
-            $client->client_type_id = $request->input('client_type_id');
-            $client->document_type_id = $request->input('document_type_id');
-            $client->document_number = $request->input('document_number');
-            $client->country_id = $request->input('country_id');
-            $client->departament_id = $request->input('departament_id');
-            $client->city_id = $request->input('city_id');
-            $client->address = $request->input('address');
-            $client->neighbourhood = $request->input('neighbourhood');
-            $client->email = $request->input('email');
-            $client->telephone_number_first = $request->input('telephone_number_first');
-            $client->telephone_number_second = $request->input('telephone_number_second');
-            $client->save();
+            $personReference = PersonReference::withTrashed()->findOrFail($id);
+            $personReference->name = $request->input('name');
+            $personReference->last_name = $request->input('last_name');
+            $personReference->document_type_id = $request->input('document_type_id');
+            $personReference->document_number = $request->input('document_number');
+            $personReference->country_id = $request->input('country_id');
+            $personReference->departament_id = $request->input('departament_id');
+            $personReference->city_id = $request->input('city_id');
+            $personReference->address = $request->input('address');
+            $personReference->neighbourhood = $request->input('neighbourhood');
+            $personReference->email = $request->input('email');
+            $personReference->telephone_number_first = $request->input('telephone_number_first');
+            $personReference->telephone_number_second = $request->input('telephone_number_second');
+            $personReference->save();
 
             return $this->successResponse(
-                $client,
-                'El cliente fue actualizado exitosamente.',
+                $personReference,
+                'La referencia personal fue actualizada exitosamente.',
                 200
             );
         } catch (ModelNotFoundException $e) {
@@ -286,12 +289,13 @@ class ClientController extends Controller
         }
     }
 
-    public function show($id)
+    public function delete(PersonReferenceDeleteRequest $request)
     {
         try {
+            $personReference = PersonReference::withTrashed()->findOrFail($request->input('id'))->delete();
             return $this->successResponse(
-                Client::withTrashed()->findOrFail($id),
-                'El cliente fue encontrado exitosamente.',
+                $personReference,
+                'La referencia personal fue eliminada exitosamente.',
                 204
             );
         } catch (ModelNotFoundException $e) {
@@ -313,81 +317,13 @@ class ClientController extends Controller
         }
     }
 
-    public function quota(ClientQuotaRequest $request, $id)
+    public function restore(PersonReferenceRestoreRequest $request)
     {
         try {
-            $client = Client::withTrashed()->findOrFail($id);
-            $client->quota = $request->input('quota');
-            $client->save();
-
+            $personReference = PersonReference::withTrashed()->findOrFail($request->input('id'))->restore();
             return $this->successResponse(
-                $client,
-                'El cupo disponible del cliente fue actualizado exitosamente.',
-                200
-            );
-        } catch (ModelNotFoundException $e) {
-            return $this->errorResponse(
-                [
-                    'message' => $this->getMessage('ModelNotFoundException'),
-                    'error' => $e->getMessage()
-                ],
-                404
-            );
-        } catch (QueryException $e) {
-            // Manejar la excepción de la base de datos
-            return $this->errorResponse(
-                [
-                    'message' => $this->getMessage('QueryException'),
-                    'error' => $e->getMessage()
-                ],
-                500
-            );
-        } catch (Exception $e) {
-            return $this->errorResponse(
-                [
-                    'message' => $this->getMessage('Exception'),
-                    'error' => $e->getMessage()
-                ],
-                500
-            );
-        }
-    }
-
-    public function delete(ClientDeleteRequest $request)
-    {
-        try {
-            $client = Client::withTrashed()->findOrFail($request->input('id'))->delete();
-            return $this->successResponse(
-                $client,
-                'El cliente fue eliminado exitosamente.',
-                204
-            );
-        } catch (ModelNotFoundException $e) {
-            return $this->errorResponse(
-                [
-                    'message' => $this->getMessage('ModelNotFoundException'),
-                    'error' => $e->getMessage()
-                ],
-                404
-            );
-        } catch (Exception $e) {
-            return $this->errorResponse(
-                [
-                    'message' => $this->getMessage('Exception'),
-                    'error' => $e->getMessage()
-                ],
-                500
-            );
-        }
-    }
-
-    public function restore(ClientRestoreRequest $request)
-    {
-        try {
-            $client = Client::withTrashed()->findOrFail($request->input('id'))->restore();
-            return $this->successResponse(
-                $client,
-                'El cliente fue restaurado exitosamente.',
+                $personReference,
+                'La referencia personal fue restaurado exitosamente.',
                 204
             );
         } catch (ModelNotFoundException $e) {

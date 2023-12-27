@@ -31,6 +31,7 @@ return new class extends Migration
             $table->foreign('person_id')->references('id')->on('people')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('document_type_id')->references('id')->on('document_types')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

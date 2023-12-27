@@ -16,27 +16,27 @@ class ClientBranchIndexQueryCollection extends ResourceCollection
     public function toArray($request)
     {
         return [
-            'clients' => $this->collection->map(function ($clients) {
+            'clientBranches' => $this->collection->map(function ($clientBranch) {
                 return [
-                    'id' => $clients->id,
-                    'client_id' => $clients->client_id,
-                    'client' => $clients->client,
-                    'code' => $clients->code,
-                    'country_id' => $clients->country_id,
-                    'country' => $clients->country->name,
-                    'departament_id' => $clients->departament_id,
-                    'departament' => $clients->departament->name,
-                    'city_id' => $clients->city_id,
-                    'city' => $clients->city->name,
-                    'address' => $clients->address,
-                    'neighbourhood' => $clients->neighbourhood,
-                    'description' => $clients->description,
-                    'email' => $clients->email,
-                    'telephone_number_first' => $clients->telephone_number_first,
-                    'telephone_number_second' => $clients->telephone_number_second,
-                    'created_at' => $this->formatDate($clients->created_at),
-                    'updated_at' => $this->formatDate($clients->updated_at),
-                    'deleted_at' => $clients->deleted_at
+                    'id' => $clientBranch->id,
+                    'client_id' => $clientBranch->client_id,
+                    'client' => $clientBranch->client,
+                    'code' => $clientBranch->code,
+                    'country_id' => $clientBranch->country_id,
+                    'country' => $clientBranch->country->name,
+                    'departament_id' => $clientBranch->departament_id,
+                    'departament' => $clientBranch->departament->name,
+                    'city_id' => $clientBranch->city_id,
+                    'city' => $clientBranch->city->name,
+                    'address' => $clientBranch->address,
+                    'neighbourhood' => $clientBranch->neighbourhood,
+                    'description' => $clientBranch->description,
+                    'email' => $clientBranch->email,
+                    'telephone_number_first' => $clientBranch->telephone_number_first,
+                    'telephone_number_second' => $clientBranch->telephone_number_second,
+                    'created_at' => $this->formatDate($clientBranch->created_at),
+                    'updated_at' => $this->formatDate($clientBranch->updated_at),
+                    'deleted_at' => $clientBranch->deleted_at
                 ];
             }),
             'meta' => [
