@@ -6,13 +6,25 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Spatie\Permission\Models\Permission;
+use OwenIt\Auditing\Contracts\Auditable;
+use OwenIt\Auditing\Auditable as AuditableModel;
 
-class Submodule extends Model
+class Submodule extends Model implements Auditable
 {
     use HasFactory;
-    
+    use AuditableModel;
+
     protected $table = 'submodules';
     protected $fillable = [
+        'name',
+        'type',
+        'url',
+        'icon',
+        'module_id',
+        'permission_id'
+    ];
+
+    protected $auditInclude = [
         'name',
         'type',
         'url',

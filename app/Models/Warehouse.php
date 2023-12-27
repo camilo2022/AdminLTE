@@ -7,14 +7,23 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use OwenIt\Auditing\Contracts\Auditable;
+use OwenIt\Auditing\Auditable as AuditableModel;
 
-class Warehouse extends Model
+class Warehouse extends Model implements Auditable
 {
     use HasFactory;
     use SoftDeletes;
-    
+    use AuditableModel;
+
     protected $table = 'warehouses';
     protected $fillable = [
+        'name',
+        'code',
+        'description'
+    ];
+
+    protected $auditInclude = [
         'name',
         'code',
         'description'

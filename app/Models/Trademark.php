@@ -6,14 +6,24 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use OwenIt\Auditing\Contracts\Auditable;
+use OwenIt\Auditing\Auditable as AuditableModel;
 
-class Trademark extends Model
+class Trademark extends Model implements Auditable
 {
     use HasFactory;
     use SoftDeletes;
-    protected $table = 'trademarks';
+    use AuditableModel;
 
+    protected $table = 'trademarks';
     protected $fillable = [
+        'name',
+        'code',
+        'description',
+        'logo'
+    ];
+
+    protected $auditInclude = [
         'name',
         'code',
         'description',
@@ -24,7 +34,7 @@ class Trademark extends Model
     {
         return $this->hasMany(Product::class, 'trademark_id');
     }
-    
+
     public function scopeSearch($query, $search)
     {
         return $query->where('name', 'like', '%' . $search . '%')

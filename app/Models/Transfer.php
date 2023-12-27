@@ -8,14 +8,30 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
+use OwenIt\Auditing\Contracts\Auditable;
+use OwenIt\Auditing\Auditable as AuditableModel;
 
-class Transfer extends Model
+class Transfer extends Model implements Auditable
 {
     use HasFactory;
     use SoftDeletes;
+    use AuditableModel;
 
     protected $table = 'transfers';
     protected $fillable = [
+        'consecutive',
+        'from_warehouse_id',
+        'from_user_id',
+        'form_date',
+        'from_observation',
+        'to_warehouse_id',
+        'to_user_id',
+        'to_date',
+        'to_observation',
+        'status'
+    ];
+
+    protected $auditInclude = [
         'consecutive',
         'from_warehouse_id',
         'from_user_id',

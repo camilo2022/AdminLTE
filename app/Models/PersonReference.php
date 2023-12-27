@@ -6,14 +6,33 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use OwenIt\Auditing\Contracts\Auditable;
+use OwenIt\Auditing\Auditable as AuditableModel;
 
-class PersonReference extends Model
+class PersonReference extends Model implements Auditable
 {
     use HasFactory;
     use SoftDeletes;
+    use AuditableModel;
 
     protected $table = 'people_references';
     protected $fillable = [
+        'person_id',
+        'name',
+        'last_name',
+        'document_type_id',
+        'document_number',
+        'country_id',
+        'departament_id',
+        'city_id',
+        'address',
+        'neighborhood',
+        'email',
+        'telephone_number_first',
+        'telephone_number_second',
+    ];
+
+    protected $auditInclude = [
         'person_id',
         'name',
         'last_name',

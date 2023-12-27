@@ -6,14 +6,23 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model as DBModel;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use OwenIt\Auditing\Contracts\Auditable;
+use OwenIt\Auditing\Auditable as AuditableModel;
 
-class Model extends DBModel
+class Model extends DBModel implements Auditable
 {
     use HasFactory;
     use SoftDeletes;
-    protected $table = 'models';
+    use AuditableModel;
 
+    protected $table = 'models';
     protected $fillable = [
+        'name',
+        'code',
+        'description'
+    ];
+
+    protected $auditInclude = [
         'name',
         'code',
         'description'

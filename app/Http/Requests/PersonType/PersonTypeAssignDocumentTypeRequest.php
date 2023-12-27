@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class PersonTypeDeleteRequest extends FormRequest
+class PersonTypeAssignDocumentTypeRequest extends FormRequest
 {
     protected function failedValidation(Validator $validator)
     {
@@ -24,15 +24,18 @@ class PersonTypeDeleteRequest extends FormRequest
     public function rules()
     {
         return [
-            'id' => ['required', 'exists:person_types,id'],
+            'person_type_id' => ['required', 'exists:person_types,id'],
+            'document_type_id' => ['required', 'exists:document_types,id'],
         ];
     }
 
     public function messages()
     {
         return [
-            'id.required' => 'El Identificador del tipo de persona es requerido.',
-            'id.exists' => 'El Identificador del tipo de persona no es válido.',
+            'person_type_id.required' => 'El Identificador del tipo de persona es requerido.',
+            'person_type_id.exists' => 'El Identificador del tipo de persona no es valido.',
+            'document_type_id.required' => 'El Identificador del tipo de documento es requerido.',
+            'document_type_id.exists' => 'El Identificador del tipo de documento no es valido.',
         ];
     }
 }

@@ -39,7 +39,7 @@ class UserUpdateRequest extends FormRequest
             'email' => 'required|string|email|max:255|unique:users,email,' . $this->route('id'),
             'area_id' => ['required', 'exists:areas,id'],
             'charge_id' => ['required', 'exists:charges,id'],
-            'area_charge' => ['exists:charges,id,charge_id,' . $this->input('charge_id')],
+            'area_charge' => ['exists:charges,id,area_id,' . $this->input('area_id')],
         ];
     }
 
@@ -54,7 +54,7 @@ class UserUpdateRequest extends FormRequest
             'min' => 'El campo :attribute debe tener al menos :min caracteres.',
             'size' => 'El campo :attribute debe tener :size caracteres.',
             'exists' => 'El campo :attribute no es valido.',
-            'country_departament.exists' => 'El cargo no pertenece al area seleccionada.',
+            'area_charge.exists' => 'El cargo no pertenece al area seleccionada.',
         ];
     }
 

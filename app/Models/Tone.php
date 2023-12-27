@@ -6,14 +6,21 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use OwenIt\Auditing\Contracts\Auditable;
+use OwenIt\Auditing\Auditable as AuditableModel;
 
-class Tone extends Model
+class Tone extends Model implements Auditable
 {
     use HasFactory;
     use SoftDeletes;
-    protected $table = 'tones';
+    use AuditableModel;
 
+    protected $table = 'tones';
     protected $fillable = [
+        'name',
+    ];
+
+    protected $auditInclude = [
         'name',
     ];
 

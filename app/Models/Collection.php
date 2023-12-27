@@ -6,16 +6,24 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use OwenIt\Auditing\Contracts\Auditable;
+use OwenIt\Auditing\Auditable as AuditableModel;
 
-class Collection extends Model
+class Collection extends Model implements Auditable
 {
     use HasFactory;
     use SoftDeletes;
-    
+    use AuditableModel;
+
     protected $table = 'collections';
     protected $fillable = [
         'name',
         'code',
+    ];
+
+    protected $auditInclude = [
+        'name',
+        'code'
     ];
 
     public function products() : HasMany

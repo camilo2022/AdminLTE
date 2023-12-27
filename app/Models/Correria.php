@@ -6,14 +6,24 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use OwenIt\Auditing\Contracts\Auditable;
+use OwenIt\Auditing\Auditable as AuditableModel;
 
-class Correria extends Model
+class Correria extends Model implements Auditable
 {
     use HasFactory;
     use SoftDeletes;
-    protected $table = 'correrias';
+    use AuditableModel;
 
+    protected $table = 'correrias';
     protected $fillable = [
+        'name',
+        'code',
+        'start_date',
+        'end_date'
+    ];
+
+    protected $auditInclude = [
         'name',
         'code',
         'start_date',

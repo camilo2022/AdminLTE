@@ -2,13 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PersonType\PersonTypeAssignDocumentTypeRequest;
 use App\Http\Requests\PersonType\PersonTypeDeleteRequest;
 use App\Http\Requests\PersonType\PersonTypeIndexQueryRequest;
+use App\Http\Requests\PersonType\PersonTypeRemoveDocumentTypeRequest;
 use App\Http\Requests\PersonType\PersonTypeRestoreRequest;
 use App\Http\Requests\PersonType\PersonTypeStoreRequest;
 use App\Http\Requests\PersonType\PersonTypeUpdateRequest;
 use App\Http\Resources\PersonType\PersonTypeIndexQueryCollection;
+use App\Models\DocumentType;
 use App\Models\PersonType;
+use App\Models\PersonTypeDocumentType;
 use App\Traits\ApiMessage;
 use App\Traits\ApiResponser;
 use Carbon\Carbon;
@@ -198,6 +202,130 @@ class PersonTypeController extends Controller
                 500
             );
         } catch (Exception $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('Exception'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        }
+    }
+
+    public function show($id)
+    {
+        try {
+            $documentTypes = DocumentType::with('person_types')->get();
+            $personType = PersonType::findOrFail($id);
+
+            foreach ($documentTypes as $documentType) {
+                $personTypesId = $documentType->person_types->pluck('id')->all();
+                $documentType->merge([
+                    'admin' => in_array($id, $personTypesId)
+                ]);
+            }
+
+            return $this->successResponse(
+                [
+                    'personType' => $personType,
+                    'documentTypes' => $documentTypes
+                ],
+                'El tipo de persona fue encontrado exitosamente.',
+                204
+            );
+        } catch (ModelNotFoundException $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('ModelNotFoundException'),
+                    'error' => $e->getMessage()
+                ],
+                404
+            );
+        } catch (Exception $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('Exception'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        }
+    }
+
+    public function assignDocumentType(PersonTypeAssignDocumentTypeRequest $request)
+    {
+        try {
+            $personType_documentTypes = new PersonTypeDocumentType();
+            $personType_documentTypes->person_type_id = $request->input('person_type_id');
+            $personType_documentTypes->document_type_id = $request->input('document_type_id');
+            $personType_documentTypes->save();
+
+            return $this->successResponse(
+                $personType_documentTypes,
+                'Tipo de documento asignado exitosamente.',
+                200
+            );
+        } catch (ModelNotFoundException $e) {
+            // Manejar la excepción de la base de datos
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('ModelNotFoundException'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        } catch (QueryException $e) {
+            // Manejar la excepción de la base de datos
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('QueryException'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        } catch (Exception $e) {
+            // Devolver una respuesta de error en caso de excepción
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('Exception'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        }
+    }
+
+    public function removeDocumentType(PersonTypeRemoveDocumentTypeRequest $request)
+    {
+        try {
+            $personType_documentTypes = PersonTypeDocumentType::where('person_type_id', '=', $request->input('person_type_id'))
+            ->where('document_type_id', '=', $request->input('document_type_id'))->delete();
+
+            return $this->successResponse(
+                $personType_documentTypes,
+                'Tipo de documento removido exitosamente.',
+                200
+            );
+        } catch (ModelNotFoundException $e) {
+            // Manejar la excepción de la base de datos
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('ModelNotFoundException'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        } catch (QueryException $e) {
+            // Manejar la excepción de la base de datos
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('QueryException'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        } catch (Exception $e) {
+            // Devolver una respuesta de error en caso de excepción
             return $this->errorResponse(
                 [
                     'message' => $this->getMessage('Exception'),

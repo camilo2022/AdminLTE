@@ -8,14 +8,8 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 
 class PersonTypeStoreRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
     protected function failedValidation(Validator $validator)
     {
-        // Lanzar una excepción de validación con los errores de validación obtenidos
         throw new HttpResponseException(response()->json([
             'message' => 'Error de validación.',
             'errors' => $validator->errors()
@@ -24,32 +18,22 @@ class PersonTypeStoreRequest extends FormRequest
 
     protected function prepareForValidation()
     {
-        $this->request->set('require_references', $this->input('departament_id') == 'true');
+        $this->request->set('require_people', $this->input('require_people') == 'true');
     }
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
+
     public function authorize()
     {
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, mixed>
-     */
     public function rules()
     {
         return [
             'name' => ['required', 'string', 'unique:person_types,name', 'max:255'],
             'code' => ['required', 'string', 'unique:person_types,code', 'max:255'],
-            'require_references' => ['required', 'boolean']
+            'require_people' => ['required', 'boolean']
         ];
     }
-
 
     public function messages()
     {
@@ -62,8 +46,8 @@ class PersonTypeStoreRequest extends FormRequest
             'code.string' => 'El campo Codigo del tipo de Persona debe ser una cadena de texto.',
             'code.unique' => 'El campo Codigo del tipo de Persona ya existe en la base de datos.',
             'code.max' => 'El campo Codigo del tipo de Persona no debe exceder los 255 caracteres.',
-            'require_references.required' => 'El campo Referencias del tipo de Persona es requerido.',
-            'require_references.boolean' => 'El campo Referencias del tipo de Persona debe ser true o false.',
+            'require_people.required' => 'El campo Referencias del tipo de Persona es requerido.',
+            'require_people.boolean' => 'El campo Referencias del tipo de Persona debe ser true o false.',
         ];
     }
 }

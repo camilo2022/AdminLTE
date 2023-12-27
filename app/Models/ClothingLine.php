@@ -6,14 +6,23 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use OwenIt\Auditing\Contracts\Auditable;
+use OwenIt\Auditing\Auditable as AuditableModel;
 
-class ClothingLine extends Model
+class ClothingLine extends Model implements Auditable
 {
     use HasFactory;
     use SoftDeletes;
-    protected $table = 'clothing_lines';
+    use AuditableModel;
 
+    protected $table = 'clothing_lines';
     protected $fillable = [
+        'name',
+        'code',
+        'description'
+    ];
+
+    protected $auditInclude = [
         'name',
         'code',
         'description'

@@ -6,14 +6,27 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use OwenIt\Auditing\Contracts\Auditable;
+use OwenIt\Auditing\Auditable as AuditableModel;
 
-class TransferDetail extends Model
+class TransferDetail extends Model implements Auditable
 {
     use HasFactory;
     use SoftDeletes;
+    use AuditableModel;
 
     protected $table = 'transfer_details';
     protected $fillable = [
+        'transfer_id',
+        'product_id',
+        'size_id',
+        'color_id',
+        'tone_id',
+        'quantity',
+        'status'
+    ];
+
+    protected $auditInclude = [
         'transfer_id',
         'product_id',
         'size_id',

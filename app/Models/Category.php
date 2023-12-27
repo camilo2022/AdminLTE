@@ -7,14 +7,24 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use OwenIt\Auditing\Contracts\Auditable;
+use OwenIt\Auditing\Auditable as AuditableModel;
 
-class Category extends Model
+class Category extends Model implements Auditable
 {
     use HasFactory;
     use SoftDeletes;
-    protected $table = 'categories';
+    use AuditableModel;
 
+    protected $table = 'categories';
     protected $fillable = [
+        'clothing_line_id',
+        'name',
+        'code',
+        'description'
+    ];
+
+    protected $auditInclude = [
         'clothing_line_id',
         'name',
         'code',
@@ -52,7 +62,7 @@ class Category extends Model
                 ->orWhere('code', 'like', '%' . $search . '%')
                 ->orWhere('description', 'like', '%' . $search . '%');
             }
-        ); 
+        );
     }
 
     public function scopeFilterByDate($query, $start_date, $end_date)

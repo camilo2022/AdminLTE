@@ -7,13 +7,24 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use OwenIt\Auditing\Contracts\Auditable;
+use OwenIt\Auditing\Auditable as AuditableModel;
 
-class OrderDispatch extends Model
+class OrderDispatch extends Model implements Auditable
 {
     use HasFactory;
-    protected $table = 'order_dispatches';
+    use AuditableModel;
 
+    protected $table = 'order_dispatches';
     protected $fillable = [
+        'order_id',
+        'dispatch_user_id',
+        'dispatch_status',
+        'dispatched_date',
+        'consecutive'
+    ];
+
+    protected $auditInclude = [
         'order_id',
         'dispatch_user_id',
         'dispatch_status',

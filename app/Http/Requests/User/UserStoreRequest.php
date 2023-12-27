@@ -41,7 +41,7 @@ class UserStoreRequest extends FormRequest
             'password_confirmation' => ['required', 'string', 'min:6', new Equals($this->input('password_confirmation'), $this->input('password'), 'Contraseña')],
             'area_id' => ['required', 'exists:areas,id'],
             'charge_id' => ['required', 'exists:charges,id'],
-            'area_charge' => ['exists:charges,id,charge_id,' . $this->input('charge_id')],
+            'area_charge' => ['exists:charges,id,area_id,' . $this->input('area_id')],
         ];
     }
 
@@ -57,7 +57,7 @@ class UserStoreRequest extends FormRequest
             'size' => 'El campo :attribute debe tener :size caracteres.',
             'exists' => 'El campo :attribute no es valido.',
             'confirmed' => 'El campo :attribute no coincide con la confirmación de contraseña.',
-            'country_departament.exists' => 'El cargo no pertenece al area seleccionada.',
+            'area_charge.exists' => 'El cargo no pertenece al area seleccionada.',
         ];
     }
 

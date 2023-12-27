@@ -160,6 +160,9 @@ class RolesAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Dashboard.PackageTypes.Store'])->syncRoles([$PackageTypes]);
         Permission::create(['name' => 'Dashboard.PackageTypes.Edit'])->syncRoles([$PackageTypes]);
         Permission::create(['name' => 'Dashboard.PackageTypes.Update'])->syncRoles([$PackageTypes]);
+        Permission::create(['name' => 'Dashboard.PackageTypes.Show'])->syncRoles([$PackageTypes]);
+        Permission::create(['name' => 'Dashboard.PackageTypes.AssignDocumentType'])->syncRoles([$PackageTypes]);
+        Permission::create(['name' => 'Dashboard.PackageTypes.RemoveDocumentType'])->syncRoles([$PackageTypes]);
         Permission::create(['name' => 'Dashboard.PackageTypes.Delete'])->syncRoles([$PackageTypes]);
         Permission::create(['name' => 'Dashboard.PackageTypes.Restore'])->syncRoles([$PackageTypes]);
 

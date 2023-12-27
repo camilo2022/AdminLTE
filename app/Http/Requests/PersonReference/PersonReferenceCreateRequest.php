@@ -30,7 +30,6 @@ class PersonReferenceCreateRequest extends FormRequest
         ];
     }
 
-
     public function messages()
     {
         return [

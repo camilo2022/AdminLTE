@@ -8,5 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class ViewReportDispatch extends Model
 {
     use HasFactory;
+
     protected $view = 'view_report_dispatches';
 }

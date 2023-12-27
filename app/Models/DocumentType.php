@@ -4,18 +4,32 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use OwenIt\Auditing\Contracts\Auditable;
+use OwenIt\Auditing\Auditable as AuditableModel;
 
-class DocumentType extends Model
+class DocumentType extends Model implements Auditable
 {
     use HasFactory;
     use SoftDeletes;
-    
+    use AuditableModel;
+
     protected $table = 'document_types';
     protected $fillable = [
         'name',
         'code',
     ];
+
+    protected $auditInclude = [
+        'name',
+        'code'
+    ];
+
+    public function person_types() : BelongsToMany
+    {
+        return $this->belongsToMany(PersonType::class, 'person_type_document_types', 'document_type_id', 'person_type_id');
+    }
 
     public function scopeSearch($query, $search)
     {

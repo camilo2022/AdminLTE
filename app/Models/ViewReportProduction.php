@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Schema;
 class ViewReportProduction extends Model
 {
     use HasFactory;
+    
     protected $view = 'view_report_productions';
 
     public function scopeSearch($query, $search)
@@ -24,16 +25,6 @@ class ViewReportProduction extends Model
 
         return $query;
     }
-
-    /* (object) [
-        'order_id' => (object) [
-            'value' => [(string), (array), (object), (integer), (float), (null)],
-            'operator', (object) [
-                'logic' => [(and), (or)],
-                'query' => [(=), (!=), ($like), (like%), (%like%), (null), (notNull), (=), (=), ]
-            ]
-        ];
-    ]; */
 
     public function scopeFilterByColumnDinamic($query, $queryColumns)
     {

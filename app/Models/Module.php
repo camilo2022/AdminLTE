@@ -4,20 +4,28 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
+use OwenIt\Auditing\Contracts\Auditable;
+use OwenIt\Auditing\Auditable as AuditableModel;
 
-class Module extends Model
+class Module extends Model implements Auditable
 {
     use HasFactory;
     use HasRoles;
+    use AuditableModel;
 
     protected $table = 'modules';
     protected $guard_name = 'item';
     protected $fillable = [
+        'name',
+        'type',
+        'icon'
+    ];
+
+    protected $auditInclude = [
         'name',
         'type',
         'icon'
@@ -65,7 +73,7 @@ class Module extends Model
         // Filtro por rango de fechas entre 'start_date' y 'end_date' en el campo 'created_at'
         return $query->whereBetween('created_at', [$start_date, $end_date]);
     }
- 
+
     /* public function syncRoles($roles)
     {
         $this->roles()->sync($roles);

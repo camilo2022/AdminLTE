@@ -5,13 +5,25 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use OwenIt\Auditing\Contracts\Auditable;
+use OwenIt\Auditing\Auditable as AuditableModel;
 
-class Inventory extends Model
+class Inventory extends Model implements Auditable
 {
     use HasFactory;
-    protected $table = 'inventories';
+    use AuditableModel;
 
+    protected $table = 'inventories';
     protected $fillable = [
+        'product_id',
+        'size_id',
+        'warehouse_id',
+        'color_id',
+        'tone_id',
+        'quantity'
+    ];
+
+    protected $auditInclude = [
         'product_id',
         'size_id',
         'warehouse_id',

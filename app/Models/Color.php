@@ -6,17 +6,26 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use OwenIt\Auditing\Contracts\Auditable;
+use OwenIt\Auditing\Auditable as AuditableModel;
 
-class Color extends Model
+class Color extends Model implements Auditable
 {
     use HasFactory;
     use SoftDeletes;
-    protected $table = 'colors';
+    use AuditableModel;
 
+    protected $table = 'colors';
     protected $fillable = [
         'name',
         'code',
         'value',
+    ];
+
+    protected $auditInclude = [
+        'name',
+        'code',
+        'value'
     ];
 
     public function products() : BelongsToMany

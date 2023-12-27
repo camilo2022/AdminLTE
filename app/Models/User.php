@@ -10,16 +10,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Auth\Passwords\CanResetPassword as CanResetPasswordTrait;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use OwenIt\Auditing\Contracts\Auditable;
+use OwenIt\Auditing\Auditable as AuditableModel;
 
-class User extends Authenticatable
+class User extends Authenticatable implements Auditable
 {
-    use HasFactory, Notifiable, HasRoles, SoftDeletes, CanResetPasswordTrait;
+    use HasFactory, Notifiable, HasRoles, SoftDeletes, CanResetPasswordTrait, AuditableModel;
+
     protected $table = 'users';
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
         'name',
         'last_name',
@@ -32,23 +30,25 @@ class User extends Authenticatable
         'password'
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
     protected $casts = [
         'email_verified_at' => 'datetime',
+    ];
+
+    protected $auditInclude = [
+        'name',
+        'last_name',
+        'document_number',
+        'phone_number',
+        'address',
+        'area_id',
+        'charge_id',
+        'email',
+        'password'
     ];
 
     public function area() : BelongsTo

@@ -14,7 +14,7 @@ use OwenIt\Auditing\Auditable as AuditableModel;
 class Product extends DBModel implements Auditable
 {
     use HasFactory;
-    use SoftDeletes;    
+    use SoftDeletes;
     use AuditableModel;
 
     protected $table = 'products';

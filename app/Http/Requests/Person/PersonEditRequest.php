@@ -30,7 +30,6 @@ class PersonEditRequest extends FormRequest
         ];
     }
 
-
     public function messages()
     {
         return [

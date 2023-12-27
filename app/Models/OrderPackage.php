@@ -6,13 +6,24 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use OwenIt\Auditing\Contracts\Auditable;
+use OwenIt\Auditing\Auditable as AuditableModel;
 
-class OrderPackage extends Model
+class OrderPackage extends Model implements Auditable
 {
     use HasFactory;
-    protected $table = 'order_packages';
+    use AuditableModel;
 
+    protected $table = 'order_packages';
     protected $fillable = [
+        'order_packing_id',
+        'package_id',
+        'weight',
+        'package_status',
+        'package_date',
+    ];
+
+    protected $auditInclude = [
         'order_packing_id',
         'package_id',
         'weight',

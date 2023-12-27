@@ -228,7 +228,7 @@ class WarehouseController extends Controller
             }
 
             return $this->successResponse(
-                (object) [
+                [
                     'warehouse' => $warehouse,
                     'admins' => $users
                 ],
@@ -257,13 +257,13 @@ class WarehouseController extends Controller
     public function assignGestor(WarehouseAssignGestorRequest $request)
     {
         try {
-            $warehouse_has_users = new WarehouseUser();
-            $warehouse_has_users->user_id = $request->input('user_id');
-            $warehouse_has_users->warehouse_id = $request->input('warehouse_id');
-            $warehouse_has_users->save();
+            $warehouse_users = new WarehouseUser();
+            $warehouse_users->user_id = $request->input('user_id');
+            $warehouse_users->warehouse_id = $request->input('warehouse_id');
+            $warehouse_users->save();
 
             return $this->successResponse(
-                $warehouse_has_users,
+                $warehouse_users,
                 'Gestor de bodega asignado exitosamente.',
                 200
             );
@@ -300,11 +300,11 @@ class WarehouseController extends Controller
     public function removeGestor(WarehouseRemoveGestorRequest $request)
     {
         try {
-            $warehouse_has_users = WarehouseUser::where('user_id', '=', $request->input('user_id'))
+            $warehouse_users = WarehouseUser::where('user_id', '=', $request->input('user_id'))
             ->where('warehouse_id', '=', $request->input('warehouse_id'))->delete();
 
             return $this->successResponse(
-                $warehouse_has_users,
+                $warehouse_users,
                 'Gestor de bodega removido exitosamente.',
                 200
             );

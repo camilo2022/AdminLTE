@@ -6,14 +6,31 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use OwenIt\Auditing\Contracts\Auditable;
+use OwenIt\Auditing\Auditable as AuditableModel;
 
-class ClientBranch extends Model
+class ClientBranch extends Model implements Auditable
 {
     use HasFactory;
     use SoftDeletes;
+    use AuditableModel;
 
     protected $table = 'client_branches';
     protected $fillable = [
+        'client_id',
+        'code',
+        'country_id',
+        'departament_id',
+        'city_id',
+        'address',
+        'neighborhood',
+        'description',
+        'email',
+        'telephone_number_first',
+        'telephone_number_second',
+    ];
+
+    protected $auditInclude = [
         'client_id',
         'code',
         'country_id',

@@ -2,15 +2,25 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use OwenIt\Auditing\Contracts\Auditable;
+use OwenIt\Auditing\Auditable as AuditableModel;
 
-class Departament extends Model
+class Departament extends Model implements Auditable
 {
-    protected $table = 'departaments';
+    use HasFactory;
+    use AuditableModel;
 
+    protected $table = 'departaments';
     protected $fillable = [
+        'country_id',
+        'name'
+    ];
+
+    protected $auditInclude = [
         'country_id',
         'name'
     ];

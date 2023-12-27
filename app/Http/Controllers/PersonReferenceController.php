@@ -13,6 +13,7 @@ use App\Http\Resources\PersonReference\PersonReferenceIndexQueryCollection;
 use App\Models\City;
 use App\Models\Country;
 use App\Models\Departament;
+use App\Models\DocumentType;
 use App\Models\PersonReference;
 use App\Traits\ApiMessage;
 use App\Traits\ApiResponser;
@@ -122,7 +123,10 @@ class PersonReferenceController extends Controller
             }
 
             return $this->successResponse(
-                Country::all(),
+                [
+                    'countries' => Country::all(),
+                    'document_types' => DocumentType::all()
+                ],
                 'Ingrese los datos para hacer la validacion y registro.',
                 200
             );
@@ -214,6 +218,7 @@ class PersonReferenceController extends Controller
             return $this->successResponse(
                 [
                     'personReferece' => PersonReference::withTrashed()->findOrFail($id),
+                    'document_types' => DocumentType::all(),
                     'countries' => Country::all()
                 ],
                 'La referencia personal fue encontrada exitosamente.',

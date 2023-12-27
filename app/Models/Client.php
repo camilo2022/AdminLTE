@@ -8,14 +8,34 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use OwenIt\Auditing\Contracts\Auditable;
+use OwenIt\Auditing\Auditable as AuditableModel;
 
-class Client extends Model
+class Client extends Model implements Auditable
 {
     use HasFactory;
     use SoftDeletes;
+    use AuditableModel;
 
     protected $table = 'clients';
     protected $fillable = [
+        'name',
+        'person_type_id',
+        'client_type_id',
+        'document_type_id',
+        'document_number',
+        'country_id',
+        'departament_id',
+        'city_id',
+        'address',
+        'neighborhood',
+        'email',
+        'telephone_number_first',
+        'telephone_number_second',
+        'quota'
+    ];
+
+    protected $auditInclude = [
         'name',
         'person_type_id',
         'client_type_id',
