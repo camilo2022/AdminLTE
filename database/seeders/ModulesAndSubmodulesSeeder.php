@@ -84,7 +84,7 @@ class ModulesAndSubmodulesSeeder extends Seeder
             'url' => '/Dashboard/PackageTypes/Index',
             'icon' => 'fas fa-box-open',
             'module_id' => $Administracion->id,
-            'permission_id' => 64
+            'permission_id' => 67
         ]);
 
         Submodule::create([

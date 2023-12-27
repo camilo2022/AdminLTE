@@ -4,6 +4,7 @@ use App\Http\Controllers\AreasAndChargesController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\BusinessController;
 use App\Http\Controllers\CategoriesAndSubcategoriesController;
+use App\Http\Controllers\ClientBranchController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ClientTypeController;
 use App\Http\Controllers\ClothingLineController;
@@ -17,6 +18,8 @@ use App\Http\Controllers\ModelController;
 use App\Http\Controllers\ModulesAndSubmodulesController;
 use App\Http\Controllers\PackageTypeController;
 use App\Http\Controllers\PaymentMethodController;
+use App\Http\Controllers\PersonController;
+use App\Http\Controllers\PersonReferenceController;
 use App\Http\Controllers\PersonTypeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\RolesAndPermissionsController;
@@ -270,11 +273,48 @@ Route::middleware(['auth'])->group(function () {
             Route::put('/Update/{id}', [PersonTypeController::class, 'update'])
             ->middleware('can:Dashboard.PersonTypes.Update')->name('Dashboard.PersonTypes.Update');
 
+            Route::post('/Show/{id}', [PersonTypeController::class, 'show'])
+            ->middleware('can:Dashboard.PersonTypes.Show')->name('Dashboard.PersonTypes.Show');
+
+            Route::post('/AssignDocumentType', [PersonTypeController::class, 'assignDocumentType'])
+            ->middleware('can:Dashboard.PersonTypes.AssignDocumentType')->name('Dashboard.PersonTypes.AssignDocumentType');
+
+            Route::post('/RemoveDocumentType', [PersonTypeController::class, 'removeDocumentType'])
+            ->middleware('can:Dashboard.PersonTypes.RemoveDocumentType')->name('Dashboard.PersonTypes.RemoveDocumentType');
+
             Route::delete('/Delete', [PersonTypeController::class, 'delete'])
             ->middleware('can:Dashboard.PersonTypes.Delete')->name('Dashboard.PersonTypes.Delete');
 
             Route::put('/Restore', [PersonTypeController::class, 'restore'])
             ->middleware('can:Dashboard.PersonTypes.Restore')->name('Dashboard.PersonTypes.Restore');
+
+        });
+
+        Route::prefix('/PackageTypes')->group(function () {
+
+            Route::get('/Index', [PackageTypeController::class, 'index'])
+            ->middleware('can:Dashboard.PackageTypes.Index')->name('Dashboard.PackageTypes.Index');
+
+            Route::post('/Index/Query', [PackageTypeController::class, 'indexQuery'])
+            ->middleware('can:Dashboard.PackageTypes.Index.Query')->name('Dashboard.PackageTypes.Index.Query');
+
+            Route::post('/Create', [PackageTypeController::class, 'create'])
+            ->middleware('can:Dashboard.PackageTypes.Create')->name('Dashboard.PackageTypes.Create');
+
+            Route::post('/Store', [PackageTypeController::class, 'store'])
+            ->middleware('can:Dashboard.PackageTypes.Store')->name('Dashboard.PackageTypes.Store');
+
+            Route::post('/Edit/{id}', [PackageTypeController::class, 'edit'])
+            ->middleware('can:Dashboard.PackageTypes.Edit')->name('Dashboard.PackageTypes.Edit');
+
+            Route::put('/Update/{id}', [PackageTypeController::class, 'update'])
+            ->middleware('can:Dashboard.PackageTypes.Update')->name('Dashboard.PackageTypes.Update');
+
+            Route::delete('/Delete', [PackageTypeController::class, 'delete'])
+            ->middleware('can:Dashboard.PackageTypes.Delete')->name('Dashboard.PackageTypes.Delete');
+
+            Route::put('/Restore', [PackageTypeController::class, 'restore'])
+            ->middleware('can:Dashboard.PackageTypes.Restore')->name('Dashboard.PackageTypes.Restore');
 
         });
 
@@ -331,34 +371,6 @@ Route::middleware(['auth'])->group(function () {
 
             Route::put('/Restore', [PaymentMethodController::class, 'restore'])
             ->middleware('can:Dashboard.PaymentMethods.Restore')->name('Dashboard.PaymentMethods.Restore');
-
-        });
-
-        Route::prefix('/PackageTypes')->group(function () {
-
-            Route::get('/Index', [PackageTypeController::class, 'index'])
-            ->middleware('can:Dashboard.PackageTypes.Index')->name('Dashboard.PackageTypes.Index');
-
-            Route::post('/Index/Query', [PackageTypeController::class, 'indexQuery'])
-            ->middleware('can:Dashboard.PackageTypes.Index.Query')->name('Dashboard.PackageTypes.Index.Query');
-
-            Route::post('/Create', [PackageTypeController::class, 'create'])
-            ->middleware('can:Dashboard.PackageTypes.Create')->name('Dashboard.PackageTypes.Create');
-
-            Route::post('/Store', [PackageTypeController::class, 'store'])
-            ->middleware('can:Dashboard.PackageTypes.Store')->name('Dashboard.PackageTypes.Store');
-
-            Route::post('/Edit/{id}', [PackageTypeController::class, 'edit'])
-            ->middleware('can:Dashboard.PackageTypes.Edit')->name('Dashboard.PackageTypes.Edit');
-
-            Route::put('/Update/{id}', [PackageTypeController::class, 'update'])
-            ->middleware('can:Dashboard.PackageTypes.Update')->name('Dashboard.PackageTypes.Update');
-
-            Route::delete('/Delete', [PackageTypeController::class, 'delete'])
-            ->middleware('can:Dashboard.PackageTypes.Delete')->name('Dashboard.PackageTypes.Delete');
-
-            Route::put('/Restore', [PackageTypeController::class, 'restore'])
-            ->middleware('can:Dashboard.PackageTypes.Restore')->name('Dashboard.PackageTypes.Restore');
 
         });
 
@@ -872,37 +884,80 @@ Route::middleware(['auth'])->group(function () {
             Route::put('/Restore', [ClientController::class, 'restore'])
             ->middleware('can:Dashboard.Clients.Restore')->name('Dashboard.Clients.Restore');
 
-            Route::prefix('/Details')->group(function () {
+            Route::prefix('/Branches')->group(function () {
 
-                Route::post('/Index', [TransferDetailController::class, 'index'])
-                ->middleware('can:Dashboard.Clients.Details.Index')->name('Dashboard.Clients.Details.Index');
+                Route::post('/Index', [ClientBranchController::class, 'index'])
+                ->middleware('can:Dashboard.Clients.Branches.Index')->name('Dashboard.Clients.Branches.Index');
 
-                Route::post('/Index/Query', [TransferDetailController::class, 'indexQuery'])
-                ->middleware('can:Dashboard.Clients.Details.Index.Query')->name('Dashboard.Clients.Details.Index.Query');
+                Route::post('/Index/Query', [ClientBranchController::class, 'indexQuery'])
+                ->middleware('can:Dashboard.Clients.Branches.Index.Query')->name('Dashboard.Clients.Branches.Index.Query');
 
-                Route::post('/Create', [TransferDetailController::class, 'create'])
-                ->middleware('can:Dashboard.Clients.Details.Create')->name('Dashboard.Clients.Details.Create');
+                Route::post('/Create', [ClientBranchController::class, 'create'])
+                ->middleware('can:Dashboard.Clients.Branches.Create')->name('Dashboard.Clients.Branches.Create');
 
-                Route::post('/Store', [TransferDetailController::class, 'store'])
-                ->middleware('can:Dashboard.Clients.Details.Store')->name('Dashboard.Clients.Details.Store');
+                Route::post('/Store', [ClientBranchController::class, 'store'])
+                ->middleware('can:Dashboard.Clients.Branches.Store')->name('Dashboard.Clients.Branches.Store');
 
-                Route::post('/Edit/{id}', [TransferDetailController::class, 'edit'])
-                ->middleware('can:Dashboard.Clients.Details.Edit')->name('Dashboard.Clients.Details.Edit');
+                Route::post('/Edit/{id}', [ClientBranchController::class, 'edit'])
+                ->middleware('can:Dashboard.Clients.Branches.Edit')->name('Dashboard.Clients.Branches.Edit');
 
-                Route::put('/Update/{id}', [TransferDetailController::class, 'update'])
-                ->middleware('can:Dashboard.Clients.Details.Update')->name('Dashboard.Clients.Details.Update');
+                Route::put('/Update/{id}', [ClientBranchController::class, 'update'])
+                ->middleware('can:Dashboard.Clients.Branches.Update')->name('Dashboard.Clients.Branches.Update');
 
-                Route::delete('/Delete', [TransferDetailController::class, 'delete'])
-                ->middleware('can:Dashboard.Clients.Details.Delete')->name('Dashboard.Clients.Details.Delete');
+                Route::delete('/Delete', [ClientBranchController::class, 'delete'])
+                ->middleware('can:Dashboard.Clients.Branches.Delete')->name('Dashboard.Clients.Branches.Delete');
 
-                Route::put('/Pending', [TransferDetailController::class, 'pending'])
-                ->middleware('can:Dashboard.Clients.Details.Pending')->name('Dashboard.Clients.Details.Pending');
+                Route::post('/Restore', [ClientBranchController::class, 'restore'])
+                ->middleware('can:Dashboard.Clients.Branches.Restore')->name('Dashboard.Clients.Branches.Restore');
 
-                Route::put('/Cancel', [TransferDetailController::class, 'cancel'])
-                ->middleware('can:Dashboard.Clients.Details.Cancel')->name('Dashboard.Clients.Details.Cancel');
+            });
+
+            Route::prefix('/People')->group(function () {
+
+                Route::post('/Create', [PersonController::class, 'create'])
+                ->middleware('can:Dashboard.Clients.People.Create')->name('Dashboard.Clients.People.Create');
+
+                Route::post('/Store', [PersonController::class, 'store'])
+                ->middleware('can:Dashboard.Clients.People.Store')->name('Dashboard.Clients.People.Store');
+
+                Route::post('/Edit/{id}', [PersonController::class, 'edit'])
+                ->middleware('can:Dashboard.Clients.People.Edit')->name('Dashboard.Clients.People.Edit');
+
+                Route::put('/Update/{id}', [PersonController::class, 'update'])
+                ->middleware('can:Dashboard.Clients.People.Update')->name('Dashboard.Clients.People.Update');
+
+                Route::prefix('/References')->group(function () {
+
+                    Route::post('/Index', [PersonReferenceController::class, 'index'])
+                    ->middleware('can:Dashboard.Clients.People.References.Index')->name('Dashboard.Clients.People.References.Index');
+
+                    Route::post('/Index/Query', [PersonReferenceController::class, 'indexQuery'])
+                    ->middleware('can:Dashboard.Clients.People.References.Index.Query')->name('Dashboard.Clients.People.References.Index.Query');
+
+                    Route::post('/Create', [PersonReferenceController::class, 'create'])
+                    ->middleware('can:Dashboard.Clients.People.References.Create')->name('Dashboard.Clients.People.References.Create');
+
+                    Route::post('/Store', [PersonReferenceController::class, 'store'])
+                    ->middleware('can:Dashboard.Clients.People.References.Store')->name('Dashboard.Clients.People.References.Store');
+
+                    Route::post('/Edit/{id}', [PersonReferenceController::class, 'edit'])
+                    ->middleware('can:Dashboard.Clients.People.References.Edit')->name('Dashboard.Clients.People.References.Edit');
+
+                    Route::put('/Update/{id}', [PersonReferenceController::class, 'update'])
+                    ->middleware('can:Dashboard.Clients.People.References.Update')->name('Dashboard.Clients.People.References.Update');
+
+                    Route::delete('/Delete', [PersonReferenceController::class, 'delete'])
+                    ->middleware('can:Dashboard.Clients.People.References.Delete')->name('Dashboard.Clients.People.References.Delete');
+
+                    Route::post('/Restore', [PersonReferenceController::class, 'restore'])
+                    ->middleware('can:Dashboard.Clients.People.References.Restore')->name('Dashboard.Clients.People.References.Restore');
+
+                });
 
             });
 
         });
+
     });
+
 });
