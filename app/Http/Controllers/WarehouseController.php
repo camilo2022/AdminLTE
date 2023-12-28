@@ -222,9 +222,7 @@ class WarehouseController extends Controller
 
             foreach ($users as $user) {
                 $warehousesId = $user->warehouses->pluck('id')->all();
-                $user->merge([
-                    'admin' => in_array($id, $warehousesId)
-                ]);
+                $user->admin = in_array($id, $warehousesId);
             }
 
             return $this->successResponse(

@@ -19,6 +19,7 @@ class ClientIndexQueryCollection extends ResourceCollection
             'clients' => $this->collection->map(function ($client) {
                 return [
                     'id' => $client->id,
+                    'person' => $client->person,
                     'name' => $client->name,
                     'person_type_id' => $client->person_type_id,
                     'person_type' => $client->person_type,

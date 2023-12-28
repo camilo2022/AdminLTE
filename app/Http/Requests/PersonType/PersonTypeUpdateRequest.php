@@ -18,7 +18,9 @@ class PersonTypeUpdateRequest extends FormRequest
 
     protected function prepareForValidation()
     {
-        $this->request->set('require_people', $this->input('require_people') == 'true');
+        $this->merge([
+            'require_people' => $this->input('require_people') == 'true',
+        ]);
     }
 
     public function authorize()

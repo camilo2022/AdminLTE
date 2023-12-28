@@ -23,6 +23,13 @@ class WarehouseAssignGestorRequest extends FormRequest
         ], 422));
     }
 
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'warehouse_user' => $this->input('warehouse_id'),
+        ]);
+    }
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -43,6 +50,7 @@ class WarehouseAssignGestorRequest extends FormRequest
         return [
             'user_id' => ['required', 'exists:users,id'],
             'warehouse_id' => ['required', 'exists:warehouses,id'],
+            'warehouse_user' => ['unique:warehouse_users,warehouse_id,NULL,id,user_id,' . $this->input('user_id')]
         ];
     }
 
@@ -53,6 +61,7 @@ class WarehouseAssignGestorRequest extends FormRequest
             'user_id.exists' => 'El Identificador del usuario no es valido.',
             'warehouse_id.required' => 'El Identificador de la bodega es requerido.',
             'warehouse_id.exists' => 'El Identificador de la bodega no es valido.',
+            'warehouse_user.unique' => 'La relacion del Identificador de la bodega y el Identificador del usuario ya ha sido tomado.'
         ];
     }
 }

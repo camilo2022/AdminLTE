@@ -105,7 +105,7 @@ class PersonTypeController extends Controller
             $personType = new PersonType();
             $personType->name = $request->input('name');
             $personType->code = $request->input('code');
-            $personType->require_references = $request->input('require_references');
+            $personType->require_people = $request->input('require_people');
             $personType->save();
 
             return $this->successResponse(
@@ -176,7 +176,7 @@ class PersonTypeController extends Controller
             $personType = PersonType::withTrashed()->findOrFail($id);
             $personType->name = $request->input('name');
             $personType->code = $request->input('code');
-            $personType->require_references = $request->input('require_references');
+            $personType->require_people = $request->input('require_people');
             $personType->save();
 
             return $this->successResponse(
@@ -220,9 +220,7 @@ class PersonTypeController extends Controller
 
             foreach ($documentTypes as $documentType) {
                 $personTypesId = $documentType->person_types->pluck('id')->all();
-                $documentType->merge([
-                    'admin' => in_array($id, $personTypesId)
-                ]);
+                $documentType->admin = in_array($id, $personTypesId);
             }
 
             return $this->successResponse(

@@ -86,7 +86,7 @@
                                             <th>Documento</th>
                                             <th>Telefono</th>
                                             <th>Direccion</th>
-                                            <th>Email</th>
+                                            <th>Correo electronico</th>
                                             <th>Contraseña</th>
                                             <th>Editar</th>
                                             <th>Eliminar</th>

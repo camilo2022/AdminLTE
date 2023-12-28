@@ -21,7 +21,7 @@ class PersonTypeIndexQueryCollection extends ResourceCollection
                     'id' => $personType->id,
                     'name' => $personType->name,
                     'code' => $personType->code,
-                    'require_references' => $personType->require_references,
+                    'require_people' => $personType->require_people,
                     'created_at' => $this->formatDate($personType->created_at),
                     'updated_at' => $this->formatDate($personType->updated_at),
                     'deleted_at' => $personType->deleted_at

@@ -5,13 +5,13 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1 class="m-0 text-dark">Usuarios Inactivos</h1>
+                        <h1 class="m-0 text-dark">Clientes</h1>
                     </div><!-- /.col -->
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item">Dashboard</li>
-                            <li class="breadcrumb-item">Users</li>
-                            <li class="breadcrumb-item">Inactives</li>
+                            <li class="breadcrumb-item">Clients</li>
+                            <li class="breadcrumb-item">Index</li>
                         </ol>
                     </div><!-- /.col -->
                 </div><!-- /.row -->
@@ -53,53 +53,62 @@
                     <div class="card">
                         <div class="card-header p-2">
                             <ul class="nav nav-pills">
-                                <li class="nav-item ml-auto">
-                                    <a class="nav-link" href="/Dashboard/Users/Index" title="Usuarios activos">
-                                        <i class="fas fa-user-check"></i>
-                                    </a>
-                                </li>
                                 <li class="nav-item">
-                                    <a class="nav-link active" href="/Dashboard/Users/Inactives" title="Usuarios inactivos">
-                                        <i class="fas fa-user-xmark"></i>
+                                    <a class="nav-link active" type="button" onclick="CreateClientModal()" title="Agregar cliente.">
+                                        <i class="fas fa-plus"></i>
                                     </a>
                                 </li>
                             </ul>
                         </div>
-
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table id="users" class="table table-bordered table-hover dataTable dtr-inline w-100">
+                                <table id="clients" class="table table-bordered table-hover dataTable dtr-inline nowrap w-100">
                                     <thead class="thead-dark">
                                         <tr>
-                                            <th colspan="7">Información Personal</th>
-                                            <th colspan="1">Gestionar Usuario</th>
-                                        </tr>
-                                        <tr>
                                             <th>#</th>
-                                            <th>Nombres</th>
-                                            <th>Apellidos</th>
-                                            <th>Documento</th>
-                                            <th>Telefono</th>
+                                            <th>Razon social</th>
+                                            <th>Tipo de persona</th>
+                                            <th>Tipo de cliente</th>
+                                            <th>Tipo de documento</th>
+                                            <th>N° documento</th>
+                                            <th>Pais</th>
+                                            <th>Departamento</th>
+                                            <th>Ciudad</th>
                                             <th>Direccion</th>
+                                            <th>Barrio</th>
                                             <th>Correo electronico</th>
-                                            <th>Restaurar</th>
+                                            <th>N° telefono</th>
+                                            <th>N° telefono</th>
+                                            <th>Cupo</th>
+                                            <th>Estado</th>
+                                            <th>Acciones</th>
                                         </tr>
                                     </thead>
-
                                     <tbody>
-
                                     </tbody>
                                 </table>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
         </div>
+        @include('Dashboard.Clients.Create')
+        @include('Dashboard.Clients.Edit')
+        @include('Dashboard.TransferDetails.Create')
+        @include('Dashboard.TransferDetails.Edit')
     </section>
 @endsection
 @section('script')
-    <script src="{{ asset('js/Dashboard/Users/DataTableInactives.js') }}"></script>
-    <script src="{{ asset('js/Dashboard/Users/Restore.js') }}"></script>
+<script src="{{ asset('js/Dashboard/Clients/DataTableIndex.js') }}"></script>
+<script src="{{ asset('js/Dashboard/Transfers/Create.js') }}"></script>
+<script src="{{ asset('js/Dashboard/Transfers/Edit.js') }}"></script>
+<script src="{{ asset('js/Dashboard/Transfers/Delete.js') }}"></script>
+
+<script src="{{ asset('js/Dashboard/TransferDetails/DataTableIndex.js') }}"></script>
+<script src="{{ asset('js/Dashboard/TransferDetails/Create.js') }}"></script>
+<script src="{{ asset('js/Dashboard/TransferDetails/Edit.js') }}"></script>
+<script src="{{ asset('js/Dashboard/TransferDetails/Delete.js') }}"></script>
+<script src="{{ asset('js/Dashboard/TransferDetails/Pending.js') }}"></script>
+<script src="{{ asset('js/Dashboard/TransferDetails/Cancel.js') }}"></script>
 @endsection

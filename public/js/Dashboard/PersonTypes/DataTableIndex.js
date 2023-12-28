@@ -32,7 +32,16 @@ let tablePersonTypes = $('#personTypes').DataTable({
         { data: 'id' },
         { data: 'name' },
         { data: 'code' },
-        { data: 'require_references' },
+        { 
+            data: 'require_people' ,
+            render: function (data, type, row) {
+                if (data === 1) {
+                    return `<h5><span class="badge badge-outline badge-success"><i class="far fa-circle-check mr-2"></i>Requerido</span></h5>`;
+                } else {
+                    return `<h5><span class="badge badge-outline badge-danger"><i class="far fa-circle-xmark mr-2"></i>No requerido</span></h5>`;
+                }
+            }
+        },
         {
             data: 'deleted_at',
             render: function (data, type, row) {
@@ -48,6 +57,11 @@ let tablePersonTypes = $('#personTypes').DataTable({
             render: function (data, type, row) {
                 let btn = `<div class="text-center" style="width: 100px;">`;
                 if (data === null) {
+                    btn += `<a onclick="ShowPersonTypeModal(${row.id})" type="button"
+                    class="btn btn-info btn-sm mr-2" title="Asignar y remover tipos de documentos">
+                        <i class="fas fa-eye text-white"></i>
+                    </a>`;
+
                     btn += `<a onclick="EditPersonTypeModal(${row.id})" type="button"
                     class="btn btn-primary btn-sm mr-2" title="Editar tipo de Persona">
                         <i class="fas fa-pen text-white"></i>

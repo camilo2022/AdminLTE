@@ -16,6 +16,13 @@ class PersonTypeAssignDocumentTypeRequest extends FormRequest
         ], 422));
     }
 
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'person_type_document_type' => $this->input('person_type_id'),
+        ]);
+    }
+
     public function authorize()
     {
         return true;
@@ -26,6 +33,7 @@ class PersonTypeAssignDocumentTypeRequest extends FormRequest
         return [
             'person_type_id' => ['required', 'exists:person_types,id'],
             'document_type_id' => ['required', 'exists:document_types,id'],
+            'person_type_document_type' => ['unique:person_type_document_types,person_type_id,NULL,id,document_type_id,' . $this->input('document_type_id')]
         ];
     }
 
@@ -36,6 +44,7 @@ class PersonTypeAssignDocumentTypeRequest extends FormRequest
             'person_type_id.exists' => 'El Identificador del tipo de persona no es valido.',
             'document_type_id.required' => 'El Identificador del tipo de documento es requerido.',
             'document_type_id.exists' => 'El Identificador del tipo de documento no es valido.',
+            'person_type_document_type.unique' => 'La relacion del Identificador del tipo de persona y el Identificador del tipo de documento ya ha sido tomado.'
         ];
     }
 }

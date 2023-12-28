@@ -84,12 +84,14 @@
         </div>
         @include('Dashboard.PersonTypes.Create')
         @include('Dashboard.PersonTypes.Edit')
+        @include('Dashboard.PersonTypes.Show')
     </section>
 @endsection
 @section('script')
     <script src="{{ asset('js/Dashboard/PersonTypes/DataTableIndex.js') }}"></script>
     <script src="{{ asset('js/Dashboard/PersonTypes/Create.js') }}"></script>
     <script src="{{ asset('js/Dashboard/PersonTypes/Edit.js') }}"></script>
+    <script src="{{ asset('js/Dashboard/PersonTypes/Show.js') }}"></script>
     <script src="{{ asset('js/Dashboard/PersonTypes/Delete.js') }}"></script>
     <script src="{{ asset('js/Dashboard/PersonTypes/Restore.js') }}"></script>
 @endsection
