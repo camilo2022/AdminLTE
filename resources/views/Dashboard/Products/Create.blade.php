@@ -27,7 +27,7 @@
                         <div class="form-group">
                             <label for="clothing_line_id_c">Lineas</label>
                             <div class="input-group">
-                                <select class="form-control select2" id="clothing_line_id_c" name="clothing_line_id" style="width: 87%" onchange="CreateProductsModalClothingLineGetCategory(this)">
+                                <select class="form-control select2" id="clothing_line_id_c" name="clothing_line_id" style="width: 87%" onchange="CreateProductModalClothingLineGetCategory(this)">
                                     <option value="">Seleccione</option>
                                 </select>
                                 <div class="input-group-append">
@@ -40,7 +40,7 @@
                         <div class="form-group">
                             <label for="category_id_c">Categoria</label>
                             <div class="input-group">
-                                <select class="form-control select2" id="category_id_c" name="category_id" style="width: 86%" onchange="CreateProductsModalCategoryGetSubcategory(this)">
+                                <select class="form-control select2" id="category_id_c" name="category_id" style="width: 86%" onchange="CreateProductModalCategoryGetSubcategory(this)">
                                     <option value="">Seleccione</option>
                                 </select>
                                 <div class="input-group-append">
@@ -77,7 +77,7 @@
                                     </span>
                                 </div>
                             </div>
-                        </div>  
+                        </div>
                         <div class="form-group">
                             <label for="correria_id_c">Correria</label>
                             <div class="input-group">
@@ -90,7 +90,7 @@
                                     </span>
                                 </div>
                             </div>
-                        </div>  
+                        </div>
                         <div class="form-group">
                             <label for="model_id_c">Modelo</label>
                             <div class="input-group">

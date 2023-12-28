@@ -1,48 +1,44 @@
-function DeleteClient(id) {
+function RestoreClientBranch(id) {
     Swal.fire({
-        title: '¿Desea eliminar el cliente?',
-        text: 'El cliente será desactivado.',
+        title: '¿Desea restaurar la sucursal?',
+        text: 'La sucursal será restaurada.',
         icon: 'warning',
         showCancelButton: true,
         cancelButtonColor: '#DD6B55',
         confirmButtonColor: '#3085d6',
-        confirmButtonText: 'Si, eliminar!',
-        cancelButtonText: 'No, cancelar!',
+        confirmButtonText: 'Si, restaurar!',
+        cancelButtonText: 'No, cancelar!'
     }).then((result) => {
         if (result.value) {
             $.ajax({
-                url: `/Dashboard/Clients/Delete`,
-                type: 'DELETE',
+                url: '/Dashboard/Clients/Branches/Restore',
+                type: 'PUT',
                 data: {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
                     'id': id
                 },
                 success: function(response) {
-                    tableClients.ajax.reload();
-                    DeleteClientAjaxSuccess(response);
+                    tableClientBranches.ajax.reload();
+                    RestoreClientBranchAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableClients.ajax.reload();
-                    DeleteClientAjaxError(xhr);
+                    tableClientBranches.ajax.reload();
+                    RestoreClientBranchAjaxError(xhr);
                 }
             });
         } else {
-            toastr.info('El cliente seleccionada no fue desactivado.')
+            toastr.info('La sucursal seleccionada no fue restaurado.')
         }
     });
 }
 
-function DeleteClientAjaxSuccess(response) {
+function RestoreClientBranchAjaxSuccess(response) {
     if(response.status === 204) {
         toastr.success(response.message);
     }
-
-    if(response.status === 422) {
-        toastr.warning(response.message);
-    }
 }
 
-function DeleteClientAjaxError(xhr) {
+function RestoreClientBranchAjaxError(xhr) {
     if(xhr.status === 403) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
     }

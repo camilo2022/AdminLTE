@@ -8,11 +8,11 @@ function EditProductModal(id) {
         success: function(response) {
             tableProducts.ajax.reload();
             EditProductModalCleaned(response.data.product);
-            EditProductsModalCorreria(response.data.correrias);
-            EditProductsModalCollection(response.data.collections);
-            EditProductsModalModel(response.data.models);
-            EditProductsModalTrademark(response.data.trademarks);
-            EditProductsModalClothingLine(response.data.clothing_lines);
+            EditProductModalCorreria(response.data.correrias);
+            EditProductModalCollection(response.data.collections);
+            EditProductModalModel(response.data.models);
+            EditProductModalTrademark(response.data.trademarks);
+            EditProductModalClothingLine(response.data.clothing_lines);
             EditProductAjaxSuccess(response);
             $('#EditProductModal').modal('show');
         },
@@ -24,11 +24,11 @@ function EditProductModal(id) {
 }
 
 function EditProductModalCleaned(product) {
-    EditProductsModalResetSelect('collection_id_c');
-    EditProductsModalResetSelect('correria_id_e');
-    EditProductsModalResetSelect('model_id_e');
-    EditProductsModalResetSelect('trademark_id_e');
-    EditProductsModalResetSelect('clothing_line_id_e');
+    EditProductModalResetSelect('collection_id_c');
+    EditProductModalResetSelect('correria_id_e');
+    EditProductModalResetSelect('model_id_e');
+    EditProductModalResetSelect('trademark_id_e');
+    EditProductModalResetSelect('clothing_line_id_e');
     RemoveIsValidClassEditProduct();
     RemoveIsInvalidClassEditProduct();
 
@@ -47,13 +47,13 @@ function EditProductModalCleaned(product) {
     $('#cost_e').val(product.cost);
 }
 
-function EditProductsModalResetSelect(id) {
+function EditProductModalResetSelect(id) {
     $(`#${id}`).html('')
     $(`#${id}`).append(new Option('Seleccione', '', false, false));
     $(`#${id}`).trigger('change');
 }
 
-function EditProductsModalCollection(collections) {
+function EditProductModalCollection(collections) {
     collections.forEach(collection => {
         $('#collection_id_e').append(new Option(collection.name, collection.id, false, false));
     });
@@ -64,7 +64,7 @@ function EditProductsModalCollection(collections) {
     }
 }
 
-function EditProductsModalCorreria(correrias) {
+function EditProductModalCorreria(correrias) {
     correrias.forEach(correria => {
         $('#correria_id_e').append(new Option(correria.name, correria.id, false, false));
     });
@@ -75,7 +75,7 @@ function EditProductsModalCorreria(correrias) {
     }
 }
 
-function EditProductsModalModel(models) {
+function EditProductModalModel(models) {
     models.forEach(model => {
         $('#model_id_e').append(new Option(model.name, model.id, false, false));
     });
@@ -86,7 +86,7 @@ function EditProductsModalModel(models) {
     }
 }
 
-function EditProductsModalTrademark(trademarks) {
+function EditProductModalTrademark(trademarks) {
     trademarks.forEach(trademark => {
         $('#trademark_id_e').append(new Option(trademark.name, trademark.id, false, false));
     });
@@ -97,7 +97,7 @@ function EditProductsModalTrademark(trademarks) {
     }
 }
 
-function EditProductsModalClothingLine(clothing_lines) {
+function EditProductModalClothingLine(clothing_lines) {
     clothing_lines.forEach(clothing_line => {
         $('#clothing_line_id_e').append(new Option(clothing_line.name, clothing_line.id, false, false));
     });
@@ -109,9 +109,9 @@ function EditProductsModalClothingLine(clothing_lines) {
     }
 }
 
-function EditProductsModalClothingLineGetCategory(select) {
+function EditProductModalClothingLineGetCategory(select) {
     if($(select).val() == '') {
-        EditProductsModalResetSelect('category_id_e');
+        EditProductModalResetSelect('category_id_e');
     } else {
         let id = $('#EditProductButton').attr('data-id');
         $.ajax({
@@ -122,17 +122,17 @@ function EditProductsModalClothingLineGetCategory(select) {
                 'clothing_line_id':  $(select).val()
             },
             success: function(response) {
-                EditProductsModalResetSelect('category_id_e');
-                EditProductsModalCategory(response.data);
+                EditProductModalResetSelect('category_id_e');
+                EditProductModalCategory(response.data);
             },
             error: function(xhr, textStatus, errorThrown) {
-                EditProductsAjaxError(xhr);
+                EditProductAjaxError(xhr);
             }
         });
     }
 };
 
-function EditProductsModalCategory(categories) {
+function EditProductModalCategory(categories) {
     categories.forEach(category => {
         $('#category_id_e').append(new Option(category.name, category.id, false, false));
     });
@@ -143,9 +143,9 @@ function EditProductsModalCategory(categories) {
     }
 }
 
-function EditProductsModalCategoryGetSubcategory(select) {
+function EditProductModalCategoryGetSubcategory(select) {
     if($(select).val() == '') {
-        EditProductsModalResetSelect('subcategory_id_e');
+        EditProductModalResetSelect('subcategory_id_e');
     } else {
         let id = $('#EditProductButton').attr('data-id');
         $.ajax({
@@ -156,17 +156,17 @@ function EditProductsModalCategoryGetSubcategory(select) {
                 'category_id':  $(select).val()
             },
             success: function(response) {
-                EditProductsModalResetSelect('subcategory_id_e');
-                EditProductsModalSubcategory(response.data);
+                EditProductModalResetSelect('subcategory_id_e');
+                EditProductModalSubcategory(response.data);
             },
             error: function(xhr, textStatus, errorThrown) {
-                EditProductsAjaxError(xhr);
+                EditProductAjaxError(xhr);
             }
         });
     }
 };
 
-function EditProductsModalSubcategory(subcategories) {
+function EditProductModalSubcategory(subcategories) {
     subcategories.forEach(subcategory => {
         $('#subcategory_id_e').append(new Option(subcategory.name, subcategory.id, false, false));
     });

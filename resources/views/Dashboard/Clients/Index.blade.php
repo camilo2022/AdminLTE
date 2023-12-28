@@ -101,14 +101,18 @@
 @endsection
 @section('script')
 <script src="{{ asset('js/Dashboard/Clients/DataTableIndex.js') }}"></script>
-<script src="{{ asset('js/Dashboard/Transfers/Create.js') }}"></script>
-<script src="{{ asset('js/Dashboard/Transfers/Edit.js') }}"></script>
-<script src="{{ asset('js/Dashboard/Transfers/Delete.js') }}"></script>
+<script src="{{ asset('js/Dashboard/Clients/Create.js') }}"></script>
+<script src="{{ asset('js/Dashboard/Clients/Edit.js') }}"></script>
+<script src="{{ asset('js/Dashboard/Clients/Delete.js') }}"></script>
+<script src="{{ asset('js/Dashboard/Clients/Restore.js') }}"></script>
 
-<script src="{{ asset('js/Dashboard/TransferDetails/DataTableIndex.js') }}"></script>
-<script src="{{ asset('js/Dashboard/TransferDetails/Create.js') }}"></script>
-<script src="{{ asset('js/Dashboard/TransferDetails/Edit.js') }}"></script>
-<script src="{{ asset('js/Dashboard/TransferDetails/Delete.js') }}"></script>
-<script src="{{ asset('js/Dashboard/TransferDetails/Pending.js') }}"></script>
-<script src="{{ asset('js/Dashboard/TransferDetails/Cancel.js') }}"></script>
+<script src="{{ asset('js/Dashboard/ClientBranches/DataTableIndex.js') }}"></script>
+<script src="{{ asset('js/Dashboard/ClientBranches/Index.js') }}"></script>
+<script src="{{ asset('js/Dashboard/ClientBranches/Create.js') }}"></script>
+<script src="{{ asset('js/Dashboard/ClientBranches/Edit.js') }}"></script>
+<script src="{{ asset('js/Dashboard/ClientBranches/Delete.js') }}"></script>
+<script src="{{ asset('js/Dashboard/ClientBranches/Restore.js') }}"></script>
+
+<script src="{{ asset('js/Dashboard/People/Create.js') }}"></script>
+<script src="{{ asset('js/Dashboard/People/Edit.js') }}"></script>
 @endsection

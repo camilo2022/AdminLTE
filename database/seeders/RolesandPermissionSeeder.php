@@ -361,7 +361,9 @@ class RolesAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Dashboard.Clients.Edit'])->syncRoles([$Clients]);
         Permission::create(['name' => 'Dashboard.Clients.Update'])->syncRoles([$Clients]);
         Permission::create(['name' => 'Dashboard.Clients.Show'])->syncRoles([$Clients]);
+        Permission::create(['name' => 'Dashboard.Clients.Show.Query'])->syncRoles([$Clients]);
         Permission::create(['name' => 'Dashboard.Clients.Quota'])->syncRoles([$Clients]);
+        Permission::create(['name' => 'Dashboard.Clients.Quota.Query'])->syncRoles([$Clients]);
         Permission::create(['name' => 'Dashboard.Clients.Delete'])->syncRoles([$Clients]);
         Permission::create(['name' => 'Dashboard.Clients.Restore'])->syncRoles([$Clients]);
         Permission::create(['name' => 'Dashboard.Clients.Branches.Index'])->syncRoles([$Clients]);

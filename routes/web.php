@@ -875,8 +875,14 @@ Route::middleware(['auth'])->group(function () {
             Route::post('/Show/{id}', [ClientController::class, 'show'])
             ->middleware('can:Dashboard.Clients.Show')->name('Dashboard.Clients.Show');
 
-            Route::put('/Quota', [ClientController::class, 'quota'])
+            Route::post('/Show/Query/{id}', [ClientController::class, 'showQuery'])
+            ->middleware('can:Dashboard.Clients.Show.Query')->name('Dashboard.Clients.Show.Query');
+
+            Route::post('/Quota', [ClientController::class, 'quota'])
             ->middleware('can:Dashboard.Clients.Quota')->name('Dashboard.Clients.Quota');
+
+            Route::put('/Quota/Query', [ClientController::class, 'quotaQuery'])
+            ->middleware('can:Dashboard.Clients.Quota.Query')->name('Dashboard.Clients.Quota.Query');
 
             Route::delete('/Delete', [ClientController::class, 'delete'])
             ->middleware('can:Dashboard.Clients.Delete')->name('Dashboard.Clients.Delete');
@@ -907,7 +913,7 @@ Route::middleware(['auth'])->group(function () {
                 Route::delete('/Delete', [ClientBranchController::class, 'delete'])
                 ->middleware('can:Dashboard.Clients.Branches.Delete')->name('Dashboard.Clients.Branches.Delete');
 
-                Route::post('/Restore', [ClientBranchController::class, 'restore'])
+                Route::put('/Restore', [ClientBranchController::class, 'restore'])
                 ->middleware('can:Dashboard.Clients.Branches.Restore')->name('Dashboard.Clients.Branches.Restore');
 
             });
@@ -949,7 +955,7 @@ Route::middleware(['auth'])->group(function () {
                     Route::delete('/Delete', [PersonReferenceController::class, 'delete'])
                     ->middleware('can:Dashboard.Clients.People.References.Delete')->name('Dashboard.Clients.People.References.Delete');
 
-                    Route::post('/Restore', [PersonReferenceController::class, 'restore'])
+                    Route::put('/Restore', [PersonReferenceController::class, 'restore'])
                     ->middleware('can:Dashboard.Clients.People.References.Restore')->name('Dashboard.Clients.People.References.Restore');
 
                 });

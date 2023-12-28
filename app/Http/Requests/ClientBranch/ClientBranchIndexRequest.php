@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Requests\Client;
+namespace App\Http\Requests\ClientBranch;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class ClientQuotaRequest extends FormRequest
+class ClientBranchIndexRequest extends FormRequest
 {
     protected function failedValidation(Validator $validator)
     {
@@ -14,14 +14,6 @@ class ClientQuotaRequest extends FormRequest
             'message' => 'Error de validación.',
             'errors' => $validator->errors()
         ], 422));
-    }
-
-    protected function prepareForValidation()
-    {
-        $this->merge([
-            'country_departament' => $this->input('departament_id'),
-            'departament_city' => $this->input('city_id'),
-        ]);
     }
 
     public function authorize()
@@ -32,15 +24,15 @@ class ClientQuotaRequest extends FormRequest
     public function rules()
     {
         return [
-            'quota' => ['required', 'numeric'],
+            'client_id' => ['required', 'exists:clients,id'],
         ];
     }
 
     public function messages()
     {
         return [
-            'quota.required' => 'El campo Cupo del cliente es requerido.',
-            'quota.string' => 'El campo Cupo del cliente debe ser numerico.',
+            'client_id.required' => 'El Identificador del cliente es requerido.',
+            'client_id.exists' => 'El Identificador del cliente no es válido.',
         ];
     }
 }

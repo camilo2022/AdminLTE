@@ -1,7 +1,7 @@
-function DeleteClient(id) {
+function DeleteClientBranch(id) {
     Swal.fire({
-        title: '¿Desea eliminar el cliente?',
-        text: 'El cliente será desactivado.',
+        title: '¿Desea eliminar la sucursal?',
+        text: 'La sucursal será eliminado.',
         icon: 'warning',
         showCancelButton: true,
         cancelButtonColor: '#DD6B55',
@@ -11,28 +11,28 @@ function DeleteClient(id) {
     }).then((result) => {
         if (result.value) {
             $.ajax({
-                url: `/Dashboard/Clients/Delete`,
+                url: `/Dashboard/Clients/Branches/Delete`,
                 type: 'DELETE',
                 data: {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
                     'id': id
                 },
                 success: function(response) {
-                    tableClients.ajax.reload();
-                    DeleteClientAjaxSuccess(response);
+                    tableClientBranches.ajax.reload();
+                    DeleteClientBranchAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableClients.ajax.reload();
-                    DeleteClientAjaxError(xhr);
+                    tableClientBranches.ajax.reload();
+                    DeleteClientBranchAjaxError(xhr);
                 }
             });
         } else {
-            toastr.info('El cliente seleccionada no fue desactivado.')
+            toastr.info('La sucursal seleccionada no fue eliminado.')
         }
     });
 }
 
-function DeleteClientAjaxSuccess(response) {
+function DeleteClientBranchAjaxSuccess(response) {
     if(response.status === 204) {
         toastr.success(response.message);
     }
@@ -42,7 +42,7 @@ function DeleteClientAjaxSuccess(response) {
     }
 }
 
-function DeleteClientAjaxError(xhr) {
+function DeleteClientBranchAjaxError(xhr) {
     if(xhr.status === 403) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
     }

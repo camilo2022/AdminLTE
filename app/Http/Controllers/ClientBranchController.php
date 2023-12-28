@@ -7,11 +7,13 @@ use App\Http\Requests\ClientBranch\ClientBranchCreateRequest;
 use App\Http\Requests\ClientBranch\ClientBranchDeleteRequest;
 use App\Http\Requests\ClientBranch\ClientBranchEditRequest;
 use App\Http\Requests\ClientBranch\ClientBranchIndexQueryRequest;
+use App\Http\Requests\ClientBranch\ClientBranchIndexRequest;
 use App\Http\Requests\ClientBranch\ClientBranchRestoreRequest;
 use App\Http\Requests\ClientBranch\ClientBranchStoreRequest;
 use App\Http\Requests\ClientBranch\ClientBranchUpdateRequest;
 use App\Http\Resources\ClientBranch\ClientBranchIndexQueryCollection;
 use App\Models\City;
+use App\Models\Client;
 use App\Models\ClientBranch;
 use App\Models\Country;
 use App\Models\Departament;
@@ -27,13 +29,21 @@ class ClientBranchController extends Controller
     use ApiResponser;
     use ApiMessage;
 
-    public function index()
+    public function index(ClientBranchIndexRequest $request)
     {
         try {
             return $this->successResponse(
-                '',
+                Client::withTrashed()->findOrFail($request->input('client_id')),
                 'Cargando registros de las sucursales del cliente.',
                 200
+            );
+        } catch (ModelNotFoundException $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('ModelNotFoundException'),
+                    'error' => $e->getMessage()
+                ],
+                404
             );
         } catch (Exception $e) {
             // Devolver una respuesta de error en caso de excepción
@@ -205,7 +215,7 @@ class ClientBranchController extends Controller
 
             return $this->successResponse(
                 [
-                    'clients' => ClientBranch::withTrashed()->findOrFail($id),
+                    'clientBranch' => ClientBranch::withTrashed()->findOrFail($id),
                     'countries' => Country::all(),
                 ],
                 'La sucursal del cliente fue encontrada exitosamente.',

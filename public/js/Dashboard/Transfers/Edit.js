@@ -68,7 +68,7 @@ function EditTransfersModalFromWarehoseGetToWarehouse(select) {
                 EditTransfersModalToWarehouse(response.data);
             },
             error: function(xhr, textStatus, errorThrown) {
-                EditTransfersAjaxError(xhr);
+                EditTransferAjaxError(xhr);
             }
         });
     }

@@ -8,11 +8,11 @@ function CreateProductModal() {
         success: function(response) {
             tableProducts.ajax.reload();
             CreateProductModalCleaned();
-            CreateProductsModalCorreria(response.data.correrias);
-            CreateProductsModalCollection(response.data.collections);
-            CreateProductsModalModel(response.data.models);
-            CreateProductsModalTrademark(response.data.trademarks);
-            CreateProductsModalClothingLine(response.data.clothing_lines);
+            CreateProductModalCorreria(response.data.correrias);
+            CreateProductModalCollection(response.data.collections);
+            CreateProductModalModel(response.data.models);
+            CreateProductModalTrademark(response.data.trademarks);
+            CreateProductModalClothingLine(response.data.clothing_lines);
             CreateProductAjaxSuccess(response);
             $('#CreateProductModal').modal('show');
         },
@@ -24,11 +24,11 @@ function CreateProductModal() {
 }
 
 function CreateProductModalCleaned() {
-    CreateProductsModalResetSelect('collection_id_c');
-    CreateProductsModalResetSelect('correria_id_c');
-    CreateProductsModalResetSelect('model_id_c');
-    CreateProductsModalResetSelect('trademark_id_c');
-    CreateProductsModalResetSelect('clothing_line_id_c');
+    CreateProductModalResetSelect('collection_id_c');
+    CreateProductModalResetSelect('correria_id_c');
+    CreateProductModalResetSelect('model_id_c');
+    CreateProductModalResetSelect('trademark_id_c');
+    CreateProductModalResetSelect('clothing_line_id_c');
     RemoveIsValidClassCreateProduct();
     RemoveIsInvalidClassCreateProduct();
 
@@ -40,45 +40,45 @@ function CreateProductModalCleaned() {
     $('#photos_c').dropify().data('dropify').init(); */
 }
 
-function CreateProductsModalResetSelect(id) {
+function CreateProductModalResetSelect(id) {
     $(`#${id}`).html('')
     $(`#${id}`).append(new Option('Seleccione', '', false, false));
     $(`#${id}`).trigger('change');
 }
 
-function CreateProductsModalCollection(collections) {
+function CreateProductModalCollection(collections) {
     collections.forEach(collection => {
         $('#collection_id_c').append(new Option(collection.name, collection.id, false, false));
     });
 }
 
-function CreateProductsModalCorreria(correrias) {
+function CreateProductModalCorreria(correrias) {
     correrias.forEach(correria => {
         $('#correria_id_c').append(new Option(correria.name, correria.id, false, false));
     });
 }
 
-function CreateProductsModalModel(models) {
+function CreateProductModalModel(models) {
     models.forEach(model => {
         $('#model_id_c').append(new Option(model.name, model.id, false, false));
     });
 }
 
-function CreateProductsModalTrademark(trademarks) {
+function CreateProductModalTrademark(trademarks) {
     trademarks.forEach(trademark => {
         $('#trademark_id_c').append(new Option(trademark.name, trademark.id, false, false));
     });
 }
 
-function CreateProductsModalClothingLine(clothing_lines) {
+function CreateProductModalClothingLine(clothing_lines) {
     clothing_lines.forEach(clothing_line => {
         $('#clothing_line_id_c').append(new Option(clothing_line.name, clothing_line.id, false, false));
     });
 }
 
-function CreateProductsModalClothingLineGetCategory(select) {
+function CreateProductModalClothingLineGetCategory(select) {
     if($(select).val() == '') {
-        CreateProductsModalResetSelect('category_id_c');
+        CreateProductModalResetSelect('category_id_c');
     } else {
         $.ajax({
             url: `/Dashboard/Products/Create`,
@@ -88,25 +88,25 @@ function CreateProductsModalClothingLineGetCategory(select) {
                 'clothing_line_id':  $(select).val()
             },
             success: function(response) {
-                CreateProductsModalResetSelect('category_id_c');
-                CreateProductsModalCategory(response.data);
+                CreateProductModalResetSelect('category_id_c');
+                CreateProductModalCategory(response.data);
             },
             error: function(xhr, textStatus, errorThrown) {
-                CreateProductsAjaxError(xhr);
+                CreateProductAjaxError(xhr);
             }
         });
     }
 };
 
-function CreateProductsModalCategory(categories) {
+function CreateProductModalCategory(categories) {
     categories.forEach(category => {
         $('#category_id_c').append(new Option(category.name, category.id, false, false));
     });
 }
 
-function CreateProductsModalCategoryGetSubcategory(select) {
+function CreateProductModalCategoryGetSubcategory(select) {
     if($(select).val() == '') {
-        CreateProductsModalResetSelect('subcategory_id_c');
+        CreateProductModalResetSelect('subcategory_id_c');
     } else {
         $.ajax({
             url: `/Dashboard/Products/Create`,
@@ -116,17 +116,17 @@ function CreateProductsModalCategoryGetSubcategory(select) {
                 'category_id':  $(select).val()
             },
             success: function(response) {
-                CreateProductsModalResetSelect('subcategory_id_c');
-                CreateProductsModalSubcategory(response.data);
+                CreateProductModalResetSelect('subcategory_id_c');
+                CreateProductModalSubcategory(response.data);
             },
             error: function(xhr, textStatus, errorThrown) {
-                CreateProductsAjaxError(xhr);
+                CreateProductAjaxError(xhr);
             }
         });
     }
 };
 
-function CreateProductsModalSubcategory(subcategories) {
+function CreateProductModalSubcategory(subcategories) {
     subcategories.forEach(subcategory => {
         $('#subcategory_id_c').append(new Option(subcategory.name, subcategory.id, false, false));
     });

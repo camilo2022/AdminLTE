@@ -27,7 +27,7 @@ aria-labelledby="exampleModalLabel" data-backdrop="static" aria-hidden="true">
                         <div class="form-group">
                             <label for="clothing_line_id_e">Lineas</label>
                             <div class="input-group">
-                                <select class="form-control select2" id="clothing_line_id_e" name="clothing_line_id" style="width: 87%" onchange="EditProductsModalClothingLineGetCategory(this)">
+                                <select class="form-control select2" id="clothing_line_id_e" name="clothing_line_id" style="width: 87%" onchange="EditProductModalClothingLineGetCategory(this)">
                                     <option value="">Seleccione</option>
                                 </select>
                                 <div class="input-group-append">
@@ -40,7 +40,7 @@ aria-labelledby="exampleModalLabel" data-backdrop="static" aria-hidden="true">
                         <div class="form-group">
                             <label for="category_id_e">Categoria</label>
                             <div class="input-group">
-                                <select class="form-control select2" id="category_id_e" name="category_id" style="width: 86%" onchange="EditProductsModalCategoryGetSubcategory(this)">
+                                <select class="form-control select2" id="category_id_e" name="category_id" style="width: 86%" onchange="EditProductModalCategoryGetSubcategory(this)">
                                     <option value="">Seleccione</option>
                                 </select>
                                 <div class="input-group-append">
@@ -77,7 +77,7 @@ aria-labelledby="exampleModalLabel" data-backdrop="static" aria-hidden="true">
                                     </span>
                                 </div>
                             </div>
-                        </div>  
+                        </div>
                         <div class="form-group">
                             <label for="correria_id_e">Correria</label>
                             <div class="input-group">
@@ -90,7 +90,7 @@ aria-labelledby="exampleModalLabel" data-backdrop="static" aria-hidden="true">
                                     </span>
                                 </div>
                             </div>
-                        </div>  
+                        </div>
                         <div class="form-group">
                             <label for="model_id_e">Modelo</label>
                             <div class="input-group">

@@ -7,7 +7,7 @@ use App\Http\Requests\Client\ClientCreateRequest;
 use App\Http\Requests\Client\ClientDeleteRequest;
 use App\Http\Requests\Client\ClientEditRequest;
 use App\Http\Requests\Client\ClientIndexQueryRequest;
-use App\Http\Requests\Client\ClientQuotaRequest;
+use App\Http\Requests\Client\ClientQuotaQueryRequest;
 use App\Http\Requests\Client\ClientRestoreRequest;
 use App\Http\Requests\Client\ClientStoreRequest;
 use App\Http\Requests\Client\ClientUpdateRequest;
@@ -46,7 +46,7 @@ class ClientController extends Controller
             $start_date = Carbon::parse($request->input('start_date'))->startOfDay();
             $end_date = Carbon::parse($request->input('end_date'))->endOfDay();
             //Consulta por nombre
-            $clients = Client::with(['person', 'country', 'departament', 'city', 
+            $clients = Client::with(['person', 'country', 'departament', 'city',
                     'person_type' => function ($query) { $query->withTrashed(); },
                     'client_type' => function ($query) { $query->withTrashed(); },
                     'document_type' => function ($query) { $query->withTrashed(); }
@@ -93,6 +93,14 @@ class ClientController extends Controller
     public function create(ClientCreateRequest $request)
     {
         try {
+            if($request->filled('person_type_id')) {
+                return $this->successResponse(
+                    DocumentType::with('person_types')->whereHas('person_types', fn($subQuery) => $subQuery->where('person_type_id', $request->input('person_type_id')))->get(),
+                    'Tipos de documento encontrados con exito.',
+                    200
+                );
+            }
+
             if($request->filled('country_id')) {
                 return $this->successResponse(
                     Departament::where('country_id', '=', $request->input('country_id'))->get(),
@@ -112,9 +120,8 @@ class ClientController extends Controller
             return $this->successResponse(
                 [
                     'countries' => Country::all(),
-                    'person_types' => PersonType::all(),
-                    'client_types' => ClientType::all(),
-                    'document_types' => DocumentType::all()
+                    'personTypes' => PersonType::all(),
+                    'clientTypes' => ClientType::all()
                 ],
                 'Ingrese los datos para hacer la validacion y registro.',
                 200
@@ -188,6 +195,14 @@ class ClientController extends Controller
     public function edit(ClientEditRequest $request, $id)
     {
         try {
+            if($request->filled('person_type_id')) {
+                return $this->successResponse(
+                    DocumentType::with('person_types')->whereHas('person_types', fn($subQuery) => $subQuery->where('person_type_id', $request->input('person_type_id')))->get(),
+                    'Tipos de documento encontrados con exito.',
+                    200
+                );
+            }
+
             if($request->filled('country_id')) {
                 return $this->successResponse(
                     Departament::where('country_id', '=', $request->input('country_id'))->get(),
@@ -208,9 +223,8 @@ class ClientController extends Controller
                 [
                     'client' => Client::withTrashed()->findOrFail($id),
                     'countries' => Country::all(),
-                    'person_types' => PersonType::all(),
-                    'client_types' => ClientType::all(),
-                    'document_types' => DocumentType::all()
+                    'personTypes' => PersonType::all(),
+                    'clientTypes' => ClientType::all()
                 ],
                 'El cliente fue encontrado exitosamente.',
                 204
@@ -313,7 +327,84 @@ class ClientController extends Controller
         }
     }
 
-    public function quota(ClientQuotaRequest $request, $id)
+    public function showQuery(ClientIndexQueryRequest $request)
+    {
+        try {
+            $start_date = Carbon::parse($request->input('start_date'))->startOfDay();
+            $end_date = Carbon::parse($request->input('end_date'))->endOfDay();
+            //Consulta por nombre
+            $clients = Client::with(['person', 'country', 'departament', 'city',
+                    'person_type' => function ($query) { $query->withTrashed(); },
+                    'client_type' => function ($query) { $query->withTrashed(); },
+                    'document_type' => function ($query) { $query->withTrashed(); }
+                ])
+                ->when($request->filled('search'),
+                    function ($query) use ($request) {
+                        $query->search($request->input('search'));
+                    }
+                )
+                ->when($request->filled('start_date') && $request->filled('end_date'),
+                    function ($query) use ($start_date, $end_date) {
+                        $query->filterByDate($start_date, $end_date);
+                    }
+                )
+                ->withTrashed() //Trae los registros 'eliminados'
+                ->orderBy($request->input('column'), $request->input('dir'))
+                ->paginate($request->input('perPage'));
+
+            return $this->successResponse(
+                new ClientIndexQueryCollection($clients),
+                $this->getMessage('Success'),
+                200
+            );
+        } catch (QueryException $e) {
+            // Manejar la excepción de la base de datos
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('QueryException'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        } catch (Exception $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('Exception'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        }
+    }
+
+    public function quota($id)
+    {
+        try {
+            return $this->successResponse(
+                Client::withTrashed()->findOrFail($id),
+                'El cliente fue encontrado exitosamente.',
+                204
+            );
+        } catch (ModelNotFoundException $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('ModelNotFoundException'),
+                    'error' => $e->getMessage()
+                ],
+                404
+            );
+        } catch (Exception $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('Exception'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        }
+    }
+
+    public function quotaQuery(ClientQuotaQueryRequest $request, $id)
     {
         try {
             $client = Client::withTrashed()->findOrFail($id);

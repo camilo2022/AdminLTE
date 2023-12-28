@@ -56,7 +56,7 @@ function CreateTransfersModalFromWarehoseGetToWarehouse(select) {
                 CreateTransfersModalToWarehouse(response.data);
             },
             error: function(xhr, textStatus, errorThrown) {
-                CreateTransfersAjaxError(xhr);
+                CreateTransferAjaxError(xhr);
             }
         });
     }
