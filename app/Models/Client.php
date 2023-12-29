@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableModel;
@@ -52,9 +53,9 @@ class Client extends Model implements Auditable
         'quota'
     ];
 
-    public function person() : HasOne
+    public function person() : MorphOne
     {
-        return $this->hasOne(Person::class, 'client_id');
+        return $this->morphOne(Person::class, 'model');
     }
 
     public function client_branches() : HasMany

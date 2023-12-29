@@ -920,7 +920,7 @@ Route::middleware(['auth'])->group(function () {
 
             Route::prefix('/People')->group(function () {
 
-                Route::post('/Create', [PersonController::class, 'create'])
+                Route::get('/Create', [PersonController::class, 'create'])
                 ->middleware('can:Dashboard.Clients.People.Create')->name('Dashboard.Clients.People.Create');
 
                 Route::post('/Store', [PersonController::class, 'store'])

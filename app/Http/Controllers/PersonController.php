@@ -7,6 +7,7 @@ use App\Http\Requests\Person\PersonEditRequest;
 use App\Http\Requests\Person\PersonStoreRequest;
 use App\Http\Requests\Person\PersonUpdateRequest;
 use App\Models\City;
+use App\Models\Client;
 use App\Models\Country;
 use App\Models\Departament;
 use App\Models\DocumentType;
@@ -24,6 +25,8 @@ class PersonController extends Controller
 
     public function create(PersonCreateRequest $request)
     {
+        //return Client::with('person.person_references')->get();
+        return Person::with('client','person_references')->get();
         try {
             if($request->filled('country_id')) {
                 return $this->successResponse(
@@ -65,7 +68,8 @@ class PersonController extends Controller
     {
         try {
             $person = new Person();
-            $person->client_id = $request->input('client_id');
+            $person->model_type = Client::class;
+            $person->model_id = $request->input('client_id');
             $person->name = $request->input('name');
             $person->last_name = $request->input('last_name');
             $person->document_type_id = $request->input('document_type_id');

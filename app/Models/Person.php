@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableModel;
 
@@ -16,7 +19,8 @@ class Person extends Model implements Auditable
 
     protected $table = 'people';
     protected $fillable = [
-        'client_id',
+        'model_type',
+        'model_id',
         'name',
         'last_name',
         'document_type_id',
@@ -32,7 +36,8 @@ class Person extends Model implements Auditable
     ];
 
     protected $auditInclude = [
-        'client_id',
+        'model_type',
+        'model_id',
         'name',
         'last_name',
         'document_type_id',
@@ -47,14 +52,19 @@ class Person extends Model implements Auditable
         'telephone_number_second',
     ];
 
-    public function person_references() : HasMany
+    public function model() : MorphTo
     {
-        return $this->hasMany(PersonReference::class, 'person_id');
+        return $this->morphTo();
     }
-
-    public function client() : BelongsTo
+  
+    public function person_references() : MorphMany
     {
-        return $this->belongsTo(Client::class, 'client_id');
+      return $this->morphMany(Person::class, 'model'); 
+    }
+    
+    public function client(): BelongsTo
+    {
+        return $this->belongsTo(Client::class, 'model_id');
     }
 
     public function document_type() : BelongsTo
