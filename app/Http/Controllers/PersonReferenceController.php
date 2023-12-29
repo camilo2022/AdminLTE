@@ -14,7 +14,7 @@ use App\Models\City;
 use App\Models\Country;
 use App\Models\Departament;
 use App\Models\DocumentType;
-use App\Models\PersonReference;
+use App\Models\Person;
 use App\Traits\ApiMessage;
 use App\Traits\ApiResponser;
 use Carbon\Carbon;
@@ -60,7 +60,7 @@ class PersonReferenceController extends Controller
             $start_date = Carbon::parse($request->input('start_date'))->startOfDay();
             $end_date = Carbon::parse($request->input('end_date'))->endOfDay();
             //Consulta por nombre
-            $peopleReferences = PersonReference::with(['person', 'country', 'departament', 'city',
+            return $peopleReferences = Person::with(['person', 'country', 'departament', 'city',
                     'document_type' => function ($query) { $query->withTrashed(); }
                 ])
                 ->when($request->filled('search'),
@@ -74,9 +74,12 @@ class PersonReferenceController extends Controller
                     }
                 )
                 ->withTrashed() //Trae los registros 'eliminados'
-                ->where('person_id', '=', $request->input('person_id'))
-                ->orderBy($request->input('column'), $request->input('dir'))
-                ->paginate($request->input('perPage'));
+                /* ->whereHasMorph('person', Person::class, function ($query) use ($request) {
+                    $query->where('model_id', $request->input('person_id'));
+                }) */
+                ->get();
+                /* ->orderBy($request->input('column'), $request->input('dir'))
+                ->paginate($request->input('perPage')); */
 
             return $this->successResponse(
                 new PersonReferenceIndexQueryCollection($peopleReferences),
@@ -145,7 +148,7 @@ class PersonReferenceController extends Controller
     public function store(PersonReferenceStoreRequest $request)
     {
         try {
-            $personReference = new PersonReference();
+            $personReference = new Person();
             $personReference->person_id = $request->input('person_id');
             $personReference->name = $request->input('name');
             $personReference->last_name = $request->input('last_name');
@@ -217,7 +220,7 @@ class PersonReferenceController extends Controller
 
             return $this->successResponse(
                 [
-                    'personReferece' => PersonReference::withTrashed()->findOrFail($id),
+                    'personReferece' => Person::withTrashed()->findOrFail($id),
                     'document_types' => DocumentType::all(),
                     'countries' => Country::all()
                 ],
@@ -246,7 +249,7 @@ class PersonReferenceController extends Controller
     public function update(PersonReferenceUpdateRequest $request, $id)
     {
         try {
-            $personReference = PersonReference::withTrashed()->findOrFail($id);
+            $personReference = Person::withTrashed()->findOrFail($id);
             $personReference->name = $request->input('name');
             $personReference->last_name = $request->input('last_name');
             $personReference->document_type_id = $request->input('document_type_id');
@@ -297,7 +300,7 @@ class PersonReferenceController extends Controller
     public function delete(PersonReferenceDeleteRequest $request)
     {
         try {
-            $personReference = PersonReference::withTrashed()->findOrFail($request->input('id'))->delete();
+            $personReference = Person::withTrashed()->findOrFail($request->input('id'))->delete();
             return $this->successResponse(
                 $personReference,
                 'La referencia personal fue eliminada exitosamente.',
@@ -325,7 +328,7 @@ class PersonReferenceController extends Controller
     public function restore(PersonReferenceRestoreRequest $request)
     {
         try {
-            $personReference = PersonReference::withTrashed()->findOrFail($request->input('id'))->restore();
+            $personReference = Person::withTrashed()->findOrFail($request->input('id'))->restore();
             return $this->successResponse(
                 $personReference,
                 'La referencia personal fue restaurado exitosamente.',

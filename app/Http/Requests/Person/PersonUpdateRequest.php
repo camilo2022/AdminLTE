@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Person;
 
+use App\Models\Client;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
@@ -32,7 +33,7 @@ class PersonUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'client_id' => ['required', 'exists:clients,id', 'unique:people,client_id,' . $this->route('id') .',id'],
+            'client_id' => ['required', 'exists:clients,id', 'unique:people,client_id,' . $this->route('id') .',id,model_type,' . Client::class],
             'name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
             'document_type_id' => ['required', 'exists:document_types,id'],

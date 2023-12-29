@@ -25,8 +25,6 @@ class PersonController extends Controller
 
     public function create(PersonCreateRequest $request)
     {
-        //return Client::with('person.person_references')->get();
-        return Person::with('client','person_references')->get();
         try {
             if($request->filled('country_id')) {
                 return $this->successResponse(

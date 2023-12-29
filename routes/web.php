@@ -920,7 +920,7 @@ Route::middleware(['auth'])->group(function () {
 
             Route::prefix('/People')->group(function () {
 
-                Route::get('/Create', [PersonController::class, 'create'])
+                Route::post('/Create', [PersonController::class, 'create'])
                 ->middleware('can:Dashboard.Clients.People.Create')->name('Dashboard.Clients.People.Create');
 
                 Route::post('/Store', [PersonController::class, 'store'])
@@ -937,7 +937,7 @@ Route::middleware(['auth'])->group(function () {
                     Route::post('/Index', [PersonReferenceController::class, 'index'])
                     ->middleware('can:Dashboard.Clients.People.References.Index')->name('Dashboard.Clients.People.References.Index');
 
-                    Route::post('/Index/Query', [PersonReferenceController::class, 'indexQuery'])
+                    Route::get('/Index/Query', [PersonReferenceController::class, 'indexQuery'])
                     ->middleware('can:Dashboard.Clients.People.References.Index.Query')->name('Dashboard.Clients.People.References.Index.Query');
 
                     Route::post('/Create', [PersonReferenceController::class, 'create'])

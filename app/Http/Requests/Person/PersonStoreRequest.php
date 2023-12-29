@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Person;
 
+use App\Models\Client;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
@@ -32,7 +33,7 @@ class PersonStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'client_id' => ['required', 'exists:clients,id', 'unique:people,client_id'],
+            'client_id' => ['required', 'exists:clients,id', 'unique:people,model_id,NULL,id,model_type' . Client::class],
             'name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
             'document_type_id' => ['required', 'exists:document_types,id'],
@@ -78,9 +79,9 @@ class PersonStoreRequest extends FormRequest
             'address.required' => 'El campo Direccion de la persona es requerido.',
             'address.string' => 'El campo Direccion de la persona debe ser una cadena de caracteres.',
             'address.max' => 'El campo Direccion de la persona no debe exceder los 255 caracteres.',
-            'neighbourhood.required' => 'El campo Barrio de la persona es requerido.',
-            'neighbourhood.string' => 'El campo Barrio de la persona debe ser una cadena de caracteres.',
-            'neighbourhood.max' => 'El campo Barrio de la persona no debe exceder los 255 caracteres.',
+            'neighborhood.required' => 'El campo Barrio de la persona es requerido.',
+            'neighborhood.string' => 'El campo Barrio de la persona debe ser una cadena de caracteres.',
+            'neighborhood.max' => 'El campo Barrio de la persona no debe exceder los 255 caracteres.',
             'email.required' => 'El campo Correo electronico de la persona es requerido.',
             'email.string' => 'El campo Correo electronico de la persona debe ser una cadena de caracteres.',
             'email.email' => 'El campo Correo electronico de la persona debe ser una dirección de correo electrónico válida.',

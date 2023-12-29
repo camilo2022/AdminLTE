@@ -27,7 +27,7 @@ class PersonReferenceIndexQueryRequest extends FormRequest
             'person_id' => ['nullable', 'exists:people,id'],
             'start_date' => ['nullable', 'date'],
             'end_date' => ['nullable', 'date', 'after_or_equal:start_date'],
-            'perPage' => ['required', 'numeric'],
+            'perPage' => ['nullable', 'numeric'],
         ];
     }
 
