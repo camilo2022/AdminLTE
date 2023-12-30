@@ -6,6 +6,7 @@ use App\Http\Requests\PersonReference\PersonReferenceCreateRequest;
 use App\Http\Requests\PersonReference\PersonReferenceDeleteRequest;
 use App\Http\Requests\PersonReference\PersonReferenceEditRequest;
 use App\Http\Requests\PersonReference\PersonReferenceIndexQueryRequest;
+use App\Http\Requests\PersonReference\PersonReferenceIndexRequest;
 use App\Http\Requests\PersonReference\PersonReferenceRestoreRequest;
 use App\Http\Requests\PersonReference\PersonReferenceStoreRequest;
 use App\Http\Requests\PersonReference\PersonReferenceUpdateRequest;
@@ -27,11 +28,11 @@ class PersonReferenceController extends Controller
     use ApiResponser;
     use ApiMessage;
 
-    public function index()
+    public function index(PersonReferenceIndexRequest $request)
     {
         try {
             return $this->successResponse(
-                '',
+                Person::withTrashed()->findOrFail($request->input('person_id')),
                 'Cargando registros de las referencias personales.',
                 204
             );
@@ -60,7 +61,7 @@ class PersonReferenceController extends Controller
             $start_date = Carbon::parse($request->input('start_date'))->startOfDay();
             $end_date = Carbon::parse($request->input('end_date'))->endOfDay();
             //Consulta por nombre
-            return $peopleReferences = Person::with(['person', 'country', 'departament', 'city',
+            $peopleReferences = Person::with(['model', 'country', 'departament', 'city',
                     'document_type' => function ($query) { $query->withTrashed(); }
                 ])
                 ->when($request->filled('search'),
@@ -74,12 +75,11 @@ class PersonReferenceController extends Controller
                     }
                 )
                 ->withTrashed() //Trae los registros 'eliminados'
-                /* ->whereHasMorph('person', Person::class, function ($query) use ($request) {
+                ->whereHasMorph('model', [Person::class], function ($query) use ($request) {
                     $query->where('model_id', $request->input('person_id'));
-                }) */
-                ->get();
-                /* ->orderBy($request->input('column'), $request->input('dir'))
-                ->paginate($request->input('perPage')); */
+                })
+                ->orderBy($request->input('column'), $request->input('dir'))
+                ->paginate($request->input('perPage'));
 
             return $this->successResponse(
                 new PersonReferenceIndexQueryCollection($peopleReferences),
@@ -128,7 +128,7 @@ class PersonReferenceController extends Controller
             return $this->successResponse(
                 [
                     'countries' => Country::all(),
-                    'document_types' => DocumentType::all()
+                    'documentTypes' => DocumentType::all()
                 ],
                 'Ingrese los datos para hacer la validacion y registro.',
                 204
@@ -149,7 +149,8 @@ class PersonReferenceController extends Controller
     {
         try {
             $personReference = new Person();
-            $personReference->person_id = $request->input('person_id');
+            $personReference->model_type = Person::class;
+            $personReference->model_id = $request->input('person_id');
             $personReference->name = $request->input('name');
             $personReference->last_name = $request->input('last_name');
             $personReference->document_type_id = $request->input('document_type_id');
@@ -158,7 +159,7 @@ class PersonReferenceController extends Controller
             $personReference->departament_id = $request->input('departament_id');
             $personReference->city_id = $request->input('city_id');
             $personReference->address = $request->input('address');
-            $personReference->neighbourhood = $request->input('neighbourhood');
+            $personReference->neighborhood = $request->input('neighborhood');
             $personReference->email = $request->input('email');
             $personReference->telephone_number_first = $request->input('telephone_number_first');
             $personReference->telephone_number_second = $request->input('telephone_number_second');
@@ -220,8 +221,8 @@ class PersonReferenceController extends Controller
 
             return $this->successResponse(
                 [
-                    'personReferece' => Person::withTrashed()->findOrFail($id),
-                    'document_types' => DocumentType::all(),
+                    'personReference' => Person::withTrashed()->findOrFail($id),
+                    'documentTypes' => DocumentType::all(),
                     'countries' => Country::all()
                 ],
                 'La referencia personal fue encontrada exitosamente.',
@@ -258,7 +259,7 @@ class PersonReferenceController extends Controller
             $personReference->departament_id = $request->input('departament_id');
             $personReference->city_id = $request->input('city_id');
             $personReference->address = $request->input('address');
-            $personReference->neighbourhood = $request->input('neighbourhood');
+            $personReference->neighborhood = $request->input('neighborhood');
             $personReference->email = $request->input('email');
             $personReference->telephone_number_first = $request->input('telephone_number_first');
             $personReference->telephone_number_second = $request->input('telephone_number_second');

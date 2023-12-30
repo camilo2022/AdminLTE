@@ -1,9 +1,9 @@
-<div class="modal" id="EditClientModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" data-backdrop="static" aria-hidden="true">
+<div class="modal" id="EditPersonReferenceModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" data-backdrop="static" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header w-100">
                 <div class="text-center w-100" style="background: white;">
-                    <label style="font-size:20px;font-weight:bold;">Edicion de Cliente</label>
+                    <label style="font-size:20px;font-weight:bold;">Edicion de Referencia Person Referenceal</label>
                 </div>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
@@ -11,11 +11,24 @@
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-lg-12">
+                    <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="name_c_e">Razon social</label>
+                            <label for="name_pr_e">Nombres</label>
                             <div class="input-group">
-                                <input type="text" class="form-control" id="name_c_e" name="name">
+                                <input type="text" class="form-control" id="name_pr_e" name="name">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-signature"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="last_name_pr_e">Apellidos</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="last_name_pr_e" name="last_name">
                                 <div class="input-group-append">
                                     <span class="input-group-text">
                                         <i class="fas fa-signature"></i>
@@ -28,9 +41,9 @@
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="country_id_c_e">Pais</label>
+                            <label for="country_id_pr_e">Pais</label>
                             <div class="input-group">
-                                <select class="form-control select2" id="country_id_c_e" name="country_id" style="width: 88%" onchange="EditClientModalCountryGetDepartament(this)">
+                                <select class="form-control select2" id="country_id_pr_e" name="country_id" style="width: 88%" onchange="EditPersonReferenceModalCountryGetDepartament(this)">
                                     <option value="">Seleccione</option>
                                 </select>
                                 <div class="input-group-append">
@@ -43,73 +56,9 @@
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="person_type_id_c_e">Tipo de persona</label>
+                            <label for="document_type_id_pr_e">Tipo de documento</label>
                             <div class="input-group">
-                                <select class="form-control select2" id="person_type_id_c_e" name="person_type_id" style="width: 88%" onchange="EditClientModalPersonTypeGetDocumentType(this)">
-                                    <option value="">Seleccione</option>
-                                </select>
-                                <div class="input-group-append">
-                                    <span class="input-group-text">
-                                        <i class="fas fa-people-simple"></i>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label for="departament_id_c_e">Departamento</label>
-                            <div class="input-group">
-                                <select class="form-control select2" id="departament_id_c_e" name="departament_id" style="width: 88%" onchange="EditClientModalDepartamentGetCity(this)">
-                                    <option value="">Seleccione</option>
-                                </select>
-                                <div class="input-group-append">
-                                    <span class="input-group-text">
-                                        <i class="fas fa-map"></i>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label for="client_type_id_c_e">Tipo de cliente</label>
-                            <div class="input-group">
-                                <select class="form-control select2" id="client_type_id_c_e" name="client_type_id" style="width: 88%">
-                                    <option value="">Seleccione</option>
-                                </select>
-                                <div class="input-group-append">
-                                    <span class="input-group-text">
-                                        <i class="fas fa-person-military-to-person"></i>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label for="city_id_c_e">Municipio</label>
-                            <div class="input-group">
-                                <select class="form-control select2" id="city_id_c_e" name="city_id" style="width: 88%">
-                                    <option value="">Seleccione</option>
-                                </select>
-                                <div class="input-group-append">
-                                    <span class="input-group-text">
-                                        <i class="fas fa-map-location-dot"></i>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label for="document_type_id_c_e">Tipo de documento</label>
-                            <div class="input-group">
-                                <select class="form-control select2" id="document_type_id_c_e" name="document_type_id" style="width: 88%">
+                                <select class="form-control select2" id="document_type_id_pr_e" name="document_type_id" style="width: 88%">
                                     <option value="">Seleccione</option>
                                 </select>
                                 <div class="input-group-append">
@@ -124,12 +73,14 @@
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="address_c_e">Direccion</label>
+                            <label for="departament_id_pr_e">Departamento</label>
                             <div class="input-group">
-                                <input type="text" class="form-control" id="address_c_e" name="address">
+                                <select class="form-control select2" id="departament_id_pr_e" name="departament_id" style="width: 88%" onchange="EditPersonReferenceModalDepartamentGetCity(this)">
+                                    <option value="">Seleccione</option>
+                                </select>
                                 <div class="input-group-append">
                                     <span class="input-group-text">
-                                        <i class="fas fa-location-dot"></i>
+                                        <i class="fas fa-map"></i>
                                     </span>
                                 </div>
                             </div>
@@ -137,9 +88,9 @@
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="document_number_c_e">Numero de documento</label>
+                            <label for="document_number_pr_e">Numero de documento</label>
                             <div class="input-group">
-                                <input type="number" class="form-control" id="document_number_c_e" name="document_number">
+                                <input type="number" class="form-control" id="document_number_pr_e" name="document_number">
                                 <div class="input-group-append">
                                     <span class="input-group-text">
                                         <i class="fas fa-address-card"></i>
@@ -152,9 +103,39 @@
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="neighborhood_c_e">Barrio</label>
+                            <label for="city_id_pr_e">Municipio</label>
                             <div class="input-group">
-                                <input type="text" class="form-control" id="neighborhood_c_e" name="neighbourhood">
+                                <select class="form-control select2" id="city_id_pr_e" name="city_id" style="width: 88%">
+                                    <option value="">Seleccione</option>
+                                </select>
+                                <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-map-location-dot"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="address_pr_e">Direccion</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="address_pr_e" name="address">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-location-dot"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="neighborhood_pr_e">Barrio</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="neighborhood_pr_e" name="neighbourhood">
                                 <div class="input-group-append">
                                     <span class="input-group-text">
                                         <i class="fas fa-location-arrow"></i>
@@ -165,9 +146,9 @@
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="email_c_e">Correo electronico</label>
+                            <label for="email_pr_e">Correo electronico</label>
                             <div class="input-group">
-                                <input type="text" class="form-control" id="email_c_e" name="email">
+                                <input type="text" class="form-control" id="email_pr_e" name="email">
                                 <div class="input-group-append">
                                     <span class="input-group-text">
                                         <i class="fas fa-envelope"></i>
@@ -180,9 +161,9 @@
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="telephone_number_first_c_e">Numero de telefono</label>
+                            <label for="telephone_number_first_pr_e">Numero de telefono</label>
                             <div class="input-group">
-                                <input type="number" class="form-control" id="telephone_number_first_c_e" name="telephone_number">
+                                <input type="number" class="form-control" id="telephone_number_first_pr_e" name="telephone_number">
                                 <div class="input-group-append">
                                     <span class="input-group-text">
                                         <i class="fas fa-phone"></i>
@@ -193,9 +174,9 @@
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="telephone_number_second_c_e">Numero de telefono</label>
+                            <label for="telephone_number_second_pr_e">Numero de telefono</label>
                             <div class="input-group">
-                                <input type="number" class="form-control" id="telephone_number_second_c_e" name="telephone_number">
+                                <input type="number" class="form-control" id="telephone_number_second_pr_e" name="telephone_number">
                                 <div class="input-group-append">
                                     <span class="input-group-text">
                                         <i class="fas fa-phone"></i>
@@ -210,7 +191,7 @@
                 <button type="button" class="btn btn-secondary" data-dismiss="modal" title="Cerrar ventana">
                     <i class="fas fa-xmark"></i>
                 </button>
-                <button type="button" class="btn btn-primary" id="EditClientButton" onclick="" title="Actualizar cliente.">
+                <button type="button" class="btn btn-primary" id="EditPersonReferenceButton" onclick="" title="Actualizar persona.">
                     <i class="fas fa-floppy-disk"></i>
                 </button>
             </div>

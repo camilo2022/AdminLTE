@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class PersonReferenceRestoreRequest extends FormRequest
+class PersonReferenceIndexRequest extends FormRequest
 {
     protected function failedValidation(Validator $validator)
     {
@@ -24,15 +24,15 @@ class PersonReferenceRestoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'id' => ['required', 'exists:people,id'],
+            'person_id' => ['required', 'exists:people,id'],
         ];
     }
 
     public function messages()
     {
         return [
-            'id.required' => 'El Identificador de la referencia personal es requerido.',
-            'id.exists' => 'El Identificador de la referencia personal no es válido.',
+            'person_id.required' => 'El Identificador de la persona es requerido.',
+            'person_id.exists' => 'El Identificador de la persona no es válido.',
         ];
     }
 }

@@ -24,7 +24,7 @@ class PersonReferenceDeleteRequest extends FormRequest
     public function rules()
     {
         return [
-            'id' => ['required', 'exists:people_references,id'],
+            'id' => ['required', 'exists:people,id'],
         ];
     }
 

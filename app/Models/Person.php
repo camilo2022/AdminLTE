@@ -63,11 +63,6 @@ class Person extends Model implements Auditable
       return $this->morphMany(Person::class, 'model');
     }
 
-    public function person() : MorphOne
-    {
-      return $this->morphOne(Person::class, 'model');
-    }
-
     public function client()
     {
         return $this->belongsTo(Client::class, 'model_id');

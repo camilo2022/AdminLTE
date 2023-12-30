@@ -937,7 +937,7 @@ Route::middleware(['auth'])->group(function () {
                     Route::post('/Index', [PersonReferenceController::class, 'index'])
                     ->middleware('can:Dashboard.Clients.People.References.Index')->name('Dashboard.Clients.People.References.Index');
 
-                    Route::get('/Index/Query', [PersonReferenceController::class, 'indexQuery'])
+                    Route::post('/Index/Query', [PersonReferenceController::class, 'indexQuery'])
                     ->middleware('can:Dashboard.Clients.People.References.Index.Query')->name('Dashboard.Clients.People.References.Index.Query');
 
                     Route::post('/Create', [PersonReferenceController::class, 'create'])

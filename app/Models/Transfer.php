@@ -86,7 +86,7 @@ class Transfer extends Model implements Auditable
                 ->orWhere('last_name', 'like',  '%' . $search . '%');
             }
         )
-        ->orWhere('form_date', 'like', '%' . $search . '%')
+        ->orWhere('from_date', 'like', '%' . $search . '%')
         ->orWhere('from_observation', 'like', '%' . $search . '%')
         ->orWhereHas('to_warehouse',
             function ($subQuery) use ($search) {
@@ -99,7 +99,7 @@ class Transfer extends Model implements Auditable
             function ($subQuery) use ($search) {
                 $subQuery->where('id', 'like',  '%' . $search . '%')
                 ->orWhere('name', 'like',  '%' . $search . '%')
-                ->orWhere('description', 'like',  '%' . $search . '%');
+                ->orWhere('last_name', 'like',  '%' . $search . '%');
             }
         )
         ->orWhere('to_date', 'like', '%' . $search . '%')

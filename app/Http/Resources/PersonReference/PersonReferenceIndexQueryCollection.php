@@ -16,30 +16,30 @@ class PersonReferenceIndexQueryCollection extends ResourceCollection
     public function toArray($request)
     {
         return [
-            'peopleReferences' => $this->collection->map(function ($peopleReference) {
+            'personReferences' => $this->collection->map(function ($personReference) {
                 return [
-                    'id' => $peopleReference->id,
-                    'person_id' => $peopleReference->person_id,
-                    'person' => $peopleReference->person,
-                    'name' => $peopleReference->name,
-                    'last_name' => $peopleReference->last_name,
-                    'document_type_id' => $peopleReference->document_type_id,
-                    'document_type' => $peopleReference->document_type,
-                    'document_number' => $peopleReference->document_number,
-                    'country_id' => $peopleReference->country_id,
-                    'country' => $peopleReference->country->name,
-                    'departament_id' => $peopleReference->departament_id,
-                    'departament' => $peopleReference->departament->name,
-                    'city_id' => $peopleReference->city_id,
-                    'city' => $peopleReference->city->name,
-                    'address' => $peopleReference->address,
-                    'neighbourhood' => $peopleReference->neighbourhood,
-                    'email' => $peopleReference->email,
-                    'telephone_number_first' => $peopleReference->telephone_number_first,
-                    'telephone_number_second' => $peopleReference->telephone_number_second,
-                    'created_at' => $this->formatDate($peopleReference->created_at),
-                    'updated_at' => $this->formatDate($peopleReference->updated_at),
-                    'deleted_at' => $peopleReference->deleted_at
+                    'id' => $personReference->id,
+                    'person_id' => $personReference->person_id,
+                    'person' => $personReference->person,
+                    'name' => $personReference->name,
+                    'last_name' => $personReference->last_name,
+                    'document_type_id' => $personReference->document_type_id,
+                    'document_type' => $personReference->document_type,
+                    'document_number' => $personReference->document_number,
+                    'country_id' => $personReference->country_id,
+                    'country' => $personReference->country,
+                    'departament_id' => $personReference->departament_id,
+                    'departament' => $personReference->departament,
+                    'city_id' => $personReference->city_id,
+                    'city' => $personReference->city,
+                    'address' => $personReference->address,
+                    'neighborhood' => $personReference->neighborhood,
+                    'email' => $personReference->email,
+                    'telephone_number_first' => $personReference->telephone_number_first,
+                    'telephone_number_second' => $personReference->telephone_number_second,
+                    'created_at' => $this->formatDate($personReference->created_at),
+                    'updated_at' => $this->formatDate($personReference->updated_at),
+                    'deleted_at' => $personReference->deleted_at
                 ];
             }),
             'meta' => [

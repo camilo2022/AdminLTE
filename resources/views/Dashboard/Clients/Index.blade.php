@@ -95,11 +95,14 @@
         </div>
         @include('Dashboard.Clients.Create')
         @include('Dashboard.Clients.Edit')
-        @include('Dashboard.ClientBranches.index')
+        @include('Dashboard.ClientBranches.Index')
         @include('Dashboard.ClientBranches.Create')
         @include('Dashboard.ClientBranches.Edit')
         @include('Dashboard.People.Create')
         @include('Dashboard.People.Edit')
+        @include('Dashboard.PersonReferences.Index')
+        @include('Dashboard.PersonReferences.Create')
+        @include('Dashboard.PersonReferences.Edit')
     </section>
 @endsection
 @section('script')
@@ -118,4 +121,11 @@
 
 <script src="{{ asset('js/Dashboard/People/Create.js') }}"></script>
 <script src="{{ asset('js/Dashboard/People/Edit.js') }}"></script>
+
+<script src="{{ asset('js/Dashboard/PersonReferences/DataTableIndex.js') }}"></script>
+<script src="{{ asset('js/Dashboard/PersonReferences/Index.js') }}"></script>
+<script src="{{ asset('js/Dashboard/PersonReferences/Create.js') }}"></script>
+<script src="{{ asset('js/Dashboard/PersonReferences/Edit.js') }}"></script>
+<script src="{{ asset('js/Dashboard/PersonReferences/Delete.js') }}"></script>
+<script src="{{ asset('js/Dashboard/PersonReferences/Restore.js') }}"></script>
 @endsection
