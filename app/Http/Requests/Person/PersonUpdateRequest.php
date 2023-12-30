@@ -33,7 +33,7 @@ class PersonUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'client_id' => ['required', 'exists:clients,id', 'unique:people,client_id,' . $this->route('id') .',id,model_type,' . Client::class],
+            'client_id' => ['required', 'exists:clients,id', 'unique:people,model_id,' . $this->route('id') .',id,model_type,' . Client::class],
             'name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
             'document_type_id' => ['required', 'exists:document_types,id'],
@@ -43,7 +43,7 @@ class PersonUpdateRequest extends FormRequest
             'city_id' => ['required', 'exists:cities,id'],
             'address' => ['required', 'string', 'max:255'],
             'neighborhood' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255'],
+            'email' => ['required', 'email', 'max:255'],
             'telephone_number_first' => ['required', 'string', 'size:10'],
             'telephone_number_second' => ['nullable', 'string', 'size:10'],
             'country_departament' => ['exists:departaments,id,country_id,' . $this->input('country_id')],
@@ -83,7 +83,6 @@ class PersonUpdateRequest extends FormRequest
             'neighbourhood.string' => 'El campo Barrio de la persona debe ser una cadena de caracteres.',
             'neighbourhood.max' => 'El campo Barrio de la persona no debe exceder los 255 caracteres.',
             'email.required' => 'El campo Correo electronico de la persona es requerido.',
-            'email.string' => 'El campo Correo electronico de la persona debe ser una cadena de caracteres.',
             'email.email' => 'El campo Correo electronico de la persona debe ser una dirección de correo electrónico válida.',
             'email.max' => 'El campo Correo electronico de la persona no debe exceder los 255 caracteres.',
             'telephone_number_first.required' => 'El campo Numero de telefono de la persona es requerido.',

@@ -15,7 +15,7 @@ let tableBusinesses = $('#businesses').DataTable({
                 6: 'departament_id',
                 7: 'city_id',
                 8: 'address',
-                9: 'neighbourhood',
+                9: 'neighborhood',
                 10: 'description',
                 11: 'deleted_at'
             };
@@ -45,7 +45,7 @@ let tableBusinesses = $('#businesses').DataTable({
         { data: 'departament' },
         { data: 'city' },
         { data: 'address' },
-        { data: 'neighbourhood' },
+        { data: 'neighborhood' },
         { data: 'description' },
         {
             data: 'deleted_at',

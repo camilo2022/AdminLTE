@@ -65,6 +65,11 @@ function EditPackageType(id) {
 }
 
 function EditPackageTypeAjaxSuccess(response) {
+    if(response.status === 204) {
+        toastr.info(response.message);
+        $('#EditPackageTypeModal').modal('hide');
+    }
+    
     if(response.status === 200) {
         toastr.success(response.message);
         $('#EditPackageTypeModal').modal('hide');

@@ -26,11 +26,6 @@ function IndexClientBranchModalCleaned(client) {
 
 function IndexClientBranchAjaxSuccess(response) {
     if(response.status === 200) {
-        toastr.success(response.message);
-        $('#IndexClientBranchModal').modal('hide');
-    }
-
-    if(response.status === 204) {
         toastr.info(response.message);
         $('#IndexClientBranchModal').modal('hide');
     }

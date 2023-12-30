@@ -62,6 +62,11 @@ function EditTone(id) {
 }
 
 function EditToneAjaxSuccess(response) {
+    if (response.status === 204) {
+        toastr.info(response.message);
+        $('#EditToneModal').modal('hide');
+    }
+    
     if (response.status === 200) {
         toastr.success(response.message);
         $('#EditToneModal').modal('hide');

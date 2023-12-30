@@ -128,7 +128,7 @@ class ClientBranchController extends Controller
             return $this->successResponse(
                 Country::all(),
                 'Ingrese los datos para hacer la validacion y registro.',
-                200
+                204
             );
         } catch (Exception $e) {
             // Devolver una respuesta de error en caso de excepción
@@ -152,7 +152,7 @@ class ClientBranchController extends Controller
             $clientBranch->departament_id = $request->input('departament_id');
             $clientBranch->city_id = $request->input('city_id');
             $clientBranch->address = $request->input('address');
-            $clientBranch->neighbourhood = $request->input('neighbourhood');
+            $clientBranch->neighborhood = $request->input('neighborhood');
             $clientBranch->description = $request->input('description');
             $clientBranch->email = $request->input('email');
             $clientBranch->telephone_number_first = $request->input('telephone_number_first');
@@ -249,7 +249,7 @@ class ClientBranchController extends Controller
             $clientBranch->departament_id = $request->input('departament_id');
             $clientBranch->city_id = $request->input('city_id');
             $clientBranch->address = $request->input('address');
-            $clientBranch->neighbourhood = $request->input('neighbourhood');
+            $clientBranch->neighborhood = $request->input('neighborhood');
             $clientBranch->description = $request->input('description');
             $clientBranch->email = $request->input('email');
             $clientBranch->telephone_number_first = $request->input('telephone_number_first');

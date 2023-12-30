@@ -196,7 +196,7 @@ class UserController extends Controller
             return $this->successResponse(
                 Area::all(),
                 'Ingrese los datos para hacer la validacion y registro.',
-                200
+                204
             );
         } catch (Exception $e) {
             // Devolver una respuesta de error en caso de excepción
@@ -275,7 +275,7 @@ class UserController extends Controller
             }
 
             return $this->successResponse(
-                (object) [
+                [
                     'user' => User::findOrFail($id),
                     'areas' => Area::all(),
                 ],

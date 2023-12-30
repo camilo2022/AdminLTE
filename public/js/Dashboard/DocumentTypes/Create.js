@@ -60,7 +60,7 @@ function CreateDocumentType() {
 }
 
 function CreateDocumentTypeAjaxSuccess(response) {
-    if (response.status === 200) {
+    if (response.status === 204) {
         toastr.info(response.message);
         $('#CreateDocumentTypeModal').modal('hide');
     }

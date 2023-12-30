@@ -45,10 +45,10 @@ class PersonController extends Controller
             return $this->successResponse(
                 [
                     'countries' => Country::all(),
-                    'document_types' => DocumentType::all()
+                    'documentTypes' => DocumentType::all()
                 ],
                 'Ingrese los datos para hacer la validacion y registro.',
-                200
+                204
             );
         } catch (Exception $e) {
             // Devolver una respuesta de error en caso de excepción
@@ -76,7 +76,7 @@ class PersonController extends Controller
             $person->departament_id = $request->input('departament_id');
             $person->city_id = $request->input('city_id');
             $person->address = $request->input('address');
-            $person->neighbourhood = $request->input('neighbourhood');
+            $person->neighborhood = $request->input('neighborhood');
             $person->email = $request->input('email');
             $person->telephone_number_first = $request->input('telephone_number_first');
             $person->telephone_number_second = $request->input('telephone_number_second');
@@ -139,7 +139,7 @@ class PersonController extends Controller
             return $this->successResponse(
                 [
                     'person' => Person::withTrashed()->findOrFail($id),
-                    'document_types' => DocumentType::all(),
+                    'documentTypes' => DocumentType::all(),
                     'countries' => Country::all()
                 ],
                 'La persona fue encontrada exitosamente.',
@@ -176,7 +176,7 @@ class PersonController extends Controller
             $person->departament_id = $request->input('departament_id');
             $person->city_id = $request->input('city_id');
             $person->address = $request->input('address');
-            $person->neighbourhood = $request->input('neighbourhood');
+            $person->neighborhood = $request->input('neighborhood');
             $person->email = $request->input('email');
             $person->telephone_number_first = $request->input('telephone_number_first');
             $person->telephone_number_second = $request->input('telephone_number_second');

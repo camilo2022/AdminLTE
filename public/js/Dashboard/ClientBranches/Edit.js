@@ -26,9 +26,9 @@ function EditClientBranchModalCleaned(clientBranch) {
 
     $('#EditClientBranchButton').attr('onclick', `EditClientBranch(${clientBranch.id})`);
     $('#EditClientBranchButton').attr('data-id', clientBranch.id);
-    $('#EditClientBranchButton').attr('data-country_id', client.country_id);
-    $('#EditClientBranchButton').attr('data-departament_id', client.departament_id);
-    $('#EditClientBranchButton').attr('data-city_id', client.city_id);
+    $('#EditClientBranchButton').attr('data-country_id', clientBranch.country_id);
+    $('#EditClientBranchButton').attr('data-departament_id', clientBranch.departament_id);
+    $('#EditClientBranchButton').attr('data-city_id', clientBranch.city_id);
 
     $('#code_cb_e').val(clientBranch.code);
     $('#address_cb_e').val(clientBranch.address);
@@ -61,8 +61,9 @@ function EditClientBranchModalCountryGetDepartament(select) {
     if($(select).val() == '') {
         EditClientBranchModalResetSelect('departament_id_cb_e');
     } else {
+        let id = $('#EditClientBranchButton').attr('data-id');
         $.ajax({
-            url: `/Dashboard/Clients/Branches/Edit`,
+            url: `/Dashboard/Clients/Branches/Edit/${id}`,
             type: 'POST',
             data: {
                 '_token': $('meta[name="csrf-token"]').attr('content'),
@@ -95,8 +96,9 @@ function EditClientBranchModalDepartamentGetCity(select) {
     if($(select).val() == '') {
         EditClientBranchModalResetSelect('city_id_cb_e');
     } else {
+        let id = $('#EditClientBranchButton').attr('data-id');
         $.ajax({
-            url: `/Dashboard/Clients/Branches/Edit`,
+            url: `/Dashboard/Clients/Branches/Edit/${id}`,
             type: 'POST',
             data: {
                 '_token': $('meta[name="csrf-token"]').attr('content'),
@@ -172,6 +174,11 @@ function EditClientBranch(id) {
 function EditClientBranchAjaxSuccess(response) {
     if (response.status === 200) {
         toastr.success(response.message);
+        $('#EditClientBranchModal').modal('hide');
+    }
+
+    if (response.status === 204) {
+        toastr.info(response.message);
         $('#EditClientBranchModal').modal('hide');
     }
 }

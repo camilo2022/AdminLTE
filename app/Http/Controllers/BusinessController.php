@@ -104,7 +104,7 @@ class BusinessController extends Controller
             return $this->successResponse(
                 Country::all(),
                 'Ingrese los datos para hacer la validacion y registro.',
-                200
+                204
             );
         } catch (Exception $e) {
             // Devolver una respuesta de error en caso de excepción
@@ -130,7 +130,7 @@ class BusinessController extends Controller
             $business->departament_id = $request->input('departament_id');
             $business->city_id = $request->input('city_id');
             $business->address = $request->input('address');
-            $business->neighbourhood = $request->input('neighbourhood');
+            $business->neighborhood = $request->input('neighborhood');
             $business->description = $request->input('description');
             $business->save();
 
@@ -227,7 +227,7 @@ class BusinessController extends Controller
             $business->departament_id = $request->input('departament_id');
             $business->city_id = $request->input('city_id');
             $business->address = $request->input('address');
-            $business->neighbourhood = $request->input('neighbourhood');
+            $business->neighborhood = $request->input('neighborhood');
             $business->description = $request->input('description');
             $business->save();
 

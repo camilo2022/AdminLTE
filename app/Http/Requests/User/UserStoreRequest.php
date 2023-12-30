@@ -36,7 +36,7 @@ class UserStoreRequest extends FormRequest
             'document_number' => ['required', 'string', 'min:5', 'max:20', 'unique:users'],
             'phone_number' => ['required', 'string', 'size:10'],
             'address' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'email' => ['required', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:6', 'confirmed'],
             'password_confirmation' => ['required', 'string', 'min:6', new Equals($this->input('password_confirmation'), $this->input('password'), 'Contraseña')],
             'area_id' => ['required', 'exists:areas,id'],

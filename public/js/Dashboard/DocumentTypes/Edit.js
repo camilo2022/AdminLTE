@@ -64,6 +64,11 @@ function EditDocumentType(id) {
 }
 
 function EditDocumentTypeAjaxSuccess(response) {
+    if (response.status === 204) {
+        toastr.info(response.message);
+        $('#EditDocumentTypeModal').modal('hide');
+    }
+    
     if (response.status === 200) {
         toastr.success(response.message);
         $('#EditDocumentTypeModal').modal('hide');

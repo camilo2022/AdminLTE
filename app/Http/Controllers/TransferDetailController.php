@@ -120,7 +120,7 @@ class TransferDetailController extends Controller
                     ->whereHas('inventories', fn($subQuery) => $subQuery->where('warehouse_id', $request->input('from_warehouse_id')))
                     ->get(),
                 'Ingrese los datos para hacer la validacion y registro.',
-                200
+                204
             );
         } catch (Exception $e) {
             // Devolver una respuesta de error en caso de excepción

@@ -181,7 +181,7 @@ function CreateCategoryAndSubcategoriesRemoveSubcategory(index) {
 }
 
 function CreateCategoryAndSubcategoriesAjaxSuccess(response) {
-    if(response.status === 200) {
+    if(response.status === 204) {
         toastr.info(response.message);
         $('#CreateCategoryAndSubcategoriesModal').modal('hide');
     }

@@ -36,7 +36,7 @@ function EditBusinessModalCleaned(business) {
     $('#email_e').val(business.email);
     $('#description_e').val(business.description);
     $('#address_e').val(business.address);
-    $('#neighbourhood_e').val(business.neighbourhood);
+    $('#neighborhood_e').val(business.neighborhood);
 }
 
 function EditBusinessModalResetSelect(id) {
@@ -146,7 +146,7 @@ function EditBusiness(id) {
                     'email': $('#email_e').val(),
                     'description': $('#description_e').val(),
                     'address': $('#address_e').val(),
-                    'neighbourhood': $('#neighbourhood_e').val(),
+                    'neighborhood': $('#neighborhood_e').val(),
                     'country_id': $('#country_id_e').val(),
                     'departament_id': $('#departament_id_e').val(),
                     'city_id': $('#city_id_e').val()
@@ -167,6 +167,11 @@ function EditBusiness(id) {
 }
 
 function EditBusinessAjaxSuccess(response) {
+    if(response.status === 204) {
+        toastr.info(response.message);
+        $('#EditBusinessModal').modal('hide');
+    }
+
     if(response.status === 200) {
         toastr.success(response.message);
         $('#EditBusinessModal').modal('hide');
@@ -223,8 +228,8 @@ function AddIsValidClassEditBusiness() {
     if (!$('#address_e').hasClass('is-invalid')) {
         $('#address_e').addClass('is-valid');
     }
-    if (!$('#neighbourhood_e').hasClass('is-invalid')) {
-        $('#neighbourhood_e').addClass('is-valid');
+    if (!$('#neighborhood_e').hasClass('is-invalid')) {
+        $('#neighborhood_e').addClass('is-valid');
     }
     if (!$('#description_e').hasClass('is-invalid')) {
         $('#description_e').addClass('is-valid');
@@ -246,7 +251,7 @@ function RemoveIsValidClassEditBusiness() {
     $('#telephone_number_e').removeClass('is-valid');
     $('#email_e').removeClass('is-valid');
     $('#address_e').removeClass('is-valid');
-    $('#neighbourhood_e').removeClass('is-valid');
+    $('#neighborhood_e').removeClass('is-valid');
     $('#description_e').removeClass('is-valid');
     $('span[aria-labelledby="select2-country_id_e-container"]').removeClass('is-valid');
     $('span[aria-labelledby="select2-departament_id_e-container"]').removeClass('is-valid');
@@ -268,7 +273,7 @@ function RemoveIsInvalidClassEditBusiness() {
     $('#telephone_number_e').removeClass('is-invalid');
     $('#email_e').removeClass('is-invalid');
     $('#address_e').removeClass('is-invalid');
-    $('#neighbourhood_e').removeClass('is-invalid');
+    $('#neighborhood_e').removeClass('is-invalid');
     $('#description_e').removeClass('is-invalid');
     $('span[aria-labelledby="select2-country_id_e-container"]').removeClass('is-invalid');
     $('span[aria-labelledby="select2-departament_id_e-container"]').removeClass('is-invalid');

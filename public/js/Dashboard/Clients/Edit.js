@@ -8,6 +8,9 @@ function EditClientModal(id) {
         success: function (response) {
             tableClients.ajax.reload();
             EditClientModalCleaned(response.data.client);
+            EditClientModalClientType(response.data.clientTypes);
+            EditClientModalPersonType(response.data.personTypes);
+            EditClientModalCountry(response.data.countries);
             EditClientAjaxSuccess(response);
             $('#EditClientModal').modal('show');
         },
@@ -237,6 +240,11 @@ function EditClient(id) {
 }
 
 function EditClientAjaxSuccess(response) {
+    if (response.status === 204) {
+        toastr.info(response.message);
+        $('#EditClientModal').modal('hide');
+    }
+
     if (response.status === 200) {
         toastr.success(response.message);
         $('#EditClientModal').modal('hide');

@@ -81,7 +81,7 @@ class ClientTypeController extends Controller
             return $this->successResponse(
                 '',
                 'Ingrese los datos para hacer la validacion y registro.',
-                200
+                204
             );
         } catch (Exception $e) {
             // Devolver una respuesta de error en caso de excepción

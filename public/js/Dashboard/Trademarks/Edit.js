@@ -79,6 +79,11 @@ function EditTrademark(id) {
 }
 
 function EditTrademarkAjaxSuccess(response) {
+    if (response.status === 204) {
+        toastr.info(response.message);
+        $('#EditTrademarkModal').modal('hide');
+    }
+    
     if (response.status === 200) {
         toastr.success(response.message);
         $('#EditTrademarkModal').modal('hide');

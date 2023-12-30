@@ -96,7 +96,7 @@ class ModulesAndSubmodulesController extends Controller
             return $this->successResponse(
                 $roles,
                 'Ingrese los datos para hacer la validacion y registro.',
-                200
+                204
             );
         } catch (Exception $e) {
             // Devolver una respuesta de error en caso de excepción
@@ -179,7 +179,7 @@ class ModulesAndSubmodulesController extends Controller
             }
 
             return $this->successResponse(
-                (object) [
+                [
                     'module' => Module::with('roles', 'submodules.permission')->findOrFail($id),
                     'roles' => Role::whereDoesntHave('modules')->get()
                 ],

@@ -191,6 +191,11 @@ function EditPerson(id) {
 }
 
 function EditPersonAjaxSuccess(response) {
+    if (response.status === 204) {
+        toastr.info(response.message);
+        $('#EditPersonModal').modal('hide');
+    }
+
     if (response.status === 200) {
         toastr.success(response.message);
         $('#EditPersonModal').modal('hide');
@@ -235,6 +240,9 @@ function AddIsValidClassEditPerson() {
     if (!$('#name_p_e').hasClass('is-invalid')) {
         $('#name_p_e').addClass('is-valid');
     }
+    if (!$('#last_name_p_e').hasClass('is-invalid')) {
+        $('#last_name_p_e').addClass('is-valid');
+    }
     if (!$('#document_number_p_e').hasClass('is-invalid')) {
         $('#document_number_p_e').addClass('is-valid');
     }
@@ -275,6 +283,7 @@ function AddIsValidClassEditPerson() {
 
 function RemoveIsValidClassEditPerson() {
     $('#name_p_e').removeClass('is-valid');
+    $('#last_name_p_e').removeClass('is-valid');
     $('#document_number_p_e').removeClass('is-valid');
     $('#address_p_e').removeClass('is-valid');
     $('#neighborhood_p_e').removeClass('is-valid');
@@ -300,6 +309,7 @@ function AddIsInvalidClassEditPerson(input) {
 
 function RemoveIsInvalidClassEditPerson() {
     $('#name_p_e').removeClass('is-invalid');
+    $('#last_name_p_e').removeClass('is-invalid');
     $('#document_number_p_e').removeClass('is-invalid');
     $('#address_p_e').removeClass('is-invalid');
     $('#neighborhood_p_e').removeClass('is-invalid');

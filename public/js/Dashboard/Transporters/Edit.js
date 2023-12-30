@@ -68,6 +68,11 @@ function EditTransporter(id) {
 }
 
 function EditTransporterAjaxSuccess(response) {
+    if(response.status === 204) {
+        toastr.info(response.message);
+        $('#EditTransporterModal').modal('hide');
+    }
+    
     if(response.status === 200) {
         toastr.success(response.message);
         $('#EditTransporterModal').modal('hide');

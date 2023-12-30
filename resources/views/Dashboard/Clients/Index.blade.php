@@ -95,8 +95,11 @@
         </div>
         @include('Dashboard.Clients.Create')
         @include('Dashboard.Clients.Edit')
-        @include('Dashboard.TransferDetails.Create')
-        @include('Dashboard.TransferDetails.Edit')
+        @include('Dashboard.ClientBranches.index')
+        @include('Dashboard.ClientBranches.Create')
+        @include('Dashboard.ClientBranches.Edit')
+        @include('Dashboard.People.Create')
+        @include('Dashboard.People.Edit')
     </section>
 @endsection
 @section('script')

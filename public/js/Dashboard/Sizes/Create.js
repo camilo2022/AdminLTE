@@ -60,7 +60,7 @@ function CreateSize() {
 }
 
 function CreateSizeAjaxSuccess(response) {
-    if (response.status === 200) {
+    if (response.status === 204) {
         toastr.info(response.message);
         $('#CreateSizeModal').modal('hide');
     }

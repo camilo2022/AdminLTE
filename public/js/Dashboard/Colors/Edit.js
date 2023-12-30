@@ -66,6 +66,11 @@ function EditColor(id) {
 }
 
 function EditColorAjaxSuccess(response) {
+    if (response.status === 204) {
+        toastr.info(response.message);
+        $('#EditColorModal').modal('hide');
+    }
+    
     if (response.status === 200) {
         toastr.success(response.message);
         $('#EditColorModal').modal('hide');

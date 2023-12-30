@@ -226,6 +226,11 @@ function EditProduct(id) {
 }
 
 function EditProductAjaxSuccess(response) {
+    if(response.status === 204) {
+        toastr.info(response.message);
+        $('#EditProductModal').modal('hide');
+    }
+    
     if(response.status === 200) {
         toastr.success(response.message);
         $('#EditProductModal').modal('hide');

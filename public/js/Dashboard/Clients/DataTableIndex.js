@@ -101,23 +101,23 @@ let tableClients = $('#clients').DataTable({
                 if (data === null) {
                     btn += `<a onclick="IndexClientBranchModal(${row.id})" type="button"
                     class="btn btn-info btn-sm mr-2" title="Visualizar sucursales del cliente.">
-                        <i class="fas fa-code-branch text-white"></i>
+                        <i class="fas fa-eye text-white"></i>
                     </a>`;
 
-                    if(row.person_type === 1) {
+                    if(row.person_type.require_people === 1) {
                         if(row.person === null) {
                             btn += `<a onclick="CreatePersonModal(${row.id})" type="button"
                             class="btn btn-success btn-sm mr-2" title="Agregar representante legal.">
                                 <i class="fas fa-user-plus text-white"></i>
                             </a>`;
                         } else {
-                            btn += `<a onclick="EditPersonModal(${row.id})" type="button"
+                            btn += `<a onclick="EditPersonModal(${row.person.id}, ${row.id})" type="button"
                             class="btn bg-purple btn-sm mr-2" title="Editar representante legal.">
                                 <i class="fas fa-user-pen text-white"></i>
                             </a>`;
 
                             btn += `<a onclick="IndexPersonReferenceModal(${row.id})" type="button"
-                            class="btn btn-orange btn-sm mr-2" title="Visualizar referencias del representante legal.">
+                            class="btn bg-orange btn-sm mr-2" title="Visualizar referencias del representante legal.">
                                 <i class="fas fa-users text-white"></i>
                             </a>`;
                         }

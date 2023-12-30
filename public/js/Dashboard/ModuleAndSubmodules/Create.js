@@ -326,7 +326,7 @@ function CreateModuleAndSubmodulesPermissions(selectPermissions, permissions) {
 }
 
 function CreateModuleAndSubmodulesAjaxSuccess(response) {
-    if(response.status === 200) {
+    if(response.status === 204) {
         toastr.info(response.message);
         $('#CreateModuleAndSubmodulesModal').modal('hide');
     }

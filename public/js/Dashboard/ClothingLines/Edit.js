@@ -66,6 +66,11 @@ function EditClothingLine(id) {
 }
 
 function EditClothingLineAjaxSuccess(response) {
+    if (response.status === 204) {
+        toastr.info(response.message);
+        $('#EditClothingLineModal').modal('hide');
+    }
+    
     if (response.status === 200) {
         toastr.success(response.message);
         $('#EditClothingLineModal').modal('hide');

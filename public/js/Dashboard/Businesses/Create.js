@@ -28,7 +28,7 @@ function CreateBusinessModalCleaned() {
     $('#email_c').val('');
     $('#description_c').val('');
     $('#address_c').val('');
-    $('#neighbourhood_c').val('');
+    $('#neighborhood_c').val('');
 }
 
 function CreateBusinessModalResetSelect(id) {
@@ -122,7 +122,7 @@ function CreateBusiness() {
                     'email': $('#email_c').val(),
                     'description': $('#description_c').val(),
                     'address': $('#address_c').val(),
-                    'neighbourhood': $('#neighbourhood_c').val(),
+                    'neighborhood': $('#neighborhood_c').val(),
                     'country_id': $('#country_id_c').val(),
                     'departament_id': $('#departament_id_c').val(),
                     'city_id': $('#city_id_c').val()
@@ -143,7 +143,7 @@ function CreateBusiness() {
 }
 
 function CreateBusinessAjaxSuccess(response) {
-    if(response.status === 200) {
+    if(response.status === 204) {
         toastr.info(response.message);
         $('#CreateBusinessModal').modal('hide');
     }
@@ -204,8 +204,8 @@ function AddIsValidClassCreateBusiness() {
     if (!$('#address_c').hasClass('is-invalid')) {
         $('#address_c').addClass('is-valid');
     }
-    if (!$('#neighbourhood_c').hasClass('is-invalid')) {
-        $('#neighbourhood_c').addClass('is-valid');
+    if (!$('#neighborhood_c').hasClass('is-invalid')) {
+        $('#neighborhood_c').addClass('is-valid');
     }
     if (!$('#description_c').hasClass('is-invalid')) {
         $('#description_c').addClass('is-valid');
@@ -227,7 +227,7 @@ function RemoveIsValidClassCreateBusiness() {
     $('#telephone_number_c').removeClass('is-valid');
     $('#email_c').removeClass('is-valid');
     $('#address_c').removeClass('is-valid');
-    $('#neighbourhood_c').removeClass('is-valid');
+    $('#neighborhood_c').removeClass('is-valid');
     $('#description_c').removeClass('is-valid');
     $('span[aria-labelledby="select2-country_id_c-container"]').removeClass('is-valid');
     $('span[aria-labelledby="select2-departament_id_c-container"]').removeClass('is-valid');
@@ -249,7 +249,7 @@ function RemoveIsInvalidClassCreateBusiness() {
     $('#telephone_number_c').removeClass('is-invalid');
     $('#email_c').removeClass('is-invalid');
     $('#address_c').removeClass('is-invalid');
-    $('#neighbourhood_c').removeClass('is-invalid');
+    $('#neighborhood_c').removeClass('is-invalid');
     $('#description_c').removeClass('is-invalid');
     $('span[aria-labelledby="select2-country_id_c-container"]').removeClass('is-invalid');
     $('span[aria-labelledby="select2-departament_id_c-container"]').removeClass('is-invalid');

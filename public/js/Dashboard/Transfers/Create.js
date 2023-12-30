@@ -105,7 +105,7 @@ function CreateTransfer() {
 }
 
 function CreateTransferAjaxSuccess(response) {
-    if (response.status === 200) {
+    if (response.status === 204) {
         toastr.info(response.message);
         $('#CreateTransferModal').modal('hide');
     }

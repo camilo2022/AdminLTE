@@ -30,7 +30,7 @@ class BusinessIndexQueryCollection extends ResourceCollection
                     'city_id' => $business->city_id,
                     'city' => $business->city->name,
                     'address' => $business->address,
-                    'neighbourhood' => $business->neighbourhood,
+                    'neighborhood' => $business->neighborhood,
                     'description' =>  $business->description,
                     'created_at' => $this->formatDate($business->created_at),
                     'updated_at' => $this->formatDate($business->updated_at),

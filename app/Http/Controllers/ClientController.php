@@ -151,7 +151,7 @@ class ClientController extends Controller
             $client->departament_id = $request->input('departament_id');
             $client->city_id = $request->input('city_id');
             $client->address = $request->input('address');
-            $client->neighbourhood = $request->input('neighbourhood');
+            $client->neighborhood = $request->input('neighborhood');
             $client->email = $request->input('email');
             $client->telephone_number_first = $request->input('telephone_number_first');
             $client->telephone_number_second = $request->input('telephone_number_second');
@@ -227,7 +227,7 @@ class ClientController extends Controller
                     'clientTypes' => ClientType::all()
                 ],
                 'El cliente fue encontrado exitosamente.',
-                204
+                200
             );
         } catch (ModelNotFoundException $e) {
             return $this->errorResponse(
@@ -261,7 +261,7 @@ class ClientController extends Controller
             $client->departament_id = $request->input('departament_id');
             $client->city_id = $request->input('city_id');
             $client->address = $request->input('address');
-            $client->neighbourhood = $request->input('neighbourhood');
+            $client->neighborhood = $request->input('neighborhood');
             $client->email = $request->input('email');
             $client->telephone_number_first = $request->input('telephone_number_first');
             $client->telephone_number_second = $request->input('telephone_number_second');

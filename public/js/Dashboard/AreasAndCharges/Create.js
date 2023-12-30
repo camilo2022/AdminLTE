@@ -148,7 +148,7 @@ function CreateAreaAndChargesRemoveCharge(index) {
 }
 
 function CreateAreaAndChargesAjaxSuccess(response) {
-    if(response.status === 200) {
+    if(response.status === 204) {
         toastr.info(response.message);
         $('#CreateAreaAndChargesModal').modal('hide');
     }

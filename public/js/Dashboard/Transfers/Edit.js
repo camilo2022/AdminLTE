@@ -121,6 +121,11 @@ function EditTransfer(id) {
 }
 
 function EditTransferAjaxSuccess(response) {
+    if (response.status === 204) {
+        toastr.info(response.message);
+        $('#EditTransferModal').modal('hide');
+    }
+    
     if (response.status === 200) {
         toastr.success(response.message);
         $('#EditTransferModal').modal('hide');
