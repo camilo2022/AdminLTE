@@ -217,7 +217,7 @@ class ModulesAndSubmodulesController extends Controller
 
             $submodules = collect($request->input('submodules'))->map(function ($submodule) use ($module){
                 $submodule = (object) $submodule;
-                $submoduleNew = isset($submodule->id) ? Submodule::find($submodule->id) : new Submodule();
+                $submoduleNew = isset($submodule->id) ? Submodule::findOrFail($submodule->id) : new Submodule();
                 $submoduleNew->name = $submodule->submodule;
                 $submoduleNew->url = $submodule->url;
                 $submoduleNew->icon = $submodule->icon;

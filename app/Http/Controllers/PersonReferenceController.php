@@ -62,7 +62,7 @@ class PersonReferenceController extends Controller
             $end_date = Carbon::parse($request->input('end_date'))->endOfDay();
             //Consulta por nombre
             $peopleReferences = Person::with(['model', 'country', 'departament', 'city',
-                    'document_type' => function ($query) { $query->withTrashed(); }
+                    'document_type' => fn($query) => $query->withTrashed()
                 ])
                 ->when($request->filled('search'),
                     function ($query) use ($request) {

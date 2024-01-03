@@ -63,7 +63,7 @@ class ClientBranchController extends Controller
             $start_date = Carbon::parse($request->input('start_date'))->startOfDay();
             $end_date = Carbon::parse($request->input('end_date'))->endOfDay();
             //Consulta por nombre
-            $clientBranchBranches = ClientBranch::with(['country', 'departament', 'city',
+            $clientBranches = ClientBranch::with(['country', 'departament', 'city',
                     'client' => function ($query) { $query->withTrashed(); },
                 ])
                 ->when($request->filled('search'),
@@ -77,12 +77,12 @@ class ClientBranchController extends Controller
                     }
                 )
                 ->withTrashed() //Trae los registros 'eliminados'
-                ->where('client_id', '=', $request->input('client_id'))
+                ->where('client_id', $request->input('client_id'))
                 ->orderBy($request->input('column'), $request->input('dir'))
                 ->paginate($request->input('perPage'));
 
             return $this->successResponse(
-                new ClientBranchIndexQueryCollection($clientBranchBranches),
+                new ClientBranchIndexQueryCollection($clientBranches),
                 $this->getMessage('Success'),
                 200
             );

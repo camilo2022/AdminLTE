@@ -41,10 +41,10 @@ class WarehouseStoreRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'unique:warehouses,name', 'max:255'],
             'code' => ['required', 'string', 'unique:warehouses,code', 'max:255'],
-            'description' => ['nullable', 'string', 'max:255']
+            'description' => ['nullable', 'string', 'max:255'],
+            'to_discount' => ['required', 'boolean']
         ];
     }
-
 
     public function messages()
     {

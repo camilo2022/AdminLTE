@@ -4,7 +4,7 @@ namespace App\Http\Requests\OrderSeller;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class OrderSellerShowQueryRequest extends FormRequest
+class OrderSellerApproveRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

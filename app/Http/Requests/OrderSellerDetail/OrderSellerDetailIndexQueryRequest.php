@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\OrderSeller;
+namespace App\Http\Requests\OrderSellerDetail;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class OrderSellerAcceptRequest extends FormRequest
+class OrderSellerDetailIndexQueryRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

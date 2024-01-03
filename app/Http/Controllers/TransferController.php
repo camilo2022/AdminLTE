@@ -46,11 +46,11 @@ class TransferController extends Controller
             $end_date = Carbon::parse($request->input('end_date'))->endOfDay();
             //Consulta por nombre
             $transfers = Transfer::with([
-                    'from_warehouse' => function ($query) { $query->withTrashed(); },
-                    'from_user' => function ($query) { $query->withTrashed(); },
-                    'to_warehouse' => function ($query) { $query->withTrashed(); },
-                    'to_user' => function ($query) { $query->withTrashed(); },
-                    'details' => function ($query) { $query->withTrashed(); }
+                    'from_warehouse' => fn($query) => $query->withTrashed(),
+                    'from_user' => fn($query) => $query->withTrashed(),
+                    'to_warehouse' => fn($query) => $query->withTrashed(),
+                    'to_user' => fn($query) => $query->withTrashed(),
+                    'details' => fn($query) => $query->withTrashed()
                 ])
                 ->when($request->filled('search'),
                     function ($query) use ($request) {
@@ -186,7 +186,7 @@ class TransferController extends Controller
                     200
                 );
             }
-            
+
             $transfer = Transfer::with('from_warehouse')->findOrFail($id);
 
             return $this->successResponse(
@@ -354,7 +354,7 @@ class TransferController extends Controller
                     ->whereHas('color', fn($subQuery) => $subQuery->where('id', $detail->color_id))
                     ->whereHas('tone', fn($subQuery) => $subQuery->where('id', $detail->tone_id))
                     ->first();
-                
+
                 if(!$inventory && $detail->status == 'Pendiente') {
                     $inventory = new Inventory();
                     $inventory->product_id = $detail->product_id;
@@ -370,7 +370,7 @@ class TransferController extends Controller
                 $detail->status = $detail->status == 'Pendiente' ? 'Aprobado' : $detail->status;
                 $detail->save();
             }
-            
+
             $transfer->to_user_id = Auth::user()->id;
             $transfer->to_date = Carbon::now()->format('Y-m-d H:i:s');
             $transfer->to_observation = $request->input('to_observation');

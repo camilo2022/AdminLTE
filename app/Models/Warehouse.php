@@ -20,13 +20,15 @@ class Warehouse extends Model implements Auditable
     protected $fillable = [
         'name',
         'code',
-        'description'
+        'description',
+        'to_discount'
     ];
 
     protected $auditInclude = [
         'name',
         'code',
-        'description'
+        'description',
+        'to_discount'
     ];
 
     public function inventories() : HasMany

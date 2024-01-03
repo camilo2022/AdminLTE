@@ -30,7 +30,6 @@ class Order extends Model implements Auditable
         'wallet_observation',
         'dispatched_status',
         'dispatched_date',
-        'payment_status',
         'correria_id'
     ];
 
@@ -49,16 +48,15 @@ class Order extends Model implements Auditable
         'wallet_observation',
         'dispatched_status',
         'dispatched_date',
-        'payment_status',
         'correria_id'
     ];
 
-    public function order_details() : HasMany
+    public function details() : HasMany
     {
         return $this->hasMany(OrderDetail::class, 'order_id');
     }
 
-    public function order_dispatches() : HasMany
+    public function dispatches() : HasMany
     {
         return $this->hasMany(OrderDispatch::class, 'order_id');
     }

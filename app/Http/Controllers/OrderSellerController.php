@@ -3,83 +3,361 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Http\Requests\OrderSeller\OrderSellerApproveRequest;
+use App\Http\Requests\OrderSeller\OrderSellerCancelRequest;
+use App\Http\Requests\OrderSeller\OrderSellerCreateRequest;
+use App\Http\Requests\OrderSeller\OrderSellerIndexQueryRequest;
+use App\Http\Requests\OrderSeller\OrderSellerStoreRequest;
+use App\Http\Requests\OrderSeller\OrderSellerUpdateRequest;
+use App\Http\Resources\OrderSeller\OrderSellerIndexQueryCollection;
+use App\Models\Client;
+use App\Models\ClientBranch;
+use App\Models\Inventory;
+use App\Models\Order;
+use App\Traits\ApiMessage;
+use App\Traits\ApiResponser;
+use Carbon\Carbon;
+use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Auth;
 
 class OrderSellerController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    use ApiResponser;
+    use ApiMessage;
+
     public function index()
     {
-        //
+        try {
+            return view('Dashboard.OrderSellers.Index');
+        } catch (Exception $e) {
+            return back()->with('danger', 'Ocurrió un error al cargar la vista: ' . $e->getMessage());
+        }
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function indexQuery(OrderSellerIndexQueryRequest $request)
     {
-        //
+        try {
+            $start_date = Carbon::parse($request->input('start_date'))->startOfDay();
+            $end_date = Carbon::parse($request->input('end_date'))->endOfDay();
+            //Consulta por nombre
+            $orders = Order::with([
+                    'client' => fn($query) => $query->withTrashed(),
+                    'client_branch' => fn($query) => $query->withTrashed(),
+                    'seller_user' => fn($query) => $query->withTrashed(),
+                    'wallet_user' => fn($query) => $query->withTrashed(),
+                    'correria' => fn($query) => $query->withTrashed()
+                ])
+                ->when($request->filled('search'),
+                    function ($query) use ($request) {
+                        $query->search($request->input('search'));
+                    }
+                )
+                ->when($request->filled('start_date') && $request->filled('end_date'),
+                    function ($query) use ($start_date, $end_date) {
+                        $query->filterByDate($start_date, $end_date);
+                    }
+                )
+                ->when(!Auth::user()->hasRole('OrderWallet'),
+                    function ($query) {
+                        $query->where('seller_user_id', Auth::user()->id);
+                    }
+                )
+                ->orderBy($request->input('column'), $request->input('dir'))
+                ->paginate($request->input('perPage'));
+
+            return $this->successResponse(
+                new OrderSellerIndexQueryCollection($orders),
+                $this->getMessage('Success'),
+                200
+            );
+        } catch (QueryException $e) {
+            // Manejar la excepción de la base de datos
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('QueryException'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        } catch (Exception $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('Exception'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function create(OrderSellerCreateRequest $request)
     {
-        //
+        try {
+            if($request->filled('client_id')) {
+                return $this->successResponse(
+                    ClientBranch::where('client_id', '=', $request->input('client_id'))->get(),
+                    'Sucursales encontradas con exito.',
+                    200
+                );
+            }
+
+            return $this->successResponse(
+                Client::all(),
+                'Ingrese los datos para hacer la validacion y registro.',
+                204
+            );
+        } catch (Exception $e) {
+            // Devolver una respuesta de error en caso de excepción
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('Exception'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+    public function store(OrderSellerStoreRequest $request)
     {
-        //
+        try {
+            $order = new Order();
+            $order->client_id = $request->input('client_id');
+            $order->client_branch_id = $request->input('client_branch_id');
+            $order->dispatch = $request->input('dispatch');
+            $order->dispatch_date = Carbon::parse($request->input('dispatch_date'))->format('Y-m-d');
+            $order->seller_user_id = Auth::user()->id;
+            $order->seller_date = Carbon::now()->format('Y-m-d H:i:s');
+            $order->seller_observation = $request->input('seller_observation');
+            $order->correria_id = $request->input('correria_id');
+            $order->save();
+
+            return $this->successResponse(
+                $order,
+                'El pedido fue registrado exitosamente.',
+                201
+            );
+        } catch (ModelNotFoundException $e) {
+            // Manejar la excepción de la base de datos
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('OrderNotFoundException'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        } catch (QueryException $e) {
+            // Manejar la excepción de la base de datos
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('QueryException'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        } catch (Exception $e) {
+            // Devolver una respuesta de error en caso de excepción
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('Exception'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
+    public function edit(OrderSellerCreateRequest $request, $id)
     {
-        //
+        try {
+            if($request->filled('client_id')) {
+                return $this->successResponse(
+                    ClientBranch::where('client_id', '=', $request->input('client_id'))->get(),
+                    'Sucursales encontradas con exito.',
+                    200
+                );
+            }
+
+            return $this->successResponse(
+                [
+                    'clients' => Client::all(),
+                    'order' => Order::withTrashed()->findOrFail($id)
+                ],
+                'El pedido fue encontrado exitosamente.',
+                204
+            );
+        } catch (ModelNotFoundException $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('OrderNotFoundException'),
+                    'error' => $e->getMessage()
+                ],
+                404
+            );
+        } catch (Exception $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('Exception'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        }
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
+    public function update(OrderSellerUpdateRequest $request, $id)
     {
-        //
+        try {
+            $order = Order::withTrashed()->findOrFail($id);
+            $order->client_id = $request->input('client_id');
+            $order->client_branch_id = $request->input('client_branch_id');
+            $order->dispatch = $request->input('dispatch');
+            $order->dispatch_date = Carbon::parse($request->input('dispatch_date'))->format('Y-m-d');
+            $order->seller_observation = $request->input('seller_observation');
+            $order->save();
+
+            return $this->successResponse(
+                $order,
+                'El pedido fue actualizado exitosamente.',
+                200
+            );
+        } catch (ModelNotFoundException $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('OrderNotFoundException'),
+                    'error' => $e->getMessage()
+                ],
+                404
+            );
+        } catch (QueryException $e) {
+            // Manejar la excepción de la base de datos
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('QueryException'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        } catch (Exception $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('Exception'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
+    public function approve(OrderSellerApproveRequest $request)
     {
-        //
+        try {
+            $order = Order::with('details.quantities')->findOrFail($request->input('id'));
+
+            foreach ($order->details as $detail) {
+                if($detail->status == 'Pendiente'){
+                    foreach ($detail->quantities as $quantity) {
+
+                        $inventory = Inventory::with('product', 'size', 'warehouse', 'color', 'tone')
+                        ->whereHas('product', fn($subQuery) => $subQuery->where('id', $detail->product_id))
+                        ->whereHas('size', fn($subQuery) => $subQuery->where('id', $quantity->size_id))
+                        ->whereHas('warehouse', fn($subQuery) => $subQuery->where('to_discount', true))
+                        ->whereHas('color', fn($subQuery) => $subQuery->where('id', $detail->color_id))
+                        ->whereHas('tone', fn($subQuery) => $subQuery->where('id', $detail->tone_id))
+                        ->first();
+
+                        $detail->status = !$inventory || $inventory->quantity < $quantity->quantity ? 'Agotado' : 'Aprobado';
+                        $detail->save();
+
+                        if($inventory && $inventory->quantity >= $quantity->quantity) {
+                            $inventory->quantity -= $quantity->quantity;
+                            $inventory->save();
+                        }
+                    }
+                }
+            }
+
+            $order->seller_status = 'Aprobado';
+            $order->save();
+
+            return $this->successResponse(
+                $order,
+                'El pedido fue aprobado exitosamente.',
+                200
+            );
+        } catch (ModelNotFoundException $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('ModelNotFoundException'),
+                    'error' => $e->getMessage()
+                ],
+                404
+            );
+        } catch (QueryException $e) {
+            // Manejar la excepción de la base de datos
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('QueryException'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        } catch (Exception $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('Exception'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        }
+    }
+
+    public function cancel(OrderSellerCancelRequest $request)
+    {
+        try {
+            $order = Order::with('details')->findOrFail($request->input('id'));
+
+            foreach ($order->details as $detail) {
+                $detail->status = 'Cancelado';
+                $detail->save();
+            }
+
+            $order->seller_status = 'Cancelado';
+            $order->save();
+
+            return $this->successResponse(
+                '',
+                'El pedido fue cancelado exitosamente.',
+                200
+            );
+        } catch (ModelNotFoundException $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('ModelNotFoundException'),
+                    'error' => $e->getMessage()
+                ],
+                404
+            );
+        } catch (QueryException $e) {
+            // Manejar la excepción de la base de datos
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('QueryException'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        } catch (Exception $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('Exception'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        }
     }
 }

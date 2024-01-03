@@ -64,14 +64,14 @@ class ProductController extends Controller
             $end_date = Carbon::parse($request->input('end_date'))->endOfDay();
             //Consulta por nombre
             $products = Product::with([
-                    'clothing_line' => function ($query) { $query->withTrashed(); },
-                    'category' => function ($query) { $query->withTrashed(); },
-                    'subcategory' => function ($query) { $query->withTrashed(); },
-                    'model' => function ($query) { $query->withTrashed(); },
-                    'trademark' => function ($query) { $query->withTrashed(); },
-                    'collection' => function ($query) { $query->withTrashed(); },
-                    'colors_tones.color' => function ($query) { $query->withTrashed(); },
-                    'colors_tones.tone' => function ($query) { $query->withTrashed(); },
+                    'clothing_line' => fn($query) => $query->withTrashed(),
+                    'category' => fn($query) => $query->withTrashed(),
+                    'subcategory' => fn($query) => $query->withTrashed(),
+                    'model' => fn($query) => $query->withTrashed(),
+                    'trademark' => fn($query) => $query->withTrashed(),
+                    'collection' => fn($query) => $query->withTrashed(),
+                    'colors_tones.color' => fn($query) => $query->withTrashed(),
+                    'colors_tones.tone' => fn($query) => $query->withTrashed(),
                     'sizes'
                 ])
                 ->when($request->filled('search'),
@@ -227,15 +227,7 @@ class ProductController extends Controller
 
             return $this->successResponse(
                 [
-                    'product' => Product::with([
-                        'clothing_line' => function ($query) { $query->withTrashed(); },
-                        'category' => function ($query) { $query->withTrashed(); },
-                        'subcategory' => function ($query) { $query->withTrashed(); },
-                        'model' => function ($query) { $query->withTrashed(); },
-                        'trademark' => function ($query) { $query->withTrashed(); },
-                        'correria' => function ($query) { $query->withTrashed(); },
-                        'collection' => function ($query) { $query->withTrashed(); },
-                    ])->findOrFail($id),
+                    'product' => Product::findOrFail($id),
                     'clothing_lines' => ClothingLine::all(),
                     'models' => Model::all(),
                     'trademarks' => Trademark::all(),
@@ -737,7 +729,7 @@ class ProductController extends Controller
             });
 
             return $this->successResponse(
-                '',
+                $products,
                 'Los productos fueron registrados exitosamente.',
                 201
             );
@@ -766,14 +758,14 @@ class ProductController extends Controller
     {
         try {
             $products = Product::with([
-                    'clothing_line' => function ($query) { $query->withTrashed(); },
-                    'category' => function ($query) { $query->withTrashed(); },
-                    'subcategory' => function ($query) { $query->withTrashed(); },
-                    'model' => function ($query) { $query->withTrashed(); },
-                    'trademark' => function ($query) { $query->withTrashed(); },
-                    'collection' => function ($query) { $query->withTrashed(); },
-                    'colors_tones.color' => function ($query) { $query->withTrashed(); },
-                    'colors_tones.tone' => function ($query) { $query->withTrashed(); },
+                    'clothing_line' => fn($query) => $query->withTrashed(),
+                    'category' => fn($query) => $query->withTrashed(),
+                    'subcategory' => fn($query) => $query->withTrashed(),
+                    'model' => fn($query) => $query->withTrashed(),
+                    'trademark' => fn($query) => $query->withTrashed(),
+                    'collection' => fn($query) => $query->withTrashed(),
+                    'colors_tones.color' => fn($query) => $query->withTrashed(),
+                    'colors_tones.tone' => fn($query) => $query->withTrashed(),
                     'sizes'
                 ])
                 ->get();

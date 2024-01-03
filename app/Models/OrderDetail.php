@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableModel;
@@ -18,9 +19,7 @@ class OrderDetail extends Model implements Auditable
     protected $fillable = [
         'order_id',
         'product_id',
-        'size_id',
         'color_id',
-        'quantity',
         'price',
         'seller_date',
         'seller_observation',
@@ -28,15 +27,13 @@ class OrderDetail extends Model implements Auditable
         'wallet_date',
         'dispatched_user_id',
         'dispatched_date',
-        'order_detail_status'
+        'status'
     ];
 
     protected $auditInclude = [
         'order_id',
         'product_id',
-        'size_id',
         'color_id',
-        'quantity',
         'price',
         'seller_date',
         'seller_observation',
@@ -44,11 +41,15 @@ class OrderDetail extends Model implements Auditable
         'wallet_date',
         'dispatched_user_id',
         'dispatched_date',
-        'order_detail_status'
+        'status'
     ];
 
+    public function quantities() : HasMany
+    {
+        return $this->hasMany(OrderDetailQuantity::class, 'order_detail_id');
+    }
 
-    public function order_dispatch_detail() : HasOne
+    public function dispatch_detail() : HasOne
     {
         return $this->hasOne(OrderDispatchDetail::class, 'order_detail_id');
     }

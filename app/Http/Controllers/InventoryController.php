@@ -40,11 +40,11 @@ class InventoryController extends Controller
             $end_date = Carbon::parse($request->input('end_date'))->endOfDay();
             //Consulta por nombre
             $inventories = Inventory::with([
-                    'product' => function ($query) { $query->withTrashed(); },
-                    'size' => function ($query) { $query->withTrashed(); },
-                    'warehouse' => function ($query) { $query->withTrashed(); },
-                    'color' => function ($query) { $query->withTrashed(); },
-                    'tone' => function ($query) { $query->withTrashed(); },
+                    'product' => fn($query) => $query->withTrashed(),
+                    'size' => fn($query) => $query->withTrashed(),
+                    'warehouse' => fn($query) => $query->withTrashed(),
+                    'color' => fn($query) => $query->withTrashed(),
+                    'tone' => fn($query) => $query->withTrashed(),
                 ])
                 ->when($request->filled('search'),
                     function ($query) use ($request) {
@@ -167,11 +167,11 @@ class InventoryController extends Controller
     {
         try {
             $inventories = Inventory::with([
-                    'product' => function ($query) { $query->withTrashed(); },
-                    'size' => function ($query) { $query->withTrashed(); },
-                    'warehouse' => function ($query) { $query->withTrashed(); },
-                    'color' => function ($query) { $query->withTrashed(); },
-                    'tone' => function ($query) { $query->withTrashed(); },
+                    'product' => fn($query) => $query->withTrashed(),
+                    'size' => fn($query) => $query->withTrashed(),
+                    'warehouse' => fn($query) => $query->withTrashed(),
+                    'color' => fn($query) => $query->withTrashed(),
+                    'tone' => fn($query) => $query->withTrashed(),
                 ])
                 ->get();
 

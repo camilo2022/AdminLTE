@@ -40,8 +40,8 @@ class CategoriesAndSubcategoriesController extends Controller
             $end_date = Carbon::parse($request->input('end_date'))->endOfDay();
             // Consultar roles con relaciones y aplicar filtros
             $categoriesAndSubcategories = Category::with([
-                    'clothing_line' => function ($query) { $query->withTrashed(); },
-                    'subcategories' => function ($query) { $query->withTrashed(); }
+                    'clothing_line' => fn($query) => $query->withTrashed(),
+                    'subcategories' => fn($query) => $query->withTrashed()
                 ])
                 ->when($request->filled('search'),
                     function ($query) use ($request) {
@@ -163,8 +163,8 @@ class CategoriesAndSubcategoriesController extends Controller
             return $this->successResponse(
                 [
                     'category' => Category::with([
-                        'clothing_line' => function ($query) { $query->withTrashed(); },
-                        'subcategories' => function ($query) { $query->withTrashed(); }
+                        'clothing_line' => fn($query) => $query->withTrashed(),
+                        'subcategories' => fn($query) => $query->withTrashed()
                     ])
                     ->findOrFail($id),
                     'clothingLines' => ClothingLine::all()
@@ -201,9 +201,9 @@ class CategoriesAndSubcategoriesController extends Controller
             $category->description = $request->input('description');
             $category->save();
 
-            collect($request->input('subcategories'))->map(function ($subcategory) use ($category){
+            $subcategories = collect($request->input('subcategories'))->map(function ($subcategory) use ($category){
                 $subcategory = (object) $subcategory;
-                $subcategoryNew = isset($subcategory->id) ? Subcategory::withTrashed()->find($subcategory->id) : new Subcategory();
+                $subcategoryNew = isset($subcategory->id) ? Subcategory::withTrashed()->findOrFail($subcategory->id) : new Subcategory();
                 $subcategoryNew->category_id = $category->id;
                 $subcategoryNew->name = $subcategory->name;
                 $subcategoryNew->code = $subcategory->code;

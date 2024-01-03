@@ -21,7 +21,7 @@ return new class extends Migration
             $table->unsignedBigInteger('color_id');
             $table->unsignedBigInteger('tone_id');
             $table->unsignedBigInteger('quantity')->default(0);
-            $table->string('status');
+            $table->enum('status', ['Pendiente', 'Cancelado', 'Aprobado', 'Eliminado'])->default('Pendiente');
             $table->foreign('transfer_id')->references('id')->on('transfers')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('product_id')->references('id')->on('products')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('size_id')->references('id')->on('sizes')->onUpdate('cascade')->onDelete('cascade');

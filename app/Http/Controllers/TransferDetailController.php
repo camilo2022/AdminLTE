@@ -36,11 +36,11 @@ class TransferDetailController extends Controller
             $end_date = Carbon::parse($request->input('end_date'))->endOfDay();
             //Consulta por nombre
             $tranferDetails = TransferDetail::with([
-                    'transfer' => function ($query) { $query->withTrashed(); },
-                    'product' => function ($query) { $query->withTrashed(); },
-                    'size' => function ($query) { $query->withTrashed(); },
-                    'color' => function ($query) { $query->withTrashed(); },
-                    'tone' => function ($query) { $query->withTrashed(); },
+                    'transfer' => fn($query) => $query->withTrashed(),
+                    'product' => fn($query) => $query->withTrashed(),
+                    'size' => fn($query) => $query->withTrashed(),
+                    'color' => fn($query) => $query->withTrashed(),
+                    'tone' => fn($query) => $query->withTrashed(),
                 ])
                 ->when($request->filled('search'),
                     function ($query) use ($request) {
@@ -53,7 +53,7 @@ class TransferDetailController extends Controller
                     }
                 )
                 ->withTrashed()
-                ->where('transfer_id', '=', $request->input('transfer_id'))
+                ->where('transfer_id', $request->input('transfer_id'))
                 ->orderBy($request->input('column'), $request->input('dir'))
                 ->paginate($request->input('perPage'));
 
@@ -211,10 +211,10 @@ class TransferDetailController extends Controller
 
             return $this->successResponse(
                 TransferDetail::with([
-                    'product' => function ($query) { $query->withTrashed(); },
-                    'size' => function ($query) { $query->withTrashed(); },
-                    'color' => function ($query) { $query->withTrashed(); },
-                    'tone' => function ($query) { $query->withTrashed(); },
+                    'product' => fn($query) => $query->withTrashed(),
+                    'size' => fn($query) => $query->withTrashed(),
+                    'color' => fn($query) => $query->withTrashed(),
+                    'tone' => fn($query) => $query->withTrashed(),
                 ])->findOrFail($id),
                 'El Detalle de la transferencia fue encontrado exitosamente.',
                 204
@@ -305,11 +305,11 @@ class TransferDetailController extends Controller
 
             $inventory->quantity += $tranferDetail->quantity;
             $inventory->save();
-            
+
             $tranferDetail->status = 'Eliminado';
             $tranferDetail->save();
             $tranferDetail->delete();
-            
+
             return $this->successResponse(
                 $tranferDetail,
                 'El Detalle de la transferencia fue eliminado exitosamente.',

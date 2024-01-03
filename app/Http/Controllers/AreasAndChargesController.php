@@ -38,7 +38,7 @@ class AreasAndChargesController extends Controller
             $end_date = Carbon::parse($request->input('end_date'))->endOfDay();
             // Consultar roles con relaciones y aplicar filtros
             $areasAndCharges = Area::with([
-                    'charges' => function ($query) { $query->withTrashed(); }
+                    'charges' => fn($query) => $query->withTrashed()
                 ])
                 ->when($request->filled('search'),
                     function ($query) use ($request) {
@@ -156,7 +156,7 @@ class AreasAndChargesController extends Controller
         try {
             return $this->successResponse(
                 Area::with([
-                    'charges' => function ($query) { $query->withTrashed(); }
+                    'charges' => fn($query) => $query->withTrashed()
                 ])->withTrashed()->findOrFail($id),
                 'El area y cargos fueron encontrados exitosamente.',
                 204

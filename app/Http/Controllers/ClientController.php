@@ -47,9 +47,9 @@ class ClientController extends Controller
             $end_date = Carbon::parse($request->input('end_date'))->endOfDay();
             //Consulta por nombre
             $clients = Client::with(['person', 'country', 'departament', 'city',
-                    'person_type' => function ($query) { $query->withTrashed(); },
-                    'client_type' => function ($query) { $query->withTrashed(); },
-                    'document_type' => function ($query) { $query->withTrashed(); }
+                    'person_type' => fn($query) => $query->withTrashed(),
+                    'client_type' => fn($query) => $query->withTrashed(),
+                    'document_type' => fn($query) => $query->withTrashed()
                 ])
                 ->when($request->filled('search'),
                     function ($query) use ($request) {
@@ -334,9 +334,9 @@ class ClientController extends Controller
             $end_date = Carbon::parse($request->input('end_date'))->endOfDay();
             //Consulta por nombre
             $clients = Client::with(['person', 'country', 'departament', 'city',
-                    'person_type' => function ($query) { $query->withTrashed(); },
-                    'client_type' => function ($query) { $query->withTrashed(); },
-                    'document_type' => function ($query) { $query->withTrashed(); }
+                    'person_type' => fn($query) => $query->withTrashed(),
+                    'client_type' => fn($query) => $query->withTrashed(),
+                    'document_type' => fn($query) => $query->withTrashed()
                 ])
                 ->when($request->filled('search'),
                     function ($query) use ($request) {
