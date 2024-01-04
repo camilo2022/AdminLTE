@@ -63,8 +63,7 @@ class Product extends DBModel implements Auditable
     {
         return $this->belongsToMany(Size::class, 'product_sizes', 'product_id', 'size_id')
             ->withTimestamps()
-            ->using(ProductSize::class)
-            ->wherePivot('deleted_at', null);
+            ->whereNull('product_sizes.deleted_at');
     }
 
     public function clothing_line() : BelongsTo

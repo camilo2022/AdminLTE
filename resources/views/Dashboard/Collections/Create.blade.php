@@ -1,6 +1,6 @@
-<div class="modal fade bd-example-modal-lg" id="CreateCollectionModal" tabindex="-1" role="dialog"
+<div class="modal fade" id="CreateCollectionModal" tabindex="-1" role="dialog"
     aria-labelledby="exampleModalLabel" data-backdrop="static" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header w-100">
                 <div class="text-center w-100" style="background: white;">

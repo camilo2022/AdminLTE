@@ -6,13 +6,13 @@ function EditCollectionModal(id) {
             '_token': $('meta[name="csrf-token"]').attr('content')
         },
         success: function(response) {
-            tableCorrerias.ajax.reload();
+            tableCollections.ajax.reload();
             EditCollectionModalCleaned(response.data);
             EditCollectionAjaxSuccess(response);
             $('#EditCollectionModal').modal('show');
         },
         error: function(xhr, textStatus, errorThrown) {
-            tableCorrerias.ajax.reload();
+            tableCollections.ajax.reload();
             EditCollectionAjaxError(xhr);
         }
     });
@@ -50,11 +50,11 @@ function EditCollection(id) {
                     'code': $("#code_e").val()
                 },
                 success: function(response) {
-                    tableCorrerias.ajax.reload();
+                    tableCollections.ajax.reload();
                     EditCollectionAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableCorrerias.ajax.reload();
+                    tableCollections.ajax.reload();
                     EditCollectionAjaxError(xhr);
                 }
             });

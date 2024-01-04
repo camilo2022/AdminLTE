@@ -6,7 +6,6 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Validation\Rule;
-use Illuminate\Http\Request;
 
 class ProductMasiveRequest extends FormRequest
 {
@@ -18,11 +17,6 @@ class ProductMasiveRequest extends FormRequest
         ], 422));
     }
 
-    protected function getIndex()
-    {
-        return explode('.', Request::route()->parameterNames()[0])[1];
-    }
-
     public function authorize()
     {
         return true;
@@ -30,7 +24,7 @@ class ProductMasiveRequest extends FormRequest
 
     public function rules()
     {
-        return [
+        $rules = [
             'Products.*.code' => ['required', 'string', 'max:255', 'unique:products,code'],
             'Products.*.description' => ['nullable', 'string', 'max:255'],
             'Products.*.price' => ['required', 'numeric', 'between:0,999999.99'],
@@ -42,14 +36,23 @@ class ProductMasiveRequest extends FormRequest
             'Products.*.trademark_id' => ['required', 'exists:trademarks,id'],
             'Products.*.correria_id' => ['required', 'exists:correrias,id'],
             'Products.*.collection_id' => ['required', 'exists:collections,id'],
-            'Products.*.clothingLine_category' => ['exists:categories,id,clothing_line_id,' . $this->input('Products.' . $this->getIndex() . '.clothing_line_id')],
-            'Products.*.category_subcategory' => ['exists:subcategories,id,category_id,' . $this->input('Products.' . $this->getIndex() . '.category_id')],
             'ProductsSizes.*.code' => ['required', 'string', 'max:255', Rule::in(collect($this->Products)->pluck('code'))],
             'ProductsSizes.*.size_id' => ['required', 'exists:sizes,id'],
             'ProductsColorsTones.*.code' => ['required', 'string', 'max:255', Rule::in(collect($this->Products)->pluck('code'))],
             'ProductsColorsTones.*.color_id' => ['required', 'exists:colors,id'],
             'ProductsColorsTones.*.tone_id' => ['required', 'exists:tones,id'],
         ];
+
+        foreach ($this->Products as $index => $product) {
+            $rules["Products.{$index}.clothingLine_category"] = [
+                'exists:categories,id,clothing_line_id,' . $product['clothing_line_id'],
+            ];
+            $rules["Products.{$index}.category_subcategory"] = [
+                'exists:subcategories,id,category_id,' . $product['category_id'],
+            ];
+        }
+
+        return $rules;
     }
 
     public function messages()

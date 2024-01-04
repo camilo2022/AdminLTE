@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\OrderSeller\OrderSellerApproveRequest;
 use App\Http\Requests\OrderSeller\OrderSellerCancelRequest;
 use App\Http\Requests\OrderSeller\OrderSellerCreateRequest;
+use App\Http\Requests\OrderSeller\OrderSellerEditRequest;
 use App\Http\Requests\OrderSeller\OrderSellerIndexQueryRequest;
 use App\Http\Requests\OrderSeller\OrderSellerStoreRequest;
 use App\Http\Requests\OrderSeller\OrderSellerUpdateRequest;
@@ -169,7 +170,7 @@ class OrderSellerController extends Controller
         }
     }
 
-    public function edit(OrderSellerCreateRequest $request, $id)
+    public function edit(OrderSellerEditRequest $request, $id)
     {
         try {
             if($request->filled('client_id')) {

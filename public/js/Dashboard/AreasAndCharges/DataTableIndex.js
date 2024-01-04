@@ -7,10 +7,9 @@ let tableAreasAndCharges = $('#areasAndCharges').DataTable({
         data: function (request) {
             var columnMappings = {
                 0: 'id',
-                2: 'name',
-                3: 'icon',
-                4: 'description',
-                6: 'deleted_at',
+                1: 'name',
+                2: 'description',
+                4: 'deleted_at',
             };
             request._token = $('meta[name="csrf-token"]').attr('content');
             request.perPage = request.length;

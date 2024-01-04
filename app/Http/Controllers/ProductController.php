@@ -648,12 +648,10 @@ class ProductController extends Controller
             $products = Excel::toCollection(new ProductImportSheets, $request->file('products'));
 
             foreach($products['Products'] as $product) {
-                $product->merge([
-                    'clothingLine_category' => $product->category_id,
-                    'category_subcategory' => $product->subcategory_id,
-                ]);
+                $product['clothingLine_category'] = $product['category_id'];
+                $product['category_subcategory'] = $product['subcategory_id'];
             }
-
+            
             $productsValidate = new ProductMasiveRequest();
             $productsValidate->merge([
                 'Products' => $products['Products']->toArray(),
