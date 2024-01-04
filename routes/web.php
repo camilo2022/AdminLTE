@@ -16,6 +16,8 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\ModelController;
 use App\Http\Controllers\ModulesAndSubmodulesController;
+use App\Http\Controllers\OrderSellerController;
+use App\Http\Controllers\OrderSellerDetailController;
 use App\Http\Controllers\PackageTypeController;
 use App\Http\Controllers\PaymentMethodController;
 use App\Http\Controllers\PersonController;
@@ -959,6 +961,20 @@ Route::middleware(['auth'])->group(function () {
                     ->middleware('can:Dashboard.Clients.People.References.Restore')->name('Dashboard.Clients.People.References.Restore');
 
                 });
+
+            });
+
+        });
+
+        Route::prefix('/Orders')->group(function () {
+
+            Route::prefix('/Seller')->group(function () {
+
+                Route::post('/Index', [OrderSellerController::class, 'index'])
+                ->middleware('can:Dashboard.Order.Seller.Index')->name('Dashboard.Order.Seller.Index');
+
+                Route::get('/Details/Index/Query', [OrderSellerDetailController::class, 'indexQuery'])
+                ->middleware('can:Dashboard.Order.Seller.Details.Index.Query')->name('Dashboard.Order.Seller.Details.Index.Query');
 
             });
 

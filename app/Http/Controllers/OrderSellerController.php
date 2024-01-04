@@ -257,11 +257,11 @@ class OrderSellerController extends Controller
         try {
             $order = Order::with('details.quantities')->findOrFail($request->input('id'));
 
-            foreach ($order->details as $detail) {
-                if($detail->status == 'Pendiente'){
-                    foreach ($detail->quantities as $quantity) {
-
-                        $inventory = Inventory::with('product', 'size', 'warehouse', 'color', 'tone')
+            $order->details->filter(function ($detail) {
+                return $detail->status == 'Pendiente';
+            })->each(function ($detail) {
+                $detail->quantities->each(function ($quantity) use ($detail) {
+                    $inventory = Inventory::with('product', 'size', 'warehouse', 'color', 'tone')
                         ->whereHas('product', fn($subQuery) => $subQuery->where('id', $detail->product_id))
                         ->whereHas('size', fn($subQuery) => $subQuery->where('id', $quantity->size_id))
                         ->whereHas('warehouse', fn($subQuery) => $subQuery->where('to_discount', true))
@@ -269,16 +269,15 @@ class OrderSellerController extends Controller
                         ->whereHas('tone', fn($subQuery) => $subQuery->where('id', $detail->tone_id))
                         ->first();
 
-                        $detail->status = !$inventory || $inventory->quantity < $quantity->quantity ? 'Agotado' : 'Aprobado';
-                        $detail->save();
+                    $detail->status = !$inventory || $inventory->quantity < $quantity->quantity ? 'Agotado' : 'Aprobado';
+                    $detail->save();
 
-                        if($inventory && $inventory->quantity >= $quantity->quantity) {
-                            $inventory->quantity -= $quantity->quantity;
-                            $inventory->save();
-                        }
+                    if ($inventory && $inventory->quantity >= $quantity->quantity) {
+                        $inventory->quantity -= $quantity->quantity;
+                        $inventory->save();
                     }
-                }
-            }
+                });
+            });
 
             $order->seller_status = 'Aprobado';
             $order->save();

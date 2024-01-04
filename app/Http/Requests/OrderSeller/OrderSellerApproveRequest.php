@@ -3,28 +3,36 @@
 namespace App\Http\Requests\OrderSeller;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class OrderSellerApproveRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
+    protected function failedValidation(Validator $validator)
     {
-        return false;
+        throw new HttpResponseException(response()->json([
+            'message' => 'Error de validación.',
+            'errors' => $validator->errors()
+        ], 422));
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, mixed>
-     */
+    public function authorize()
+    {
+        return true;
+    }
+
     public function rules()
     {
         return [
-            //
+            'id' => ['required', 'exists:orders,id'],
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'id.required' => 'El campo Pedido es requerido.',
+            'id.exists' => 'El Identificador del pedido no es valido.',
         ];
     }
 }

@@ -46,8 +46,8 @@ class OrderSellerDetailController extends Controller
             //Consulta por nombre
             $orderDetails = OrderDetail::with([
                     'order',
+                    'quantities.size',
                     'product' => fn($query) => $query->withTrashed(),
-                    'size' => fn($query) => $query->withTrashed(),
                     'color' => fn($query) => $query->withTrashed(),
                     'wallet_user' => fn($query) => $query->withTrashed(),
                     'dispatched_user' => fn($query) => $query->withTrashed(),
@@ -64,6 +64,45 @@ class OrderSellerDetailController extends Controller
                 )
                 ->where('order_id', $request->input('order_id'))
                 ->get();
+
+            $orderDetailQuantitySizes = OrderDetailQuantity::with('order_detail')
+                ->whereHas('order_detail', fn($subQuery) => $subQuery->where('order_id', $request->input('order_id')))
+                ->get()->pluck('size_id')->unique();
+
+            return $orderDetails = $orderDetails->map(function ($orderDetail) use ($orderDetailQuantitySizes) {
+
+                $orderDetailSizes = $orderDetail->quantities->pluck('size_id')->unique();
+                $missingSizes = $orderDetailQuantitySizes->diff($orderDetailSizes)->values();
+
+                $quantities = collect($orderDetail->quantities)->mapWithKeys(function ($quantity) {
+                    return [$quantity['size']->id => [
+                        'order_detail_id' => $quantity['order_detail_id'],
+                        'quantity' => $quantity['quantity'],
+                    ]];
+                });
+
+                $missingSizes->each(function ($missingSize) use ($quantities, $orderDetail) {
+                    $quantities[$missingSize] = [
+                        'order_detail_id' => $orderDetail->id,
+                        'quantity' => 0,
+                    ];
+                });
+
+                return [
+                    'id' => $orderDetail->id,
+                    'order_id' => $orderDetail->order_id,
+                    'product_id' => $orderDetail->product_id,
+                    'color_id' => $orderDetail->color_id,
+                    'price' => $orderDetail->price,
+                    'seller_date' => $orderDetail->seller_date,
+                    'seller_observation' => $orderDetail->seller_observation,
+                    'status' => $orderDetail->status,
+                    'quantities' => $quantities,
+                ];
+            });
+
+                // $result contendrá el resultado deseado
+
 
             return $this->successResponse(
                 $orderDetails,
