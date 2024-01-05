@@ -18,9 +18,10 @@ return new class extends Migration
             $table->unsignedBigInteger('order_id')->comment('Identificador del pedido.');
             $table->unsignedBigInteger('product_id')->comment('Identificador del producto.');
             $table->unsignedBigInteger('color_id')->comment('Identificador del color.');
+            $table->unsignedBigInteger('tone_id')->comment('Identificador del tono.');
             $table->float('price', 8, 2)->comment('Valor de venta del producto.');
             $table->datetime('seller_date')->comment('Fecha de vendedor');
-            $table->string('seller_observation')->comment('Observacion de vendedor');
+            $table->string('seller_observation')->nullable()->comment('Observacion de vendedor');
             $table->unsignedBigInteger('wallet_user_id')->nullable()->comment('Identificador del usuario de cartera.');
             $table->datetime('wallet_date')->nullable()->comment('Fecha de cartera.');
             $table->unsignedBigInteger('dispatched_user_id')->nullable()->comment('Identificador del usuario de despacho.');
@@ -29,6 +30,7 @@ return new class extends Migration
             $table->foreign('order_id')->references('id')->on('orders')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('product_id')->references('id')->on('products')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('color_id')->references('id')->on('colors')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('tone_id')->references('id')->on('tones')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('wallet_user_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('dispatched_user_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();

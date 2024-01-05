@@ -366,6 +366,7 @@ return array(
     'App\\Models\\OrderDispatchDetailQuantity' => $baseDir . '/app/Models/OrderDispatchDetailQuantity.php',
     'App\\Models\\OrderPackage' => $baseDir . '/app/Models/OrderPackage.php',
     'App\\Models\\OrderPackageDetail' => $baseDir . '/app/Models/OrderPackageDetail.php',
+    'App\\Models\\OrderPackageDetailQuantity' => $baseDir . '/app/Models/OrderPackageDetailQuantity.php',
     'App\\Models\\OrderPacking' => $baseDir . '/app/Models/OrderPacking.php',
     'App\\Models\\PackageType' => $baseDir . '/app/Models/PackageType.php',
     'App\\Models\\Person' => $baseDir . '/app/Models/Person.php',

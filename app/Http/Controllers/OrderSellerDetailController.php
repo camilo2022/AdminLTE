@@ -49,6 +49,7 @@ class OrderSellerDetailController extends Controller
                     'quantities.size',
                     'product' => fn($query) => $query->withTrashed(),
                     'color' => fn($query) => $query->withTrashed(),
+                    'tone' => fn($query) => $query->withTrashed(),
                     'wallet_user' => fn($query) => $query->withTrashed(),
                     'dispatched_user' => fn($query) => $query->withTrashed(),
                 ])
@@ -65,11 +66,11 @@ class OrderSellerDetailController extends Controller
                 ->where('order_id', $request->input('order_id'))
                 ->get();
 
-            $orderDetailQuantitySizes = OrderDetailQuantity::with('order_detail')
+            $orderDetailQuantitySizes = OrderDetailQuantity::with('order_detail', 'size')
                 ->whereHas('order_detail', fn($subQuery) => $subQuery->where('order_id', $request->input('order_id')))
-                ->get()->pluck('size_id')->unique();
+                ->get()->pluck('size')->unique();
 
-            return $orderDetails = $orderDetails->map(function ($orderDetail) use ($orderDetailQuantitySizes) {
+            /* $orderDetails = $orderDetails->map(function ($orderDetail) use ($orderDetailQuantitySizes) {
 
                 $orderDetailSizes = $orderDetail->quantities->pluck('size_id')->unique();
                 $missingSizes = $orderDetailQuantitySizes->diff($orderDetailSizes)->values();
@@ -99,13 +100,13 @@ class OrderSellerDetailController extends Controller
                     'status' => $orderDetail->status,
                     'quantities' => $quantities,
                 ];
-            });
-
-                // $result contendrá el resultado deseado
-
+            }); */
 
             return $this->successResponse(
-                $orderDetails,
+                [
+                    'orderDetails' => $orderDetails,
+                    'sizes' => $orderDetailQuantitySizes
+                ],
                 $this->getMessage('Success'),
                 200
             );
@@ -179,6 +180,7 @@ class OrderSellerDetailController extends Controller
             $orderDetail->order_id = $request->input('order_id');
             $orderDetail->product_id = $request->input('product_id');
             $orderDetail->color_id = $request->input('color_id');
+            $orderDetail->tone_id = $request->input('tone_id');
             $orderDetail->price = $request->input('price');
             $orderDetail->seller_date = Carbon::now()->format('Y-m-d H:i:s');
             $orderDetail->seller_observation = $request->input('seller_observation');
@@ -231,16 +233,21 @@ class OrderSellerDetailController extends Controller
     public function edit(OrderSellerDetailCreateRequest $request, $id)
     {
         try {
-            return $this->successResponse(
-                [
-                    'inventories' => Inventory::with('product', 'warehouse', 'color', 'tone', 'size')
+            if($request->filled('product_id') && $request->filled('color_id') && $request->filled('tone_id')) {
+                return $this->successResponse(
+                    Inventory::with('product', 'warehouse', 'color', 'tone', 'size')
                         ->whereHas('product', fn($subQuery) => $subQuery->where('id', $request->input('product_id')))
                         ->whereHas('warehouse', fn($subQuery) => $subQuery->where('to_discount', true))
                         ->whereHas('color', fn($subQuery) => $subQuery->where('id', $request->input('color_id')))
                         ->whereHas('tone', fn($subQuery) => $subQuery->where('id', $request->input('tone_id')))
                         ->first(),
-                    'orderDetail' => OrderDetail::with('quantities')->findOrFail($id)
-                ],
+                    'Inventario encontrado con exito.',
+                    200
+                );
+            }
+
+            return $this->successResponse(
+                OrderDetail::with('quantities')->findOrFail($id),
                 'El detalle del pedido fue encontrado exitosamente.',
                 204
             );

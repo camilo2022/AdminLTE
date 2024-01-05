@@ -44,6 +44,8 @@ class TransferDetailEditRequest extends FormRequest
             'warehouse_id' => ['nullable', 'exists:warehouses,id'],
             'product_id' => ['nullable', 'exists:products,id'],
             'color_id' => ['nullable', 'exists:colors,id'],
+            'tone_id' => ['nullable', 'exists:tones,id'],
+            'size_id' => ['nullable', 'exists:sizes,id'],
         ];
     }
 
@@ -53,6 +55,8 @@ class TransferDetailEditRequest extends FormRequest
             'warehouse_id.exists' => 'El Identificador de la bodega no es valido.',
             'product_id.exists' => 'El Identificador del producto no es valido.',
             'color_id.exists' => 'El Identificador del color no es valido.',
+            'tone_id.exists' => 'El Identificador del tono no es valido.',
+            'size_id.exists' => 'El Identificador de la talla no es valido.',
         ];
     }
 }

@@ -20,6 +20,7 @@ class OrderDetail extends Model implements Auditable
         'order_id',
         'product_id',
         'color_id',
+        'tone_id',
         'price',
         'seller_date',
         'seller_observation',
@@ -34,6 +35,7 @@ class OrderDetail extends Model implements Auditable
         'order_id',
         'product_id',
         'color_id',
+        'tone_id',
         'price',
         'seller_date',
         'seller_observation',
@@ -67,6 +69,11 @@ class OrderDetail extends Model implements Auditable
     public function color() : BelongsTo
     {
         return $this->belongsTo(Color::class, 'color_id');
+    }
+
+    public function tone() : BelongsTo
+    {
+        return $this->belongsTo(Tone::class, 'tone_id');
     }
 
     public function wallet_user() : BelongsTo

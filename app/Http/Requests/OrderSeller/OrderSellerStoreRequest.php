@@ -41,7 +41,6 @@ class OrderSellerStoreRequest extends FormRequest
         ];
     }
 
-
     public function messages()
     {
         return [

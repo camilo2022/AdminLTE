@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('order_detail_quantity_id')->comment('Identificador de la cantidad del detalle de la orden.');
             $table->unsignedBigInteger('quantity')->default(0);
-            $table->foreign('order_detail_quantity_id', 'order_dispatch_detail_quantities_order_detail_quantity_id_fk')->references('id')->on('order_detail_quantities')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('order_detail_quantity_id', 'order_dispatch_detail_quantities_detail_quantity_id_fk')->references('id')->on('order_detail_quantities')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });
     }

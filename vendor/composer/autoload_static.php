@@ -1020,6 +1020,7 @@ class ComposerStaticInitd8dacbe985ec62888937197aae0da1ad
         'App\\Models\\OrderDispatchDetailQuantity' => __DIR__ . '/../..' . '/app/Models/OrderDispatchDetailQuantity.php',
         'App\\Models\\OrderPackage' => __DIR__ . '/../..' . '/app/Models/OrderPackage.php',
         'App\\Models\\OrderPackageDetail' => __DIR__ . '/../..' . '/app/Models/OrderPackageDetail.php',
+        'App\\Models\\OrderPackageDetailQuantity' => __DIR__ . '/../..' . '/app/Models/OrderPackageDetailQuantity.php',
         'App\\Models\\OrderPacking' => __DIR__ . '/../..' . '/app/Models/OrderPacking.php',
         'App\\Models\\PackageType' => __DIR__ . '/../..' . '/app/Models/PackageType.php',
         'App\\Models\\Person' => __DIR__ . '/../..' . '/app/Models/Person.php',

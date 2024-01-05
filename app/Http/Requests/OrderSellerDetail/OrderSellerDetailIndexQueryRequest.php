@@ -27,7 +27,7 @@ class OrderSellerDetailIndexQueryRequest extends FormRequest
             'order_id' => ['nullable', 'exists:orders,id'],
             'start_date' => ['nullable', 'date'],
             'end_date' => ['nullable', 'date', 'after_or_equal:start_date'],
-            'perPage' => ['nullable', 'numeric'],
+            'perPage' => ['required', 'numeric'],
         ];
     }
 
