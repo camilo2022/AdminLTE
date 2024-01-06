@@ -13,9 +13,9 @@
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="code_cb_c">Codigo</label>
+                            <label for="name_cb_c">Nombre</label>
                             <div class="input-group">
-                                <input type="text" class="form-control" id="code_cb_c" name="code">
+                                <input type="text" class="form-control" id="name_cb_c" name="name">
                                 <div class="input-group-append">
                                     <span class="input-group-text">
                                         <i class="fas fa-signature"></i>
@@ -26,12 +26,12 @@
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="address_cb_c">Direccion</label>
+                            <label for="code_cb_c">Codigo</label>
                             <div class="input-group">
-                                <input type="text" class="form-control" id="address_cb_c" name="address">
+                                <input type="text" class="form-control" id="code_cb_c" name="code">
                                 <div class="input-group-append">
                                     <span class="input-group-text">
-                                        <i class="fas fa-location-dot"></i>
+                                        <i class="fas fa-code"></i>
                                     </span>
                                 </div>
                             </div>
@@ -56,12 +56,12 @@
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="neighborhood_cb_c">Barrio</label>
+                            <label for="address_cb_c">Direccion</label>
                             <div class="input-group">
-                                <input type="text" class="form-control" id="neighborhood_cb_c" name="neighbourhood">
+                                <input type="text" class="form-control" id="address_cb_c" name="address">
                                 <div class="input-group-append">
                                     <span class="input-group-text">
-                                        <i class="fas fa-location-arrow"></i>
+                                        <i class="fas fa-location-dot"></i>
                                     </span>
                                 </div>
                             </div>
@@ -86,12 +86,12 @@
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="email_cb_c">Correo electronico</label>
+                            <label for="neighborhood_cb_c">Barrio</label>
                             <div class="input-group">
-                                <input type="text" class="form-control" id="email_cb_c" name="email">
+                                <input type="text" class="form-control" id="neighborhood_cb_c" name="neighbourhood">
                                 <div class="input-group-append">
                                     <span class="input-group-text">
-                                        <i class="fas fa-envelope"></i>
+                                        <i class="fas fa-location-arrow"></i>
                                     </span>
                                 </div>
                             </div>
@@ -113,6 +113,23 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="email_cb_c">Correo electronico</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="email_cb_c" name="email">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-envelope"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
                         <div class="form-group">
                             <label for="telephone_number_first_cb_c">Numero de telefono</label>
                             <div class="input-group">
@@ -140,7 +157,7 @@
                         <div class="form-group">
                             <label for="description_cb_c">Descripcion</label>
                             <div class="input-group">
-                                <textarea class="form-control" id="description_cb_c" name="description" cols="30" rows="8"></textarea>
+                                <textarea class="form-control" id="description_cb_c" name="description" cols="30" rows="5"></textarea>
                                 <div class="input-group-append">
                                     <span class="input-group-text">
                                         <i class="fas fa-text-size"></i>

@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('client_branches', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('client_id');
+            $table->string('name');
             $table->string('code');
             $table->unsignedBigInteger('country_id');
             $table->unsignedBigInteger('departament_id');

@@ -237,7 +237,7 @@ class ModulesAndSubmodulesSeeder extends Seeder
 
         Submodule::create([
             'name' => 'Pedidos',
-            'url' => '/Dashboard/Order/Seller/Index',
+            'url' => '/Dashboard/Orders/Seller/Index',
             'icon' => 'fas fa-receipt',
             'module_id' => $Pedido->id,
             'permission_id' => 228
@@ -257,7 +257,7 @@ class ModulesAndSubmodulesSeeder extends Seeder
 
         Submodule::create([
             'name' => 'Gestion',
-            'url' => '/Dashboard/Wallet/Index',
+            'url' => '/Dashboard/Wallets/Index',
             'icon' => 'fas fa-wallet',
             'module_id' => $Cartera->id,
             'permission_id' => 266
@@ -265,7 +265,7 @@ class ModulesAndSubmodulesSeeder extends Seeder
 
         Submodule::create([
             'name' => 'Ordenes',
-            'url' => '/Dashboard/Order/Wallet/Index',
+            'url' => '/Dashboard/Orders/Wallet/Index',
             'icon' => 'fas fa-traffic-light',
             'module_id' => $Cartera->id,
             'permission_id' => 273
@@ -277,7 +277,7 @@ class ModulesAndSubmodulesSeeder extends Seeder
 
         Submodule::create([
             'name' => 'Filtro',
-            'url' => '/Dashboard/Order/Dispatch/Index',
+            'url' => '/Dashboard/Orders/Dispatch/Index',
             'icon' => 'fas fa-filter',
             'module_id' => $Despacho->id,
             'permission_id' => 289
@@ -285,7 +285,7 @@ class ModulesAndSubmodulesSeeder extends Seeder
 
         Submodule::create([
             'name' => 'Empacado',
-            'url' => '/Dashboard/Order/Packed/Index',
+            'url' => '/Dashboard/Orders/Packed/Index',
             'icon' => 'fas fa-box-open-full',
             'module_id' => $Despacho->id,
             'permission_id' => 307
@@ -293,7 +293,7 @@ class ModulesAndSubmodulesSeeder extends Seeder
 
         Submodule::create([
             'name' => 'Facturacion',
-            'url' => '/Dashboard/Order/Invoiced/Index',
+            'url' => '/Dashboard/Orders/Invoiced/Index',
             'icon' => 'fas fa-file-invoice-dollar',
             'module_id' => $Despacho->id,
             'permission_id' => 320

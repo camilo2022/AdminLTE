@@ -24,6 +24,7 @@ function CreateClientBranchModalCleaned() {
     RemoveIsValidClassCreateClientBranch();
     RemoveIsInvalidClassCreateClientBranch();
 
+    $('#name_cb_c').val('');
     $('#code_cb_c').val('');
     $('#address_cb_c').val('');
     $('#neighborhood_cb_c').val('');
@@ -119,6 +120,7 @@ function CreateClientBranch() {
                 data: {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
                     'client_id': $('#IndexClientBranchButton').attr('data-client_id'),
+                    'name': $('#name_cb_c').val(),
                     'code': $('#code_cb_c').val(),
                     'country_id': $('#country_id_cb_c').val(),
                     'departament_id': $('#departament_id_cb_c').val(),
@@ -194,6 +196,9 @@ function CreateClientBranchAjaxError(xhr) {
 }
 
 function AddIsValidClassCreateClientBranch() {
+    if (!$('#name_cb_c').hasClass('is-invalid')) {
+        $('#name_cb_c').addClass('is-valid');
+    }
     if (!$('#code_cb_c').hasClass('is-invalid')) {
         $('#code_cb_c').addClass('is-valid');
     }
@@ -227,6 +232,7 @@ function AddIsValidClassCreateClientBranch() {
 }
 
 function RemoveIsValidClassCreateClientBranch() {
+    $('#name_cb_c').removeClass('is-valid');
     $('#code_cb_c').removeClass('is-valid');
     $('#address_cb_c').removeClass('is-valid');
     $('#neighborhood_cb_c').removeClass('is-valid');
@@ -249,6 +255,7 @@ function AddIsInvalidClassCreateClientBranch(input) {
 }
 
 function RemoveIsInvalidClassCreateClientBranch() {
+    $('#name_cb_c').removeClass('is-invalid');
     $('#code_cb_c').removeClass('is-invalid');
     $('#address_cb_c').removeClass('is-invalid');
     $('#neighborhood_cb_c').removeClass('is-invalid');

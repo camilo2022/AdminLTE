@@ -2,9 +2,12 @@
 
 namespace App\Http\Requests\OrderSeller;
 
+use App\Models\Correria;
+use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Support\Facades\DB;
 
 class OrderSellerStoreRequest extends FormRequest
 {
@@ -18,8 +21,12 @@ class OrderSellerStoreRequest extends FormRequest
 
     protected function prepareForValidation()
     {
+        DB::statement('CALL correrias(?)', [Carbon::now()->format('Y-m-d H:i:s')]);
+        $correria = Correria::first();
+
         $this->merge([
             'client_clientBranch' => $this->input('client_branch_id'),
+            'correria_id' => $correria ? $correria->id : null
         ]);
     }
 
@@ -56,7 +63,7 @@ class OrderSellerStoreRequest extends FormRequest
             'dispatch_date.after_or_equal' => 'El campo Fecha de despacho debe ser posterior o igual a la fecha actual :now.',
             'seller_observation.string' => 'El campo Observacion del asesor debe ser una cadena de caracteres.',
             'seller_observation.max' => 'El campo Observacion del asesor no debe exceder los 255 caracteres.',
-            'correria_id.required' => 'El campo Correria es requerido.',
+            'correria_id.required' => 'El campo Correria es requerido. No existe una correria activa en la fecha actual.',
             'correria_id.exists' => 'El Identificador de la correria no es valido.',
             'client_clientBranch.exists' => 'La sucursal no pertenece al cliente seleccionado.'
         ];

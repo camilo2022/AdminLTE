@@ -21,6 +21,7 @@ class ClientBranchIndexQueryCollection extends ResourceCollection
                     'id' => $clientBranch->id,
                     'client_id' => $clientBranch->client_id,
                     'client' => $clientBranch->client,
+                    'name' => $clientBranch->name,
                     'code' => $clientBranch->code,
                     'country_id' => $clientBranch->country_id,
                     'country' => $clientBranch->country,

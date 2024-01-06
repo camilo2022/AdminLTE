@@ -147,6 +147,7 @@ class ClientBranchController extends Controller
         try {
             $clientBranch = new ClientBranch();
             $clientBranch->client_id = $request->input('client_id');
+            $clientBranch->name = $request->input('name');
             $clientBranch->code = $request->input('code');
             $clientBranch->country_id = $request->input('country_id');
             $clientBranch->departament_id = $request->input('departament_id');
@@ -244,6 +245,7 @@ class ClientBranchController extends Controller
     {
         try {
             $clientBranch = ClientBranch::withTrashed()->findOrFail($id);
+            $clientBranch->name = $request->input('name');
             $clientBranch->code = $request->input('code');
             $clientBranch->country_id = $request->input('country_id');
             $clientBranch->departament_id = $request->input('departament_id');

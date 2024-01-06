@@ -970,55 +970,55 @@ Route::middleware(['auth'])->group(function () {
 
             Route::prefix('/Seller')->group(function () {
 
-                Route::post('/Index', [OrderSellerController::class, 'index'])
-                ->middleware('can:Dashboard.Order.Seller.Index')->name('Dashboard.Order.Seller.Index');
+                Route::get('/Index', [OrderSellerController::class, 'index'])
+                ->middleware('can:Dashboard.Orders.Seller.Index')->name('Dashboard.Orders.Seller.Index');
 
                 Route::post('/Index/Query', [OrderSellerController::class, 'indexQuery'])
-                ->middleware('can:Dashboard.Order.Seller.Index.Query')->name('Dashboard.Order.Seller.Index.Query');
+                ->middleware('can:Dashboard.Orders.Seller.Index.Query')->name('Dashboard.Orders.Seller.Index.Query');
 
                 Route::post('/Create', [OrderSellerController::class, 'create'])
-                ->middleware('can:Dashboard.Order.Seller.Create')->name('Dashboard.Order.Seller.Create');
+                ->middleware('can:Dashboard.Orders.Seller.Create')->name('Dashboard.Orders.Seller.Create');
 
                 Route::post('/Store', [OrderSellerController::class, 'store'])
-                ->middleware('can:Dashboard.Order.Seller.Store')->name('Dashboard.Order.Seller.Store');
+                ->middleware('can:Dashboard.Orders.Seller.Store')->name('Dashboard.Orders.Seller.Store');
 
                 Route::post('/Edit/{id}', [OrderSellerController::class, 'edit'])
-                ->middleware('can:Dashboard.Order.Seller.Edit')->name('Dashboard.Order.Seller.Edit');
+                ->middleware('can:Dashboard.Orders.Seller.Edit')->name('Dashboard.Orders.Seller.Edit');
 
                 Route::put('/Update/{id}', [OrderSellerController::class, 'update'])
-                ->middleware('can:Dashboard.Order.Seller.Update')->name('Dashboard.Order.Seller.Update');
+                ->middleware('can:Dashboard.Orders.Seller.Update')->name('Dashboard.Orders.Seller.Update');
 
                 Route::put('/Approve', [OrderSellerController::class, 'approve'])
-                ->middleware('can:Dashboard.Order.Seller.Approve')->name('Dashboard.Order.Seller.Approve');
+                ->middleware('can:Dashboard.Orders.Seller.Approve')->name('Dashboard.Orders.Seller.Approve');
 
                 Route::put('/Cancel', [OrderSellerController::class, 'cancel'])
-                ->middleware('can:Dashboard.Order.Seller.Cancel')->name('Dashboard.Order.Seller.Cancel');
+                ->middleware('can:Dashboard.Orders.Seller.Cancel')->name('Dashboard.Orders.Seller.Cancel');
 
                 Route::prefix('/Details')->group(function () {
     
-                    Route::post('/Index', [OrderSellerDetailController::class, 'index'])
-                    ->middleware('can:Dashboard.Order.Seller.Details.Index')->name('Dashboard.Order.Seller.Details.Index');
+                    Route::get('/Index/{id}', [OrderSellerDetailController::class, 'index'])
+                    ->middleware('can:Dashboard.Orders.Seller.Details.Index')->name('Dashboard.Orders.Seller.Details.Index');
     
                     Route::post('/Index/Query', [OrderSellerDetailController::class, 'indexQuery'])
-                    ->middleware('can:Dashboard.Order.Seller.Details.Index.Query')->name('Dashboard.Order.Seller.Details.Index.Query');
+                    ->middleware('can:Dashboard.Orders.Seller.Details.Index.Query')->name('Dashboard.Orders.Seller.Details.Index.Query');
     
                     Route::post('/Create', [OrderSellerDetailController::class, 'create'])
-                    ->middleware('can:Dashboard.Order.Seller.Details.Create')->name('Dashboard.Order.Seller.Details.Create');
+                    ->middleware('can:Dashboard.Orders.Seller.Details.Create')->name('Dashboard.Orders.Seller.Details.Create');
     
                     Route::post('/Store', [OrderSellerDetailController::class, 'store'])
-                    ->middleware('can:Dashboard.Order.Seller.Details.Store')->name('Dashboard.Order.Seller.Details.Store');
+                    ->middleware('can:Dashboard.Orders.Seller.Details.Store')->name('Dashboard.Orders.Seller.Details.Store');
     
                     Route::post('/Edit/{id}', [OrderSellerDetailController::class, 'edit'])
-                    ->middleware('can:Dashboard.Order.Seller.Details.Edit')->name('Dashboard.Order.Seller.Details.Edit');
+                    ->middleware('can:Dashboard.Orders.Seller.Details.Edit')->name('Dashboard.Orders.Seller.Details.Edit');
     
                     Route::put('/Update/{id}', [OrderSellerDetailController::class, 'update'])
-                    ->middleware('can:Dashboard.Order.Seller.Details.Update')->name('Dashboard.Order.Seller.Details.Update');
+                    ->middleware('can:Dashboard.Orders.Seller.Details.Update')->name('Dashboard.Orders.Seller.Details.Update');
     
                     Route::put('/Pending', [OrderSellerDetailController::class, 'pending'])
-                    ->middleware('can:Dashboard.Order.Seller.Details.Pending')->name('Dashboard.Order.Seller.Details.Pending');
+                    ->middleware('can:Dashboard.Orders.Seller.Details.Pending')->name('Dashboard.Orders.Seller.Details.Pending');
     
                     Route::put('/Cancel', [OrderSellerDetailController::class, 'cancel'])
-                    ->middleware('can:Dashboard.Order.Seller.Details.Cancel')->name('Dashboard.Order.Seller.Details.Cancel');
+                    ->middleware('can:Dashboard.Orders.Seller.Details.Cancel')->name('Dashboard.Orders.Seller.Details.Cancel');
     
                 });
 

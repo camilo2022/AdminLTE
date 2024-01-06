@@ -18,6 +18,7 @@ class ClientBranch extends Model implements Auditable
     protected $table = 'client_branches';
     protected $fillable = [
         'client_id',
+        'name',
         'code',
         'country_id',
         'departament_id',
@@ -32,6 +33,7 @@ class ClientBranch extends Model implements Auditable
 
     protected $auditInclude = [
         'client_id',
+        'name',
         'code',
         'country_id',
         'departament_id',

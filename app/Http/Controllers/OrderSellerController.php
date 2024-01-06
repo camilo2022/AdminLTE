@@ -22,6 +22,7 @@ use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\URL;
 
 class OrderSellerController extends Controller
 {
@@ -45,7 +46,9 @@ class OrderSellerController extends Controller
             //Consulta por nombre
             $orders = Order::with([
                     'client' => fn($query) => $query->withTrashed(),
+                    'client.country', 'client.departament', 'client.city',
                     'client_branch' => fn($query) => $query->withTrashed(),
+                    'client_branch.country', 'client_branch.departament', 'client_branch.city',
                     'seller_user' => fn($query) => $query->withTrashed(),
                     'wallet_user' => fn($query) => $query->withTrashed(),
                     'correria' => fn($query) => $query->withTrashed()
@@ -136,7 +139,10 @@ class OrderSellerController extends Controller
             $order->save();
 
             return $this->successResponse(
-                $order,
+                [
+                    'url' => URL::route('Dashboard.Orders.Seller.Details.Index', ['id' => $order->id]), 
+                    'order' => $order
+                ],
                 'El pedido fue registrado exitosamente.',
                 201
             );

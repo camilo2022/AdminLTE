@@ -41,7 +41,6 @@ class OrderSellerIndexQueryCollection extends ResourceCollection
                     'correria' => $orderSeller->correria,
                     'created_at' => $this->formatDate($orderSeller->created_at),
                     'updated_at' => $this->formatDate($orderSeller->updated_at),
-                    'deleted_at' => $orderSeller->deleted_at
                 ];
             }),
             'meta' => [

@@ -33,6 +33,7 @@ class ClientBranchUpdateRequest extends FormRequest
     {
         return [
             'client_id' => ['required', 'exists:clients,id'],
+            'name' => ['required', 'string', 'max:255'],
             'code' => ['required', 'string', 'max:255', 'unique:client_branches,code,' . $this->route('id') .',id,client_id,' . $this->input('client_id')],
             'country_id' => ['required', 'exists:countries,id'],
             'departament_id' => ['required', 'exists:departaments,id'],
@@ -53,6 +54,9 @@ class ClientBranchUpdateRequest extends FormRequest
         return [
             'client_id.required' => 'El campo Cliente es requerido.',
             'client_id.exists' => 'El Identificador del cliente no es valido.',
+            'name.required' => 'El campo Nombre de la sucursal del cliente es requerido.',
+            'name.string' => 'El campo Nombre de la sucursal del cliente debe ser una cadena de caracteres.',
+            'name.max' => 'El campo Nombre de la sucursal del cliente no debe exceder los 255 caracteres.',
             'code.required' => 'El campo Codigo de la sucursal del cliente es requerido.',
             'code.string' => 'El campo Codigo de la sucursal del cliente debe ser una cadena de caracteres.',
             'code.max' => 'El campo Codigo de la sucursal del cliente no debe exceder los 255 caracteres.',

@@ -24,10 +24,10 @@ return new class extends Migration
             $table->datetime('seller_date')->comment('Fecha del vendedor.');
             $table->string('seller_observation')->nullable()->comment('Observacion del vendedor.');
             $table->unsignedBigInteger('wallet_user_id')->nullable()->comment('Identificador del usuario de cartera.');
-            $table->enum('wallet_status', ['Pendiente', 'Cancelado', 'Aprobado'])->default('Pendiente')->comment('Estado de cartera.');
+            $table->enum('wallet_status', ['Pendiente', 'Cancelado', 'Parcialmente Aprobado', 'Aprobado'])->default('Pendiente')->comment('Estado de cartera.');
             $table->datetime('wallet_date')->nullable()->comment('Fecha de cartera');
             $table->string('wallet_observation')->nullable()->comment('Observacion de cartera');
-            $table->enum('dispatched_status', ['Pendiente', 'Cancelado', 'Parcialmente Aprobado', 'Aprobado', 'Devuelto', 'Parcialmente Despachado', 'Despachado'])->default('Pendiente')->comment('Estado de despacho.');
+            $table->enum('dispatched_status', ['Pendiente', 'Cancelado', 'Parcialmente Aprobado', 'Aprobado', 'Parcialmente Devuelto', 'Devuelto', 'Parcialmente Despachado', 'Despachado'])->default('Pendiente')->comment('Estado de despacho.');
             $table->datetime('dispatched_date')->nullable()->comment('Fecha de despacho.');
             $table->unsignedBigInteger('correria_id')->comment('Identificador de la correria.');
             $table->foreign('client_id')->references('id')->on('clients')->onUpdate('cascade')->onDelete('cascade');

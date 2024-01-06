@@ -30,6 +30,7 @@ function EditClientBranchModalCleaned(clientBranch) {
     $('#EditClientBranchButton').attr('data-departament_id', clientBranch.departament_id);
     $('#EditClientBranchButton').attr('data-city_id', clientBranch.city_id);
 
+    $('#name_cb_e').val(clientBranch.name);
     $('#code_cb_e').val(clientBranch.code);
     $('#address_cb_e').val(clientBranch.address);
     $('#neighborhood_cb_e').val(clientBranch.neighborhood);
@@ -145,6 +146,7 @@ function EditClientBranch(id) {
                 data: {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
                     'client_id': $('#IndexClientBranchButton').attr('data-client_id'),
+                    'name': $('#name_cb_e').val(),
                     'code': $('#code_cb_e').val(),
                     'country_id': $('#country_id_cb_e').val(),
                     'departament_id': $('#departament_id_cb_e').val(),
