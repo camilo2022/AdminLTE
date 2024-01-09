@@ -8,6 +8,7 @@ use App\Http\Requests\OrderSeller\OrderSellerCancelRequest;
 use App\Http\Requests\OrderSeller\OrderSellerCreateRequest;
 use App\Http\Requests\OrderSeller\OrderSellerEditRequest;
 use App\Http\Requests\OrderSeller\OrderSellerIndexQueryRequest;
+use App\Http\Requests\OrderSeller\OrderSellerObservationRequest;
 use App\Http\Requests\OrderSeller\OrderSellerStoreRequest;
 use App\Http\Requests\OrderSeller\OrderSellerUpdateRequest;
 use App\Http\Resources\OrderSeller\OrderSellerIndexQueryCollection;
@@ -190,7 +191,7 @@ class OrderSellerController extends Controller
             return $this->successResponse(
                 [
                     'clients' => Client::all(),
-                    'order' => Order::withTrashed()->findOrFail($id)
+                    'order' => Order::findOrFail($id)
                 ],
                 'El pedido fue encontrado exitosamente.',
                 204
@@ -217,7 +218,7 @@ class OrderSellerController extends Controller
     public function update(OrderSellerUpdateRequest $request, $id)
     {
         try {
-            $order = Order::withTrashed()->findOrFail($id);
+            $order = Order::findOrFail($id);
             $order->client_id = $request->input('client_id');
             $order->client_branch_id = $request->input('client_branch_id');
             $order->dispatch = $request->input('dispatch');
@@ -234,6 +235,46 @@ class OrderSellerController extends Controller
             return $this->errorResponse(
                 [
                     'message' => $this->getMessage('OrderNotFoundException'),
+                    'error' => $e->getMessage()
+                ],
+                404
+            );
+        } catch (QueryException $e) {
+            // Manejar la excepción de la base de datos
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('QueryException'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        } catch (Exception $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('Exception'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        }
+    }
+
+    public function observation(OrderSellerObservationRequest $request)
+    {
+        try {
+            $order = Order::findOrFail($request->input('id'));
+            $order->wallet_observation = $request->input('wallet_observation');
+            $order->save();
+
+            return $this->successResponse(
+                $order,
+                'El pedido fue aprobado exitosamente.',
+                200
+            );
+        } catch (ModelNotFoundException $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('ModelNotFoundException'),
                     'error' => $e->getMessage()
                 ],
                 404
@@ -332,6 +373,8 @@ class OrderSellerController extends Controller
             }
 
             $order->seller_status = 'Cancelado';
+            $order->wallet_status = 'Cancelado';
+            $order->dispatched_status = 'Cancelado';
             $order->save();
 
             return $this->successResponse(

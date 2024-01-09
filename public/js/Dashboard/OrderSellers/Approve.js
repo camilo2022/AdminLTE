@@ -1,7 +1,7 @@
-function ApproveTransfer(id) {
+function ApproveOrderSeller(id) {
     Swal.fire({
-        title: '¿Desea aprobar la transferencia?',
-        text: 'La transferencia será aprobada.',
+        title: '¿Desea aprovar el pedido?',
+        text: 'El pedido será aprobado.',
         icon: 'warning',
         showCancelButton: true,
         cancelButtonColor: '#DD6B55',
@@ -11,28 +11,28 @@ function ApproveTransfer(id) {
     }).then((result) => {
         if (result.value) {
             $.ajax({
-                url: `/Dashboard/Transfers/Approve`,
+                url: `/Dashboard/Orders/Seller/Approve`,
                 type: 'PUT',
                 data: {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
                     'id': id
                 },
                 success: function(response) {
-                    tableTransfers.ajax.reload();
-                    ApproveTransferAjaxSuccess(response);
+                    tableOrderSellers.ajax.reload();
+                    ApproveOrderSellerAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableTransfers.ajax.reload();
-                    ApproveTransferAjaxError(xhr);
+                    tableOrderSellers.ajax.reload();
+                    ApproveOrderSellerAjaxError(xhr);
                 }
             });
         } else {
-            toastr.info('La transferencia seleccionada no fue aprobada.')
+            toastr.info('El pedido seleccionada no fue aprobado.')
         }
     });
 }
 
-function ApproveTransferAjaxSuccess(response) {
+function ApproveOrderSellerAjaxSuccess(response) {
     if(response.status === 200) {
         toastr.success(response.message);
     }
@@ -42,7 +42,7 @@ function ApproveTransferAjaxSuccess(response) {
     }
 }
 
-function ApproveTransferAjaxError(xhr) {
+function ApproveOrderSellerAjaxError(xhr) {
     if(xhr.status === 403) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
     }

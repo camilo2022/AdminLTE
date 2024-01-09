@@ -60,11 +60,8 @@ class TransferDetailController extends Controller
             return $this->successResponse(
                 [
                     'warehouses' => Warehouse::with('users')
-                    ->whereHas('users',
-                        function ($subQuery) {
-                            $subQuery->where('user_id', Auth::user()->id);
-                        }
-                    )->pluck('id'),
+                    ->whereHas('users', fn($subQuery) => $subQuery->where('user_id', Auth::user()->id))
+                    ->pluck('id'),
                     'transferDetails' => new TransferDetailIndexQueryCollection($tranferDetails)
                 ],
                 $this->getMessage('Success'),

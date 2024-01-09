@@ -36,7 +36,6 @@ class OrderSellerUpdateRequest extends FormRequest
             'dispatch' => ['required', 'string', 'max:255'],
             'dispatch_date' => ['required', 'date', 'after_or_equal:now'],
             'seller_observation' => ['nullable', 'string', 'max:255'],
-            'correria_id' => ['required', 'exists:correrias,id'],
             'client_clientBranch' => ['exists:client_branches,id,client_id,' . $this->input('client_id')]
         ];
     }
@@ -56,8 +55,6 @@ class OrderSellerUpdateRequest extends FormRequest
             'dispatch_date.after_or_equal' => 'El campo Fecha de despacho debe ser posterior o igual a la fecha actual :now.',
             'seller_observation.string' => 'El campo Observacion del asesor debe ser una cadena de caracteres.',
             'seller_observation.max' => 'El campo Observacion del asesor no debe exceder los 255 caracteres.',
-            'correria_id.required' => 'El campo Correria es requerido.',
-            'correria_id.exists' => 'El Identificador de la correria no es valido.',
             'client_clientBranch.exists' => 'La sucursal no pertenece al cliente seleccionado.'
         ];
     }

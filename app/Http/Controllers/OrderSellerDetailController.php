@@ -29,7 +29,7 @@ class OrderSellerDetailController extends Controller
     public function index($id)
     {
         try {
-            $order = Order::findOrFail($id);
+            $order = Order::with('seller_user', 'client.document_type', 'client_branch.country', 'client_branch.departament', 'client_branch.city')->findOrFail($id);
             return view('Dashboard.OrderSellerDetails.Index', compact('order'));
         } catch (ModelNotFoundException $e) {
             return back()->with('danger', 'Ocurrió un error al cargar el pedido: ' . $this->getMessage('OrderNotFoundException'));
@@ -68,12 +68,12 @@ class OrderSellerDetailController extends Controller
 
             $orderDetailQuantitySizes = OrderDetailQuantity::with('order_detail', 'size')
                 ->whereHas('order_detail', fn($subQuery) => $subQuery->where('order_id', $request->input('order_id')))
-                ->get()->pluck('size')->unique();
+                ->get();
 
-            /* $orderDetails = $orderDetails->map(function ($orderDetail) use ($orderDetailQuantitySizes) {
+            $orderDetails = $orderDetails->map(function ($orderDetail) use ($orderDetailQuantitySizes) {
 
                 $orderDetailSizes = $orderDetail->quantities->pluck('size_id')->unique();
-                $missingSizes = $orderDetailQuantitySizes->diff($orderDetailSizes)->values();
+                $missingSizes = $orderDetailQuantitySizes->pluck('size_id')->unique()->values()->diff($orderDetailSizes)->values();
 
                 $quantities = collect($orderDetail->quantities)->mapWithKeys(function ($quantity) {
                     return [$quantity['size']->id => [
@@ -91,21 +91,22 @@ class OrderSellerDetailController extends Controller
 
                 return [
                     'id' => $orderDetail->id,
-                    'order_id' => $orderDetail->order_id,
-                    'product_id' => $orderDetail->product_id,
-                    'color_id' => $orderDetail->color_id,
+                    'order' => $orderDetail->order,
+                    'product' => $orderDetail->product,
+                    'color' => $orderDetail->color,
+                    'tone' => $orderDetail->tone,
                     'price' => $orderDetail->price,
                     'seller_date' => $orderDetail->seller_date,
                     'seller_observation' => $orderDetail->seller_observation,
                     'status' => $orderDetail->status,
                     'quantities' => $quantities,
                 ];
-            }); */
+            });
 
             return $this->successResponse(
                 [
                     'orderDetails' => $orderDetails,
-                    'sizes' => $orderDetailQuantitySizes
+                    'sizes' => $orderDetailQuantitySizes->pluck('size')->unique()->values()
                 ],
                 $this->getMessage('Success'),
                 200

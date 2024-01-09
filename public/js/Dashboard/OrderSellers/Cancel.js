@@ -1,44 +1,48 @@
-function RestoreClient(id) {
+function CancelOrderSeller(id) {
     Swal.fire({
-        title: '¿Desea restaurar el cliente?',
-        text: 'El cliente será restaurada.',
+        title: '¿Desea cancelar el pedido?',
+        text: 'El pedido será cancelado.',
         icon: 'warning',
         showCancelButton: true,
         cancelButtonColor: '#DD6B55',
         confirmButtonColor: '#3085d6',
-        confirmButtonText: 'Si, restaurar!',
-        cancelButtonText: 'No, cancelar!'
+        confirmButtonText: 'Si, cancelar!',
+        cancelButtonText: 'No, cancelar!',
     }).then((result) => {
         if (result.value) {
             $.ajax({
-                url: '/Dashboard/Clients/Restore',
+                url: `/Dashboard/Orders/Seller/Cancel`,
                 type: 'PUT',
                 data: {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
                     'id': id
                 },
                 success: function(response) {
-                    tableClients.ajax.reload();
-                    RestoreClientAjaxSuccess(response);
+                    tableOrderSellers.ajax.reload();
+                    CancelOrderSellerAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableClients.ajax.reload();
-                    RestoreClientAjaxError(xhr);
+                    tableOrderSellers.ajax.reload();
+                    CancelOrderSellerAjaxError(xhr);
                 }
             });
         } else {
-            toastr.info('El cliente seleccionada no fue restaurado.')
+            toastr.info('El pedido seleccionada no fue cancelado.')
         }
     });
 }
 
-function RestoreClientAjaxSuccess(response) {
-    if(response.status === 204) {
+function CancelOrderSellerAjaxSuccess(response) {
+    if(response.status === 200) {
         toastr.success(response.message);
+    }
+
+    if(response.status === 422) {
+        toastr.warning(response.message);
     }
 }
 
-function RestoreClientAjaxError(xhr) {
+function CancelOrderSellerAjaxError(xhr) {
     if(xhr.status === 403) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
     }

@@ -988,8 +988,14 @@ Route::middleware(['auth'])->group(function () {
                 Route::put('/Update/{id}', [OrderSellerController::class, 'update'])
                 ->middleware('can:Dashboard.Orders.Seller.Update')->name('Dashboard.Orders.Seller.Update');
 
+                Route::put('/Observation', [OrderSellerController::class, 'observation'])
+                ->middleware('can:Dashboard.Orders.Seller.Observation')->name('Dashboard.Orders.Seller.Observation');
+
                 Route::put('/Approve', [OrderSellerController::class, 'approve'])
                 ->middleware('can:Dashboard.Orders.Seller.Approve')->name('Dashboard.Orders.Seller.Approve');
+
+                Route::put('/PartiallyApprove', [OrderSellerController::class, 'partiallyApprove'])
+                ->middleware('can:Dashboard.Orders.Seller.PartiallyApprove')->name('Dashboard.Orders.Seller.PartiallyApprove');
 
                 Route::put('/Cancel', [OrderSellerController::class, 'cancel'])
                 ->middleware('can:Dashboard.Orders.Seller.Cancel')->name('Dashboard.Orders.Seller.Cancel');

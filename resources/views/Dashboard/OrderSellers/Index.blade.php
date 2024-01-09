@@ -100,6 +100,6 @@
 <script src="{{ asset('js/Dashboard/OrderSellers/DataTableIndex.js') }}"></script>
 <script src="{{ asset('js/Dashboard/OrderSellers/Create.js') }}"></script>
 <script src="{{ asset('js/Dashboard/OrderSellers/Edit.js') }}"></script>
-<script src="{{ asset('js/Dashboard/OrderSellers/Delete.js') }}"></script>
-<script src="{{ asset('js/Dashboard/OrderSellers/Restore.js') }}"></script>
+<script src="{{ asset('js/Dashboard/OrderSellers/Approve.js') }}"></script>
+<script src="{{ asset('js/Dashboard/OrderSellers/Cancel.js') }}"></script>
 @endsection

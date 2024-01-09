@@ -397,19 +397,19 @@ class RolesAndPermissionSeeder extends Seeder
 
         Permission::create(['name' => 'Dashboard.Orders.Wallet.Index'])->syncRoles([$OrderWallets]);
         Permission::create(['name' => 'Dashboard.Orders.Wallet.Index.Query'])->syncRoles([$OrderWallets]);
+        Permission::create(['name' => 'Dashboard.Orders.Wallet.Observation'])->syncRoles([$OrderWallets]);
+        Permission::create(['name' => 'Dashboard.Orders.Wallet.Approve'])->syncRoles([$OrderWallets]);
+        Permission::create(['name' => 'Dashboard.Orders.Wallet.Pending'])->syncRoles([$OrderWallets]);
+        Permission::create(['name' => 'Dashboard.Orders.Wallet.PartiallyApprove'])->syncRoles([$OrderWallets]);
+        Permission::create(['name' => 'Dashboard.Orders.Wallet.Cancel'])->syncRoles([$OrderWallets]);
+        Permission::create(['name' => 'Dashboard.Orders.Wallet.Details.Index'])->syncRoles([$OrderWallets]);
+        Permission::create(['name' => 'Dashboard.Orders.Wallet.Details.Index.Query'])->syncRoles([$OrderWallets]);
         Permission::create(['name' => 'Dashboard.Orders.Wallet.Details.Create'])->syncRoles([$OrderWallets]);
         Permission::create(['name' => 'Dashboard.Orders.Wallet.Details.Store'])->syncRoles([$OrderWallets]);
-        Permission::create(['name' => 'Dashboard.Orders.Wallet.Show'])->syncRoles([$OrderWallets]);
-        Permission::create(['name' => 'Dashboard.Orders.Wallet.Show.Query'])->syncRoles([$OrderWallets]);
-        Permission::create(['name' => 'Dashboard.Orders.Wallet.Edit'])->syncRoles([$OrderWallets]);
-        Permission::create(['name' => 'Dashboard.Orders.Wallet.Update'])->syncRoles([$OrderWallets]);
         Permission::create(['name' => 'Dashboard.Orders.Wallet.Details.Edit'])->syncRoles([$OrderWallets]);
         Permission::create(['name' => 'Dashboard.Orders.Wallet.Details.Update'])->syncRoles([$OrderWallets]);
-        Permission::create(['name' => 'Dashboard.Orders.Wallet.Approve'])->syncRoles([$OrderWallets]);
         Permission::create(['name' => 'Dashboard.Orders.Wallet.Details.Approve'])->syncRoles([$OrderWallets]);
-        Permission::create(['name' => 'Dashboard.Orders.Wallet.Pending'])->syncRoles([$OrderWallets]);
         Permission::create(['name' => 'Dashboard.Orders.Wallet.Details.Pending'])->syncRoles([$OrderWallets]);
-        Permission::create(['name' => 'Dashboard.Orders.Wallet.Cancel'])->syncRoles([$OrderWallets]);
         Permission::create(['name' => 'Dashboard.Orders.Wallet.Details.Cancel'])->syncRoles([$OrderWallets]);
 
         Permission::create(['name' => 'Dashboard.Orders.Dispatch.Index'])->syncRoles([$OrderDispatches]);

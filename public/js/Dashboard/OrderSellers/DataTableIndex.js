@@ -88,13 +88,17 @@ let tableOrderSellers = $('#orderSellers').DataTable({
             render: function (data, type, row) {
                 switch (data) {
                     case 'Cancelado':
-                        return `<h5><span class="badge badge-outline badge-danger text-white"><i class="fas fa-xmark mr-2 text-white"></i>Cancelado</span></h5>`;
+                        return `<h5><span class="badge badge-pill badge-danger text-white"><i class="fas fa-xmark mr-2 text-white"></i>Cancelado</span></h5>`;
+                        break;
                     case 'Pendiente':
-                        return `<h5><span class="badge badge-outline badge-info"><i class="fas fa-arrows-rotate mr-2"></i>Pendiente</span></h5>`;
+                        return `<h5><span class="badge badge-pill badge-info"><i class="fas fa-arrows-rotate mr-2"></i>Pendiente</span></h5>`;
+                        break;
                     case 'Aprobado':
-                        return `<h5><span class="badge badge-outline badge-success"><i class="fas fa-check mr-2"></i>Aprobado</span></h5>`;
+                        return `<h5><span class="badge badge-pill badge-success"><i class="fas fa-check mr-2"></i>Aprobado</span></h5>`;
+                        break;
                     default:
-                        return `<h5><span class="badge badge-outline badge-info"><i class="fas fa-arrows-rotate mr-2"></i>Pendiente</span></h5>`;
+                        return `<h5><span class="badge badge-pill badge-info"><i class="fas fa-arrows-rotate mr-2"></i>Pendiente</span></h5>`;
+                        break;
                 }
             }
         },
@@ -103,15 +107,20 @@ let tableOrderSellers = $('#orderSellers').DataTable({
             render: function (data, type, row) {
                 switch (data) {
                     case 'Cancelado':
-                        return `<h5><span class="badge badge-outline badge-danger text-white"><i class="fas fa-xmark mr-2 text-white"></i>Cancelado</span></h5>`;
+                        return `<h5><span class="badge badge-pill badge-danger text-white"><i class="fas fa-xmark mr-2 text-white"></i>Cancelado</span></h5>`;
+                        break;
                     case 'Pendiente':
-                        return `<h5><span class="badge badge-outline badge-info"><i class="fas fa-arrows-rotate mr-2"></i>Pendiente</span></h5>`;
+                        return `<h5><span class="badge badge-pill badge-info"><i class="fas fa-arrows-rotate mr-2"></i>Pendiente</span></h5>`;
+                        break;
                     case 'Parcialmente Aprobado':
-                        return `<h5><span class="badge badge-outline bg-orange"><i class="fas fa-question mr-2"></i>Parcialmente Aprobado</span></h5>`;
+                        return `<h5><span class="badge badge-pill bg-orange"><i class="fas fa-question mr-2"></i>Parcialmente Aprobado</span></h5>`;
+                        break;
                     case 'Aprobado':
-                        return `<h5><span class="badge badge-outline badge-success"><i class="fas fa-check mr-2"></i>Aprobado</span></h5>`;
+                        return `<h5><span class="badge badge-pill badge-success"><i class="fas fa-check mr-2"></i>Aprobado</span></h5>`;
+                        break;
                     default:
-                        return `<h5><span class="badge badge-outline badge-info"><i class="fas fa-arrows-rotate mr-2"></i>Pendiente</span></h5>`;
+                        return `<h5><span class="badge badge-pill badge-info"><i class="fas fa-arrows-rotate mr-2"></i>Pendiente</span></h5>`;
+                        break;
                 }
             }
         },
@@ -120,23 +129,32 @@ let tableOrderSellers = $('#orderSellers').DataTable({
             render: function (data, type, row) {
                 switch (data) {
                     case 'Cancelado':
-                        return `<h5><span class="badge badge-outline badge-danger text-white"><i class="fas fa-xmark mr-2 text-white"></i>Cancelado</span></h5>`;
+                        return `<h5><span class="badge badge-pill badge-danger text-white"><i class="fas fa-xmark mr-2 text-white"></i>Cancelado</span></h5>`;
+                        break;
                     case 'Pendiente':
-                        return `<h5><span class="badge badge-outline badge-info"><i class="fas fa-arrows-rotate mr-2"></i>Pendiente</span></h5>`;
+                        return `<h5><span class="badge badge-pill badge-info"><i class="fas fa-arrows-rotate mr-2"></i>Pendiente</span></h5>`;
+                        break;
                     case 'Parcialmente Aprobado':
-                        return `<h5><span class="badge badge-outline bg-orange"><i class="fas fa-question mr-2"></i>Parcialmente Aprobado</span></h5>`;
+                        return `<h5><span class="badge badge-pill badge-warning text-white"><i class="fas fa-check mr-2 text-white"></i>Parcialmente Aprobado</span></h5>`;
+                        break;
                     case 'Aprobado':
-                        return `<h5><span class="badge badge-outline badge-success"><i class="fas fa-check mr-2"></i>Aprobado</span></h5>`;
+                        return `<h5><span class="badge badge-pill badge-success"><i class="fas fa-check-double mr-2"></i>Aprobado</span></h5>`;
+                        break;
                     case 'Parcialmente Devuelto':
-                        return `<h5><span class="badge badge-outline bg-dimgrey"><i class="fas fa-reply mr-2"></i>Parcialmente Devuelto</span></h5>`;
+                        return `<h5><span class="badge badge-pill bg-gray"><i class="fas fa-reply mr-2"></i>Parcialmente Devuelto</span></h5>`;
+                        break;
                     case 'Devuelto':
-                        return `<h5><span class="badge badge-outline bg-dark"><i class="fas fa-reply-all mr-2"></i>Devuelto</span></h5>`;
+                        return `<h5><span class="badge badge-pill bg-dark text-white"><i class="fas fa-reply-all mr-2 text-white"></i>Devuelto</span></h5>`;
+                        break;
                     case 'Parcialmente Despachado':
-                        return `<h5><span class="badge badge-outline bg-blueviolet"><i class="fas fa-share mr-2"></i>Parcialmente Despachado</span></h5>`;
+                        return `<h5><span class="badge badge-pill bg-purple text-white"><i class="fas fa-share mr-2 text-white"></i>Parcialmente Despachado</span></h5>`;
+                        break;
                     case 'Despachado':
-                        return `<h5><span class="badge badge-outline badge-primary"><i class="fas fa-share-all mr-2"></i>Despachado</span></h5>`;
+                        return `<h5><span class="badge badge-pill badge-primary"><i class="fas fa-share-all mr-2"></i>Despachado</span></h5>`;
+                        break;
                     default:
-                        return `<h5><span class="badge badge-outline badge-info"><i class="fas fa-arrows-rotate mr-2"></i>Pendiente</span></h5>`;
+                        return `<h5><span class="badge badge-pill badge-info"><i class="fas fa-arrows-rotate mr-2"></i>Pendiente</span></h5>`;
+                        break;
                 }
             }
         },
