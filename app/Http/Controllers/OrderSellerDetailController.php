@@ -105,6 +105,7 @@ class OrderSellerDetailController extends Controller
 
             return $this->successResponse(
                 [
+                    'order' => Order::findOrFail($request->input('order_id')),
                     'orderDetails' => $orderDetails,
                     'sizes' => $orderDetailQuantitySizes->pluck('size')->unique()->values()
                 ],

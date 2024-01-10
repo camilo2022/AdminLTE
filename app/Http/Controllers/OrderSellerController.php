@@ -8,7 +8,6 @@ use App\Http\Requests\OrderSeller\OrderSellerCancelRequest;
 use App\Http\Requests\OrderSeller\OrderSellerCreateRequest;
 use App\Http\Requests\OrderSeller\OrderSellerEditRequest;
 use App\Http\Requests\OrderSeller\OrderSellerIndexQueryRequest;
-use App\Http\Requests\OrderSeller\OrderSellerObservationRequest;
 use App\Http\Requests\OrderSeller\OrderSellerStoreRequest;
 use App\Http\Requests\OrderSeller\OrderSellerUpdateRequest;
 use App\Http\Resources\OrderSeller\OrderSellerIndexQueryCollection;
@@ -259,72 +258,50 @@ class OrderSellerController extends Controller
         }
     }
 
-    public function observation(OrderSellerObservationRequest $request)
-    {
-        try {
-            $order = Order::findOrFail($request->input('id'));
-            $order->wallet_observation = $request->input('wallet_observation');
-            $order->save();
-
-            return $this->successResponse(
-                $order,
-                'El pedido fue aprobado exitosamente.',
-                200
-            );
-        } catch (ModelNotFoundException $e) {
-            return $this->errorResponse(
-                [
-                    'message' => $this->getMessage('ModelNotFoundException'),
-                    'error' => $e->getMessage()
-                ],
-                404
-            );
-        } catch (QueryException $e) {
-            // Manejar la excepción de la base de datos
-            return $this->errorResponse(
-                [
-                    'message' => $this->getMessage('QueryException'),
-                    'error' => $e->getMessage()
-                ],
-                500
-            );
-        } catch (Exception $e) {
-            return $this->errorResponse(
-                [
-                    'message' => $this->getMessage('Exception'),
-                    'error' => $e->getMessage()
-                ],
-                500
-            );
-        }
-    }
-
     public function approve(OrderSellerApproveRequest $request)
     {
         try {
             $order = Order::with('details.quantities')->findOrFail($request->input('id'));
 
-            $order->details->filter(function ($detail) {
-                return $detail->status == 'Pendiente';
-            })->each(function ($detail) {
-                $detail->quantities->each(function ($quantity) use ($detail) {
-                    $inventory = Inventory::with('product', 'size', 'warehouse', 'color', 'tone')
-                        ->whereHas('product', fn($subQuery) => $subQuery->where('id', $detail->product_id))
-                        ->whereHas('size', fn($subQuery) => $subQuery->where('id', $quantity->size_id))
-                        ->whereHas('warehouse', fn($subQuery) => $subQuery->where('to_discount', true))
-                        ->whereHas('color', fn($subQuery) => $subQuery->where('id', $detail->color_id))
-                        ->whereHas('tone', fn($subQuery) => $subQuery->where('id', $detail->tone_id))
-                        ->first();
+            foreach($order->details as $detail) {
+                if($detail->status == 'Pendiente') {
+                    $boolean = true;
+                    foreach($detail->quantities as $quantity) {
+                        $inventory = Inventory::with('product', 'size', 'warehouse', 'color', 'tone')
+                            ->whereHas('product', fn($subQuery) => $subQuery->where('id', $detail->product_id))
+                            ->whereHas('size', fn($subQuery) => $subQuery->where('id', $quantity->size_id))
+                            ->whereHas('warehouse', fn($subQuery) => $subQuery->where('to_discount', true))
+                            ->whereHas('color', fn($subQuery) => $subQuery->where('id', $detail->color_id))
+                            ->whereHas('tone', fn($subQuery) => $subQuery->where('id', $detail->tone_id))
+                            ->first();
 
-                    $detail->status = !$inventory || $inventory->quantity < $quantity->quantity ? 'Agotado' : 'Aprobado';
-                    $detail->save();
-
-                    if ($inventory && $inventory->quantity >= $quantity->quantity) {
-                        $inventory->quantity -= $quantity->quantity;
-                        $inventory->save();
+                        if($inventory->quantity < $quantity->quantity) {
+                            $boolean = false;
+                            $detail->status = 'Agotado';
+                            $detail->save();
+                            break;
+                        }
                     }
-                });
-            });
+
+                    if($boolean){
+                        foreach($detail->quantities as $quantity) {
+                            $inventory = Inventory::with('product', 'size', 'warehouse', 'color', 'tone')
+                                ->whereHas('product', fn($subQuery) => $subQuery->where('id', $detail->product_id))
+                                ->whereHas('size', fn($subQuery) => $subQuery->where('id', $quantity->size_id))
+                                ->whereHas('warehouse', fn($subQuery) => $subQuery->where('to_discount', true))
+                                ->whereHas('color', fn($subQuery) => $subQuery->where('id', $detail->color_id))
+                                ->whereHas('tone', fn($subQuery) => $subQuery->where('id', $detail->tone_id))
+                                ->first();
+    
+                            $inventory->quantity -= $quantity->quantity;
+                            $inventory->save();
+
+                            $detail->status = 'Aprobado';
+                            $detail->save();
+                        }
+                    }
+                }
+            }
 
             $order->seller_status = 'Aprobado';
             $order->save();
@@ -378,7 +355,7 @@ class OrderSellerController extends Controller
             $order->save();
 
             return $this->successResponse(
-                '',
+                $order,
                 'El pedido fue cancelado exitosamente.',
                 200
             );

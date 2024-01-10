@@ -1,17 +1,17 @@
-function CancelOrderSellerDetail(id) {
+function PendingOrderSellerDetail(id) {
     Swal.fire({
-        title: '¿Desea cancelar el detalle del pedido?',
-        text: 'El detalle del pedido será cancelado.',
+        title: '¿Desea pendiente el detalle del pedido?',
+        text: 'El detalle del pedido será pendiente.',
         icon: 'warning',
         showCancelButton: true,
         cancelButtonColor: '#DD6B55',
         confirmButtonColor: '#3085d6',
-        confirmButtonText: 'Si, cancelar!',
+        confirmButtonText: 'Si, pendiente!',
         cancelButtonText: 'No, cancelar!',
     }).then((result) => {
         if (result.value) {
             $.ajax({
-                url: `/Dashboard/Orders/Seller/Details/Cancel`,
+                url: `/Dashboard/Orders/Seller/Details/Pending`,
                 type: 'PUT',
                 data: {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
@@ -19,20 +19,20 @@ function CancelOrderSellerDetail(id) {
                 },
                 success: function(response) {
                     $('#IndexOrderSellerDetail').trigger('click');
-                    CancelOrderSellerDetailAjaxSuccess(response);
+                    PendingOrderSellerDetailAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
                     $('#IndexOrderSellerDetail').trigger('click');
-                    CancelOrderSellerDetailAjaxError(xhr);
+                    PendingOrderSellerDetailAjaxError(xhr);
                 }
             });
         } else {
-            toastr.info('El detalle del pedido seleccionada no fue cancelado.')
+            toastr.info('El detalle del pedido seleccionada no fue pendiente.')
         }
     });
 }
 
-function CancelOrderSellerDetailAjaxSuccess(response) {
+function PendingOrderSellerDetailAjaxSuccess(response) {
     if(response.status === 200) {
         toastr.success(response.message);
     }
@@ -42,7 +42,7 @@ function CancelOrderSellerDetailAjaxSuccess(response) {
     }
 }
 
-function CancelOrderSellerDetailAjaxError(xhr) {
+function PendingOrderSellerDetailAjaxError(xhr) {
     if(xhr.status === 403) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
     }

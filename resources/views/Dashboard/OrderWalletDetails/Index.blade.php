@@ -196,6 +196,15 @@
                                     <tr>
                                         <td style="font-size:14px;">OBSERVACION COMERCIAL:</td>
                                         <td style="font-size:14px;" colspan="5">{{ $order->seller_observation }}</td>
+                                        <!-- <td style="font-size:14px;">OBSERVACION CARTERA:</td>
+                                        <td style="font-size:14px;" colspan="2">
+                                            <textarea class="form-control" id="seller_observation" name="seller_observation" cols="30" rows="2">{{ $order->wallet_observation }}</textarea>
+                                        </td>
+                                        <td class="text-center">
+                                            <button type="button" class="btn btn-primary" onclick="" title="Actualizar observacion de cartera pedido.">
+                                                <i class="fas fa-floppy-disk"></i>
+                                            </button>
+                                        </td> -->
                                     </tr>
                                 </tbody>
                             </table>

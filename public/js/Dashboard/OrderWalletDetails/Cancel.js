@@ -1,38 +1,38 @@
-function ApproveOrderSeller(id) {
+function CancelOrderSellerDetail(id) {
     Swal.fire({
-        title: '¿Desea aprovar el pedido?',
-        text: 'El pedido será aprobado.',
+        title: '¿Desea cancelar el detalle del pedido?',
+        text: 'El detalle del pedido será cancelado.',
         icon: 'warning',
         showCancelButton: true,
         cancelButtonColor: '#DD6B55',
         confirmButtonColor: '#3085d6',
-        confirmButtonText: 'Si, aprobar!',
+        confirmButtonText: 'Si, cancelar!',
         cancelButtonText: 'No, cancelar!',
     }).then((result) => {
         if (result.value) {
             $.ajax({
-                url: `/Dashboard/Orders/Seller/Approve`,
+                url: `/Dashboard/Orders/Seller/Details/Cancel`,
                 type: 'PUT',
                 data: {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
                     'id': id
                 },
                 success: function(response) {
-                    tableOrderSellers.ajax.reload();
-                    ApproveOrderSellerAjaxSuccess(response);
+                    $('#IndexOrderSellerDetail').trigger('click');
+                    CancelOrderSellerDetailAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableOrderSellers.ajax.reload();
-                    ApproveOrderSellerAjaxError(xhr);
+                    $('#IndexOrderSellerDetail').trigger('click');
+                    CancelOrderSellerDetailAjaxError(xhr);
                 }
             });
         } else {
-            toastr.info('El pedido seleccionada no fue aprobado.')
+            toastr.info('El detalle del pedido seleccionada no fue cancelado.')
         }
     });
 }
 
-function ApproveOrderSellerAjaxSuccess(response) {
+function CancelOrderSellerDetailAjaxSuccess(response) {
     if(response.status === 200) {
         toastr.success(response.message);
     }
@@ -42,7 +42,7 @@ function ApproveOrderSellerAjaxSuccess(response) {
     }
 }
 
-function ApproveOrderSellerAjaxError(xhr) {
+function CancelOrderSellerDetailAjaxError(xhr) {
     if(xhr.status === 403) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
     }
