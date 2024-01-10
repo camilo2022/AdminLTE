@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class OrderWalletCancelRequest extends FormRequest
+class OrderWalletObservationRequest extends FormRequest
 {
     protected function failedValidation(Validator $validator)
     {
@@ -24,7 +24,8 @@ class OrderWalletCancelRequest extends FormRequest
     public function rules()
     {
         return [
-            'id' => ['required', 'exists:orders,id']
+            'id' => ['required', 'exists:orders,id'],
+            'wallet_observation' => ['required', 'string', 'max:255'],
         ];
     }
 
@@ -32,7 +33,10 @@ class OrderWalletCancelRequest extends FormRequest
     {
         return [
             'id.required' => 'El campo Pedido es requerido.',
-            'id.exists' => 'El Identificador del pedido no es valido.'
+            'id.exists' => 'El Identificador del pedido no es valido.',
+            'wallet_observation.required' => 'El campo Observacion de cartera.',
+            'wallet_observation.string' => 'El campo Observacion de cartera debe ser una cadena de caracteres.',
+            'wallet_observation.max' => 'El campo Observacion de cartera no debe exceder los 255 caracteres.',
         ];
     }
 }

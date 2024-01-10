@@ -1,4 +1,4 @@
-function ApproveOrderSeller(id, status = true) {
+function ApproveOrderWallet(id, status = true) {
     Swal.fire({
         title: '¿Desea aprobar el pedido?',
         text: 'El pedido será aprobado.',
@@ -11,19 +11,19 @@ function ApproveOrderSeller(id, status = true) {
     }).then((result) => {
         if (result.value) {
             $.ajax({
-                url: `/Dashboard/Orders/Seller/Approve`,
+                url: `/Dashboard/Orders/Wallet/Approve`,
                 type: 'PUT',
                 data: {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
                     'id': id
                 },
                 success: function(response) {
-                    status ? tableOrderSellers.ajax.reload() : location.reload() ;
-                    ApproveOrderSellerAjaxSuccess(response);
+                    status ? tableOrderWallets.ajax.reload() : location.reload() ;
+                    ApproveOrderWalletAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    status ? tableOrderSellers.ajax.reload() : location.reload() ;
-                    ApproveOrderSellerAjaxError(xhr);
+                    status ? tableOrderWallets.ajax.reload() : location.reload() ;
+                    ApproveOrderWalletAjaxError(xhr);
                 }
             });
         } else {
@@ -32,7 +32,7 @@ function ApproveOrderSeller(id, status = true) {
     });
 }
 
-function ApproveOrderSellerAjaxSuccess(response) {
+function ApproveOrderWalletAjaxSuccess(response) {
     if(response.status === 200) {
         toastr.success(response.message);
     }
@@ -42,7 +42,7 @@ function ApproveOrderSellerAjaxSuccess(response) {
     }
 }
 
-function ApproveOrderSellerAjaxError(xhr) {
+function ApproveOrderWalletAjaxError(xhr) {
     if(xhr.status === 403) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
     }

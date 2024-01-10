@@ -190,11 +190,11 @@ function RemoveIsValidClassCreateOrderSeller() {
 }
 
 function AddIsInvalidClassCreateOrderSeller(input) {
-    if (!$(`#${input}_c_c`).hasClass('is-valid')) {
-        $(`#${input}_c_c`).addClass('is-invalid');
+    if (!$(`#${input}_c`).hasClass('is-valid')) {
+        $(`#${input}_c`).addClass('is-invalid');
     }
-    if (!$(`span[aria-labelledby="select2-${input}_c_c-container`).hasClass('is-valid')) {
-        $(`span[aria-labelledby="select2-${input}_c_c-container"]`).addClass('is-invalid');
+    if (!$(`span[aria-labelledby="select2-${input}_c-container`).hasClass('is-valid')) {
+        $(`span[aria-labelledby="select2-${input}_c-container"]`).addClass('is-invalid');
     }
 }
 
@@ -205,7 +205,3 @@ function RemoveIsInvalidClassCreateOrderSeller() {
     $('span[aria-labelledby="select2-client_id_c-container"]').removeClass('is-invalid');
     $('span[aria-labelledby="select2-client_branch_id_c-container"]').removeClass('is-invalid');
 }
-
-$('#dispatch_date_c').datetimepicker({
-    format: 'L'
-});

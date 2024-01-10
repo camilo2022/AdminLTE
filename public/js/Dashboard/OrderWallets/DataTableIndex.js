@@ -1,8 +1,8 @@
-let tableOrderSellers = $('#orderSellers').DataTable({
+let tableOrderWallets = $('#orderWallets').DataTable({
     processing: true,
     serverSide: true,
     ajax: {
-        url: `/Dashboard/Orders/Seller/Index/Query`,
+        url: `/Dashboard/Orders/Wallet/Index/Query`,
         type: 'POST',
         data: function (request) {
             var columnMappings = {
@@ -26,7 +26,7 @@ let tableOrderSellers = $('#orderSellers').DataTable({
         dataSrc: function (response) {
             response.recordsTotal = response.data.meta.pagination.count;
             response.recordsFiltered = response.data.meta.pagination.total;
-            return response.data.orderSellers;
+            return response.data.orderWallets;
         },
         error: function (xhr, error, thrown) {
             toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
@@ -34,7 +34,7 @@ let tableOrderSellers = $('#orderSellers').DataTable({
     },
     columns: [
         { data: 'id' },
-        { 
+        {
             data: 'client_id',
             render: function (data, type, row) {
                 return `${row.client.document_number}-${row.client_branch.code}`;
@@ -64,20 +64,20 @@ let tableOrderSellers = $('#orderSellers').DataTable({
                 return row.client_branch.city.name;
             }
         },
-        { 
+        {
             data: 'client_branch_id',
             render: function (data, type, row) {
                 return row.client_branch.address;
             }
         },
-        { 
+        {
             data: 'client_branch_id' ,
             render: function (data, type, row) {
                 return row.client_branch.neighborhood;
             }
         },
         { data: 'seller_date' },
-        { 
+        {
             data: 'seller_user_id' ,
             render: function (data, type, row) {
                 return `${row.seller_user.name} ${row.seller_user.last_name}`;
@@ -168,13 +168,13 @@ let tableOrderSellers = $('#orderSellers').DataTable({
             data: 'seller_status',
             render: function (data, type, row) {
                 let btn = `<div class="text-center" style="width: 100%;">`;
-                
+
                 btn += `<a href="/Dashboard/Orders/Seller/Details/Index/${row.id}" type="button"
                 class="btn btn-info btn-sm mr-2" title="Visualizar detalles del pedido.">
                     <i class="fas fa-eye text-white"></i>
                 </a>`;
 
-                if (data === 'Pendiente') {                    
+                if (data === 'Pendiente') {
                     btn += `<a onclick="EditOrderSellerModal(${row.id})" type="button"
                     class="btn btn-primary btn-sm mr-2" title="Editar pedido.">
                         <i class="fas fa-pen text-white"></i>

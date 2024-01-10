@@ -199,7 +199,7 @@ class OrderSellerDetailController extends Controller
 
             return $this->successResponse(
                 $orderDetail,
-                'El detalle del pedido fue registrado exitosamente.',
+                'El detalle del pedido fue registrado por el asesor exitosamente.',
                 201
             );
         } catch (ModelNotFoundException $e) {
@@ -290,7 +290,7 @@ class OrderSellerDetailController extends Controller
 
             return $this->successResponse(
                 $orderDetail,
-                'El detalle del pedido fue actualizado exitosamente.',
+                'El detalle del pedido fue actualizado por el asesor exitosamente.',
                 200
             );
         } catch (ModelNotFoundException $e) {
@@ -330,7 +330,7 @@ class OrderSellerDetailController extends Controller
 
             return $this->successResponse(
                 $orderDetail,
-                'El detalle del pedido fue pendiente exitosamente.',
+                'El detalle del pedido fue pendiente por el asesor exitosamente.',
                 200
             );
         } catch (ModelNotFoundException $e) {
@@ -370,7 +370,7 @@ class OrderSellerDetailController extends Controller
 
             return $this->successResponse(
                 $orderDetail,
-                'El detalle del pedido fue cancelado exitosamente.',
+                'El detalle del pedido fue cancelado por el asesor exitosamente.',
                 200
             );
         } catch (ModelNotFoundException $e) {

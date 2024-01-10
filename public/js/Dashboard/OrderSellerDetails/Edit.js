@@ -29,7 +29,7 @@ function EditOrderSellerModalCleaned(order) {
     $('#EditOrderSellerButton').attr('data-client_id', order.client_id);
     $('#EditOrderSellerButton').attr('data-client_branch_id', order.client_branch_id);
 
-    $('#dispatch_e').val(order.dispatch).trigger('change'); 
+    $('#dispatch_e').val(order.dispatch).trigger('change');
     $('#dispatch_date_e').val(order.dispatch_date);
     $('#seller_observation_e').val(order.seller_observation);
 }
@@ -207,11 +207,11 @@ function RemoveIsValidClassEditOrderSeller() {
 }
 
 function AddIsInvalidClassEditOrderSeller(input) {
-    if (!$(`#${input}_e_e`).hasClass('is-valid')) {
-        $(`#${input}_e_e`).addClass('is-invalid');
+    if (!$(`#${input}_e`).hasClass('is-valid')) {
+        $(`#${input}_e`).addClass('is-invalid');
     }
-    if (!$(`span[aria-labelledby="select2-${input}_e_e-container`).hasClass('is-valid')) {
-        $(`span[aria-labelledby="select2-${input}_e_e-container"]`).addClass('is-invalid');
+    if (!$(`span[aria-labelledby="select2-${input}_e-container`).hasClass('is-valid')) {
+        $(`span[aria-labelledby="select2-${input}_e-container"]`).addClass('is-invalid');
     }
 }
 
@@ -222,7 +222,3 @@ function RemoveIsInvalidClassEditOrderSeller() {
     $('span[aria-labelledby="select2-client_id_e-container"]').removeClass('is-invalid');
     $('span[aria-labelledby="select2-client_branch_id_e-container"]').removeClass('is-invalid');
 }
-
-$('#dispatch_date_e').datetimepicker({
-    format: 'L'
-});

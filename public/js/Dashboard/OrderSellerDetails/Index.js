@@ -8,7 +8,7 @@ function IndexOrderSellerDetail(order_id) {
             '_token': $('meta[name="csrf-token"]').attr('content'),
             'order_id': order_id
         },
-        success: function(response) { 
+        success: function(response) {
             console.log(response);
             IndexOrderSellerDetailModalCleaned(response.data.orderDetails, response.data.sizes);
             IndexOrderSellerDetailAjaxSuccess(response);
@@ -46,16 +46,11 @@ function IndexOrderSellerDetailModalCleaned(details, sizes) {
 
     $.each(details, function(index, detail) {
         body += `<tr>
-                        <td>${detail.id}</td>`;
+                    <td>${detail.id}</td>`;
         let btn = '';
-        
+
         switch (detail.status) {
             case 'Pendiente':
-                /* btn += `<a onclick="ApproveOrderSellerDetail(${detail.order.id})" type="button"
-                class="btn btn-success btn-sm mr-2" title="Aprobar detalle de pedido.">
-                    <i class="fas fa-check text-white"></i>
-                </a>`; */
-
                 btn += `<a onclick="EditOrderSellerDetail(${detail.id})" type="button"
                 class="btn btn-primary btn-sm mr-2" title="Editar detalle pedido.">
                     <i class="fas fa-pen text-white"></i>
@@ -72,29 +67,6 @@ function IndexOrderSellerDetailModalCleaned(details, sizes) {
                     <i class="fas fa-arrows-rotate text-white"></i>
                 </a>`;
                 break;
-            /* case 'Agotado':
-                btn += `<a onclick="PendingOrderSellerDetail(${detail.order.id})" type="button"
-                class="btn btn-info btn-sm mr-2" title="Pendiente detalle de pedido.">
-                    <i class="fas fa-arrows-rotate text-white"></i>
-                </a>`;
-                break;
-            case 'Rechazado':
-                btn += `<a onclick="PendingOrderSellerDetail(${detail.order.id})" type="button"
-                class="btn btn-info btn-sm mr-2" title="Pendiente detalle de pedido.">
-                    <i class="fas fa-arrows-rotate text-white"></i>
-                </a>`;
-                break;
-            case 'Aprobado':
-                btn += `<a onclick="PendingOrderSellerDetail(${detail.order.id})" type="button"
-                class="btn btn-info btn-sm mr-2" title="Pendiente detalle de pedido.">
-                    <i class="fas fa-arrows-rotate text-white"></i>
-                </a>`;
-
-                btn += `<a onclick="CancelOrderSellerDetail(${detail.order.id})" type="button"
-                class="btn btn-danger btn-sm mr-2" title="Cancelar detalle pedido.">
-                    <i class="fas fa-xmark text-white"></i>
-                </a>`;
-                break; */
             default:
                 btn += ``;
                 break;
@@ -104,7 +76,7 @@ function IndexOrderSellerDetailModalCleaned(details, sizes) {
 
         let quantities = 0;
 
-        $.each(detail.quantities, function(index, quantity) { 
+        $.each(detail.quantities, function(index, quantity) {
             quantities += quantity.quantity;
         });
 
@@ -126,6 +98,9 @@ function IndexOrderSellerDetailModalCleaned(details, sizes) {
                 break;
             case 'Cancelado':
                 body += `<td><span class="badge badge-pill badge-danger text-white"><i class="fas fa-xmark mr-2 text-white"></i>Cancelado</span></td>`;
+                break;
+            case 'Revision':
+                body += `<td><span class="badge badge-pill badge-silver"><i class="fas fa-magnifying-glass mr-2"></i>Revision</span></td>`;
                 break;
             case 'Aprobado':
                 body += `<td><span class="badge badge-pill badge-success"><i class="fas fa-check mr-2"></i>Aprobado</span></td>`;

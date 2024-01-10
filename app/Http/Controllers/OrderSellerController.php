@@ -140,10 +140,10 @@ class OrderSellerController extends Controller
 
             return $this->successResponse(
                 [
-                    'url' => URL::route('Dashboard.Orders.Seller.Details.Index', ['id' => $order->id]), 
+                    'url' => URL::route('Dashboard.Orders.Seller.Details.Index', ['id' => $order->id]),
                     'order' => $order
                 ],
-                'El pedido fue registrado exitosamente.',
+                'El pedido fue registrado por el asesor exitosamente.',
                 201
             );
         } catch (ModelNotFoundException $e) {
@@ -227,7 +227,7 @@ class OrderSellerController extends Controller
 
             return $this->successResponse(
                 $order,
-                'El pedido fue actualizado exitosamente.',
+                'El pedido fue actualizado por el asesor exitosamente.',
                 200
             );
         } catch (ModelNotFoundException $e) {
@@ -292,11 +292,11 @@ class OrderSellerController extends Controller
                                 ->whereHas('color', fn($subQuery) => $subQuery->where('id', $detail->color_id))
                                 ->whereHas('tone', fn($subQuery) => $subQuery->where('id', $detail->tone_id))
                                 ->first();
-    
+
                             $inventory->quantity -= $quantity->quantity;
                             $inventory->save();
 
-                            $detail->status = 'Aprobado';
+                            $detail->status = 'Revision';
                             $detail->save();
                         }
                     }
@@ -308,7 +308,7 @@ class OrderSellerController extends Controller
 
             return $this->successResponse(
                 $order,
-                'El pedido fue aprobado exitosamente.',
+                'El pedido fue aprobado por el asesor exitosamente.',
                 200
             );
         } catch (ModelNotFoundException $e) {
@@ -356,7 +356,7 @@ class OrderSellerController extends Controller
 
             return $this->successResponse(
                 $order,
-                'El pedido fue cancelado exitosamente.',
+                'El pedido fue cancelado por el asesor exitosamente.',
                 200
             );
         } catch (ModelNotFoundException $e) {
