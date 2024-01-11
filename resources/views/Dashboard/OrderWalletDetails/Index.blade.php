@@ -11,7 +11,7 @@
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item">Dashboard</li>
                         <li class="breadcrumb-item">Orders</li>
-                        <li class="breadcrumb-item">Seller</li>
+                        <li class="breadcrumb-item">Wallet</li>
                         <li class="breadcrumb-item">Details</li>
                         <li class="breadcrumb-item">Index</li>
                     </ol>
@@ -56,18 +56,47 @@
                     <div class="card-header p-2">
                         <ul class="nav nav-pills">
                             <li class="nav-item">
-                                <a class="btn btn-info text-white" id="IndexOrderSellerDetail" data-id="{{ $order->id }}" onclick="IndexOrderSellerDetail({{ $order->id }})" type="button" title="Orden de pedido.">
+                                <a class="btn btn-info text-white" id="IndexOrderWalletDetail" data-id="{{ $order->id }}" onclick="IndexOrderWalletDetail({{ $order->id }})" type="button" title="Orden de pedido.">
                                     ORDEN DE PEDIDO: {{ $order->id }}
                                 </a>
                             </li>
-                            @if($order->seller_status == 'Pendiente')
+                            @if($order->seller_status == 'Aprobado' && $order->wallet_status == 'Cancelado')
                                 <li class="nav-item ml-auto">
-                                    <a class="btn btn-success text-white" type="button" onclick="ApproveOrderSeller({{ $order->id }}, false)" title="Aprobacion del pedido.">
+                                    <a class="btn btn-info text-white" type="button" onclick="PendingOrderWallet({{ $order->id }}, false)" title="Pedido pendiente para cartera.">
+                                        <i class="fas fa-arrows-rotate"></i>
+                                    </a>
+                                </li>
+                            @endif
+                            @if($order->seller_status == 'Aprobado' && $order->wallet_status == 'Pendiente')
+                                <li class="nav-item ml-auto">
+                                    <a class="btn btn-info text-white" type="button" onclick="PendingOrderSeller({{ $order->id }}, false)" title="Pedido pendiente para vendedor.">
+                                        <i class="fas fa-arrows-rotate"></i>
+                                    </a>
+                                </li>
+                                <li class="nav-item ml-2">
+                                    <a class="btn btn-success text-white" type="button" onclick="ApproveOrderWallet({{ $order->id }}, false)" title="Pedido aprobado para cartera.">
+                                        <i class="fas fa-check-double"></i>
+                                    </a>
+                                </li>
+                                <li class="nav-item ml-2">
+                                    <a class="btn btn-warning text-white" type="button" onclick="PartiallyApproveOrderWallet({{ $order->id }}, false)" title="Pedido parcialmente aprobado para cartera.">
                                         <i class="fas fa-check"></i>
                                     </a>
                                 </li>
                                 <li class="nav-item ml-2">
-                                    <a class="btn btn-danger text-white" type="button" onclick="CancelOrderSeller({{ $order->id }}, false)" title="Cancelacion del pedido.">
+                                    <a class="btn btn-danger text-white" type="button" onclick="CancelOrderWallet({{ $order->id }}, false)" title="Pedido cancelado para cartera.">
+                                        <i class="fas fa-xmark"></i>
+                                    </a>
+                                </li>
+                            @endif
+                            @if($order->seller_status == 'Aprobado' && $order->wallet_status == 'Parcialmente Aprobado')
+                                <li class="nav-item ml-auto">
+                                    <a class="btn btn-success text-white" type="button" onclick="ApproveOrderWallet({{ $order->id }}, false)" title="Pedido aprobado para cartera.">
+                                        <i class="fas fa-check-double"></i>
+                                    </a>
+                                </li>
+                                <li class="nav-item ml-2">
+                                    <a class="btn btn-danger text-white" type="button" onclick="CancelOrderWallet({{ $order->id }}, false)" title="Pedido cancelado para cartera.">
                                         <i class="fas fa-xmark"></i>
                                     </a>
                                 </li>
@@ -112,9 +141,6 @@
                                                 @case('Pendiente')
                                                     <span class="badge badge-pill badge-info" id="seller_status"><i class="fas fa-arrows-rotate mr-2"></i>Pendiente</span>
                                                     @break
-                                                @case('Parcialmente Aprobado')
-                                                    <span class="badge badge-pill bg-orange" id="seller_status"><i class="fas fa-question mr-2"></i>Parcialmente Aprobado</span>
-                                                    @break
                                                 @case('Aprobado')
                                                     <span class="badge badge-pill badge-success" id="seller_status"><i class="fas fa-check mr-2"></i>Aprobado</span>
                                                     @break
@@ -138,10 +164,10 @@
                                                     <span class="badge badge-pill badge-info" id="wallet_status"><i class="fas fa-arrows-rotate mr-2"></i>Pendiente</span>
                                                     @break
                                                 @case('Parcialmente Aprobado')
-                                                    <span class="badge badge-pill bg-orange" id="wallet_status"><i class="fas fa-question mr-2"></i>Parcialmente Aprobado</span>
+                                                    <span class="badge badge-pill badge-warning text-white" id="wallet_status"><i class="fas fa-check mr-2 text-white"></i>Parcialmente Aprobado</span>
                                                     @break
                                                 @case('Aprobado')
-                                                    <span class="badge badge-pill badge-success" id="wallet_status"><i class="fas fa-check mr-2"></i>Aprobado</span>
+                                                    <span class="badge badge-pill badge-success" id="wallet_status"><i class="fas fa-check-double mr-2"></i>Aprobado</span>
                                                     @break
                                                 @default
                                                     <span class="badge badge-pill badge-info" id="wallet_status"><i class="fas fa-arrows-rotate mr-2"></i>Pendiente</span>
@@ -195,16 +221,16 @@
                                     </tr>
                                     <tr>
                                         <td style="font-size:14px;">OBSERVACION COMERCIAL:</td>
-                                        <td style="font-size:14px;" colspan="5">{{ $order->seller_observation }}</td>
-                                        <!-- <td style="font-size:14px;">OBSERVACION CARTERA:</td>
+                                        <td style="font-size:14px;">{{ $order->seller_observation }}</td>
+                                        <td style="font-size:14px;">OBSERVACION CARTERA:</td>
                                         <td style="font-size:14px;" colspan="2">
                                             <textarea class="form-control" id="seller_observation" name="seller_observation" cols="30" rows="2">{{ $order->wallet_observation }}</textarea>
                                         </td>
                                         <td class="text-center">
-                                            <button type="button" class="btn btn-primary" onclick="" title="Actualizar observacion de cartera pedido.">
+                                            <button type="button" class="btn btn-primary" onclick="ObservationApproveOrderWallet({{ $order->id }})" title="Actualizar observacion de cartera pedido.">
                                                 <i class="fas fa-floppy-disk"></i>
                                             </button>
-                                        </td> -->
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -220,7 +246,7 @@
                         <ul class="nav nav-pills">
                             @if($order->seller_status == 'Pendiente' || $order->wallet_status == 'Pendiente' || $order->wallet_status == 'Aprobado' || $order->wallet_status == 'Parcialmente Aprobado' || $order->dispatched_status == 'Pendiente')
                                 <li class="nav-item">
-                                    <a class="nav-link active" type="button" onclick="CreateOrderSellerDetailModal()" title="Agregar detalle de pedido.">
+                                    <a class="nav-link active" type="button" onclick="CreateOrderWalletDetailModal()" title="Agregar detalle de pedido.">
                                         <i class="fas fa-plus"></i>
                                     </a>
                                 </li>
@@ -229,10 +255,10 @@
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table id="orderSellers" class="table table-bordered table-hover dataTable dtr-inline nowrap w-100">
-                                <thead class="thead-dark" id="OrderSellerDetailHead">
+                            <table id="orderWallets" class="table table-bordered table-hover dataTable dtr-inline nowrap w-100">
+                                <thead class="thead-dark" id="OrderWalletDetailHead">
                                 </thead>
-                                <tbody id="OrderSellerDetailBody">
+                                <tbody id="OrderWalletDetailBody">
                                 </tbody>
                             </table>
                         </div>
@@ -241,17 +267,18 @@
             </div>
         </div>
     </div>
-    @include('Dashboard.OrderSellers.Create')
-    @include('Dashboard.OrderSellers.Edit')
+    @include('Dashboard.OrderWallets.Create')
+    @include('Dashboard.OrderWallets.Edit')
 </section>
 @endsection
 @section('script')
-<script src="{{ asset('js/Dashboard/OrderSellerDetails/Index.js') }}"></script>
-<script src="{{ asset('js/Dashboard/OrderSellerDetails/Create.js') }}"></script>
-<script src="{{ asset('js/Dashboard/OrderSellerDetails/Edit.js') }}"></script>
-<script src="{{ asset('js/Dashboard/OrderSellerDetails/Pending.js') }}"></script>
-<script src="{{ asset('js/Dashboard/OrderSellerDetails/Cancel.js') }}"></script>
+<script src="{{ asset('js/Dashboard/OrderWalletDetails/Index.js') }}"></script>
+<script src="{{ asset('js/Dashboard/OrderWalletDetails/Create.js') }}"></script>
+<script src="{{ asset('js/Dashboard/OrderWalletDetails/Edit.js') }}"></script>
+<script src="{{ asset('js/Dashboard/OrderWalletDetails/Pending.js') }}"></script>
+<script src="{{ asset('js/Dashboard/OrderWalletDetails/Cancel.js') }}"></script>
 
-<script src="{{ asset('js/Dashboard/OrderSellers/Approve.js') }}"></script>
-<script src="{{ asset('js/Dashboard/OrderSellers/Cancel.js') }}"></script>
+<script src="{{ asset('js/Dashboard/OrderWallets/Approve.js') }}"></script>
+<script src="{{ asset('js/Dashboard/OrderWallets/PartiallyApprove.js') }}"></script>
+<script src="{{ asset('js/Dashboard/OrderWallets/Cancel.js') }}"></script>
 @endsection

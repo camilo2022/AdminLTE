@@ -8,6 +8,7 @@ use App\Http\Requests\OrderWallet\OrderWalletCancelRequest;
 use App\Http\Requests\OrderWallet\OrderWalletIndexQueryRequest;
 use App\Http\Requests\OrderWallet\OrderWalletObservationRequest;
 use App\Http\Requests\OrderWallet\OrderWalletPartiallyApproveRequest;
+use App\Http\Requests\OrderWallet\OrderWalletPendingRequest;
 use App\Http\Resources\OrderWallet\OrderWalletIndexQueryCollection;
 use App\Models\Inventory;
 use App\Models\Order;
@@ -57,6 +58,7 @@ class OrderWalletController extends Controller
                         $query->filterByDate($start_date, $end_date);
                     }
                 )
+                ->where('seller_status', 'Aprobado')
                 ->orderBy($request->input('column'), $request->input('dir'))
                 ->paginate($request->input('perPage'));
 
@@ -174,13 +176,53 @@ class OrderWalletController extends Controller
     public function partiallyApprove(OrderWalletPartiallyApproveRequest $request)
     {
         try {
-            $order = Order::with('details')->findOrFail($request->input('id'));
+            $order = Order::findOrFail($request->input('id'));
             $order->wallet_status = 'Parcialmente Aprobado';
             $order->save();
 
             return $this->successResponse(
                 $order,
                 'El pedido fue aprobado parcialmente por cartera exitosamente.',
+                200
+            );
+        } catch (ModelNotFoundException $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('ModelNotFoundException'),
+                    'error' => $e->getMessage()
+                ],
+                404
+            );
+        } catch (QueryException $e) {
+            // Manejar la excepción de la base de datos
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('QueryException'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        } catch (Exception $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('Exception'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        }
+    }
+
+    public function pending(OrderWalletPendingRequest $request)
+    {
+        try {
+            $order = Order::findOrFail($request->input('id'));
+            $order->wallet_status = 'Pendiente';
+            $order->save();
+
+            return $this->successResponse(
+                $order,
+                'El pedido fue pendiente por cartera exitosamente.',
                 200
             );
         } catch (ModelNotFoundException $e) {

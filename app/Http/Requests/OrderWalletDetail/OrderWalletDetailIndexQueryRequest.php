@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Requests\OrderSellerDetail;
+namespace App\Http\Requests\OrderWalletDetail;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class OrderSellerDetailIndexQueryRequest extends FormRequest
+class OrderWalletDetailIndexQueryRequest extends FormRequest
 {
     protected function failedValidation(Validator $validator)
     {

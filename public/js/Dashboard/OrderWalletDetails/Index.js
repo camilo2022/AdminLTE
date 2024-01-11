@@ -57,19 +57,19 @@ function IndexOrderWalletDetailModalCleaned(details, sizes) {
                 </a>`;
 
                 btn += `<a onclick="DeclineOrderWalletDetail(${detail.id})" type="button"
-                class="btn btn-danger btn-sm mr-2" title="Rechazar detalle pedido.">
-                    <i class="fas fa-xmark text-white"></i>
+                class="btn btn-warning btn-sm mr-2 text-white" title="Rechazar detalle pedido.">
+                    <i class="fas fa-ban text-white"></i>
                 </a>`;
                 break;
             case 'Pendiente':
-                btn += `<a onclick="ReviewOrderWalletDetail(${detail.order.id})" type="button"
-                class="btn btn-success btn-sm mr-2" title="Revisar detalle de pedido.">
-                    <i class="fas fa-check text-white"></i>
-                </a>`;
-
                 btn += `<a onclick="EditOrderWalletDetail(${detail.id})" type="button"
                 class="btn btn-primary btn-sm mr-2" title="Editar detalle pedido.">
                     <i class="fas fa-pen text-white"></i>
+                </a>`;
+
+                btn += `<a onclick="ReviewOrderWalletDetail(${detail.order.id})" type="button"
+                class="btn bg-silver btn-sm mr-2" title="Revisar detalle de pedido.">
+                    <i class="fas fa-magnifying-glass"></i>
                 </a>`;
 
                 btn += `<a onclick="CancelOrderWalletDetail(${detail.id})" type="button"
@@ -85,8 +85,8 @@ function IndexOrderWalletDetailModalCleaned(details, sizes) {
                 break;
             case 'Aprobado':
                 btn += `<a onclick="DeclineOrderWalletDetail(${detail.id})" type="button"
-                class="btn btn-danger btn-sm mr-2" title="Rechazar detalle pedido.">
-                    <i class="fas fa-xmark text-white"></i>
+                class="btn btn-warning btn-sm mr-2 text-white" title="Rechazar detalle pedido.">
+                    <i class="fas fa-ban text-white"></i>
                 </a>`;
                 break;
             default:
@@ -94,7 +94,7 @@ function IndexOrderWalletDetailModalCleaned(details, sizes) {
                 break;
         };
 
-        body += `<td><div class="text-center">${detail.order.wallet_status == 'Pendiente' ? btn : ''}</div></td>`;
+        body += `<td><div class="text-center">${detail.order.seller_status == 'Aprobado' &&(detail.order.wallet_status == 'Pendiente' || detail.order.wallet_status == 'Parcialmente Aprobado') && detail.order.dispatched_status == 'Pendiente' ? btn : ''}</div></td>`;
 
         let quantities = 0;
 
@@ -131,7 +131,7 @@ function IndexOrderWalletDetailModalCleaned(details, sizes) {
                 body += `<td><span class="badge badge-pill bg-orange" style="color:white !important;"><i class="fas fa-ban mr-2 text-white"></i>Agotado</span></td>`;
                 break;
             case 'Rechazado':
-                body += `<td><span class="badge badge-pill badge-warning text-white"><i class="fas fa-circle-xmark mr-2 text-white"></i>Rechazado</span></td>`;
+                body += `<td><span class="badge badge-pill badge-warning text-white"><i class="fas fa-ban mr-2 text-white"></i>Rechazado</span></td>`;
                 break;
             case 'Filtrado':
                 body += `<td><span class="badge badge-pill bg-purple" style="color:white !important;"><i class="fas fa-filter mr-2 text-white"></i>Filtrado</span></td>`;

@@ -4,7 +4,7 @@ namespace App\Http\Requests\OrderWalletDetail;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class OrderWalletDetailAcceptRequest extends FormRequest
+class OrderWalletDetailApproveRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

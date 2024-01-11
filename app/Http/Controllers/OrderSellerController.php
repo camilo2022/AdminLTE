@@ -8,6 +8,7 @@ use App\Http\Requests\OrderSeller\OrderSellerCancelRequest;
 use App\Http\Requests\OrderSeller\OrderSellerCreateRequest;
 use App\Http\Requests\OrderSeller\OrderSellerEditRequest;
 use App\Http\Requests\OrderSeller\OrderSellerIndexQueryRequest;
+use App\Http\Requests\OrderSeller\OrderSellerPendingRequest;
 use App\Http\Requests\OrderSeller\OrderSellerStoreRequest;
 use App\Http\Requests\OrderSeller\OrderSellerUpdateRequest;
 use App\Http\Resources\OrderSeller\OrderSellerIndexQueryCollection;
@@ -309,6 +310,46 @@ class OrderSellerController extends Controller
             return $this->successResponse(
                 $order,
                 'El pedido fue aprobado por el asesor exitosamente.',
+                200
+            );
+        } catch (ModelNotFoundException $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('ModelNotFoundException'),
+                    'error' => $e->getMessage()
+                ],
+                404
+            );
+        } catch (QueryException $e) {
+            // Manejar la excepción de la base de datos
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('QueryException'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        } catch (Exception $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('Exception'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        }
+    }
+
+    public function pending(OrderSellerPendingRequest $request)
+    {
+        try {
+            $order = Order::findOrFail($request->input('id'));
+            $order->sellet_status = 'Pendiente';
+            $order->save();
+
+            return $this->successResponse(
+                $order,
+                'El pedido fue pendiente por el asesor exitosamente.',
                 200
             );
         } catch (ModelNotFoundException $e) {

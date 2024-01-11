@@ -113,10 +113,10 @@ let tableOrderWallets = $('#orderWallets').DataTable({
                         return `<h5><span class="badge badge-pill badge-info"><i class="fas fa-arrows-rotate mr-2"></i>Pendiente</span></h5>`;
                         break;
                     case 'Parcialmente Aprobado':
-                        return `<h5><span class="badge badge-pill bg-orange"><i class="fas fa-question mr-2"></i>Parcialmente Aprobado</span></h5>`;
+                        return `<h5><span class="badge badge-pill badge-warning text-white"><i class="fas fa-check mr-2 text-white"></i>Parcialmente Aprobado</span></h5>`;
                         break;
                     case 'Aprobado':
-                        return `<h5><span class="badge badge-pill badge-success"><i class="fas fa-check mr-2"></i>Aprobado</span></h5>`;
+                        return `<h5><span class="badge badge-pill badge-success"><i class="fas fa-check-double mr-2"></i>Aprobado</span></h5>`;
                         break;
                     default:
                         return `<h5><span class="badge badge-pill badge-info"><i class="fas fa-arrows-rotate mr-2"></i>Pendiente</span></h5>`;
@@ -165,27 +165,27 @@ let tableOrderWallets = $('#orderWallets').DataTable({
             }
         },
         {
-            data: 'seller_status',
+            data: 'wallet_status',
             render: function (data, type, row) {
                 let btn = `<div class="text-center" style="width: 100%;">`;
 
-                btn += `<a href="/Dashboard/Orders/Seller/Details/Index/${row.id}" type="button"
+                btn += `<a href="/Dashboard/Orders/Wallet/Details/Index/${row.id}" type="button"
                 class="btn btn-info btn-sm mr-2" title="Visualizar detalles del pedido.">
                     <i class="fas fa-eye text-white"></i>
                 </a>`;
 
                 if (data === 'Pendiente') {
-                    btn += `<a onclick="EditOrderSellerModal(${row.id})" type="button"
-                    class="btn btn-primary btn-sm mr-2" title="Editar pedido.">
-                        <i class="fas fa-pen text-white"></i>
+                    btn += `<a onclick="ApproveOrderWallet(${row.id})" type="button"
+                    class="btn btn-success btn-sm mr-2" title="Aprobar pedido.">
+                        <i class="fas fa-check-double text-white"></i>
                     </a>`;
 
-                    btn += `<a onclick="ApproveOrderSeller(${row.id})" type="button"
-                    class="btn btn-success btn-sm mr-2" title="Aprobar pedido.">
+                    btn += `<a onclick="PartiallyApproveOrderWallet(${row.id})" type="button"
+                    class="btn btn-warning btn-sm mr-2" title="Aprobar parcialmente pedido.">
                         <i class="fas fa-check text-white"></i>
                     </a>`;
 
-                    btn += `<a onclick="CancelOrderSeller(${row.id})" type="button"
+                    btn += `<a onclick="CancelOrderWallet(${row.id})" type="button"
                     class="btn btn-danger btn-sm mr-2" title="Cancelar pedido.">
                         <i class="fas fa-xmark text-white"></i>
                     </a>`;

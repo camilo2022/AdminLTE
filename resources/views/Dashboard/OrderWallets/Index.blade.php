@@ -5,13 +5,13 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1 class="m-0 text-dark">Pedidos</h1>
+                        <h1 class="m-0 text-dark">Gestion de Pedidos Cartera</h1>
                     </div><!-- /.col -->
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item">Dashboard</li>
                             <li class="breadcrumb-item">Orders</li>
-                            <li class="breadcrumb-item">Seller</li>
+                            <li class="breadcrumb-item">Wallet</li>
                             <li class="breadcrumb-item">Index</li>
                         </ol>
                     </div><!-- /.col -->
@@ -54,16 +54,11 @@
                     <div class="card">
                         <div class="card-header p-2">
                             <ul class="nav nav-pills">
-                                <li class="nav-item">
-                                    <a class="nav-link active" type="button" onclick="CreateOrderSellerModal()" title="Agregar pedido.">
-                                        <i class="fas fa-plus"></i>
-                                    </a>
-                                </li>
                             </ul>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table id="orderSellers" class="table table-bordered table-hover dataTable dtr-inline nowrap w-100">
+                                <table id="orderWallets" class="table table-bordered table-hover dataTable dtr-inline nowrap w-100">
                                     <thead class="thead-dark">
                                         <tr>
                                             <th>#</th>
@@ -92,14 +87,15 @@
                 </div>
             </div>
         </div>
-        @include('Dashboard.OrderSellers.Create')
-        @include('Dashboard.OrderSellers.Edit')
+        @include('Dashboard.OrderWallets.Create')
+        @include('Dashboard.OrderWallets.Edit')
     </section>
 @endsection
 @section('script')
-<script src="{{ asset('js/Dashboard/OrderSellers/DataTableIndex.js') }}"></script>
-<script src="{{ asset('js/Dashboard/OrderSellers/Create.js') }}"></script>
-<script src="{{ asset('js/Dashboard/OrderSellers/Edit.js') }}"></script>
-<script src="{{ asset('js/Dashboard/OrderSellers/Approve.js') }}"></script>
-<script src="{{ asset('js/Dashboard/OrderSellers/Cancel.js') }}"></script>
+<script src="{{ asset('js/Dashboard/OrderWallets/DataTableIndex.js') }}"></script>
+<script src="{{ asset('js/Dashboard/OrderWallets/Create.js') }}"></script>
+<script src="{{ asset('js/Dashboard/OrderWallets/Edit.js') }}"></script>
+<script src="{{ asset('js/Dashboard/OrderWallets/Approve.js') }}"></script>
+<script src="{{ asset('js/Dashboard/OrderWallets/PartiallyApprove.js') }}"></script>
+<script src="{{ asset('js/Dashboard/OrderWallets/Cancel.js') }}"></script>
 @endsection

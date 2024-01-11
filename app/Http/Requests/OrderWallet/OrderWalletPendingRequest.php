@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Requests\OrderSellerDetail;
+namespace App\Http\Requests\OrderWallet;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class OrderSellerDetailIndexQueryRequest extends FormRequest
+class OrderWalletPendingRequest extends FormRequest
 {
     protected function failedValidation(Validator $validator)
     {
@@ -24,15 +24,15 @@ class OrderSellerDetailIndexQueryRequest extends FormRequest
     public function rules()
     {
         return [
-            'order_id' => ['required', 'exists:orders,id'],
+            'id' => ['required', 'exists:orders,id']
         ];
     }
 
     public function messages()
     {
         return [
-            'order_id.required' => 'El Identificador del pedido es requerido.',
-            'order_id.exists' => 'El Identificador del pedidp no es válido.',
+            'id.required' => 'El campo Pedido es requerido.',
+            'id.exists' => 'El Identificador del pedido no es valido.'
         ];
     }
 }

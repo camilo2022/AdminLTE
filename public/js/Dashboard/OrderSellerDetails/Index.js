@@ -72,7 +72,7 @@ function IndexOrderSellerDetailModalCleaned(details, sizes) {
                 break;
         };
 
-        body += `<td><div class="text-center">${detail.order.seller_status == 'Pendiente' ? btn : ''}</div></td>`;
+        body += `<td><div class="text-center">${detail.order.seller_status == 'Pendiente' && detail.order.wallet_status == 'Pendiente' && detail.order.dispatched_status == 'Pendiente' ? btn : ''}</div></td>`;
 
         let quantities = 0;
 
@@ -109,7 +109,7 @@ function IndexOrderSellerDetailModalCleaned(details, sizes) {
                 body += `<td><span class="badge badge-pill bg-orange" style="color:white !important;"><i class="fas fa-ban mr-2 text-white"></i>Agotado</span></td>`;
                 break;
             case 'Rechazado':
-                body += `<td><span class="badge badge-pill badge-warning text-white"><i class="fas fa-circle-xmark mr-2 text-white"></i>Rechazado</span></td>`;
+                body += `<td><span class="badge badge-pill badge-warning text-white"><i class="fas fa-ban mr-2 text-white"></i>Rechazado</span></td>`;
                 break;
             case 'Filtrado':
                 body += `<td><span class="badge badge-pill bg-purple" style="color:white !important;"><i class="fas fa-filter mr-2 text-white"></i>Filtrado</span></td>`;

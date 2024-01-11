@@ -62,12 +62,12 @@
                             </li>
                             @if($order->seller_status == 'Pendiente')
                                 <li class="nav-item ml-auto">
-                                    <a class="btn btn-success text-white" type="button" onclick="ApproveOrderSeller({{ $order->id }}, false)" title="Aprobacion del pedido.">
+                                    <a class="btn btn-success text-white" type="button" onclick="ApproveOrderSeller({{ $order->id }}, false)" title="Pedido aprobado para vendedor.">
                                         <i class="fas fa-check"></i>
                                     </a>
                                 </li>
                                 <li class="nav-item ml-2">
-                                    <a class="btn btn-danger text-white" type="button" onclick="CancelOrderSeller({{ $order->id }}, false)" title="Cancelacion del pedido.">
+                                    <a class="btn btn-danger text-white" type="button" onclick="CancelOrderSeller({{ $order->id }}, false)" title="Pedido cancelado para vendedor.">
                                         <i class="fas fa-xmark"></i>
                                     </a>
                                 </li>
@@ -112,9 +112,6 @@
                                                 @case('Pendiente')
                                                     <span class="badge badge-pill badge-info" id="seller_status"><i class="fas fa-arrows-rotate mr-2"></i>Pendiente</span>
                                                     @break
-                                                @case('Parcialmente Aprobado')
-                                                    <span class="badge badge-pill bg-orange" id="seller_status"><i class="fas fa-question mr-2"></i>Parcialmente Aprobado</span>
-                                                    @break
                                                 @case('Aprobado')
                                                     <span class="badge badge-pill badge-success" id="seller_status"><i class="fas fa-check mr-2"></i>Aprobado</span>
                                                     @break
@@ -138,7 +135,7 @@
                                                     <span class="badge badge-pill badge-info" id="wallet_status"><i class="fas fa-arrows-rotate mr-2"></i>Pendiente</span>
                                                     @break
                                                 @case('Parcialmente Aprobado')
-                                                    <span class="badge badge-pill bg-orange" id="wallet_status"><i class="fas fa-question mr-2"></i>Parcialmente Aprobado</span>
+                                                    <span class="badge badge-pill badge-warning text-white" id="seller_status"><i class="fas fa-check mr-2 text-white"></i>Parcialmente Aprobado</span>
                                                     @break
                                                 @case('Aprobado')
                                                     <span class="badge badge-pill badge-success" id="wallet_status"><i class="fas fa-check mr-2"></i>Aprobado</span>

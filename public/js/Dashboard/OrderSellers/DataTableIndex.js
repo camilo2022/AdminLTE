@@ -113,10 +113,10 @@ let tableOrderSellers = $('#orderSellers').DataTable({
                         return `<h5><span class="badge badge-pill badge-info"><i class="fas fa-arrows-rotate mr-2"></i>Pendiente</span></h5>`;
                         break;
                     case 'Parcialmente Aprobado':
-                        return `<h5><span class="badge badge-pill bg-orange"><i class="fas fa-question mr-2"></i>Parcialmente Aprobado</span></h5>`;
+                        return `<h5><span class="badge badge-pill badge-warning text-white"><i class="fas fa-check mr-2"></i>Parcialmente Aprobado</span></h5>`;
                         break;
                     case 'Aprobado':
-                        return `<h5><span class="badge badge-pill badge-success"><i class="fas fa-check mr-2"></i>Aprobado</span></h5>`;
+                        return `<h5><span class="badge badge-pill badge-success"><i class="fas fa-check-double mr-2"></i>Aprobado</span></h5>`;
                         break;
                     default:
                         return `<h5><span class="badge badge-pill badge-info"><i class="fas fa-arrows-rotate mr-2"></i>Pendiente</span></h5>`;
