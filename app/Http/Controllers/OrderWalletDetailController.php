@@ -3,10 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\OrderWalletDetail\OrderWalletDetailApproveRequest;
 use App\Http\Requests\OrderWalletDetail\OrderWalletDetailCancelRequest;
 use App\Http\Requests\OrderWalletDetail\OrderWalletDetailCreateRequest;
+use App\Http\Requests\OrderWalletDetail\OrderWalletDetailDeclineRequest;
+use App\Http\Requests\OrderWalletDetail\OrderWalletDetailEditRequest;
 use App\Http\Requests\OrderWalletDetail\OrderWalletDetailIndexQueryRequest;
 use App\Http\Requests\OrderWalletDetail\OrderWalletDetailPendingRequest;
+use App\Http\Requests\OrderWalletDetail\OrderWalletDetailReviewRequest;
 use App\Http\Requests\OrderWalletDetail\OrderWalletDetailStoreRequest;
 use App\Http\Requests\OrderWalletDetail\OrderWalletDetailUpdateRequest;
 use App\Models\Inventory;
@@ -32,7 +36,7 @@ class OrderWalletDetailController extends Controller
             $order = Order::with('seller_user', 'client.document_type', 'client_branch.country', 'client_branch.departament', 'client_branch.city')->findOrFail($id);
             return view('Dashboard.OrderWalletDetails.Index', compact('order'));
         } catch (ModelNotFoundException $e) {
-            return back()->with('danger', 'Ocurrió un error al cargar el pedido: ' . $this->getMessage('OrderNotFoundException'));
+            return back()->with('danger', 'Ocurrió un error al cargar el pedido: ' . $this->getMessage('ModelNotFoundException'));
         } catch (Exception $e) {
             return back()->with('danger', 'Ocurrió un error al cargar la vista: ' . $e->getMessage());
         }
@@ -53,16 +57,6 @@ class OrderWalletDetailController extends Controller
                     'wallet_user' => fn($query) => $query->withTrashed(),
                     'dispatched_user' => fn($query) => $query->withTrashed(),
                 ])
-                ->when($request->filled('search'),
-                    function ($query) use ($request) {
-                        $query->search($request->input('search'));
-                    }
-                )
-                ->when($request->filled('start_date') && $request->filled('end_date'),
-                    function ($query) use ($start_date, $end_date) {
-                        $query->filterByDate($start_date, $end_date);
-                    }
-                )
                 ->where('order_id', $request->input('order_id'))
                 ->get();
 
@@ -137,11 +131,11 @@ class OrderWalletDetailController extends Controller
         try {
             if($request->filled('product_id') && $request->filled('color_id') && $request->filled('tone_id')) {
                 return $this->successResponse(
-                    Inventory::with('product', 'warehouse', 'color', 'tone', 'size')
-                        ->whereHas('product', fn($subQuery) => $subQuery->where('id', $request->input('product_id')))
+                    Inventory::with('warehouse')
                         ->whereHas('warehouse', fn($subQuery) => $subQuery->where('to_discount', true))
-                        ->whereHas('color', fn($subQuery) => $subQuery->where('id', $request->input('color_id')))
-                        ->whereHas('tone', fn($subQuery) => $subQuery->where('id', $request->input('tone_id')))
+                        ->where('product_id', $request->input('product_id'))
+                        ->where('color_id', $request->input('color_id'))
+                        ->where('tone_id', $request->input('tone_id'))
                         ->first(),
                     'Inventario encontrado con exito.',
                     200
@@ -199,14 +193,14 @@ class OrderWalletDetailController extends Controller
 
             return $this->successResponse(
                 $orderDetail,
-                'El detalle del pedido fue registrado por el asesor exitosamente.',
+                'El detalle del pedido fue registrado por cartera exitosamente.',
                 201
             );
         } catch (ModelNotFoundException $e) {
             // Manejar la excepción de la base de datos
             return $this->errorResponse(
                 [
-                    'message' => $this->getMessage('OrderNotFoundException'),
+                    'message' => $this->getMessage('ModelNotFoundException'),
                     'error' => $e->getMessage()
                 ],
                 500
@@ -232,16 +226,16 @@ class OrderWalletDetailController extends Controller
         }
     }
 
-    public function edit(OrderWalletDetailCreateRequest $request, $id)
+    public function edit(OrderWalletDetailEditRequest $request, $id)
     {
         try {
             if($request->filled('product_id') && $request->filled('color_id') && $request->filled('tone_id')) {
                 return $this->successResponse(
-                    Inventory::with('product', 'warehouse', 'color', 'tone', 'size')
-                        ->whereHas('product', fn($subQuery) => $subQuery->where('id', $request->input('product_id')))
+                    Inventory::with('warehouse')
                         ->whereHas('warehouse', fn($subQuery) => $subQuery->where('to_discount', true))
-                        ->whereHas('color', fn($subQuery) => $subQuery->where('id', $request->input('color_id')))
-                        ->whereHas('tone', fn($subQuery) => $subQuery->where('id', $request->input('tone_id')))
+                        ->where('product_id', $request->input('product_id'))
+                        ->where('color_id', $request->input('color_id'))
+                        ->where('tone_id', $request->input('tone_id'))
                         ->first(),
                     'Inventario encontrado con exito.',
                     200
@@ -256,7 +250,7 @@ class OrderWalletDetailController extends Controller
         } catch (ModelNotFoundException $e) {
             return $this->errorResponse(
                 [
-                    'message' => $this->getMessage('OrderNotFoundException'),
+                    'message' => $this->getMessage('ModelNotFoundException'),
                     'error' => $e->getMessage()
                 ],
                 404
@@ -290,13 +284,53 @@ class OrderWalletDetailController extends Controller
 
             return $this->successResponse(
                 $orderDetail,
-                'El detalle del pedido fue actualizado por el asesor exitosamente.',
+                'El detalle del pedido fue actualizado por cartera exitosamente.',
                 200
             );
         } catch (ModelNotFoundException $e) {
             return $this->errorResponse(
                 [
-                    'message' => $this->getMessage('OrderNotFoundException'),
+                    'message' => $this->getMessage('ModelNotFoundException'),
+                    'error' => $e->getMessage()
+                ],
+                404
+            );
+        } catch (QueryException $e) {
+            // Manejar la excepción de la base de datos
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('QueryException'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        } catch (Exception $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('Exception'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        }
+    }
+
+    public function approve(OrderWalletDetailApproveRequest $request)
+    {
+        try {
+            $orderDetail = OrderDetail::findOrFail($request->input('id'));
+            $orderDetail->status = 'Aprobado';
+            $orderDetail->save();
+
+            return $this->successResponse(
+                $orderDetail,
+                'El detalle del pedido fue aprobado por cartera exitosamente.',
+                200
+            );
+        } catch (ModelNotFoundException $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('ModelNotFoundException'),
                     'error' => $e->getMessage()
                 ],
                 404
@@ -330,7 +364,82 @@ class OrderWalletDetailController extends Controller
 
             return $this->successResponse(
                 $orderDetail,
-                'El detalle del pedido fue pendiente por el asesor exitosamente.',
+                'El detalle del pedido fue pendiente por cartera exitosamente.',
+                200
+            );
+        } catch (ModelNotFoundException $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('ModelNotFoundException'),
+                    'error' => $e->getMessage()
+                ],
+                404
+            );
+        } catch (QueryException $e) {
+            // Manejar la excepción de la base de datos
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('QueryException'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        } catch (Exception $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('Exception'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        }
+    }
+
+    public function review(OrderWalletDetailReviewRequest $request)
+    {
+        try {
+            $orderDetail = OrderDetail::with('quantities')->findOrFail($request->input('id'));
+
+            $boolean = true;
+            foreach($orderDetail->quantities as $quantity) {
+                $inventory = Inventory::with('warehouse')
+                    ->whereHas('warehouse', fn($subQuery) => $subQuery->where('to_discount', true))
+                    ->where('product_id', $orderDetail->product_id)
+                    ->where('size_id', $quantity->size_id)
+                    ->where('color_id', $orderDetail->color_id)
+                    ->where('tone_id', $orderDetail->tone_id)
+                    ->first();
+
+                if($inventory->quantity < $quantity->quantity) {
+                    $boolean = false;
+                    break;
+                }
+            }
+
+            if($boolean){
+                foreach($orderDetail->quantities as $quantity) {
+                    $inventory = Inventory::with('warehouse')
+                        ->whereHas('warehouse', fn($subQuery) => $subQuery->where('to_discount', true))
+                        ->where('product_id', $orderDetail->product_id)
+                        ->where('size_id', $quantity->size_id)
+                        ->where('color_id', $orderDetail->color_id)
+                        ->where('tone_id', $orderDetail->tone_id)
+                        ->first();
+
+                    $inventory->quantity -= $quantity->quantity;
+                    $inventory->save();
+                }
+
+                $orderDetail->status = 'Revision';
+            } else {
+                $orderDetail->status = 'Agotado';
+            }
+
+            $orderDetail->save();
+
+            return $this->successResponse(
+                $orderDetail,
+                'El detalle del pedido fue pendiente por cartera exitosamente.',
                 200
             );
         } catch (ModelNotFoundException $e) {
@@ -370,7 +479,59 @@ class OrderWalletDetailController extends Controller
 
             return $this->successResponse(
                 $orderDetail,
-                'El detalle del pedido fue cancelado por el asesor exitosamente.',
+                'El detalle del pedido fue cancelado por cartera exitosamente.',
+                200
+            );
+        } catch (ModelNotFoundException $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('ModelNotFoundException'),
+                    'error' => $e->getMessage()
+                ],
+                404
+            );
+        } catch (QueryException $e) {
+            // Manejar la excepción de la base de datos
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('QueryException'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        } catch (Exception $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('Exception'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        }
+    }
+
+    public function decline(OrderWalletDetailDeclineRequest $request)
+    {
+        try {
+            $orderDetail = OrderDetail::with('quantities')->findOrFail($request->input('id'));
+            foreach($orderDetail->quantities as $quantity) {
+                $inventory = Inventory::with('warehouse')
+                    ->whereHas('warehouse', fn($subQuery) => $subQuery->where('to_discount', true))
+                    ->where('product_id', $orderDetail->product_id)
+                    ->where('size_id', $quantity->size_id)
+                    ->where('color_id', $orderDetail->color_id)
+                    ->where('tone_id', $orderDetail->tone_id)
+                    ->first();
+
+                $inventory->quantity += $quantity->quantity;
+                $inventory->save();
+            }
+            $orderDetail->status = 'Rechazado';
+            $orderDetail->save();
+
+            return $this->successResponse(
+                $orderDetail,
+                'El detalle del pedido fue rechazado por cartera exitosamente.',
                 200
             );
         } catch (ModelNotFoundException $e) {

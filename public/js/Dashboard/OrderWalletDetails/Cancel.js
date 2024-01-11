@@ -1,4 +1,4 @@
-function CancelOrderSellerDetail(id) {
+function CancelOrderWalletDetail(id) {
     Swal.fire({
         title: '¿Desea cancelar el detalle del pedido?',
         text: 'El detalle del pedido será cancelado.',
@@ -11,19 +11,19 @@ function CancelOrderSellerDetail(id) {
     }).then((result) => {
         if (result.value) {
             $.ajax({
-                url: `/Dashboard/Orders/Seller/Details/Cancel`,
+                url: `/Dashboard/Orders/Wallet/Details/Cancel`,
                 type: 'PUT',
                 data: {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
                     'id': id
                 },
                 success: function(response) {
-                    $('#IndexOrderSellerDetail').trigger('click');
-                    CancelOrderSellerDetailAjaxSuccess(response);
+                    $('#IndexOrderWalletDetail').trigger('click');
+                    CancelOrderWalletDetailAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    $('#IndexOrderSellerDetail').trigger('click');
-                    CancelOrderSellerDetailAjaxError(xhr);
+                    $('#IndexOrderWalletDetail').trigger('click');
+                    CancelOrderWalletDetailAjaxError(xhr);
                 }
             });
         } else {
@@ -32,7 +32,7 @@ function CancelOrderSellerDetail(id) {
     });
 }
 
-function CancelOrderSellerDetailAjaxSuccess(response) {
+function CancelOrderWalletDetailAjaxSuccess(response) {
     if(response.status === 200) {
         toastr.success(response.message);
     }
@@ -42,7 +42,7 @@ function CancelOrderSellerDetailAjaxSuccess(response) {
     }
 }
 
-function CancelOrderSellerDetailAjaxError(xhr) {
+function CancelOrderWalletDetailAjaxError(xhr) {
     if(xhr.status === 403) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
     }

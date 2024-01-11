@@ -1,17 +1,17 @@
-function PendingOrderWalletDetail(id) {
+function ApproveOrderWalletDetail(id) {
     Swal.fire({
-        title: '¿Desea pendiente el detalle del pedido?',
-        text: 'El detalle del pedido será pendiente.',
+        title: '¿Desea aprobar el detalle del pedido?',
+        text: 'El detalle del pedido será aprobado.',
         icon: 'warning',
         showCancelButton: true,
         cancelButtonColor: '#DD6B55',
         confirmButtonColor: '#3085d6',
-        confirmButtonText: 'Si, pendiente!',
+        confirmButtonText: 'Si, aprobar!',
         cancelButtonText: 'No, cancelar!',
     }).then((result) => {
         if (result.value) {
             $.ajax({
-                url: `/Dashboard/Orders/Wallet/Details/Pending`,
+                url: `/Dashboard/Orders/Wallet/Details/Approve`,
                 type: 'PUT',
                 data: {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
@@ -19,20 +19,20 @@ function PendingOrderWalletDetail(id) {
                 },
                 success: function(response) {
                     $('#IndexOrderWalletDetail').trigger('click');
-                    PendingOrderWalletDetailAjaxSuccess(response);
+                    ApproveOrderWalletDetailAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
                     $('#IndexOrderWalletDetail').trigger('click');
-                    PendingOrderWalletDetailAjaxError(xhr);
+                    ApproveOrderWalletDetailAjaxError(xhr);
                 }
             });
         } else {
-            toastr.info('El detalle del pedido seleccionada no fue pendiente.')
+            toastr.info('El detalle del pedido seleccionada no fue aprobado.')
         }
     });
 }
 
-function PendingOrderWalletDetailAjaxSuccess(response) {
+function ApproveOrderWalletDetailAjaxSuccess(response) {
     if(response.status === 200) {
         toastr.success(response.message);
     }
@@ -42,7 +42,7 @@ function PendingOrderWalletDetailAjaxSuccess(response) {
     }
 }
 
-function PendingOrderWalletDetailAjaxError(xhr) {
+function ApproveOrderWalletDetailAjaxError(xhr) {
     if(xhr.status === 403) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
     }

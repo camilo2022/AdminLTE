@@ -993,35 +993,38 @@ Route::middleware(['auth'])->group(function () {
                 Route::put('/Approve', [OrderSellerController::class, 'approve'])
                 ->middleware('can:Dashboard.Orders.Seller.Approve')->name('Dashboard.Orders.Seller.Approve');
 
+                Route::put('/Pending', [OrderSellerController::class, 'pending'])
+                ->middleware('can:Dashboard.Orders.Seller.Pending')->name('Dashboard.Orders.Seller.Pending');
+
                 Route::put('/Cancel', [OrderSellerController::class, 'cancel'])
                 ->middleware('can:Dashboard.Orders.Seller.Cancel')->name('Dashboard.Orders.Seller.Cancel');
 
                 Route::prefix('/Details')->group(function () {
-    
+
                     Route::get('/Index/{id}', [OrderSellerDetailController::class, 'index'])
                     ->middleware('can:Dashboard.Orders.Seller.Details.Index')->name('Dashboard.Orders.Seller.Details.Index');
-    
+
                     Route::post('/Index/Query', [OrderSellerDetailController::class, 'indexQuery'])
                     ->middleware('can:Dashboard.Orders.Seller.Details.Index.Query')->name('Dashboard.Orders.Seller.Details.Index.Query');
-    
+
                     Route::post('/Create', [OrderSellerDetailController::class, 'create'])
                     ->middleware('can:Dashboard.Orders.Seller.Details.Create')->name('Dashboard.Orders.Seller.Details.Create');
-    
+
                     Route::post('/Store', [OrderSellerDetailController::class, 'store'])
                     ->middleware('can:Dashboard.Orders.Seller.Details.Store')->name('Dashboard.Orders.Seller.Details.Store');
-    
+
                     Route::post('/Edit/{id}', [OrderSellerDetailController::class, 'edit'])
                     ->middleware('can:Dashboard.Orders.Seller.Details.Edit')->name('Dashboard.Orders.Seller.Details.Edit');
-    
+
                     Route::put('/Update/{id}', [OrderSellerDetailController::class, 'update'])
                     ->middleware('can:Dashboard.Orders.Seller.Details.Update')->name('Dashboard.Orders.Seller.Details.Update');
-    
+
                     Route::put('/Pending', [OrderSellerDetailController::class, 'pending'])
                     ->middleware('can:Dashboard.Orders.Seller.Details.Pending')->name('Dashboard.Orders.Seller.Details.Pending');
-    
+
                     Route::put('/Cancel', [OrderSellerDetailController::class, 'cancel'])
                     ->middleware('can:Dashboard.Orders.Seller.Details.Cancel')->name('Dashboard.Orders.Seller.Details.Cancel');
-    
+
                 });
 
             });
@@ -1043,38 +1046,47 @@ Route::middleware(['auth'])->group(function () {
                 Route::put('/PartiallyApprove', [OrderWalletController::class, 'partiallyApprove'])
                 ->middleware('can:Dashboard.Orders.Wallet.PartiallyApprove')->name('Dashboard.Orders.Wallet.PartiallyApprove');
 
+                Route::put('/Pending', [OrderWalletController::class, 'pending'])
+                ->middleware('can:Dashboard.Orders.Wallet.Pending')->name('Dashboard.Orders.Wallet.Pending');
+
                 Route::put('/Cancel', [OrderWalletController::class, 'cancel'])
                 ->middleware('can:Dashboard.Orders.Wallet.Cancel')->name('Dashboard.Orders.Wallet.Cancel');
 
                 Route::prefix('/Details')->group(function () {
-    
+
                     Route::get('/Index/{id}', [OrderWalletDetailController::class, 'index'])
                     ->middleware('can:Dashboard.Orders.Wallet.Details.Index')->name('Dashboard.Orders.Wallet.Details.Index');
-    
+
                     Route::post('/Index/Query', [OrderWalletDetailController::class, 'indexQuery'])
                     ->middleware('can:Dashboard.Orders.Wallet.Details.Index.Query')->name('Dashboard.Orders.Wallet.Details.Index.Query');
-    
+
                     Route::post('/Create', [OrderWalletDetailController::class, 'create'])
                     ->middleware('can:Dashboard.Orders.Wallet.Details.Create')->name('Dashboard.Orders.Wallet.Details.Create');
-    
+
                     Route::post('/Store', [OrderWalletDetailController::class, 'store'])
                     ->middleware('can:Dashboard.Orders.Wallet.Details.Store')->name('Dashboard.Orders.Wallet.Details.Store');
-    
+
                     Route::post('/Edit/{id}', [OrderWalletDetailController::class, 'edit'])
                     ->middleware('can:Dashboard.Orders.Wallet.Details.Edit')->name('Dashboard.Orders.Wallet.Details.Edit');
-    
+
                     Route::put('/Update/{id}', [OrderWalletDetailController::class, 'update'])
                     ->middleware('can:Dashboard.Orders.Wallet.Details.Update')->name('Dashboard.Orders.Wallet.Details.Update');
-    
+
                     Route::put('/Approve', [OrderWalletDetailController::class, 'approve'])
                     ->middleware('can:Dashboard.Orders.Wallet.Details.Approve')->name('Dashboard.Orders.Wallet.Details.Approve');
-    
+
                     Route::put('/Pending', [OrderWalletDetailController::class, 'pending'])
                     ->middleware('can:Dashboard.Orders.Wallet.Details.Pending')->name('Dashboard.Orders.Wallet.Details.Pending');
-    
+
+                    Route::put('/Review', [OrderWalletDetailController::class, 'review'])
+                    ->middleware('can:Dashboard.Orders.Wallet.Details.Review')->name('Dashboard.Orders.Wallet.Details.Review');
+
                     Route::put('/Cancel', [OrderWalletDetailController::class, 'cancel'])
                     ->middleware('can:Dashboard.Orders.Wallet.Details.Cancel')->name('Dashboard.Orders.Wallet.Details.Cancel');
-    
+
+                    Route::put('/Decline', [OrderWalletDetailController::class, 'decline'])
+                    ->middleware('can:Dashboard.Orders.Wallet.Details.Decline')->name('Dashboard.Orders.Wallet.Details.Decline');
+
                 });
 
             });

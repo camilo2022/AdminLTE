@@ -1,7 +1,7 @@
-function PendingOrderWalletDetail(id) {
+function PendingOrderSeller(id, status = true) {
     Swal.fire({
-        title: '¿Desea pendiente el detalle del pedido?',
-        text: 'El detalle del pedido será pendiente.',
+        title: '¿Desea pendiente el pedido?',
+        text: 'El pedido será pendiente.',
         icon: 'warning',
         showCancelButton: true,
         cancelButtonColor: '#DD6B55',
@@ -11,28 +11,28 @@ function PendingOrderWalletDetail(id) {
     }).then((result) => {
         if (result.value) {
             $.ajax({
-                url: `/Dashboard/Orders/Wallet/Details/Pending`,
+                url: `/Dashboard/Orders/Seller/Pending`,
                 type: 'PUT',
                 data: {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
                     'id': id
                 },
                 success: function(response) {
-                    $('#IndexOrderWalletDetail').trigger('click');
-                    PendingOrderWalletDetailAjaxSuccess(response);
+                    status ? tableOrderSellers.ajax.reload() : location.reload() ;
+                    PendingOrderSellerAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    $('#IndexOrderWalletDetail').trigger('click');
-                    PendingOrderWalletDetailAjaxError(xhr);
+                    status ? tableOrderSellers.ajax.reload() : location.reload() ;
+                    PendingOrderSellerAjaxError(xhr);
                 }
             });
         } else {
-            toastr.info('El detalle del pedido seleccionada no fue pendiente.')
+            toastr.info('El pedido seleccionada no fue pendiente.')
         }
     });
 }
 
-function PendingOrderWalletDetailAjaxSuccess(response) {
+function PendingOrderSellerAjaxSuccess(response) {
     if(response.status === 200) {
         toastr.success(response.message);
     }
@@ -42,7 +42,7 @@ function PendingOrderWalletDetailAjaxSuccess(response) {
     }
 }
 
-function PendingOrderWalletDetailAjaxError(xhr) {
+function PendingOrderSellerAjaxError(xhr) {
     if(xhr.status === 403) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
     }

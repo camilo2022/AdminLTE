@@ -32,7 +32,7 @@ class OrderSellerDetailController extends Controller
             $order = Order::with('seller_user', 'client.document_type', 'client_branch.country', 'client_branch.departament', 'client_branch.city')->findOrFail($id);
             return view('Dashboard.OrderSellerDetails.Index', compact('order'));
         } catch (ModelNotFoundException $e) {
-            return back()->with('danger', 'Ocurrió un error al cargar el pedido: ' . $this->getMessage('OrderNotFoundException'));
+            return back()->with('danger', 'Ocurrió un error al cargar el pedido: ' . $this->getMessage('ModelNotFoundException'));
         } catch (Exception $e) {
             return back()->with('danger', 'Ocurrió un error al cargar la vista: ' . $e->getMessage());
         }
@@ -53,16 +53,6 @@ class OrderSellerDetailController extends Controller
                     'wallet_user' => fn($query) => $query->withTrashed(),
                     'dispatched_user' => fn($query) => $query->withTrashed(),
                 ])
-                ->when($request->filled('search'),
-                    function ($query) use ($request) {
-                        $query->search($request->input('search'));
-                    }
-                )
-                ->when($request->filled('start_date') && $request->filled('end_date'),
-                    function ($query) use ($start_date, $end_date) {
-                        $query->filterByDate($start_date, $end_date);
-                    }
-                )
                 ->where('order_id', $request->input('order_id'))
                 ->get();
 
@@ -206,7 +196,7 @@ class OrderSellerDetailController extends Controller
             // Manejar la excepción de la base de datos
             return $this->errorResponse(
                 [
-                    'message' => $this->getMessage('OrderNotFoundException'),
+                    'message' => $this->getMessage('ModelNotFoundException'),
                     'error' => $e->getMessage()
                 ],
                 500
@@ -256,7 +246,7 @@ class OrderSellerDetailController extends Controller
         } catch (ModelNotFoundException $e) {
             return $this->errorResponse(
                 [
-                    'message' => $this->getMessage('OrderNotFoundException'),
+                    'message' => $this->getMessage('ModelNotFoundException'),
                     'error' => $e->getMessage()
                 ],
                 404
@@ -296,7 +286,7 @@ class OrderSellerDetailController extends Controller
         } catch (ModelNotFoundException $e) {
             return $this->errorResponse(
                 [
-                    'message' => $this->getMessage('OrderNotFoundException'),
+                    'message' => $this->getMessage('ModelNotFoundException'),
                     'error' => $e->getMessage()
                 ],
                 404

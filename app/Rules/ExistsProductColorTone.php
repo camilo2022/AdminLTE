@@ -14,14 +14,10 @@ class ExistsProductColorTone implements Rule
 
     public function passes($attribute, $value)
     {
-        $productId = $value['product_id'];
-        $colorId = $value['color_id'];
-        $toneId = $value['tone_id'];
-
         return DB::table('product_color_tone')
-            ->where('product_id', $productId)
-            ->where('color_id', $colorId)
-            ->where('tone_id', $toneId)
+            ->where('product_id', $value['product_id'])
+            ->where('color_id', $value['color_id'])
+            ->where('tone_id', $value['tone_id'])
             ->exists();
     }
 

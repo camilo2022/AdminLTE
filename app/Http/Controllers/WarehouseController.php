@@ -106,6 +106,7 @@ class WarehouseController extends Controller
             $warehouse->name = $request->input('name');
             $warehouse->code = $request->input('code');
             $warehouse->description = $request->input('description');
+            $warehouse->to_discount = $request->input('to_discount');
             $warehouse->save();
 
             return $this->successResponse(
@@ -177,6 +178,7 @@ class WarehouseController extends Controller
             $warehouse->name = $request->input('name');
             $warehouse->code = $request->input('code');
             $warehouse->description = $request->input('description');
+            $warehouse->to_discount = $request->input('to_discount');
             $warehouse->save();
 
             return $this->successResponse(

@@ -275,10 +275,17 @@
 <script src="{{ asset('js/Dashboard/OrderWalletDetails/Index.js') }}"></script>
 <script src="{{ asset('js/Dashboard/OrderWalletDetails/Create.js') }}"></script>
 <script src="{{ asset('js/Dashboard/OrderWalletDetails/Edit.js') }}"></script>
+<script src="{{ asset('js/Dashboard/OrderWalletDetails/Approve.js') }}"></script>
 <script src="{{ asset('js/Dashboard/OrderWalletDetails/Pending.js') }}"></script>
+<script src="{{ asset('js/Dashboard/OrderWalletDetails/Review.js') }}"></script>
 <script src="{{ asset('js/Dashboard/OrderWalletDetails/Cancel.js') }}"></script>
+<script src="{{ asset('js/Dashboard/OrderWalletDetails/Decline.js') }}"></script>
 
+<script src="{{ asset('js/Dashboard/OrderSellers/Pending.js') }}"></script>
+
+<script src="{{ asset('js/Dashboard/OrderWallets/Observation.js') }}"></script>
 <script src="{{ asset('js/Dashboard/OrderWallets/Approve.js') }}"></script>
 <script src="{{ asset('js/Dashboard/OrderWallets/PartiallyApprove.js') }}"></script>
+<script src="{{ asset('js/Dashboard/OrderWallets/Pending.js') }}"></script>
 <script src="{{ asset('js/Dashboard/OrderWallets/Cancel.js') }}"></script>
 @endsection

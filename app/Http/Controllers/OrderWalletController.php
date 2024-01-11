@@ -102,7 +102,7 @@ class OrderWalletController extends Controller
         } catch (ModelNotFoundException $e) {
             return $this->errorResponse(
                 [
-                    'message' => $this->getMessage('OrderNotFoundException'),
+                    'message' => $this->getMessage('ModelNotFoundException'),
                     'error' => $e->getMessage()
                 ],
                 404
@@ -261,12 +261,12 @@ class OrderWalletController extends Controller
             foreach($order->details as $detail) {
                 if($detail->status == 'Revision') {
                     foreach($detail->quantities as $quantity) {
-                        $inventory = Inventory::with('product', 'size', 'warehouse', 'color', 'tone')
-                            ->whereHas('product', fn($subQuery) => $subQuery->where('id', $detail->product_id))
-                            ->whereHas('size', fn($subQuery) => $subQuery->where('id', $quantity->size_id))
+                        $inventory = Inventory::with('warehouse')
                             ->whereHas('warehouse', fn($subQuery) => $subQuery->where('to_discount', true))
-                            ->whereHas('color', fn($subQuery) => $subQuery->where('id', $detail->color_id))
-                            ->whereHas('tone', fn($subQuery) => $subQuery->where('id', $detail->tone_id))
+                            ->where('product_id', $detail->product_id)
+                            ->where('size_id', $quantity->size_id)
+                            ->where('color_id', $detail->color_id)
+                            ->where('tone_id', $detail->tone_id)
                             ->first();
 
                         $inventory->quantity += $quantity->quantity;

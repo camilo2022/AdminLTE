@@ -14,12 +14,9 @@ class ExistsProductSize implements Rule
 
     public function passes($attribute, $value)
     {
-        $productId = $value['product_id'];
-        $sizeId = $value['size_id'];
-
         return DB::table('product_sizes')
-            ->where('product_id', $productId)
-            ->where('size_id', $sizeId)
+            ->where('product_id', $value['product_id'])
+            ->where('size_id', $value['size_id'])
             ->exists();
     }
 
