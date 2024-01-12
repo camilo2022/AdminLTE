@@ -30,7 +30,6 @@ class UserSeeder extends Seeder
         ]);
 
         foreach($RolesAndPermissions as $RoleAndPermission) {
-            // Crear o recuperar un permiso con el nombre proporcionado
             $user->assignRole([$RoleAndPermission->name]);
             $user->givePermissionTo($RoleAndPermission->permissions->pluck('name'));
         };

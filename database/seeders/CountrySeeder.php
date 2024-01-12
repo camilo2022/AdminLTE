@@ -14,6 +14,6 @@ class CountrySeeder extends Seeder
      */
     public function run()
     {
-        Country::create(["name" => "COLOMBIA", "tourism_code" => "CO", "country_code" => "57"]);
+        Country::create(['name' => 'COLOMBIA', 'tourism_code' => 'CO', 'country_code' => '57']);
     }
 }

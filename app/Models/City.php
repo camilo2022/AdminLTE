@@ -15,13 +15,15 @@ class City extends Model implements Auditable
 
     protected $table = 'cities';
     protected $fillable = [
+        'departament_id',
         'name',
-        'departament_id'
+        'code'
     ];
 
     protected $auditInclude = [
+        'departament_id',
         'name',
-        'departament_id'
+        'code'
     ];
 
     public function departament() : BelongsTo
