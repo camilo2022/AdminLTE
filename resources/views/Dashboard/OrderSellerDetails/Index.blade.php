@@ -192,7 +192,9 @@
                                     </tr>
                                     <tr>
                                         <td style="font-size:14px;">OBSERVACION COMERCIAL:</td>
-                                        <td style="font-size:14px;" colspan="5">{{ $order->seller_observation }}</td>
+                                        <td style="font-size:14px;">{{ $order->seller_observation }}</td>
+                                        <td style="font-size:14px;">OBSERVACION CARTERA:</td>
+                                        <td style="font-size:14px;" colspan="3">{{ $order->wallet_observation }}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -206,7 +208,7 @@
                 <div class="card">
                     <div class="card-header p-2">
                         <ul class="nav nav-pills">
-                            @if($order->seller_status == 'Pendiente' || $order->wallet_status == 'Pendiente' || $order->wallet_status == 'Aprobado' || $order->wallet_status == 'Parcialmente Aprobado' || $order->dispatched_status == 'Pendiente')
+                            @if($order->seller_status == 'Pendiente' && $order->wallet_status == 'Pendiente' && $order->dispatched_status == 'Pendiente')
                                 <li class="nav-item">
                                     <a class="nav-link active" type="button" onclick="CreateOrderSellerDetailModal()" title="Agregar detalle de pedido.">
                                         <i class="fas fa-plus"></i>

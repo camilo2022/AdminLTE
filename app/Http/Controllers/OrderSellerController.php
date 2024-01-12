@@ -345,7 +345,7 @@ class OrderSellerController extends Controller
     {
         try {
             $order = Order::findOrFail($request->input('id'));
-            $order->sellet_status = 'Pendiente';
+            $order->selleR_status = 'Pendiente';
             $order->save();
 
             return $this->successResponse(
@@ -386,7 +386,22 @@ class OrderSellerController extends Controller
         try {
             $order = Order::with('details')->findOrFail($request->input('id'));
 
-            foreach ($order->details as $detail) {
+            foreach($order->details as $detail) {
+                if($detail->status == 'Revision') {
+                    foreach($detail->quantities as $quantity) {
+                        $inventory = Inventory::with('warehouse')
+                            ->whereHas('warehouse', fn($subQuery) => $subQuery->where('to_discount', true))
+                            ->where('product_id', $detail->product_id)
+                            ->where('size_id', $quantity->size_id)
+                            ->where('color_id', $detail->color_id)
+                            ->where('tone_id', $detail->tone_id)
+                            ->first();
+
+                        $inventory->quantity += $quantity->quantity;
+                        $inventory->save();
+                    }
+                }
+
                 $detail->status = 'Cancelado';
                 $detail->save();
             }

@@ -216,8 +216,17 @@ class OrderWalletController extends Controller
     public function pending(OrderWalletPendingRequest $request)
     {
         try {
-            $order = Order::findOrFail($request->input('id'));
+            $order = Order::with('details')->findOrFail($request->input('id'));
+
+            foreach($order->details as $detail) {
+                if($detail->status == 'Rechazado') {
+                    $detail->status = 'Pendiente';
+                    $detail->save();
+                }
+            }
+
             $order->wallet_status = 'Pendiente';
+            $order->dispatched_status = 'Pendiente';
             $order->save();
 
             return $this->successResponse(
@@ -271,11 +280,11 @@ class OrderWalletController extends Controller
 
                         $inventory->quantity += $quantity->quantity;
                         $inventory->save();
-
-                        $detail->status = 'Rechazado';
-                        $detail->save();
                     }
                 }
+
+                $detail->status = 'Rechazado';
+                $detail->save();
             }
 
             $order->wallet_status = 'Cancelado';

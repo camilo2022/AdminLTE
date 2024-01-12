@@ -83,7 +83,7 @@ class ModulesAndSubmodulesController extends Controller
     {
         try {
             if($request->filled('role')) {
-                $permissions = Role::with('permissions')->findByName($request->input('role'));
+                $permissions = Role::with('permissions')->where('name', $request->input('role'))->firstOrFail();
 
                 return $this->successResponse(
                     $permissions,
@@ -169,7 +169,7 @@ class ModulesAndSubmodulesController extends Controller
     {
         try {
             if($request->filled('role')) {
-                $permissions = Role::with('permissions')->findByName($request->input('role'));
+                $permissions = Role::with('permissions')->where('name', $request->input('role'))->firstOrFail();
 
                 return $this->successResponse(
                     $permissions,

@@ -224,10 +224,10 @@
                                         <td style="font-size:14px;">{{ $order->seller_observation }}</td>
                                         <td style="font-size:14px;">OBSERVACION CARTERA:</td>
                                         <td style="font-size:14px;" colspan="2">
-                                            <textarea class="form-control" id="seller_observation" name="seller_observation" cols="30" rows="2">{{ $order->wallet_observation }}</textarea>
+                                            <textarea class="form-control" id="wallet_observation" name="wallet_observation" cols="30" rows="2">{{ $order->wallet_observation }}</textarea>
                                         </td>
                                         <td class="text-center">
-                                            <button type="button" class="btn btn-primary" onclick="ObservationApproveOrderWallet({{ $order->id }})" title="Actualizar observacion de cartera pedido.">
+                                            <button type="button" class="btn btn-primary" onclick="ObservationOrderWallet({{ $order->id }})" title="Actualizar observacion de cartera pedido.">
                                                 <i class="fas fa-floppy-disk"></i>
                                             </button>
                                         </td>
@@ -244,7 +244,7 @@
                 <div class="card">
                     <div class="card-header p-2">
                         <ul class="nav nav-pills">
-                            @if($order->seller_status == 'Pendiente' || $order->wallet_status == 'Pendiente' || $order->wallet_status == 'Aprobado' || $order->wallet_status == 'Parcialmente Aprobado' || $order->dispatched_status == 'Pendiente')
+                            @if(($order->seller_status == 'Pendiente' || $order->wallet_status == 'Pendiente') && ($order->wallet_status == 'Pendiente' || $order->wallet_status == 'Parcialmente Aprobado') && $order->dispatched_status == 'Pendiente')
                                 <li class="nav-item">
                                     <a class="nav-link active" type="button" onclick="CreateOrderWalletDetailModal()" title="Agregar detalle de pedido.">
                                         <i class="fas fa-plus"></i>

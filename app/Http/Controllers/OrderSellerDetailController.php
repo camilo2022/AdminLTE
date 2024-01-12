@@ -20,6 +20,7 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\DB;
 
 class OrderSellerDetailController extends Controller
 {
@@ -357,6 +358,8 @@ class OrderSellerDetailController extends Controller
             $orderDetail = OrderDetail::findOrFail($request->input('id'));
             $orderDetail->status = 'Cancelado';
             $orderDetail->save();
+
+            DB::statement('CALL order_seller_status(?)', [$orderDetail->order->id]);
 
             return $this->successResponse(
                 $orderDetail,

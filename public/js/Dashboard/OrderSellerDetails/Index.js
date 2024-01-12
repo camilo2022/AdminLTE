@@ -106,7 +106,7 @@ function IndexOrderSellerDetailModalCleaned(details, sizes) {
                 body += `<td><span class="badge badge-pill badge-success"><i class="fas fa-check mr-2"></i>Aprobado</span></td>`;
                 break;
             case 'Agotado':
-                body += `<td><span class="badge badge-pill bg-orange" style="color:white !important;"><i class="fas fa-ban mr-2 text-white"></i>Agotado</span></td>`;
+                body += `<td><span class="badge badge-pill bg-orange" style="color:white !important;"><i class="fas fa-hourglass-half mr-2 text-white"></i>Agotado</span></td>`;
                 break;
             case 'Rechazado':
                 body += `<td><span class="badge badge-pill badge-warning text-white"><i class="fas fa-ban mr-2 text-white"></i>Rechazado</span></td>`;

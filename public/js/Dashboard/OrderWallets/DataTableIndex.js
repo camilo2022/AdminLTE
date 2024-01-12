@@ -191,6 +191,18 @@ let tableOrderWallets = $('#orderWallets').DataTable({
                     </a>`;
                 }
 
+                if (data === 'Parcialmente Aprobado') {
+                    btn += `<a onclick="ApproveOrderWallet(${row.id})" type="button"
+                    class="btn btn-success btn-sm mr-2" title="Aprobar pedido.">
+                        <i class="fas fa-check-double text-white"></i>
+                    </a>`;
+
+                    btn += `<a onclick="CancelOrderWallet(${row.id})" type="button"
+                    class="btn btn-danger btn-sm mr-2" title="Cancelar pedido.">
+                        <i class="fas fa-xmark text-white"></i>
+                    </a>`;
+                }
+
                 btn += `</div>`;
                 return btn;
             }

@@ -34,7 +34,7 @@ class OrderWalletObservationRequest extends FormRequest
         return [
             'id.required' => 'El campo Pedido es requerido.',
             'id.exists' => 'El Identificador del pedido no es valido.',
-            'wallet_observation.required' => 'El campo Observacion de cartera.',
+            'wallet_observation.required' => 'El campo Observacion de cartera es requerido.',
             'wallet_observation.string' => 'El campo Observacion de cartera debe ser una cadena de caracteres.',
             'wallet_observation.max' => 'El campo Observacion de cartera no debe exceder los 255 caracteres.',
         ];

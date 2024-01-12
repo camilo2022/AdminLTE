@@ -51,7 +51,7 @@ function IndexOrderWalletDetailModalCleaned(details, sizes) {
 
         switch (detail.status) {
             case 'Revision':
-                btn += `<a onclick="ApproveOrderWalletDetail(${detail.order.id})" type="button"
+                btn += `<a onclick="ApproveOrderWalletDetail(${detail.id})" type="button"
                 class="btn btn-success btn-sm mr-2" title="Aprobar detalle de pedido.">
                     <i class="fas fa-check text-white"></i>
                 </a>`;
@@ -67,7 +67,7 @@ function IndexOrderWalletDetailModalCleaned(details, sizes) {
                     <i class="fas fa-pen text-white"></i>
                 </a>`;
 
-                btn += `<a onclick="ReviewOrderWalletDetail(${detail.order.id})" type="button"
+                btn += `<a onclick="ReviewOrderWalletDetail(${detail.id})" type="button"
                 class="btn bg-silver btn-sm mr-2" title="Revisar detalle de pedido.">
                     <i class="fas fa-magnifying-glass"></i>
                 </a>`;
@@ -128,7 +128,7 @@ function IndexOrderWalletDetailModalCleaned(details, sizes) {
                 body += `<td><span class="badge badge-pill badge-success"><i class="fas fa-check mr-2"></i>Aprobado</span></td>`;
                 break;
             case 'Agotado':
-                body += `<td><span class="badge badge-pill bg-orange" style="color:white !important;"><i class="fas fa-ban mr-2 text-white"></i>Agotado</span></td>`;
+                body += `<td><span class="badge badge-pill bg-orange" style="color:white !important;"><i class="fas fa-hourglass-half mr-2 text-white"></i>Agotado</span></td>`;
                 break;
             case 'Rechazado':
                 body += `<td><span class="badge badge-pill badge-warning text-white"><i class="fas fa-ban mr-2 text-white"></i>Rechazado</span></td>`;

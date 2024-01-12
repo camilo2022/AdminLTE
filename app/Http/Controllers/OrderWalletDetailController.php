@@ -24,6 +24,7 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\DB;
 
 class OrderWalletDetailController extends Controller
 {
@@ -318,9 +319,11 @@ class OrderWalletDetailController extends Controller
     public function approve(OrderWalletDetailApproveRequest $request)
     {
         try {
-            $orderDetail = OrderDetail::findOrFail($request->input('id'));
+            $orderDetail = OrderDetail::with('order')->findOrFail($request->input('id'));
             $orderDetail->status = 'Aprobado';
             $orderDetail->save();
+
+            DB::statement('CALL order_wallet_status(?)', [$orderDetail->order->id]);
 
             return $this->successResponse(
                 $orderDetail,
@@ -361,6 +364,8 @@ class OrderWalletDetailController extends Controller
             $orderDetail = OrderDetail::findOrFail($request->input('id'));
             $orderDetail->status = 'Pendiente';
             $orderDetail->save();
+
+            DB::statement('CALL order_wallet_status(?)', [$orderDetail->order->id]);
 
             return $this->successResponse(
                 $orderDetail,
@@ -437,6 +442,8 @@ class OrderWalletDetailController extends Controller
 
             $orderDetail->save();
 
+            DB::statement('CALL order_wallet_status(?)', [$orderDetail->order->id]);
+
             return $this->successResponse(
                 $orderDetail,
                 'El detalle del pedido fue pendiente por cartera exitosamente.',
@@ -476,6 +483,8 @@ class OrderWalletDetailController extends Controller
             $orderDetail = OrderDetail::findOrFail($request->input('id'));
             $orderDetail->status = 'Cancelado';
             $orderDetail->save();
+
+            DB::statement('CALL order_wallet_status(?)', [$orderDetail->order->id]);
 
             return $this->successResponse(
                 $orderDetail,
@@ -528,6 +537,8 @@ class OrderWalletDetailController extends Controller
             }
             $orderDetail->status = 'Rechazado';
             $orderDetail->save();
+
+            DB::statement('CALL order_wallet_status(?)', [$orderDetail->order->id]);
 
             return $this->successResponse(
                 $orderDetail,
