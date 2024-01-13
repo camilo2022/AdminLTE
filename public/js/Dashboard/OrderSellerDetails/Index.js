@@ -9,7 +9,6 @@ function IndexOrderSellerDetail(order_id) {
             'order_id': order_id
         },
         success: function(response) {
-            console.log(response);
             IndexOrderSellerDetailModalCleaned(response.data.orderDetails, response.data.sizes);
             IndexOrderSellerDetailAjaxSuccess(response);
         },

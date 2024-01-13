@@ -401,8 +401,8 @@
 
         $(document).ready(function() {
             function setSelect2Width() {
-                var windowWidth = $(window).width();
-                var select2Width;
+                let windowWidth = $(window).width();
+                let select2Width;
 
                 if (windowWidth >= 250 && windowWidth < 280) {
                     select2Width = '78%';
@@ -422,7 +422,9 @@
 
 
             }
-
+            if($(window).width() >= 250 && $(window).width() < 400) {
+                setSelect2Width();
+            }
             // Actualizar el ancho cuando cambie el tamaño de la ventana
             $(window).on('resize', function() {
                 setSelect2Width();

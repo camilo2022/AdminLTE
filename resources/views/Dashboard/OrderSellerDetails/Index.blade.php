@@ -231,8 +231,8 @@
             </div>
         </div>
     </div>
-    @include('Dashboard.OrderSellers.Create')
-    @include('Dashboard.OrderSellers.Edit')
+    @include('Dashboard.OrderSellerDetails.Create')
+    @include('Dashboard.OrderSellerDetails.Edit')
 </section>
 @endsection
 @section('script')

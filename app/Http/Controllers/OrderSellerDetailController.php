@@ -133,7 +133,7 @@ class OrderSellerDetailController extends Controller
                         ->whereHas('warehouse', fn($subQuery) => $subQuery->where('to_discount', true))
                         ->whereHas('color', fn($subQuery) => $subQuery->where('id', $request->input('color_id')))
                         ->whereHas('tone', fn($subQuery) => $subQuery->where('id', $request->input('tone_id')))
-                        ->first(),
+                        ->get(),
                     'Inventario encontrado con exito.',
                     200
                 );
@@ -169,6 +169,7 @@ class OrderSellerDetailController extends Controller
     public function store(OrderSellerDetailStoreRequest $request)
     {
         try {
+            return $request;
             $orderDetail = new OrderDetail();
             $orderDetail->order_id = $request->input('order_id');
             $orderDetail->product_id = $request->input('product_id');
@@ -233,7 +234,7 @@ class OrderSellerDetailController extends Controller
                         ->whereHas('warehouse', fn($subQuery) => $subQuery->where('to_discount', true))
                         ->whereHas('color', fn($subQuery) => $subQuery->where('id', $request->input('color_id')))
                         ->whereHas('tone', fn($subQuery) => $subQuery->where('id', $request->input('tone_id')))
-                        ->first(),
+                        ->get(),
                     'Inventario encontrado con exito.',
                     200
                 );

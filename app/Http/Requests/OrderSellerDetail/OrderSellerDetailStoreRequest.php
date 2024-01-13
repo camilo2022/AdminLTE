@@ -3,6 +3,7 @@
 namespace App\Http\Requests\OrderSellerDetail;
 
 use App\Models\Inventory;
+use App\Models\Product;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
@@ -19,7 +20,9 @@ class OrderSellerDetailStoreRequest extends FormRequest
 
     protected function prepareForValidation()
     {
-        foreach($this->order_detail_quantities as $order_detail_quantity) {
+        $product = Product::findOrFail($this->input('product_id'));
+        $order_detail_quantities = $this->input('order_detail_quantities');
+        foreach($order_detail_quantities as $order_detail_quantity) {
             $inventory = Inventory::with('product', 'warehouse', 'color', 'tone', 'size')
             ->whereHas('product', fn($subQuery) => $subQuery->where('id', $this->input('product_id')))
             ->whereHas('warehouse', fn($subQuery) => $subQuery->where('to_discount', true))
@@ -28,13 +31,15 @@ class OrderSellerDetailStoreRequest extends FormRequest
             ->whereHas('size', fn($subQuery) => $subQuery->where('id', $order_detail_quantity['size_id']))
             ->first();
 
-            $order_detail_quantity['min'] = $inventory ? 1 : 0;
+            $order_detail_quantity['min'] = $inventory ? 0 : 0;
             $order_detail_quantity['max'] = $inventory ? $inventory->quantity : 0;
             $order_detail_quantity['product_size'] = $order_detail_quantity['size_id'];
         }
 
         $this->merge([
+            'order_detail_quantities' => $order_detail_quantities,
             'product_color_tone' => $this->input('product_id'),
+            'price' => $product->price
         ]);
     }
 
@@ -59,9 +64,9 @@ class OrderSellerDetailStoreRequest extends FormRequest
             'order_detail_quantities.*.product_size' => ['required', 'exists:product_sizes,size_id,product_id,' . $this->input('product_id')]
         ];
 
-        foreach ($this->order_detail_quantities as $index => $product) {
+        foreach ($this->input('order_detail_quantities') as $index => $order_detail_quantity) {
             $rules["order_detail_quantities.{$index}.quantity"] = [
-                'required', 'numeric', 'min:' . $product['min'], 'max:' . $product['max'],
+                'required', 'numeric'/* , 'min:' . $order_detail_quantity['min'], 'max:' . $order_detail_quantity['max'] */,
             ];
         }
 

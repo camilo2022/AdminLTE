@@ -101,7 +101,6 @@ function CreateOrderSeller() {
                     'dispatch_date': $('#dispatch_c').val() == 'De inmediato' ? new Date().toISOString().split('T')[0] : $('#dispatch_date_c').val()
                 },
                 success: function (response) {
-                    console.log(response.data.url);
                     window.location.href = response.data.url;
                     tableOrderSellers.ajax.reload();
                     CreateOrderSellerAjaxSuccess(response);

@@ -67,7 +67,7 @@ function CreateTransferDetailModalProductGetColorToneSizes(select) {
             }
         });
     }
-};
+}
 
 function CreateTransferDetailModalColorTone(colors_tones) {
     colors_tones.forEach(color_tone => {
