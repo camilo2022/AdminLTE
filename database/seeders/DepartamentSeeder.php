@@ -19,6 +19,7 @@ class DepartamentSeeder extends Seeder
         Departament::create(['country_id' => 1, 'name' => 'ARAUCA']);
         Departament::create(['country_id' => 1, 'name' => 'ARCHIPIELAGO DE SAN ANDRES']);
         Departament::create(['country_id' => 1, 'name' => 'ATLANTICO']);
+        Departament::create(['country_id' => 1, 'name' => 'BOGOTÁ D.C.']);
         Departament::create(['country_id' => 1, 'name' => 'BOLIVAR']);
         Departament::create(['country_id' => 1, 'name' => 'BOYACA']);
         Departament::create(['country_id' => 1, 'name' => 'CALDAS']);

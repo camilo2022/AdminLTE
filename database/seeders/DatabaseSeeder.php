@@ -22,6 +22,8 @@ class DatabaseSeeder extends Seeder
         $this->call(ModulesAndSubmodulesSeeder::class);
         $this->call(CountrySeeder::class);
         $this->call(DepartamentSeeder::class);
+        $this->call(ProvinceSeeder
+        ::class);
         $this->call(CitySeeder::class);
         $this->call(SizeSeeder::class);
         $this->call(ColorSeeder::class);
