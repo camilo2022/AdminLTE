@@ -1,4 +1,4 @@
-function EditOrderSellerModal(id) {
+function EditOrderSellerDetailModal(id) {
     $.ajax({
         url: `/Dashboard/Orders/Seller/Edit/${id}`,
         type: 'POST',
@@ -6,100 +6,131 @@ function EditOrderSellerModal(id) {
             '_token': $('meta[name="csrf-token"]').attr('content')
         },
         success: function (response) {
-            tableOrderSellers.ajax.reload();
-            EditOrderSellerModalCleaned(response.data.order);
-            EditOrderSellerModalClient(response.data.clients);
-            EditOrderSellerAjaxSuccess(response);
-            $('#EditOrderSellerModal').modal('show');
+            $('#IndexOrderSellerDetail').trigger('click');
+            EditOrderSellerDetailModalCleaned(response.data.orderDetail);
+            EditOrderSellerDetailModalClient(response.data.clients);
+            EditOrderSellerDetailAjaxSuccess(response);
+            $('#EditOrderSellerDetailModal').modal('show');
         },
         error: function (xhr, textStatus, errorThrown) {
-            tableOrderSellers.ajax.reload();
-            EditOrderSellerAjaxError(xhr);
+            $('#IndexOrderSellerDetail').trigger('click');
+            EditOrderSellerDetailAjaxError(xhr);
         }
     });
 }
 
-function EditOrderSellerModalCleaned(order) {
-    EditOrderSellerModalResetSelect('client_id_e');
-    RemoveIsValidClassEditOrderSeller();
-    RemoveIsInvalidClassEditOrderSeller();
+function EditOrderSellerDetailModalCleaned(orderDetail) {
+    EditOrderSellerDetailModalResetSelect('product_id_e');
+    RemoveIsValidClassEditOrderSellerDetail();
+    RemoveIsInvalidClassEditOrderSellerDetail();
+    $('#sizes_e').html('');
 
-    $('#EditOrderSellerButton').attr('onclick', `EditOrderSeller(${order.id})`);
-    $('#EditOrderSellerButton').attr('data-id', order.id);
-    $('#EditOrderSellerButton').attr('data-client_id', order.client_id);
-    $('#EditOrderSellerButton').attr('data-client_branch_id', order.client_branch_id);
-
-    $('#dispatch_e').val(order.dispatch).trigger('change');
-    $('#dispatch_date_e').val(order.dispatch_date);
-    $('#seller_observation_e').val(order.seller_observation);
+    $('#EditOrderSellerDetailButton').attr('onclick', `EditOrderSellerDetail(${orderDetail.id})`);
+    $('#EditOrderSellerDetailButton').attr('data-id', orderDetail.id);
+    $('#EditOrderSellerDetailButton').attr('data-product_id', orderDetail.product_id);
+    $('#EditOrderSellerDetailButton').attr('data-color_id', orderDetail.color_id);
+    $('#EditOrderSellerDetailButton').attr('data-tone_id', orderDetail.tone_id);
+    $('#EditOrderSellerDetailButton').attr('data-quantities', orderDetail.quantities);
 }
 
-function EditOrderSellerModalResetSelect(id) {
+function EditOrderSellerDetailModalResetSelect(id) {
     $(`#${id}`).html('')
     $(`#${id}`).append(new Option('Seleccione', '', false, false));
     $(`#${id}`).trigger('change');
 }
 
-function EditOrderSellerModalClient(clients) {
-    clients.forEach(client => {
-        $('#client_id_e').append(new Option(`${client.name} - ${client.document_number}`, client.id, false, false));
+function EditOrderSellerDetailModalProduct(products) {
+    $.each(products, function(index, product) {
+        $('#product_id_e').append(new Option(product.code, product.id, false, false));
     });
 
-    let client_id = $('#EditOrderSellerButton').attr('data-client_id');
-    if(client_id != '') {
-        $("#client_id_e").val(client_id).trigger('change');
-        $('#EditOrderSellerButton').attr('data-client_id', '');
+    let product_id = $('#EditOrderSellerDetailButton').attr('data-product_id');
+    if(product_id != '') {
+        $("#product_id_e").val(product_id).trigger('change');
+        $('#EditOrderSellerDetailButton').attr('data-product_id', '');
     }
 }
 
-function EditOrderSellerModalClientGetClientBranch(select) {
+function EditOrderSellerDetailModalProductGetColorTone(select) {
     if($(select).val() == '') {
-        EditOrderSellerModalResetSelect('client_branch_id_e');
+        $('#sizes_e').html('');
+        EditOrderSellerDetailModalResetSelect('color_id_tone_id_e');
     } else {
-        let id = $('#EditOrderSellerButton').attr('data-id');
+        let id = $('#EditOrderSellerDetailButton').attr('data-id');
         $.ajax({
-            url: `/Dashboard/Orders/Seller/Edit/${id}`,
+            url: `/Dashboard/Orders/Seller/Details/Edit/${id}`,
             type: 'POST',
             data: {
                 '_token': $('meta[name="csrf-token"]').attr('content'),
-                'client_id':  $(select).val()
+                'product_id':  $(select).val()
             },
             success: function(response) {
-                EditOrderSellerModalResetSelect('client_branch_id_e');
-                EditOrderSellerModalClienteBranch(response.data);
+                EditOrderSellerDetailModalResetSelect('color_id_tone_id_e');
+                EditOrderSellerDetailModalColorTone(response.data.colors_tones);
+                $('#sizes_e').html('');
             },
             error: function(xhr, textStatus, errorThrown) {
-                EditOrderSellerAjaxError(xhr);
+                EditOrderSellerDetailAjaxError(xhr);
+            }
+        });
+    }
+};
+
+function EditOrderSellerDetailModalColorTone(colors_tones) {
+    colors_tones.forEach(color_tone => {
+        $('#color_id_tone_id_e').append(new Option(`${color_tone.color.name} - ${color_tone.tone.name}`, `${color_tone.color.id}-${color_tone.tone.id}`, false, false));
+    });
+
+    let color_id = $('#EditOrderSellerDetailButton').attr('data-color_id');
+    let tone_id = $('#EditOrderSellerDetailButton').attr('data-tone_id');
+    if(color_id != '' && tone_id != '') {
+        $("#color_id_tone_id_e").val(`${color_id}-${tone_id}`).trigger('change');
+        $('#EditOrderSellerDetailButton').attr('data-color_id', '');
+        $('#EditOrderSellerDetailButton').attr('data-tone_id', '');
+    }
+}
+
+function EditOrderSellerDetailModalColorToneGetSizesQuantity() {
+    if($('#color_id_tone_id_e').val() == '') {
+        $('#sizes_e').html('');
+    } else {
+        let id = $('#EditOrderSellerDetailButton').attr('data-id');
+        $.ajax({
+            url: `/Dashboard/Orders/Seller/Details/Edit/${id}`,
+            type: 'POST',
+            data: {
+                '_token': $('meta[name="csrf-token"]').attr('content'),
+                'product_id':  $('#product_id_e').val(),
+                'color_id':  $('#color_id_tone_id_e').val().split('-')[0],
+                'tone_id':  $('#color_id_tone_id_e').val().split('-')[1],
+                'size_id':  $('#size_id_e').val(),
+            },
+            success: function(response) {
+                EditOrderSellerDetailModalSizes(response.data);
+            },
+            error: function(xhr, textStatus, errorThrown) {
+                EditOrderSellerDetailAjaxError(xhr);
             }
         });
     }
 }
 
-function EditOrderSellerModalClienteBranch(clientBranches) {
-    clientBranches.forEach(clientBranch => {
-        $('#client_branch_id_e').append(new Option(`${clientBranch.name} - ${clientBranch.code}`, clientBranch.id, false, false));
+function EditOrderSellerDetailModalSizes(sizes) {
+    let inputs = '';
+    $.each(sizes, function(index, size) {
+        inputs += `<div class="form-group">
+                        <label for="size_${size.size.id}_e">${size.size.name}</label>
+                        <input type="number" class="form-control" id="size_${size.size.id}_e" name="size_${size.size.id}" data-size_id="${size.size.id}" value="0">
+                        <small id="message_size_${size.size.id}_e">${size.quantity} unidades disponibles.</small>
+                    </div>`;
     });
-
-    let client_branch_id = $('#EditOrderSellerButton').attr('data-client_branch_id');
-    if(client_branch_id != '') {
-        $("#client_branch_id_e").val(client_branch_id).trigger('change');
-        $('#EditOrderSellerButton').attr('data-client_branch_id', '');
-    }
+    $('#sizes_e').html(inputs);
 }
 
-function EditOrderSellerModalDispatchGetDispatchDate(select) {
-    if($(select).val() == '' || $(select).val() == 'De inmediato') {
-        $('#div_dispatch_date_e').hide();
-        $('#dispatch_date_e').val('')
-    } else {
-        $('#div_dispatch_date_e').show();
-    }
-}
-
-function EditOrderSeller(id) {
+function EditOrderSellerDetail(id) {
     Swal.fire({
-        title: '¿Desea actualizar el pedido?',
-        text: 'El pedido se actualizara.',
+        title: '¿Desea actualizar el detalle del pedido?',
+        text: 'El detalle del pedido se actualizara.',
         icon: 'warning',
         showCancelButton: true,
         cancelButtonColor: '#DD6B55',
@@ -113,74 +144,79 @@ function EditOrderSeller(id) {
                 type: 'PUT',
                 data: {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
-                    'client_id': $('#client_id_e').val(),
-                    'client_branch_id': $('#client_branch_id_e').val(),
-                    'seller_observation': $('#seller_observation_e').val(),
-                    'dispatch': $('#dispatch_e').val(),
-                    'dispatch_date': $('#dispatch_e').val() == 'De inmediato' ? new Date().toISOString().split('T')[0] : $('#dispatch_date_e').val()
+                    'order_id': $('#IndexOrderSellerDetail').attr('data-id'),
+                    'product_id':  $('#product_id_e').val(),
+                    'color_id':  $('#color_id_tone_id_e').val().split('-')[0],
+                    'tone_id':  $('#color_id_tone_id_e').val().split('-')[1],
+                    'order_detail_quantities': $('#sizes_e').find('div.form-group').map(function(index) {
+                        return {
+                            'quantity': $(this).find('input').val() == '' ? 0 : $(this).find('input').val(),
+                            'size_id': $(this).find('input').attr('data-size_id')
+                        };
+                    }).get()
                 },
                 success: function (response) {
-                    tableOrderSellers.ajax.reload();
-                    EditOrderSellerAjaxSuccess(response);
+                    $('#IndexOrderSellerDetail').trigger('click');
+                    EditOrderSellerDetailAjaxSuccess(response);
                 },
                 error: function (xhr, textStatus, errorThrown) {
-                    tableOrderSellers.ajax.reload();
-                    EditOrderSellerAjaxError(xhr);
+                    $('#IndexOrderSellerDetail').trigger('click');
+                    EditOrderSellerDetailAjaxError(xhr);
                 }
             });
         } else {
-            toastr.info('El pedido no fue actualizada.')
+            toastr.info('El detalle del pedido no fue actualizado.')
         }
     });
 }
 
-function EditOrderSellerAjaxSuccess(response) {
+function EditOrderSellerDetailAjaxSuccess(response) {
     if (response.status === 204) {
         toastr.info(response.message);
-        $('#EditOrderSellerModal').modal('hide');
+        $('#EditOrderSellerDetailModal').modal('hide');
     }
 
     if (response.status === 200) {
         toastr.success(response.message);
-        $('#EditOrderSellerModal').modal('hide');
+        $('#EditOrderSellerDetailModal').modal('hide');
     }
 }
 
-function EditOrderSellerAjaxError(xhr) {
+function EditOrderSellerDetailAjaxError(xhr) {
     if (xhr.status === 403) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
-        $('#EditOrderSellerModal').modal('hide');
+        $('#EditOrderSellerDetailModal').modal('hide');
     }
 
     if (xhr.status === 404) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
-        $('#EditOrderSellerModal').modal('hide');
+        $('#EditOrderSellerDetailModal').modal('hide');
     }
 
     if (xhr.status === 419) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
-        $('#EditOrderSellerModal').modal('hide');
+        $('#EditOrderSellerDetailModal').modal('hide');
     }
 
     if (xhr.status === 422) {
-        RemoveIsValidClassEditOrderSeller();
-        RemoveIsInvalidClassEditOrderSeller();
+        RemoveIsValidClassEditOrderSellerDetail();
+        RemoveIsInvalidClassEditOrderSellerDetail();
         $.each(xhr.responseJSON.errors, function (field, messages) {
-            AddIsInvalidClassEditOrderSeller(field);
+            AddIsInvalidClassEditOrderSellerDetail(field);
             $.each(messages, function (index, message) {
                 toastr.error(message);
             });
         });
-        AddIsValidClassEditOrderSeller();
+        AddIsValidClassEditOrderSellerDetail();
     }
 
     if (xhr.status === 500) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
-        $('#EditOrderSellerModal').modal('hide');
+        $('#EditOrderSellerDetailModal').modal('hide');
     }
 }
 
-function AddIsValidClassEditOrderSeller() {
+function AddIsValidClassEditOrderSellerDetail() {
     if (!$('#seller_observation_e').hasClass('is-invalid')) {
         $('#seller_observation_e').addClass('is-valid');
     }
@@ -198,7 +234,7 @@ function AddIsValidClassEditOrderSeller() {
     }
 }
 
-function RemoveIsValidClassEditOrderSeller() {
+function RemoveIsValidClassEditOrderSellerDetail() {
     $('#seller_observation_e').removeClass('is-valid');
     $('#dispatch_e').removeClass('is-valid');
     $('#dispatch_date_e').removeClass('is-valid');
@@ -206,7 +242,7 @@ function RemoveIsValidClassEditOrderSeller() {
     $('span[aria-labelledby="select2-client_branch_id_e-container"]').removeClass('is-valid');
 }
 
-function AddIsInvalidClassEditOrderSeller(input) {
+function AddIsInvalidClassEditOrderSellerDetail(input) {
     if (!$(`#${input}_e`).hasClass('is-valid')) {
         $(`#${input}_e`).addClass('is-invalid');
     }
@@ -215,7 +251,7 @@ function AddIsInvalidClassEditOrderSeller(input) {
     }
 }
 
-function RemoveIsInvalidClassEditOrderSeller() {
+function RemoveIsInvalidClassEditOrderSellerDetail() {
     $('#seller_observation_e').removeClass('is-invalid');
     $('#dispatch_e').removeClass('is-invalid');
     $('#dispatch_date_e').removeClass('is-invalid');

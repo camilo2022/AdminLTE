@@ -4,6 +4,7 @@ namespace App\Http\Requests\OrderSellerDetail;
 
 use App\Models\Inventory;
 use App\Models\OrderDetailQuantity;
+use App\Models\Product;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
@@ -20,6 +21,8 @@ class OrderSellerDetailUpdateRequest extends FormRequest
 
     protected function prepareForValidation()
     {
+        $product = Product::findOrFail($this->input('product_id'));
+
         foreach($this->order_detail_quantities as $order_detail_quantity) {
             $inventory = Inventory::with('product', 'warehouse', 'color', 'tone', 'size')
                 ->whereHas('product', fn($subQuery) => $subQuery->where('id', $this->input('product_id')))
@@ -36,6 +39,7 @@ class OrderSellerDetailUpdateRequest extends FormRequest
 
         $this->merge([
             'product_color_tone' => $this->input('product_id'),
+            'price' => $product->price
         ]);
     }
 

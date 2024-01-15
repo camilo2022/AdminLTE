@@ -18,6 +18,7 @@ class Order extends Model implements Auditable
     protected $fillable = [
         'client_id',
         'client_branch_id',
+        'sale_channel_id',
         'dispatch',
         'dispatch_date',
         'seller_user_id',
@@ -36,6 +37,7 @@ class Order extends Model implements Auditable
     protected $auditInclude = [
         'client_id',
         'client_branch_id',
+        'sale_channel_id',
         'dispatch',
         'dispatch_date',
         'seller_user_id',
@@ -69,6 +71,11 @@ class Order extends Model implements Auditable
     public function client_branch() : BelongsTo
     {
         return $this->belongsTo(ClientBranch::class, 'client_branch_id');
+    }
+
+    public function sale_channel() : BelongsTo
+    {
+        return $this->belongsTo(SaleChannel::class, 'sale_channel_id');
     }
 
     public function seller_user() : BelongsTo

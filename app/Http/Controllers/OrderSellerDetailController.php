@@ -42,9 +42,6 @@ class OrderSellerDetailController extends Controller
     public function indexQuery(OrderSellerDetailIndexQueryRequest $request)
     {
         try {
-            $start_date = Carbon::parse($request->input('start_date'))->startOfDay();
-            $end_date = Carbon::parse($request->input('end_date'))->endOfDay();
-            //Consulta por nombre
             $orderDetails = OrderDetail::with([
                     'order',
                     'quantities.size',
@@ -240,8 +237,21 @@ class OrderSellerDetailController extends Controller
                 );
             }
 
+            if($request->filled('product_id')) {
+                return $this->successResponse(
+                    Product::with('colors_tones.color', 'colors_tones.tone')->findOrFail($request->input('product_id')),
+                    'Colores, tonos y tallas del producto encontrados con exito.',
+                    200
+                );
+            }
+
             return $this->successResponse(
-                OrderDetail::with('quantities')->findOrFail($id),
+                [
+                    'products' => Product::with('inventories.warehouse')
+                    ->whereHas('inventories.warehouse', fn($subQuery) => $subQuery->where('to_discount', true))
+                    ->get(),
+                    'orderDetail' => OrderDetail::with('quantities')->findOrFail($id)
+                ],
                 'El detalle del pedido fue encontrado exitosamente.',
                 204
             );

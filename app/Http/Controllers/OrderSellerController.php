@@ -131,6 +131,7 @@ class OrderSellerController extends Controller
             $order = new Order();
             $order->client_id = $request->input('client_id');
             $order->client_branch_id = $request->input('client_branch_id');
+            $order->sale_channel_id = $request->input('sale_channel_id');
             $order->dispatch = $request->input('dispatch');
             $order->dispatch_date = Carbon::parse($request->input('dispatch_date'))->format('Y-m-d');
             $order->seller_user_id = Auth::user()->id;
@@ -221,6 +222,7 @@ class OrderSellerController extends Controller
             $order = Order::findOrFail($id);
             $order->client_id = $request->input('client_id');
             $order->client_branch_id = $request->input('client_branch_id');
+            $order->sale_channel_id = $request->input('sale_channel_id');
             $order->dispatch = $request->input('dispatch');
             $order->dispatch_date = Carbon::parse($request->input('dispatch_date'))->format('Y-m-d');
             $order->seller_observation = $request->input('seller_observation');

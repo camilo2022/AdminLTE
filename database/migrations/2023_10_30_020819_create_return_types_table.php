@@ -13,14 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('bills', function (Blueprint $table) {
+        Schema::create('return_types', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('order_dispatch_id');
-            $table->string('code');
-            $table->float('value', 8, 2);
-            $table->string('route');
-            $table->foreign('order_dispatch_id')->references('id')->on('order_dispatches')->onUpdate('cascade')->onDelete('cascade');
+            $table->string('name')->unique();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -31,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('bills');
+        Schema::dropIfExists('return_types');
     }
 };

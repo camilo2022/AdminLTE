@@ -90,6 +90,7 @@ class ProvinceSeeder extends Seeder
         Province::create(['departament_id' => 15, 'name' => 'ALTO SINU']);
         Province::create(['departament_id' => 15, 'name' => 'BAJO SINU']);
         Province::create(['departament_id' => 15, 'name' => 'CENTRO CORDOBA']);
+        Province::create(['departament_id' => 15, 'name' => 'COSTANERA']);
         Province::create(['departament_id' => 15, 'name' => 'SABANAS']);
         Province::create(['departament_id' => 15, 'name' => 'SAN JORGE']);
         Province::create(['departament_id' => 15, 'name' => 'SINU MEDIO']);

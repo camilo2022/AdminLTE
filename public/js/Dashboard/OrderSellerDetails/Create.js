@@ -105,12 +105,6 @@ function CreateOrderSellerDetailModalSizes(sizes) {
 }
 
 function CreateOrderSellerDetail() {
-    console.log($('#sizes_c').find('div.form-group').map(function(index) {
-        return {
-            'quantity': $(this).find('input').val() == '' ? 0 : $(this).find('input').val(),
-            'size_id': $(this).find('input').attr('data-size_id')
-        };
-    }).get());
     Swal.fire({
         title: '¿Desea guardar el detalle del pedido?',
         text: 'El detalle del pedido será creado.',

@@ -46,9 +46,6 @@ class OrderWalletDetailController extends Controller
     public function indexQuery(OrderWalletDetailIndexQueryRequest $request)
     {
         try {
-            $start_date = Carbon::parse($request->input('start_date'))->startOfDay();
-            $end_date = Carbon::parse($request->input('end_date'))->endOfDay();
-            //Consulta por nombre
             $orderDetails = OrderDetail::with([
                     'order',
                     'quantities.size',

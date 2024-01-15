@@ -21,7 +21,10 @@ class OrderSellerDetailStoreRequest extends FormRequest
     protected function prepareForValidation()
     {
         $product = Product::findOrFail($this->input('product_id'));
+
         $order_detail_quantities = $this->input('order_detail_quantities');
+        $updated_order_details = [];
+
         foreach($order_detail_quantities as $order_detail_quantity) {
             $inventory = Inventory::with('product', 'warehouse', 'color', 'tone', 'size')
             ->whereHas('product', fn($subQuery) => $subQuery->where('id', $this->input('product_id')))
@@ -31,13 +34,15 @@ class OrderSellerDetailStoreRequest extends FormRequest
             ->whereHas('size', fn($subQuery) => $subQuery->where('id', $order_detail_quantity['size_id']))
             ->first();
 
-            $order_detail_quantity['min'] = $inventory ? 0 : 0;
+            $order_detail_quantity['min'] = 0;
             $order_detail_quantity['max'] = $inventory ? $inventory->quantity : 0;
             $order_detail_quantity['product_size'] = $order_detail_quantity['size_id'];
+
+            $updated_order_details[] = $order_detail_quantity;
         }
 
         $this->merge([
-            'order_detail_quantities' => $order_detail_quantities,
+            'order_detail_quantities' => $updated_order_details,
             'product_color_tone' => $this->input('product_id'),
             'price' => $product->price
         ]);
@@ -66,7 +71,7 @@ class OrderSellerDetailStoreRequest extends FormRequest
 
         foreach ($this->input('order_detail_quantities') as $index => $order_detail_quantity) {
             $rules["order_detail_quantities.{$index}.quantity"] = [
-                'required', 'numeric'/* , 'min:' . $order_detail_quantity['min'], 'max:' . $order_detail_quantity['max'] */,
+                'required', 'numeric', 'min:' . $order_detail_quantity['min'], 'max:' . $order_detail_quantity['max'],
             ];
         }
 

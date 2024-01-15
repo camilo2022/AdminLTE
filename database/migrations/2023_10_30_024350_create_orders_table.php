@@ -18,6 +18,7 @@ return new class extends Migration
             $table->id()->comment('Identificador del pedido.');
             $table->unsignedBigInteger('client_id')->comment('Identificador del cliente.');
             $table->unsignedBigInteger('client_branch_id')->comment('Identificador de la sucursal del cliente.');
+            $table->unsignedBigInteger('sale_channel_id')->comment('Identificador del canal de venta del pedido');
             $table->enum('dispatch', ['De inmediato', 'Antes de', 'Despues de'])->comment('Cuando despachar.');
             $table->date('dispatch_date')->nullable()->comment('Fecha de cuando despachar.');
             $table->unsignedBigInteger('seller_user_id')->comment('Identificador del usuario de vendedor.');
@@ -33,6 +34,7 @@ return new class extends Migration
             $table->unsignedBigInteger('correria_id')->comment('Identificador de la correria.');
             $table->foreign('client_id')->references('id')->on('clients')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('client_branch_id')->references('id')->on('client_branches')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('sale_channel_id')->references('id')->on('sale_channels')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('seller_user_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('wallet_user_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('correria_id')->references('id')->on('correrias')->onUpdate('cascade')->onDelete('cascade');
@@ -70,7 +72,7 @@ return new class extends Migration
                 DECLARE cntDespachado INT;
                 DECLARE cntCanceladoRechazado INT;
                 DECLARE totalDetalles INT;
-            
+
                 SELECT COUNT(*) INTO cntPendiente FROM order_details WHERE order_id = order_id AND status = "Pendiente";
                 SELECT COUNT(*) INTO cntRevision FROM order_details WHERE order_id = order_id AND status = "Revision";
                 SELECT COUNT(*) INTO cntAprobado FROM order_details WHERE order_id = order_id AND status = "Aprobado";
@@ -80,7 +82,7 @@ return new class extends Migration
                 SELECT COUNT(*) INTO cntDespachado FROM order_details WHERE order_id = order_id AND status = "Despachado";
                 SELECT COUNT(*) INTO cntCanceladoRechazado FROM order_details WHERE order_id = order_id AND (status = "Cancelado" OR status = "Rechazado");
                 SELECT COUNT(*) INTO totalDetalles FROM order_details WHERE order_id = order_id;
-            
+
                 IF cntCanceladoRechazado = totalDetalles THEN
                     UPDATE orders SET wallet_status = "Cancelado", dispatched_status = "Cancelado" WHERE id = order_id;
                 ELSEIF cntPendiente = 0 AND cntRevision = 0 THEN
