@@ -18,17 +18,17 @@ function EditPersonTypeModal(id) {
     });
 }
 
-function EditPersonTypeModalCleaned(PersonType) {
+function EditPersonTypeModalCleaned(personType) {
     RemoveIsValidClassEditPersonType();
     RemoveIsInvalidClassEditPersonType();
 
-    $('#EditPersonTypeButton').attr('onclick', `EditPersonType(${PersonType.id})`);
+    $('#EditPersonTypeButton').attr('onclick', `EditPersonType(${personType.id}, ${personType.require_people})`);
 
-    $("#name_e").val(PersonType.name);
-    $("#code_e").val(PersonType.code);
+    $("#name_e").val(personType.name);
+    $("#code_e").val(personType.code);
 }
 
-function EditPersonType(id) {
+function EditPersonType(id, require_people) {
     Swal.fire({
         title: '¿Desea actualizar el tipo de persona?',
         text: 'El tipo de persona se actualizara.',
@@ -38,6 +38,7 @@ function EditPersonType(id) {
         confirmButtonColor: '#3085d6',
         confirmButtonText: 'Si, actualizar!',
         cancelButtonText: 'No, cancelar!',
+        html: `<label for="require_people"><input type="checkbox" id="require_people_c" name="require_people" ${require_people ? 'checked' : ''}> ¿Requiere referencias personales?</label>`,
     }).then((result) => {
         if (result.value) {
             $.ajax({
@@ -46,7 +47,8 @@ function EditPersonType(id) {
                 data: {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
                     'name': $('#name_e').val(),
-                    'code': $('#code_e').val()
+                    'code': $('#code_e').val(),
+                    'require_people': $('#require_people_c').is(':checked')
                 },
                 success: function (response) {
                     tablePersonTypes.ajax.reload();
@@ -68,7 +70,7 @@ function EditPersonTypeAjaxSuccess(response) {
         toastr.info(response.message);
         $('#EditPersonTypeModal').modal('hide');
     }
-    
+
     if (response.status === 200) {
         toastr.success(response.message);
         $('#EditPersonTypeModal').modal('hide');

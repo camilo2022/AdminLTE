@@ -9,6 +9,7 @@ function EditOrderSellerModal(id) {
             tableOrderSellers.ajax.reload();
             EditOrderSellerModalCleaned(response.data.order);
             EditOrderSellerModalClient(response.data.clients);
+            EditOrderSellerModalSaleChannel(response.data.saleChannels);
             EditOrderSellerAjaxSuccess(response);
             $('#EditOrderSellerModal').modal('show');
         },
@@ -28,6 +29,7 @@ function EditOrderSellerModalCleaned(order) {
     $('#EditOrderSellerButton').attr('data-id', order.id);
     $('#EditOrderSellerButton').attr('data-client_id', order.client_id);
     $('#EditOrderSellerButton').attr('data-client_branch_id', order.client_branch_id);
+    $('#EditOrderSellerButton').attr('data-sale_channel_id', order.sale_channel_id);
 
     $('#dispatch_e').val(order.dispatch).trigger('change');
     $('#dispatch_date_e').val(order.dispatch_date);
@@ -84,6 +86,18 @@ function EditOrderSellerModalClienteBranch(clientBranches) {
     if(client_branch_id != '') {
         $("#client_branch_id_e").val(client_branch_id).trigger('change');
         $('#EditOrderSellerButton').attr('data-client_branch_id', '');
+    }
+}
+
+function EditOrderSellerModalSaleChannel(saleChannels) {
+    saleChannels.forEach(saleChannel => {
+        $('#sale_channel_id_e').append(new Option(saleChannel.name, saleChannel.id, false, false));
+    });
+
+    let sale_channel_id = $('#EditOrderSellerButton').attr('data-sale_channel_id');
+    if(sale_channel_id != '') {
+        $("#sale_channel_id_e").val(sale_channel_id).trigger('change');
+        $('#EditOrderSellerButton').attr('data-sale_channel_id', '');
     }
 }
 

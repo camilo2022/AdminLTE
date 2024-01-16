@@ -22,14 +22,14 @@ function EditWarehouseModalCleaned(warehouse) {
     RemoveIsValidClassEditWarehouse();
     RemoveIsInvalidClassEditWarehouse();
 
-    $('#EditWarehouseButton').attr('onclick', `EditWarehouse(${warehouse.id})`);
+    $('#EditWarehouseButton').attr('onclick', `EditWarehouse(${warehouse.id}, ${warehouse.to_discount})`);
 
     $("#name_e").val(warehouse.name);
     $("#code_e").val(warehouse.code);
     $('#description_e').val(warehouse.description);
 }
 
-function EditWarehouse(id) {
+function EditWarehouse(id, to_discount) {
     Swal.fire({
         title: '¿Desea actualizar la bodega?',
         text: 'La bodega se actualizara.',
@@ -39,6 +39,7 @@ function EditWarehouse(id) {
         confirmButtonColor: '#3085d6',
         confirmButtonText: 'Si, actualizar!',
         cancelButtonText: 'No, cancelar!',
+        html: `<label for="to_discount"><input type="checkbox" id="to_discount_e" name="to_discount" ${to_discount ? 'checked' : ''}> ¿Es bodega de producto terminado?</label>`,
     }).then((result) => {
         if (result.value) {
             $.ajax({
@@ -48,7 +49,8 @@ function EditWarehouse(id) {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
                     'name': $('#name_e').val(),
                     'code': $('#code_e').val(),
-                    'description': $('#description_e').val()
+                    'description': $('#description_e').val(),
+                    'to_discount': $('#to_discount_e').is(':checked')
                 },
                 success: function (response) {
                     tableWarehouses.ajax.reload();

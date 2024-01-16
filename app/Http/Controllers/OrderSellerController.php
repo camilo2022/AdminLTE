@@ -16,6 +16,7 @@ use App\Models\Client;
 use App\Models\ClientBranch;
 use App\Models\Inventory;
 use App\Models\Order;
+use App\Models\SaleChannel;
 use App\Traits\ApiMessage;
 use App\Traits\ApiResponser;
 use Carbon\Carbon;
@@ -50,6 +51,7 @@ class OrderSellerController extends Controller
                     'client.country', 'client.departament', 'client.city',
                     'client_branch' => fn($query) => $query->withTrashed(),
                     'client_branch.country', 'client_branch.departament', 'client_branch.city',
+                    'sale_channel' => fn($query) => $query->withTrashed(),
                     'seller_user' => fn($query) => $query->withTrashed(),
                     'wallet_user' => fn($query) => $query->withTrashed(),
                     'correria' => fn($query) => $query->withTrashed()
@@ -109,7 +111,10 @@ class OrderSellerController extends Controller
             }
 
             return $this->successResponse(
-                Client::all(),
+                [
+                    'clients' => Client::all(),
+                    'saleChannels' => SaleChannel::all(),
+                ],
                 'Ingrese los datos para hacer la validacion y registro.',
                 204
             );
@@ -192,6 +197,7 @@ class OrderSellerController extends Controller
             return $this->successResponse(
                 [
                     'clients' => Client::all(),
+                    'saleChannels' => SaleChannel::all(),
                     'order' => Order::findOrFail($id)
                 ],
                 'El pedido fue encontrado exitosamente.',

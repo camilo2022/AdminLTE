@@ -8,7 +8,8 @@ function CreateOrderSellerModal() {
         success: function (response) {
             tableOrderSellers.ajax.reload();
             CreateOrderSellerModalCleaned();
-            CreateOrderSellerModalClient(response.data);
+            CreateOrderSellerModalClient(response.data.clients);
+            CreateOrderSellerModalSaleChannel(response.data.saleChannels);
             CreateOrderSellerAjaxSuccess(response);
             $('#CreateOrderSellerModal').modal('show');
         },
@@ -21,6 +22,7 @@ function CreateOrderSellerModal() {
 
 function CreateOrderSellerModalCleaned() {
     CreateOrderSellerModalResetSelect('client_id_c');
+    CreateOrderSellerModalResetSelect('sale_channel_id_c');
     RemoveIsValidClassCreateOrderSeller();
     RemoveIsInvalidClassCreateOrderSeller();
 
@@ -68,6 +70,12 @@ function CreateOrderSellerModalClienteBranch(clientBranches) {
     });
 }
 
+function CreateOrderSellerModalSaleChannel(saleChannels) {
+    saleChannels.forEach(saleChannel => {
+        $('#sale_channel_id_c').append(new Option(saleChannel.name, saleChannel.id, false, false));
+    });
+}
+
 function CreateOrderSellerModalDispatchGetDispatchDate(select) {
     if($(select).val() == '' || $(select).val() == 'De inmediato') {
         $('#div_dispatch_date_c').hide();
@@ -96,6 +104,7 @@ function CreateOrderSeller() {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
                     'client_id': $('#client_id_c').val(),
                     'client_branch_id': $('#client_branch_id_c').val(),
+                    'sale_channel_id': $('#sale_channel_id_c').val(),
                     'seller_observation': $('#seller_observation_c').val(),
                     'dispatch': $('#dispatch_c').val(),
                     'dispatch_date': $('#dispatch_c').val() == 'De inmediato' ? new Date().toISOString().split('T')[0] : $('#dispatch_date_c').val()
@@ -178,6 +187,9 @@ function AddIsValidClassCreateOrderSeller() {
     if (!$('span[aria-labelledby="select2-client_branch_id_c-container"]').hasClass('is-invalid')) {
         $('span[aria-labelledby="select2-client_branch_id_c-container"]').addClass('is-valid');
     }
+    if (!$('span[aria-labelledby="select2-sale_channel_id_c-container"]').hasClass('is-invalid')) {
+        $('span[aria-labelledby="select2-sale_channel_id_c-container"]').addClass('is-valid');
+    }
 }
 
 function RemoveIsValidClassCreateOrderSeller() {
@@ -186,6 +198,7 @@ function RemoveIsValidClassCreateOrderSeller() {
     $('#dispatch_date_c').removeClass('is-valid');
     $('span[aria-labelledby="select2-client_id_c-container"]').removeClass('is-valid');
     $('span[aria-labelledby="select2-client_branch_id_c-container"]').removeClass('is-valid');
+    $('span[aria-labelledby="select2-sale_channel_id_c-container"]').removeClass('is-valid');
 }
 
 function AddIsInvalidClassCreateOrderSeller(input) {
@@ -203,6 +216,7 @@ function RemoveIsInvalidClassCreateOrderSeller() {
     $('#dispatch_date_c').removeClass('is-invalid');
     $('span[aria-labelledby="select2-client_id_c-container"]').removeClass('is-invalid');
     $('span[aria-labelledby="select2-client_branch_id_c-container"]').removeClass('is-invalid');
+    $('span[aria-labelledby="select2-sale_channel_id_c-container"]').removeClass('is-invalid');
 }
 
 $('#dispatch_date_c').datetimepicker({

@@ -33,6 +33,8 @@ class RolesAndPermissionSeeder extends Seeder
 
         $PackageTypes = Role::create(['name' => 'PackageTypes']);
 
+        $ReturnTypes = Role::create(['name' => 'ReturnTypes']);
+
         $Transporters = Role::create(['name' => 'Transporters']);
 
         $PaymentMethods = Role::create(['name' => 'PaymentMethods']);
@@ -166,6 +168,15 @@ class RolesAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Dashboard.PackageTypes.Delete'])->syncRoles([$PackageTypes]);
         Permission::create(['name' => 'Dashboard.PackageTypes.Restore'])->syncRoles([$PackageTypes]);
 
+        Permission::create(['name' => 'Dashboard.ReturnTypes.Index'])->syncRoles([$ReturnTypes]);
+        Permission::create(['name' => 'Dashboard.ReturnTypes.Index.Query'])->syncRoles([$ReturnTypes]);
+        Permission::create(['name' => 'Dashboard.ReturnTypes.Create'])->syncRoles([$ReturnTypes]);
+        Permission::create(['name' => 'Dashboard.ReturnTypes.Store'])->syncRoles([$ReturnTypes]);
+        Permission::create(['name' => 'Dashboard.ReturnTypes.Edit'])->syncRoles([$ReturnTypes]);
+        Permission::create(['name' => 'Dashboard.ReturnTypes.Update'])->syncRoles([$ReturnTypes]);
+        Permission::create(['name' => 'Dashboard.ReturnTypes.Delete'])->syncRoles([$ReturnTypes]);
+        Permission::create(['name' => 'Dashboard.ReturnTypes.Restore'])->syncRoles([$ReturnTypes]);
+
         Permission::create(['name' => 'Dashboard.Transporters.Index'])->syncRoles([$Transporters]);
         Permission::create(['name' => 'Dashboard.Transporters.Index.Query'])->syncRoles([$Transporters]);
         Permission::create(['name' => 'Dashboard.Transporters.Create'])->syncRoles([$Transporters]);
@@ -228,6 +239,9 @@ class RolesAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Dashboard.SaleChannels.Store'])->syncRoles([$SaleChannels]);
         Permission::create(['name' => 'Dashboard.SaleChannels.Edit'])->syncRoles([$SaleChannels]);
         Permission::create(['name' => 'Dashboard.SaleChannels.Update'])->syncRoles([$SaleChannels]);
+        Permission::create(['name' => 'Dashboard.SaleChannels.Show'])->syncRoles([$SaleChannels]);
+        Permission::create(['name' => 'Dashboard.SaleChannels.AssignReturnType'])->syncRoles([$SaleChannels]);
+        Permission::create(['name' => 'Dashboard.SaleChannels.RemoveReturnType'])->syncRoles([$SaleChannels]);
         Permission::create(['name' => 'Dashboard.SaleChannels.Delete'])->syncRoles([$SaleChannels]);
         Permission::create(['name' => 'Dashboard.SaleChannels.Restore'])->syncRoles([$SaleChannels]);
 

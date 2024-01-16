@@ -35,6 +35,7 @@ function CreateWarehouse() {
         confirmButtonColor: '#3085d6',
         confirmButtonText: 'Si, guardar!',
         cancelButtonText: 'No, cancelar!',
+        html: '<label for="to_discount"><input type="checkbox" id="to_discount_c" name="to_discount"> ¿Es bodega de producto terminado?</label>',
     }).then((result) => {
         if (result.value) {
             $.ajax({
@@ -44,7 +45,8 @@ function CreateWarehouse() {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
                     'name': $('#name_c').val(),
                     'code': $('#code_c').val(),
-                    'description': $('#description_c').val()
+                    'description': $('#description_c').val(),
+                    'to_discount': $('#to_discount_c').is(':checked')
                 },
                 success: function (response) {
                     tableWarehouses.ajax.reload();

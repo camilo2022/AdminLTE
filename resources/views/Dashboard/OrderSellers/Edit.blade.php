@@ -35,7 +35,20 @@
                             </span>
                         </div>
                     </div>
-                </div> 
+                </div>
+                <div class="form-group">
+                    <label for="sale_channel_id_e">Canal de venta</label>
+                    <div class="input-group">
+                        <select class="form-control select2" id="sale_channel_id_e" name="sale_channel_id" style="width: 88%">
+                            <option value="">Seleccione</option>
+                        </select>
+                        <div class="input-group-append">
+                            <span class="input-group-text">
+                                <i class="fas fa-computer-classic"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
                 <div class="form-group">
                     <label for="seller_observation_e">Observacion</label>
                     <div class="input-group">
@@ -62,7 +75,7 @@
                             </span>
                         </div>
                     </div>
-                </div>   
+                </div>
                 <div class="form-group" id="div_dispatch_date_e">
                     <label for="dispatch_date_e">Fecha despachar</label>
                     <div class="input-group date" id="dispatch_date" data-target-input="nearest">

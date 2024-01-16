@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableModel;
@@ -22,6 +23,11 @@ class SaleChannel extends Model implements Auditable
     protected $auditInclude = [
         'name',
     ];
+
+    public function return_types() : BelongsToMany
+    {
+        return $this->belongsToMany(ReturnType::class, 'sale_channel_return_types', 'sale_channel_id', 'return_type_id');
+    }
 
     public function scopeSearch($query, $search)
     {
