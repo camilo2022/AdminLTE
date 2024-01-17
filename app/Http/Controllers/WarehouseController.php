@@ -298,8 +298,8 @@ class WarehouseController extends Controller
     public function removeGestor(WarehouseRemoveGestorRequest $request)
     {
         try {
-            $warehouse_users = WarehouseUser::where('user_id', '=', $request->input('user_id'))
-            ->where('warehouse_id', '=', $request->input('warehouse_id'))->delete();
+            $warehouse_users = WarehouseUser::where('user_id', $request->input('user_id'))
+            ->where('warehouse_id', $request->input('warehouse_id'))->delete();
 
             return $this->successResponse(
                 $warehouse_users,

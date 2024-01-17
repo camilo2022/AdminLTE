@@ -3,13 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\SaleChannel\SaleChannelAssignReturnTypeRequest;
 use App\Http\Requests\SaleChannel\SaleChannelDeleteRequest;
 use App\Http\Requests\SaleChannel\SaleChannelIndexQueryRequest;
+use App\Http\Requests\SaleChannel\SaleChannelRemoveReturnTypeRequest;
 use App\Http\Requests\SaleChannel\SaleChannelRestoreRequest;
 use App\Http\Requests\SaleChannel\SaleChannelStoreRequest;
 use App\Http\Requests\SaleChannel\SaleChannelUpdateRequest;
 use App\Http\Resources\SaleChannel\SaleChannelIndexQueryCollection;
+use App\Models\ReturnType;
 use App\Models\SaleChannel;
+use App\Models\SaleChannelReturnType;
 use App\Traits\ApiMessage;
 use App\Traits\ApiResponser;
 use Carbon\Carbon;
@@ -195,6 +199,128 @@ class SaleChannelController extends Controller
                 500
             );
         } catch (Exception $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('Exception'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        }
+    }
+
+    public function show($id)
+    {
+        try {
+            $returnTypes = ReturnType::with('sale_channels')->get();
+            $saleChannel = SaleChannel::findOrFail($id);
+
+            foreach ($returnTypes as $returnType) {
+                $returnTypesId = $returnType->sale_channels->pluck('id')->all();
+                $returnType->exists = in_array($id, $returnTypesId);
+            }
+
+            return $this->successResponse(
+                [
+                    'saleChannel' => $saleChannel,
+                    'returnTypes' => $returnTypes
+                ],
+                'El canal de venta fue encontrado exitosamente.',
+                204
+            );
+        } catch (ModelNotFoundException $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('ModelNotFoundException'),
+                    'error' => $e->getMessage()
+                ],
+                404
+            );
+        } catch (Exception $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('Exception'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        }
+    }
+
+    public function assignReturnType(SaleChannelAssignReturnTypeRequest $request)
+    {
+        try {
+            $sale_channel_return_types = new SaleChannelReturnType();
+            $sale_channel_return_types->sale_channel_id = $request->input('sale_channel_id');
+            $sale_channel_return_types->return_type_id = $request->input('return_type_id');
+            $sale_channel_return_types->save();
+
+            return $this->successResponse(
+                $sale_channel_return_types,
+                'Tipo de devolucion asignado exitosamente.',
+                200
+            );
+        } catch (ModelNotFoundException $e) {
+            // Manejar la excepción de la base de datos
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('ModelNotFoundException'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        } catch (QueryException $e) {
+            // Manejar la excepción de la base de datos
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('QueryException'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        } catch (Exception $e) {
+            // Devolver una respuesta de error en caso de excepción
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('Exception'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        }
+    }
+
+    public function removeReturnType(SaleChannelRemoveReturnTypeRequest $request)
+    {
+        try {
+            $warehouse_users = SaleChannelReturnType::where('sale_channel_id', $request->input('sale_channel_id'))
+            ->where('return_type_id', $request->input('return_type_id'))->delete();
+
+            return $this->successResponse(
+                $warehouse_users,
+                'Tipo de devolucion removido exitosamente.',
+                200
+            );
+        } catch (ModelNotFoundException $e) {
+            // Manejar la excepción de la base de datos
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('ModelNotFoundException'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        } catch (QueryException $e) {
+            // Manejar la excepción de la base de datos
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('QueryException'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        } catch (Exception $e) {
+            // Devolver una respuesta de error en caso de excepción
             return $this->errorResponse(
                 [
                     'message' => $this->getMessage('Exception'),

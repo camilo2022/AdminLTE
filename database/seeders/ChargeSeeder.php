@@ -17,74 +17,128 @@ class ChargeSeeder extends Seeder
     {
         Charge::create([
             'area_id' => 1,
-            'name' => 'Director General',
-            'description' => 'Responsable de la toma de decisiones estratégicas para toda la organización.'
+            'name' => 'GERENCIA',
+            'description' => ''
         ]);
-
+        
         Charge::create([
             'area_id' => 1,
-            'name' => 'Gerente de Proyectos',
-            'description' => 'Encargado de la planificación y ejecución de proyectos dentro de la organización.'
+            'name' => 'DIRECION ADMINISTRATIVA Y FINANCIERA',
+            'description' => ''
         ]);
-
+        
+        Charge::create([
+            'area_id' => 1,
+            'name' => 'CONTADOR',
+            'description' => ''
+        ]);
+        
+        Charge::create([
+            'area_id' => 1,
+            'name' => 'AUXILIAR CONTABLE',
+            'description' => ''
+        ]);
+        
+        Charge::create([
+            'area_id' => 1,
+            'name' => 'AUXILIAR CARTERA',
+            'description' => ''
+        ]);
+        
         Charge::create([
             'area_id' => 2,
-            'name' => 'Analista de Crédito',
-            'description' => 'Evaluación de la solvencia crediticia de clientes y emisión de límites de crédito.'
+            'name' => 'DIRECION COMERCIAL VENTA ASISTIDA',
+            'description' => ''
         ]);
-
+        
         Charge::create([
             'area_id' => 2,
-            'name' => 'Gestor de Cobranza',
-            'description' => 'Encargado de realizar el seguimiento y la gestión de cuentas por cobrar.'
+            'name' => 'Community manager - Trafficker  Digital',
+            'description' => ''
         ]);
-
+        
         Charge::create([
             'area_id' => 2,
-            'name' => 'Especialista en Facturación',
-            'description' => 'Responsable de la emisión de facturas y la documentación asociada.'
+            'name' => 'Gestora Telefónica - Novedades',
+            'description' => ''
         ]);
-
+        
         Charge::create([
             'area_id' => 2,
-            'name' => 'Coordinador de Cartera',
-            'description' => 'Supervisión y coordinación de las actividades de gestión de cartera.'
+            'name' => 'ASESOR COMERCIAL',
+            'description' => ''
         ]);
-
+        
         Charge::create([
             'area_id' => 2,
-            'name' => 'Analista de Riesgos',
-            'description' => 'Evaluación y gestión de los riesgos asociados a las cuentas por cobrar'
+            'name' => 'DIRECCION COMERCIAL VENTA NACIONAL',
+            'description' => ''
         ]);
-
+        
         Charge::create([
             'area_id' => 2,
-            'name' => 'Especialista en Conciliación',
-            'description' => 'Encargado de conciliar pagos y resolver discrepancias en cuentas.'
+            'name' => 'COMISIONISTAS NACIONALES',
+            'description' => ''
         ]);
-
+        
         Charge::create([
             'area_id' => 2,
-            'name' => 'Asesor Financiero',
-            'description' => 'Proporciona asesoramiento financiero a clientes en relación con sus cuentas.'
+            'name' => 'DIRECION COMERCIAL CALZADO',
+            'description' => ''
         ]);
-
+        
         Charge::create([
             'area_id' => 2,
-            'name' => 'Especialista en Recuperación de Deudas',
-            'description' => 'Se encarga de la recuperación de cuentas atrasadas o en mora.'
+            'name' => 'VENDEDOR NACIONAL',
+            'description' => ''
         ]);
-
+        
         Charge::create([
             'area_id' => 2,
-            'name' => 'Analista de Cartera',
-            'description' => 'Realiza análisis y reportes relacionados con el estado de la cartera.'
+            'name' => 'TALLERES SATELITE',
+            'description' => ''
         ]);
-
+        
         Charge::create([
-            'area_id' => 2,
-            'name' => 'Coordinador de Facturación y Cobranza',
-            'description' => 'Supervisa tanto el proceso de facturación como las actividades de cobranza.'
+            'area_id' => 3,
+            'name' => 'JEFE BODEGA',
+            'description' => ''
+        ]);
+        
+        Charge::create([
+            'area_id' => 3,
+            'name' => 'AUXILIAR BODEGA',
+            'description' => ''
+        ]);
+        
+        Charge::create([
+            'area_id' => 4,
+            'name' => 'DISEÑADOR Y JEFE DE PRODUCCION',
+            'description' => ''
+        ]);
+        
+        Charge::create([
+            'area_id' => 4,
+            'name' => 'PERSONAL DE CORTE',
+            'description' => ''
+        ]);
+        
+        Charge::create([
+            'area_id' => 4,
+            'name' => 'PERSONAL DE TERMINACION',
+            'description' => ''
+        ]);
+        
+        Charge::create([
+            'area_id' => 4,
+            'name' => 'LAVANDERIAS',
+            'description' => ''
+        ]);
+        
+        Charge::create([
+            'area_id' => 4,
+            'name' => 'TALLER SATELITES',
+            'description' => ''
         ]);
     }
 }

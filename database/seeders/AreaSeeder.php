@@ -15,8 +15,14 @@ class AreaSeeder extends Seeder
      */
     public function run()
     {
-        Area::create(['name' => 'Gerencia']);
+        Area::create(['name' => 'ADMINISTRACION']);
 
-        Area::create(['name' => 'Credito y Cartera']);
+        Area::create(['name' => 'COMERCIAL']);
+
+        Area::create(['name' => 'BODEGA']);
+
+        Area::create(['name' => 'DISEÑO']);
+
+        Area::create(['name' => 'SISTEMAS']);
     }
 }

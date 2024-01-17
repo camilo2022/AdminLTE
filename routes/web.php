@@ -26,6 +26,7 @@ use App\Http\Controllers\PersonController;
 use App\Http\Controllers\PersonReferenceController;
 use App\Http\Controllers\PersonTypeController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ReturnTypeController;
 use App\Http\Controllers\RolesAndPermissionsController;
 use App\Http\Controllers\SaleChannelController;
 use App\Http\Controllers\SizeController;
@@ -322,6 +323,34 @@ Route::middleware(['auth'])->group(function () {
 
         });
 
+        Route::prefix('/ReturnTypes')->group(function () {
+
+            Route::get('/Index', [ReturnTypeController::class, 'index'])
+            ->middleware('can:Dashboard.ReturnTypes.Index')->name('Dashboard.ReturnTypes.Index');
+
+            Route::post('/Index/Query', [ReturnTypeController::class, 'indexQuery'])
+            ->middleware('can:Dashboard.ReturnTypes.Index.Query')->name('Dashboard.ReturnTypes.Index.Query');
+
+            Route::post('/Create', [ReturnTypeController::class, 'create'])
+            ->middleware('can:Dashboard.ReturnTypes.Create')->name('Dashboard.ReturnTypes.Create');
+
+            Route::post('/Store', [ReturnTypeController::class, 'store'])
+            ->middleware('can:Dashboard.ReturnTypes.Store')->name('Dashboard.ReturnTypes.Store');
+
+            Route::post('/Edit/{id}', [ReturnTypeController::class, 'edit'])
+            ->middleware('can:Dashboard.ReturnTypes.Edit')->name('Dashboard.ReturnTypes.Edit');
+
+            Route::put('/Update/{id}', [ReturnTypeController::class, 'update'])
+            ->middleware('can:Dashboard.ReturnTypes.Update')->name('Dashboard.ReturnTypes.Update');
+
+            Route::delete('/Delete', [ReturnTypeController::class, 'delete'])
+            ->middleware('can:Dashboard.ReturnTypes.Delete')->name('Dashboard.ReturnTypes.Delete');
+
+            Route::put('/Restore', [ReturnTypeController::class, 'restore'])
+            ->middleware('can:Dashboard.ReturnTypes.Restore')->name('Dashboard.ReturnTypes.Restore');
+
+        });
+
         Route::prefix('/Transporters')->group(function () {
 
             Route::get('/Index', [TransporterController::class, 'index'])
@@ -515,6 +544,15 @@ Route::middleware(['auth'])->group(function () {
 
             Route::put('/Update/{id}', [SaleChannelController::class, 'update'])
             ->middleware('can:Dashboard.SaleChannels.Update')->name('Dashboard.SaleChannels.Update');
+
+            Route::post('/Show/{id}', [SaleChannelController::class, 'show'])
+            ->middleware('can:Dashboard.SaleChannels.Show')->name('Dashboard.SaleChannels.Show');
+
+            Route::post('/AssignReturnType', [SaleChannelController::class, 'assignReturnType'])
+            ->middleware('can:Dashboard.SaleChannels.AssignReturnType')->name('Dashboard.SaleChannels.AssignReturnType');
+
+            Route::post('/RemoveReturnType', [SaleChannelController::class, 'removeReturnType'])
+            ->middleware('can:Dashboard.SaleChannels.RemoveReturnType')->name('Dashboard.SaleChannels.RemoveReturnType');
 
             Route::delete('/Delete', [SaleChannelController::class, 'delete'])
             ->middleware('can:Dashboard.SaleChannels.Delete')->name('Dashboard.SaleChannels.Delete');
