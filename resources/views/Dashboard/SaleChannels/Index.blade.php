@@ -5,12 +5,12 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1 class="m-0 text-dark">Bodegas</h1>
+                        <h1 class="m-0 text-dark">Canales de Venta</h1>
                     </div><!-- /.col -->
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item">Dashboard</li>
-                            <li class="breadcrumb-item">Warehouses</li>
+                            <li class="breadcrumb-item">SaleChannels</li>
                             <li class="breadcrumb-item">Index</li>
                         </ol>
                     </div><!-- /.col -->
@@ -54,7 +54,7 @@
                         <div class="card-header p-2">
                             <ul class="nav nav-pills">
                                 <li class="nav-item">
-                                    <a class="nav-link active" type="button" onclick="CreateWarehouseModal()" title="Agregar bodega.">
+                                    <a class="nav-link active" type="button" onclick="CreateSaleChannelModal()" title="Agregar canal de venta.">
                                         <i class="fas fa-plus"></i>
                                     </a>
                                 </li>
@@ -62,13 +62,11 @@
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table id="warehouses" class="table table-bordered table-hover dataTable dtr-inline w-100">
+                                <table id="saleChannels" class="table table-bordered table-hover dataTable dtr-inline w-100">
                                     <thead class="thead-dark">
                                         <tr>
                                             <th>#</th>
                                             <th>Nombre</th>
-                                            <th>Codigo</th>
-                                            <th>Descripcion</th>
                                             <th>Estado</th>
                                             <th>Acciones</th>
                                         </tr>
@@ -82,16 +80,16 @@
                 </div>
             </div>
         </div>
-        @include('Dashboard.Warehouses.Create')
-        @include('Dashboard.Warehouses.Edit')
-        @include('Dashboard.Warehouses.Show')
+        @include('Dashboard.SaleChannels.Create')
+        @include('Dashboard.SaleChannels.Edit')
+        @include('Dashboard.SaleChannels.Show')
     </section>
 @endsection
 @section('script')
-    <script src="{{ asset('js/Dashboard/Warehouses/DataTableIndex.js') }}"></script>
-    <script src="{{ asset('js/Dashboard/Warehouses/Create.js') }}"></script>
-    <script src="{{ asset('js/Dashboard/Warehouses/Edit.js') }}"></script>
-    <script src="{{ asset('js/Dashboard/Warehouses/Show.js') }}"></script>
-    <script src="{{ asset('js/Dashboard/Warehouses/Delete.js') }}"></script>
-    <script src="{{ asset('js/Dashboard/Warehouses/Restore.js') }}"></script>
+    <script src="{{ asset('js/Dashboard/SaleChannels/DataTableIndex.js') }}"></script>
+    <script src="{{ asset('js/Dashboard/SaleChannels/Create.js') }}"></script>
+    <script src="{{ asset('js/Dashboard/SaleChannels/Edit.js') }}"></script>
+    <script src="{{ asset('js/Dashboard/SaleChannels/Show.js') }}"></script>
+    <script src="{{ asset('js/Dashboard/SaleChannels/Delete.js') }}"></script>
+    <script src="{{ asset('js/Dashboard/SaleChannels/Restore.js') }}"></script>
 @endsection

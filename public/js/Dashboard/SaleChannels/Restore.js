@@ -1,7 +1,7 @@
-function RestoreWarehouse(id) {
+function RestoreSaleChannel(id) {
     Swal.fire({
-        title: '¿Desea restaurar la bodega?',
-        text: 'La bodega será restaurada.',
+        title: '¿Desea restaurar el canal de venta?',
+        text: 'El canal de venta será restaurado.',
         icon: 'warning',
         showCancelButton: true,
         cancelButtonColor: '#DD6B55',
@@ -11,34 +11,34 @@ function RestoreWarehouse(id) {
     }).then((result) => {
         if (result.value) {
             $.ajax({
-                url: '/Dashboard/Warehouses/Restore',
+                url: '/Dashboard/SaleChannels/Restore',
                 type: 'PUT',
                 data: {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
                     'id': id
                 },
                 success: function(response) {
-                    tableWarehouses.ajax.reload();
-                    RestoreWarehouseAjaxSuccess(response);
+                    tableSaleChannels.ajax.reload();
+                    RestoreSaleChannelAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableWarehouses.ajax.reload();
-                    RestoreWarehouseAjaxError(xhr);
+                    tableSaleChannels.ajax.reload();
+                    RestoreSaleChannelAjaxError(xhr);
                 }
             });
         } else {
-            toastr.info('La bodega seleccionada no fue restaurada.')
+            toastr.info('El canal de venta seleccionada no fue restaurado.')
         }
     });
 }
 
-function RestoreWarehouseAjaxSuccess(response) {
+function RestoreSaleChannelAjaxSuccess(response) {
     if(response.status === 204) {
         toastr.success(response.message);
     }
 }
 
-function RestoreWarehouseAjaxError(xhr) {
+function RestoreSaleChannelAjaxError(xhr) {
     if(xhr.status === 403) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
     }

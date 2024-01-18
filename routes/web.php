@@ -74,53 +74,24 @@ Route::middleware(['auth'])->group(function () {
 
         Route::prefix('/Users')->group(function () {
 
-            Route::get('/Index',[UserController::class, 'index'])
-            ->middleware('can:Dashboard.Users.Index')->name('Dashboard.Users.Index');
-
-            Route::post('/Index/Query', [UserController::class, 'indexQuery'])
-            ->middleware('can:Dashboard.Users.Index.Query')->name('Dashboard.Users.Index.Query');
-
-            Route::get('/Inactives', [UserController::class, 'inactives'])
-            ->middleware('can:Dashboard.Users.Inactives')->name('Dashboard.Users.Inactives');
-
-            Route::post('/Inactives/Query', [UserController::class, 'inactivesQuery'])
-            ->middleware('can:Dashboard.Users.Inactives.Query')->name('Dashboard.Users.Inactives.Query');
-
-            Route::post('/Create', [UserController::class, 'create'])
-            ->middleware('can:Dashboard.Users.Create')->name('Dashboard.Users.Create');
-
-            Route::post('/Store', [UserController::class, 'store'])
-            ->middleware('can:Dashboard.Users.Store')->name('Dashboard.Users.Store');
-
-            Route::post('/Edit/{id}', [UserController::class, 'edit'])
-            ->middleware('can:Dashboard.Users.Edit')->name('Dashboard.Users.Edit');
-
-            Route::put('/Update/{id}', [UserController::class, 'update'])
-            ->middleware('can:Dashboard.Users.Update')->name('Dashboard.Users.Update');
-
-            Route::post('/Show/{id}', [UserController::class, 'show'])
-            ->middleware('can:Dashboard.Users.Show')->name('Dashboard.Users.Show');
-
-            Route::put('/Password/{id}', [UserController::class, 'password'])
-            ->middleware('can:Dashboard.Users.Password')->name('Dashboard.Users.Password');
-
-            Route::delete('/Delete', [UserController::class, 'delete'])
-            ->middleware('can:Dashboard.Users.Delete')->name('Dashboard.Users.Delete');
-
-            Route::put('/Restore', [UserController::class, 'restore'])
-            ->middleware('can:Dashboard.Users.Restore')->name('Dashboard.Users.Restore');
-
-            Route::post('/AssignRoleAndPermissions',  [UserController::class, 'assignRoleAndPermissions'])
-            ->middleware('can:Dashboard.Users.AssignRoleAndPermissions')->name('Dashboard.Users.AssignRoleAndPermissions');
-
-            Route::post('/AssignRoleAndPermissions/Query',  [UserController::class, 'assignRoleAndPermissionsQuery'])
-            ->middleware('can:Dashboard.Users.AssignRoleAndPermissions.Query')->name('Dashboard.Users.AssignRoleAndPermissions.Query');
-
-            Route::post('/RemoveRoleAndPermissions',  [UserController::class, 'removeRoleAndPermissions'])
-            ->middleware('can:Dashboard.Users.RemoveRoleAndPermissions')->name('Dashboard.Users.RemoveRoleAndPermissions');
-
-            Route::post('/RemoveRoleAndPermissions/Query',  [UserController::class, 'removeRoleAndPermissionsQuery'])
-            ->middleware('can:Dashboard.Users.RemoveRoleAndPermissions.Query')->name('Dashboard.Users.RemoveRoleAndPermissions.Query');
+            Route::controller(UserController::class)->group(function () {
+                Route::get('/Index', 'index')->middleware('can:Dashboard.Users.Index')->name('Dashboard.Users.Index');         
+                Route::post('/Index/Query', 'indexQuery')->middleware('can:Dashboard.Users.Index.Query')->name('Dashboard.Users.Index.Query');
+                Route::get('/Inactives', 'inactives')->middleware('can:Dashboard.Users.Inactives')->name('Dashboard.Users.Inactives');
+                Route::post('/Inactives/Query', 'inactivesQuery')->middleware('can:Dashboard.Users.Inactives.Query')->name('Dashboard.Users.Inactives.Query');
+                Route::post('/Create', 'create')->middleware('can:Dashboard.Users.Create')->name('Dashboard.Users.Create');
+                Route::post('/Store', 'store')->middleware('can:Dashboard.Users.Store')->name('Dashboard.Users.Store');
+                Route::post('/Edit/{id}', 'edit')->middleware('can:Dashboard.Users.Edit')->name('Dashboard.Users.Edit');
+                Route::put('/Update/{id}', 'update')->middleware('can:Dashboard.Users.Update')->name('Dashboard.Users.Update');
+                Route::post('/Show/{id}', 'show')->middleware('can:Dashboard.Users.Show')->name('Dashboard.Users.Show');
+                Route::put('/Password/{id}', 'password')->middleware('can:Dashboard.Users.Password')->name('Dashboard.Users.Password');
+                Route::delete('/Delete', 'delete')->middleware('can:Dashboard.Users.Delete')->name('Dashboard.Users.Delete');
+                Route::put('/Restore', 'restore')->middleware('can:Dashboard.Users.Restore')->name('Dashboard.Users.Restore');
+                Route::post('/AssignRoleAndPermissions', 'assignRoleAndPermissions')->middleware('can:Dashboard.Users.AssignRoleAndPermissions')->name('Dashboard.Users.AssignRoleAndPermissions');
+                Route::post('/AssignRoleAndPermissions/Query', 'assignRoleAndPermissionsQuery')->middleware('can:Dashboard.Users.AssignRoleAndPermissions.Query')->name('Dashboard.Users.AssignRoleAndPermissions.Query');
+                Route::post('/RemoveRoleAndPermissions', 'removeRoleAndPermissions')->middleware('can:Dashboard.Users.RemoveRoleAndPermissions')->name('Dashboard.Users.RemoveRoleAndPermissions');
+                Route::post('/RemoveRoleAndPermissions/Query', 'removeRoleAndPermissionsQuery')->middleware('can:Dashboard.Users.RemoveRoleAndPermissions.Query')->name('Dashboard.Users.RemoveRoleAndPermissions.Query');
+            });   
 
         });
 

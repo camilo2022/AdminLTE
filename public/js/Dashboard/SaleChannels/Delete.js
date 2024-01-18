@@ -1,44 +1,48 @@
-function RestoreWarehouse(id) {
+function DeleteSaleChannel(id) {
     Swal.fire({
-        title: '¿Desea restaurar la bodega?',
-        text: 'La bodega será restaurada.',
+        title: '¿Desea eliminar el canal de venta?',
+        text: 'El canal de venta será desactivado.',
         icon: 'warning',
         showCancelButton: true,
         cancelButtonColor: '#DD6B55',
         confirmButtonColor: '#3085d6',
-        confirmButtonText: 'Si, restaurar!',
-        cancelButtonText: 'No, cancelar!'
+        confirmButtonText: 'Si, eliminar!',
+        cancelButtonText: 'No, cancelar!',
     }).then((result) => {
         if (result.value) {
             $.ajax({
-                url: '/Dashboard/Warehouses/Restore',
-                type: 'PUT',
+                url: `/Dashboard/SaleChannels/Delete`,
+                type: 'DELETE',
                 data: {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
                     'id': id
                 },
                 success: function(response) {
-                    tableWarehouses.ajax.reload();
-                    RestoreWarehouseAjaxSuccess(response);
+                    tableSaleChannels.ajax.reload();
+                    DeleteSaleChannelAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableWarehouses.ajax.reload();
-                    RestoreWarehouseAjaxError(xhr);
+                    tableSaleChannels.ajax.reload();
+                    DeleteSaleChannelAjaxError(xhr);
                 }
             });
         } else {
-            toastr.info('La bodega seleccionada no fue restaurada.')
+            toastr.info('El canal de venta seleccionado no fue desactivado.')
         }
     });
 }
 
-function RestoreWarehouseAjaxSuccess(response) {
+function DeleteSaleChannelAjaxSuccess(response) {
     if(response.status === 204) {
         toastr.success(response.message);
     }
+
+    if(response.status === 422) {
+        toastr.warning(response.message);
+    }
 }
 
-function RestoreWarehouseAjaxError(xhr) {
+function DeleteSaleChannelAjaxError(xhr) {
     if(xhr.status === 403) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
     }
