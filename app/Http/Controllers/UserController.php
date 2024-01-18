@@ -74,7 +74,6 @@ class UserController extends Controller
         */
 
         try {
-
             return view('Dashboard.Users.Index');
         } catch (Exception $e) {
             return back()->with('danger', 'Ocurrió un error al cargar la vista: ' . $e->getMessage());

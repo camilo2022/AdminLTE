@@ -119,8 +119,11 @@ class InventoryController extends Controller
             foreach($inventories as $inventory) {
                 $inventory = (object) $inventory;
                 $existInventory = Inventory::where('product_id', '=', $inventory->product_id)
-                ->where('size_id', '=', $inventory->size_id)->where('warehouse_id', '=', $inventory->warehouse_id)
-                ->where('color_id', '=', $inventory->color_id)->where('tone_id', '=', $inventory->tone_id)->first();
+                ->where('size_id', '=', $inventory->size_id)
+                ->where('warehouse_id', '=', $inventory->warehouse_id)
+                ->where('color_id', '=', $inventory->color_id)
+                ->where('tone_id', '=', $inventory->tone_id)
+                ->first();
 
                 if($existInventory) {
                     $existInventory->quantity += ($existInventory->quantity + $inventory->quantity) >= 0 ? $inventory->quantity : 0;
