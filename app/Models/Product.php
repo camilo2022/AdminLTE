@@ -28,7 +28,6 @@ class Product extends DBModel implements Auditable
         'model_id',
         'trademark_id',
         'correria_id',
-        'collection_id'
     ];
 
     protected $auditInclude = [
@@ -41,7 +40,6 @@ class Product extends DBModel implements Auditable
         'model_id',
         'trademark_id',
         'correria_id',
-        'collection_id'
     ];
 
     public function inventories() : HasMany
@@ -96,11 +94,6 @@ class Product extends DBModel implements Auditable
         return $this->belongsTo(Correria::class, 'correria_id');
     }
 
-    public function collection() : BelongsTo
-    {
-        return $this->belongsTo(Collection::class, 'collection_id');
-    }
-
     public function scopeSearch($query, $search)
     {
         return $query->where('code', 'like', '%' . $search . '%')
@@ -132,11 +125,6 @@ class Product extends DBModel implements Auditable
             }
         )
         ->orWhereHas('correria',
-            function ($subQuery) use ($search) {
-                $subQuery->where('name', 'like',  '%' . $search . '%');
-            }
-        )
-        ->orWhereHas('collection',
             function ($subQuery) use ($search) {
                 $subQuery->where('name', 'like',  '%' . $search . '%');
             }

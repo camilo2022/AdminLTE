@@ -44,8 +44,8 @@ class PersonStoreRequest extends FormRequest
             'address' => ['required', 'string', 'max:255'],
             'neighborhood' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255'],
-            'telephone_number_first' => ['required', 'string', 'size:10'],
-            'telephone_number_second' => ['nullable', 'string', 'size:10'],
+            'telephone_number_first' => ['required', 'numeric', 'size:10'],
+            'telephone_number_second' => ['nullable', 'numeric', 'size:10'],
             'country_departament' => ['exists:departaments,id,country_id,' . $this->input('country_id')],
             'departament_city' => ['exists:cities,id,departament_id,' . $this->input('departament_id')]
         ];

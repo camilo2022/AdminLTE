@@ -1,7 +1,7 @@
-function DeleteCollection(id) {
+function DeleteReturnType(id) {
     Swal.fire({
-        title: '¿Desea eliminar la coleccion?',
-        text: 'La coleccion será desactivada.',
+        title: '¿Desea eliminar el tipo de devolucion?',
+        text: 'El tipo de devolucion será desactivado.',
         icon: 'warning',
         showCancelButton: true,
         cancelButtonColor: '#DD6B55',
@@ -11,28 +11,28 @@ function DeleteCollection(id) {
     }).then((result) => {
         if (result.value) {
             $.ajax({
-                url: `/Dashboard/Collections/Delete`,
+                url: `/Dashboard/ReturnTypes/Delete`,
                 type: 'DELETE',
                 data: {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
                     'id': id
                 },
                 success: function(response) {
-                    tableCollections.ajax.reload();
-                    DeleteCollectionAjaxSuccess(response);
+                    tableReturnTypes.ajax.reload();
+                    DeleteReturnTypeAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableCollections.ajax.reload();
-                    DeleteCollectionAjaxError(xhr);
+                    tableReturnTypes.ajax.reload();
+                    DeleteReturnTypeAjaxError(xhr);
                 }
             });
         } else {
-            toastr.info('La coleccion seleccionada no fue desactivada.');
+            toastr.info('El tipo de devolucion seleccionado no fue desactivado.');
         }
     });
 }
 
-function DeleteCollectionAjaxSuccess(response) {
+function DeleteReturnTypeAjaxSuccess(response) {
     if(response.status === 204) {
         toastr.success(response.message);
     }
@@ -42,7 +42,7 @@ function DeleteCollectionAjaxSuccess(response) {
     }
 }
 
-function DeleteCollectionAjaxError(xhr) {
+function DeleteReturnTypeAjaxError(xhr) {
     if(xhr.status === 403) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
     }

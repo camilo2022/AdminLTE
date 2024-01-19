@@ -1,28 +1,28 @@
-function EditCorreriaModal(id) {
+function EditCorreriaAndCollectionModal(id) {
     $.ajax({
-        url: `/Dashboard/Correrias/Edit/${id}`,
+        url: `/Dashboard/CorreriasAndCollections/Edit/${id}`,
         type: 'POST',
         data: {
             '_token': $('meta[name="csrf-token"]').attr('content')
         },
         success: function(response) {
-            tableCorrerias.ajax.reload();
-            EditCorreriaModalCleaned(response.data);
-            EditCorreriaAjaxSuccess(response);
-            $('#EditCorreriaModal').modal('show');
+            tableCorreriasAndCollections.ajax.reload();
+            EditCorreriaAndCollectionModalCleaned(response.data);
+            EditCorreriaAndCollectionAjaxSuccess(response);
+            $('#EditCorreriaAndCollectionModal').modal('show');
         },
         error: function(xhr, textStatus, errorThrown) {
-            tableCorrerias.ajax.reload();
-            EditCorreriaAjaxError(xhr);
+            tableCorreriasAndCollections.ajax.reload();
+            EditCorreriaAndCollectionAjaxError(xhr);
         }
     });
 }
 
-function EditCorreriaModalCleaned(correria) {
-    RemoveIsValidClassEditCorreria();
-    RemoveIsInvalidClassEditCorreria();
+function EditCorreriaAndCollectionModalCleaned(correria) {
+    RemoveIsValidClassEditCorreriaAndCollection();
+    RemoveIsInvalidClassEditCorreriaAndCollection();
 
-    $('#EditCorreriaButton').attr('onclick', `EditCorreria(${correria.id})`);
+    $('#EditCorreriaAndCollectionButton').attr('onclick', `EditCorreriaAndCollection(${correria.id})`);
 
     $("#name_e").val(correria.name);
     $("#code_e").val(correria.code);
@@ -30,7 +30,7 @@ function EditCorreriaModalCleaned(correria) {
     $("#end_date_e").val(moment(correria.end_date).format('MM/DD/YYYY'));
 }
 
-function EditCorreria(id) {
+function EditCorreriaAndCollection(id) {
     Swal.fire({
         title: '¿Desea actualizar la correria?',
         text: 'La correria se actualizara.',
@@ -43,7 +43,7 @@ function EditCorreria(id) {
     }).then((result) => {
         if (result.value) {
             $.ajax({
-                url: `/Dashboard/Correrias/Update/${id}`,
+                url: `/Dashboard/CorreriasAndCollections/Update/${id}`,
                 type: 'PUT',
                 data: {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
@@ -54,12 +54,12 @@ function EditCorreria(id) {
                     'end_date': $("#end_date_e").val()
                 },
                 success: function(response) {
-                    tableCorrerias.ajax.reload();
-                    EditCorreriaAjaxSuccess(response);
+                    tableCorreriasAndCollections.ajax.reload();
+                    EditCorreriaAndCollectionAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableCorrerias.ajax.reload();
-                    EditCorreriaAjaxError(xhr);
+                    tableCorreriasAndCollections.ajax.reload();
+                    EditCorreriaAndCollectionAjaxError(xhr);
                 }
             });
         } else {
@@ -68,10 +68,10 @@ function EditCorreria(id) {
     });
 }
 
-function EditCorreriaAjaxSuccess(response) {
+function EditCorreriaAndCollectionAjaxSuccess(response) {
     if(response.status === 200) {
         toastr.success(response.message);
-        $('#EditCorreriaModal').modal('hide');
+        $('#EditCorreriaAndCollectionModal').modal('hide');
     }
 
     if(response.status === 204) {
@@ -80,41 +80,41 @@ function EditCorreriaAjaxSuccess(response) {
     }
 }
 
-function EditCorreriaAjaxError(xhr) {
+function EditCorreriaAndCollectionAjaxError(xhr) {
     if(xhr.status === 403) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
-        $('#EditCorreriaModal').modal('hide');
+        $('#EditCorreriaAndCollectionModal').modal('hide');
     }
 
     if(xhr.status === 404) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
-        $('#EditCorreriaModal').modal('hide');
+        $('#EditCorreriaAndCollectionModal').modal('hide');
     }
 
     if(xhr.status === 419) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
-        $('#EditCorreriaModal').modal('hide');
+        $('#EditCorreriaAndCollectionModal').modal('hide');
     }
 
     if(xhr.status === 422){
-        RemoveIsValidClassEditCorreria();
-        RemoveIsInvalidClassEditCorreria();
+        RemoveIsValidClassEditCorreriaAndCollection();
+        RemoveIsInvalidClassEditCorreriaAndCollection();
         $.each(xhr.responseJSON.errors, function(field, messages) {
-            AddIsInvalidClassEditCorreria(field);
+            AddIsInvalidClassEditCorreriaAndCollection(field);
             $.each(messages, function(index, message) {
                 toastr.error(message);
             });
         });
-        AddIsValidClassEditCorreria();
+        AddIsValidClassEditCorreriaAndCollection();
     }
 
     if(xhr.status === 500){
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
-        $('#EditCorreriaModal').modal('hide');
+        $('#EditCorreriaAndCollectionModal').modal('hide');
     }
 }
 
-function AddIsValidClassEditCorreria() {
+function AddIsValidClassEditCorreriaAndCollection() {
     if (!$('#name_e').hasClass('is-invalid')) {
       $('#name_e').addClass('is-valid');
     }
@@ -129,20 +129,20 @@ function AddIsValidClassEditCorreria() {
     }
 }
 
-function RemoveIsValidClassEditCorreria() {
+function RemoveIsValidClassEditCorreriaAndCollection() {
     $('#name_e').removeClass('is-valid');
     $('#code_e').removeClass('is-valid');
     $('#start_date_e').removeClass('is-valid');
     $('#end_date_e').removeClass('is-valid');
 }
 
-function AddIsInvalidClassEditCorreria(input) {
+function AddIsInvalidClassEditCorreriaAndCollection(input) {
     if (!$(`#${input}_e`).hasClass('is-valid')) {
         $(`#${input}_e`).addClass('is-invalid');
     }
 }
 
-function RemoveIsInvalidClassEditCorreria() {
+function RemoveIsInvalidClassEditCorreriaAndCollection() {
     $('#name_e').removeClass('is-invalid');
     $('#code_e').removeClass('is-invalid');
     $('#start_date_e').removeClass('is-invalid');

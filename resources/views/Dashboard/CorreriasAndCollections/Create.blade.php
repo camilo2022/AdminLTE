@@ -1,10 +1,10 @@
-<div class="modal fade bd-example-modal-lg" id="CreateCorreriaModal" tabindex="-1" role="dialog"
+<div class="modal fade bd-example-modal-lg" id="CreateCorreriaAndCollectionModal" tabindex="-1" role="dialog"
     aria-labelledby="exampleModalLabel" data-backdrop="static" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header w-100">
                 <div class="text-center w-100" style="background: white;">
-                    <label style="font-size:20px;font-weight:bold;">Creacion de Correria</label>
+                    <label style="font-size:20px;font-weight:bold;">Creacion de Correria y Coleccion</label>
                 </div>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
@@ -68,7 +68,7 @@
                 <button type="button" class="btn btn-secondary" data-dismiss="modal" title="Cerrar ventana">
                     <i class="fas fa-xmark"></i>
                 </button>
-                <button type="button" class="btn btn-primary" id="CreateCorreriaButton" onclick="CreateCorreria()" title="Guardar correria.">
+                <button type="button" class="btn btn-primary" id="CreateCorreriaAndCollectionButton" onclick="CreateCorreriaAndCollection()" title="Guardar correria y coleccion.">
                     <i class="fas fa-floppy-disk"></i>
                 </button>
             </div>

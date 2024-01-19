@@ -1,15 +1,17 @@
-let tableCollections = $('#collections').DataTable({
+let tableCorreriasAndCollections = $('#CorreriasAndCollectionsAndCollections').DataTable({
     processing: true,
     serverSide: true,
     ajax: {
-        url: `/Dashboard/Collections/Index/Query`,
+        url: `/Dashboard/CorreriasAndCollections/Index/Query`,
         type: 'POST',
         data: function (request) {
             var columnMappings = {
                 0: 'id',
                 1: 'name',
                 2: 'code',
-                3: 'deleted_at'
+                3: 'start_date',
+                4: 'end_date',
+                5: 'deleted_at'
             };
             request._token = $('meta[name="csrf-token"]').attr('content');
             request.perPage = request.length;
@@ -21,7 +23,7 @@ let tableCollections = $('#collections').DataTable({
         dataSrc: function (response) {
             response.recordsTotal = response.data.meta.pagination.count;
             response.recordsFiltered = response.data.meta.pagination.total;
-            return response.data.collections;
+            return response.data.correriasAndCollections;
         },
         error: function (xhr, error, thrown) {
             toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
@@ -31,6 +33,8 @@ let tableCollections = $('#collections').DataTable({
         { data: 'id' },
         { data: 'name' },
         { data: 'code' },
+        { data: 'start_date' },
+        { data: 'end_date' },
         {
             data: 'deleted_at',
             render: function (data, type, row) {
@@ -44,21 +48,18 @@ let tableCollections = $('#collections').DataTable({
         {
             data: 'deleted_at',
             render: function (data, type, row) {
-                let btn = `<div class="text-center" style="width: 100%;">`;
-                if (data === null) {
-                    btn += `<a onclick="EditCollectionModal(${row.id})" type="button"
-                    class="btn btn-primary btn-sm mr-2" title="Editar coleccion">
-                        <i class="fas fa-pen text-white"></i>
-                    </a>`;
 
-                    btn += `<a onclick="DeleteCollection(${row.id})" type="button"
-                    class="btn btn-danger btn-sm mr-2" title="Eliminar coleccion">
+                let btn = `<div class="text-center" style="width: 100%;">`;
+
+                btn =  `<a onclick="EditCorreriaAndCollectionModal(${row.id})" type="button"
+                class="btn btn-primary btn-sm mr-2" title="Editar correria y coleccion.">
+                    <i class="fas fa-pen text-white"></i>
+                </a>`;
+
+                if (data === null) {
+                    btn += `<a onclick="DeleteCorreriaAndCollection(${row.id})" type="button"
+                    class="btn btn-danger btn-sm" title="Eliminar correria y coleccion.">
                         <i class="fas fa-trash text-white"></i>
-                    </a>`;
-                } else {
-                    btn += `<a onclick="RestoreCollection(${row.id})" type="button"
-                    class="btn btn-info btn-sm mr-2" title="Restaurar coleccion">
-                        <i class="fas fa-arrow-rotate-left text-white"></i>
                     </a>`;
                 }
                 btn += `</div>`;
@@ -69,11 +70,11 @@ let tableCollections = $('#collections').DataTable({
     columnDefs: [
         {
             orderable: true,
-            targets: [0, 1, 2, 3]
+            targets: [0, 1, 2, 3, 4, 5]
         },
         {
             orderable: false,
-            targets: [4]
+            targets: [6]
         }
     ],
     pagingType: 'full_numbers',

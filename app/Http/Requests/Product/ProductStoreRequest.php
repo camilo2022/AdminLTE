@@ -42,7 +42,6 @@ class ProductStoreRequest extends FormRequest
             'model_id' => ['required', 'exists:models,id'],
             'trademark_id' => ['required', 'exists:trademarks,id'],
             'correria_id' => ['required', 'exists:correrias,id'],
-            'collection_id' => ['required', 'exists:collections,id'],
             'clothingLine_category' => ['exists:categories,id,clothing_line_id,' . $this->input('clothing_line_id')],
             'category_subcategory' => ['exists:subcategories,id,category_id,' . $this->input('category_id')]
         ];
@@ -75,8 +74,6 @@ class ProductStoreRequest extends FormRequest
             'trademark_id.exists' => 'El Identificador de la marca del producto no es valido.',
             'correria_id.required' => 'El campo Correria del producto es requerido.',
             'correria_id.exists' => 'El Identificador de la correria del producto no es valido.',
-            'collection_id.required' => 'El campo Coleccion del producto es requerido.',
-            'collection_id.exists' => 'El Identificador de la coleccion del producto no es valido.',
             'clothingLine_category.exists' => 'La categoria no pertenece a la linea de producto seleccionada.',
             'category_subcategory.exists' => 'La subcategoria no pertenece a la categoria seleccionada.',
         ];

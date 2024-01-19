@@ -28,7 +28,6 @@ class ProductIndexQueryCollection extends ResourceCollection
                     'model' => $product->model,
                     'trademark' => $product->trademark,
                     'correria' => $product->correria,
-                    'collection' => $product->collection,
                     'colors_tones' => $product->colors_tones->map(function ($color_tone) {
                             return [
                                 'color' => $color_tone->color,

@@ -69,7 +69,6 @@ class ProductController extends Controller
                     'subcategory' => fn($query) => $query->withTrashed(),
                     'model' => fn($query) => $query->withTrashed(),
                     'trademark' => fn($query) => $query->withTrashed(),
-                    'collection' => fn($query) => $query->withTrashed(),
                     'colors_tones.color' => fn($query) => $query->withTrashed(),
                     'colors_tones.tone' => fn($query) => $query->withTrashed(),
                     'sizes'
@@ -138,7 +137,6 @@ class ProductController extends Controller
                     'models' => Model::all(),
                     'trademarks' => Trademark::all(),
                     'correrias' => Correria::all(),
-                    'collections' => Collection::all()
                 ],
                 'Ingrese los datos para hacer la validacion y registro.',
                 204
@@ -168,7 +166,6 @@ class ProductController extends Controller
             $product->model_id = $request->input('model_id');
             $product->trademark_id = $request->input('trademark_id');
             $product->correria_id = $request->input('correria_id');
-            $product->collection_id = $request->input('collection_id');
             $product->save();
 
             return $this->successResponse(
@@ -232,7 +229,6 @@ class ProductController extends Controller
                     'models' => Model::all(),
                     'trademarks' => Trademark::all(),
                     'correrias' => Correria::all(),
-                    'collections' => Collection::all()
                 ],
                 'El producto fue encontrado exitosamente.',
                 204
@@ -269,7 +265,6 @@ class ProductController extends Controller
             $product->model_id = $request->input('model_id');
             $product->trademark_id = $request->input('trademark_id');
             $product->correria_id = $request->input('correria_id');
-            $product->collection_id = $request->input('collection_id');
             $product->save();
 
             return $this->successResponse(
@@ -651,7 +646,7 @@ class ProductController extends Controller
                 $product['clothingLine_category'] = $product['category_id'];
                 $product['category_subcategory'] = $product['subcategory_id'];
             }
-            
+
             $productsValidate = new ProductMasiveRequest();
             $productsValidate->merge([
                 'Products' => $products['Products']->toArray(),

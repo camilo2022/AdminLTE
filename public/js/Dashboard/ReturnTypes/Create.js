@@ -1,33 +1,33 @@
-function CreatePackageTypeModal() {
+function CreateReturnTypeModal() {
     $.ajax({
-        url: `/Dashboard/PackageTypes/Create`,
+        url: `/Dashboard/ReturnTypes/Create`,
         type: 'POST',
         data: {
             '_token': $('meta[name="csrf-token"]').attr('content')
         },
         success: function(response) {
-            CreatePackageTypeModalCleaned();
-            CreatePackageTypeAjaxSuccess(response);
-            $('#CreatePackageTypeModal').modal('show');
+            CreateReturnTypeModalCleaned();
+            CreateReturnTypeAjaxSuccess(response);
+            $('#CreateReturnTypeModal').modal('show');
         },
         error: function(xhr, textStatus, errorThrown) {
-            CreatePackageTypeAjaxError(xhr);
+            CreateReturnTypeAjaxError(xhr);
         }
     });
 }
 
-function CreatePackageTypeModalCleaned() {
-    RemoveIsValidClassCreatePackageType();
-    RemoveIsInvalidClassCreatePackageType();
+function CreateReturnTypeModalCleaned() {
+    RemoveIsValidClassCreateReturnType();
+    RemoveIsInvalidClassCreateReturnType();
 
     $('#name_c').val('');
     $('#code_c').val('');
 }
 
-function CreatePackageType() {
+function CreateReturnType() {
     Swal.fire({
-        title: '¿Desea guardar el tipo de empaque?',
-        text: 'El tipo de empaque será creado.',
+        title: '¿Desea guardar el tipo de devolucion?',
+        text: 'El tipo de devolucion será creado.',
         icon: 'warning',
         showCancelButton: true,
         cancelButtonColor: '#DD6B55',
@@ -37,95 +37,89 @@ function CreatePackageType() {
     }).then((result) => {
         if (result.value) {
             $.ajax({
-                url: `/Dashboard/PackageTypes/Store`,
+                url: `/Dashboard/ReturnTypes/Store`,
                 type: 'POST',
                 data: {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
                     'name': $('#name_c').val(),
-                    'code': $('#code_c').val(),
                 },
                 success: function(response) {
-                    tablePackageTypes.ajax.reload();
-                    CreatePackageTypeAjaxSuccess(response);
+                    tableReturnTypes.ajax.reload();
+                    CreateReturnTypeAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tablePackageTypes.ajax.reload();
-                    CreatePackageTypeAjaxError(xhr);
+                    tableReturnTypes.ajax.reload();
+                    CreateReturnTypeAjaxError(xhr);
                 }
             });
         } else {
-            toastr.info('El tipo de empaque no fue creado.')
+            toastr.info('El tipo de devolucion no fue creado.')
         }
     });
 }
 
-function CreatePackageTypeAjaxSuccess(response) {
+function CreateReturnTypeAjaxSuccess(response) {
     if(response.status === 204) {
         toastr.info(response.message);
-        $('#CreatePackageTypeModal').modal('hide');
+        $('#CreateReturnTypeModal').modal('hide');
     }
 
     if(response.status === 201) {
         toastr.success(response.message);
-        $('#CreatePackageTypeModal').modal('hide');
+        $('#CreateReturnTypeModal').modal('hide');
     }
 }
 
-function CreatePackageTypeAjaxError(xhr) {
+function CreateReturnTypeAjaxError(xhr) {
     if(xhr.status === 403) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
-        $('#CreatePackageTypeModal').modal('hide');
+        $('#CreateReturnTypeModal').modal('hide');
     }
 
     if(xhr.status === 404) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
-        $('#CreatePackageTypeModal').modal('hide');
+        $('#CreateReturnTypeModal').modal('hide');
     }
 
     if(xhr.status === 419) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
-        $('#CreatePackageTypeModal').modal('hide');
+        $('#CreateReturnTypeModal').modal('hide');
     }
 
     if(xhr.status === 422){
-        RemoveIsValidClassCreatePackageType();
-        RemoveIsInvalidClassCreatePackageType();
+        RemoveIsValidClassCreateReturnType();
+        RemoveIsInvalidClassCreateReturnType();
         $.each(xhr.responseJSON.errors, function(field, messages) {
-            AddIsInvalidClassCreatePackageType(field);
+            AddIsInvalidClassCreateReturnType(field);
             $.each(messages, function(index, message) {
                 toastr.error(message);
             });
         });
-        AddIsValidClassCreatePackageType();
+        AddIsValidClassCreateReturnType();
     }
 
     if(xhr.status === 500){
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
-        $('#CreatePackageTypeModal').modal('hide');
+        $('#CreateReturnTypeModal').modal('hide');
     }
 }
 
-function AddIsValidClassCreatePackageType() {
+function AddIsValidClassCreateReturnType() {
     if (!$('#name_c').hasClass('is-invalid')) {
       $('#name_c').addClass('is-valid');
     }
-    if (!$('#code_c').hasClass('is-invalid')) {
-      $('#code_c').addClass('is-valid');
-    }
 }
 
-function RemoveIsValidClassCreatePackageType() {
+function RemoveIsValidClassCreateReturnType() {
     $('#name_c').removeClass('is-valid');
-    $('#code_c').removeClass('is-valid');
 }
 
-function AddIsInvalidClassCreatePackageType(input) {
+function AddIsInvalidClassCreateReturnType(input) {
     if (!$(`#${input}_c`).hasClass('is-valid')) {
         $(`#${input}_c`).addClass('is-invalid');
     }
 }
 
-function RemoveIsInvalidClassCreatePackageType() {
+function RemoveIsInvalidClassCreateReturnType() {
     $('#name_c').removeClass('is-invalid');
-    $('#code_c').removeClass('is-invalid');
 }

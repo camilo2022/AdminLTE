@@ -1,17 +1,15 @@
-let tableCorrerias = $('#correrias').DataTable({
+let tableReturnTypes = $('#returnTypes').DataTable({
     processing: true,
     serverSide: true,
     ajax: {
-        url: `/Dashboard/Correrias/Index/Query`,
+        url: `/Dashboard/ReturnTypes/Index/Query`,
         type: 'POST',
         data: function (request) {
             var columnMappings = {
                 0: 'id',
                 1: 'name',
                 2: 'code',
-                3: 'start_date',
-                4: 'end_date',
-                5: 'deleted_at'
+                3: 'deleted_at'
             };
             request._token = $('meta[name="csrf-token"]').attr('content');
             request.perPage = request.length;
@@ -23,7 +21,7 @@ let tableCorrerias = $('#correrias').DataTable({
         dataSrc: function (response) {
             response.recordsTotal = response.data.meta.pagination.count;
             response.recordsFiltered = response.data.meta.pagination.total;
-            return response.data.correrias;
+            return response.data.returnTypes;
         },
         error: function (xhr, error, thrown) {
             toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
@@ -32,9 +30,6 @@ let tableCorrerias = $('#correrias').DataTable({
     columns: [
         { data: 'id' },
         { data: 'name' },
-        { data: 'code' },
-        { data: 'start_date' },
-        { data: 'end_date' },
         {
             data: 'deleted_at',
             render: function (data, type, row) {
@@ -48,18 +43,21 @@ let tableCorrerias = $('#correrias').DataTable({
         {
             data: 'deleted_at',
             render: function (data, type, row) {
+                let btn = `<div class="text-center" style="width: 100px;">`;
+                if (data == null) {
+                    btn += `<a onclick="EditReturnTypeModal(${row.id})" type="button"
+                    class="btn btn-primary btn-sm mr-2" title="Editar tipo de devolucion.">
+                        <i class="fas fa-pen text-white"></i>
+                    </a>`;
 
-                let btn = `<div class="text-center" style="width: 100%;">`;
-
-                btn =  `<a onclick="EditCorreriaModal(${row.id})" type="button"
-                class="btn btn-primary btn-sm mr-2" title="Editar correria">
-                    <i class="fas fa-pen text-white"></i>
-                </a>`;
-
-                if (data === null) {
-                    btn += `<a onclick="DeleteCorreria(${row.id})" type="button"
-                    class="btn btn-danger btn-sm" title="Eliminar correria">
+                    btn += `<a onclick="DeleteReturnType(${row.id})" type="button"
+                    class="btn btn-danger btn-sm mr-2" title="Eliminar tipo de devolucion.">
                         <i class="fas fa-trash text-white"></i>
+                    </a>`;
+                } else {
+                    btn += `<a onclick="RestoreReturnType(${row.id})" type="button"
+                    class="btn btn-info btn-sm mr-2"title="Restaurar tipo de devolucion.">
+                        <i class="fas fa-arrow-rotate-left text-white"></i>
                     </a>`;
                 }
                 btn += `</div>`;
@@ -70,11 +68,11 @@ let tableCorrerias = $('#correrias').DataTable({
     columnDefs: [
         {
             orderable: true,
-            targets: [0, 1, 2, 3, 4, 5]
+            targets: [0, 1, 2, 3]
         },
         {
             orderable: false,
-            targets: [6]
+            targets: [4]
         }
     ],
     pagingType: 'full_numbers',

@@ -69,7 +69,7 @@ function EditPackageTypeAjaxSuccess(response) {
         toastr.info(response.message);
         $('#EditPackageTypeModal').modal('hide');
     }
-    
+
     if(response.status === 200) {
         toastr.success(response.message);
         $('#EditPackageTypeModal').modal('hide');
@@ -126,9 +126,8 @@ function RemoveIsValidClassEditPackageType() {
 
 function AddIsInvalidClassEditPackageType(input) {
     if (!$(`#${input}_e`).hasClass('is-valid')) {
-        $(`#${input}_e`).removeClass('is-valid');
+        $(`#${input}_e`).addClass('is-invalid');
     }
-    $(`#${input}_e`).addClass('is-invalid');
 }
 
 function RemoveIsInvalidClassEditPackageType() {

@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Resources\Correria;
+namespace App\Http\Resources\CorreriasAndCollections;
 
 use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class CorreriaIndexQueryCollection extends ResourceCollection
+class CorreriasAndCollectionsIndexQueryCollection extends ResourceCollection
 {
     /**
      * Transform the resource collection into an array.
@@ -16,16 +16,17 @@ class CorreriaIndexQueryCollection extends ResourceCollection
     public function toArray($request)
     {
         return [
-            'correrias' => $this->collection->map(function ($correria) {
+            'correriasAndCollections' => $this->collection->map(function ($correriasAndCollection) {
                 return [
-                    'id' => $correria->id,
-                    'name' => $correria->name,
-                    'code' => $correria->code,
-                    'start_date' => $this->formatDate($correria->start_date),
-                    'end_date' => $this->formatDate($correria->end_date),
-                    'created_at' => $this->formatDate($correria->created_at),
-                    'updated_at' => $this->formatDate($correria->updated_at),
-                    'deleted_at' => $correria->deleted_at
+                    'id' => $correriasAndCollection->id,
+                    'name' => $correriasAndCollection->name,
+                    'code' => $correriasAndCollection->code,
+                    'start_date' => $this->formatDate($correriasAndCollection->start_date),
+                    'end_date' => $this->formatDate($correriasAndCollection->end_date),
+                    'collection' => $correriasAndCollection->collection,
+                    'created_at' => $this->formatDate($correriasAndCollection->created_at),
+                    'updated_at' => $this->formatDate($correriasAndCollection->updated_at),
+                    'deleted_at' => $correriasAndCollection->deleted_at
                 ];
             }),
             'meta' => [

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableModel;
@@ -29,6 +30,11 @@ class Correria extends Model implements Auditable
         'start_date',
         'end_date'
     ];
+
+    public function collection() : HasOne
+    {
+        return $this->hasOne(Collection::class, 'correria_id');
+    }
 
     public function orders() : HasMany
     {

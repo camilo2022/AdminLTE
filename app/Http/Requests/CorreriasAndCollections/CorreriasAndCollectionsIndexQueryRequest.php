@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Requests\Collection;
+namespace App\Http\Requests\CorreriasAndCollections;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class CollectionIndexQueryRequest extends FormRequest
+class CorreriasAndCollectionsIndexQueryRequest extends FormRequest
 {
     protected function failedValidation(Validator $validator)
     {

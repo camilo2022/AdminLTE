@@ -5,12 +5,12 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1 class="m-0 text-dark">Colecciones</h1>
+                        <h1 class="m-0 text-dark">Tipo de Devoluciones</h1>
                     </div><!-- /.col -->
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item">Dashboard</li>
-                            <li class="breadcrumb-item">Collections</li>
+                            <li class="breadcrumb-item">ReturnTypes</li>
                             <li class="breadcrumb-item">Index</li>
                         </ol>
                     </div><!-- /.col -->
@@ -54,7 +54,7 @@
                         <div class="card-header p-2">
                             <ul class="nav nav-pills">
                                 <li class="nav-item">
-                                    <a class="nav-link active" type="button" onclick="CreateCollectionModal()" title="Agregar correria">
+                                    <a class="nav-link active" type="button" onclick="CreateReturnTypeModal()" title="Agregar tipo de devolucion.">
                                         <i class="fas fa-plus"></i>
                                     </a>
                                 </li>
@@ -62,12 +62,11 @@
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table id="collections" class="table table-bordered table-hover dataTable dtr-inline w-100">
+                                <table id="returnTypes" class="table table-bordered table-hover dataTable dtr-inline w-100">
                                     <thead class="thead-dark">
                                         <tr>
                                             <th>#</th>
                                             <th>Nombre</th>
-                                            <th>Codigo</th>
                                             <th>Estado</th>
                                             <th>Acciones</th>
                                         </tr>
@@ -81,14 +80,14 @@
                 </div>
             </div>
         </div>
-        @include('Dashboard.Collections.Create')
-        @include('Dashboard.Collections.Edit')
+        @include('Dashboard.ReturnTypes.Create')
+        @include('Dashboard.ReturnTypes.Edit')
     </section>
 @endsection
 @section('script')
-    <script src="{{ asset('js/Dashboard/Collections/DataTableIndex.js') }}"></script>
-    <script src="{{ asset('js/Dashboard/Collections/Create.js') }}"></script>
-    <script src="{{ asset('js/Dashboard/Collections/Edit.js') }}"></script>
-    <script src="{{ asset('js/Dashboard/Collections/Delete.js') }}"></script>
-    <script src="{{ asset('js/Dashboard/Collections/Restore.js') }}"></script>
+    <script src="{{ asset('js/Dashboard/ReturnTypes/DataTableIndex.js') }}"></script>
+    <script src="{{ asset('js/Dashboard/ReturnTypes/Create.js') }}"></script>
+    <script src="{{ asset('js/Dashboard/ReturnTypes/Edit.js') }}"></script>
+    <script src="{{ asset('js/Dashboard/ReturnTypes/Delete.js') }}"></script>
+    <script src="{{ asset('js/Dashboard/ReturnTypes/Restore.js') }}"></script>
 @endsection

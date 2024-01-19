@@ -1,48 +1,44 @@
-function DeleteCorreria(id) {
+function RestoreReturnType(id) {
     Swal.fire({
-        title: '¿Desea eliminar la correria?',
-        text: 'La correria será desactivada.',
+        title: '¿Desea restaurar el tipo de devolucion?',
+        text: 'El tipo de devolucion será restaurado.',
         icon: 'warning',
         showCancelButton: true,
         cancelButtonColor: '#DD6B55',
         confirmButtonColor: '#3085d6',
-        confirmButtonText: 'Si, eliminar!',
-        cancelButtonText: 'No, cancelar!',
+        confirmButtonText: 'Si, restaurar!',
+        cancelButtonText: 'No, cancelar!'
     }).then((result) => {
         if (result.value) {
             $.ajax({
-                url: `/Dashboard/Correrias/Delete`,
-                type: 'DELETE',
+                url: '/Dashboard/ReturnTypes/Restore',
+                type: 'PUT',
                 data: {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
                     'id': id
                 },
                 success: function(response) {
-                    tableCorrerias.ajax.reload();
-                    DeleteCorreriaAjaxSuccess(response);
+                    tableReturnTypes.ajax.reload();
+                    RestoreReturnTypeAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableCorrerias.ajax.reload();
-                    DeleteCorreriaAjaxError(xhr);
+                    tableReturnTypes.ajax.reload();
+                    RestoreReturnTypeAjaxError(xhr);
                 }
             });
         } else {
-            toastr.info('La correria seleccionada no fue desactivada.');
+            toastr.info('El tipo de devolucion seleccionado no fue restaurado.')
         }
     });
 }
 
-function DeleteCorreriaAjaxSuccess(response) {
+function RestoreReturnTypeAjaxSuccess(response) {
     if(response.status === 204) {
         toastr.success(response.message);
     }
-
-    if(response.status === 422) {
-        toastr.warning(response.message);
-    }
 }
 
-function DeleteCorreriaAjaxError(xhr) {
+function RestoreReturnTypeAjaxError(xhr) {
     if(xhr.status === 403) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
     }

@@ -10,8 +10,6 @@ use App\Http\Resources\RolesAndPermissions\RolesAndPermissionsIndexQueryCollecti
 use App\Http\Requests\RolesAndPermissions\RolesAndPermissionsIndexQueryRequest;
 use App\Http\Requests\RolesAndPermissions\RolesAndPermissionsStoreRequest;
 use App\Http\Requests\RolesAndPermissions\RolesAndPermissionsDeleteRequest;
-use App\Http\Requests\RolesAndPermissions\RolesAndPermissionsPermissionsQueryRequest;
-use App\Http\Requests\RolesAndPermissions\RolesAndPermissionsRolesQueryRequest;
 use App\Http\Requests\RolesAndPermissions\RolesAndPermissionsUpdateRequest;
 use App\Traits\ApiMessage;
 use Exception;

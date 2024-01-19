@@ -1,37 +1,36 @@
-function EditCollectionModal(id) {
+function EditReturnTypeModal(id) {
     $.ajax({
-        url: `/Dashboard/Correrias/Edit/${id}`,
+        url: `/Dashboard/ReturnTypes/Edit/${id}`,
         type: 'POST',
         data: {
             '_token': $('meta[name="csrf-token"]').attr('content')
         },
         success: function(response) {
-            tableCollections.ajax.reload();
-            EditCollectionModalCleaned(response.data);
-            EditCollectionAjaxSuccess(response);
-            $('#EditCollectionModal').modal('show');
+            tableReturnTypes.ajax.reload();
+            EditReturnTypeModalCleaned(response.data);
+            EditReturnTypeAjaxSuccess(response);
+            $('#EditReturnTypeModal').modal('show');
         },
         error: function(xhr, textStatus, errorThrown) {
-            tableCollections.ajax.reload();
-            EditCollectionAjaxError(xhr);
+            tableReturnTypes.ajax.reload();
+            EditReturnTypeAjaxError(xhr);
         }
     });
 }
 
-function EditCollectionModalCleaned(collection) {
-    RemoveIsValidClassEditCollection();
-    RemoveIsInvalidClassEditCollection();
+function EditReturnTypeModalCleaned(returnType) {
+    RemoveIsValidClassEditReturnType();
+    RemoveIsInvalidClassEditReturnType();
 
-    $('#EditCollectionButton').attr('onclick', `EditCollection(${collection.id})`);
+    $('#EditReturnTypeButton').attr('onclick', `EditReturnType(${returnType.id})`);
 
-    $("#name_e").val(collection.name);
-    $("#code_e").val(collection.code);
+    $("#name_e").val(returnType.name);
 }
 
-function EditCollection(id) {
+function EditReturnType(id) {
     Swal.fire({
-        title: '¿Desea actualizar la collection?',
-        text: 'La collection se actualizara.',
+        title: '¿Desea actualizar el tipo de devolucion?',
+        text: 'El tipo de devolucion se actualizara.',
         icon: 'warning',
         showCancelButton: true,
         cancelButtonColor: '#DD6B55',
@@ -41,7 +40,7 @@ function EditCollection(id) {
     }).then((result) => {
         if (result.value) {
             $.ajax({
-                url: `/Dashboard/Correrias/Update/${id}`,
+                url: `/Dashboard/ReturnTypes/Update/${id}`,
                 type: 'PUT',
                 data: {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
@@ -50,87 +49,82 @@ function EditCollection(id) {
                     'code': $("#code_e").val()
                 },
                 success: function(response) {
-                    tableCollections.ajax.reload();
-                    EditCollectionAjaxSuccess(response);
+                    tableReturnTypes.ajax.reload();
+                    EditReturnTypeAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableCollections.ajax.reload();
-                    EditCollectionAjaxError(xhr);
+                    tableReturnTypes.ajax.reload();
+                    EditReturnTypeAjaxError(xhr);
                 }
             });
         } else {
-            toastr.info('La collection no fue actualizada.')
+            toastr.info('El tipo de devolucion no fue actualizado.')
         }
     });
 }
 
-function EditCollectionAjaxSuccess(response) {
-    if(response.status === 200) {
-        toastr.success(response.message);
-        $('#EditCollectionModal').modal('hide');
-    }
-
+function EditReturnTypeAjaxSuccess(response) {
     if(response.status === 204) {
         toastr.info(response.message);
-        $('#PasswordCorreriaModal').modal('hide');
+        $('#EditReturnTypeModal').modal('hide');
+    }
+
+    if(response.status === 200) {
+        toastr.success(response.message);
+        $('#EditReturnTypeModal').modal('hide');
     }
 }
 
-function EditCollectionAjaxError(xhr) {
+function EditReturnTypeAjaxError(xhr) {
     if(xhr.status === 403) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
-        $('#EditCollectionModal').modal('hide');
+        $('#EditReturnTypeModal').modal('hide');
     }
 
     if(xhr.status === 404) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
-        $('#EditCollectionModal').modal('hide');
+        $('#EditReturnTypeModal').modal('hide');
     }
 
     if(xhr.status === 419) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
-        $('#EditCollectionModal').modal('hide');
+        $('#EditReturnTypeModal').modal('hide');
     }
 
     if(xhr.status === 422){
-        RemoveIsValidClassEditCollection();
-        RemoveIsInvalidClassEditCollection();
+        RemoveIsValidClassEditReturnType();
+        RemoveIsInvalidClassEditReturnType();
         $.each(xhr.responseJSON.errors, function(field, messages) {
-            AddIsInvalidClassEditCollection(field);
+            AddIsInvalidClassEditReturnType(field);
             $.each(messages, function(index, message) {
                 toastr.error(message);
             });
         });
-        AddIsValidClassEditCollection();
+        AddIsValidClassEditReturnType();
     }
 
     if(xhr.status === 500){
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
-        $('#EditCollectionModal').modal('hide');
+        $('#EditReturnTypeModal').modal('hide');
     }
 }
 
-function AddIsValidClassEditCollection() {
+function AddIsValidClassEditReturnType() {
     if (!$('#name_e').hasClass('is-invalid')) {
       $('#name_e').addClass('is-valid');
     }
-    if (!$('#code_e').hasClass('is-invalid')) {
-      $('#code_e').addClass('is-valid');
-    }
 }
 
-function RemoveIsValidClassEditCollection() {
+function RemoveIsValidClassEditReturnType() {
     $('#name_e').removeClass('is-valid');
-    $('#code_e').removeClass('is-valid');
 }
 
-function AddIsInvalidClassEditCollection(input) {
+function AddIsInvalidClassEditReturnType(input) {
     if (!$(`#${input}_e`).hasClass('is-valid')) {
         $(`#${input}_e`).addClass('is-invalid');
     }
 }
 
-function RemoveIsInvalidClassEditCollection() {
+function RemoveIsInvalidClassEditReturnType() {
     $('#name_e').removeClass('is-invalid');
-    $('#code_e').removeClass('is-invalid');
 }

@@ -1,44 +1,48 @@
-function RestoreCollection(id) {
+function DeleteCorreriaAndCollection(id) {
     Swal.fire({
-        title: '¿Desea restaurar la coleccion?',
-        text: 'La coleccion será restaurada.',
+        title: '¿Desea eliminar la correria?',
+        text: 'La correria será desactivada.',
         icon: 'warning',
         showCancelButton: true,
         cancelButtonColor: '#DD6B55',
         confirmButtonColor: '#3085d6',
-        confirmButtonText: 'Si, restaurar!',
-        cancelButtonText: 'No, cancelar!'
+        confirmButtonText: 'Si, eliminar!',
+        cancelButtonText: 'No, cancelar!',
     }).then((result) => {
         if (result.value) {
             $.ajax({
-                url: '/Dashboard/Collections/Restore',
-                type: 'PUT',
+                url: `/Dashboard/CorreriasAndCollections/Delete`,
+                type: 'DELETE',
                 data: {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
                     'id': id
                 },
                 success: function(response) {
-                    tableCollections.ajax.reload();
-                    RestoreCollectionAjaxSuccess(response);
+                    tableCorreriasAndCollections.ajax.reload();
+                    DeleteCorreriaAndCollectionAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableCollections.ajax.reload();
-                    RestoreCollectionAjaxError(xhr);
+                    tableCorreriasAndCollections.ajax.reload();
+                    DeleteCorreriaAndCollectionAjaxError(xhr);
                 }
             });
         } else {
-            toastr.info('La coleccion seleccionada no fue restaurada.')
+            toastr.info('La correria seleccionada no fue desactivada.');
         }
     });
 }
 
-function RestoreCollectionAjaxSuccess(response) {
+function DeleteCorreriaAndCollectionAjaxSuccess(response) {
     if(response.status === 204) {
         toastr.success(response.message);
     }
+
+    if(response.status === 422) {
+        toastr.warning(response.message);
+    }
 }
 
-function RestoreCollectionAjaxError(xhr) {
+function DeleteCorreriaAndCollectionAjaxError(xhr) {
     if(xhr.status === 403) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
     }

@@ -129,18 +129,10 @@ class ModulesAndSubmodulesSeeder extends Seeder
 
         Submodule::create([
             'name' => 'Correrias',
-            'url' => '/Dashboard/Correrias/Index',
+            'url' => '/Dashboard/CorreriasAndCollections/Index',
             'icon' => 'fas fa-rectangle-vertical-history',
             'module_id' => $Administracion->id,
             'permission_id' => 118
-        ]);
-
-        Submodule::create([
-            'name' => 'Colecciones',
-            'url' => '/Dashboard/Collections/Index',
-            'icon' => 'fas fa-rectangle-history',
-            'module_id' => $Administracion->id,
-            'permission_id' => 125
         ]);
 
         Submodule::create([

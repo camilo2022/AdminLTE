@@ -8,8 +8,7 @@ use App\Http\Controllers\ClientBranchController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ClientTypeController;
 use App\Http\Controllers\ClothingLineController;
-use App\Http\Controllers\CollectionController;
-use App\Http\Controllers\CorreriaController;
+use App\Http\Controllers\CorreriasAndCollectionsController;
 use App\Http\Controllers\ColorController;
 use App\Http\Controllers\DocumentTypeController;
 use App\Http\Controllers\HomeController;
@@ -75,7 +74,7 @@ Route::middleware(['auth'])->group(function () {
         Route::prefix('/Users')->group(function () {
 
             Route::controller(UserController::class)->group(function () {
-                Route::get('/Index', 'index')->middleware('can:Dashboard.Users.Index')->name('Dashboard.Users.Index');         
+                Route::get('/Index', 'index')->middleware('can:Dashboard.Users.Index')->name('Dashboard.Users.Index');
                 Route::post('/Index/Query', 'indexQuery')->middleware('can:Dashboard.Users.Index.Query')->name('Dashboard.Users.Index.Query');
                 Route::get('/Inactives', 'inactives')->middleware('can:Dashboard.Users.Inactives')->name('Dashboard.Users.Inactives');
                 Route::post('/Inactives/Query', 'inactivesQuery')->middleware('can:Dashboard.Users.Inactives.Query')->name('Dashboard.Users.Inactives.Query');
@@ -91,206 +90,113 @@ Route::middleware(['auth'])->group(function () {
                 Route::post('/AssignRoleAndPermissions/Query', 'assignRoleAndPermissionsQuery')->middleware('can:Dashboard.Users.AssignRoleAndPermissions.Query')->name('Dashboard.Users.AssignRoleAndPermissions.Query');
                 Route::post('/RemoveRoleAndPermissions', 'removeRoleAndPermissions')->middleware('can:Dashboard.Users.RemoveRoleAndPermissions')->name('Dashboard.Users.RemoveRoleAndPermissions');
                 Route::post('/RemoveRoleAndPermissions/Query', 'removeRoleAndPermissionsQuery')->middleware('can:Dashboard.Users.RemoveRoleAndPermissions.Query')->name('Dashboard.Users.RemoveRoleAndPermissions.Query');
-            });   
+            });
 
         });
 
         Route::prefix('/RolesAndPermissions')->group(function () {
 
-            Route::get('/Index', [RolesAndPermissionsController::class, 'index'])
-            ->middleware('can:Dashboard.RolesAndPermissions.Index')->name('Dashboard.RolesAndPermissions.Index');
-
-            Route::post('/Index/Query', [RolesAndPermissionsController::class, 'indexQuery'])
-            ->middleware('can:Dashboard.RolesAndPermissions.Index.Query')->name('Dashboard.RolesAndPermissions.Index.Query');
-
-            Route::post('/Create', [RolesAndPermissionsController::class, 'create'])
-            ->middleware('can:Dashboard.RolesAndPermissions.Create')->name('Dashboard.RolesAndPermissions.Create');
-
-            Route::post('/Store', [RolesAndPermissionsController::class, 'store'])
-            ->middleware('can:Dashboard.RolesAndPermissions.Store')->name('Dashboard.RolesAndPermissions.Store');
-
-            Route::post('/Edit/{id}', [RolesAndPermissionsController::class, 'edit'])
-            ->middleware('can:Dashboard.RolesAndPermissions.Edit')->name('Dashboard.RolesAndPermissions.Edit');
-
-            Route::put('/Update/{id}', [RolesAndPermissionsController::class, 'update'])
-            ->middleware('can:Dashboard.RolesAndPermissions.Update')->name('Dashboard.RolesAndPermissions.Update');
-
-            Route::delete('/Delete', [RolesAndPermissionsController::class, 'delete'])
-            ->middleware('can:Dashboard.RolesAndPermissions.Delete')->name('Dashboard.RolesAndPermissions.Delete');
+            Route::controller(RolesAndPermissionsController::class)->group(function () {
+                Route::get('/Index', 'index')->middleware('can:Dashboard.RolesAndPermissions.Index')->name('Dashboard.RolesAndPermissions.Index');
+                Route::post('/Index/Query', 'indexQuery')->middleware('can:Dashboard.RolesAndPermissions.Index.Query')->name('Dashboard.RolesAndPermissions.Index.Query');
+                Route::post('/Create', 'create')->middleware('can:Dashboard.RolesAndPermissions.Create')->name('Dashboard.RolesAndPermissions.Create');
+                Route::post('/Store', 'store')->middleware('can:Dashboard.RolesAndPermissions.Store')->name('Dashboard.RolesAndPermissions.Store');
+                Route::post('/Edit/{id}', 'edit')->middleware('can:Dashboard.RolesAndPermissions.Edit')->name('Dashboard.RolesAndPermissions.Edit');
+                Route::put('/Update/{id}', 'update')->middleware('can:Dashboard.RolesAndPermissions.Update')->name('Dashboard.RolesAndPermissions.Update');
+                Route::delete('/Delete', 'delete')->middleware('can:Dashboard.RolesAndPermissions.Delete')->name('Dashboard.RolesAndPermissions.Delete');
+            });
 
         });
 
         Route::prefix('/ModulesAndSubmodules')->group(function () {
 
-            Route::get('/Index', [ModulesAndSubmodulesController::class, 'index'])
-            ->middleware('can:Dashboard.ModulesAndSubmodules.Index')->name('Dashboard.ModulesAndSubmodules.Index');
-
-            Route::post('/Index/Query', [ModulesAndSubmodulesController::class, 'indexQuery'])
-            ->middleware('can:Dashboard.ModulesAndSubmodules.Index.Query')->name('Dashboard.ModulesAndSubmodules.Index.Query');
-
-            Route::post('/Create', [ModulesAndSubmodulesController::class, 'create'])
-            ->middleware('can:Dashboard.ModulesAndSubmodules.Create')->name('Dashboard.ModulesAndSubmodules.Create');
-
-            Route::post('/Store', [ModulesAndSubmodulesController::class, 'store'])
-            ->middleware('can:Dashboard.ModulesAndSubmodules.Store')->name('Dashboard.ModulesAndSubmodules.Store');
-
-            Route::post('/Edit/{id}', [ModulesAndSubmodulesController::class, 'edit'])
-            ->middleware('can:Dashboard.ModulesAndSubmodules.Edit')->name('Dashboard.ModulesAndSubmodules.Edit');
-
-            Route::put('/Update/{id}', [ModulesAndSubmodulesController::class, 'update'])
-            ->middleware('can:Dashboard.ModulesAndSubmodules.Update')->name('Dashboard.ModulesAndSubmodules.Update');
-
-            Route::delete('/Delete', [ModulesAndSubmodulesController::class, 'delete'])
-            ->middleware('can:Dashboard.ModulesAndSubmodules.Delete')->name('Dashboard.ModulesAndSubmodules.Delete');
+            Route::controller(ModulesAndSubmodulesController::class)->group(function () {
+                Route::get('/Index', 'index')->middleware('can:Dashboard.ModulesAndSubmodules.Index')->name('Dashboard.ModulesAndSubmodules.Index');
+                Route::post('/Index/Query', 'indexQuery')->middleware('can:Dashboard.ModulesAndSubmodules.Index.Query')->name('Dashboard.ModulesAndSubmodules.Index.Query');
+                Route::post('/Create', 'create')->middleware('can:Dashboard.ModulesAndSubmodules.Create')->name('Dashboard.ModulesAndSubmodules.Create');
+                Route::post('/Store', 'store')->middleware('can:Dashboard.ModulesAndSubmodules.Store')->name('Dashboard.ModulesAndSubmodules.Store');
+                Route::post('/Edit/{id}', 'edit')->middleware('can:Dashboard.ModulesAndSubmodules.Edit')->name('Dashboard.ModulesAndSubmodules.Edit');
+                Route::put('/Update/{id}', 'update')->middleware('can:Dashboard.ModulesAndSubmodules.Update')->name('Dashboard.ModulesAndSubmodules.Update');
+                Route::delete('/Delete', 'delete')->middleware('can:Dashboard.ModulesAndSubmodules.Delete')->name('Dashboard.ModulesAndSubmodules.Delete');
+            });
 
         });
 
         Route::prefix('/AreasAndCharges')->group(function () {
 
-            Route::get('/Index', [AreasAndChargesController::class, 'index'])
-            ->middleware('can:Dashboard.AreasAndCharges.Index')->name('Dashboard.AreasAndCharges.Index');
-
-            Route::post('/Index/Query', [AreasAndChargesController::class, 'indexQuery'])
-            ->middleware('can:Dashboard.AreasAndCharges.Index.Query')->name('Dashboard.AreasAndCharges.Index.Query');
-
-            Route::post('/Create', [AreasAndChargesController::class, 'create'])
-            ->middleware('can:Dashboard.AreasAndCharges.Create')->name('Dashboard.AreasAndCharges.Create');
-
-            Route::post('/Store', [AreasAndChargesController::class, 'store'])
-            ->middleware('can:Dashboard.AreasAndCharges.Store')->name('Dashboard.AreasAndCharges.Store');
-
-            Route::post('/Edit/{id}', [AreasAndChargesController::class, 'edit'])
-            ->middleware('can:Dashboard.AreasAndCharges.Edit')->name('Dashboard.AreasAndCharges.Edit');
-
-            Route::put('/Update/{id}', [AreasAndChargesController::class, 'update'])
-            ->middleware('can:Dashboard.AreasAndCharges.Update')->name('Dashboard.AreasAndCharges.Update');
-
-            Route::delete('/Delete', [AreasAndChargesController::class, 'delete'])
-            ->middleware('can:Dashboard.AreasAndCharges.Delete')->name('Dashboard.AreasAndCharges.Delete');
-
-            Route::put('/Restore', [AreasAndChargesController::class, 'restore'])
-            ->middleware('can:Dashboard.AreasAndCharges.Restore')->name('Dashboard.AreasAndCharges.Restore');
+            Route::controller(AreasAndChargesController::class)->group(function () {
+                Route::get('/Index', 'index')->middleware('can:Dashboard.AreasAndCharges.Index')->name('Dashboard.AreasAndCharges.Index');
+                Route::post('/Index/Query', 'indexQuery')->middleware('can:Dashboard.AreasAndCharges.Index.Query')->name('Dashboard.AreasAndCharges.Index.Query');
+                Route::post('/Create', 'create')->middleware('can:Dashboard.AreasAndCharges.Create')->name('Dashboard.AreasAndCharges.Create');
+                Route::post('/Store', 'store')->middleware('can:Dashboard.AreasAndCharges.Store')->name('Dashboard.AreasAndCharges.Store');
+                Route::post('/Edit/{id}', 'edit')->middleware('can:Dashboard.AreasAndCharges.Edit')->name('Dashboard.AreasAndCharges.Edit');
+                Route::put('/Update/{id}', 'update')->middleware('can:Dashboard.AreasAndCharges.Update')->name('Dashboard.AreasAndCharges.Update');
+                Route::delete('/Delete', 'delete')->middleware('can:Dashboard.AreasAndCharges.Delete')->name('Dashboard.AreasAndCharges.Delete');
+                Route::put('/Restore', 'restore')->middleware('can:Dashboard.AreasAndCharges.Restore')->name('Dashboard.AreasAndCharges.Restore');
+            });
 
         });
 
         Route::prefix('/DocumentTypes')->group(function () {
 
-            Route::get('/Index', [DocumentTypeController::class, 'index'])
-            ->middleware('can:Dashboard.DocumentTypes.Index')->name('Dashboard.DocumentTypes.Index');
-
-            Route::post('/Index/Query', [DocumentTypeController::class, 'indexQuery'])
-            ->middleware('can:Dashboard.DocumentTypes.Index.Query')->name('Dashboard.DocumentTypes.Index.Query');
-
-            Route::post('/Create', [DocumentTypeController::class, 'create'])
-            ->middleware('can:Dashboard.DocumentTypes.Create')->name('Dashboard.DocumentTypes.Create');
-
-            Route::post('/Store', [DocumentTypeController::class, 'store'])
-            ->middleware('can:Dashboard.DocumentTypes.Store')->name('Dashboard.DocumentTypes.Store');
-
-            Route::post('/Edit/{id}', [DocumentTypeController::class, 'edit'])
-            ->middleware('can:Dashboard.DocumentTypes.Edit')->name('Dashboard.DocumentTypes.Edit');
-
-            Route::put('/Update/{id}', [DocumentTypeController::class, 'update'])
-            ->middleware('can:Dashboard.DocumentTypes.Update')->name('Dashboard.DocumentTypes.Update');
-
-            Route::delete('/Delete', [DocumentTypeController::class, 'delete'])
-            ->middleware('can:Dashboard.DocumentTypes.Delete')->name('Dashboard.DocumentTypes.Delete');
-
-            Route::put('/Restore', [DocumentTypeController::class, 'restore'])
-            ->middleware('can:Dashboard.DocumentTypes.Restore')->name('Dashboard.DocumentTypes.Restore');
+            Route::controller(DocumentTypeController::class)->group(function () {
+                Route::get('/Index', 'index')->middleware('can:Dashboard.DocumentTypes.Index')->name('Dashboard.DocumentTypes.Index');
+                Route::post('/Index/Query', 'indexQuery')->middleware('can:Dashboard.DocumentTypes.Index.Query')->name('Dashboard.DocumentTypes.Index.Query');
+                Route::post('/Create', 'create')->middleware('can:Dashboard.DocumentTypes.Create')->name('Dashboard.DocumentTypes.Create');
+                Route::post('/Store', 'store')->middleware('can:Dashboard.DocumentTypes.Store')->name('Dashboard.DocumentTypes.Store');
+                Route::post('/Edit/{id}', 'edit')->middleware('can:Dashboard.DocumentTypes.Edit')->name('Dashboard.DocumentTypes.Edit');
+                Route::put('/Update/{id}', 'update')->middleware('can:Dashboard.DocumentTypes.Update')->name('Dashboard.DocumentTypes.Update');
+                Route::delete('/Delete', 'delete')->middleware('can:Dashboard.DocumentTypes.Delete')->name('Dashboard.DocumentTypes.Delete');
+                Route::put('/Restore', 'restore')->middleware('can:Dashboard.DocumentTypes.Restore')->name('Dashboard.DocumentTypes.Restore');
+            });
 
         });
 
         Route::prefix('/ClientTypes')->group(function () {
 
-            Route::get('/Index', [ClientTypeController::class, 'index'])
-            ->middleware('can:Dashboard.ClientTypes.Index')->name('Dashboard.ClientTypes.Index');
-
-            Route::post('/Index/Query', [ClientTypeController::class, 'indexQuery'])
-            ->middleware('can:Dashboard.ClientTypes.Index.Query')->name('Dashboard.ClientTypes.Index.Query');
-
-            Route::post('/Create', [ClientTypeController::class, 'create'])
-            ->middleware('can:Dashboard.ClientTypes.Create')->name('Dashboard.ClientTypes.Create');
-
-            Route::post('/Store', [ClientTypeController::class, 'store'])
-            ->middleware('can:Dashboard.ClientTypes.Store')->name('Dashboard.ClientTypes.Store');
-
-            Route::post('/Edit/{id}', [ClientTypeController::class, 'edit'])
-            ->middleware('can:Dashboard.ClientTypes.Edit')->name('Dashboard.ClientTypes.Edit');
-
-            Route::put('/Update/{id}', [ClientTypeController::class, 'update'])
-            ->middleware('can:Dashboard.ClientTypes.Update')->name('Dashboard.ClientTypes.Update');
-
-            Route::delete('/Delete', [ClientTypeController::class, 'delete'])
-            ->middleware('can:Dashboard.ClientTypes.Delete')->name('Dashboard.ClientTypes.Delete');
-
-            Route::put('/Restore', [ClientTypeController::class, 'restore'])
-            ->middleware('can:Dashboard.ClientTypes.Restore')->name('Dashboard.ClientTypes.Restore');
+            Route::controller(ClientTypeController::class)->group(function () {
+                Route::get('/Index', 'index')->middleware('can:Dashboard.ClientTypes.Index')->name('Dashboard.ClientTypes.Index');
+                Route::post('/Index/Query', 'indexQuery')->middleware('can:Dashboard.ClientTypes.Index.Query')->name('Dashboard.ClientTypes.Index.Query');
+                Route::post('/Create', 'create')->middleware('can:Dashboard.ClientTypes.Create')->name('Dashboard.ClientTypes.Create');
+                Route::post('/Store', 'store')->middleware('can:Dashboard.ClientTypes.Store')->name('Dashboard.ClientTypes.Store');
+                Route::post('/Edit/{id}', 'edit')->middleware('can:Dashboard.ClientTypes.Edit')->name('Dashboard.ClientTypes.Edit');
+                Route::put('/Update/{id}', 'update')->middleware('can:Dashboard.ClientTypes.Update')->name('Dashboard.ClientTypes.Update');
+                Route::delete('/Delete', 'delete')->middleware('can:Dashboard.ClientTypes.Delete')->name('Dashboard.ClientTypes.Delete');
+                Route::put('/Restore', 'restore')->middleware('can:Dashboard.ClientTypes.Restore')->name('Dashboard.ClientTypes.Restore');
+            });
 
         });
 
         Route::prefix('/PersonTypes')->group(function () {
 
-            Route::get('/Index', [PersonTypeController::class, 'index'])
-            ->middleware('can:Dashboard.PersonTypes.Index')->name('Dashboard.PersonTypes.Index');
-
-            Route::post('/Index/Query', [PersonTypeController::class, 'indexQuery'])
-            ->middleware('can:Dashboard.PersonTypes.Index.Query')->name('Dashboard.PersonTypes.Index.Query');
-
-            Route::post('/Create', [PersonTypeController::class, 'create'])
-            ->middleware('can:Dashboard.PersonTypes.Create')->name('Dashboard.PersonTypes.Create');
-
-            Route::post('/Store', [PersonTypeController::class, 'store'])
-            ->middleware('can:Dashboard.PersonTypes.Store')->name('Dashboard.PersonTypes.Store');
-
-            Route::post('/Edit/{id}', [PersonTypeController::class, 'edit'])
-            ->middleware('can:Dashboard.PersonTypes.Edit')->name('Dashboard.PersonTypes.Edit');
-
-            Route::put('/Update/{id}', [PersonTypeController::class, 'update'])
-            ->middleware('can:Dashboard.PersonTypes.Update')->name('Dashboard.PersonTypes.Update');
-
-            Route::post('/Show/{id}', [PersonTypeController::class, 'show'])
-            ->middleware('can:Dashboard.PersonTypes.Show')->name('Dashboard.PersonTypes.Show');
-
-            Route::post('/AssignDocumentType', [PersonTypeController::class, 'assignDocumentType'])
-            ->middleware('can:Dashboard.PersonTypes.AssignDocumentType')->name('Dashboard.PersonTypes.AssignDocumentType');
-
-            Route::post('/RemoveDocumentType', [PersonTypeController::class, 'removeDocumentType'])
-            ->middleware('can:Dashboard.PersonTypes.RemoveDocumentType')->name('Dashboard.PersonTypes.RemoveDocumentType');
-
-            Route::delete('/Delete', [PersonTypeController::class, 'delete'])
-            ->middleware('can:Dashboard.PersonTypes.Delete')->name('Dashboard.PersonTypes.Delete');
-
-            Route::put('/Restore', [PersonTypeController::class, 'restore'])
-            ->middleware('can:Dashboard.PersonTypes.Restore')->name('Dashboard.PersonTypes.Restore');
+            Route::controller(PersonTypeController::class)->group(function () {
+                Route::get('/Index', 'index')->middleware('can:Dashboard.PersonTypes.Index')->name('Dashboard.PersonTypes.Index');
+                Route::post('/Index/Query', 'indexQuery')->middleware('can:Dashboard.PersonTypes.Index.Query')->name('Dashboard.PersonTypes.Index.Query');
+                Route::post('/Create', 'create')->middleware('can:Dashboard.PersonTypes.Create')->name('Dashboard.PersonTypes.Create');
+                Route::post('/Store', 'store')->middleware('can:Dashboard.PersonTypes.Store')->name('Dashboard.PersonTypes.Store');
+                Route::post('/Edit/{id}', 'edit')->middleware('can:Dashboard.PersonTypes.Edit')->name('Dashboard.PersonTypes.Edit');
+                Route::put('/Update/{id}', 'update')->middleware('can:Dashboard.PersonTypes.Update')->name('Dashboard.PersonTypes.Update');
+                Route::post('/Show/{id}', 'show')->middleware('can:Dashboard.PersonTypes.Show')->name('Dashboard.PersonTypes.Show');
+                Route::post('/AssignDocumentType', 'assignDocumentType')->middleware('can:Dashboard.PersonTypes.AssignDocumentType')->name('Dashboard.PersonTypes.AssignDocumentType');
+                Route::post('/RemoveDocumentType', 'removeDocumentType')->middleware('can:Dashboard.PersonTypes.RemoveDocumentType')->name('Dashboard.PersonTypes.RemoveDocumentType');
+                Route::delete('/Delete', 'delete')->middleware('can:Dashboard.PersonTypes.Delete')->name('Dashboard.PersonTypes.Delete');
+                Route::put('/Restore', 'restore')->middleware('can:Dashboard.PersonTypes.Restore')->name('Dashboard.PersonTypes.Restore');
+            });
 
         });
 
         Route::prefix('/PackageTypes')->group(function () {
 
-            Route::get('/Index', [PackageTypeController::class, 'index'])
-            ->middleware('can:Dashboard.PackageTypes.Index')->name('Dashboard.PackageTypes.Index');
-
-            Route::post('/Index/Query', [PackageTypeController::class, 'indexQuery'])
-            ->middleware('can:Dashboard.PackageTypes.Index.Query')->name('Dashboard.PackageTypes.Index.Query');
-
-            Route::post('/Create', [PackageTypeController::class, 'create'])
-            ->middleware('can:Dashboard.PackageTypes.Create')->name('Dashboard.PackageTypes.Create');
-
-            Route::post('/Store', [PackageTypeController::class, 'store'])
-            ->middleware('can:Dashboard.PackageTypes.Store')->name('Dashboard.PackageTypes.Store');
-
-            Route::post('/Edit/{id}', [PackageTypeController::class, 'edit'])
-            ->middleware('can:Dashboard.PackageTypes.Edit')->name('Dashboard.PackageTypes.Edit');
-
-            Route::put('/Update/{id}', [PackageTypeController::class, 'update'])
-            ->middleware('can:Dashboard.PackageTypes.Update')->name('Dashboard.PackageTypes.Update');
-
-            Route::delete('/Delete', [PackageTypeController::class, 'delete'])
-            ->middleware('can:Dashboard.PackageTypes.Delete')->name('Dashboard.PackageTypes.Delete');
-
-            Route::put('/Restore', [PackageTypeController::class, 'restore'])
-            ->middleware('can:Dashboard.PackageTypes.Restore')->name('Dashboard.PackageTypes.Restore');
+            Route::controller(PackageTypeController::class)->group(function () {
+                Route::get('/Index', 'index')->middleware('can:Dashboard.PackageTypes.Index')->name('Dashboard.PackageTypes.Index');
+                Route::post('/Index/Query', 'indexQuery')->middleware('can:Dashboard.PackageTypes.Index.Query')->name('Dashboard.PackageTypes.Index.Query');
+                Route::post('/Create', 'create')->middleware('can:Dashboard.PackageTypes.Create')->name('Dashboard.PackageTypes.Create');
+                Route::post('/Store', 'store')->middleware('can:Dashboard.PackageTypes.Store')->name('Dashboard.PackageTypes.Store');
+                Route::post('/Edit/{id}', 'edit')->middleware('can:Dashboard.PackageTypes.Edit')->name('Dashboard.PackageTypes.Edit');
+                Route::put('/Update/{id}', 'update')->middleware('can:Dashboard.PackageTypes.Update')->name('Dashboard.PackageTypes.Update');
+                Route::delete('/Delete', 'delete')->middleware('can:Dashboard.PackageTypes.Delete')->name('Dashboard.PackageTypes.Delete');
+                Route::put('/Restore', 'restore')->middleware('can:Dashboard.PackageTypes.Restore')->name('Dashboard.PackageTypes.Restore');
+            });
 
         });
 
@@ -443,56 +349,28 @@ Route::middleware(['auth'])->group(function () {
 
         });
 
-        Route::prefix('/Correrias')->group(function () {
+        Route::prefix('/CorreriasAndCollections')->group(function () {
 
-            Route::get('/Index', [CorreriaController::class, 'index'])
-            ->middleware('can:Dashboard.Correrias.Index')->name('Dashboard.Correrias.Index');
+            Route::get('/Index', [CorreriasAndCollectionsController::class, 'index'])
+            ->middleware('can:Dashboard.CorreriasAndCollections.Index')->name('Dashboard.CorreriasAndCollections.Index');
 
-            Route::post('/Index/Query', [CorreriaController::class, 'indexQuery'])
-            ->middleware('can:Dashboard.Correrias.Index.Query')->name('Dashboard.Correrias.Index.Query');
+            Route::post('/Index/Query', [CorreriasAndCollectionsController::class, 'indexQuery'])
+            ->middleware('can:Dashboard.CorreriasAndCollections.Index.Query')->name('Dashboard.CorreriasAndCollections.Index.Query');
 
-            Route::post('/Create', [CorreriaController::class, 'create'])
-            ->middleware('can:Dashboard.Correrias.Create')->name('Dashboard.Correrias.Create');
+            Route::post('/Create', [CorreriasAndCollectionsController::class, 'create'])
+            ->middleware('can:Dashboard.CorreriasAndCollections.Create')->name('Dashboard.CorreriasAndCollections.Create');
 
-            Route::post('/Store', [CorreriaController::class, 'store'])
-            ->middleware('can:Dashboard.Correrias.Store')->name('Dashboard.Correrias.Store');
+            Route::post('/Store', [CorreriasAndCollectionsController::class, 'store'])
+            ->middleware('can:Dashboard.CorreriasAndCollections.Store')->name('Dashboard.CorreriasAndCollections.Store');
 
-            Route::post('/Edit/{id}', [CorreriaController::class, 'edit'])
-            ->middleware('can:Dashboard.Correrias.Edit')->name('Dashboard.Correrias.Edit');
+            Route::post('/Edit/{id}', [CorreriasAndCollectionsController::class, 'edit'])
+            ->middleware('can:Dashboard.CorreriasAndCollections.Edit')->name('Dashboard.CorreriasAndCollections.Edit');
 
-            Route::put('/Update/{id}', [CorreriaController::class, 'update'])
-            ->middleware('can:Dashboard.Correrias.Update')->name('Dashboard.Correrias.Update');
+            Route::put('/Update/{id}', [CorreriasAndCollectionsController::class, 'update'])
+            ->middleware('can:Dashboard.CorreriasAndCollections.Update')->name('Dashboard.CorreriasAndCollections.Update');
 
-            Route::delete('/Delete', [CorreriaController::class, 'delete'])
-            ->middleware('can:Dashboard.Correrias.Delete')->name('Dashboard.Correrias.Delete');
-
-        });
-
-        Route::prefix('/Collections')->group(function () {
-
-            Route::get('/Index', [CollectionController::class, 'index'])
-            ->middleware('can:Dashboard.Collections.Index')->name('Dashboard.Collections.Index');
-
-            Route::post('/Index/Query', [CollectionController::class, 'indexQuery'])
-            ->middleware('can:Dashboard.Collections.Index.Query')->name('Dashboard.Collections.Index.Query');
-
-            Route::post('/Create', [CollectionController::class, 'create'])
-            ->middleware('can:Dashboard.Collections.Create')->name('Dashboard.Collections.Create');
-
-            Route::post('/Store', [CollectionController::class, 'store'])
-            ->middleware('can:Dashboard.Collections.Store')->name('Dashboard.Collections.Store');
-
-            Route::post('/Edit/{id}', [CollectionController::class, 'edit'])
-            ->middleware('can:Dashboard.Collections.Edit')->name('Dashboard.Collections.Edit');
-
-            Route::put('/Update/{id}', [CollectionController::class, 'update'])
-            ->middleware('can:Dashboard.Collections.Update')->name('Dashboard.Collections.Update');
-
-            Route::delete('/Delete', [CollectionController::class, 'delete'])
-            ->middleware('can:Dashboard.Collections.Delete')->name('Dashboard.Collections.Delete');
-
-            Route::put('/Restore', [CollectionController::class, 'restore'])
-            ->middleware('can:Dashboard.Collections.Restore')->name('Dashboard.Collections.Restore');
+            Route::delete('/Delete', [CorreriasAndCollectionsController::class, 'delete'])
+            ->middleware('can:Dashboard.CorreriasAndCollections.Delete')->name('Dashboard.CorreriasAndCollections.Delete');
 
         });
 
@@ -981,58 +859,30 @@ Route::middleware(['auth'])->group(function () {
 
             Route::prefix('/Seller')->group(function () {
 
-                Route::get('/Index', [OrderSellerController::class, 'index'])
-                ->middleware('can:Dashboard.Orders.Seller.Index')->name('Dashboard.Orders.Seller.Index');
-
-                Route::post('/Index/Query', [OrderSellerController::class, 'indexQuery'])
-                ->middleware('can:Dashboard.Orders.Seller.Index.Query')->name('Dashboard.Orders.Seller.Index.Query');
-
-                Route::post('/Create', [OrderSellerController::class, 'create'])
-                ->middleware('can:Dashboard.Orders.Seller.Create')->name('Dashboard.Orders.Seller.Create');
-
-                Route::post('/Store', [OrderSellerController::class, 'store'])
-                ->middleware('can:Dashboard.Orders.Seller.Store')->name('Dashboard.Orders.Seller.Store');
-
-                Route::post('/Edit/{id}', [OrderSellerController::class, 'edit'])
-                ->middleware('can:Dashboard.Orders.Seller.Edit')->name('Dashboard.Orders.Seller.Edit');
-
-                Route::put('/Update/{id}', [OrderSellerController::class, 'update'])
-                ->middleware('can:Dashboard.Orders.Seller.Update')->name('Dashboard.Orders.Seller.Update');
-
-                Route::put('/Approve', [OrderSellerController::class, 'approve'])
-                ->middleware('can:Dashboard.Orders.Seller.Approve')->name('Dashboard.Orders.Seller.Approve');
-
-                Route::put('/Pending', [OrderSellerController::class, 'pending'])
-                ->middleware('can:Dashboard.Orders.Seller.Pending')->name('Dashboard.Orders.Seller.Pending');
-
-                Route::put('/Cancel', [OrderSellerController::class, 'cancel'])
-                ->middleware('can:Dashboard.Orders.Seller.Cancel')->name('Dashboard.Orders.Seller.Cancel');
+                Route::controller(OrderSellerController::class)->group(function () {
+                    Route::get('/Index', 'index')->middleware('can:Dashboard.Orders.Seller.Index')->name('Dashboard.Orders.Seller.Index');
+                    Route::post('/Index/Query', 'indexQuery')->middleware('can:Dashboard.Orders.Seller.Index.Query')->name('Dashboard.Orders.Seller.Index.Query');
+                    Route::post('/Create', 'create')->middleware('can:Dashboard.Orders.Seller.Create')->name('Dashboard.Orders.Seller.Create');
+                    Route::post('/Store', 'store')->middleware('can:Dashboard.Orders.Seller.Store')->name('Dashboard.Orders.Seller.Store');
+                    Route::post('/Edit/{id}', 'edit')->middleware('can:Dashboard.Orders.Seller.Edit')->name('Dashboard.Orders.Seller.Edit');
+                    Route::put('/Update/{id}', 'update')->middleware('can:Dashboard.Orders.Seller.Update')->name('Dashboard.Orders.Seller.Update');
+                    Route::put('/Approve', 'approve')->middleware('can:Dashboard.Orders.Seller.Approve')->name('Dashboard.Orders.Seller.Approve');
+                    Route::put('/Pending', 'pending')->middleware('can:Dashboard.Orders.Seller.Pending')->name('Dashboard.Orders.Seller.Pending');
+                    Route::put('/Cancel', 'cancel')->middleware('can:Dashboard.Orders.Seller.Cancel')->name('Dashboard.Orders.Seller.Cancel');
+                });
 
                 Route::prefix('/Details')->group(function () {
 
-                    Route::get('/Index/{id}', [OrderSellerDetailController::class, 'index'])
-                    ->middleware('can:Dashboard.Orders.Seller.Details.Index')->name('Dashboard.Orders.Seller.Details.Index');
-
-                    Route::post('/Index/Query', [OrderSellerDetailController::class, 'indexQuery'])
-                    ->middleware('can:Dashboard.Orders.Seller.Details.Index.Query')->name('Dashboard.Orders.Seller.Details.Index.Query');
-
-                    Route::post('/Create', [OrderSellerDetailController::class, 'create'])
-                    ->middleware('can:Dashboard.Orders.Seller.Details.Create')->name('Dashboard.Orders.Seller.Details.Create');
-
-                    Route::post('/Store', [OrderSellerDetailController::class, 'store'])
-                    ->middleware('can:Dashboard.Orders.Seller.Details.Store')->name('Dashboard.Orders.Seller.Details.Store');
-
-                    Route::post('/Edit/{id}', [OrderSellerDetailController::class, 'edit'])
-                    ->middleware('can:Dashboard.Orders.Seller.Details.Edit')->name('Dashboard.Orders.Seller.Details.Edit');
-
-                    Route::put('/Update/{id}', [OrderSellerDetailController::class, 'update'])
-                    ->middleware('can:Dashboard.Orders.Seller.Details.Update')->name('Dashboard.Orders.Seller.Details.Update');
-
-                    Route::put('/Pending', [OrderSellerDetailController::class, 'pending'])
-                    ->middleware('can:Dashboard.Orders.Seller.Details.Pending')->name('Dashboard.Orders.Seller.Details.Pending');
-
-                    Route::put('/Cancel', [OrderSellerDetailController::class, 'cancel'])
-                    ->middleware('can:Dashboard.Orders.Seller.Details.Cancel')->name('Dashboard.Orders.Seller.Details.Cancel');
+                    Route::controller(OrderSellerDetailController::class)->group(function () {
+                        Route::get('/Index/{id}', 'index')->middleware('can:Dashboard.Orders.Seller.Details.Index')->name('Dashboard.Orders.Seller.Details.Index');
+                        Route::post('/Index/Query', 'indexQuery')->middleware('can:Dashboard.Orders.Seller.Details.Index.Query')->name('Dashboard.Orders.Seller.Details.Index.Query');
+                        Route::post('/Create', 'create')->middleware('can:Dashboard.Orders.Seller.Details.Create')->name('Dashboard.Orders.Seller.Details.Create');
+                        Route::post('/Store', 'store')->middleware('can:Dashboard.Orders.Seller.Details.Store')->name('Dashboard.Orders.Seller.Details.Store');
+                        Route::post('/Edit/{id}', 'edit')->middleware('can:Dashboard.Orders.Seller.Details.Edit')->name('Dashboard.Orders.Seller.Details.Edit');
+                        Route::put('/Update/{id}', 'update')->middleware('can:Dashboard.Orders.Seller.Details.Update')->name('Dashboard.Orders.Seller.Details.Update');
+                        Route::put('/Pending', 'pending')->middleware('can:Dashboard.Orders.Seller.Details.Pending')->name('Dashboard.Orders.Seller.Details.Pending');
+                        Route::put('/Cancel', 'cancel')->middleware('can:Dashboard.Orders.Seller.Details.Cancel')->name('Dashboard.Orders.Seller.Details.Cancel');
+                    });
 
                 });
 
@@ -1040,61 +890,31 @@ Route::middleware(['auth'])->group(function () {
 
             Route::prefix('/Wallet')->group(function () {
 
-                Route::get('/Index', [OrderWalletController::class, 'index'])
-                ->middleware('can:Dashboard.Orders.Wallet.Index')->name('Dashboard.Orders.Wallet.Index');
-
-                Route::post('/Index/Query', [OrderWalletController::class, 'indexQuery'])
-                ->middleware('can:Dashboard.Orders.Wallet.Index.Query')->name('Dashboard.Orders.Wallet.Index.Query');
-
-                Route::put('/Observation', [OrderWalletController::class, 'observation'])
-                ->middleware('can:Dashboard.Orders.Wallet.Observation')->name('Dashboard.Orders.Wallet.Observation');
-
-                Route::put('/Approve', [OrderWalletController::class, 'approve'])
-                ->middleware('can:Dashboard.Orders.Wallet.Approve')->name('Dashboard.Orders.Wallet.Approve');
-
-                Route::put('/PartiallyApprove', [OrderWalletController::class, 'partiallyApprove'])
-                ->middleware('can:Dashboard.Orders.Wallet.PartiallyApprove')->name('Dashboard.Orders.Wallet.PartiallyApprove');
-
-                Route::put('/Pending', [OrderWalletController::class, 'pending'])
-                ->middleware('can:Dashboard.Orders.Wallet.Pending')->name('Dashboard.Orders.Wallet.Pending');
-
-                Route::put('/Cancel', [OrderWalletController::class, 'cancel'])
-                ->middleware('can:Dashboard.Orders.Wallet.Cancel')->name('Dashboard.Orders.Wallet.Cancel');
+                Route::controller(OrderWalletController::class)->group(function () {
+                    Route::get('/Index', 'index')->middleware('can:Dashboard.Orders.Wallet.Index')->name('Dashboard.Orders.Wallet.Index');
+                    Route::post('/Index/Query', 'indexQuery')->middleware('can:Dashboard.Orders.Wallet.Index.Query')->name('Dashboard.Orders.Wallet.Index.Query');
+                    Route::put('/Observation', 'observation')->middleware('can:Dashboard.Orders.Wallet.Observation')->name('Dashboard.Orders.Wallet.Observation');
+                    Route::put('/Approve', 'approve')->middleware('can:Dashboard.Orders.Wallet.Approve')->name('Dashboard.Orders.Wallet.Approve');
+                    Route::put('/PartiallyApprove', 'partiallyApprove')->middleware('can:Dashboard.Orders.Wallet.PartiallyApprove')->name('Dashboard.Orders.Wallet.PartiallyApprove');
+                    Route::put('/Pending', 'pending')->middleware('can:Dashboard.Orders.Wallet.Pending')->name('Dashboard.Orders.Wallet.Pending');
+                    Route::put('/Cancel', 'cancel')->middleware('can:Dashboard.Orders.Wallet.Cancel')->name('Dashboard.Orders.Wallet.Cancel');
+                });
 
                 Route::prefix('/Details')->group(function () {
 
-                    Route::get('/Index/{id}', [OrderWalletDetailController::class, 'index'])
-                    ->middleware('can:Dashboard.Orders.Wallet.Details.Index')->name('Dashboard.Orders.Wallet.Details.Index');
-
-                    Route::post('/Index/Query', [OrderWalletDetailController::class, 'indexQuery'])
-                    ->middleware('can:Dashboard.Orders.Wallet.Details.Index.Query')->name('Dashboard.Orders.Wallet.Details.Index.Query');
-
-                    Route::post('/Create', [OrderWalletDetailController::class, 'create'])
-                    ->middleware('can:Dashboard.Orders.Wallet.Details.Create')->name('Dashboard.Orders.Wallet.Details.Create');
-
-                    Route::post('/Store', [OrderWalletDetailController::class, 'store'])
-                    ->middleware('can:Dashboard.Orders.Wallet.Details.Store')->name('Dashboard.Orders.Wallet.Details.Store');
-
-                    Route::post('/Edit/{id}', [OrderWalletDetailController::class, 'edit'])
-                    ->middleware('can:Dashboard.Orders.Wallet.Details.Edit')->name('Dashboard.Orders.Wallet.Details.Edit');
-
-                    Route::put('/Update/{id}', [OrderWalletDetailController::class, 'update'])
-                    ->middleware('can:Dashboard.Orders.Wallet.Details.Update')->name('Dashboard.Orders.Wallet.Details.Update');
-
-                    Route::put('/Approve', [OrderWalletDetailController::class, 'approve'])
-                    ->middleware('can:Dashboard.Orders.Wallet.Details.Approve')->name('Dashboard.Orders.Wallet.Details.Approve');
-
-                    Route::put('/Pending', [OrderWalletDetailController::class, 'pending'])
-                    ->middleware('can:Dashboard.Orders.Wallet.Details.Pending')->name('Dashboard.Orders.Wallet.Details.Pending');
-
-                    Route::put('/Review', [OrderWalletDetailController::class, 'review'])
-                    ->middleware('can:Dashboard.Orders.Wallet.Details.Review')->name('Dashboard.Orders.Wallet.Details.Review');
-
-                    Route::put('/Cancel', [OrderWalletDetailController::class, 'cancel'])
-                    ->middleware('can:Dashboard.Orders.Wallet.Details.Cancel')->name('Dashboard.Orders.Wallet.Details.Cancel');
-
-                    Route::put('/Decline', [OrderWalletDetailController::class, 'decline'])
-                    ->middleware('can:Dashboard.Orders.Wallet.Details.Decline')->name('Dashboard.Orders.Wallet.Details.Decline');
+                    Route::controller(OrderWalletDetailController::class)->group(function () {
+                        Route::get('/Index/{id}', 'index')->middleware('can:Dashboard.Orders.Wallet.Details.Index')->name('Dashboard.Orders.Wallet.Details.Index');
+                        Route::post('/Index/Query', 'indexQuery')->middleware('can:Dashboard.Orders.Wallet.Details.Index.Query')->name('Dashboard.Orders.Wallet.Details.Index.Query');
+                        Route::post('/Create', 'create')->middleware('can:Dashboard.Orders.Wallet.Details.Create')->name('Dashboard.Orders.Wallet.Details.Create');
+                        Route::post('/Store', 'store')->middleware('can:Dashboard.Orders.Wallet.Details.Store')->name('Dashboard.Orders.Wallet.Details.Store');
+                        Route::post('/Edit/{id}', 'edit')->middleware('can:Dashboard.Orders.Wallet.Details.Edit')->name('Dashboard.Orders.Wallet.Details.Edit');
+                        Route::put('/Update/{id}', 'update')->middleware('can:Dashboard.Orders.Wallet.Details.Update')->name('Dashboard.Orders.Wallet.Details.Update');
+                        Route::put('/Approve', 'approve')->middleware('can:Dashboard.Orders.Wallet.Details.Approve')->name('Dashboard.Orders.Wallet.Details.Approve');
+                        Route::put('/Pending', 'pending')->middleware('can:Dashboard.Orders.Wallet.Details.Pending')->name('Dashboard.Orders.Wallet.Details.Pending');
+                        Route::put('/Review', 'review')->middleware('can:Dashboard.Orders.Wallet.Details.Review')->name('Dashboard.Orders.Wallet.Details.Review');
+                        Route::put('/Cancel', 'cancel')->middleware('can:Dashboard.Orders.Wallet.Details.Cancel')->name('Dashboard.Orders.Wallet.Details.Cancel');
+                        Route::put('/Decline', 'decline')->middleware('can:Dashboard.Orders.Wallet.Details.Decline')->name('Dashboard.Orders.Wallet.Details.Decline');
+                    });
 
                 });
 

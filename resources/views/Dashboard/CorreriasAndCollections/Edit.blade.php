@@ -1,10 +1,10 @@
-<div class="modal fade bd-example-modal-lg" id="EditCorreriaModal" tabindex="-1" role="dialog"
+<div class="modal fade bd-example-modal-lg" id="EditCorreriaAndCollectionModal" tabindex="-1" role="dialog"
     aria-labelledby="exampleModalLabel" data-backdrop="static" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header w-100">
                 <div class="text-center w-100" style="background: white;">
-                    <label style="font-size:20px;font-weight:bold;">Edicion de Correria</label>
+                    <label style="font-size:20px;font-weight:bold;">Edicion de Correria y Coleccion</label>
                 </div>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
@@ -68,7 +68,7 @@
                 <button type="button" class="btn btn-secondary" data-dismiss="modal" title="Cerrar ventana">
                     <i class="fas fa-xmark"></i>
                 </button>
-                <button type="button" class="btn btn-primary" id="EditCorreriaButton" onclick="" title="Actualizar correria.">
+                <button type="button" class="btn btn-primary" id="EditCorreriaAndCollectionButton" onclick="" title="Actualizar correria y coleccion.">
                     <i class="fas fa-floppy-disk"></i>
                 </button>
             </div>
