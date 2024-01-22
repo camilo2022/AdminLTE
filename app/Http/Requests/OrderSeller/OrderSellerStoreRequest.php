@@ -52,11 +52,11 @@ class OrderSellerStoreRequest extends FormRequest
     public function messages()
     {
         return [
-            'client_id.required' => 'El campo Cliente es requerido.',
+            'client_id.required' => 'El Identificador del Cliente es requerido.',
             'client_id.exists' => 'El Identificador del cliente no es valido.',
-            'client_branch_id.required' => 'El campo Sucursal del Cliente es requerido.',
+            'client_branch_id.required' => 'El Identificador de la Sucursal del Cliente es requerido.',
             'client_branch_id.exists' => 'El Identificador de la sucursal del cliente no es valido.',
-            'sale_channel_id.required' => 'El campo Canal de venta es requerido.',
+            'sale_channel_id.required' => 'El Identificador del Canal de venta es requerido.',
             'sale_channel_id.exists' => 'El Identificador del canal de venta no es valido.',
             'dispatch.required' => 'El campo Despacho es requerido.',
             'dispatch.string' => 'El campo Despacho debe ser una cadena de caracteres.',
@@ -66,7 +66,7 @@ class OrderSellerStoreRequest extends FormRequest
             'dispatch_date.after_or_equal' => 'El campo Fecha de despacho debe ser posterior o igual a la fecha actual :now.',
             'seller_observation.string' => 'El campo Observacion del asesor debe ser una cadena de caracteres.',
             'seller_observation.max' => 'El campo Observacion del asesor no debe exceder los 255 caracteres.',
-            'correria_id.required' => 'El campo Correria es requerido. No existe una correria activa en la fecha actual.',
+            'correria_id.required' => 'El Identificador de la Correria es requerido. No existe una correria activa en la fecha actual.',
             'correria_id.exists' => 'El Identificador de la correria no es valido.',
             'client_clientBranch.exists' => 'La sucursal no pertenece al cliente seleccionado.'
         ];

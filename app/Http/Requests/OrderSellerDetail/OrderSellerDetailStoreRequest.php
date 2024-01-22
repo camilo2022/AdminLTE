@@ -57,7 +57,7 @@ class OrderSellerDetailStoreRequest extends FormRequest
     {
         $rules = [
             'order_id' => ['required', 'exists:orders,id'],
-            'product_id' => ['required', 'exists:products,id'],
+            'product_id' => ['required', 'exists:products,id', 'unique:order_details,product_id,NULL,id,order_id,' . $this->input('order_id')],
             'color_id' => ['required', 'exists:colors,id'],
             'tone_id' => ['required', 'exists:tones,id'],
             'price' => ['required', 'numeric', 'between:0,999999.99'],
@@ -81,6 +81,12 @@ class OrderSellerDetailStoreRequest extends FormRequest
     public function messages()
     {
         return [
+            'order_id.required' => 'El Identificador del Pedido es requerido.',
+            'order_id.exists' => 'El Identificador del pedido no es valido.',
+            'product_id.required' => 'El Identificador del Producto es requerido.',
+            'product_id.exists' => 'El Identificador del producto no es valido.',
+            'product_id.unique' => 'El Identificador del producto ya ha sido tomado en otro detalle.',
+
             'client_id.required' => 'El campo Cliente es requerido.',
             'client_id.exists' => 'El Identificador del cliente no es valido.',
             'client_branch_id.required' => 'El campo Sucursal del Cliente es requerido.',

@@ -63,6 +63,58 @@
                         </div>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="date_definition_start_pilots_ereate">Fecha definicion e inicio de Pilotos</label>
+                            <div class="input-group date" id="date_definition_start_pilots_ereate" data-target-input="nearest">
+                                <input type="text" class="form-control datetimepicker-input" data-target="#date_definition_start_pilots_ereate" id="date_definition_start_pilots_e" name="date_definition_start_pilots">
+                                <div class="input-group-append" data-target="#date_definition_start_pilots_ereate" data-toggle="datetimepicker">
+                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="date_definition_start_samples_ereate">Fecha definicion entrega Muestras</label>
+                            <div class="input-group date" id="date_definition_start_samples_ereate" data-target-input="nearest">
+                                <input type="text" class="form-control datetimepicker-input" data-target="#date_definition_start_samples_ereate" id="date_definition_start_samples_e" name="date_definition_start_samples">
+                                <div class="input-group-append" data-target="#date_definition_start_samples_ereate" data-toggle="datetimepicker">
+                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="proyection_stop_warehouse">Porcentaje proyeccion Bodega</label>
+                            <div class="input-group">
+                                <input type="number" class="form-control" id="proyection_stop_warehouse_e" name="proyection_stop_warehouse">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-percent"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="number_samples_include_suitcase">Numero de muestras a incluir por Maleta</label>
+                            <div class="input-group">
+                                <input type="number" class="form-control" id="number_samples_include_suitcase_e" name="number_samples_include_suitcase">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-hashtag"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal" title="Cerrar ventana">

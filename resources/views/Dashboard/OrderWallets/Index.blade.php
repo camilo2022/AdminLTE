@@ -87,8 +87,6 @@
                 </div>
             </div>
         </div>
-        @include('Dashboard.OrderWallets.Create')
-        @include('Dashboard.OrderWallets.Edit')
     </section>
 @endsection
 @section('script')

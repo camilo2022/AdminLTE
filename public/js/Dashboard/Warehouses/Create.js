@@ -35,7 +35,7 @@ function CreateWarehouse() {
         confirmButtonColor: '#3085d6',
         confirmButtonText: 'Si, guardar!',
         cancelButtonText: 'No, cancelar!',
-        html: '<label for="to_discount"><input type="checkbox" id="to_discount_c" name="to_discount"> ¿Es bodega de producto terminado?</label>',
+        html: '<div class="icheck-primary"><input type="checkbox" id="to_discount_c" name="to_discount_c"><label for="to_discount_c">¿Es bodega de producto terminado?</label></div>',
     }).then((result) => {
         if (result.value) {
             $.ajax({

@@ -16,7 +16,6 @@ class Collection extends Model implements Auditable
     protected $table = 'collections';
     protected $fillable = [
         'correria_id',
-        'name',
         'date_definition_start_pilots',
         'date_definition_start_samples',
         'proyection_stop_warehouse',
@@ -25,7 +24,6 @@ class Collection extends Model implements Auditable
 
     protected $auditInclude = [
         'correria_id',
-        'name',
         'date_definition_start_pilots',
         'date_definition_start_samples',
         'proyection_stop_warehouse',

@@ -13,12 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('product_photos', function (Blueprint $table) {
+        Schema::create('files', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('product_color_tone_id');
+            $table->morphs('model');
             $table->string('name');
             $table->string('path');
-            $table->foreign('product_color_tone_id')->references('id')->on('product_color_tone')->onUpdate('cascade')->onDelete('cascade');
+            $table->string('type');
+            $table->unsignedBigInteger('size');
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });
     }

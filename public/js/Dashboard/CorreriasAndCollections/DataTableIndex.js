@@ -1,4 +1,4 @@
-let tableCorreriasAndCollections = $('#CorreriasAndCollectionsAndCollections').DataTable({
+let tableCorreriasAndCollections = $('#correriasAndCollections').DataTable({
     processing: true,
     serverSide: true,
     ajax: {
@@ -48,10 +48,9 @@ let tableCorreriasAndCollections = $('#CorreriasAndCollectionsAndCollections').D
         {
             data: 'deleted_at',
             render: function (data, type, row) {
-
-                let btn = `<div class="text-center" style="width: 100%;">`;
-
-                btn =  `<a onclick="EditCorreriaAndCollectionModal(${row.id})" type="button"
+                let btn = `<div class="text-center" style="width: 100% !important;">`;
+                
+                btn +=  `<a onclick="EditCorreriaAndCollectionModal(${row.id})" type="button"
                 class="btn btn-primary btn-sm mr-2" title="Editar correria y coleccion.">
                     <i class="fas fa-pen text-white"></i>
                 </a>`;

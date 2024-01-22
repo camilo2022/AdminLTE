@@ -16,8 +16,7 @@ let tableProducts = $('#products').DataTable({
                 7: 'model_id',
                 8: 'trademark_id',
                 9: 'correria_id',
-                10: 'collection_id',
-                12: 'deleted_at'
+                11: 'deleted_at'
             };
             request._token = $('meta[name="csrf-token"]').attr('content');
             request.perPage = request.length;
@@ -72,12 +71,6 @@ let tableProducts = $('#products').DataTable({
         },
         {
             data: 'correria',
-            render: function (data, type, row) {
-                return data.name;
-            }
-        },
-        {
-            data: 'collection',
             render: function (data, type, row) {
                 return data.name;
             }
@@ -150,11 +143,11 @@ let tableProducts = $('#products').DataTable({
         {
             targets: 0,
             orderable: true,
-            targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 13]
+            targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 12]
         },
         {
             orderable: false,
-            targets: [11, 12, 14]
+            targets: [10, 11, 13]
         },
     ],
     pagingType: 'full_numbers',

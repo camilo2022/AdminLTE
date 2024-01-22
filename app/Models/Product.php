@@ -47,11 +47,6 @@ class Product extends DBModel implements Auditable
         return $this->hasMany(Inventory::class, 'product_id');
     }
 
-    public function photos() : HasMany
-    {
-        return $this->hasMany(ProductPhoto::class, 'product_id');
-    }
-
     public function colors_tones() : HasMany
     {
         return $this->hasMany(ProductColorTone::class, 'product_id');

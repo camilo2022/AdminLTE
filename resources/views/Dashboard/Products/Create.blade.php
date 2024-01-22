@@ -1,5 +1,4 @@
-<div class="modal fade" id="CreateProductModal" tabindex="-1" role="dialog"
-    aria-labelledby="exampleModalLabel" data-backdrop="static" aria-hidden="true">
+<div class="modal fade" id="CreateProductModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" data-backdrop="static" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
         <div class="modal-content">
             <div class="modal-header w-100">
@@ -50,34 +49,8 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label for="subcategory_id_c">Subcategoria</label>
-                            <div class="input-group">
-                                <select class="form-control select2" id="subcategory_id_c" name="subcategory_id" style="width: 89%">
-                                    <option value="">Seleccione</option>
-                                </select>
-                                <div class="input-group-append">
-                                    <span class="input-group-text">
-                                        <i class="fas fa-shirt-tank-top"></i>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                     <div class="col-lg-4">
-                        <div class="form-group">
-                            <label for="collection_id_c">Coleccion</label>
-                            <div class="input-group">
-                                <select class="form-control select2" id="collection_id_c" name="collection" style="width: 87%">
-                                    <option value="">Seleccione</option>
-                                </select>
-                                <div class="input-group-append">
-                                    <span class="input-group-text">
-                                        <i class="fas fa-rectangle-history"></i>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
                         <div class="form-group">
                             <label for="correria_id_c">Correria</label>
                             <div class="input-group">
@@ -105,14 +78,14 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="trademark_id_c">Marca</label>
+                            <label for="subcategory_id_c">Subcategoria</label>
                             <div class="input-group">
-                                <select class="form-control select2" id="trademark_id_c" name="trademark_id" style="width: 88%">
+                                <select class="form-control select2" id="subcategory_id_c" name="subcategory_id" style="width: 89%">
                                     <option value="">Seleccione</option>
                                 </select>
                                 <div class="input-group-append">
                                     <span class="input-group-text">
-                                        <i class="fas fa-registered"></i>
+                                        <i class="fas fa-shirt-tank-top"></i>
                                     </span>
                                 </div>
                             </div>
@@ -137,6 +110,19 @@
                                 <div class="input-group-append">
                                     <span class="input-group-text">
                                         <i class="fas fa-coin"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="trademark_id_c">Marca</label>
+                            <div class="input-group">
+                                <select class="form-control select2" id="trademark_id_c" name="trademark_id" style="width: 88%">
+                                    <option value="">Seleccione</option>
+                                </select>
+                                <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-registered"></i>
                                     </span>
                                 </div>
                             </div>

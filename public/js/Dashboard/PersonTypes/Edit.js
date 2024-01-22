@@ -38,7 +38,7 @@ function EditPersonType(id, require_people) {
         confirmButtonColor: '#3085d6',
         confirmButtonText: 'Si, actualizar!',
         cancelButtonText: 'No, cancelar!',
-        html: `<label for="require_people"><input type="checkbox" id="require_people_c" name="require_people" ${require_people ? 'checked' : ''}> ¿Requiere referencias personales?</label>`,
+        html: `<div class="icheck-primary"><input type="checkbox" id="require_people_c" name="require_people" ${require_people ? 'checked' : ''}><label for="require_people">¿Requiere referencias personales?</label></div>`,
     }).then((result) => {
         if (result.value) {
             $.ajax({

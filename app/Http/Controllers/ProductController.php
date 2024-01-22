@@ -23,14 +23,16 @@ use App\Http\Resources\Product\ProductIndexQueryCollection;
 use App\Imports\Product\ProductImportSheets;
 use App\Models\Category;
 use App\Models\ClothingLine;
-use App\Models\Collection;
+use App\Models\Color;
 use App\Models\Correria;
 use App\Models\Model;
 use App\Models\Product;
 use App\Models\ProductColorTone;
 use App\Models\ProductSize;
-use App\Models\ProductPhoto;
+use App\Models\File;
+use App\Models\Size;
 use App\Models\Subcategory;
+use App\Models\Tone;
 use App\Models\Trademark;
 use App\Traits\ApiMessage;
 use App\Traits\ApiResponser;
@@ -38,6 +40,7 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
@@ -69,6 +72,7 @@ class ProductController extends Controller
                     'subcategory' => fn($query) => $query->withTrashed(),
                     'model' => fn($query) => $query->withTrashed(),
                     'trademark' => fn($query) => $query->withTrashed(),
+                    'correria' => fn($query) => $query->withTrashed(),
                     'colors_tones.color' => fn($query) => $query->withTrashed(),
                     'colors_tones.tone' => fn($query) => $query->withTrashed(),
                     'sizes'
@@ -135,8 +139,8 @@ class ProductController extends Controller
                 [
                     'clothing_lines' => ClothingLine::all(),
                     'models' => Model::all(),
-                    'trademarks' => Trademark::all(),
-                    'correrias' => Correria::all(),
+                    'trademarks' => Trademark::withTrashed()->get(),
+                    'correrias' => Correria::withTrashed()->get(),
                 ],
                 'Ingrese los datos para hacer la validacion y registro.',
                 204
@@ -227,8 +231,8 @@ class ProductController extends Controller
                     'product' => Product::findOrFail($id),
                     'clothing_lines' => ClothingLine::all(),
                     'models' => Model::all(),
-                    'trademarks' => Trademark::all(),
-                    'correrias' => Correria::all(),
+                    'trademarks' => Trademark::withTrashed()->get(),
+                    'correrias' => Correria::withTrashed()->get(),
                 ],
                 'El producto fue encontrado exitosamente.',
                 204
@@ -303,14 +307,27 @@ class ProductController extends Controller
     public function show($id)
     {
         try {
-            $product = Product::with('photos')->findOrFail($id);
+            $colors = Color::all();
+            $tones = Tone::all();
+            $sizes = Size::with('products')->get();
+            $product = Product::with('colors_tones.files', 'sizes')->findOrFail($id);
 
             foreach ($product->photos as $photo) {
                 $photo->path = asset('storage/' . $photo->path);
             }
 
+            foreach ($sizes as $size) {
+                $productsId = $size->products->pluck('id')->all();
+                $sizes->admin = in_array($id, $productsId);
+            }
+
             return $this->successResponse(
-                $product,
+                [
+                    'product' => $product,
+                    'sizes' => $sizes,
+                    'colors' => $colors,
+                    'tones' => $tones
+                ],
                 'El producto fue encontrado exitosamente.',
                 204
             );
@@ -466,7 +483,8 @@ class ProductController extends Controller
         try {
             $product_sizes = ProductColorTone::where('product_id', '=', $request->input('product_id'))
             ->where('color_id', '=', $request->input('color_id'))
-            ->where('tone_id', '=', $request->input('tone_id'))->delete();
+            ->where('tone_id', '=', $request->input('tone_id'))
+            ->delete();
 
             return $this->successResponse(
                 $product_sizes,
@@ -508,10 +526,14 @@ class ProductController extends Controller
         try {
             $photos = $request->file('photos');
             foreach ($photos as $photo) {
-                $productPhoto = new ProductPhoto();
-                $productPhoto->product_id = $request->input('product_color_tone_id');
+                $productPhoto = new File();
+                $productPhoto->model_type = ProductColorTone::class;
+                $productPhoto->model_id = $request->input('product_color_tone_id');
                 $productPhoto->name = $photo->getClientOriginalName();
                 $productPhoto->path = Storage::disk('public')->put('Products/' . $request->input('product_color_tone_id'), $photo);
+                $productPhoto->type = $photo->getClientOriginalExtension();
+                $productPhoto->size = $photo->getSize();
+                $productPhoto->user_id = Auth::user()->id;
                 $productPhoto->save();
             }
             return $this->successResponse(
@@ -552,7 +574,7 @@ class ProductController extends Controller
     public function destroy(ProductDestroyRequest $request)
     {
         try {
-            $productPhoto = ProductPhoto::findOrFail($request->input('id'));
+            $productPhoto = File::findOrFail($request->input('id'));
             if (Storage::disk('public')->exists($productPhoto->path)) {
                 Storage::disk('public')->delete($productPhoto->path);
             }
@@ -694,7 +716,6 @@ class ProductController extends Controller
                 $productNew->model_id = $product->model_id;
                 $productNew->trademark_id = $product->trademark_id;
                 $productNew->correria_id = $product->correria_id;
-                $productNew->collection_id = $product->collection_id;
                 $productNew->save();
 
                 // Map para sizes
@@ -756,7 +777,6 @@ class ProductController extends Controller
                     'subcategory' => fn($query) => $query->withTrashed(),
                     'model' => fn($query) => $query->withTrashed(),
                     'trademark' => fn($query) => $query->withTrashed(),
-                    'collection' => fn($query) => $query->withTrashed(),
                     'colors_tones.color' => fn($query) => $query->withTrashed(),
                     'colors_tones.tone' => fn($query) => $query->withTrashed(),
                     'sizes'

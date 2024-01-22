@@ -50,34 +50,8 @@ aria-labelledby="exampleModalLabel" data-backdrop="static" aria-hidden="true">
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label for="subcategory_id_e">Subcategoria</label>
-                            <div class="input-group">
-                                <select class="form-control select2" id="subcategory_id_e" name="subcategory_id" style="width: 89%">
-                                    <option value="">Seleccione</option>
-                                </select>
-                                <div class="input-group-append">
-                                    <span class="input-group-text">
-                                        <i class="fas fa-shirt-tank-top"></i>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                     <div class="col-lg-4">
-                        <div class="form-group">
-                            <label for="collection_id_e">Coleccion</label>
-                            <div class="input-group">
-                                <select class="form-control select2" id="collection_id_e" name="collection" style="width: 87%">
-                                    <option value="">Seleccione</option>
-                                </select>
-                                <div class="input-group-append">
-                                    <span class="input-group-text">
-                                        <i class="fas fa-rectangle-history"></i>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
                         <div class="form-group">
                             <label for="correria_id_e">Correria</label>
                             <div class="input-group">
@@ -105,14 +79,14 @@ aria-labelledby="exampleModalLabel" data-backdrop="static" aria-hidden="true">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="trademark_id_e">Marca</label>
+                            <label for="subcategory_id_e">Subcategoria</label>
                             <div class="input-group">
-                                <select class="form-control select2" id="trademark_id_e" name="trademark_id" style="width: 88%">
+                                <select class="form-control select2" id="subcategory_id_e" name="subcategory_id" style="width: 89%">
                                     <option value="">Seleccione</option>
                                 </select>
                                 <div class="input-group-append">
                                     <span class="input-group-text">
-                                        <i class="fas fa-registered"></i>
+                                        <i class="fas fa-shirt-tank-top"></i>
                                     </span>
                                 </div>
                             </div>
@@ -137,6 +111,19 @@ aria-labelledby="exampleModalLabel" data-backdrop="static" aria-hidden="true">
                                 <div class="input-group-append">
                                     <span class="input-group-text">
                                         <i class="fas fa-coin"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="trademark_id_e">Marca</label>
+                            <div class="input-group">
+                                <select class="form-control select2" id="trademark_id_e" name="trademark_id" style="width: 88%">
+                                    <option value="">Seleccione</option>
+                                </select>
+                                <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-registered"></i>
                                     </span>
                                 </div>
                             </div>

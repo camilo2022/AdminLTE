@@ -1,5 +1,5 @@
 <div class="modal fade" id="CreateOrderSellerModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" data-backdrop="static" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-dialog modal-dialog-scrollable" role="document">
         <div class="modal-content">
             <div class="modal-header w-100">
                 <div class="text-center w-100" style="background: white;">
@@ -13,7 +13,7 @@
                 <div class="form-group">
                     <label for="client_id_c">Cliente</label>
                     <div class="input-group">
-                        <select class="form-control select2" id="client_id_c" name="client_id" style="width: 88%" onchange="CreateOrderSellerModalClientGetClientBranch(this)">
+                        <select class="form-control select2" id="client_id_c" name="client_id" style="width: 90%" onchange="CreateOrderSellerModalClientGetClientBranch(this)">
                             <option value="">Seleccione</option>
                         </select>
                         <div class="input-group-append">
@@ -26,7 +26,7 @@
                 <div class="form-group">
                     <label for="client_branch_id_c">Sucursal</label>
                     <div class="input-group">
-                        <select class="form-control select2" id="client_branch_id_c" name="client_branch_id" style="width: 88%">
+                        <select class="form-control select2" id="client_branch_id_c" name="client_branch_id" style="width: 90%">
                             <option value="">Seleccione</option>
                         </select>
                         <div class="input-group-append">
@@ -39,7 +39,7 @@
                 <div class="form-group">
                     <label for="sale_channel_id_c">Canal de venta</label>
                     <div class="input-group">
-                        <select class="form-control select2" id="sale_channel_id_c" name="sale_channel_id" style="width: 88%">
+                        <select class="form-control select2" id="sale_channel_id_c" name="sale_channel_id" style="width: 90%">
                             <option value="">Seleccione</option>
                         </select>
                         <div class="input-group-append">
@@ -63,7 +63,7 @@
                 <div class="form-group">
                     <label for="dispatch_c">Cuando despachar</label>
                     <div class="input-group">
-                        <select class="form-control" id="dispatch_c" name="dispatch" style="width: 88%" onchange="CreateOrderSellerModalDispatchGetDispatchDate(this)">
+                        <select class="form-control" id="dispatch_c" name="dispatch" style="width: 90%" onchange="CreateOrderSellerModalDispatchGetDispatchDate(this)">
                             <option value="">Seleccione</option>
                             <option value="De inmediato">De inmediato</option>
                             <option value="Antes de">Antes de</option>

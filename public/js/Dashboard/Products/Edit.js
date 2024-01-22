@@ -9,7 +9,6 @@ function EditProductModal(id) {
             tableProducts.ajax.reload();
             EditProductModalCleaned(response.data.product);
             EditProductModalCorreria(response.data.correrias);
-            EditProductModalCollection(response.data.collections);
             EditProductModalModel(response.data.models);
             EditProductModalTrademark(response.data.trademarks);
             EditProductModalClothingLine(response.data.clothing_lines);
@@ -24,7 +23,6 @@ function EditProductModal(id) {
 }
 
 function EditProductModalCleaned(product) {
-    EditProductModalResetSelect('collection_id_c');
     EditProductModalResetSelect('correria_id_e');
     EditProductModalResetSelect('model_id_e');
     EditProductModalResetSelect('trademark_id_e');
@@ -35,7 +33,6 @@ function EditProductModalCleaned(product) {
     $('#EditProductButton').attr('onclick', `EditProduct(${product.id})`);
     $('#EditProductButton').attr('data-id', product.id);
     $('#EditProductButton').attr('data-correria_id', product.correria_id);
-    $('#EditProductButton').attr('data-collection_id', product.collection_id);
     $('#EditProductButton').attr('data-model_id', product.model_id);
     $('#EditProductButton').attr('data-trademark_id', product.trademark_id);
     $('#EditProductButton').attr('data-clothing_line_id', product.clothing_line_id);
@@ -51,17 +48,6 @@ function EditProductModalResetSelect(id) {
     $(`#${id}`).html('')
     $(`#${id}`).append(new Option('Seleccione', '', false, false));
     $(`#${id}`).trigger('change');
-}
-
-function EditProductModalCollection(collections) {
-    collections.forEach(collection => {
-        $('#collection_id_e').append(new Option(collection.name, collection.id, false, false));
-    });
-    let collection_id = $('#EditProductButton').attr('data-collection_id');
-    if(collection_id != '') {
-        $("#collection_id_e").val(collection_id).trigger('change');
-        $('#EditProductButton').attr('data-collection_id', '');
-    }
 }
 
 function EditProductModalCorreria(correrias) {
@@ -205,7 +191,6 @@ function EditProduct(id) {
                     'correria_id': $('#correria_id_e').val(),
                     'clothing_line_id': $('#clothing_line_id_e').val(),
                     'category_id': $('#category_id_e').val(),
-                    'collection_id': $('#collection_id_e').val(),
                     'subcategory_id': $('#subcategory_id_e').val(),
                     'model_id': $('#model_id_e').val(),
                     'trademark_id': $('#trademark_id_e').val(),

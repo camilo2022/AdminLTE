@@ -49,9 +49,9 @@ class TransferStoreRequest extends FormRequest
     public function messages()
     {
         return [
-            'from_warehouse_id.required' => 'El campo Bodega envia es requerido.',
+            'from_warehouse_id.required' => 'El Identificador de la Bodega envia es requerido.',
             'from_warehouse_id.exists' => 'El Identificador de la bodega de envio no es valido.',
-            'to_warehouse_id.required' => 'El campo Bodega recibe es requerido.',
+            'to_warehouse_id.required' => 'El Identificador de la Bodega recibe es requerido.',
             'to_warehouse_id.exists' => 'El Identificador de la bodega que recibe no es valido.',
             'from_observation.string' => 'El campo Observacion del usuario que envia debe ser una cadena de texto.',
             'from_observation.max' => 'El campo Observacion del usuario que envia no debe tener mas de 255 caracteres.',

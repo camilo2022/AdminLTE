@@ -156,7 +156,7 @@ class CorreriasAndCollectionsController extends Controller
     {
         try {
             return $this->successResponse(
-                Correria::withTrashed()->findOrFail($id),
+                Correria::withTrashed()->with('collection')->findOrFail($id),
                 'La correria fue encontrado exitosamente.',
                 204
             );

@@ -43,7 +43,7 @@ class RolesAndPermissionSeeder extends Seeder
 
         $Warehouses = Role::create(['name' => 'Warehouses']);
 
-        $CorreriasAndCollections = Role::create(['name' => 'Correrias']);
+        $CorreriasAndCollections = Role::create(['name' => 'CorreriasAndCollections']);
 
         $SaleChannels = Role::create(['name' => 'SaleChannels']);
 
@@ -214,13 +214,13 @@ class RolesAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Dashboard.Warehouses.Delete'])->syncRoles([$Warehouses]);
         Permission::create(['name' => 'Dashboard.Warehouses.Restore'])->syncRoles([$Warehouses]);
 
-        Permission::create(['name' => 'Dashboard.CorreriasAndCollection.Index'])->syncRoles([$CorreriasAndCollections]);
-        Permission::create(['name' => 'Dashboard.CorreriasAndCollection.Index.Query'])->syncRoles([$CorreriasAndCollections]);
-        Permission::create(['name' => 'Dashboard.CorreriasAndCollection.Create'])->syncRoles([$CorreriasAndCollections]);
-        Permission::create(['name' => 'Dashboard.CorreriasAndCollection.Store'])->syncRoles([$CorreriasAndCollections]);
-        Permission::create(['name' => 'Dashboard.CorreriasAndCollection.Edit'])->syncRoles([$CorreriasAndCollections]);
-        Permission::create(['name' => 'Dashboard.CorreriasAndCollection.Update'])->syncRoles([$CorreriasAndCollections]);
-        Permission::create(['name' => 'Dashboard.CorreriasAndCollection.Delete'])->syncRoles([$CorreriasAndCollections]);
+        Permission::create(['name' => 'Dashboard.CorreriasAndCollections.Index'])->syncRoles([$CorreriasAndCollections]);
+        Permission::create(['name' => 'Dashboard.CorreriasAndCollections.Index.Query'])->syncRoles([$CorreriasAndCollections]);
+        Permission::create(['name' => 'Dashboard.CorreriasAndCollections.Create'])->syncRoles([$CorreriasAndCollections]);
+        Permission::create(['name' => 'Dashboard.CorreriasAndCollections.Store'])->syncRoles([$CorreriasAndCollections]);
+        Permission::create(['name' => 'Dashboard.CorreriasAndCollections.Edit'])->syncRoles([$CorreriasAndCollections]);
+        Permission::create(['name' => 'Dashboard.CorreriasAndCollections.Update'])->syncRoles([$CorreriasAndCollections]);
+        Permission::create(['name' => 'Dashboard.CorreriasAndCollections.Delete'])->syncRoles([$CorreriasAndCollections]);
 
         Permission::create(['name' => 'Dashboard.SaleChannels.Index'])->syncRoles([$SaleChannels]);
         Permission::create(['name' => 'Dashboard.SaleChannels.Index.Query'])->syncRoles([$SaleChannels]);

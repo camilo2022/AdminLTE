@@ -72,7 +72,8 @@ class ClientBranch extends Model implements Auditable
             function ($subQuery) use ($search) {
                 $subQuery->where('name', 'like', '%' . $search . '%');
             }
-        )->orWhere('code', 'like', '%' . $search . '%')
+        )
+        ->orWhere('code', 'like', '%' . $search . '%')
         ->orWhere('document_number', 'like', '%' . $search . '%')
         ->orWhereHas('country',
             function ($subQuery) use ($search) {

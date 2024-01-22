@@ -46,7 +46,11 @@ function CreateCorreriaAndCollection() {
                     'name': $('#name_c').val(),
                     'code': $('#code_c').val(),
                     'start_date': $('#start_date_c').val(),
-                    'end_date': $('#end_date_c').val()
+                    'end_date': $('#end_date_c').val(),
+                    'date_definition_start_pilots': $('#date_definition_start_pilots_c').val(),
+                    'date_definition_start_samples': $('#date_definition_start_samples_c').val(),
+                    'proyection_stop_warehouse': $('#proyection_stop_warehouse_c').val(),
+                    'number_samples_include_suitcase': $('#number_samples_include_suitcase_c').val()
                 },
                 success: function(response) {
                     tableCorreriasAndCollections.ajax.reload();
@@ -122,6 +126,18 @@ function AddIsValidClassCreateCorreriaAndCollection() {
     if (!$('#end_date_c').hasClass('is-invalid')) {
       $('#end_date_c').addClass('is-valid');
     }
+    if (!$('#date_definition_start_pilots_c').hasClass('is-invalid')) {
+      $('#date_definition_start_pilots_c').addClass('is-valid');
+    }
+    if (!$('#date_definition_start_samples_c').hasClass('is-invalid')) {
+      $('#date_definition_start_samples_c').addClass('is-valid');
+    }
+    if (!$('#proyection_stop_warehouse_c').hasClass('is-invalid')) {
+      $('#proyection_stop_warehouse_c').addClass('is-valid');
+    }
+    if (!$('#number_samples_include_suitcase_c').hasClass('is-invalid')) {
+      $('#number_samples_include_suitcase_c').addClass('is-valid');
+    }
 }
 
 function RemoveIsValidClassCreateCorreriaAndCollection() {
@@ -129,6 +145,10 @@ function RemoveIsValidClassCreateCorreriaAndCollection() {
     $('#code_c').removeClass('is-valid');
     $('#start_date_c').removeClass('is-valid');
     $('#end_date_c').removeClass('is-valid');
+    $('#date_definition_start_pilots_c').removeClass('is-valid');
+    $('#date_definition_start_samples_c').removeClass('is-valid');
+    $('#proyection_stop_warehouse_c').removeClass('is-valid');
+    $('#number_samples_include_suitcase_c').removeClass('is-valid');
 }
 
 function AddIsInvalidClassCreateCorreriaAndCollection(input) {
@@ -142,6 +162,10 @@ function RemoveIsInvalidClassCreateCorreriaAndCollection() {
     $('#code_c').removeClass('is-invalid');
     $('#start_date_c').removeClass('is-invalid');
     $('#end_date_c').removeClass('is-invalid');
+    $('#date_definition_start_pilots_c').removeClass('is-invalid');
+    $('#date_definition_start_samples_c').removeClass('is-invalid');
+    $('#proyection_stop_warehouse_c').removeClass('is-invalid');
+    $('#number_samples_include_suitcase_c').removeClass('is-invalid');
 }
 
 $('#start_date_create').datetimepicker({
@@ -149,5 +173,13 @@ $('#start_date_create').datetimepicker({
 });
 
 $('#end_date_create').datetimepicker({
+    format: 'L'
+});
+
+$('#date_definition_start_pilots_create').datetimepicker({
+    format: 'L'
+});
+
+$('#date_definition_start_samples_create').datetimepicker({
     format: 'L'
 });

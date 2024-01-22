@@ -69,10 +69,10 @@ class ModulesAndSubmodulesStoreRequest extends FormRequest
             'submodules.*.icon.string' => 'El campo Icono del submodulo debe ser una cadena de caracteres.',
             'submodules.*.icon.max' => 'El campo Icono del submodulo no debe exceder los 255 caracteres.',
             'submodules.*.icon.unique' => 'El campo Icono del submodulo ya ha sido tomado.',
-            'submodules.*.permission_id.required' => 'El campo Permiso de acceso del submodulo es requerido.',
-            'submodules.*.permission_id.max' => 'El campo Permiso de acceso del submodulo no debe exceder los 255 caracteres.',
-            'submodules.*.permission_id.exists' => 'El campo Permiso de acceso del submodulo no es valido.',
-            'submodules.*.permission_id.unique' => 'El campo Permiso de acceso del submodulo ya ha sido tomado.',
+            'submodules.*.permission_id.required' => 'El Identificador del Permiso de acceso del submodulo es requerido.',
+            'submodules.*.permission_id.max' => 'El Identificador del Permiso de acceso del submodulo no debe exceder los 255 caracteres.',
+            'submodules.*.permission_id.exists' => 'El Identificador del Permiso de acceso del submodulo no es valido.',
+            'submodules.*.permission_id.unique' => 'El Identificador del Permiso de acceso del submodulo ya ha sido tomado.',
         ];
     }
 }

@@ -25,7 +25,7 @@ class Business extends Model implements Auditable
         'departament_id',
         'city_id',
         'address',
-        'neighbourhood',
+        'neighborhood',
         'description'
     ];
 
@@ -38,7 +38,7 @@ class Business extends Model implements Auditable
         'departament_id',
         'city_id',
         'address',
-        'neighbourhood',
+        'neighborhood',
         'description'
     ];
 
@@ -79,7 +79,7 @@ class Business extends Model implements Auditable
             }
         )
         ->orWhere('address', 'like', '%' . $search . '%')
-        ->orWhere('neighbourhood', 'like', '%' . $search . '%')
+        ->orWhere('neighborhood', 'like', '%' . $search . '%')
         ->orWhere('description', 'like', '%' . $search . '%');
     }
 

@@ -166,7 +166,6 @@ class OrderSellerDetailController extends Controller
     public function store(OrderSellerDetailStoreRequest $request)
     {
         try {
-            return $request;
             $orderDetail = new OrderDetail();
             $orderDetail->order_id = $request->input('order_id');
             $orderDetail->product_id = $request->input('product_id');

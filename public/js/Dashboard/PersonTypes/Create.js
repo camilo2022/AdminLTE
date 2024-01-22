@@ -34,7 +34,7 @@ function CreatePersonType() {
         confirmButtonColor: '#3085d6',
         confirmButtonText: 'Si, guardar!',
         cancelButtonText: 'No, cancelar!',
-        html: '<label for="require_people"><input type="checkbox" id="require_people_c" name="require_people"> ¿Requiere referencias personales?</label>',
+        html: '<div class="icheck-primary"><input type="checkbox" id="require_people_c" name="require_people_c"><label for="require_people_c">¿Requiere referencias personales?</label></div>',
     }).then((result) => {
         if (result.value) {
             $.ajax({

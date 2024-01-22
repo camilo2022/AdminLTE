@@ -9,7 +9,6 @@ function CreateProductModal() {
             tableProducts.ajax.reload();
             CreateProductModalCleaned();
             CreateProductModalCorreria(response.data.correrias);
-            CreateProductModalCollection(response.data.collections);
             CreateProductModalModel(response.data.models);
             CreateProductModalTrademark(response.data.trademarks);
             CreateProductModalClothingLine(response.data.clothing_lines);
@@ -24,7 +23,6 @@ function CreateProductModal() {
 }
 
 function CreateProductModalCleaned() {
-    CreateProductModalResetSelect('collection_id_c');
     CreateProductModalResetSelect('correria_id_c');
     CreateProductModalResetSelect('model_id_c');
     CreateProductModalResetSelect('trademark_id_c');
@@ -44,12 +42,6 @@ function CreateProductModalResetSelect(id) {
     $(`#${id}`).html('')
     $(`#${id}`).append(new Option('Seleccione', '', false, false));
     $(`#${id}`).trigger('change');
-}
-
-function CreateProductModalCollection(collections) {
-    collections.forEach(collection => {
-        $('#collection_id_c').append(new Option(collection.name, collection.id, false, false));
-    });
 }
 
 function CreateProductModalCorreria(correrias) {
@@ -161,7 +153,6 @@ function CreateProduct() {
                     'correria_id': $('#correria_id_c').val(),
                     'clothing_line_id': $('#clothing_line_id_c').val(),
                     'category_id': $('#category_id_c').val(),
-                    'collection_id': $('#collection_id_c').val(),
                     'subcategory_id': $('#subcategory_id_c').val(),
                     'model_id': $('#model_id_c').val(),
                     'trademark_id': $('#trademark_id_c').val(),

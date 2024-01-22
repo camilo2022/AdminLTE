@@ -44,11 +44,11 @@ class OrderSellerUpdateRequest extends FormRequest
     public function messages()
     {
         return [
-            'client_id.required' => 'El campo Cliente es requerido.',
+            'client_id.required' => 'El Identificador del Cliente es requerido.',
             'client_id.exists' => 'El Identificador del cliente no es valido.',
-            'client_branch_id.required' => 'El campo Sucursal del Cliente es requerido.',
+            'client_branch_id.required' => 'El Identificador de la Sucursal del Cliente es requerido.',
             'client_branch_id.exists' => 'El Identificador de la sucursal del cliente no es valido.',
-            'sale_channel_id.required' => 'El campo Canal de venta es requerido.',
+            'sale_channel_id.required' => 'El Identificador del Canal de venta es requerido.',
             'sale_channel_id.exists' => 'El Identificador del canal de venta no es valido.',
             'dispatch.required' => 'El campo Despacho es requerido.',
             'dispatch.string' => 'El campo Despacho debe ser una cadena de caracteres.',

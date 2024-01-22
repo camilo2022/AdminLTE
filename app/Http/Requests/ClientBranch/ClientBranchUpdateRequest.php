@@ -52,7 +52,7 @@ class ClientBranchUpdateRequest extends FormRequest
     public function messages()
     {
         return [
-            'client_id.required' => 'El campo Cliente es requerido.',
+            'client_id.required' => 'El Identificador del Cliente es requerido.',
             'client_id.exists' => 'El Identificador del cliente no es valido.',
             'name.required' => 'El campo Nombre de la sucursal del cliente es requerido.',
             'name.string' => 'El campo Nombre de la sucursal del cliente debe ser una cadena de caracteres.',
@@ -61,11 +61,11 @@ class ClientBranchUpdateRequest extends FormRequest
             'code.string' => 'El campo Codigo de la sucursal del cliente debe ser una cadena de caracteres.',
             'code.max' => 'El campo Codigo de la sucursal del cliente no debe exceder los 255 caracteres.',
             'code.unique' => 'El Codigo de sucursal ya ha sido tomado.',
-            'country_id.required' => 'El campo Pais de la sucursal del cliente es requerido.',
+            'country_id.required' => 'El Identificador del Pais de la sucursal del cliente es requerido.',
             'country_id.exists' => 'El Identificador del pais no es valido.',
-            'departament_id.required' => 'El campo Departamento de la sucursal del cliente es requerido.',
+            'departament_id.required' => 'El Identificador del Departamento de la sucursal del cliente es requerido.',
             'departament_id.exists' => 'El Identificador del departamento no es valido.',
-            'city_id.required' => 'El campo Ciudad de la sucursal del cliente es requerido.',
+            'city_id.required' => 'El Identificador de la Ciudad de la sucursal del cliente es requerido.',
             'city_id.exists' => 'El Identificador de la ciudad es valido.',
             'address.required' => 'El campo Direccion de la sucursal del cliente es requerido.',
             'address.string' => 'El campo Direccion de la sucursal del cliente debe ser una cadena de caracteres.',

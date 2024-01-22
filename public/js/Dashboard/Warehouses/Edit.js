@@ -39,7 +39,7 @@ function EditWarehouse(id, to_discount) {
         confirmButtonColor: '#3085d6',
         confirmButtonText: 'Si, actualizar!',
         cancelButtonText: 'No, cancelar!',
-        html: `<label for="to_discount"><input type="checkbox" id="to_discount_e" name="to_discount" ${to_discount ? 'checked' : ''}> ¿Es bodega de producto terminado?</label>`,
+        html: `<div class="icheck-primary"><input type="checkbox" id="to_discount_e" name="to_discount_e" ${to_discount ? 'checked' : ''}><label for="to_discount_e">¿Es bodega de producto terminado?</label></div>`,
     }).then((result) => {
         if (result.value) {
             $.ajax({
