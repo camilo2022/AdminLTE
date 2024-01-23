@@ -64,7 +64,7 @@ function CreateWarehouse() {
 }
 
 function CreateWarehouseAjaxSuccess(response) {
-    if (response.status === 204) {
+    if (response.status === 200) {
         toastr.info(response.message);
         $('#CreateWarehouseModal').modal('hide');
     }

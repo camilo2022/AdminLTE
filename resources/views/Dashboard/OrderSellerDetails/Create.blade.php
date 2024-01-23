@@ -13,7 +13,7 @@
                 <div class="form-group">    
                     <label for="product_id_c">Productos</label>
                     <div class="input-group">
-                        <select class="form-control select2" id="product_id_c" name="product_id" style="width: 88%" onchange="CreateOrderSellerDetailModalProductGetColorTone(this)">
+                        <select class="form-control select2" id="product_id_c" name="product_id" style="width: 90%" onchange="CreateOrderSellerDetailModalProductGetColorTone(this)">
                             <option value="">Seleccione</option>
                         </select>
                         <div class="input-group-append">
@@ -26,7 +26,7 @@
                 <div class="form-group">
                     <label for="color_id_tone_id_c">Colores y Tonos</label>
                     <div class="input-group">
-                        <select class="form-control select2" id="color_id_tone_id_c" name="color_id_tone_id" style="width: 88%" onchange="CreateOrderSellerDetailModalColorToneGetSizesQuantity()">
+                        <select class="form-control select2" id="color_id_tone_id_c" name="color_id_tone_id" style="width: 90%" onchange="CreateOrderSellerDetailModalColorToneGetSizesQuantity()">
                             <option value="">Seleccione</option>
                         </select>
                         <div class="input-group-append">
@@ -38,6 +38,17 @@
                 </div>
                 <div class="div" id="sizes_c">
 
+                </div>
+                <div class="form-group">
+                    <label for="seller_observation_c">Observacion</label>
+                    <div class="input-group">
+                        <textarea class="form-control" id="seller_observation_c" name="seller_observation_c" cols="30" rows="3"></textarea>
+                        <div class="input-group-append">
+                            <span class="input-group-text">
+                                <i class="fas fa-text-size"></i>
+                            </span>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">

@@ -276,13 +276,21 @@ class OrderSellerDetailController extends Controller
     public function update(OrderSellerDetailUpdateRequest $request, $id)
     {
         try {
-            $orderDetail = OrderDetail::findOrFail($id);
+            $orderDetail = OrderDetail::with('quantities')->findOrFail($id);
+            $orderDetail->order_id = $request->input('order_id');
+            $orderDetail->product_id = $request->input('product_id');
+            $orderDetail->color_id = $request->input('color_id');
+            $orderDetail->tone_id = $request->input('tone_id');
             $orderDetail->seller_observation = $request->input('seller_observation');
             $orderDetail->save();
 
+            foreach($orderDetail->quantities as $quantity) {
+                $quantity->delete();
+            }
+
             collect($request->order_detail_quantities)->map(function ($orderDetailQuantity) use ($orderDetail) {
                 $orderDetailQuantity = (object) $orderDetailQuantity;
-                $orderDetailQuantityNew = isset($orderDetailQuantity->id) ? OrderDetailQuantity::findOrFail($orderDetailQuantity->id) : new OrderDetailQuantity();
+                $orderDetailQuantityNew = new OrderDetailQuantity();
                 $orderDetailQuantityNew->order_detail_id = $orderDetail->id;
                 $orderDetailQuantityNew->size_id = $orderDetailQuantity->size_id;
                 $orderDetailQuantityNew->quantity = $orderDetailQuantity->quantity;

@@ -432,7 +432,6 @@ Route::middleware(['auth'])->group(function () {
         });
 
         Route::prefix('/Clients')->group(function () {
-
             Route::controller(ClientController::class)->group(function () {
                 Route::get('/Index', 'index')->middleware('can:Dashboard.Clients.Index')->name('Dashboard.Clients.Index');    
                 Route::post('/Index/Query', 'indexQuery')->middleware('can:Dashboard.Clients.Index.Query')->name('Dashboard.Clients.Index.Query');    

@@ -523,7 +523,7 @@ class UserController extends Controller
     {
         try {
             // Obtener el rol existente
-            $role = Role::findByName($request->input('role'));
+            $role = Role::where('name', $request->input('role'))->firstOrFail();
             $user = User::findOrFail($request->input('id'));
 
             // Verificar si el usuario no tiene el rol
@@ -616,7 +616,7 @@ class UserController extends Controller
     public function removeRoleAndPermissions(UserRemoveRolesAndPermissionsRequest $request)
     {
         try {
-            $role = Role::with('permissions')->findByName($request->input('role'));
+            $role = Role::with('permissions')->where('name', $request->input('role'))->firstOrFail();
             $user = User::findOrFail($request->input('id'));
 
             // Remover los permisos del usuario

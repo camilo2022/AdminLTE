@@ -85,7 +85,7 @@ class WarehouseController extends Controller
             return $this->successResponse(
                 '',
                 'Ingrese los datos para hacer la validacion y registro.',
-                204
+                200
             );
         } catch (Exception $e) {
             // Devolver una respuesta de error en caso de excepción
@@ -150,7 +150,7 @@ class WarehouseController extends Controller
             return $this->successResponse(
                 Warehouse::withTrashed()->findOrFail($id),
                 'La bodega fue encontrada exitosamente.',
-                204
+                200
             );
         } catch (ModelNotFoundException $e) {
             return $this->errorResponse(
@@ -184,7 +184,7 @@ class WarehouseController extends Controller
             return $this->successResponse(
                 $warehouse,
                 'La bodega fue actualizada exitosamente.',
-                200
+                204
             );
         } catch (ModelNotFoundException $e) {
             return $this->errorResponse(

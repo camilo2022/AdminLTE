@@ -50,7 +50,7 @@ function IndexOrderSellerDetailModalCleaned(details, sizes) {
 
         switch (detail.status) {
             case 'Pendiente':
-                btn += `<a onclick="EditOrderSellerDetail(${detail.id})" type="button"
+                btn += `<a onclick="EditOrderSellerDetailModal(${detail.id})" type="button"
                 class="btn btn-primary btn-sm mr-2" title="Editar detalle pedido.">
                     <i class="fas fa-pen text-white"></i>
                 </a>`;
@@ -135,7 +135,7 @@ function IndexOrderSellerDetailModalCleaned(details, sizes) {
 }
 
 function IndexOrderSellerDetailAjaxSuccess(response) {
-    if(response.status === 200) {
+    if(response.status === 204) {
         toastr.info(response.message);
     }
 }

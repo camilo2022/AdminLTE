@@ -130,7 +130,8 @@ function CreateOrderSellerDetail() {
                             'quantity': $(this).find('input').val() == '' ? 0 : $(this).find('input').val(),
                             'size_id': $(this).find('input').attr('data-size_id')
                         };
-                    }).get()
+                    }).get(),
+                    'seller_observation': $('#seller_observation_c').val()
                 },
                 success: function (response) {
                     $('#IndexOrderSellerDetail').trigger('click');
@@ -197,41 +198,52 @@ function AddIsValidClassCreateOrderSellerDetail() {
     if (!$('#seller_observation_c').hasClass('is-invalid')) {
         $('#seller_observation_c').addClass('is-valid');
     }
-    if (!$('#dispatch_c').hasClass('is-invalid')) {
-        $('#dispatch_c').addClass('is-valid');
+    if (!$('span[aria-labelledby="select2-product_id_c-container"]').hasClass('is-invalid')) {
+        $('span[aria-labelledby="select2-product_id_c-container"]').addClass('is-valid');
     }
-    if (!$('#dispatch_date_c').hasClass('is-invalid')) {
-        $('#dispatch_date_c').addClass('is-valid');
+    if (!$('span[aria-labelledby="select2-color_id_tone_id_c-container"]').hasClass('is-invalid')) {
+        $('span[aria-labelledby="select2-color_id_tone_id_c-container"]').addClass('is-valid');
     }
-    if (!$('span[aria-labelledby="select2-client_id_c-container"]').hasClass('is-invalid')) {
-        $('span[aria-labelledby="select2-client_id_c-container"]').addClass('is-valid');
-    }
-    if (!$('span[aria-labelledby="select2-client_branch_id_c-container"]').hasClass('is-invalid')) {
-        $('span[aria-labelledby="select2-client_branch_id_c-container"]').addClass('is-valid');
-    }
+    $('#sizes_c').find('input').each(function() {
+        if (!$(this).hasClass('is-invalid')) {
+            $(this).addClass('is-valid');
+        }
+    });
 }
 
 function RemoveIsValidClassCreateOrderSellerDetail() {
     $('#seller_observation_c').removeClass('is-valid');
-    $('#dispatch_c').removeClass('is-valid');
-    $('#dispatch_date_c').removeClass('is-valid');
-    $('span[aria-labelledby="select2-client_id_c-container"]').removeClass('is-valid');
-    $('span[aria-labelledby="select2-client_branch_id_c-container"]').removeClass('is-valid');
+    $(`span[aria-labelledby="select2-product_id_c-container"]`).removeClass('is-valid');
+    $(`span[aria-labelledby="select2-color_id_tone_id_c-container"]`).removeClass('is-valid');
+    $('#sizes_c').find('input').each(function() {
+        $(this).removeClass('is-valid');
+    });
 }
 
 function AddIsInvalidClassCreateOrderSellerDetail(input) {
     if (!$(`#${input}_c`).hasClass('is-valid')) {
         $(`#${input}_c`).addClass('is-invalid');
     }
+    if(input == 'color_id' || input == 'tone_id') {
+        if (!$(`span[aria-labelledby="select2-color_id_tone_id_c-container`).hasClass('is-valid')) {
+            $(`span[aria-labelledby="select2-color_id_tone_id_c-container"]`).addClass('is-invalid');
+        }
+    }
     if (!$(`span[aria-labelledby="select2-${input}_c-container`).hasClass('is-valid')) {
         $(`span[aria-labelledby="select2-${input}_c-container"]`).addClass('is-invalid');
     }
+    $('#sizes_c').find('input').each(function(index) {
+        if(input === `order_detail_quantities.${index}.quantity`) {
+            $(this).addClass('is-invalid');
+        }
+    });
 }
 
 function RemoveIsInvalidClassCreateOrderSellerDetail() {
     $('#seller_observation_c').removeClass('is-invalid');
-    $('#dispatch_c').removeClass('is-invalid');
-    $('#dispatch_date_c').removeClass('is-invalid');
-    $('span[aria-labelledby="select2-client_id_c-container"]').removeClass('is-invalid');
-    $('span[aria-labelledby="select2-client_branch_id_c-container"]').removeClass('is-invalid');
+    $(`span[aria-labelledby="select2-product_id_c-container"]`).removeClass('is-invalid');
+    $(`span[aria-labelledby="select2-color_id_tone_id_c-container"]`).removeClass('is-invalid');
+    $('#sizes_c').find('input').each(function() {
+        $(this).removeClass('is-invalid');
+    });
 }

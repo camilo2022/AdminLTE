@@ -38,7 +38,7 @@ function EditPersonType(id, require_people) {
         confirmButtonColor: '#3085d6',
         confirmButtonText: 'Si, actualizar!',
         cancelButtonText: 'No, cancelar!',
-        html: `<div class="icheck-primary"><input type="checkbox" id="require_people_c" name="require_people" ${require_people ? 'checked' : ''}><label for="require_people">¿Requiere referencias personales?</label></div>`,
+        html: `<div class="icheck-primary"><input type="checkbox" id="require_people_e" name="require_people_e" ${require_people ? 'checked' : ''}><label for="require_people_e">¿Requiere referencias personales?</label></div>`,
     }).then((result) => {
         if (result.value) {
             $.ajax({
@@ -48,7 +48,7 @@ function EditPersonType(id, require_people) {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
                     'name': $('#name_e').val(),
                     'code': $('#code_e').val(),
-                    'require_people': $('#require_people_c').is(':checked')
+                    'require_people': $('#require_people_e').is(':checked')
                 },
                 success: function (response) {
                     tablePersonTypes.ajax.reload();

@@ -69,6 +69,11 @@ function EditWarehouse(id, to_discount) {
 
 function EditWarehouseAjaxSuccess(response) {
     if (response.status === 200) {
+        toastr.info(response.message);
+        $('#EditWarehouseModal').modal('hide');
+    }
+    
+    if (response.status === 204) {
         toastr.success(response.message);
         $('#EditWarehouseModal').modal('hide');
     }

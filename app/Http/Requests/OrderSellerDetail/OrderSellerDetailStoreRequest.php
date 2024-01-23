@@ -22,7 +22,7 @@ class OrderSellerDetailStoreRequest extends FormRequest
     {
         $product = Product::findOrFail($this->input('product_id'));
 
-        $order_detail_quantities = $this->input('order_detail_quantities');
+        $order_detail_quantities = $this->input('order_detail_quantities')  ? $this->input('order_detail_quantities') : [];
         $updated_order_details = [];
 
         foreach($order_detail_quantities as $order_detail_quantity) {
@@ -66,7 +66,7 @@ class OrderSellerDetailStoreRequest extends FormRequest
             'order_detail_quantities' => ['required', 'array'],
             'order_detail_quantities.*' => ['required', 'array'],
             'order_detail_quantities.*.size_id' => ['required', 'exists:sizes,id'],
-            'order_detail_quantities.*.product_size' => ['required', 'exists:product_sizes,size_id,product_id,' . $this->input('product_id')]
+            'order_detail_quantities.*.product_size' => ['exists:product_sizes,size_id,product_id,' . $this->input('product_id')]
         ];
 
         foreach ($this->input('order_detail_quantities') as $index => $order_detail_quantity) {
@@ -82,26 +82,31 @@ class OrderSellerDetailStoreRequest extends FormRequest
     {
         return [
             'order_id.required' => 'El Identificador del Pedido es requerido.',
-            'order_id.exists' => 'El Identificador del pedido no es valido.',
+            'order_id.exists' => 'El Identificador del Pedido no es valido.',
             'product_id.required' => 'El Identificador del Producto es requerido.',
-            'product_id.exists' => 'El Identificador del producto no es valido.',
-            'product_id.unique' => 'El Identificador del producto ya ha sido tomado en otro detalle.',
-
-            'client_id.required' => 'El campo Cliente es requerido.',
-            'client_id.exists' => 'El Identificador del cliente no es valido.',
-            'client_branch_id.required' => 'El campo Sucursal del Cliente es requerido.',
-            'client_branch_id.exists' => 'El Identificador de la sucursal del cliente no es valido.',
-            'dispatch.required' => 'El campo Despacho es requerido.',
-            'dispatch.string' => 'El campo Despacho debe ser una cadena de caracteres.',
-            'dispatch.max' => 'El campo Despacho no debe exceder los 255 caracteres.',
-            'dispatch_date.required' => 'El campo Fecha de despacho es requerido.',
-            'dispatch_date.date' => 'El campo Fecha de despacho debe ser una fecha valida.',
-            'dispatch_date.after_or_equal' => 'El campo Fecha de despacho debe ser posterior o igual a la fecha actual :now.',
+            'product_id.exists' => 'El Identificador del Producto no es valido.',
+            'product_id.unique' => 'El Identificador del Producto ya ha sido tomado en otro detalle.',
+            'color_id.required' => 'El Identificador del Color es requerido.',
+            'color_id.exists' => 'El Identificador del Color no es valido.',
+            'tone_id.required' => 'El Identificador del Tono es requerido.',
+            'tone_id.exists' => 'El Identificador del Tono no es valido.',
+            'price.required' => 'El campo Precio del producto es requerido.',
+            'price.numeric' => 'El campo Precio del producto debe ser numerico.',
+            'price.between' => 'El campo Precio del producto debe estar en un rango de 0 a 999999.99.',
             'seller_observation.string' => 'El campo Observacion del asesor debe ser una cadena de caracteres.',
             'seller_observation.max' => 'El campo Observacion del asesor no debe exceder los 255 caracteres.',
-            'correria_id.required' => 'El campo Correria es requerido.',
-            'correria_id.exists' => 'El Identificador de la correria no es valido.',
-            'client_clientBranch.exists' => 'La sucursal no pertenece al cliente seleccionado.'
+            'product_color_tone.exists' => 'El color y tono no pertenecen al producto seleccionado.',
+            'order_detail_quantities.required' => 'El campo Detalles del pedido es requerido.',
+            'order_detail_quantities.array' => 'El campo Detalles del pedido debe ser un arreglo.',
+            'order_detail_quantities.*.required' => 'El item :position del campo Detalles del pedido es requerido.',
+            'order_detail_quantities.*.array' => 'El item :position del campo Detalles del pedido debe ser un arreglo.',
+            'order_detail_quantities.*.size_id.required' => 'El Identificador de la Talla es requerido.',
+            'order_detail_quantities.*.size_id.exists' => 'El Identificador de la Talla no es valido.',     
+            'order_detail_quantities.*.product_size.exists' => 'La talla no pertenece al producto seleccionado.',    
+            'order_detail_quantities.*.quantity.required' => 'El campo Cantidad de unidades es requerido.',
+            'order_detail_quantities.*.quantity.numeric' => 'El campo Cantidad de unidades debe ser un valor numérico.',
+            'order_detail_quantities.*.quantity.max' => 'El campo Cantidad de unidades no debe exceder los :max unidades.',
+            'order_detail_quantities.*.quantity.min' => 'El campo Cantidad de unidades debe tener al menos :min unidades.',
         ];
     }
 }

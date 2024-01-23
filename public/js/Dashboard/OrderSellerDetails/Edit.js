@@ -1,6 +1,6 @@
 function EditOrderSellerDetailModal(id) {
     $.ajax({
-        url: `/Dashboard/Orders/Seller/Edit/${id}`,
+        url: `/Dashboard/Orders/Seller/Details/Edit/${id}`,
         type: 'POST',
         data: {
             '_token': $('meta[name="csrf-token"]').attr('content')
@@ -8,7 +8,7 @@ function EditOrderSellerDetailModal(id) {
         success: function (response) {
             $('#IndexOrderSellerDetail').trigger('click');
             EditOrderSellerDetailModalCleaned(response.data.orderDetail);
-            EditOrderSellerDetailModalClient(response.data.clients);
+            EditOrderSellerDetailModalProduct(response.data.products);
             EditOrderSellerDetailAjaxSuccess(response);
             $('#EditOrderSellerDetailModal').modal('show');
         },
@@ -23,6 +23,7 @@ function EditOrderSellerDetailModalCleaned(orderDetail) {
     EditOrderSellerDetailModalResetSelect('product_id_e');
     RemoveIsValidClassEditOrderSellerDetail();
     RemoveIsInvalidClassEditOrderSellerDetail();
+    $('#seller_observation_e').val(orderDetail.seller_observation);
     $('#sizes_e').html('');
 
     $('#EditOrderSellerDetailButton').attr('onclick', `EditOrderSellerDetail(${orderDetail.id})`);
@@ -30,7 +31,7 @@ function EditOrderSellerDetailModalCleaned(orderDetail) {
     $('#EditOrderSellerDetailButton').attr('data-product_id', orderDetail.product_id);
     $('#EditOrderSellerDetailButton').attr('data-color_id', orderDetail.color_id);
     $('#EditOrderSellerDetailButton').attr('data-tone_id', orderDetail.tone_id);
-    $('#EditOrderSellerDetailButton').attr('data-quantities', orderDetail.quantities);
+    $('#EditOrderSellerDetailButton').attr('data-quantities', JSON.stringify(orderDetail.quantities));
 }
 
 function EditOrderSellerDetailModalResetSelect(id) {
@@ -125,6 +126,14 @@ function EditOrderSellerDetailModalSizes(sizes) {
                     </div>`;
     });
     $('#sizes_e').html(inputs);
+
+    let quantities = $('#EditOrderSellerDetailButton').attr('data-quantities');
+    if(quantities != '') {
+        $.each(JSON.parse(quantities), function(index, quantity) {
+            $(`#size_${quantity.size_id}_e`).val(quantity.quantity);
+        })
+        $('#EditOrderSellerDetailButton').attr('data-quantities', '');
+    }
 }
 
 function EditOrderSellerDetail(id) {
@@ -140,7 +149,7 @@ function EditOrderSellerDetail(id) {
     }).then((result) => {
         if (result.value) {
             $.ajax({
-                url: `/Dashboard/Orders/Seller/Update/${id}`,
+                url: `/Dashboard/Orders/Seller/Details/Update/${id}`,
                 type: 'PUT',
                 data: {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
@@ -153,7 +162,8 @@ function EditOrderSellerDetail(id) {
                             'quantity': $(this).find('input').val() == '' ? 0 : $(this).find('input').val(),
                             'size_id': $(this).find('input').attr('data-size_id')
                         };
-                    }).get()
+                    }).get(),
+                    'seller_observation': $('#seller_observation_e').val()
                 },
                 success: function (response) {
                     $('#IndexOrderSellerDetail').trigger('click');
@@ -220,41 +230,52 @@ function AddIsValidClassEditOrderSellerDetail() {
     if (!$('#seller_observation_e').hasClass('is-invalid')) {
         $('#seller_observation_e').addClass('is-valid');
     }
-    if (!$('#dispatch_e').hasClass('is-invalid')) {
-        $('#dispatch_e').addClass('is-valid');
+    if (!$('span[aria-labelledby="select2-product_id_e-container"]').hasClass('is-invalid')) {
+        $('span[aria-labelledby="select2-product_id_e-container"]').addClass('is-valid');
     }
-    if (!$('#dispatch_date_e').hasClass('is-invalid')) {
-        $('#dispatch_date_e').addClass('is-valid');
+    if (!$('span[aria-labelledby="select2-color_id_tone_id_e-container"]').hasClass('is-invalid')) {
+        $('span[aria-labelledby="select2-color_id_tone_id_e-container"]').addClass('is-valid');
     }
-    if (!$('span[aria-labelledby="select2-client_id_e-container"]').hasClass('is-invalid')) {
-        $('span[aria-labelledby="select2-client_id_e-container"]').addClass('is-valid');
-    }
-    if (!$('span[aria-labelledby="select2-client_branch_id_e-container"]').hasClass('is-invalid')) {
-        $('span[aria-labelledby="select2-client_branch_id_e-container"]').addClass('is-valid');
-    }
+    $('#sizes_e').find('input').each(function() {
+        if (!$(this).hasClass('is-invalid')) {
+            $(this).addClass('is-valid');
+        }
+    });
 }
 
 function RemoveIsValidClassEditOrderSellerDetail() {
     $('#seller_observation_e').removeClass('is-valid');
-    $('#dispatch_e').removeClass('is-valid');
-    $('#dispatch_date_e').removeClass('is-valid');
-    $('span[aria-labelledby="select2-client_id_e-container"]').removeClass('is-valid');
-    $('span[aria-labelledby="select2-client_branch_id_e-container"]').removeClass('is-valid');
+    $(`span[aria-labelledby="select2-product_id_e-container"]`).removeClass('is-valid');
+    $(`span[aria-labelledby="select2-color_id_tone_id_e-container"]`).removeClass('is-valid');
+    $('#sizes_e').find('input').each(function() {
+        $(this).removeClass('is-valid');
+    });
 }
 
 function AddIsInvalidClassEditOrderSellerDetail(input) {
     if (!$(`#${input}_e`).hasClass('is-valid')) {
         $(`#${input}_e`).addClass('is-invalid');
     }
+    if(input == 'color_id' || input == 'tone_id') {
+        if (!$(`span[aria-labelledby="select2-color_id_tone_id_e-container`).hasClass('is-valid')) {
+            $(`span[aria-labelledby="select2-color_id_tone_id_e-container"]`).addClass('is-invalid');
+        }
+    }
     if (!$(`span[aria-labelledby="select2-${input}_e-container`).hasClass('is-valid')) {
         $(`span[aria-labelledby="select2-${input}_e-container"]`).addClass('is-invalid');
     }
+    $('#sizes_e').find('input').each(function(index) {
+        if(input === `order_detail_quantities.${index}.quantity`) {
+            $(this).addClass('is-invalid');
+        }
+    });
 }
 
 function RemoveIsInvalidClassEditOrderSellerDetail() {
     $('#seller_observation_e').removeClass('is-invalid');
-    $('#dispatch_e').removeClass('is-invalid');
-    $('#dispatch_date_e').removeClass('is-invalid');
-    $('span[aria-labelledby="select2-client_id_e-container"]').removeClass('is-invalid');
-    $('span[aria-labelledby="select2-client_branch_id_e-container"]').removeClass('is-invalid');
+    $(`span[aria-labelledby="select2-product_id_e-container"]`).removeClass('is-invalid');
+    $(`span[aria-labelledby="select2-color_id_tone_id_e-container"]`).removeClass('is-invalid');
+    $('#sizes_e').find('input').each(function() {
+        $(this).removeClass('is-invalid');
+    });
 }
