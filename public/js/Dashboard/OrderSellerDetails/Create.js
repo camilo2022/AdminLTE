@@ -23,6 +23,7 @@ function CreateOrderSellerDetailModalCleaned() {
     CreateOrderSellerDetailModalResetSelect('product_id_c');
     RemoveIsValidClassCreateOrderSellerDetail();
     RemoveIsInvalidClassCreateOrderSellerDetail();
+    $('#seller_observation_c').val('');
     $('#sizes_c').html('');
 }
 

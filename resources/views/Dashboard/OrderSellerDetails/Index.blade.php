@@ -224,6 +224,8 @@
                                 </thead>
                                 <tbody id="OrderSellerDetailBody">
                                 </tbody>
+                                <tfoot class="thead-dark" id="OrderSellerDetailFoot">
+                                </tfoot>
                             </table>
                         </div>
                     </div>

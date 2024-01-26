@@ -57,7 +57,7 @@ class OrderSellerDetailStoreRequest extends FormRequest
     {
         $rules = [
             'order_id' => ['required', 'exists:orders,id'],
-            'product_id' => ['required', 'exists:products,id', 'unique:order_details,product_id,NULL,id,order_id,' . $this->input('order_id')],
+            'product_id' => ['required', 'exists:products,id', 'unique:order_details,product_id,NULL,id,order_id,' . $this->input('order_id') . ',color_id,' . $this->input('color_id') . ',tone_id,' . $this->input('tone_id')],
             'color_id' => ['required', 'exists:colors,id'],
             'tone_id' => ['required', 'exists:tones,id'],
             'price' => ['required', 'numeric', 'between:0,999999.99'],

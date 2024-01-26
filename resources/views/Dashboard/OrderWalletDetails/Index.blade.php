@@ -260,6 +260,8 @@
                                 </thead>
                                 <tbody id="OrderWalletDetailBody">
                                 </tbody>
+                                <tfoot class="thead-dark" id="OrderSellerDetailFoot">
+                                </tfoot>
                             </table>
                         </div>
                     </div>

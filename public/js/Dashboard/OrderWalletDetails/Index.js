@@ -42,6 +42,13 @@ function IndexOrderWalletDetailModalCleaned(details, sizes) {
                     <th>Estado</th>
                 </tr>`;
 
+    let foot = `<tr>
+                    <th>#</th>
+                    <th>-</th>`;
+
+    let totalSum = 0;
+    let quantitySum = 0;
+
     let body = '';
 
     $.each(details, function(index, detail) {
@@ -101,8 +108,11 @@ function IndexOrderWalletDetailModalCleaned(details, sizes) {
         $.each(detail.quantities, function(index, quantity) {
             quantities += quantity.quantity;
         });
+    
+        totalSum += quantities * detail.price;
+        quantitySum += quantities;
 
-        body += `<td>${(quantities * detail.price) + ' COP'}</td>
+        body += `<td>${(quantities * detail.price).toLocaleString('es-CO', { style: 'currency', currency: 'COP' })} COP</td>
                 <td>${quantities}</td>
                 <td>${detail.product.code}</td>
                 <td>${detail.color.name + ' - ' + detail.color.code}</td>
@@ -153,8 +163,27 @@ function IndexOrderWalletDetailModalCleaned(details, sizes) {
         body += `</tr>`;
     });
 
+    foot += `<th>${totalSum.toLocaleString('es-CO', { style: 'currency', currency: 'COP' })} COP</th>
+            <th>${quantitySum}</th>
+            <th>-</th>
+            <th>-</th>
+            <th>-</th>`;
+
+    $.each(sizes, function(index, size) {
+        let sizeSum = 0;
+        $.each(details, function(i, detail) {
+            sizeSum += detail.quantities[size.id].quantity;
+        });
+        foot += `<th>${sizeSum}</th>`;
+    });
+            
+    foot += `<th>-</th>
+            <th>-</th>
+        </tr>`;
+
     $('#OrderWalletDetailHead').html(head);
     $('#OrderWalletDetailBody').html(body);
+    $('#OrderSellerDetailFoot').html(foot);
 }
 
 function IndexOrderWalletDetailAjaxSuccess(response) {
