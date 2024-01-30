@@ -105,7 +105,7 @@ class ModulesAndSubmodulesSeeder extends Seeder
 
         Submodule::create([
             'name' => 'Metodos de Pago',
-            'url' => '/Dashboard/PaymentMethods/Index',
+            'url' => '/Dashboard/PaymentTypes/Index',
             'icon' => 'fas fa-money-check-dollar-pen',
             'module_id' => $Administracion->id,
             'permission_id' => 91

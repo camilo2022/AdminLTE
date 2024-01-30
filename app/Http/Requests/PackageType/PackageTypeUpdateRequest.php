@@ -41,4 +41,3 @@ class PackageTypeUpdateRequest extends FormRequest
         ];
     }
 }
-

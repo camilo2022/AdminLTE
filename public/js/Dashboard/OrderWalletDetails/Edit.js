@@ -1,105 +1,145 @@
-function EditOrderSellerModal(id) {
+function EditOrderWalletDetailModal(id) {
     $.ajax({
-        url: `/Dashboard/Orders/Seller/Edit/${id}`,
+        url: `/Dashboard/Orders/Wallet/Details/Edit/${id}`,
         type: 'POST',
         data: {
             '_token': $('meta[name="csrf-token"]').attr('content')
         },
         success: function (response) {
-            tableOrderSellers.ajax.reload();
-            EditOrderSellerModalCleaned(response.data.order);
-            EditOrderSellerModalClient(response.data.clients);
-            EditOrderSellerAjaxSuccess(response);
-            $('#EditOrderSellerModal').modal('show');
+            $('#IndexOrderWalletDetail').trigger('click');
+            EditOrderWalletDetailModalCleaned(response.data.orderDetail);
+            EditOrderWalletDetailModalProduct(response.data.products);
+            EditOrderWalletDetailAjaxSuccess(response);
+            $('#EditOrderWalletDetailModal').modal('show');
         },
         error: function (xhr, textStatus, errorThrown) {
-            tableOrderSellers.ajax.reload();
-            EditOrderSellerAjaxError(xhr);
+            $('#IndexOrderWalletDetail').trigger('click');
+            EditOrderWalletDetailAjaxError(xhr);
         }
     });
 }
 
-function EditOrderSellerModalCleaned(order) {
-    EditOrderSellerModalResetSelect('client_id_e');
-    RemoveIsValidClassEditOrderSeller();
-    RemoveIsInvalidClassEditOrderSeller();
+function EditOrderWalletDetailModalCleaned(orderDetail) {
+    EditOrderWalletDetailModalResetSelect('product_id_e');
+    RemoveIsValidClassEditOrderWalletDetail();
+    RemoveIsInvalidClassEditOrderWalletDetail();
+    $('#seller_observation_e').val(orderDetail.seller_observation);
+    $('#sizes_e').html('');
 
-    $('#EditOrderSellerButton').attr('onclick', `EditOrderSeller(${order.id})`);
-    $('#EditOrderSellerButton').attr('data-id', order.id);
-    $('#EditOrderSellerButton').attr('data-client_id', order.client_id);
-    $('#EditOrderSellerButton').attr('data-client_branch_id', order.client_branch_id);
-
-    $('#dispatch_e').val(order.dispatch).trigger('change'); 
-    $('#dispatch_date_e').val(order.dispatch_date);
-    $('#seller_observation_e').val(order.seller_observation);
+    $('#EditOrderWalletDetailButton').attr('onclick', `EditOrderWalletDetail(${orderDetail.id})`);
+    $('#EditOrderWalletDetailButton').attr('data-id', orderDetail.id);
+    $('#EditOrderWalletDetailButton').attr('data-product_id', orderDetail.product_id);
+    $('#EditOrderWalletDetailButton').attr('data-color_id', orderDetail.color_id);
+    $('#EditOrderWalletDetailButton').attr('data-tone_id', orderDetail.tone_id);
+    $('#EditOrderWalletDetailButton').attr('data-quantities', JSON.stringify(orderDetail.quantities));
 }
 
-function EditOrderSellerModalResetSelect(id) {
+function EditOrderWalletDetailModalResetSelect(id) {
     $(`#${id}`).html('')
     $(`#${id}`).append(new Option('Seleccione', '', false, false));
     $(`#${id}`).trigger('change');
 }
 
-function EditOrderSellerModalClient(clients) {
-    clients.forEach(client => {
-        $('#client_id_e').append(new Option(`${client.name} - ${client.document_number}`, client.id, false, false));
+function EditOrderWalletDetailModalProduct(products) {
+    $.each(products, function(index, product) {
+        $('#product_id_e').append(new Option(product.code, product.id, false, false));
     });
 
-    let client_id = $('#EditOrderSellerButton').attr('data-client_id');
-    if(client_id != '') {
-        $("#client_id_e").val(client_id).trigger('change');
-        $('#EditOrderSellerButton').attr('data-client_id', '');
+    let product_id = $('#EditOrderWalletDetailButton').attr('data-product_id');
+    if(product_id != '') {
+        $("#product_id_e").val(product_id).trigger('change');
+        $('#EditOrderWalletDetailButton').attr('data-product_id', '');
     }
 }
 
-function EditOrderSellerModalClientGetClientBranch(select) {
+function EditOrderWalletDetailModalProductGetColorTone(select) {
     if($(select).val() == '') {
-        EditOrderSellerModalResetSelect('client_branch_id_e');
+        $('#sizes_e').html('');
+        EditOrderWalletDetailModalResetSelect('color_id_tone_id_e');
     } else {
-        let id = $('#EditOrderSellerButton').attr('data-id');
+        let id = $('#EditOrderWalletDetailButton').attr('data-id');
         $.ajax({
-            url: `/Dashboard/Orders/Seller/Edit/${id}`,
+            url: `/Dashboard/Orders/Wallet/Details/Edit/${id}`,
             type: 'POST',
             data: {
                 '_token': $('meta[name="csrf-token"]').attr('content'),
-                'client_id':  $(select).val()
+                'product_id':  $(select).val()
             },
             success: function(response) {
-                EditOrderSellerModalResetSelect('client_branch_id_e');
-                EditOrderSellerModalClienteBranch(response.data);
+                EditOrderWalletDetailModalResetSelect('color_id_tone_id_e');
+                EditOrderWalletDetailModalColorTone(response.data.colors_tones);
+                $('#sizes_e').html('');
             },
             error: function(xhr, textStatus, errorThrown) {
-                EditOrderSellerAjaxError(xhr);
+                EditOrderWalletDetailAjaxError(xhr);
+            }
+        });
+    }
+};
+
+function EditOrderWalletDetailModalColorTone(colors_tones) {
+    colors_tones.forEach(color_tone => {
+        $('#color_id_tone_id_e').append(new Option(`${color_tone.color.name} - ${color_tone.tone.name}`, `${color_tone.color.id}-${color_tone.tone.id}`, false, false));
+    });
+
+    let color_id = $('#EditOrderWalletDetailButton').attr('data-color_id');
+    let tone_id = $('#EditOrderWalletDetailButton').attr('data-tone_id');
+    if(color_id != '' && tone_id != '') {
+        $("#color_id_tone_id_e").val(`${color_id}-${tone_id}`).trigger('change');
+        $('#EditOrderWalletDetailButton').attr('data-color_id', '');
+        $('#EditOrderWalletDetailButton').attr('data-tone_id', '');
+    }
+}
+
+function EditOrderWalletDetailModalColorToneGetSizesQuantity() {
+    if($('#color_id_tone_id_e').val() == '') {
+        $('#sizes_e').html('');
+    } else {
+        let id = $('#EditOrderWalletDetailButton').attr('data-id');
+        $.ajax({
+            url: `/Dashboard/Orders/Wallet/Details/Edit/${id}`,
+            type: 'POST',
+            data: {
+                '_token': $('meta[name="csrf-token"]').attr('content'),
+                'product_id':  $('#product_id_e').val(),
+                'color_id':  $('#color_id_tone_id_e').val().split('-')[0],
+                'tone_id':  $('#color_id_tone_id_e').val().split('-')[1],
+                'size_id':  $('#size_id_e').val(),
+            },
+            success: function(response) {
+                EditOrderWalletDetailModalSizes(response.data);
+            },
+            error: function(xhr, textStatus, errorThrown) {
+                EditOrderWalletDetailAjaxError(xhr);
             }
         });
     }
 }
 
-function EditOrderSellerModalClienteBranch(clientBranches) {
-    clientBranches.forEach(clientBranch => {
-        $('#client_branch_id_e').append(new Option(`${clientBranch.name} - ${clientBranch.code}`, clientBranch.id, false, false));
+function EditOrderWalletDetailModalSizes(sizes) {
+    let inputs = '';
+    $.each(sizes, function(index, size) {
+        inputs += `<div class="form-group">
+                        <label for="size_${size.size.id}_e">${size.size.name}</label>
+                        <input type="number" class="form-control" id="size_${size.size.id}_e" name="size_${size.size.id}" data-size_id="${size.size.id}" value="0">
+                        <small id="message_size_${size.size.id}_e">${size.quantity} unidades disponibles.</small>
+                    </div>`;
     });
+    $('#sizes_e').html(inputs);
 
-    let client_branch_id = $('#EditOrderSellerButton').attr('data-client_branch_id');
-    if(client_branch_id != '') {
-        $("#client_branch_id_e").val(client_branch_id).trigger('change');
-        $('#EditOrderSellerButton').attr('data-client_branch_id', '');
+    let quantities = $('#EditOrderWalletDetailButton').attr('data-quantities');
+    if(quantities != '') {
+        $.each(JSON.parse(quantities), function(index, quantity) {
+            $(`#size_${quantity.size_id}_e`).val(quantity.quantity);
+        })
+        $('#EditOrderWalletDetailButton').attr('data-quantities', '');
     }
 }
 
-function EditOrderSellerModalDispatchGetDispatchDate(select) {
-    if($(select).val() == '' || $(select).val() == 'De inmediato') {
-        $('#div_dispatch_date_e').hide();
-        $('#dispatch_date_e').val('')
-    } else {
-        $('#div_dispatch_date_e').show();
-    }
-}
-
-function EditOrderSeller(id) {
+function EditOrderWalletDetail(id) {
     Swal.fire({
-        title: '¿Desea actualizar el pedido?',
-        text: 'El pedido se actualizara.',
+        title: '¿Desea actualizar el detalle del pedido?',
+        text: 'El detalle del pedido se actualizara.',
         icon: 'warning',
         showCancelButton: true,
         cancelButtonColor: '#DD6B55',
@@ -109,120 +149,133 @@ function EditOrderSeller(id) {
     }).then((result) => {
         if (result.value) {
             $.ajax({
-                url: `/Dashboard/Orders/Seller/Update/${id}`,
+                url: `/Dashboard/Orders/Wallet/Details/Update/${id}`,
                 type: 'PUT',
                 data: {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
-                    'client_id': $('#client_id_e').val(),
-                    'client_branch_id': $('#client_branch_id_e').val(),
-                    'seller_observation': $('#seller_observation_e').val(),
-                    'dispatch': $('#dispatch_e').val(),
-                    'dispatch_date': $('#dispatch_e').val() == 'De inmediato' ? new Date().toISOString().split('T')[0] : $('#dispatch_date_e').val()
+                    'order_id': $('#IndexOrderWalletDetail').attr('data-id'),
+                    'product_id':  $('#product_id_e').val(),
+                    'color_id':  $('#color_id_tone_id_e').val().split('-')[0],
+                    'tone_id':  $('#color_id_tone_id_e').val().split('-')[1],
+                    'order_detail_quantities': $('#sizes_e').find('div.form-group').map(function(index) {
+                        return {
+                            'quantity': $(this).find('input').val() == '' ? 0 : $(this).find('input').val(),
+                            'size_id': $(this).find('input').attr('data-size_id')
+                        };
+                    }).get(),
+                    'seller_observation': $('#seller_observation_e').val()
                 },
                 success: function (response) {
-                    tableOrderSellers.ajax.reload();
-                    EditOrderSellerAjaxSuccess(response);
+                    $('#IndexOrderWalletDetail').trigger('click');
+                    EditOrderWalletDetailAjaxSuccess(response);
                 },
                 error: function (xhr, textStatus, errorThrown) {
-                    tableOrderSellers.ajax.reload();
-                    EditOrderSellerAjaxError(xhr);
+                    $('#IndexOrderWalletDetail').trigger('click');
+                    EditOrderWalletDetailAjaxError(xhr);
                 }
             });
         } else {
-            toastr.info('El pedido no fue actualizada.')
+            toastr.info('El detalle del pedido no fue actualizado.')
         }
     });
 }
 
-function EditOrderSellerAjaxSuccess(response) {
+function EditOrderWalletDetailAjaxSuccess(response) {
     if (response.status === 204) {
         toastr.info(response.message);
-        $('#EditOrderSellerModal').modal('hide');
+        $('#EditOrderWalletDetailModal').modal('hide');
     }
 
     if (response.status === 200) {
         toastr.success(response.message);
-        $('#EditOrderSellerModal').modal('hide');
+        $('#EditOrderWalletDetailModal').modal('hide');
     }
 }
 
-function EditOrderSellerAjaxError(xhr) {
+function EditOrderWalletDetailAjaxError(xhr) {
     if (xhr.status === 403) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
-        $('#EditOrderSellerModal').modal('hide');
+        $('#EditOrderWalletDetailModal').modal('hide');
     }
 
     if (xhr.status === 404) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
-        $('#EditOrderSellerModal').modal('hide');
+        $('#EditOrderWalletDetailModal').modal('hide');
     }
 
     if (xhr.status === 419) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
-        $('#EditOrderSellerModal').modal('hide');
+        $('#EditOrderWalletDetailModal').modal('hide');
     }
 
     if (xhr.status === 422) {
-        RemoveIsValidClassEditOrderSeller();
-        RemoveIsInvalidClassEditOrderSeller();
+        RemoveIsValidClassEditOrderWalletDetail();
+        RemoveIsInvalidClassEditOrderWalletDetail();
         $.each(xhr.responseJSON.errors, function (field, messages) {
-            AddIsInvalidClassEditOrderSeller(field);
+            AddIsInvalidClassEditOrderWalletDetail(field);
             $.each(messages, function (index, message) {
                 toastr.error(message);
             });
         });
-        AddIsValidClassEditOrderSeller();
+        AddIsValidClassEditOrderWalletDetail();
     }
 
     if (xhr.status === 500) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
-        $('#EditOrderSellerModal').modal('hide');
+        $('#EditOrderWalletDetailModal').modal('hide');
     }
 }
 
-function AddIsValidClassEditOrderSeller() {
+function AddIsValidClassEditOrderWalletDetail() {
     if (!$('#seller_observation_e').hasClass('is-invalid')) {
         $('#seller_observation_e').addClass('is-valid');
     }
-    if (!$('#dispatch_e').hasClass('is-invalid')) {
-        $('#dispatch_e').addClass('is-valid');
+    if (!$('span[aria-labelledby="select2-product_id_e-container"]').hasClass('is-invalid')) {
+        $('span[aria-labelledby="select2-product_id_e-container"]').addClass('is-valid');
     }
-    if (!$('#dispatch_date_e').hasClass('is-invalid')) {
-        $('#dispatch_date_e').addClass('is-valid');
+    if (!$('span[aria-labelledby="select2-color_id_tone_id_e-container"]').hasClass('is-invalid')) {
+        $('span[aria-labelledby="select2-color_id_tone_id_e-container"]').addClass('is-valid');
     }
-    if (!$('span[aria-labelledby="select2-client_id_e-container"]').hasClass('is-invalid')) {
-        $('span[aria-labelledby="select2-client_id_e-container"]').addClass('is-valid');
-    }
-    if (!$('span[aria-labelledby="select2-client_branch_id_e-container"]').hasClass('is-invalid')) {
-        $('span[aria-labelledby="select2-client_branch_id_e-container"]').addClass('is-valid');
-    }
+    $('#sizes_e').find('input').each(function() {
+        if (!$(this).hasClass('is-invalid')) {
+            $(this).addClass('is-valid');
+        }
+    });
 }
 
-function RemoveIsValidClassEditOrderSeller() {
+function RemoveIsValidClassEditOrderWalletDetail() {
     $('#seller_observation_e').removeClass('is-valid');
-    $('#dispatch_e').removeClass('is-valid');
-    $('#dispatch_date_e').removeClass('is-valid');
-    $('span[aria-labelledby="select2-client_id_e-container"]').removeClass('is-valid');
-    $('span[aria-labelledby="select2-client_branch_id_e-container"]').removeClass('is-valid');
+    $(`span[aria-labelledby="select2-product_id_e-container"]`).removeClass('is-valid');
+    $(`span[aria-labelledby="select2-color_id_tone_id_e-container"]`).removeClass('is-valid');
+    $('#sizes_e').find('input').each(function() {
+        $(this).removeClass('is-valid');
+    });
 }
 
-function AddIsInvalidClassEditOrderSeller(input) {
-    if (!$(`#${input}_e_e`).hasClass('is-valid')) {
-        $(`#${input}_e_e`).addClass('is-invalid');
+function AddIsInvalidClassEditOrderWalletDetail(input) {
+    if (!$(`#${input}_e`).hasClass('is-valid')) {
+        $(`#${input}_e`).addClass('is-invalid');
     }
-    if (!$(`span[aria-labelledby="select2-${input}_e_e-container`).hasClass('is-valid')) {
-        $(`span[aria-labelledby="select2-${input}_e_e-container"]`).addClass('is-invalid');
+    if(input == 'color_id' || input == 'tone_id') {
+        if (!$(`span[aria-labelledby="select2-color_id_tone_id_e-container`).hasClass('is-valid')) {
+            $(`span[aria-labelledby="select2-color_id_tone_id_e-container"]`).addClass('is-invalid');
+        }
     }
+    if (!$(`span[aria-labelledby="select2-${input}_e-container`).hasClass('is-valid')) {
+        $(`span[aria-labelledby="select2-${input}_e-container"]`).addClass('is-invalid');
+    }
+    $('#sizes_e').find('input').each(function(index) {
+        if(input === `order_detail_quantities.${index}.quantity`) {
+            $(this).addClass('is-invalid');
+        }
+    });
 }
 
-function RemoveIsInvalidClassEditOrderSeller() {
+function RemoveIsInvalidClassEditOrderWalletDetail() {
     $('#seller_observation_e').removeClass('is-invalid');
-    $('#dispatch_e').removeClass('is-invalid');
-    $('#dispatch_date_e').removeClass('is-invalid');
-    $('span[aria-labelledby="select2-client_id_e-container"]').removeClass('is-invalid');
-    $('span[aria-labelledby="select2-client_branch_id_e-container"]').removeClass('is-invalid');
+    $(`span[aria-labelledby="select2-product_id_e-container"]`).removeClass('is-invalid');
+    $(`span[aria-labelledby="select2-color_id_tone_id_e-container"]`).removeClass('is-invalid');
+    $('#sizes_e').find('input').each(function() {
+        $(this).removeClass('is-invalid');
+    });
 }
-
-$('#dispatch_date_e').datetimepicker({
-    format: 'L'
-});

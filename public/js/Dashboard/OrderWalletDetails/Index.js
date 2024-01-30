@@ -69,7 +69,7 @@ function IndexOrderWalletDetailModalCleaned(details, sizes) {
                 </a>`;
                 break;
             case 'Pendiente':
-                btn += `<a onclick="EditOrderWalletDetail(${detail.id})" type="button"
+                btn += `<a onclick="EditOrderWalletDetailModal(${detail.id})" type="button"
                 class="btn btn-primary btn-sm mr-2" title="Editar detalle pedido.">
                     <i class="fas fa-pen text-white"></i>
                 </a>`;
@@ -187,7 +187,7 @@ function IndexOrderWalletDetailModalCleaned(details, sizes) {
 }
 
 function IndexOrderWalletDetailAjaxSuccess(response) {
-    if(response.status === 200) {
+    if(response.status === 204) {
         toastr.info(response.message);
     }
 }

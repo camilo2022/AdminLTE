@@ -129,12 +129,12 @@ class OrderWalletDetailController extends Controller
         try {
             if($request->filled('product_id') && $request->filled('color_id') && $request->filled('tone_id')) {
                 return $this->successResponse(
-                    Inventory::with('warehouse')
+                    Inventory::with('product', 'warehouse', 'color', 'tone', 'size')
+                        ->whereHas('product', fn($subQuery) => $subQuery->where('id', $request->input('product_id')))
                         ->whereHas('warehouse', fn($subQuery) => $subQuery->where('to_discount', true))
-                        ->where('product_id', $request->input('product_id'))
-                        ->where('color_id', $request->input('color_id'))
-                        ->where('tone_id', $request->input('tone_id'))
-                        ->first(),
+                        ->whereHas('color', fn($subQuery) => $subQuery->where('id', $request->input('color_id')))
+                        ->whereHas('tone', fn($subQuery) => $subQuery->where('id', $request->input('tone_id')))
+                        ->get(),
                     'Inventario encontrado con exito.',
                     200
                 );
@@ -191,7 +191,7 @@ class OrderWalletDetailController extends Controller
 
             return $this->successResponse(
                 $orderDetail,
-                'El detalle del pedido fue registrado por cartera exitosamente.',
+                'El detalle del pedido fue registrado por el asesor exitosamente.',
                 201
             );
         } catch (ModelNotFoundException $e) {
@@ -224,24 +224,37 @@ class OrderWalletDetailController extends Controller
         }
     }
 
-    public function edit(OrderWalletDetailEditRequest $request, $id)
+    public function edit(OrderWalletDetailCreateRequest $request, $id)
     {
         try {
             if($request->filled('product_id') && $request->filled('color_id') && $request->filled('tone_id')) {
                 return $this->successResponse(
-                    Inventory::with('warehouse')
+                    Inventory::with('product', 'warehouse', 'color', 'tone', 'size')
+                        ->whereHas('product', fn($subQuery) => $subQuery->where('id', $request->input('product_id')))
                         ->whereHas('warehouse', fn($subQuery) => $subQuery->where('to_discount', true))
-                        ->where('product_id', $request->input('product_id'))
-                        ->where('color_id', $request->input('color_id'))
-                        ->where('tone_id', $request->input('tone_id'))
-                        ->first(),
+                        ->whereHas('color', fn($subQuery) => $subQuery->where('id', $request->input('color_id')))
+                        ->whereHas('tone', fn($subQuery) => $subQuery->where('id', $request->input('tone_id')))
+                        ->get(),
                     'Inventario encontrado con exito.',
                     200
                 );
             }
 
+            if($request->filled('product_id')) {
+                return $this->successResponse(
+                    Product::with('colors_tones.color', 'colors_tones.tone')->findOrFail($request->input('product_id')),
+                    'Colores, tonos y tallas del producto encontrados con exito.',
+                    200
+                );
+            }
+
             return $this->successResponse(
-                OrderDetail::with('quantities')->findOrFail($id),
+                [
+                    'products' => Product::with('inventories.warehouse')
+                    ->whereHas('inventories.warehouse', fn($subQuery) => $subQuery->where('to_discount', true))
+                    ->get(),
+                    'orderDetail' => OrderDetail::with('quantities')->findOrFail($id)
+                ],
                 'El detalle del pedido fue encontrado exitosamente.',
                 204
             );
@@ -267,13 +280,21 @@ class OrderWalletDetailController extends Controller
     public function update(OrderWalletDetailUpdateRequest $request, $id)
     {
         try {
-            $orderDetail = OrderDetail::findOrFail($id);
+            $orderDetail = OrderDetail::with('quantities')->findOrFail($id);
+            $orderDetail->order_id = $request->input('order_id');
+            $orderDetail->product_id = $request->input('product_id');
+            $orderDetail->color_id = $request->input('color_id');
+            $orderDetail->tone_id = $request->input('tone_id');
             $orderDetail->seller_observation = $request->input('seller_observation');
             $orderDetail->save();
 
+            foreach($orderDetail->quantities as $quantity) {
+                $quantity->delete();
+            }
+
             collect($request->order_detail_quantities)->map(function ($orderDetailQuantity) use ($orderDetail) {
                 $orderDetailQuantity = (object) $orderDetailQuantity;
-                $orderDetailQuantityNew = isset($orderDetailQuantity->id) ? OrderDetailQuantity::findOrFail($orderDetailQuantity->id) : new OrderDetailQuantity();
+                $orderDetailQuantityNew = new OrderDetailQuantity();
                 $orderDetailQuantityNew->order_detail_id = $orderDetail->id;
                 $orderDetailQuantityNew->size_id = $orderDetailQuantity->size_id;
                 $orderDetailQuantityNew->quantity = $orderDetailQuantity->quantity;
@@ -282,7 +303,7 @@ class OrderWalletDetailController extends Controller
 
             return $this->successResponse(
                 $orderDetail,
-                'El detalle del pedido fue actualizado por cartera exitosamente.',
+                'El detalle del pedido fue actualizado por el asesor exitosamente.',
                 200
             );
         } catch (ModelNotFoundException $e) {
@@ -438,8 +459,6 @@ class OrderWalletDetailController extends Controller
             }
 
             $orderDetail->save();
-
-            DB::statement('CALL order_wallet_status(?)', [$orderDetail->order->id]);
 
             return $this->successResponse(
                 $orderDetail,

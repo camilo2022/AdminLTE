@@ -20,7 +20,7 @@ use App\Http\Controllers\OrderSellerDetailController;
 use App\Http\Controllers\OrderWalletController;
 use App\Http\Controllers\OrderWalletDetailController;
 use App\Http\Controllers\PackageTypeController;
-use App\Http\Controllers\PaymentMethodController;
+use App\Http\Controllers\PaymentTypeController;
 use App\Http\Controllers\PersonController;
 use App\Http\Controllers\PersonReferenceController;
 use App\Http\Controllers\PersonTypeController;
@@ -211,16 +211,16 @@ Route::middleware(['auth'])->group(function () {
             });
         });
 
-        Route::prefix('/PaymentMethods')->group(function () {
-            Route::controller(PaymentMethodController::class)->group(function () {
-                Route::get('/Index', 'index')->middleware('can:Dashboard.PaymentMethods.Index')->name('Dashboard.PaymentMethods.Index');    
-                Route::post('/Index/Query', 'indexQuery')->middleware('can:Dashboard.PaymentMethods.Index.Query')->name('Dashboard.PaymentMethods.Index.Query');    
-                Route::post('/Create', 'create')->middleware('can:Dashboard.PaymentMethods.Create')->name('Dashboard.PaymentMethods.Create');    
-                Route::post('/Store', 'store')->middleware('can:Dashboard.PaymentMethods.Store')->name('Dashboard.PaymentMethods.Store');    
-                Route::post('/Edit/{id}', 'edit')->middleware('can:Dashboard.PaymentMethods.Edit')->name('Dashboard.PaymentMethods.Edit');    
-                Route::put('/Update/{id}', 'update')->middleware('can:Dashboard.PaymentMethods.Update')->name('Dashboard.PaymentMethods.Update');    
-                Route::delete('/Delete', 'delete')->middleware('can:Dashboard.PaymentMethods.Delete')->name('Dashboard.PaymentMethods.Delete');    
-                Route::put('/Restore', 'restore')->middleware('can:Dashboard.PaymentMethods.Restore')->name('Dashboard.PaymentMethods.Restore');
+        Route::prefix('/PaymentTypes')->group(function () {
+            Route::controller(PaymentTypeController::class)->group(function () {
+                Route::get('/Index', 'index')->middleware('can:Dashboard.PaymentTypes.Index')->name('Dashboard.PaymentTypes.Index');    
+                Route::post('/Index/Query', 'indexQuery')->middleware('can:Dashboard.PaymentTypes.Index.Query')->name('Dashboard.PaymentTypes.Index.Query');    
+                Route::post('/Create', 'create')->middleware('can:Dashboard.PaymentTypes.Create')->name('Dashboard.PaymentTypes.Create');    
+                Route::post('/Store', 'store')->middleware('can:Dashboard.PaymentTypes.Store')->name('Dashboard.PaymentTypes.Store');    
+                Route::post('/Edit/{id}', 'edit')->middleware('can:Dashboard.PaymentTypes.Edit')->name('Dashboard.PaymentTypes.Edit');    
+                Route::put('/Update/{id}', 'update')->middleware('can:Dashboard.PaymentTypes.Update')->name('Dashboard.PaymentTypes.Update');    
+                Route::delete('/Delete', 'delete')->middleware('can:Dashboard.PaymentTypes.Delete')->name('Dashboard.PaymentTypes.Delete');    
+                Route::put('/Restore', 'restore')->middleware('can:Dashboard.PaymentTypes.Restore')->name('Dashboard.PaymentTypes.Restore');
             });
         });
 

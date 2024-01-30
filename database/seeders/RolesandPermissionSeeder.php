@@ -37,7 +37,7 @@ class RolesAndPermissionSeeder extends Seeder
 
         $Transporters = Role::create(['name' => 'Transporters']);
 
-        $PaymentMethods = Role::create(['name' => 'PaymentMethods']);
+        $PaymentTypes = Role::create(['name' => 'PaymentTypes']);
 
         $Bussinesses = Role::create(['name' => 'Bussinesses']);
 
@@ -184,14 +184,14 @@ class RolesAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Dashboard.Transporters.Delete'])->syncRoles([$Transporters]);
         Permission::create(['name' => 'Dashboard.Transporters.Restore'])->syncRoles([$Transporters]);
 
-        Permission::create(['name' => 'Dashboard.PaymentMethods.Index'])->syncRoles([$PaymentMethods]);
-        Permission::create(['name' => 'Dashboard.PaymentMethods.Index.Query'])->syncRoles([$PaymentMethods]);
-        Permission::create(['name' => 'Dashboard.PaymentMethods.Create'])->syncRoles([$PaymentMethods]);
-        Permission::create(['name' => 'Dashboard.PaymentMethods.Store'])->syncRoles([$PaymentMethods]);
-        Permission::create(['name' => 'Dashboard.PaymentMethods.Edit'])->syncRoles([$PaymentMethods]);
-        Permission::create(['name' => 'Dashboard.PaymentMethods.Update'])->syncRoles([$PaymentMethods]);
-        Permission::create(['name' => 'Dashboard.PaymentMethods.Delete'])->syncRoles([$PaymentMethods]);
-        Permission::create(['name' => 'Dashboard.PaymentMethods.Restore'])->syncRoles([$PaymentMethods]);
+        Permission::create(['name' => 'Dashboard.PaymentTypes.Index'])->syncRoles([$PaymentTypes]);
+        Permission::create(['name' => 'Dashboard.PaymentTypes.Index.Query'])->syncRoles([$PaymentTypes]);
+        Permission::create(['name' => 'Dashboard.PaymentTypes.Create'])->syncRoles([$PaymentTypes]);
+        Permission::create(['name' => 'Dashboard.PaymentTypes.Store'])->syncRoles([$PaymentTypes]);
+        Permission::create(['name' => 'Dashboard.PaymentTypes.Edit'])->syncRoles([$PaymentTypes]);
+        Permission::create(['name' => 'Dashboard.PaymentTypes.Update'])->syncRoles([$PaymentTypes]);
+        Permission::create(['name' => 'Dashboard.PaymentTypes.Delete'])->syncRoles([$PaymentTypes]);
+        Permission::create(['name' => 'Dashboard.PaymentTypes.Restore'])->syncRoles([$PaymentTypes]);
 
         Permission::create(['name' => 'Dashboard.Businesses.Index'])->syncRoles([$Bussinesses]);
         Permission::create(['name' => 'Dashboard.Businesses.Index.Query'])->syncRoles([$Bussinesses]);
