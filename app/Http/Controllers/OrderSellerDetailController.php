@@ -43,8 +43,7 @@ class OrderSellerDetailController extends Controller
     {
         try {
             $orderDetails = OrderDetail::with([
-                    'order',
-                    'quantities.size',
+                    'order', 'quantities.size',
                     'product' => fn($query) => $query->withTrashed(),
                     'color' => fn($query) => $query->withTrashed(),
                     'tone' => fn($query) => $query->withTrashed(),

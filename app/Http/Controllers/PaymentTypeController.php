@@ -25,7 +25,7 @@ class PaymentTypeController extends Controller
     public function index()
     {
         try {
-            return view('Dashboard.PaymentType.Index');
+            return view('Dashboard.PaymentTypes.Index');
         } catch (Exception $e) {
             return back()->with('danger', 'Ocurrió un error al cargar la vista: ' . $e->getMessage());
         }

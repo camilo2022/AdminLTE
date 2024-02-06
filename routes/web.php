@@ -15,6 +15,8 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\ModelController;
 use App\Http\Controllers\ModulesAndSubmodulesController;
+use App\Http\Controllers\OrderDispatchController;
+use App\Http\Controllers\OrderDispatchDetailController;
 use App\Http\Controllers\OrderSellerController;
 use App\Http\Controllers\OrderSellerDetailController;
 use App\Http\Controllers\OrderWalletController;
@@ -529,6 +531,29 @@ Route::middleware(['auth'])->group(function () {
                         Route::put('/Review', 'review')->middleware('can:Dashboard.Orders.Wallet.Details.Review')->name('Dashboard.Orders.Wallet.Details.Review');
                         Route::put('/Cancel', 'cancel')->middleware('can:Dashboard.Orders.Wallet.Details.Cancel')->name('Dashboard.Orders.Wallet.Details.Cancel');
                         Route::put('/Decline', 'decline')->middleware('can:Dashboard.Orders.Wallet.Details.Decline')->name('Dashboard.Orders.Wallet.Details.Decline');
+                    });
+                });
+            });
+            Route::prefix('/Dispatch')->group(function () {
+                Route::controller(OrderDispatchController::class)->group(function () {
+                    Route::get('/Index', 'index')->middleware('can:Dashboard.Orders.Dispatch.Index')->name('Dashboard.Orders.Dispatch.Index');
+                    Route::post('/Index/Query', 'indexQuery')->middleware('can:Dashboard.Orders.Dispatch.Index.Query')->name('Dashboard.Orders.Dispatch.Index.Query');
+                    Route::get('/Filter', 'filter')->middleware('can:Dashboard.Orders.Dispatch.Filter')->name('Dashboard.Orders.Dispatch.Filter');
+                    Route::post('/Filter/Query/References', 'filterQueryReferences')->middleware('can:Dashboard.Orders.Dispatch.Filter.Query.References')->name('Dashboard.Orders.Dispatch.Filter.Query.References');
+                    Route::post('/Filter/Query/Orders', 'filterQueryOrders')->middleware('can:Dashboard.Orders.Dispatch.Filter.Query.Orders')->name('Dashboard.Orders.Dispatch.Filter.Query.Orders');
+                    Route::post('/Store', 'store')->middleware('can:Dashboard.Orders.Dispatch.Store')->name('Dashboard.Orders.Dispatch.Store');
+                    Route::put('/Approve', 'approve')->middleware('can:Dashboard.Orders.Dispatch.Approve')->name('Dashboard.Orders.Dispatch.Approve');
+                    Route::put('/Cancel', 'cancel')->middleware('can:Dashboard.Orders.Dispatch.Cancel')->name('Dashboard.Orders.Dispatch.Cancel');
+                    Route::put('/Decline', 'decline')->middleware('can:Dashboard.Orders.Dispatch.Decline')->name('Dashboard.Orders.Dispatch.Decline');
+                    Route::post('/Download', 'download')->middleware('can:Dashboard.Orders.Dispatch.Download')->name('Dashboard.Orders.Dispatch.Download');
+                });
+                Route::prefix('/Details')->group(function () {
+                    Route::controller(OrderDispatchDetailController::class)->group(function () {
+                        Route::get('/Index/{id}', 'index')->middleware('can:Dashboard.Orders.Dispatch.Details.Index')->name('Dashboard.Orders.Dispatch.Details.Index');
+                        Route::post('/Index/Query', 'indexQuery')->middleware('can:Dashboard.Orders.Dispatch.Details.Index.Query')->name('Dashboard.Orders.Dispatch.Details.Index.Query');
+                        Route::put('/Pending', 'pending')->middleware('can:Dashboard.Orders.Dispatch.Details.Pending')->name('Dashboard.Orders.Dispatch.Details.Pending');
+                        Route::put('/Cancel', 'cancel')->middleware('can:Dashboard.Orders.Dispatch.Details.Cancel')->name('Dashboard.Orders.Dispatch.Details.Cancel');
+                        Route::put('/Decline', 'decline')->middleware('can:Dashboard.Orders.Dispatch.Details.Decline')->name('Dashboard.Orders.Dispatch.Details.Decline');
                     });
                 });
             });

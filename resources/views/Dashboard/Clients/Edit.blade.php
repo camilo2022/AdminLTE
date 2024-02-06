@@ -109,7 +109,7 @@
                         <div class="form-group">
                             <label for="document_type_id_c_e">Tipo de documento</label>
                             <div class="input-group">
-                                <select class="form-control select2" id="document_type_id_c_e" name="document_type_id" style="width: 88%">
+                                <select class="form-control select2" id="document_type_id_c_e" name="document_type_id" style="width: 86%">
                                     <option value="">Seleccione</option>
                                 </select>
                                 <div class="input-group-append">

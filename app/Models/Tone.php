@@ -18,10 +18,12 @@ class Tone extends Model implements Auditable
     protected $table = 'tones';
     protected $fillable = [
         'name',
+        'code',
     ];
 
     protected $auditInclude = [
         'name',
+        'code',
     ];
 
     public function products() : BelongsToMany
