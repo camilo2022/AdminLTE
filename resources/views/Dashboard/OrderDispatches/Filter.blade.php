@@ -98,24 +98,18 @@
                                         </tr>
                                     </tbody>
                                     <tfoot class="thead-dark" id="InventoryFoot">
-                                        <tr class="restante" id="InventoryFootQuentityDiscount">
+                                        <tr id="InventoryFootQuentityDiscount">
                                         
                                         </tr>
                                     </tfoot>
                                 </table>
-                                
-                                <table id="OrdersReference" class="table table-bordered table-hover dataTable dtr-inline nowrap w-100">
+                                <br>
+                                <table id="OrdersReference" class="table table-bordered table-hover dataTable dtr-inline w-100">
                                     <thead class="thead-dark" id="OrdersReferenceHead">
-                                        <tr id="OrdersReferenceHeadColumns">
-                                            
-                                        </tr>
                                     </thead>
                                     <tbody id="OrdersReferenceBody">
                                     </tbody>
                                     <tfoot class="thead-dark" id="OrdersReferenceFoot">
-                                        <tr id="OrdersReferenceFootSumQuantities">
-                                            
-                                        </tr>
                                     </tfoot>
                                 </table>
                             </div>

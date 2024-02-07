@@ -96,7 +96,8 @@ class OrderDispatchController extends Controller
                 ->select('size_id', DB::raw('sum(quantity) as quantity'))
                 ->get();
 
-            $ordersDetails = OrderDetail::with('order', 'product', 'color', 'tone', 'quantities')
+            $ordersDetails = OrderDetail::with('order.client', 'order.client_branch.country', 'order.client_branch.departament', 
+                'order.client_branch.city', 'order.correria', 'product', 'color', 'tone', 'quantities')
                 ->whereHas('order', function ($query) {
                     $query->where('seller_status', 'Aprobado')
                         ->where(function ($query) {
@@ -148,21 +149,21 @@ class OrderDispatchController extends Controller
             $warehouseDiscountNew = (object) [
                 'name' => $warehouseDiscount->isNotEmpty() ? $warehouseDiscount->first()->warehouse->name : 'N/A',
                 'code' => $warehouseDiscount->isNotEmpty() ? $warehouseDiscount->first()->warehouse->code : 'N/A',
-                'quantites' => []
+                'quantities' => []
             ];
 
             $warehouseNoDiscountNew = (object) [
                 'name' => 'OTRAS BODEGAS',
                 'code' => 'OB',
-                'quantites' => []
+                'quantities' => []
             ];
 
             foreach ($sizes as $size) {
                 $discounted = $warehouseDiscount->where('size_id', $size->id)->first();
                 $noDiscount = $warehouseNoDiscount->where('size_id', $size->id)->first();
 
-                $warehouseDiscountNew->quantites[$size->id] = $discounted ? $discounted->quantity : 0 ;
-                $warehouseNoDiscountNew->quantites[$size->id] = $noDiscount ? $noDiscount->quantity : 0 ;
+                $warehouseDiscountNew->quantities[$size->id] = $discounted ? $discounted->quantity : 0 ;
+                $warehouseNoDiscountNew->quantities[$size->id] = $noDiscount ? $noDiscount->quantity : 0 ;
             }
 
             return $this->successResponse(

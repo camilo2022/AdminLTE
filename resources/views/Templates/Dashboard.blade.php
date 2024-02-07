@@ -60,7 +60,52 @@
     <!-- Dropzone -->
     <link rel="stylesheet" href="{{ asset('css/plugins/dropzone/dropzone.min.css') }}">
     <style>
-
+        input[type=number]::-webkit-inner-spin-button, 
+        input[type=number]::-webkit-outer-spin-button { 
+            -webkit-appearance: none; 
+            margin: 0; 
+        }
+        input[type=number]{
+            background: transparent;
+            text-align: center;
+            border: none;
+            font-size: 15px;
+            font-weight: bold;
+        }
+        #Inventory {
+            table-layout: fixed;
+            width: 100%;
+            border-collapse: collapse;
+        }
+        #Inventory thead th:nth-child(1) {
+            width: 525px;
+        }
+        #Inventory thead th {
+            width: 70px;
+        }
+        #OrdersReference {
+            table-layout: fixed;
+            width: 100%;
+            border-collapse: collapse;
+        }
+        #OrdersReference thead th:nth-child(1) {
+            width: 25px;
+        }
+        #OrdersReference thead th:nth-child(2) {
+            width: 35px;
+        }
+        #OrdersReference thead th:nth-child(3) {
+            width: 155px;
+        }
+        #OrdersReference thead th:nth-child(4) {
+            width: 155px;
+        }
+        #OrdersReference thead th:nth-child(5) {
+            width: 150px;
+        }
+        #OrdersReference thead th {
+            width: 70px;
+        }
     </style>
 </head>
 
