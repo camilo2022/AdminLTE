@@ -65,13 +65,16 @@
             -webkit-appearance: none; 
             margin: 0; 
         }
-        input[type=number]{
-            background: transparent;
+        .filterInputNumber{
+            background: transparent !important;
             text-align: center;
-            border: none;
             font-size: 15px;
             font-weight: bold;
+            border: 0; 
+            box-shadow: none; 
+            width: 100%;
         }
+        
         #Inventory {
             table-layout: fixed;
             width: 100%;

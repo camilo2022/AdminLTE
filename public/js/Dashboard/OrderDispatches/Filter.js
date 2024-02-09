@@ -1,6 +1,7 @@
 let references = [];
+let sizes = [];
 
-ReferencesOrderDispatch(0);
+ReferencesOrderDispatch();
 
 function ReferencesOrderDispatch(position = 0) {
     $.ajax({
@@ -36,6 +37,7 @@ function InventoriesAndOrderDetailsOrderDispatch(position) {
             'tone_id': reference.tone_id
         },
         success: function(response) {
+            sizes = response.data.sizes;
             FilterOrderDispatchAjaxSuccess(response);
             $('#PositionReference').text(parseInt(position) + 1);
             $('#QuantityReference').text(references.length);
@@ -93,13 +95,13 @@ function InventoriesOrderDispatch(warehouseDiscount, warehouseNoDiscount, sizes)
     let footQuantityDiscountColumnsSizes = '';
     let sumQuantityDiscountColumnsSizes = 0;
     $.each(sizes, function(index, size) {
-        footQuantityDiscountColumnsSizes += `<th class="text-center"><b id="res_t${size.code.replace(/\s+/g, '')}">${warehouseDiscount.quantities[size.id]}</b></th>`;
+        footQuantityDiscountColumnsSizes += `<th class="text-center"><input type="number" class="form-control filterInputNumber text-white" id="res_t${size.id}" value="${warehouseDiscount.quantities[size.id]}" data-size_id="${size.id}" readonly></th>`;
         sumQuantityDiscountColumnsSizes += warehouseDiscount.quantities[size.id];
     })
 
     let trFootQuantityDiscount = `<th><b>UNIDADES RESTANTES</b></th><th>-</th>
         ${footQuantityDiscountColumnsSizes}
-        <th class="text-center"><b id="res_total">${sumQuantityDiscountColumnsSizes}</b></th>`;
+        <th class="text-center"><input type="number" class="form-control filterInputNumber text-white" id="res_total" value="${sumQuantityDiscountColumnsSizes}" readonly></th>`;
 
     $('#InventoryHead').html(headInventory);
     $('#InventoryBodyWarehouseNoDiscount').html(trBodyWarehouseNoDiscount);
@@ -109,7 +111,6 @@ function InventoriesOrderDispatch(warehouseDiscount, warehouseNoDiscount, sizes)
 }
 
 function OrdersDetailsOrderDispatch(ordersDetails, sizes) {
-    console.log(ordersDetails);
     $('#OrdersReferenceHead').empty();
     
     let headColumnsSizes = '';
@@ -133,29 +134,56 @@ function OrdersDetailsOrderDispatch(ordersDetails, sizes) {
         let bodyColumnsSizes = '';
         let sumColumnsSizes = 0;
         $.each(sizes, function(index, size) {
-            bodyColumnsSizes += `<td><input type="number" class="form-control" id="${ordersDetail.id}_t${size.code.replace(/\s+/g, '')}" value="-${ordersDetail.quantities[size.id].quantity}" onkeyup="" style="border: 0; box-shadow: none; width: 100%;"></td>`;
+            bodyColumnsSizes += `<td><input type="number" class="form-control filterInputNumber" id="${ordersDetail.id}_t${size.id}" value="-${ordersDetail.quantities[size.id].quantity}" data-size_id="${size.id}" data-quantity="${ordersDetail.quantities[size.id].quantity}" data-detail="${ordersDetail.id}" onkeyup="" onblur="ResetInputValueOrderDispatch('${ordersDetail.id}_t${size.id}')"></td>`;
             sumColumnsSizes += ordersDetail.quantities[size.id].quantity;
         })
-
-        let row = `<tr>
+        
+        bodyOrdersDetails += `<tr>
                 <td>   
                     <div class="icheck-primary">
                         <input type="checkbox" id="${ordersDetail.id}"><label for="${ordersDetail.id}"></label>
                     </div>
                 </td>
                 <td>${ordersDetail.order.id}</td>
-                <td style="font-size: 13px;">${ordersDetail.order.client.name} | ${ordersDetail.order.client_branch.name}-${ordersDetail.order.client_branch.code}</td>
-                <td style="font-size: 13px;">${ordersDetail.order.client_branch.departament.name} - ${ordersDetail.order.client_branch.city.name} - ${ordersDetail.order.client_branch.neighborhood} - ${ordersDetail.order.client_branch.address}</td>
-                <td style="font-size: 13px;">${ordersDetail.order.seller_observation ?? ''} | ${ordersDetail.order.wallet_observation ?? ''} | ${ordersDetail.seller_observation ?? ''}</td>
+                <td style="font-size: 14px;">${ordersDetail.order.client.name} | ${ordersDetail.order.client_branch.name}-${ordersDetail.order.client_branch.code}</td>
+                <td style="font-size: 14px;">${ordersDetail.order.client_branch.departament.name} - ${ordersDetail.order.client_branch.city.name} - ${ordersDetail.order.client_branch.neighborhood} - ${ordersDetail.order.client_branch.address}</td>
+                <td style="font-size: 14px;">${ordersDetail.order.seller_observation ?? ''} | ${ordersDetail.order.wallet_observation ?? ''} | ${ordersDetail.seller_observation ?? ''}</td>
                 ${bodyColumnsSizes}
-                <td><input type="number" class="form-control" id="${ordersDetail.id}_total" value="-${sumColumnsSizes}" onkeyup="" style="border: 0; box-shadow: none; width: 100%; background: transparent;" readonly></td>
+                <td><input type="number" class="form-control filterInputNumber" id="${ordersDetail.id}_total" value="-${sumColumnsSizes}" readonly></td>
             </tr>`;
-
-        bodyOrdersDetails += row;
     })
+
+    let footColumnsSizes = '';
+    $.each(sizes, function(index, size) {
+        footColumnsSizes += `<th class="text-center"><input type="number" class="form-control filterInputNumber text-white" id="sum_t${size.id}" value="0" data-size_id="${size.id}" readonly></th>`;
+    })
+
+    let footOrdersDetails = `<th>   
+            <div class="icheck-primary">
+                <input type="checkbox" id="0"><label for="0"></label>
+            </div>
+        </th><th>-</th><th>-</th><th>-</th><th>-</th>
+        ${footColumnsSizes}
+        <th class="text-center"><input type="number" class="form-control filterInputNumber text-white" id="sum_total" value="0" readonly></th>`;
     
     $('#OrdersReferenceHead').html(headOrdersDetails);
     $('#OrdersReferenceBody').html(bodyOrdersDetails);
+    $('#OrdersReferenceFoot').html(footOrdersDetails);
+}
+
+function ResetInputValueOrderDispatch(id) {
+    if($(`#${id}`).val() == '') {
+        let detail = $(`#${id}`).attr('data-detail');
+        let quantity = $(`#${id}`).attr('data-quantity');
+        $(`#${id}`).val(parseInt(quantity) * -1);
+
+        let quantities = 0;
+        $.each(sizes, function(index, size) {
+            quantities += parseInt($(`#${detail}_t${size.id}`).val());
+        })
+    
+        $(`#${detail}_total`).val(quantities);
+    }
 }
 
 function FilterOrderDispatchAjaxSuccess(response) {
