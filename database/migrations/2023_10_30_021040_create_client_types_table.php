@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id()->comment('Identificador del tipo cliente');
             $table->string('name')->unique()->comment('Nombre del tipo cliente');
             $table->string('code')->unique()->comment('Codigo del tipo cliente');
+            $table->boolean('require_quota')->default(false);
             $table->timestamps();
             $table->softDeletes();
         });

@@ -9,7 +9,8 @@ let tableClientTypes = $('#clientTypes').DataTable({
                 0: 'id',
                 1: 'name',
                 2: 'code',
-                3: 'deleted_at'
+                3: 'require_quota',
+                4: 'deleted_at'
             };
             request._token = $('meta[name="csrf-token"]').attr('content');
             request.perPage = request.length;
@@ -31,6 +32,16 @@ let tableClientTypes = $('#clientTypes').DataTable({
         { data: 'id' },
         { data: 'name' },
         { data: 'code' },
+        { 
+            data: 'require_quota' ,
+            render: function (data, type, row) {
+                if (data === 1) {
+                    return `<h5><span class="badge badge-outline badge-success"><i class="far fa-circle-check mr-2"></i>Requerido</span></h5>`;
+                } else {
+                    return `<h5><span class="badge badge-outline badge-danger"><i class="far fa-circle-xmark mr-2"></i>No requerido</span></h5>`;
+                }
+            }
+        },
         {
             data: 'deleted_at',
             render: function (data, type, row) {

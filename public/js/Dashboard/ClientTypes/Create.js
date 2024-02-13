@@ -34,6 +34,7 @@ function CreateClientType() {
         confirmButtonColor: '#3085d6',
         confirmButtonText: 'Si, guardar!',
         cancelButtonText: 'No, cancelar!',
+        html: '<div class="icheck-primary"><input type="checkbox" id="require_quota_c" name="require_quota_c"><label for="require_quota_c">¿Requiere tener en cuenta el cupo disponible del tercero al crear pedido?</label></div>',
     }).then((result) => {
         if (result.value) {
             $.ajax({
@@ -42,7 +43,8 @@ function CreateClientType() {
                 data: {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
                     'name': $('#name_c').val(),
-                    'code': $('#code_c').val()
+                    'code': $('#code_c').val(),
+                    'require_quota': $('#require_quota_c').is(':checked')
                 },
                 success: function (response) {
                     tableClientTypes.ajax.reload();

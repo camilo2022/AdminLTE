@@ -68,6 +68,7 @@
                                             <th>#</th>
                                             <th>Nombre</th>
                                             <th>Codigo</th>
+                                            <th>Requiere Quota</th>
                                             <th>Estado</th>
                                             <th>Acciones</th>
                                         </tr>

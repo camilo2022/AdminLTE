@@ -68,7 +68,7 @@
                                             <th>#</th>
                                             <th>Nombre</th>
                                             <th>Codigo</th>
-                                            <th>Referencia</th>
+                                            <th>Referencia Personal</th>
                                             <th>Estado</th>
                                             <th>Acciones</th>
                                         </tr>

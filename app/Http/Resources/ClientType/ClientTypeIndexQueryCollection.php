@@ -21,6 +21,7 @@ class ClientTypeIndexQueryCollection extends ResourceCollection
                     'id' => $clientType->id,
                     'name' => $clientType->name,
                     'code' => $clientType->code,
+                    'require_quota' => $clientType->require_quota,
                     'created_at' => $this->formatDate($clientType->created_at),
                     'updated_at' => $this->formatDate($clientType->updated_at),
                     'deleted_at' => $clientType->deleted_at

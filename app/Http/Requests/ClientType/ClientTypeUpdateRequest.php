@@ -16,6 +16,13 @@ class ClientTypeUpdateRequest extends FormRequest
         ], 422));
     }
 
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'require_quota' => $this->input('require_quota') === 'true',
+        ]);
+    }
+
     public function authorize()
     {
         return true;
@@ -25,7 +32,8 @@ class ClientTypeUpdateRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'unique:client_types,name,' . $this->route('id') .',id', 'max:255'],
-            'code' => ['required', 'string', 'unique:client_types,code,' . $this->route('id') .',id', 'max:255']
+            'code' => ['required', 'string', 'unique:client_types,code,' . $this->route('id') .',id', 'max:255'],
+            'require_quota' => ['required', 'boolean']
         ];
     }
 
@@ -40,6 +48,8 @@ class ClientTypeUpdateRequest extends FormRequest
             'code.string' => 'El campo Codigo del tipo de Documento debe ser una cadena de texto.',
             'code.unique' => 'El campo Codigo del tipo de Documento ya existe en la base de datos.',
             'code.max' => 'El campo Codigo del tipo de Documento no debe exceder los 255 caracteres.',
+            'require_quota.required' => 'El campo Requiere cupo del tipo de Cliente es requerido.',
+            'require_quota.boolean' => 'El campo Requiere cupo del tipo de Cliente debe ser true o false.',
         ];
     }
 }

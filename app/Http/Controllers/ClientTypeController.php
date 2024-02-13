@@ -101,6 +101,7 @@ class ClientTypeController extends Controller
             $clientType = new ClientType();
             $clientType->name = $request->input('name');
             $clientType->code = $request->input('code');
+            $clientType->require_quota = $request->input('require_quota');
             $clientType->save();
 
             return $this->successResponse(
@@ -171,6 +172,7 @@ class ClientTypeController extends Controller
             $clientType = ClientType::withTrashed()->findOrFail($id);
             $clientType->name = $request->input('name');
             $clientType->code = $request->input('code');
+            $clientType->require_quota = $request->input('require_quota');
             $clientType->save();
 
             return $this->successResponse(

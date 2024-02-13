@@ -105,6 +105,7 @@ class SaleChannelController extends Controller
         try {
             $saleChannel = new SaleChannel();
             $saleChannel->name = $request->input('name');
+            $saleChannel->require_verify_wallet = $request->input('require_verify_wallet');
             $saleChannel->save();
 
             return $this->successResponse(
@@ -174,6 +175,7 @@ class SaleChannelController extends Controller
         try {
             $saleChannel = SaleChannel::withTrashed()->findOrFail($id);
             $saleChannel->name = $request->input('name');
+            $saleChannel->require_verify_wallet = $request->input('require_verify_wallet');
             $saleChannel->save();
 
             return $this->successResponse(

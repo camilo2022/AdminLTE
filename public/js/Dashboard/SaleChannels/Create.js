@@ -33,6 +33,7 @@ function CreateSaleChannel() {
         confirmButtonColor: '#3085d6',
         confirmButtonText: 'Si, guardar!',
         cancelButtonText: 'No, cancelar!',
+        html: '<div class="icheck-primary"><input type="checkbox" id="require_verify_wallet_c" name="require_verify_wallet_c"><label for="require_verify_wallet_c">¿Requiere verificacion de cartera el pedido?</label></div>',
     }).then((result) => {
         if (result.value) {
             $.ajax({
@@ -41,6 +42,7 @@ function CreateSaleChannel() {
                 data: {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
                     'name': $('#name_c').val(),
+                    'require_verify_wallet': $('#require_verify_wallet_c').is(':checked')
                 },
                 success: function (response) {
                     tableSaleChannels.ajax.reload();

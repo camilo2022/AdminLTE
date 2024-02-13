@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('sale_channels', function (Blueprint $table) {
             $table->id()->comment('Identificador del canal de venta');
             $table->string('name')->unique()->comment('Nombre del canal de venta');
+            $table->boolean('require_verify_wallet')->default(false);
             $table->timestamps();
             $table->softDeletes();
         });

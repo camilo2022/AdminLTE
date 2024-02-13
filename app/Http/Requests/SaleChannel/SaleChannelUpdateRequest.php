@@ -16,6 +16,13 @@ class SaleChannelUpdateRequest extends FormRequest
         ], 422));
     }
 
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'require_verify_wallet' => $this->input('require_verify_wallet') === 'true',
+        ]);
+    }
+
     public function authorize()
     {
         return true;
@@ -25,6 +32,7 @@ class SaleChannelUpdateRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'unique:sale_channels,name,' . $this->route('id') .',id', 'max:255'],
+            'require_verify_wallet' => ['required', 'boolean']
         ];
     }
 
@@ -35,6 +43,8 @@ class SaleChannelUpdateRequest extends FormRequest
             'name.string' => 'El campo Nombre del canal de Venta debe ser una cadena de texto.',
             'name.unique' => 'El campo Nombre del canal de Venta ya existe en la base de datos.',
             'name.max' => 'El campo Nombre del canal de Venta no debe exceder los 255 caracteres.',
+            'require_verify_wallet.required' => 'El campo Requiere verificacion de cartera del canal de Venta es requerido.',
+            'require_verify_wallet.boolean' => 'El campo Requiere verificacion de cartera del canal de Venta debe ser true o false.',
         ];
     }
 }

@@ -18,17 +18,17 @@ function EditClientTypeModal(id) {
     });
 }
 
-function EditClientTypeModalCleaned(ClientType) {
+function EditClientTypeModalCleaned(clientType) {
     RemoveIsValidClassEditClientType();
     RemoveIsInvalidClassEditClientType();
 
-    $('#EditClientTypeButton').attr('onclick', `EditClientType(${ClientType.id})`);
+    $('#EditClientTypeButton').attr('onclick', `EditClientType(${clientType.id}, ${clientType.require_quota})`);
 
-    $("#name_e").val(ClientType.name);
-    $("#code_e").val(ClientType.code);
+    $("#name_e").val(clientType.name);
+    $("#code_e").val(clientType.code);
 }
 
-function EditClientType(id) {
+function EditClientType(id, require_quota) {
     Swal.fire({
         title: '¿Desea actualizar el tipo de cliente?',
         text: 'El tipo de cliente se actualizara.',
@@ -38,6 +38,7 @@ function EditClientType(id) {
         confirmButtonColor: '#3085d6',
         confirmButtonText: 'Si, actualizar!',
         cancelButtonText: 'No, cancelar!',
+        html: `<div class="icheck-primary"><input type="checkbox" id="require_quota_e" name="require_quota_e" ${require_quota ? 'checked' : ''}><label for="require_quota_e">¿Requiere tener en cuenta el cupo disponible del tercero al crear pedido?</label></div>`,
     }).then((result) => {
         if (result.value) {
             $.ajax({
@@ -46,7 +47,8 @@ function EditClientType(id) {
                 data: {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
                     'name': $('#name_e').val(),
-                    'code': $('#code_e').val()
+                    'code': $('#code_e').val(),
+                    'require_quota': $('#require_quota_e').is(':checked')
                 },
                 success: function (response) {
                     tableClientTypes.ajax.reload();

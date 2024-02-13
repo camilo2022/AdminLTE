@@ -18,11 +18,13 @@ class ClientType extends Model implements Auditable
     protected $fillable = [
         'name',
         'code',
+        'require_quota',
     ];
 
     protected $auditInclude = [
         'name',
         'code',
+        'require_quota',
     ];
 
     public function scopeSearch($query, $search)

@@ -22,12 +22,12 @@ function EditSaleChannelModalCleaned(saleChannel) {
     RemoveIsValidClassEditSaleChannel();
     RemoveIsInvalidClassEditSaleChannel();
 
-    $('#EditSaleChannelButton').attr('onclick', `EditSaleChannel(${saleChannel.id})`);
+    $('#EditSaleChannelButton').attr('onclick', `EditSaleChannel(${saleChannel.id}, ${saleChannel.require_verify_wallet})`);
 
     $("#name_e").val(saleChannel.name);
 }
 
-function EditSaleChannel(id) {
+function EditSaleChannel(id, require_verify_wallet) {
     Swal.fire({
         title: '¿Desea actualizar el canal de venta?',
         text: 'El canal de venta se actualizara.',
@@ -37,6 +37,7 @@ function EditSaleChannel(id) {
         confirmButtonColor: '#3085d6',
         confirmButtonText: 'Si, actualizar!',
         cancelButtonText: 'No, cancelar!',
+        html: `<div class="icheck-primary"><input type="checkbox" id="require_verify_wallet_e" name="require_verify_wallet_e" ${require_verify_wallet ? 'checked' : ''}><label for="require_verify_wallet_e">¿Requiere verificacion de cartera el pedido?</label></div>`,
     }).then((result) => {
         if (result.value) {
             $.ajax({
@@ -45,6 +46,7 @@ function EditSaleChannel(id) {
                 data: {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
                     'name': $('#name_e').val(),
+                    'require_verify_wallet': $('#require_verify_wallet_e').is(':checked')
                 },
                 success: function (response) {
                     tableSaleChannels.ajax.reload();
