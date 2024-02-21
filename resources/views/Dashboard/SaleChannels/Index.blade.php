@@ -67,6 +67,7 @@
                                         <tr>
                                             <th>#</th>
                                             <th>Nombre</th>
+                                            <th>Requiere Verificacion Cartera</th>
                                             <th>Estado</th>
                                             <th>Acciones</th>
                                         </tr>

@@ -72,15 +72,15 @@ let tableTransfers = $('#transfers').DataTable({
             render: function (data, type, row) {
                 switch (data) {
                     case 'Cancelado':
-                        return `<h5><span class="badge badge-outline badge-warning text-white"><i class="fas fa-xmark mr-2 text-white"></i>Cancelado</span></h5>`;
+                        return `<h5><span class="badge badge-pill badge-warning text-white"><i class="fas fa-xmark mr-2 text-white"></i>Cancelado</span></h5>`;
                     case 'Eliminado':
-                        return `<h5><span class="badge badge-outline badge-danger"><i class="fas fa-trash mr-2"></i>Eliminado</span></h5>`;
+                        return `<h5><span class="badge badge-pill badge-danger"><i class="fas fa-trash mr-2"></i>Eliminado</span></h5>`;
                     case 'Pendiente':
-                        return `<h5><span class="badge badge-outline badge-info"><i class="fas fa-arrows-rotate mr-2"></i>Pendiente</span></h5>`;
+                        return `<h5><span class="badge badge-pill badge-info"><i class="fas fa-arrows-rotate mr-2"></i>Pendiente</span></h5>`;
                     case 'Aprobado':
-                        return `<h5><span class="badge badge-outline badge-success"><i class="fas fa-check mr-2"></i>Aprobado</span></h5>`;
+                        return `<h5><span class="badge badge-pill badge-success"><i class="fas fa-check mr-2"></i>Aprobado</span></h5>`;
                     default:
-                        return `<h5><span class="badge badge-outline badge-info"><i class="fas fa-arrows-rotate mr-2"></i>Pendiente</span></h5>`;
+                        return `<h5><span class="badge badge-pill badge-info"><i class="fas fa-arrows-rotate mr-2"></i>Pendiente</span></h5>`;
                 }
             }
         },

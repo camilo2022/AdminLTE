@@ -13,16 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('files', function (Blueprint $table) {
+        Schema::create('banks', function (Blueprint $table) {
             $table->id();
-            $table->morphs('model');
-            $table->string('name');
-            $table->string('path');
-            $table->string('type');
-            $table->unsignedBigInteger('size');
-            $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
+            $table->string('name')->unique();
+            $table->string('sector_code');
+            $table->string('entity_code');
+            $table->unique(['sector_code', 'entity_code']);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -33,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('product_photos');
+        Schema::dropIfExists('banks');
     }
 };

@@ -38,7 +38,7 @@ function EditClientType(id, require_quota) {
         confirmButtonColor: '#3085d6',
         confirmButtonText: 'Si, actualizar!',
         cancelButtonText: 'No, cancelar!',
-        html: `<div class="icheck-primary"><input type="checkbox" id="require_quota_e" name="require_quota_e" ${require_quota ? 'checked' : ''}><label for="require_quota_e">¿Requiere tener en cuenta el cupo disponible del tercero al crear pedido?</label></div>`,
+        html: `<div class="icheck-primary"><input type="checkbox" id="require_quota_e" name="require_quota_e" ${require_quota ? 'checked' : ''}><label for="require_quota_e">¿Requiere tener en cuenta el cupo disponible?</label></div>`,
     }).then((result) => {
         if (result.value) {
             $.ajax({

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AreasAndChargesController;
 use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Controllers\BankController;
 use App\Http\Controllers\BusinessController;
 use App\Http\Controllers\CategoriesAndSubcategoriesController;
 use App\Http\Controllers\ClientBranchController;
@@ -210,6 +211,19 @@ Route::middleware(['auth'])->group(function () {
                 Route::put('/Update/{id}', 'update')->middleware('can:Dashboard.Transporters.Update')->name('Dashboard.Transporters.Update');
                 Route::delete('/Delete', 'delete')->middleware('can:Dashboard.Transporters.Delete')->name('Dashboard.Transporters.Delete');
                 Route::put('/Restore', 'restore')->middleware('can:Dashboard.Transporters.Restore')->name('Dashboard.Transporters.Restore');
+            });
+        });
+
+        Route::prefix('/Banks')->group(function () {
+            Route::controller(BankController::class)->group(function () {
+                Route::get('/Index', 'index')->middleware('can:Dashboard.Banks.Index')->name('Dashboard.Banks.Index');    
+                Route::post('/Index/Query', 'indexQuery')->middleware('can:Dashboard.Banks.Index.Query')->name('Dashboard.Banks.Index.Query');    
+                Route::post('/Create', 'create')->middleware('can:Dashboard.Banks.Create')->name('Dashboard.Banks.Create');    
+                Route::post('/Store', 'store')->middleware('can:Dashboard.Banks.Store')->name('Dashboard.Banks.Store');    
+                Route::post('/Edit/{id}', 'edit')->middleware('can:Dashboard.Banks.Edit')->name('Dashboard.Banks.Edit');    
+                Route::put('/Update/{id}', 'update')->middleware('can:Dashboard.Banks.Update')->name('Dashboard.Banks.Update');    
+                Route::delete('/Delete', 'delete')->middleware('can:Dashboard.Banks.Delete')->name('Dashboard.Banks.Delete');    
+                Route::put('/Restore', 'restore')->middleware('can:Dashboard.Banks.Restore')->name('Dashboard.Banks.Restore');
             });
         });
 

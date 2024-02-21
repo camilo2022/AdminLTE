@@ -4,16 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableModel;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
-class ProductColorTone extends Model implements Auditable
+class ProductColorTone extends Model implements Auditable, HasMedia
 {
-    use HasFactory;
-    use SoftDeletes;
-    use AuditableModel;
+    use HasFactory, SoftDeletes, AuditableModel, InteractsWithMedia;
 
     protected $table = 'product_color_tone';
     protected $fillable = [
@@ -27,11 +26,6 @@ class ProductColorTone extends Model implements Auditable
         'color_id',
         'tone_id'
     ];
-
-    public function files() : MorphMany
-    {
-      return $this->morphMany(File::class, 'model');
-    }
 
     public function product() : BelongsTo
     {

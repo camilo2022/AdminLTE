@@ -36,9 +36,9 @@ let tablePersonTypes = $('#personTypes').DataTable({
             data: 'require_people' ,
             render: function (data, type, row) {
                 if (data === 1) {
-                    return `<h5><span class="badge badge-outline badge-success"><i class="far fa-circle-check mr-2"></i>Requerido</span></h5>`;
+                    return `<h5><span class="badge badge-pill badge-success"><i class="far fa-circle-check mr-2"></i>Requerido</span></h5>`;
                 } else {
-                    return `<h5><span class="badge badge-outline badge-danger"><i class="far fa-circle-xmark mr-2"></i>No requerido</span></h5>`;
+                    return `<h5><span class="badge badge-pill badge-danger"><i class="far fa-circle-xmark mr-2"></i>No requerido</span></h5>`;
                 }
             }
         },
@@ -46,9 +46,9 @@ let tablePersonTypes = $('#personTypes').DataTable({
             data: 'deleted_at',
             render: function (data, type, row) {
                 if (data === null) {
-                    return `<h5><span class="badge badge-outline badge-success"><i class="fas fa-check mr-2"></i>Activa</span></h5>`;
+                    return `<h5><span class="badge badge-pill badge-success"><i class="fas fa-check mr-2"></i>Activa</span></h5>`;
                 } else {
-                    return `<h5><span class="badge badge-outline badge-danger"><i class="fas fa-xmark mr-2"></i>Inactiva</span></h5>`;
+                    return `<h5><span class="badge badge-pill badge-danger"><i class="fas fa-xmark mr-2"></i>Inactiva</span></h5>`;
                 }
             }
         },

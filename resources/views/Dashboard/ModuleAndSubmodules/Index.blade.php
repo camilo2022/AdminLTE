@@ -65,10 +65,6 @@
                                 <table id="modulesAndSubmodules" class="table table-bordered table-hover dataTable dtr-inline w-100">
                                     <thead class="thead-dark">
                                         <tr>
-                                            <th colspan="8">Información</th>
-                                            <th colspan="2">Gestionar</th>
-                                        </tr>
-                                        <tr>
                                             <th>#</th>
                                             <th>Modulo</th>
                                             <th>Icono</th>

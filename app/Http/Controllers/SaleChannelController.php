@@ -218,7 +218,7 @@ class SaleChannelController extends Controller
             $saleChannel = SaleChannel::findOrFail($id);
 
             foreach ($returnTypes as $returnType) {
-                $returnTypesId = $returnType->sale_channels->pluck('id')->all();
+                $returnTypesId = $returnType->sale_channels->pluck('id')->values();
                 $returnType->exists = in_array($id, $returnTypesId);
             }
 

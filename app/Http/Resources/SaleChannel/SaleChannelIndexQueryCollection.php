@@ -20,6 +20,7 @@ class SaleChannelIndexQueryCollection extends ResourceCollection
                 return [
                     'id' => $saleChannel->id,
                     'name' => $saleChannel->name,
+                    'require_verify_wallet' => $saleChannel->require_verify_wallet,
                     'created_at' => $this->formatDate($saleChannel->created_at),
                     'updated_at' => $this->formatDate($saleChannel->updated_at),
                     'deleted_at' => $saleChannel->deleted_at

@@ -71,10 +71,6 @@
                                 <table id="users" class="table table-bordered table-hover dataTable dtr-inline w-100">
                                     <thead class="thead-dark">
                                         <tr>
-                                            <th colspan="7">Información Personal</th>
-                                            <th colspan="1">Gestionar Usuario</th>
-                                        </tr>
-                                        <tr>
                                             <th>#</th>
                                             <th>Nombres</th>
                                             <th>Apellidos</th>

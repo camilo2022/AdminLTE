@@ -34,7 +34,7 @@ function CreateClientType() {
         confirmButtonColor: '#3085d6',
         confirmButtonText: 'Si, guardar!',
         cancelButtonText: 'No, cancelar!',
-        html: '<div class="icheck-primary"><input type="checkbox" id="require_quota_c" name="require_quota_c"><label for="require_quota_c">¿Requiere tener en cuenta el cupo disponible del tercero al crear pedido?</label></div>',
+        html: '<div class="icheck-primary"><input type="checkbox" id="require_quota_c" name="require_quota_c"><label for="require_quota_c">¿Requiere tener en cuenta el cupo disponible?</label></div>',
     }).then((result) => {
         if (result.value) {
             $.ajax({

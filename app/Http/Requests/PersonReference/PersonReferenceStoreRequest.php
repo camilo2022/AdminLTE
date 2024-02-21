@@ -43,8 +43,8 @@ class PersonReferenceStoreRequest extends FormRequest
             'address' => ['required', 'string', 'max:255'],
             'neighborhood' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255'],
-            'telephone_number_first' => ['required', 'numeric', 'size:10'],
-            'telephone_number_second' => ['nullable', 'numeric', 'size:10'],
+            'telephone_number_first' => ['required', 'string', 'size:10'],
+            'telephone_number_second' => ['nullable', 'string', 'size:10'],
             'country_departament' => ['exists:departaments,id,country_id,' . $this->input('country_id')],
             'departament_city' => ['exists:cities,id,departament_id,' . $this->input('departament_id')]
         ];
@@ -84,9 +84,9 @@ class PersonReferenceStoreRequest extends FormRequest
             'email.email' => 'El campo Correo electronico de la referencia personal debe ser una dirección de correo electrónico válida.',
             'email.max' => 'El campo Correo electronico de la referencia personal no debe exceder los 255 caracteres.',
             'telephone_number_first.required' => 'El campo Numero de telefono de la referencia personal es requerido.',
-            'telephone_number_first.numeric' => 'El campo Numero de telefono de la referencia personal debe ser una cadena de digitos.',
+            'telephone_number_first.string' => 'El campo Numero de telefono de la referencia personal debe ser una cadena de digitos.',
             'telephone_number_first.size' => 'El campo Numero de telefono de la referencia personal debe tener 10 caracteres.',
-            'telephone_number_second.numeric' => 'El campo Numero de telefono de la referencia personal debe ser una cadena de digitos.',
+            'telephone_number_second.string' => 'El campo Numero de telefono de la referencia personal debe ser una cadena de digitos.',
             'telephone_number_second.size' => 'El campo Numero de telefono de la referencia personal debe tener 10 caracteres.',
             'country_departament.exists' => 'El departamento no pertenece al pais seleccionado.',
             'departament_city.exists' => 'La ciudad no pertenece al departamento seleccionado.',

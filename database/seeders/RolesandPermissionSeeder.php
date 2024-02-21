@@ -37,6 +37,8 @@ class RolesAndPermissionSeeder extends Seeder
 
         $Transporters = Role::create(['name' => 'Transporters']);
 
+        $Banks = Role::create(['name' => 'Banks']);
+
         $PaymentTypes = Role::create(['name' => 'PaymentTypes']);
 
         $Bussinesses = Role::create(['name' => 'Bussinesses']);
@@ -183,6 +185,15 @@ class RolesAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Dashboard.Transporters.Update'])->syncRoles([$Transporters]);
         Permission::create(['name' => 'Dashboard.Transporters.Delete'])->syncRoles([$Transporters]);
         Permission::create(['name' => 'Dashboard.Transporters.Restore'])->syncRoles([$Transporters]);
+
+        Permission::create(['name' => 'Dashboard.Banks.Index'])->syncRoles([$Banks]);
+        Permission::create(['name' => 'Dashboard.Banks.Index.Query'])->syncRoles([$Banks]);
+        Permission::create(['name' => 'Dashboard.Banks.Create'])->syncRoles([$Banks]);
+        Permission::create(['name' => 'Dashboard.Banks.Store'])->syncRoles([$Banks]);
+        Permission::create(['name' => 'Dashboard.Banks.Edit'])->syncRoles([$Banks]);
+        Permission::create(['name' => 'Dashboard.Banks.Update'])->syncRoles([$Banks]);
+        Permission::create(['name' => 'Dashboard.Banks.Delete'])->syncRoles([$Banks]);
+        Permission::create(['name' => 'Dashboard.Banks.Restore'])->syncRoles([$Banks]);
 
         Permission::create(['name' => 'Dashboard.PaymentTypes.Index'])->syncRoles([$PaymentTypes]);
         Permission::create(['name' => 'Dashboard.PaymentTypes.Index.Query'])->syncRoles([$PaymentTypes]);
@@ -421,8 +432,7 @@ class RolesAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Dashboard.Orders.Dispatch.Index'])->syncRoles([$OrderDispatches]);
         Permission::create(['name' => 'Dashboard.Orders.Dispatch.Index.Query'])->syncRoles([$OrderDispatches]);
         Permission::create(['name' => 'Dashboard.Orders.Dispatch.Filter'])->syncRoles([$OrderDispatches]);
-        Permission::create(['name' => 'Dashboard.Orders.Dispatch.Filter.Query.References'])->syncRoles([$OrderDispatches]);
-        Permission::create(['name' => 'Dashboard.Orders.Dispatch.Filter.Query.Orders'])->syncRoles([$OrderDispatches]);
+        Permission::create(['name' => 'Dashboard.Orders.Dispatch.Filter.Query'])->syncRoles([$OrderDispatches]);
         Permission::create(['name' => 'Dashboard.Orders.Dispatch.Store'])->syncRoles([$OrderDispatches]);
         Permission::create(['name' => 'Dashboard.Orders.Dispatch.Approve'])->syncRoles([$OrderDispatches]);
         Permission::create(['name' => 'Dashboard.Orders.Dispatch.Cancel'])->syncRoles([$OrderDispatches]);

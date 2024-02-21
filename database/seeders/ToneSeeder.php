@@ -15,8 +15,8 @@ class ToneSeeder extends Seeder
      */
     public function run()
     {
-        Tone::create(['name' => 'CLARO']);
-        Tone::create(['name' => 'MEDIO']);
-        Tone::create(['name' => 'OSCURO']);
+        Tone::create(['name' => 'CLARO', 'code' => '01']);
+        Tone::create(['name' => 'MEDIO', 'code' => '02']);
+        Tone::create(['name' => 'OSCURO', 'code' => '03']);
     }
 }

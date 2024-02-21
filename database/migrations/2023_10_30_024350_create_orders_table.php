@@ -18,6 +18,7 @@ return new class extends Migration
             $table->id()->comment('Identificador del pedido.');
             $table->unsignedBigInteger('client_id')->comment('Identificador del cliente.');
             $table->unsignedBigInteger('client_branch_id')->comment('Identificador de la sucursal del cliente.');
+            $table->unsignedBigInteger('transporter_id')->comment('Identificador de la transportadora del pedido');
             $table->unsignedBigInteger('sale_channel_id')->comment('Identificador del canal de venta del pedido');
             $table->enum('dispatch', ['De inmediato', 'Antes de', 'Despues de'])->comment('Cuando despachar.');
             $table->date('dispatch_date')->nullable()->comment('Fecha de cuando despachar.');
@@ -34,6 +35,7 @@ return new class extends Migration
             $table->unsignedBigInteger('correria_id')->comment('Identificador de la correria.');
             $table->foreign('client_id')->references('id')->on('clients')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('client_branch_id')->references('id')->on('client_branches')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('transporter_id')->references('id')->on('transporters')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('sale_channel_id')->references('id')->on('sale_channels')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('seller_user_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('wallet_user_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
