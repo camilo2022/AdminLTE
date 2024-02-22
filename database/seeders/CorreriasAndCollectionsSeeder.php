@@ -16,35 +16,35 @@ class CorreriasAndCollectionsSeeder extends Seeder
      */
     public function run()
     {
-        $C12024 = Correria::create([
+        Correria::create([
             'name' => 'INICIO DE AÑO 2024',
             'code' => 'C12024',
             'start_date' => '2024-02-07',
             'end_date' => '2024-03-11'
         ]);
         
-        $C22024 = Correria::create([
+        Correria::create([
             'name' => 'MADRES 2024',
             'code' => 'C22024',
             'start_date' => '2024-03-21',
             'end_date' => '2024-04-22'
         ]);
         
-        $C32024 = Correria::create([
+        Correria::create([
             'name' => 'PADRES - VACACIONES 2024',
             'code' => 'C32024',
             'start_date' => '2024-05-15',
             'end_date' => '2024-06-10'
         ]);
         
-        $C42024 = Correria::create([
+        Correria::create([
             'name' => 'COLOMBIA MODA 23 - 24 - 25 JULIO 2024',
             'code' => 'C42024',
             'start_date' => '2024-07-27',
             'end_date' => '2024-08-26'
         ]);
         
-        $C52024 = Correria::create([
+        Correria::create([
             'name' => 'FIN DE AÑO 2024',
             'code' => 'C52024',
             'start_date' => '2024-09-04',
@@ -52,7 +52,7 @@ class CorreriasAndCollectionsSeeder extends Seeder
         ]);
 
         Collection::create([
-            'correria_id' => $C12024->id,
+            'correria_id' => 1,
             'date_definition_start_pilots' => '2023-11-15',
             'date_definition_start_samples' => '2024-01-15',
             'proyection_stop_warehouse' => 30,
@@ -60,7 +60,7 @@ class CorreriasAndCollectionsSeeder extends Seeder
         ]);
         
         Collection::create([
-            'correria_id' => $C22024->id,
+            'correria_id' => 2,
             'date_definition_start_pilots' => '2024-01-28',
             'date_definition_start_samples' => '2024-03-15',
             'proyection_stop_warehouse' => 30,
@@ -68,7 +68,7 @@ class CorreriasAndCollectionsSeeder extends Seeder
         ]);
         
         Collection::create([
-            'correria_id' => $C32024->id,
+            'correria_id' => 3,
             'date_definition_start_pilots' => '2024-03-30',
             'date_definition_start_samples' => '2024-05-08',
             'proyection_stop_warehouse' => 30,
@@ -76,7 +76,7 @@ class CorreriasAndCollectionsSeeder extends Seeder
         ]);
         
         Collection::create([
-            'correria_id' => $C42024->id,
+            'correria_id' => 4,
             'date_definition_start_pilots' => '2024-05-20',
             'date_definition_start_samples' => '2024-07-21',
             'proyection_stop_warehouse' => 50,
@@ -84,7 +84,7 @@ class CorreriasAndCollectionsSeeder extends Seeder
         ]);
         
         Collection::create([
-            'correria_id' => $C52024->id,
+            'correria_id' => 5,
             'date_definition_start_pilots' => '2024-07-29',
             'date_definition_start_samples' => '2024-08-30',
             'proyection_stop_warehouse' => 15,

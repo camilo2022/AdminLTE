@@ -11,9 +11,7 @@ use OwenIt\Auditing\Auditable as AuditableModel;
 
 class Subcategory extends Model implements Auditable
 {
-    use HasFactory;
-    use SoftDeletes;
-    use AuditableModel;
+    use HasFactory, SoftDeletes, AuditableModel;
 
     protected $table = 'subcategories';
     protected $fillable = [

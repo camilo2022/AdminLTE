@@ -21,7 +21,6 @@ class ColorIndexQueryCollection extends ResourceCollection
                     'id' => $color->id,
                     'name' => $color->name,
                     'code' => $color->code,
-                    'value' => $color->value,
                     'created_at' => $this->formatDate($color->created_at),
                     'updated_at' => $this->formatDate($color->updated_at),
                     'deleted_at' => $color->deleted_at

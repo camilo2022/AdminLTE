@@ -101,7 +101,6 @@ class ColorController extends Controller
             $color = new Color();
             $color->name = $request->input('name');
             $color->code = $request->input('code');
-            $color->value = $request->input('value');
             $color->save();
 
             return $this->successResponse(
@@ -172,7 +171,6 @@ class ColorController extends Controller
             $color = Color::withTrashed()->findOrFail($id);
             $color->name = $request->input('name');
             $color->code = $request->input('code');
-            $color->value = $request->input('value');
             $color->save();
 
             return $this->successResponse(

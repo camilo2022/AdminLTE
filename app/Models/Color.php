@@ -11,21 +11,17 @@ use OwenIt\Auditing\Auditable as AuditableModel;
 
 class Color extends Model implements Auditable
 {
-    use HasFactory;
-    use SoftDeletes;
-    use AuditableModel;
+    use HasFactory, SoftDeletes, AuditableModel;
 
     protected $table = 'colors';
     protected $fillable = [
         'name',
-        'code',
-        'value',
+        'code'
     ];
 
     protected $auditInclude = [
         'name',
-        'code',
-        'value'
+        'code'
     ];
 
     public function products() : BelongsToMany

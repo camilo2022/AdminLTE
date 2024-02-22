@@ -16,6 +16,13 @@ class PaymentTypeStoreRequest extends FormRequest
         ], 422));
     }
 
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'require_banks' => $this->input('require_banks') === 'true',
+        ]);
+    }
+
     public function authorize()
     {
         return true;
@@ -25,7 +32,8 @@ class PaymentTypeStoreRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'unique:payment_types,name'],
-            'code' => ['required', 'string', 'unique:payment_types,code']
+            'code' => ['required', 'string', 'unique:payment_types,code'],
+            'require_banks' => ['required', 'boolean']
         ];
     }
 
@@ -37,7 +45,9 @@ class PaymentTypeStoreRequest extends FormRequest
             'name.unique' => 'El campo Nombre del tipo de pago ya existe en la base de datos.',
             'code.required' => 'El campo Codigo del tipo de pago es requerido.',
             'code.string' => 'El campo Codigo del tipo de pago debe ser una cadena de texto.',
-            'code.unique' => 'El campo Codigo del tipo de pago ya existe en la base de datos.'
+            'code.unique' => 'El campo Codigo del tipo de pago ya existe en la base de datos.',
+            'require_banks.required' => 'El campo Requiere bancos es requerido.',
+            'require_banks.boolean' => 'El campo Requiere bancos debe ser true o false.',
         ];
     }
 }

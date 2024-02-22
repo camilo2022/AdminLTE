@@ -10,19 +10,19 @@ use OwenIt\Auditing\Auditable as AuditableModel;
 
 class PaymentType extends Model implements Auditable
 {
-    use HasFactory;
-    use SoftDeletes;
-    use AuditableModel;
+    use HasFactory, SoftDeletes, AuditableModel;
     
     protected $table = 'payment_types';
     protected $fillable = [
         'name',
-        'code'
+        'code',
+        'require_banks'
     ];
 
     protected $auditInclude = [
         'name',
-        'code'
+        'code',
+        'require_banks'
     ];
 
     public function scopeSearch($query, $search)

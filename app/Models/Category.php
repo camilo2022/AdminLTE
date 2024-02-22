@@ -12,9 +12,7 @@ use OwenIt\Auditing\Auditable as AuditableModel;
 
 class Category extends Model implements Auditable
 {
-    use HasFactory;
-    use SoftDeletes;
-    use AuditableModel;
+    use HasFactory, SoftDeletes, AuditableModel;
 
     protected $table = 'categories';
     protected $fillable = [

@@ -34,6 +34,7 @@ function CreatePaymentType() {
         confirmButtonColor: '#3085d6',
         confirmButtonText: 'Si, guardar!',
         cancelButtonText: 'No, cancelar!',
+        html: '<div class="icheck-primary"><input type="checkbox" id="require_banks_c" name="require_banks_c"><label for="require_banks_c">¿Requiere indicar el banco?</label></div>',
     }).then((result) => {
         if (result.value) {
             $.ajax({
@@ -43,6 +44,7 @@ function CreatePaymentType() {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
                     'name': $('#name_c').val(),
                     'code': $('#code_c').val(),
+                    'require_banks': $('#require_banks_c').is(':checked')
                 },
                 success: function(response) {
                     tablePaymentTypes.ajax.reload();

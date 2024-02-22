@@ -37,19 +37,6 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-12">
-                    <div class="form-group">
-                        <label for="value">Valor</label>
-                        <div class="input-group">
-                            <input type="color" class="form-control" id="value_c" name="value">
-                            <div class="input-group-append">
-                                <span class="input-group-text">
-                                    <i class="fas fa-paintbrush"></i>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal" title="Cerrar ventana">

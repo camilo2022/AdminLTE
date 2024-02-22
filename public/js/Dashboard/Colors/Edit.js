@@ -26,7 +26,6 @@ function EditColorModalCleaned(color) {
 
     $("#name_e").val(color.name);
     $("#code_e").val(color.code);
-    $('#value_e').val(color.value);
 }
 
 function EditColor(id) {
@@ -47,8 +46,7 @@ function EditColor(id) {
                 data: {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
                     'name': $('#name_e').val(),
-                    'code': $('#code_e').val(),
-                    'value': $('#value_e').val()
+                    'code': $('#code_e').val()
                 },
                 success: function (response) {
                     tableColors.ajax.reload();
@@ -118,15 +116,11 @@ function AddIsValidClassEditColor() {
     if (!$('#code_e').hasClass('is-invalid')) {
         $('#code_e').addClass('is-valid');
     }
-    if (!$('#value_e').hasClass('is-invalid')) {
-        $('#value_e').addClass('is-valid');
-    }
 }
 
 function RemoveIsValidClassEditColor() {
     $('#name_e').removeClass('is-valid');
     $('#code_e').removeClass('is-valid');
-    $('#value_e').removeClass('is-valid');
 }
 
 function AddIsInvalidClassEditColor(input) {
@@ -138,5 +132,4 @@ function AddIsInvalidClassEditColor(input) {
 function RemoveIsInvalidClassEditColor() {
     $('#name_e').removeClass('is-invalid');
     $('#code_e').removeClass('is-invalid');
-    $('#value_e').removeClass('is-invalid');
 }

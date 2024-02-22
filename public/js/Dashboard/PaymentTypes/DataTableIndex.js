@@ -31,6 +31,16 @@ let tablePaymentTypes = $('#paymentTypes').DataTable({
         { data: 'id' },
         { data: 'name' },
         { data: 'code' },
+        { 
+            data: 'require_banks' ,
+            render: function (data, type, row) {
+                if (data === 1) {
+                    return `<h5><span class="badge badge-pill badge-success"><i class="far fa-circle-check mr-2"></i>Requerido</span></h5>`;
+                } else {
+                    return `<h5><span class="badge badge-pill badge-danger"><i class="far fa-circle-xmark mr-2"></i>No requerido</span></h5>`;
+                }
+            }
+        },
         {
             data: 'deleted_at',
             render: function (data, type, row) {

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('name')->unique();
             $table->string('code')->unique();
+            $table->boolean('require_banks')->default(false);
             $table->timestamps();
             $table->softDeletes();
         });

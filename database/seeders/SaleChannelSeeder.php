@@ -15,6 +15,7 @@ class SaleChannelSeeder extends Seeder
      */
     public function run()
     {
-        
+        SaleChannel::create(['name' => 'VENTA NACIONAL', 'require_verify_wallet' => true]);
+        SaleChannel::create(['name' => 'VENTA ASISTIDA', 'require_verify_wallet' => false]);
     }
 }

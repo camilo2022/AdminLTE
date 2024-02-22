@@ -25,8 +25,7 @@ class ColorStoreRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'unique:colors,name', 'max:255'],
-            'code' => ['required', 'string', 'unique:colors,code', 'max:255'],
-            'value' => ['required', 'string', 'unique:colors,value', 'max:255']
+            'code' => ['required', 'string', 'unique:colors,code', 'max:255']
         ];
     }
 
@@ -41,10 +40,6 @@ class ColorStoreRequest extends FormRequest
             'code.string' => 'El campo Codigo del color debe ser una cadena de texto.',
             'code.unique' => 'El campo Codigo del color ya existe en la base de datos.',
             'code.max' => 'El campo Codigo del color no debe exceder los 255 caracteres.',
-            'value.required' => 'El campo Valor del color es requerido.',
-            'value.string' => 'El campo Valor del color debe ser una cadena de texto.',
-            'value.unique' => 'El campo Valor del color ya existe en la base de datos.',
-            'value.max' => 'El campo Valor del color no debe exceder los 255 caracteres.',
         ];
     }
 }

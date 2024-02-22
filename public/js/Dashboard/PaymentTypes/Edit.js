@@ -18,17 +18,17 @@ function EditPaymentTypeModal(id) {
     });
 }
 
-function EditPaymentTypeModalCleaned(packageType) {
+function EditPaymentTypeModalCleaned(paymentType) {
     RemoveIsValidClassEditPaymentType();
     RemoveIsInvalidClassEditPaymentType();
 
-    $('#EditPaymentTypeButton').attr('onclick', `EditPaymentType(${packageType.id})`);
+    $('#EditPaymentTypeButton').attr('onclick', `EditPaymentType(${paymentType.id}, ${paymentType.require_banks})`);
 
-    $("#name_e").val(packageType.name);
-    $("#code_e").val(packageType.code);
+    $("#name_e").val(paymentType.name);
+    $("#code_e").val(paymentType.code);
 }
 
-function EditPaymentType(id) {
+function EditPaymentType(id, require_banks) {
     Swal.fire({
         title: '¿Desea actualizar el metodo de pago?',
         text: 'El metodo de pago se actualizara.',
@@ -38,6 +38,7 @@ function EditPaymentType(id) {
         confirmButtonColor: '#3085d6',
         confirmButtonText: 'Si, actualizar!',
         cancelButtonText: 'No, cancelar!',
+        html: `<div class="icheck-primary"><input type="checkbox" id="require_banks_e" name="require_banks_e" ${require_banks ? 'checked' : ''}><label for="require_banks_e">¿Requiere indicar el banco?</label></div>`,
     }).then((result) => {
         if (result.value) {
             $.ajax({
@@ -47,7 +48,8 @@ function EditPaymentType(id) {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
                     'id': id,
                     'name': $("#name_e").val(),
-                    'code': $("#code_e").val()
+                    'code': $("#code_e").val(),
+                    'require_banks': $('#require_banks_e').is(':checked')
                 },
                 success: function(response) {
                     tablePaymentTypes.ajax.reload();

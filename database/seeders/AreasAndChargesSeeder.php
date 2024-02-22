@@ -2,11 +2,12 @@
 
 namespace Database\Seeders;
 
+use App\Models\Area;
 use App\Models\Charge;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class ChargeSeeder extends Seeder
+class AreasAndChargesSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,6 +16,16 @@ class ChargeSeeder extends Seeder
      */
     public function run()
     {
+        Area::create(['name' => 'ADMINISTRACION']);
+
+        Area::create(['name' => 'COMERCIAL']);
+
+        Area::create(['name' => 'BODEGA']);
+
+        Area::create(['name' => 'DISEÑO']);
+
+        Area::create(['name' => 'SISTEMAS']);
+
         Charge::create([
             'area_id' => 1,
             'name' => 'GERENCIA',
@@ -48,18 +59,6 @@ class ChargeSeeder extends Seeder
         Charge::create([
             'area_id' => 2,
             'name' => 'DIRECION COMERCIAL VENTA ASISTIDA',
-            'description' => ''
-        ]);
-        
-        Charge::create([
-            'area_id' => 2,
-            'name' => 'Community manager - Trafficker  Digital',
-            'description' => ''
-        ]);
-        
-        Charge::create([
-            'area_id' => 2,
-            'name' => 'Gestora Telefónica - Novedades',
             'description' => ''
         ]);
         

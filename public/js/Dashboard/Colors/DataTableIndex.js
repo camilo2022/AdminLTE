@@ -8,9 +8,8 @@ let tableColors = $('#colors').DataTable({
             var columnMappings = {
                 0: 'id',
                 1: 'name',
-                2: 'code',
-                3: 'description',
-                4: 'deleted_at'
+                2: 'description',
+                3: 'deleted_at'
             };
             request._token = $('meta[name="csrf-token"]').attr('content');
             request.perPage = request.length;
@@ -32,12 +31,6 @@ let tableColors = $('#colors').DataTable({
         { data: 'id' },
         { data: 'name' },
         { data: 'code' },
-        {
-            data: 'value',
-            render: function(data, type, row) {
-                return `<input type="color" value="${data}" class="form-control" disabled>`
-            }
-        },
         {
             data: 'deleted_at',
             render: function (data, type, row) {
@@ -76,11 +69,11 @@ let tableColors = $('#colors').DataTable({
     columnDefs: [
         {
             orderable: true,
-            targets: [0, 1, 2, 3, 4]
+            targets: [0, 1, 2, 3]
         },
         {
             orderable: false,
-            targets: [5],
+            targets: [4],
             className: "text-center"
         }
     ],

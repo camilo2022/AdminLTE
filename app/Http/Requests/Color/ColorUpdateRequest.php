@@ -25,8 +25,7 @@ class ColorUpdateRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'unique:colors,name,' . $this->route('id') .',id', 'max:255'],
-            'code' => ['required', 'string', 'unique:colors,code,' . $this->route('id') .',id', 'max:255'],
-            'value' => ['required', 'string', 'unique:colors,value,' . $this->route('id') .',id', 'max:255']
+            'code' => ['required', 'string', 'unique:colors,code,' . $this->route('id') .',id', 'max:255']
         ];
     }
 
@@ -41,10 +40,6 @@ class ColorUpdateRequest extends FormRequest
             'code.string' => 'El campo Codigo del color debe ser una cadena de texto.',
             'code.unique' => 'El campo Codigo del color ya existe en la base de datos.',
             'code.max' => 'El campo Codigo del color no debe exceder los 255 caracteres.',
-            'value.required' => 'El campo Codigo del color es requerido.',
-            'value.string' => 'El campo Codigo del color debe ser una cadena de texto.',
-            'value.unique' => 'El campo Codigo del color ya existe en la base de datos.',
-            'value.max' => 'El campo Codigo del color no debe exceder los 255 caracteres.',
         ];
     }
 }

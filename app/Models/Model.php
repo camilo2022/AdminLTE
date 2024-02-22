@@ -11,9 +11,7 @@ use OwenIt\Auditing\Auditable as AuditableModel;
 
 class Model extends DBModel implements Auditable
 {
-    use HasFactory;
-    use SoftDeletes;
-    use AuditableModel;
+    use HasFactory, SoftDeletes, AuditableModel;
 
     protected $table = 'models';
     protected $fillable = [
