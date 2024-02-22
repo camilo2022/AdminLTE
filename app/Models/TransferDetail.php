@@ -11,9 +11,7 @@ use OwenIt\Auditing\Auditable as AuditableModel;
 
 class TransferDetail extends Model implements Auditable
 {
-    use HasFactory;
-    use SoftDeletes;
-    use AuditableModel;
+    use HasFactory, SoftDeletes, AuditableModel;
 
     protected $table = 'transfer_details';
     protected $fillable = [

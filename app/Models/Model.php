@@ -7,11 +7,11 @@ use Illuminate\Database\Eloquent\Model as DBModel;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Contracts\Auditable;
-use OwenIt\Auditing\Auditable as AuditableModel;
+use OwenIt\Auditing\Auditable as Auditing;
 
 class Model extends DBModel implements Auditable
 {
-    use HasFactory, SoftDeletes, AuditableModel;
+    use HasFactory, SoftDeletes, Auditing;
 
     protected $table = 'models';
     protected $fillable = [

@@ -16,6 +16,7 @@ use App\Models\Client;
 use App\Models\ClientBranch;
 use App\Models\Inventory;
 use App\Models\Order;
+use App\Models\OrderPaymentType;
 use App\Models\SaleChannel;
 use App\Traits\ApiMessage;
 use App\Traits\ApiResponser;
@@ -145,6 +146,13 @@ class OrderSellerController extends Controller
             $order->correria_id = $request->input('correria_id');
             $order->save();
 
+            foreach($request->input('payment_type_ids') as $payment_type_id) {
+                $order_payment_type = New OrderPaymentType();
+                $order_payment_type->order_id = $order->id;
+                $order_payment_type->payment_type_id = $payment_type_id;
+                $order_payment_type->save();
+            }
+
             return $this->successResponse(
                 [
                     'url' => URL::route('Dashboard.Orders.Seller.Details.Index', ['id' => $order->id]),
@@ -233,6 +241,19 @@ class OrderSellerController extends Controller
             $order->dispatch_date = Carbon::parse($request->input('dispatch_date'))->format('Y-m-d');
             $order->seller_observation = $request->input('seller_observation');
             $order->save();
+
+            OrderPaymentType::where('order_id', $order->id)->whereNotIn('payment_type_id', $request->input('payment_type_ids'))->delete();
+            
+            $order->load('payment_types');
+
+            $payment_type_ids = array_values(array_diff($request->emails, $order->payment_types->pluck('id')->toArray()));
+
+            foreach($payment_type_ids as $payment_type_id) {
+                $order_payment_type = New OrderPaymentType();
+                $order_payment_type->order_id = $order->id;
+                $order_payment_type->payment_type_id = $payment_type_id;
+                $order_payment_type->save();
+            }
 
             return $this->successResponse(
                 $order,

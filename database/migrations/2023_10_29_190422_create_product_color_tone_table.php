@@ -1,5 +1,8 @@
 <?php
 
+use App\Models\Color;
+use App\Models\Product;
+use App\Models\Tone;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -15,12 +18,15 @@ return new class extends Migration
     {
         Schema::create('product_color_tone', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('product_id')->comment('Identificador del prodcuto.');
+            $table->foreignIdFor(Product::class)->constrained();
+            $table->foreignIdFor(Color::class)->constrained();
+            $table->foreignIdFor(Tone::class)->constrained();
+            /* $table->unsignedBigInteger('product_id')->comment('Identificador del prodcuto.');
             $table->unsignedBigInteger('color_id')->comment('Identificador del color.');
             $table->unsignedBigInteger('tone_id')->comment('Identificador del tono.');
             $table->foreign('product_id')->references('id')->on('products')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('color_id')->references('id')->on('colors')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreign('tone_id')->references('id')->on('tones')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('tone_id')->references('id')->on('tones')->onUpdate('cascade')->onDelete('cascade'); */
             $table->timestamps();
             $table->softDeletes();
         });

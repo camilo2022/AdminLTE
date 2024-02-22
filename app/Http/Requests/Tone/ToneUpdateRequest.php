@@ -39,7 +39,8 @@ class ToneUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required', 'string', 'unique:tones,name,' . $this->route('id') .',id', 'max:255']
+            'name' => ['required', 'string', 'unique:tones,name,' . $this->route('id') .',id', 'max:255'],
+            'code' => ['required', 'string', 'unique:tones,code,' . $this->route('id') .',id', 'max:255']
         ];
     }
 
@@ -51,6 +52,10 @@ class ToneUpdateRequest extends FormRequest
             'name.string' => 'El campo Nombre del tono debe ser una cadena de texto.',
             'name.unique' => 'El campo Nombre del tono ya existe en la base de datos.',
             'name.max' => 'El campo Nombre del tono no debe exceder los 255 caracteres.',
+            'code.required' => 'El campo Codigo del tono es requerido.',
+            'code.string' => 'El campo Codigo del tono debe ser una cadena de texto.',
+            'code.unique' => 'El campo Codigo del tono ya existe en la base de datos.',
+            'code.max' => 'El campo Codigo del tono no debe exceder los 255 caracteres.'
         ];
     }
 }

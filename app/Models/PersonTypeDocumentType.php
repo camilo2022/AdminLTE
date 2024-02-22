@@ -6,12 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use OwenIt\Auditing\Contracts\Auditable;
-use OwenIt\Auditing\Auditable as AuditableModel;
+use OwenIt\Auditing\Auditable as Auditing;
 
 class PersonTypeDocumentType extends Model implements Auditable
 {
-    use HasFactory;
-    use AuditableModel;
+    use HasFactory, Auditing;
 
     protected $table = 'person_type_document_types';
     protected $fillable = [

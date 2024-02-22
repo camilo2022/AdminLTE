@@ -6,17 +6,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
-use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Contracts\Auditable;
-use OwenIt\Auditing\Auditable as AuditableModel;
+use OwenIt\Auditing\Auditable as Auditing;
 
 class Person extends Model implements Auditable
 {
-    use HasFactory;
-    use SoftDeletes;
-    use AuditableModel;
+    use HasFactory, SoftDeletes, Auditing;
 
     protected $table = 'people';
     protected $fillable = [

@@ -9,13 +9,11 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
 use OwenIt\Auditing\Contracts\Auditable;
-use OwenIt\Auditing\Auditable as AuditableModel;
+use OwenIt\Auditing\Auditable as Auditing;
 
 class Module extends Model implements Auditable
 {
-    use HasFactory;
-    use HasRoles;
-    use AuditableModel;
+    use HasFactory, HasRoles, Auditing;
 
     protected $table = 'modules';
     protected $guard_name = 'item';

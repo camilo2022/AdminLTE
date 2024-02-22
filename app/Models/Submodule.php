@@ -7,12 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Spatie\Permission\Models\Permission;
 use OwenIt\Auditing\Contracts\Auditable;
-use OwenIt\Auditing\Auditable as AuditableModel;
+use OwenIt\Auditing\Auditable as Auditing;
 
 class Submodule extends Model implements Auditable
 {
-    use HasFactory;
-    use AuditableModel;
+    use HasFactory, Auditing;
 
     protected $table = 'submodules';
     protected $fillable = [

@@ -7,12 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use OwenIt\Auditing\Contracts\Auditable;
-use OwenIt\Auditing\Auditable as AuditableModel;
+use OwenIt\Auditing\Auditable as Auditing;
 
 class Departament extends Model implements Auditable
 {
-    use HasFactory;
-    use AuditableModel;
+    use HasFactory, Auditing;
 
     protected $table = 'departaments';
     protected $fillable = [

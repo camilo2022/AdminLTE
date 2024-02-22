@@ -7,13 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Contracts\Auditable;
-use OwenIt\Auditing\Auditable as AuditableModel;
+use OwenIt\Auditing\Auditable as Auditing;
 
 class ReturnType extends Model implements Auditable
 {
-    use HasFactory;
-    use SoftDeletes;
-    use AuditableModel;
+    use HasFactory, SoftDeletes, Auditing;
 
     protected $table = 'return_types';
     protected $fillable = [

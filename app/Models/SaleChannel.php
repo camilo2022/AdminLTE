@@ -7,11 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Contracts\Auditable;
-use OwenIt\Auditing\Auditable as AuditableModel;
+use OwenIt\Auditing\Auditable as Auditing;
 
 class SaleChannel extends Model implements Auditable
 {
-    use HasFactory, SoftDeletes, AuditableModel;
+    use HasFactory, SoftDeletes, Auditing;
 
     protected $table = 'sale_channels';
     protected $fillable = [

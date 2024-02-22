@@ -5,14 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use OwenIt\Auditing\Contracts\Auditable;
-use OwenIt\Auditing\Auditable as AuditableModel;
+use OwenIt\Auditing\Auditable as Auditing;
 
 class Order extends Model implements Auditable
 {
-    use HasFactory;
-    use AuditableModel;
+    use HasFactory, Auditing;
 
     protected $table = 'orders';
     protected $fillable = [
@@ -53,6 +54,11 @@ class Order extends Model implements Auditable
         'correria_id'
     ];
 
+    public function supports() : MorphMany
+    {
+      return $this->morphMany(Support::class, 'model');
+    }
+
     public function details() : HasMany
     {
         return $this->hasMany(OrderDetail::class, 'order_id');
@@ -73,6 +79,11 @@ class Order extends Model implements Auditable
         return $this->belongsTo(ClientBranch::class, 'client_branch_id');
     }
 
+    public function transporter() : BelongsTo
+    {
+        return $this->belongsTo(Transporter::class, 'transporter_id');
+    }
+
     public function sale_channel() : BelongsTo
     {
         return $this->belongsTo(SaleChannel::class, 'sale_channel_id');
@@ -91,5 +102,10 @@ class Order extends Model implements Auditable
     public function correria() : BelongsTo
     {
         return $this->belongsTo(Correria::class, 'correria_id');
+    }
+
+    public function payment_types() : BelongsToMany
+    {
+        return $this->belongsToMany(PaymentType::class, 'order_payment_types', 'order_id', 'payment_type_id');
     }
 }

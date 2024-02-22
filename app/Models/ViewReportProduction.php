@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Schema;
 class ViewReportProduction extends Model
 {
     use HasFactory;
-    
+
     protected $view = 'view_report_productions';
 
     public function scopeSearch($query, $search)
@@ -19,7 +19,7 @@ class ViewReportProduction extends Model
 
         $query->where(function($subQuery) use ($columns, $search){
             foreach($columns as $column){
-                $subQuery->orWhere($column, 'LIKE', '%' . $search . '%');
+                $subQuery->orWhere($column, 'like', '%' . $search . '%');
             }
         });
 

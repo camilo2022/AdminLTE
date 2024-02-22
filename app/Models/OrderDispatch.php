@@ -7,13 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use OwenIt\Auditing\Contracts\Auditable;
-use OwenIt\Auditing\Auditable as AuditableModel;
+use OwenIt\Auditing\Auditable as Auditing;
 
 class OrderDispatch extends Model implements Auditable
 {
-    use HasFactory;
-    use AuditableModel;
+    use HasFactory, Auditing;
 
     protected $table = 'order_dispatches';
     protected $fillable = [
@@ -31,6 +31,11 @@ class OrderDispatch extends Model implements Auditable
         'dispatched_date',
         'consecutive'
     ];
+
+    public function supports() : MorphMany
+    {
+      return $this->morphMany(Support::class, 'model');
+    }
 
     public function order_packing() : HasOne
     {

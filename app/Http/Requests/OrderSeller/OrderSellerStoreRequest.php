@@ -45,7 +45,9 @@ class OrderSellerStoreRequest extends FormRequest
             'dispatch_date' => ['required', 'date', 'after_or_equal:now'],
             'seller_observation' => ['nullable', 'string', 'max:255'],
             'correria_id' => ['required', 'exists:correrias,id'],
-            'client_clientBranch' => ['exists:client_branches,id,client_id,' . $this->input('client_id')]
+            'client_clientBranch' => ['exists:client_branches,id,client_id,' . $this->input('client_id')],
+            'payment_type_ids' => ['required', 'array'],
+            'payment_type_ids.*' => ['exists:payment_types,id']
         ];
     }
 
@@ -68,7 +70,10 @@ class OrderSellerStoreRequest extends FormRequest
             'seller_observation.max' => 'El campo Observacion del asesor no debe exceder los 255 caracteres.',
             'correria_id.required' => 'El Identificador de la Correria es requerido. No existe una correria activa en la fecha actual.',
             'correria_id.exists' => 'El Identificador de la correria no es valido.',
-            'client_clientBranch.exists' => 'La sucursal no pertenece al cliente seleccionado.'
+            'client_clientBranch.exists' => 'La sucursal no pertenece al cliente seleccionado.',
+            'payment_type_ids.required' => 'El campo Metodos de pago es requerido.',
+            'payment_type_ids.array' => 'El campo Metodos de pago debe ser un arreglo.',
+            'payment_type_ids.*' => 'El Identificador del Metodo de pago #:position no es valido.'
         ];
     }
 }

@@ -11,11 +11,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Auth\Passwords\CanResetPassword as CanResetPasswordTrait;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use OwenIt\Auditing\Contracts\Auditable;
-use OwenIt\Auditing\Auditable as AuditableModel;
+use OwenIt\Auditing\Auditable as Auditing;
 
 class User extends Authenticatable implements Auditable
 {
-    use HasFactory, Notifiable, HasRoles, SoftDeletes, CanResetPasswordTrait, AuditableModel;
+    use HasFactory, Notifiable, HasRoles, SoftDeletes, CanResetPasswordTrait, Auditing;
 
     protected $table = 'users';
     protected $fillable = [

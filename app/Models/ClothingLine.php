@@ -7,11 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Contracts\Auditable;
-use OwenIt\Auditing\Auditable as AuditableModel;
+use OwenIt\Auditing\Auditable as Auditing;
 
 class ClothingLine extends Model implements Auditable
 {
-    use HasFactory, SoftDeletes, AuditableModel;
+    use HasFactory, SoftDeletes, Auditing;
 
     protected $table = 'clothing_lines';
     protected $fillable = [

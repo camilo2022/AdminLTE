@@ -37,7 +37,9 @@ class OrderSellerUpdateRequest extends FormRequest
             'dispatch' => ['required', 'string', 'max:255'],
             'dispatch_date' => ['required', 'date', 'after_or_equal:now'],
             'seller_observation' => ['nullable', 'string', 'max:255'],
-            'client_clientBranch' => ['exists:client_branches,id,client_id,' . $this->input('client_id')]
+            'client_clientBranch' => ['exists:client_branches,id,client_id,' . $this->input('client_id')],
+            'payment_type_ids' => ['required', 'array'],
+            'payment_type_ids.*' => ['exists:payment_types,id']
         ];
     }
 
@@ -58,7 +60,10 @@ class OrderSellerUpdateRequest extends FormRequest
             'dispatch_date.after_or_equal' => 'El campo Fecha de despacho debe ser posterior o igual a la fecha actual :now.',
             'seller_observation.string' => 'El campo Observacion del asesor debe ser una cadena de caracteres.',
             'seller_observation.max' => 'El campo Observacion del asesor no debe exceder los 255 caracteres.',
-            'client_clientBranch.exists' => 'La sucursal no pertenece al cliente seleccionado.'
+            'client_clientBranch.exists' => 'La sucursal no pertenece al cliente seleccionado.',
+            'payment_type_ids.required' => 'El campo Metodos de pago es requerido.',
+            'payment_type_ids.array' => 'El campo Metodos de pago debe ser un arreglo.',
+            'payment_type_ids.*' => 'El Identificador del Metodo de pago #:position no es valido.'
         ];
     }
 }

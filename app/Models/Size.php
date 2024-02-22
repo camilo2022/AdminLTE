@@ -6,13 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Contracts\Auditable;
-use OwenIt\Auditing\Auditable as AuditableModel;
+use OwenIt\Auditing\Auditable as Auditing;
 
 class Size extends Model implements Auditable
 {
-    use HasFactory;
-    use SoftDeletes;
-    use AuditableModel;
+    use HasFactory, SoftDeletes, Auditing;
 
     protected $table = 'sizes';
     protected $fillable = [

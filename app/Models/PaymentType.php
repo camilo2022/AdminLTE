@@ -6,12 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Contracts\Auditable;
-use OwenIt\Auditing\Auditable as AuditableModel;
+use OwenIt\Auditing\Auditable as Auditing;
 
 class PaymentType extends Model implements Auditable
 {
-    use HasFactory, SoftDeletes, AuditableModel;
-    
+    use HasFactory, SoftDeletes, Auditing;
+
     protected $table = 'payment_types';
     protected $fillable = [
         'name',

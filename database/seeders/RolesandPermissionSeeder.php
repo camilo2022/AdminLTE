@@ -367,6 +367,8 @@ class RolesAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Dashboard.Orders.Seller.Details.Update'])->syncRoles([$OrderSellers]);
         Permission::create(['name' => 'Dashboard.Orders.Seller.Details.Pending'])->syncRoles([$OrderSellers]);
         Permission::create(['name' => 'Dashboard.Orders.Seller.Details.Cancel'])->syncRoles([$OrderSellers]);
+        Permission::create(['name' => 'Dashboard.Orders.Seller.Details.AssignSupportPayment'])->syncRoles([$OrderSellers]);
+        Permission::create(['name' => 'Dashboard.Orders.Seller.Details.RemoveSupportPayment'])->syncRoles([$OrderSellers]);
 
         Permission::create(['name' => 'Dashboard.Clients.Index'])->syncRoles([$Clients]);
         Permission::create(['name' => 'Dashboard.Clients.Index.Query'])->syncRoles([$Clients]);

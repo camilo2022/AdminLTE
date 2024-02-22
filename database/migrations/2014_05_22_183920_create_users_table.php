@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Area;
+use App\Models\Charge;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
@@ -24,10 +26,12 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique()->comment('Correo del usuario.');
             $table->timestamp('email_verified_at')->nullable()->comment('Verificacion del correo del usuario.');
             $table->string('password')->comment('Contraseña del usuario.');
-            $table->unsignedBigInteger('area_id')->comment('Identificador del area.');
+            $table->foreignIdFor(Area::class)->constrained();
+            $table->foreignIdFor(Charge::class)->constrained();
+            /* $table->unsignedBigInteger('area_id')->comment('Identificador del area.');
             $table->unsignedBigInteger('charge_id')->comment('Identificador del cargo.');
             $table->foreign('area_id')->references('id')->on('areas')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreign('charge_id')->references('id')->on('charges')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('charge_id')->references('id')->on('charges')->onUpdate('cascade')->onDelete('cascade'); */
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();

@@ -1,5 +1,10 @@
 <?php
 
+use App\Models\Client;
+use App\Models\ClientBranch;
+use App\Models\Correria;
+use App\Models\SaleChannel;
+use App\Models\Transporter;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
@@ -16,10 +21,14 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id()->comment('Identificador del pedido.');
-            $table->unsignedBigInteger('client_id')->comment('Identificador del cliente.');
+            /* $table->unsignedBigInteger('client_id')->comment('Identificador del cliente.');
             $table->unsignedBigInteger('client_branch_id')->comment('Identificador de la sucursal del cliente.');
             $table->unsignedBigInteger('transporter_id')->comment('Identificador de la transportadora del pedido');
-            $table->unsignedBigInteger('sale_channel_id')->comment('Identificador del canal de venta del pedido');
+            $table->unsignedBigInteger('sale_channel_id')->comment('Identificador del canal de venta del pedido'); */
+            $table->foreignIdFor(Client::class)->constrained();
+            $table->foreignIdFor(ClientBranch::class)->constrained();
+            $table->foreignIdFor(Transporter::class)->constrained();
+            $table->foreignIdFor(SaleChannel::class)->constrained();
             $table->enum('dispatch', ['De inmediato', 'Antes de', 'Despues de'])->comment('Cuando despachar.');
             $table->date('dispatch_date')->nullable()->comment('Fecha de cuando despachar.');
             $table->unsignedBigInteger('seller_user_id')->comment('Identificador del usuario de vendedor.');
@@ -32,14 +41,15 @@ return new class extends Migration
             $table->string('wallet_observation')->nullable()->comment('Observacion de cartera');
             $table->enum('dispatched_status', ['Pendiente', 'Cancelado', 'Parcialmente Aprobado', 'Aprobado', 'Parcialmente Devuelto', 'Devuelto', 'Parcialmente Despachado', 'Despachado'])->default('Pendiente')->comment('Estado de despacho.');
             $table->datetime('dispatched_date')->nullable()->comment('Fecha de despacho.');
-            $table->unsignedBigInteger('correria_id')->comment('Identificador de la correria.');
-            $table->foreign('client_id')->references('id')->on('clients')->onUpdate('cascade')->onDelete('cascade');
+            /* $table->unsignedBigInteger('correria_id')->comment('Identificador de la correria.'); */
+            $table->foreignIdFor(Correria::class)->constrained();
+            /* $table->foreign('client_id')->references('id')->on('clients')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('client_branch_id')->references('id')->on('client_branches')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('transporter_id')->references('id')->on('transporters')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreign('sale_channel_id')->references('id')->on('sale_channels')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('sale_channel_id')->references('id')->on('sale_channels')->onUpdate('cascade')->onDelete('cascade'); */
             $table->foreign('seller_user_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('wallet_user_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreign('correria_id')->references('id')->on('correrias')->onUpdate('cascade')->onDelete('cascade');
+            /* $table->foreign('correria_id')->references('id')->on('correrias')->onUpdate('cascade')->onDelete('cascade'); */
             $table->timestamps();
         });
 
