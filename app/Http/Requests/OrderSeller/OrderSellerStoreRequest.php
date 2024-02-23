@@ -40,6 +40,7 @@ class OrderSellerStoreRequest extends FormRequest
         return [
             'client_id' => ['required', 'exists:clients,id'],
             'client_branch_id' => ['required', 'exists:client_branches,id'],
+            'transporter_id' => ['required', 'exists:transporters,id'],
             'sale_channel_id' => ['required', 'exists:sale_channels,id'],
             'dispatch' => ['required', 'string', 'max:255'],
             'dispatch_date' => ['required', 'date', 'after_or_equal:now'],
@@ -58,7 +59,9 @@ class OrderSellerStoreRequest extends FormRequest
             'client_id.exists' => 'El Identificador del cliente no es valido.',
             'client_branch_id.required' => 'El Identificador de la Sucursal del Cliente es requerido.',
             'client_branch_id.exists' => 'El Identificador de la sucursal del cliente no es valido.',
-            'sale_channel_id.required' => 'El Identificador del Canal de venta es requerido.',
+            'transporter_id.required' => 'El Identificador de la transportadora es requerido.',
+            'transporter_id.exists' => 'El Identificador de la transportadora no es valido.',
+            'sale_channel_id.required' => 'El Identificador del canal de venta es requerido.',
             'sale_channel_id.exists' => 'El Identificador del canal de venta no es valido.',
             'dispatch.required' => 'El campo Despacho es requerido.',
             'dispatch.string' => 'El campo Despacho debe ser una cadena de caracteres.',

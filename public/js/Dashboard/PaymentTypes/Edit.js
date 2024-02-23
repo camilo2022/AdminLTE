@@ -25,7 +25,6 @@ function EditPaymentTypeModalCleaned(paymentType) {
     $('#EditPaymentTypeButton').attr('onclick', `EditPaymentType(${paymentType.id}, ${paymentType.require_banks})`);
 
     $("#name_e").val(paymentType.name);
-    $("#code_e").val(paymentType.code);
 }
 
 function EditPaymentType(id, require_banks) {
@@ -48,7 +47,6 @@ function EditPaymentType(id, require_banks) {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
                     'id': id,
                     'name': $("#name_e").val(),
-                    'code': $("#code_e").val(),
                     'require_banks': $('#require_banks_e').is(':checked')
                 },
                 success: function(response) {
@@ -116,14 +114,10 @@ function AddIsValidClassEditPaymentType() {
     if (!$('#name_e').hasClass('is-invalid')) {
       $('#name_e').addClass('is-valid');
     }
-    if (!$('#code_e').hasClass('is-invalid')) {
-      $('#code_e').addClass('is-valid');
-    }
 }
 
 function RemoveIsValidClassEditPaymentType() {
     $('#name_e').removeClass('is-valid');
-    $('#code_e').removeClass('is-valid');
 }
 
 function AddIsInvalidClassEditPaymentType(input) {
@@ -134,5 +128,4 @@ function AddIsInvalidClassEditPaymentType(input) {
 
 function RemoveIsInvalidClassEditPaymentType() {
     $('#name_e').removeClass('is-invalid');
-    $('#code_e').removeClass('is-invalid');
 }

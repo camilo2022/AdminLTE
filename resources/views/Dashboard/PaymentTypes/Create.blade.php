@@ -23,19 +23,6 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-12">
-                    <div class="form-group">
-                        <label for="code">Codigo</label>
-                        <div class="input-group">
-                            <input type="text" class="form-control" id="code_c" name="code">
-                            <div class="input-group-append">
-                                <span class="input-group-text">
-                                    <i class="fas fa-code"></i>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal" title="Cerrar ventana">

@@ -19,6 +19,7 @@ class Order extends Model implements Auditable
     protected $fillable = [
         'client_id',
         'client_branch_id',
+        'transporter_id',
         'sale_channel_id',
         'dispatch',
         'dispatch_date',
@@ -38,6 +39,7 @@ class Order extends Model implements Auditable
     protected $auditInclude = [
         'client_id',
         'client_branch_id',
+        'transporter_id',
         'sale_channel_id',
         'dispatch',
         'dispatch_date',

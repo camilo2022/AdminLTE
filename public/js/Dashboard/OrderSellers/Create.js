@@ -9,7 +9,9 @@ function CreateOrderSellerModal() {
             tableOrderSellers.ajax.reload();
             CreateOrderSellerModalCleaned();
             CreateOrderSellerModalClient(response.data.clients);
+            CreateOrderSellerModalTransporter(response.data.transporters);
             CreateOrderSellerModalSaleChannel(response.data.saleChannels);
+            CreateOrderSellerModalPaymentType(response.data.paymentTypes);
             CreateOrderSellerAjaxSuccess(response);
             $('#CreateOrderSellerModal').modal('show');
         },
@@ -22,10 +24,12 @@ function CreateOrderSellerModal() {
 
 function CreateOrderSellerModalCleaned() {
     CreateOrderSellerModalResetSelect('client_id_c');
+    CreateOrderSellerModalResetSelect('transporter_id_c');
     CreateOrderSellerModalResetSelect('sale_channel_id_c');
     RemoveIsValidClassCreateOrderSeller();
     RemoveIsInvalidClassCreateOrderSeller();
 
+    $('#payment_types_c').empty();
     $('#dispatch_c').val('').trigger('change');
     $('#seller_observation_c').val('');
 }
@@ -70,9 +74,25 @@ function CreateOrderSellerModalClienteBranch(clientBranches) {
     });
 }
 
+function CreateOrderSellerModalTransporter(transporters) {
+    transporters.forEach(transporter => {
+        $('#transporter_id_c').append(new Option(transporter.name, transporter.id, false, false));
+    });
+}
+
 function CreateOrderSellerModalSaleChannel(saleChannels) {
     saleChannels.forEach(saleChannel => {
         $('#sale_channel_id_c').append(new Option(saleChannel.name, saleChannel.id, false, false));
+    });
+}
+
+function CreateOrderSellerModalPaymentType(paymentTypes) {
+    paymentTypes.forEach(paymentType => {
+        let check = `<div class="icheck-primary">
+                        <input type="checkbox" id="payment_type_${paymentType.id}" name="payment_type_${paymentType.id}" data-id="${paymentType.id}">
+                        <label for="payment_type_${paymentType.id}">${paymentType.name}</label>
+                    </div>`;
+        $('#payment_types_c').append(check);
     });
 }
 
@@ -104,10 +124,14 @@ function CreateOrderSeller() {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
                     'client_id': $('#client_id_c').val(),
                     'client_branch_id': $('#client_branch_id_c').val(),
+                    'transporter_id': $('#transporter_id_c').val(),
                     'sale_channel_id': $('#sale_channel_id_c').val(),
                     'seller_observation': $('#seller_observation_c').val(),
                     'dispatch': $('#dispatch_c').val(),
-                    'dispatch_date': $('#dispatch_c').val() == 'De inmediato' ? new Date().toISOString().split('T')[0] : $('#dispatch_date_c').val()
+                    'dispatch_date': $('#dispatch_c').val() == 'De inmediato' ? new Date().toISOString().split('T')[0] : $('#dispatch_date_c').val(),
+                    'payment_type_ids': $('#payment_types_c input[type="checkbox"]:checked').map(function() {
+                        return $(this).attr('data-id');
+                    }).get()
                 },
                 success: function (response) {
                     window.location.href = response.data.url;
@@ -199,6 +223,7 @@ function RemoveIsValidClassCreateOrderSeller() {
     $('span[aria-labelledby="select2-client_id_c-container"]').removeClass('is-valid');
     $('span[aria-labelledby="select2-client_branch_id_c-container"]').removeClass('is-valid');
     $('span[aria-labelledby="select2-sale_channel_id_c-container"]').removeClass('is-valid');
+    $('span[aria-labelledby="select2-transporter_id_c-container"]').removeClass('is-valid');
 }
 
 function AddIsInvalidClassCreateOrderSeller(input) {
@@ -217,6 +242,7 @@ function RemoveIsInvalidClassCreateOrderSeller() {
     $('span[aria-labelledby="select2-client_id_c-container"]').removeClass('is-invalid');
     $('span[aria-labelledby="select2-client_branch_id_c-container"]').removeClass('is-invalid');
     $('span[aria-labelledby="select2-sale_channel_id_c-container"]').removeClass('is-invalid');
+    $('span[aria-labelledby="select2-transporter_id_c-container"]').removeClass('is-invalid');
 }
 
 $('#dispatch_date_c').datetimepicker({

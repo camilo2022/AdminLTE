@@ -20,7 +20,6 @@ class PaymentTypeIndexQueryCollection extends ResourceCollection
                 return [
                     'id' => $paymentType->id,
                     'name' => $paymentType->name,
-                    'code' => $paymentType->code,
                     'require_banks' => $paymentType->require_banks,
                     'created_at' => $this->formatDate($paymentType->created_at),
                     'updated_at' => $this->formatDate($paymentType->updated_at),

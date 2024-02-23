@@ -8,8 +8,7 @@ let tablePaymentTypes = $('#paymentTypes').DataTable({
             var columnMappings = {
                 0: 'id',
                 1: 'name',
-                2: 'code',
-                3: 'deleted_at'
+                2: 'deleted_at'
             };
             request._token = $('meta[name="csrf-token"]').attr('content');
             request.perPage = request.length;
@@ -30,7 +29,6 @@ let tablePaymentTypes = $('#paymentTypes').DataTable({
     columns: [
         { data: 'id' },
         { data: 'name' },
-        { data: 'code' },
         { 
             data: 'require_banks' ,
             render: function (data, type, row) {
@@ -79,11 +77,11 @@ let tablePaymentTypes = $('#paymentTypes').DataTable({
     columnDefs: [
         {
             orderable: true,
-            targets: [0, 1, 2, 3]
+            targets: [0, 1, 2]
         },
         {
             orderable: false,
-            targets: [4]
+            targets: [3]
         }
     ],
     pagingType: 'full_numbers',

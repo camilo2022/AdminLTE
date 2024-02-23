@@ -17,7 +17,9 @@ use App\Models\ClientBranch;
 use App\Models\Inventory;
 use App\Models\Order;
 use App\Models\OrderPaymentType;
+use App\Models\PaymentType;
 use App\Models\SaleChannel;
+use App\Models\Transporter;
 use App\Traits\ApiMessage;
 use App\Traits\ApiResponser;
 use Carbon\Carbon;
@@ -115,6 +117,8 @@ class OrderSellerController extends Controller
                 [
                     'clients' => Client::all(),
                     'saleChannels' => SaleChannel::all(),
+                    'paymentTypes' => PaymentType::all(),
+                    'transporters' => Transporter::all()
                 ],
                 'Ingrese los datos para hacer la validacion y registro.',
                 204
@@ -137,6 +141,7 @@ class OrderSellerController extends Controller
             $order = new Order();
             $order->client_id = $request->input('client_id');
             $order->client_branch_id = $request->input('client_branch_id');
+            $order->transporter_id = $request->input('transporter_id');
             $order->sale_channel_id = $request->input('sale_channel_id');
             $order->dispatch = $request->input('dispatch');
             $order->dispatch_date = Carbon::parse($request->input('dispatch_date'))->format('Y-m-d');
@@ -206,7 +211,9 @@ class OrderSellerController extends Controller
                 [
                     'clients' => Client::all(),
                     'saleChannels' => SaleChannel::all(),
-                    'order' => Order::findOrFail($id)
+                    'paymentTypes' => PaymentType::all(),
+                    'transporters' => Transporter::all(),
+                    'order' => Order::with('payment_types')->findOrFail($id)
                 ],
                 'El pedido fue encontrado exitosamente.',
                 204
@@ -236,6 +243,7 @@ class OrderSellerController extends Controller
             $order = Order::findOrFail($id);
             $order->client_id = $request->input('client_id');
             $order->client_branch_id = $request->input('client_branch_id');
+            $order->transporter_id = $request->input('transporter_id');
             $order->sale_channel_id = $request->input('sale_channel_id');
             $order->dispatch = $request->input('dispatch');
             $order->dispatch_date = Carbon::parse($request->input('dispatch_date'))->format('Y-m-d');

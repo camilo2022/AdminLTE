@@ -43,7 +43,7 @@
                         <div class="form-group">
                             <label for="country_id_p_c">Pais</label>
                             <div class="input-group">
-                                <select class="form-control select2" id="country_id_p_c" name="country_id" style="width: 88%" onchange="CreatePersonModalCountryGetDepartament(this)">
+                                <select class="form-control select2" id="country_id_p_c" name="country_id" style="width: 86%" onchange="CreatePersonModalCountryGetDepartament(this)">
                                     <option value="">Seleccione</option>
                                 </select>
                                 <div class="input-group-append">
@@ -58,7 +58,7 @@
                         <div class="form-group">
                             <label for="document_type_id_p_c">Tipo de documento</label>
                             <div class="input-group">
-                                <select class="form-control select2" id="document_type_id_p_c" name="document_type_id" style="width: 88%">
+                                <select class="form-control select2" id="document_type_id_p_c" name="document_type_id" style="width: 86%">
                                     <option value="">Seleccione</option>
                                 </select>
                                 <div class="input-group-append">
@@ -75,7 +75,7 @@
                         <div class="form-group">
                             <label for="departament_id_p_c">Departamento</label>
                             <div class="input-group">
-                                <select class="form-control select2" id="departament_id_p_c" name="departament_id" style="width: 88%" onchange="CreatePersonModalDepartamentGetCity(this)">
+                                <select class="form-control select2" id="departament_id_p_c" name="departament_id" style="width: 86%" onchange="CreatePersonModalDepartamentGetCity(this)">
                                     <option value="">Seleccione</option>
                                 </select>
                                 <div class="input-group-append">
@@ -105,7 +105,7 @@
                         <div class="form-group">
                             <label for="city_id_p_c">Municipio</label>
                             <div class="input-group">
-                                <select class="form-control select2" id="city_id_p_c" name="city_id" style="width: 88%">
+                                <select class="form-control select2" id="city_id_p_c" name="city_id" style="width: 86%">
                                     <option value="">Seleccione</option>
                                 </select>
                                 <div class="input-group-append">

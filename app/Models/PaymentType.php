@@ -15,20 +15,17 @@ class PaymentType extends Model implements Auditable
     protected $table = 'payment_types';
     protected $fillable = [
         'name',
-        'code',
         'require_banks'
     ];
 
     protected $auditInclude = [
         'name',
-        'code',
         'require_banks'
     ];
 
     public function scopeSearch($query, $search)
     {
-        return $query->where('name', 'like', '%' . $search . '%')
-        ->orWhere('code', 'like', '%' . $search . '%');
+        return $query->where('name', 'like', '%' . $search . '%');
     }
 
     public function scopeFilterByDate($query, $start_date, $end_date)

@@ -21,7 +21,6 @@ function CreatePaymentTypeModalCleaned() {
     RemoveIsInvalidClassCreatePaymentType();
 
     $('#name_c').val('');
-    $('#code_c').val('');
 }
 
 function CreatePaymentType() {
@@ -43,7 +42,6 @@ function CreatePaymentType() {
                 data: {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
                     'name': $('#name_c').val(),
-                    'code': $('#code_c').val(),
                     'require_banks': $('#require_banks_c').is(':checked')
                 },
                 success: function(response) {
@@ -111,14 +109,10 @@ function AddIsValidClassCreatePaymentType() {
     if (!$('#name_c').hasClass('is-invalid')) {
       $('#name_c').addClass('is-valid');
     }
-    if (!$('#code_c').hasClass('is-invalid')) {
-      $('#code_c').addClass('is-valid');
-    }
 }
 
 function RemoveIsValidClassCreatePaymentType() {
     $('#name_c').removeClass('is-valid');
-    $('#code_c').removeClass('is-valid');
 }
 
 function AddIsInvalidClassCreatePaymentType(input) {
@@ -129,5 +123,4 @@ function AddIsInvalidClassCreatePaymentType(input) {
 
 function RemoveIsInvalidClassCreatePaymentType() {
     $('#name_c').removeClass('is-invalid');
-    $('#code_c').removeClass('is-invalid');
 }

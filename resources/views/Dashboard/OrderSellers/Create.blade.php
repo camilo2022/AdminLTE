@@ -13,7 +13,7 @@
                 <div class="form-group">
                     <label for="client_id_c">Cliente</label>
                     <div class="input-group">
-                        <select class="form-control select2" id="client_id_c" name="client_id" style="width: 90%" onchange="CreateOrderSellerModalClientGetClientBranch(this)">
+                        <select class="form-control select2" id="client_id_c" name="client_id_c" style="width: 90%" onchange="CreateOrderSellerModalClientGetClientBranch(this)">
                             <option value="">Seleccione</option>
                         </select>
                         <div class="input-group-append">
@@ -26,7 +26,7 @@
                 <div class="form-group">
                     <label for="client_branch_id_c">Sucursal</label>
                     <div class="input-group">
-                        <select class="form-control select2" id="client_branch_id_c" name="client_branch_id" style="width: 90%">
+                        <select class="form-control select2" id="client_branch_id_c" name="client_branch_id_c" style="width: 90%">
                             <option value="">Seleccione</option>
                         </select>
                         <div class="input-group-append">
@@ -37,9 +37,22 @@
                     </div>
                 </div>
                 <div class="form-group">
+                    <label for="transporter_id_c">Transportadora</label>
+                    <div class="input-group">
+                        <select class="form-control select2" id="transporter_id_c" name="transporter_id_c" style="width: 88%">
+                            <option value="">Seleccione</option>
+                        </select>
+                        <div class="input-group-append">
+                            <span class="input-group-text">
+                                <i class="fas fa-truck-arrow-right"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
                     <label for="sale_channel_id_c">Canal de venta</label>
                     <div class="input-group">
-                        <select class="form-control select2" id="sale_channel_id_c" name="sale_channel_id" style="width: 90%">
+                        <select class="form-control select2" id="sale_channel_id_c" name="sale_channel_id_c" style="width: 90%">
                             <option value="">Seleccione</option>
                         </select>
                         <div class="input-group-append">
@@ -52,7 +65,7 @@
                 <div class="form-group">
                     <label for="seller_observation_c">Observacion</label>
                     <div class="input-group">
-                        <textarea class="form-control" id="seller_observation_c" name="seller_observation" cols="30" rows="4"></textarea>
+                        <textarea class="form-control" id="seller_observation_c" name="seller_observation_c" cols="30" rows="4"></textarea>
                         <div class="input-group-append">
                             <span class="input-group-text">
                                 <i class="fas fa-text-size"></i>
@@ -63,7 +76,7 @@
                 <div class="form-group">
                     <label for="dispatch_c">Cuando despachar</label>
                     <div class="input-group">
-                        <select class="form-control" id="dispatch_c" name="dispatch" style="width: 90%" onchange="CreateOrderSellerModalDispatchGetDispatchDate(this)">
+                        <select class="form-control" id="dispatch_c" name="dispatch_c" style="width: 90%" onchange="CreateOrderSellerModalDispatchGetDispatchDate(this)">
                             <option value="">Seleccione</option>
                             <option value="De inmediato">De inmediato</option>
                             <option value="Antes de">Antes de</option>
@@ -79,10 +92,15 @@
                 <div class="form-group" id="div_dispatch_date_c">
                     <label for="dispatch_date_c">Fecha despachar</label>
                     <div class="input-group date" id="dispatch_date" data-target-input="nearest">
-                        <input type="text" class="form-control datetimepicker-input" data-target="#dispatch_date_c" id="dispatch_date_c" name="dispatch_date">
+                        <input type="text" class="form-control datetimepicker-input" data-target="#dispatch_date_c" id="dispatch_date_c" name="dispatch_date_c">
                         <div class="input-group-append" data-target="#dispatch_date_c" data-toggle="datetimepicker">
                             <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                         </div>
+                    </div>
+                </div>
+                <div class="form-group" id="div_payment_types_c">
+                    <label for="div_payment_types_c">Metodos de pago</label>
+                    <div class="form-group" id="payment_types_c">
                     </div>
                 </div>
             </div>

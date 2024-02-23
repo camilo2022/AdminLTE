@@ -101,7 +101,6 @@ class PaymentTypeController extends Controller
         try {
             $paymentType = new PaymentType();
             $paymentType->name = $request->input('name');
-            $paymentType->code = $request->input('code');
             $paymentType->require_banks = $request->input('require_banks');
             $paymentType->save();
 
@@ -172,7 +171,6 @@ class PaymentTypeController extends Controller
         try {
             $paymentType = PaymentType::withTrashed()->findOrFail($id);
             $paymentType->name = $request->input('name');
-            $paymentType->code = $request->input('code');
             $paymentType->require_banks = $request->input('require_banks');
             $paymentType->save();
 
