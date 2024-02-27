@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Bank;
+use App\Models\PaymentType;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -14,16 +15,18 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('supports', function (Blueprint $table) {
+        Schema::create('payments', function (Blueprint $table) {
             $table->id();
             $table->morphs('model');
-            $table->float('value', 8, 2);
+            $table->unsignedBigInteger('value', 8, 2);
             $table->string('reference');
             $table->dateTime('date');
-            $table->enum('type', ['Soporte de Pago', 'Soporte de Factura']);
+            /* $table->unsignedBigInteger('payment_type_id')->nullable(); */
+            $table->foreignIdFor(PaymentType::class)->constrained();
             /* $table->unsignedBigInteger('bank_id')->nullable(); */
-            $table->foreignIdFor(Bank::class)->constrained()->nullable();
-            /* $table->foreign('bank_id')->references('id')->on('banks')->onUpdate('cascade')->onDelete('cascade'); */
+            $table->foreignIdFor(Bank::class)->nullable()->constrained();
+            /* $table->foreign('bank_id')->references('id')->on('banks')->onUpdate('cascade')->onDelete('cascade'); 
+            $table->foreign('payment_type_id')->references('id')->on('payment_types')->onUpdate('cascade')->onDelete('cascade'); */
             $table->timestamps();
             $table->softDeletes();
         });
@@ -36,6 +39,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('supports');
+        Schema::dropIfExists('payments');
     }
 };

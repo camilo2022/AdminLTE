@@ -16,10 +16,12 @@ class SaleChannel extends Model implements Auditable
     protected $table = 'sale_channels';
     protected $fillable = [
         'name',
+        'require_verify_wallet'
     ];
 
     protected $auditInclude = [
         'name',
+        'require_verify_wallet'
     ];
 
     public function return_types() : BelongsToMany

@@ -27,12 +27,14 @@
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="document_number">Numero de documento</label>
+                            <label for="person_type_id_c">Tipo de persona</label>
                             <div class="input-group">
-                                <input type="number" class="form-control" id="document_number_c" name="document_number">
+                                <select class="form-control select2" id="person_type_id_c" name="person_type_id" style="width: 88%" onchange="CreateBusinessModalPersonTypeGetDocumentType(this)">
+                                    <option value="">Seleccione</option>
+                                </select>
                                 <div class="input-group-append">
                                     <span class="input-group-text">
-                                        <i class="fas fa-address-card"></i>
+                                        <i class="fas fa-people-simple"></i>
                                     </span>
                                 </div>
                             </div>
@@ -57,12 +59,14 @@
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="telephone_number">Numero de telefono</label>
+                            <label for="document_type_id_c">Tipo de documento</label>
                             <div class="input-group">
-                                <input type="number" class="form-control" id="telephone_number_c" name="telephone_number">
+                                <select class="form-control select2" id="document_type_id_c" name="document_type_id" style="width: 86%">
+                                    <option value="">Seleccione</option>
+                                </select>
                                 <div class="input-group-append">
                                     <span class="input-group-text">
-                                        <i class="fas fa-phone"></i>
+                                        <i class="fas fa-cards-blank"></i>
                                     </span>
                                 </div>
                             </div>
@@ -87,12 +91,12 @@
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="email">Correo electronico</label>
+                            <label for="document_number">Numero de documento</label>
                             <div class="input-group">
-                                <input type="text" class="form-control" id="email_c" name="email">
+                                <input type="text" class="form-control" id="document_number_c" name="document_number">
                                 <div class="input-group-append">
                                     <span class="input-group-text">
-                                        <i class="fas fa-envelope"></i>
+                                        <i class="fas fa-address-card"></i>
                                     </span>
                                 </div>
                             </div>
@@ -114,6 +118,8 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div class="col-lg-6">
                         <div class="form-group">
                             <label for="address">Direccion</label>
                             <div class="input-group">
@@ -125,6 +131,10 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
                         <div class="form-group">
                             <label for="neighborhood">Barrio</label>
                             <div class="input-group">
@@ -139,12 +149,40 @@
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
+                            <label for="telephone_number">Numero de telefono</label>
+                            <div class="input-group">
+                                <input type="number" class="form-control" id="telephone_number_c" name="telephone_number">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-phone"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
                             <label for="description">Descripcion</label>
                             <div class="input-group">
-                                <textarea class="form-control" id="description_c" name="description" cols="30" rows="8"></textarea>
+                                <textarea class="form-control" id="description_c" name="description" cols="30" rows="2"></textarea>
                                 <div class="input-group-append">
                                     <span class="input-group-text">
                                         <i class="fas fa-text-size"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="email">Correo electronico</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="email_c" name="email">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-envelope"></i>
                                     </span>
                                 </div>
                             </div>

@@ -26,7 +26,6 @@ class ClientEditRequest extends FormRequest
         return [
             'country_id' => ['nullable', 'exists:countries,id'],
             'departament_id' => ['nullable', 'exists:departaments,id'],
-            'city_id' => ['nullable', 'exists:cities,id'],
             'person_type_id' => ['nullable', 'exists:person_types,id'],
         ];
     }
@@ -36,7 +35,6 @@ class ClientEditRequest extends FormRequest
         return [
             'country_id.exists' => 'El Identificador del pais no es valido.',
             'departament_id.exists' => 'El Identificador del departamento no es valido.',
-            'city_id.exists' => 'El identificador de la ciudad no es valido.',
             'person_type_id.exists' => 'El identificador del tipo de persona no es valido.',
         ];
     }

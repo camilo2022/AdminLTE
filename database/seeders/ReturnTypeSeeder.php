@@ -20,5 +20,7 @@ class ReturnTypeSeeder extends Seeder
         ReturnType::create(['name' => 'SALIO DE SU RESIDENCIA Y NO DEJO EL DINERO']);
         ReturnType::create(['name' => 'PIDE QUE SE LO LLEVEN EN UNA FECHA DEMASIADO LARGA PARA VOLVER A OFRECER']);
         ReturnType::create(['name' => 'SOLO QUIERE UNA DE LAS PRENDAS MAS NO EL PACK COMPLETO']);
+        ReturnType::create(['name' => 'GARANTIA']);
+        ReturnType::create(['name' => 'NO RECIBE PEDIDO']);
     }
 }

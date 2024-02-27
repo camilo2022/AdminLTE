@@ -8,16 +8,18 @@ let tableBusinesses = $('#businesses').DataTable({
             var columnMappings = {
                 0: 'id',
                 1: 'name',
-                2: 'document_number',
-                3: 'telephone_number',
-                4: 'email',
-                5: 'country_id',
-                6: 'departament_id',
-                7: 'city_id',
-                8: 'address',
-                9: 'neighborhood',
-                10: 'description',
-                11: 'deleted_at'
+                2: 'person_type_id',
+                3: 'document_type_id',
+                4: 'document_number',
+                5: 'telephone_number',
+                6: 'email',
+                7: 'country_id',
+                8: 'departament_id',
+                9: 'city_id',
+                10: 'address',
+                11: 'neighborhood',
+                12: 'description',
+                13: 'deleted_at'
             };
             request._token = $('meta[name="csrf-token"]').attr('content');
             request.perPage = request.length;
@@ -38,6 +40,18 @@ let tableBusinesses = $('#businesses').DataTable({
     columns: [
         { data: 'id' },
         { data: 'name' },
+        {
+            data: 'person_type',
+            render: function (data, type, row) {
+                return data.name;
+            }
+        },
+        {
+            data: 'document_type',
+            render: function (data, type, row) {
+                return `${data.name} - ${data.code}`;
+            }
+        },
         { data: 'document_number' },
         { data: 'telephone_number' },
         { data: 'email' },
@@ -85,11 +99,11 @@ let tableBusinesses = $('#businesses').DataTable({
     columnDefs: [
         {
             orderable: true,
-            targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+            targets: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
         },
         {
             orderable: false,
-            targets: [12]
+            targets: [14]
         }
     ],
     pagingType: 'full_numbers',

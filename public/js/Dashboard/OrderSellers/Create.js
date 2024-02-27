@@ -89,8 +89,8 @@ function CreateOrderSellerModalSaleChannel(saleChannels) {
 function CreateOrderSellerModalPaymentType(paymentTypes) {
     paymentTypes.forEach(paymentType => {
         let check = `<div class="icheck-primary">
-                        <input type="checkbox" id="payment_type_${paymentType.id}" name="payment_type_${paymentType.id}" data-id="${paymentType.id}">
-                        <label for="payment_type_${paymentType.id}">${paymentType.name}</label>
+                        <input type="checkbox" id="payment_type_${paymentType.id}_c" name="payment_type_${paymentType.id}_c" data-id="${paymentType.id}">
+                        <label for="payment_type_${paymentType.id}_c">${paymentType.name}</label>
                     </div>`;
         $('#payment_types_c').append(check);
     });
@@ -99,7 +99,7 @@ function CreateOrderSellerModalPaymentType(paymentTypes) {
 function CreateOrderSellerModalDispatchGetDispatchDate(select) {
     if($(select).val() == '' || $(select).val() == 'De inmediato') {
         $('#div_dispatch_date_c').hide();
-        $('#dispatch_date_c').val('')
+        $('#dispatch_date_c').val('');
     } else {
         $('#div_dispatch_date_c').show();
     }
@@ -213,6 +213,9 @@ function AddIsValidClassCreateOrderSeller() {
     }
     if (!$('span[aria-labelledby="select2-sale_channel_id_c-container"]').hasClass('is-invalid')) {
         $('span[aria-labelledby="select2-sale_channel_id_c-container"]').addClass('is-valid');
+    }
+    if (!$('span[aria-labelledby="select2-transporter_id_c-container"]').hasClass('is-invalid')) {
+        $('span[aria-labelledby="select2-transporter_id_c-container"]').addClass('is-valid');
     }
 }
 

@@ -84,7 +84,12 @@ function CreateOrderSellerDetailModalColorToneGetSizesQuantity() {
                 'size_id':  $('#size_id_c').val(),
             },
             success: function(response) {
-                CreateOrderSellerDetailModalSizes(response.data);
+                if(response.data.length == 0) {
+                    toastr.warning('No hay inventario cargado.');
+                } else {
+                    toastr.info('Inventario por talla cargado, ingrese las cantidades.');
+                    CreateOrderSellerDetailModalSizes(response.data);
+                }
             },
             error: function(xhr, textStatus, errorThrown) {
                 CreateOrderSellerDetailAjaxError(xhr);

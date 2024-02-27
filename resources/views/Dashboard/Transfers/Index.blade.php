@@ -91,6 +91,8 @@
         @include('Dashboard.Transfers.Create')
         @include('Dashboard.Transfers.Edit')
         @include('Dashboard.Transfers.Show')
+        @include('Dashboard.Transfers.Approve')
+        @include('Dashboard.Transfers.Cancel')
         @include('Dashboard.TransferDetails.Create')
         @include('Dashboard.TransferDetails.Edit')
     </section>

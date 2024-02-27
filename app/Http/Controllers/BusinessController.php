@@ -15,6 +15,8 @@ use App\Models\Business;
 use App\Models\City;
 use App\Models\Country;
 use App\Models\Departament;
+use App\Models\DocumentType;
+use App\Models\PersonType;
 use App\Traits\ApiMessage;
 use App\Traits\ApiResponser;
 use Carbon\Carbon;
@@ -42,7 +44,10 @@ class BusinessController extends Controller
             $start_date = Carbon::parse($request->input('start_date'))->startOfDay();
             $end_date = Carbon::parse($request->input('end_date'))->endOfDay();
             //Consulta por nombre
-            $businesses = Business::with('country', 'departament', 'city')
+            $businesses = Business::with(['country', 'departament', 'city',
+                    'person_type' => fn($query) => $query->withTrashed(), 
+                    'document_type' => fn($query) => $query->withTrashed()
+                ])
                 ->when($request->filled('search'),
                     function ($query) use ($request) {
                         $query->search($request->input('search'));
@@ -85,6 +90,14 @@ class BusinessController extends Controller
     public function create(BusinessCreateRequest $request)
     {
         try {
+            if($request->filled('person_type_id')) {
+                return $this->successResponse(
+                    DocumentType::with('person_types')->whereHas('person_types', fn($subQuery) => $subQuery->where('person_type_id', $request->input('person_type_id')))->get(),
+                    'Tipos de documento encontrados con exito.',
+                    200
+                );
+            }
+
             if($request->filled('country_id')) {
                 return $this->successResponse(
                     Departament::where('country_id', '=', $request->input('country_id'))->get(),
@@ -102,7 +115,10 @@ class BusinessController extends Controller
             }
 
             return $this->successResponse(
-                Country::all(),
+                [
+                    'countries' => Country::all(),
+                    'personTypes' => PersonType::all(),
+                ],
                 'Ingrese los datos para hacer la validacion y registro.',
                 204
             );
@@ -123,7 +139,9 @@ class BusinessController extends Controller
         try {
             $business = new Business();
             $business->name = $request->input('name');
-            $business->document_number = $request->input('document_number');
+            $business->person_type_id = $request->input('person_type_id');
+            $business->document_type_id = $request->input('document_type_id');
+            $business->document_number = $request->input('document_number');            
             $business->telephone_number = $request->input('telephone_number');
             $business->email = $request->input('email');
             $business->country_id = $request->input('country_id');
@@ -172,6 +190,15 @@ class BusinessController extends Controller
     public function edit(BusinessEditRequest $request, $id)
     {
         try {
+            if($request->filled('person_type_id')) {
+                return $this->successResponse(
+                    DocumentType::with('person_types')->whereHas('person_types', fn($subQuery) => $subQuery->where('person_type_id', $request->input('person_type_id')))->get(),
+                    'Tipos de documento encontrados con exito.',
+                    200
+                );
+            }
+
+            
             if($request->filled('country_id')) {
                 return $this->successResponse(
                     Departament::where('country_id', '=', $request->input('country_id'))->get(),
@@ -191,6 +218,7 @@ class BusinessController extends Controller
             return $this->successResponse(
                 [
                     'business' => Business::withTrashed()->findOrFail($id),
+                    'personTypes' => PersonType::all(),
                     'countries' => Country::all()
                 ],
                 'La empresa fue encontrada exitosamente.',
@@ -220,6 +248,8 @@ class BusinessController extends Controller
         try {
             $business = Business::withTrashed()->findOrFail($id);
             $business->name = $request->input('name');
+            $business->person_type_id = $request->input('person_type_id');
+            $business->document_type_id = $request->input('document_type_id');
             $business->document_number = $request->input('document_number');
             $business->telephone_number = $request->input('telephone_number');
             $business->email = $request->input('email');

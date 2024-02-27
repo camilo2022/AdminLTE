@@ -1,3 +1,9 @@
+function CancelTransferModal(id) {
+    $('#to_observation_c').val('');
+    $('#CancelTransferButton').attr('onclick', `CancelTransfer(${id})`);
+    $('#CancelTransferModal').modal('show');
+}
+
 function CancelTransfer(id) {
     Swal.fire({
         title: '¿Desea cancelar la transferencia?',
@@ -15,7 +21,8 @@ function CancelTransfer(id) {
                 type: 'PUT',
                 data: {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
-                    'id': id
+                    'id': id,
+                    'to_observation': $('#to_observation_c').val()
                 },
                 success: function(response) {
                     tableTransfers.ajax.reload();
@@ -35,24 +42,24 @@ function CancelTransfer(id) {
 function CancelTransferAjaxSuccess(response) {
     if(response.status === 200) {
         toastr.success(response.message);
-    }
-
-    if(response.status === 422) {
-        toastr.warning(response.message);
+        $('#CancelTransferModal').modal('hide');
     }
 }
 
 function CancelTransferAjaxError(xhr) {
     if(xhr.status === 403) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
+        $('#CancelTransferModal').modal('hide');
     }
 
     if(xhr.status === 404) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
+        $('#CancelTransferModal').modal('hide');
     }
 
     if(xhr.status === 419) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
+        $('#CancelTransferModal').modal('hide');
     }
 
     if(xhr.status === 422){
@@ -65,5 +72,6 @@ function CancelTransferAjaxError(xhr) {
 
     if(xhr.status === 500){
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
+        $('#CancelTransferModal').modal('hide');
     }
 }

@@ -508,6 +508,10 @@ Route::middleware(['auth'])->group(function () {
                     Route::put('/Approve', 'approve')->middleware('can:Dashboard.Orders.Seller.Approve')->name('Dashboard.Orders.Seller.Approve');
                     Route::put('/Pending', 'pending')->middleware('can:Dashboard.Orders.Seller.Pending')->name('Dashboard.Orders.Seller.Pending');
                     Route::put('/Cancel', 'cancel')->middleware('can:Dashboard.Orders.Seller.Cancel')->name('Dashboard.Orders.Seller.Cancel');
+                    Route::post('/Payments/Query', 'paymentQuery')->middleware('can:Dashboard.Orders.Seller.Payments.Query')->name('Dashboard.Orders.Seller.Payments.Query');
+                    Route::post('/AssignPayment/Query', 'assignPaymentQuery')->middleware('can:Dashboard.Orders.Seller.AssignPayment.Query')->name('Dashboard.Orders.Seller.AssignPayment.Query');
+                    Route::post('/AssignPayment', 'assignPayment')->middleware('can:Dashboard.Orders.Seller.AssignPayment')->name('Dashboard.Orders.Seller.AssignPayment');
+                    Route::delete('/RemovePayment', 'removePayment')->middleware('can:Dashboard.Orders.Seller.RemovePayment')->name('Dashboard.Orders.Seller.RemovePayment');
                 });
                 Route::prefix('/Details')->group(function () {
                     Route::controller(OrderSellerDetailController::class)->group(function () {

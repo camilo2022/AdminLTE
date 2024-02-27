@@ -103,13 +103,13 @@ class InventoryController extends Controller
             if ($validator->fails()) {
                 throw new ValidationException($validator);
             }
-
+            
             foreach($inventories as $inventory) {
-                $existInventory = Inventory::where('product_id', '=', $inventory['product_id'])
-                ->where('size_id', '=', $inventory['size_id'])
-                ->where('warehouse_id', '=', $inventory['warehouse_id'])
-                ->where('color_id', '=', $inventory['color_id'])
-                ->where('tone_id', '=', $inventory['tone_id'])
+                $existInventory = Inventory::where('product_id', $inventory['product_id'])
+                ->where('size_id', $inventory['size_id'])
+                ->where('warehouse_id', $inventory['warehouse_id'])
+                ->where('color_id', $inventory['color_id'])
+                ->where('tone_id', $inventory['tone_id'])
                 ->first();
 
                 if($existInventory) {

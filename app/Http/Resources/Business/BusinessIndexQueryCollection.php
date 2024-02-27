@@ -20,6 +20,8 @@ class BusinessIndexQueryCollection extends ResourceCollection
                 return [
                     'id' => $business->id,
                     'name' => $business->name,
+                    'person_type' => $business->person_type,
+                    'document_type' => $business->document_type,
                     'document_number' => $business->document_number,
                     'telephone_number' => $business->telephone_number,
                     'email' => $business->email,

@@ -203,6 +203,44 @@
                 </div>
             </div>
         </div>
+        @if($order->seller_status == 'Aprobado' && !$order->sale_channel->require_verify_wallet)
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header p-2">
+                        <ul class="nav nav-pills">
+                            @if($order->wallet_status == 'Pendiente')
+                                <li class="nav-item">
+                                    <a class="nav-link active" type="button" onclick="AssignPaymentOrderSellerModal({{ $order->id }})" title="Agregar evidencia de pago de pedido.">
+                                        <i class="fas fa-plus"></i>
+                                    </a>
+                                </li>
+                            @endif
+                        </ul>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="orderSellerPayments" class="table table-bordered table-hover dataTable dtr-inline nowrap w-100">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Valor</th>
+                                        <th>Referencia de Pago</th>
+                                        <th>Fecha de Pago</th>
+                                        <th>Tipo de Pago</th>
+                                        <th>Banco</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @endif
         <div class="row">
             <div class="col-12">
                 <div class="card">
@@ -235,6 +273,7 @@
     </div>
     @include('Dashboard.OrderSellerDetails.Create')
     @include('Dashboard.OrderSellerDetails.Edit')
+    @include('Dashboard.OrderSellers.AssignPayment')
 </section>
 @endsection
 @section('script')
@@ -246,4 +285,7 @@
 
 <script src="{{ asset('js/Dashboard/OrderSellers/Approve.js') }}"></script>
 <script src="{{ asset('js/Dashboard/OrderSellers/Cancel.js') }}"></script>
+<script src="{{ asset('js/Dashboard/OrderSellers/DataTablePayments.js') }}"></script>
+<script src="{{ asset('js/Dashboard/OrderSellers/AssignPayment.js') }}"></script>
+<script src="{{ asset('js/Dashboard/OrderSellers/RemovePayment.js') }}"></script>
 @endsection

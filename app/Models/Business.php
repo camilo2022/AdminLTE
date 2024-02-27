@@ -16,6 +16,8 @@ class Business extends Model implements Auditable
     protected $table = 'businesses';
     protected $fillable = [
         'name',
+        'person_type_id',
+        'document_type_id',
         'document_number',
         'telephone_number',
         'email',
@@ -39,6 +41,16 @@ class Business extends Model implements Auditable
         'neighborhood',
         'description'
     ];
+
+    public function person_type() : BelongsTo
+    {
+        return $this->belongsTo(PersonType::class, 'person_type_id');
+    }
+
+    public function document_type() : BelongsTo
+    {
+        return $this->belongsTo(DocumentType::class, 'document_type_id');
+    }
 
     public function country() : BelongsTo
     {

@@ -359,6 +359,10 @@ class RolesAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Dashboard.Orders.Seller.Approve'])->syncRoles([$OrderSellers]);
         Permission::create(['name' => 'Dashboard.Orders.Seller.Pending'])->syncRoles([$OrderSellers]);
         Permission::create(['name' => 'Dashboard.Orders.Seller.Cancel'])->syncRoles([$OrderSellers]);
+        Permission::create(['name' => 'Dashboard.Orders.Seller.Payments.Query'])->syncRoles([$OrderSellers]);
+        Permission::create(['name' => 'Dashboard.Orders.Seller.AssignPayment.Query'])->syncRoles([$OrderSellers]);
+        Permission::create(['name' => 'Dashboard.Orders.Seller.AssignPayment'])->syncRoles([$OrderSellers]);
+        Permission::create(['name' => 'Dashboard.Orders.Seller.RemovePayment'])->syncRoles([$OrderSellers]);
         Permission::create(['name' => 'Dashboard.Orders.Seller.Details.Index'])->syncRoles([$OrderSellers]);
         Permission::create(['name' => 'Dashboard.Orders.Seller.Details.Index.Query'])->syncRoles([$OrderSellers]);
         Permission::create(['name' => 'Dashboard.Orders.Seller.Details.Create'])->syncRoles([$OrderSellers]);
@@ -367,8 +371,6 @@ class RolesAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Dashboard.Orders.Seller.Details.Update'])->syncRoles([$OrderSellers]);
         Permission::create(['name' => 'Dashboard.Orders.Seller.Details.Pending'])->syncRoles([$OrderSellers]);
         Permission::create(['name' => 'Dashboard.Orders.Seller.Details.Cancel'])->syncRoles([$OrderSellers]);
-        Permission::create(['name' => 'Dashboard.Orders.Seller.Details.AssignSupportPayment'])->syncRoles([$OrderSellers]);
-        Permission::create(['name' => 'Dashboard.Orders.Seller.Details.RemoveSupportPayment'])->syncRoles([$OrderSellers]);
 
         Permission::create(['name' => 'Dashboard.Clients.Index'])->syncRoles([$Clients]);
         Permission::create(['name' => 'Dashboard.Clients.Index.Query'])->syncRoles([$Clients]);

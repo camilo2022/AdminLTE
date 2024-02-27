@@ -67,6 +67,8 @@
                                         <tr>
                                             <th>#</th>
                                             <th>Razon social</th>
+                                            <th>Tipo persona</th>
+                                            <th>Tipo documento</th>
                                             <th>N° documento</th>
                                             <th>N° telefono</th>
                                             <th>Correo electronico</th>

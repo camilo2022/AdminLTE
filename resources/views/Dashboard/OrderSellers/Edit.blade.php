@@ -37,6 +37,19 @@
                     </div>
                 </div>
                 <div class="form-group">
+                    <label for="transporter_id_e">Transportadora</label>
+                    <div class="input-group">
+                        <select class="form-control select2" id="transporter_id_e" name="transporter_id_e" style="width: 88%">
+                            <option value="">Seleccione</option>
+                        </select>
+                        <div class="input-group-append">
+                            <span class="input-group-text">
+                                <i class="fas fa-truck-arrow-right"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
                     <label for="sale_channel_id_e">Canal de venta</label>
                     <div class="input-group">
                         <select class="form-control select2" id="sale_channel_id_e" name="sale_channel_id" style="width: 90%">
@@ -83,6 +96,11 @@
                         <div class="input-group-append" data-target="#dispatch_date_e" data-toggle="datetimepicker">
                             <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                         </div>
+                    </div>
+                </div>
+                <div class="form-group" id="div_payment_types_e">
+                    <label for="div_payment_types_e">Metodos de pago</label>
+                    <div class="form-group" id="payment_types_e">
                     </div>
                 </div>
             </div>

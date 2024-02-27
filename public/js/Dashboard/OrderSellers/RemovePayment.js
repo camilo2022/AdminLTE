@@ -1,65 +1,58 @@
-function ApproveTransferModal(id) {
-    $('#to_observation_a').val('');
-    $('#ApproveTransferButton').attr('onclick', `ApproveTransfer(${id})`);
-    $('#ApproveTransferModal').modal('show');
-}
-
-function ApproveTransfer(id) {
+function RemovePaymentOrderSeller(id) {
     Swal.fire({
-        title: '¿Desea aprobar la transferencia?',
-        text: 'La transferencia será aprobada.',
+        title: '¿Desea remover el pago al pedido?',
+        text: 'El pago será removido al pedido.',
         icon: 'warning',
         showCancelButton: true,
         cancelButtonColor: '#DD6B55',
         confirmButtonColor: '#3085d6',
-        confirmButtonText: 'Si, aprobar!',
+        confirmButtonText: 'Si, cancelar!',
         cancelButtonText: 'No, cancelar!',
     }).then((result) => {
         if (result.value) {
             $.ajax({
-                url: `/Dashboard/Transfers/Approve`,
-                type: 'PUT',
+                url: `/Dashboard/Orders/Seller/RemovePayment`,
+                type: 'DELETE',
                 data: {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
-                    'id': id,
-                    'to_observation': $('#to_observation_a').val()
+                    'id': id
                 },
                 success: function(response) {
-                    tableTransfers.ajax.reload();
-                    ApproveTransferAjaxSuccess(response);
+                    tableOrderSellerPayments.ajax.reload();
+                    RemovePaymentOrderSellerAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableTransfers.ajax.reload();
-                    ApproveTransferAjaxError(xhr);
+                    tableOrderSellerPayments.ajax.reload();
+                    RemovePaymentOrderSellerAjaxError(xhr);
                 }
             });
         } else {
-            toastr.info('La transferencia seleccionada no fue aprobada.')
+            toastr.info('El pago no fue removido al pedido.')
         }
     });
 }
 
-function ApproveTransferAjaxSuccess(response) {
+function RemovePaymentOrderSellerAjaxSuccess(response) {
     if(response.status === 200) {
+        toastr.info(response.message);
+    }
+
+    if(response.status === 204) {
         toastr.success(response.message);
-        $('#CancelTransferModal').modal('hide');
     }
 }
 
-function ApproveTransferAjaxError(xhr) {
+function RemovePaymentOrderSellerAjaxError(xhr) {
     if(xhr.status === 403) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
-        $('#CancelTransferModal').modal('hide');
     }
 
     if(xhr.status === 404) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
-        $('#CancelTransferModal').modal('hide');
     }
 
     if(xhr.status === 419) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
-        $('#CancelTransferModal').modal('hide');
     }
 
     if(xhr.status === 422){
@@ -72,6 +65,5 @@ function ApproveTransferAjaxError(xhr) {
 
     if(xhr.status === 500){
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
-        $('#CancelTransferModal').modal('hide');
     }
 }

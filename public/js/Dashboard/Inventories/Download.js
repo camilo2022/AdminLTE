@@ -10,7 +10,7 @@ function DownloadInventory() {
         cancelButtonText: 'No, cancelar!'
     }).then((result) => {
         if (result.value) {
-            toastr.info('Por favor espere un momento a que se procese, genere y descargue el archivo porfavor.');
+            toastr.info('Por favor espere un momento a que se procese, genere y descargue el archivo.');
             document.DownloadInventories.submit();
         } else {
             toastr.info('El archivo de inventarios no fue descargado.')

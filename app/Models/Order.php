@@ -56,9 +56,9 @@ class Order extends Model implements Auditable
         'correria_id'
     ];
 
-    public function supports() : MorphMany
+    public function payments() : MorphMany
     {
-      return $this->morphMany(Support::class, 'model');
+      return $this->morphMany(Payment::class, 'model');
     }
 
     public function details() : HasMany

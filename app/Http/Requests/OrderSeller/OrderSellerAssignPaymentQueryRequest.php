@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Requests\Client;
+namespace App\Http\Requests\OrderSeller;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class ClientCreateRequest extends FormRequest
+class OrderSellerAssignPaymentQueryRequest extends FormRequest
 {
     protected function failedValidation(Validator $validator)
     {
@@ -24,18 +24,17 @@ class ClientCreateRequest extends FormRequest
     public function rules()
     {
         return [
-            'country_id' => ['nullable', 'exists:countries,id'],
-            'departament_id' => ['nullable', 'exists:departaments,id'],
-            'person_type_id' => ['nullable', 'exists:person_types,id'],
+            'order_id' => ['required', 'exists:orders,id'],
+            'payment_type_id' => ['nullable', 'exists:payment_types,id'],
         ];
     }
 
     public function messages()
     {
         return [
-            'country_id.exists' => 'El Identificador del pais no es valido.',
-            'departament_id.exists' => 'El Identificador del departamento no es valido.',
-            'person_type_id.exists' => 'El identificador del tipo de persona no es valido.',
+            'order_id.required' => 'El Identificador del pedido es requerido.',
+            'order_id.exists' => 'El Identificador del pedido no es válido.',
+            'payment_type_id.exists' => 'El Identificador del tipo de pago no es válido.',
         ];
     }
 }

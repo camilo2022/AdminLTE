@@ -90,7 +90,7 @@
                         <div class="form-group">
                             <label for="document_number_p_e">Numero de documento</label>
                             <div class="input-group">
-                                <input type="number" class="form-control" id="document_number_p_e" name="document_number">
+                                <input type="text" class="form-control" id="document_number_p_e" name="document_number">
                                 <div class="input-group-append">
                                     <span class="input-group-text">
                                         <i class="fas fa-address-card"></i>

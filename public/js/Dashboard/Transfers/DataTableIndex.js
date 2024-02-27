@@ -107,12 +107,12 @@ let tableTransfers = $('#transfers').DataTable({
                 }
 
                 if (data === null && row.status === 'Pendiente' && warehousesUser.includes(row.to_warehouse_id)) {
-                    btn += `<a onclick="ApproveTransfer(${row.id})" type="button"
+                    btn += `<a onclick="ApproveTransferModal(${row.id})" type="button"
                     class="btn btn-success btn-sm mr-2" title="Aceptar transferencia">
                         <i class="fas fa-check text-white"></i>
                     </a>`;
 
-                    btn += `<a onclick="CancelTransfer(${row.id})" type="button"
+                    btn += `<a onclick="CancelTransferModal(${row.id})" type="button"
                     class="btn bg-orange btn-sm mr-2" title="Cancelar transferencia">
                         <i class="fas fa-xmark text-white"></i>
                     </a>`;

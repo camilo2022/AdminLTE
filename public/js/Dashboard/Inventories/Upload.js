@@ -30,7 +30,7 @@ function UploadInventory() {
                     <i class="fas fa-2x fa-sync fa-spin"></i>
                 </div>`
             );
-            toastr.info('Por favor espere un momento a que se cargue, valide y procese el archivo porfavor.');
+            toastr.info('Por favor espere un momento a que se cargue, valide y procese el archivo.');
             $.ajax({
                 url: '/Dashboard/Inventories/Upload',
                 type: 'POST',

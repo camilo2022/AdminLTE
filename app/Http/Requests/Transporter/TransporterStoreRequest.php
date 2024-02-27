@@ -41,7 +41,7 @@ class TransporterStoreRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'unique:transporters,name', 'max:255'],
             'document_number' => ['required', 'string', 'min:5', 'max:20', 'unique:transporters,document_number'],
-            'telephone_number' => ['required', 'string', 'size:10'],
+            'telephone_number' => ['required', 'string'],
             'email' => ['required', 'string', 'email', 'unique:transporters,email', 'max:255'],
         ];
     }
@@ -60,8 +60,7 @@ class TransporterStoreRequest extends FormRequest
             'document_number.min' => 'El campo Numero de documento de la transportadora debe contener minimo 5 caracteres.',
             'document_number.max' => 'El campo Numero de documento de la transportadora no debe exceder los 20 caracteres.',
             'telephone_number.required' => 'El campo Numero de telefono de la transportadora es requerido.',
-            'telephone_number.numeric' => 'El campo Numero de telefono de la transportadora debe ser una cadena de digitos.',
-            'telephone_number.size' => 'El campo Numero de telefono de la transportadora debe tener 10 caracteres.',
+            'telephone_number.string' => 'El campo Numero de telefono de la transportadora debe ser una cadena de digitos.',
             'email.required' => 'El campo Correo electronico de la transportadora es requerido.',
             'email.string' => 'El campo Correo electronico de la transportadora debe ser una cadena de caracteres.',
             'email.email' => 'El campo Correo electronico de la transportadora debe ser una dirección de correo electrónico válida.',

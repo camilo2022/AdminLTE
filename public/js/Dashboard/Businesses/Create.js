@@ -7,7 +7,8 @@ function CreateBusinessModal() {
         },
         success: function(response) {
             CreateBusinessModalCleaned();
-            CreateBusinessModalCountry(response.data);
+            CreateBusinessModalCountry(response.data.countries);
+            CreateBusinessModalPersonType(response.data.personTypes);
             CreateBusinessAjaxSuccess(response);
             $('#CreateBusinessModal').modal('show');
         },
@@ -19,6 +20,7 @@ function CreateBusinessModal() {
 
 function CreateBusinessModalCleaned() {
     CreateBusinessModalResetSelect('country_id_c');
+    CreateBusinessModalResetSelect('person_type_id_c');
     RemoveIsValidClassCreateBusiness();
     RemoveIsInvalidClassCreateBusiness();
 
@@ -35,6 +37,40 @@ function CreateBusinessModalResetSelect(id) {
     $(`#${id}`).html('')
     $(`#${id}`).append(new Option('Seleccione', '', false, false));
     $(`#${id}`).trigger('change');
+}
+
+function CreateBusinessModalPersonType(personTypes) {
+    personTypes.forEach(personType => {
+        $('#person_type_id_c').append(new Option(personType.name, personType.id, false, false));
+    });
+}
+
+function CreateBusinessModalPersonTypeGetDocumentType(select) {
+    if($(select).val() == '') {
+        CreateBusinessModalResetSelect('document_type_id_c');
+    } else {
+        $.ajax({
+            url: `/Dashboard/Businesses/Create`,
+            type: 'POST',
+            data: {
+                '_token': $('meta[name="csrf-token"]').attr('content'),
+                'person_type_id':  $(select).val()
+            },
+            success: function(response) {
+                CreateBusinessModalResetSelect('document_type_id_c');
+                CreateBusinessModalDocumentType(response.data);
+            },
+            error: function(xhr, textStatus, errorThrown) {
+                CreateBusinessAjaxError(xhr);
+            }
+        });
+    }
+}
+
+function CreateBusinessModalDocumentType(documentTypes) {
+    documentTypes.forEach(documentType => {
+        $('#document_type_id_c').append(new Option(documentType.name, documentType.id, false, false));
+    });
 }
 
 function CreateBusinessModalCountry(countries) {
@@ -117,6 +153,8 @@ function CreateBusiness() {
                 data: {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
                     'name': $('#name_c').val(),
+                    'person_type_id': $('#person_type_id_c').val(),
+                    'document_type_id': $('#document_type_id_c').val(),
                     'document_number': $('#document_number_c').val(),
                     'telephone_number': $('#telephone_number_c').val(),
                     'email': $('#email_c').val(),
@@ -210,6 +248,12 @@ function AddIsValidClassCreateBusiness() {
     if (!$('#description_c').hasClass('is-invalid')) {
         $('#description_c').addClass('is-valid');
     }
+    if (!$('span[aria-labelledby="select2-document_type_id_c-container"]').hasClass('is-invalid')) {
+        $('span[aria-labelledby="select2-document_type_id_c-container"]').addClass('is-valid');
+    }
+    if (!$('span[aria-labelledby="select2-person_type_id_c-container"]').hasClass('is-invalid')) {
+        $('span[aria-labelledby="select2-person_type_id_c-container"]').addClass('is-valid');
+    }
     if (!$('span[aria-labelledby="select2-country_id_c-container"]').hasClass('is-invalid')) {
         $('span[aria-labelledby="select2-country_id_c-container"]').addClass('is-valid');
     }
@@ -229,6 +273,8 @@ function RemoveIsValidClassCreateBusiness() {
     $('#address_c').removeClass('is-valid');
     $('#neighborhood_c').removeClass('is-valid');
     $('#description_c').removeClass('is-valid');
+    $('span[aria-labelledby="select2-document_type_id_c-container"]').removeClass('is-valid');
+    $('span[aria-labelledby="select2-person_type_id_c-container"]').removeClass('is-valid');
     $('span[aria-labelledby="select2-country_id_c-container"]').removeClass('is-valid');
     $('span[aria-labelledby="select2-departament_id_c-container"]').removeClass('is-valid');
     $('span[aria-labelledby="select2-city_id_c-container"]').removeClass('is-valid');
@@ -251,6 +297,8 @@ function RemoveIsInvalidClassCreateBusiness() {
     $('#address_c').removeClass('is-invalid');
     $('#neighborhood_c').removeClass('is-invalid');
     $('#description_c').removeClass('is-invalid');
+    $('span[aria-labelledby="select2-document_type_id_c-container"]').removeClass('is-invalid');
+    $('span[aria-labelledby="select2-person_type_id_c-container"]').removeClass('is-invalid');
     $('span[aria-labelledby="select2-country_id_c-container"]').removeClass('is-invalid');
     $('span[aria-labelledby="select2-departament_id_c-container"]').removeClass('is-invalid');
     $('span[aria-labelledby="select2-city_id_c-container"]').removeClass('is-invalid');

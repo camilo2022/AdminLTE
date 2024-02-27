@@ -4,19 +4,26 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\OrderSeller\OrderSellerApproveRequest;
+use App\Http\Requests\OrderSeller\OrderSellerAssignPaymentQueryRequest;
+use App\Http\Requests\OrderSeller\OrderSellerAssignPaymentRequest;
 use App\Http\Requests\OrderSeller\OrderSellerCancelRequest;
 use App\Http\Requests\OrderSeller\OrderSellerCreateRequest;
 use App\Http\Requests\OrderSeller\OrderSellerEditRequest;
 use App\Http\Requests\OrderSeller\OrderSellerIndexQueryRequest;
+use App\Http\Requests\OrderSeller\OrderSellerPaymentIndexQueryRequest;
 use App\Http\Requests\OrderSeller\OrderSellerPendingRequest;
+use App\Http\Requests\OrderSeller\OrderSellerRemovePaymentRequest;
 use App\Http\Requests\OrderSeller\OrderSellerStoreRequest;
 use App\Http\Requests\OrderSeller\OrderSellerUpdateRequest;
 use App\Http\Resources\OrderSeller\OrderSellerIndexQueryCollection;
+use App\Http\Resources\OrderSeller\OrderSellerPaymentIndexQueryCollection;
+use App\Models\Bank;
 use App\Models\Client;
 use App\Models\ClientBranch;
 use App\Models\Inventory;
 use App\Models\Order;
 use App\Models\OrderPaymentType;
+use App\Models\Payment;
 use App\Models\PaymentType;
 use App\Models\SaleChannel;
 use App\Models\Transporter;
@@ -57,6 +64,7 @@ class OrderSellerController extends Controller
                     'sale_channel' => fn($query) => $query->withTrashed(),
                     'seller_user' => fn($query) => $query->withTrashed(),
                     'wallet_user' => fn($query) => $query->withTrashed(),
+                    'sale_channel' => fn($query) => $query->withTrashed(),
                     'correria' => fn($query) => $query->withTrashed()
                 ])
                 ->when($request->filled('search'),
@@ -254,7 +262,7 @@ class OrderSellerController extends Controller
             
             $order->load('payment_types');
 
-            $payment_type_ids = array_values(array_diff($request->emails, $order->payment_types->pluck('id')->toArray()));
+            $payment_type_ids = array_values(array_diff($request->input('payment_type_ids'), $order->payment_types->pluck('id')->toArray()));
 
             foreach($payment_type_ids as $payment_type_id) {
                 $order_payment_type = New OrderPaymentType();
@@ -382,7 +390,7 @@ class OrderSellerController extends Controller
     {
         try {
             $order = Order::findOrFail($request->input('id'));
-            $order->selleR_status = 'Pendiente';
+            $order->seller_status = 'Pendiente';
             $order->save();
 
             return $this->successResponse(
@@ -452,6 +460,181 @@ class OrderSellerController extends Controller
                 $order,
                 'El pedido fue cancelado por el asesor exitosamente.',
                 200
+            );
+        } catch (ModelNotFoundException $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('ModelNotFoundException'),
+                    'error' => $e->getMessage()
+                ],
+                404
+            );
+        } catch (QueryException $e) {
+            // Manejar la excepción de la base de datos
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('QueryException'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        } catch (Exception $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('Exception'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        }
+    }
+
+    public function paymentQuery(OrderSellerPaymentIndexQueryRequest $request)
+    {
+        try {
+            $start_date = Carbon::parse($request->input('start_date'))->startOfDay();
+            $end_date = Carbon::parse($request->input('end_date'))->endOfDay();
+            //Consulta por nombre
+            $payments = Payment::with('payment_type', 'bank')
+                ->when($request->filled('search'),
+                    function ($query) use ($request) {
+                        $query->search($request->input('search'));
+                    }
+                )
+                ->when($request->filled('start_date') && $request->filled('end_date'),
+                    function ($query) use ($start_date, $end_date) {
+                        $query->filterByDate($start_date, $end_date);
+                    }
+                )
+                ->whereHasMorph('model', [Order::class], function ($query) use ($request) {
+                    $query->where('model_id', $request->input('order_id'));
+                })
+                ->orderBy($request->input('column'), $request->input('dir'))
+                ->paginate($request->input('perPage'));
+
+            return $this->successResponse(
+                new OrderSellerPaymentIndexQueryCollection($payments),
+                $this->getMessage('Success'),
+                200
+            );
+        } catch (QueryException $e) {
+            // Manejar la excepción de la base de datos
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('QueryException'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        } catch (Exception $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('Exception'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        }
+    }
+
+    public function assignPaymentQuery(OrderSellerAssignPaymentQueryRequest $request)
+    {
+        try {
+            if($request->filled('payment_type_id')) {
+                return $this->successResponse(
+                    PaymentType::findOrFail($request->input('payment_type_id'))->require_banks ? Bank::all() : [],
+                    'Bancos encontradas con exito.',
+                    200
+                );
+            }
+
+            return $this->successResponse(
+                [
+                    'paymentTypes' => Order::with('payment_types')->findOrFail($request->input('order_id'))->payment_types
+                ],
+                'El pedido fue encontrado exitosamente.',
+                204
+            );
+        } catch (ModelNotFoundException $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('ModelNotFoundException'),
+                    'error' => $e->getMessage()
+                ],
+                404
+            );
+        } catch (Exception $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('Exception'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        }
+    }
+
+    public function assignPayment(OrderSellerAssignPaymentRequest $request)
+    {
+        try {
+            $payment = new Payment();
+            $payment->model_id = $request->input('order_id');
+            $payment->model_type = Order::class;
+            $payment->value = $request->input('value');
+            $payment->reference = $request->input('reference');
+            $payment->date = $request->input('date');
+            $payment->payment_type_id = $request->input('payment_type_id');
+            $payment->bank_id = $request->input('bank_id');
+            $payment->save();
+
+            if ($request->hasFile('supports')) {
+                foreach($request->file('supports') as $support) {
+                    $path = $support->store('supports/' . $payment->id, 'public');
+                    $payment->addMedia($path)->toMediaCollection('supports', 'public');
+                }
+            }
+
+            return $this->successResponse(
+                $payment,
+                'El pago con los soportes fueron anexados al pedido.',
+                201
+            );
+        } catch (ModelNotFoundException $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('ModelNotFoundException'),
+                    'error' => $e->getMessage()
+                ],
+                404
+            );
+        } catch (QueryException $e) {
+            // Manejar la excepción de la base de datos
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('QueryException'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        } catch (Exception $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('Exception'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        }
+    }
+
+    public function removePayment(OrderSellerRemovePaymentRequest $request)
+    {
+        try {
+            $payment = Payment::findOrFail($request->input('id'))->delete();
+            return $this->successResponse(
+                $payment,
+                'El pago con los soportes fueron eliminado del pedido.',
+                204
             );
         } catch (ModelNotFoundException $e) {
             return $this->errorResponse(
