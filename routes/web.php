@@ -512,6 +512,8 @@ Route::middleware(['auth'])->group(function () {
                     Route::post('/AssignPayment/Query', 'assignPaymentQuery')->middleware('can:Dashboard.Orders.Seller.AssignPayment.Query')->name('Dashboard.Orders.Seller.AssignPayment.Query');
                     Route::post('/AssignPayment', 'assignPayment')->middleware('can:Dashboard.Orders.Seller.AssignPayment')->name('Dashboard.Orders.Seller.AssignPayment');
                     Route::delete('/RemovePayment', 'removePayment')->middleware('can:Dashboard.Orders.Seller.RemovePayment')->name('Dashboard.Orders.Seller.RemovePayment');
+                    Route::put('/ApprovePayment', 'approvePayment')->middleware('can:Dashboard.Orders.Seller.ApprovePayment')->name('Dashboard.Orders.Seller.ApprovePayment');
+                    Route::put('/CancelPayment', 'cancelPayment')->middleware('can:Dashboard.Orders.Seller.CancelPayment')->name('Dashboard.Orders.Seller.CancelPayment');
                 });
                 Route::prefix('/Details')->group(function () {
                     Route::controller(OrderSellerDetailController::class)->group(function () {
@@ -535,6 +537,7 @@ Route::middleware(['auth'])->group(function () {
                     Route::put('/PartiallyApprove', 'partiallyApprove')->middleware('can:Dashboard.Orders.Wallet.PartiallyApprove')->name('Dashboard.Orders.Wallet.PartiallyApprove');
                     Route::put('/Pending', 'pending')->middleware('can:Dashboard.Orders.Wallet.Pending')->name('Dashboard.Orders.Wallet.Pending');
                     Route::put('/Cancel', 'cancel')->middleware('can:Dashboard.Orders.Wallet.Cancel')->name('Dashboard.Orders.Wallet.Cancel');
+                    Route::post('/Payments/Query', 'paymentQuery')->middleware('can:Dashboard.Orders.Wallet.Payments.Query')->name('Dashboard.Orders.Wallet.Payments.Query');
                 });
                 Route::prefix('/Details')->group(function () {
                     Route::controller(OrderWalletDetailController::class)->group(function () {

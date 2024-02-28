@@ -18,7 +18,7 @@ return new class extends Migration
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
             $table->morphs('model');
-            $table->unsignedBigInteger('value', 8, 2);
+            $table->unsignedBigInteger('value');
             $table->string('reference');
             $table->dateTime('date');
             /* $table->unsignedBigInteger('payment_type_id')->nullable(); */

@@ -1,8 +1,8 @@
-let tableOrderSellerPayments = $('#orderSellerPayments').DataTable({
+let tableOrderWalletPayments = $('#orderWalletPayments').DataTable({
     processing: true,
     serverSide: true,
     ajax: {
-        url: `/Dashboard/Orders/Seller/Payments/Query`,
+        url: `/Dashboard/Orders/Wallet/Payments/Query`,
         type: 'POST',
         data: function (request) {
             var columnMappings = {
@@ -14,7 +14,7 @@ let tableOrderSellerPayments = $('#orderSellerPayments').DataTable({
                 5: 'bank_id',
             };
             request._token = $('meta[name="csrf-token"]').attr('content');
-            request.order_id = $('#IndexOrderSellerDetail').attr('data-id');
+            request.order_id = $('#IndexOrderWalletDetail').attr('data-id');
             request.perPage = request.length;
             request.page = (request.start / request.length) + 1;
             request.search = request.search.value;
@@ -24,7 +24,7 @@ let tableOrderSellerPayments = $('#orderSellerPayments').DataTable({
         dataSrc: function (response) {
             response.recordsTotal = response.data.meta.pagination.count;
             response.recordsFiltered = response.data.meta.pagination.total;
-            return response.data.orderSellerPayments;
+            return response.data.orderWalletPayments;
         },
         error: function (xhr, error, thrown) {
             toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
@@ -55,13 +55,6 @@ let tableOrderSellerPayments = $('#orderSellerPayments').DataTable({
                 btn += `<a class="btn btn-info btn-sm mr-2" title="Visualizar comprobantes de pago del pedido.">
                     <i class="fas fa-eye text-white"></i>
                 </a>`;
-
-                if(row.model.wallet_status === 'Pendiente') {
-                    btn += `<a onclick="RemovePaymentOrderSeller(${row.id})"
-                    class="btn btn-danger btn-sm mr-2" title="Eliminar pago del pedido.">
-                        <i class="fas fa-trash text-white"></i>
-                    </a>`;
-                }
 
                 btn += `</div>`;
                 return btn;

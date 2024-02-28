@@ -67,6 +67,13 @@
                         </div>
                     </div>
                 </div>
+                    <div class="form-group">
+                        <label for="supports_c">Soportes</label>
+                        <div class="input-group">
+                            <input type="file" class="form-control dropify" id="supports_c" name="supports_c"
+                            accept=".jpg, .jpeg, .png, .gif, .pdf" multiple>
+                        </div>
+                    </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal" title="Cerrar ventana">

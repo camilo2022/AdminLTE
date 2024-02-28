@@ -8,10 +8,13 @@ use App\Http\Requests\OrderWallet\OrderWalletCancelRequest;
 use App\Http\Requests\OrderWallet\OrderWalletIndexQueryRequest;
 use App\Http\Requests\OrderWallet\OrderWalletObservationRequest;
 use App\Http\Requests\OrderWallet\OrderWalletPartiallyApproveRequest;
+use App\Http\Requests\OrderWallet\OrderWalletPaymentIndexQueryRequest;
 use App\Http\Requests\OrderWallet\OrderWalletPendingRequest;
 use App\Http\Resources\OrderWallet\OrderWalletIndexQueryCollection;
+use App\Http\Resources\OrderWallet\OrderWalletPaymentIndexQueryCollection;
 use App\Models\Inventory;
 use App\Models\Order;
+use App\Models\Payment;
 use App\Traits\ApiMessage;
 use App\Traits\ApiResponser;
 use Carbon\Carbon;
@@ -137,7 +140,7 @@ class OrderWalletController extends Controller
                 $detail->save();
             }
 
-            $order->Wallet_status = 'Aprobado';
+            $order->wallet_status = 'Aprobado';
             $order->save();
 
             return $this->successResponse(
@@ -303,6 +306,54 @@ class OrderWalletController extends Controller
                     'error' => $e->getMessage()
                 ],
                 404
+            );
+        } catch (QueryException $e) {
+            // Manejar la excepción de la base de datos
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('QueryException'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        } catch (Exception $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('Exception'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        }
+    }
+
+    public function paymentQuery(OrderWalletPaymentIndexQueryRequest $request)
+    {
+        try {
+            $start_date = Carbon::parse($request->input('start_date'))->startOfDay();
+            $end_date = Carbon::parse($request->input('end_date'))->endOfDay();
+            //Consulta por nombre
+            $payments = Payment::with('model', 'payment_type', 'bank')
+                ->when($request->filled('search'),
+                    function ($query) use ($request) {
+                        $query->search($request->input('search'));
+                    }
+                )
+                ->when($request->filled('start_date') && $request->filled('end_date'),
+                    function ($query) use ($start_date, $end_date) {
+                        $query->filterByDate($start_date, $end_date);
+                    }
+                )
+                ->whereHasMorph('model', [Order::class], function ($query) use ($request) {
+                    $query->where('model_id', $request->input('order_id'));
+                })
+                ->orderBy($request->input('column'), $request->input('dir'))
+                ->paginate($request->input('perPage'));
+
+            return $this->successResponse(
+                new OrderWalletPaymentIndexQueryCollection($payments),
+                $this->getMessage('Success'),
+                200
             );
         } catch (QueryException $e) {
             // Manejar la excepción de la base de datos

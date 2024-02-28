@@ -215,6 +215,16 @@
                                         <i class="fas fa-plus"></i>
                                     </a>
                                 </li>
+                                <li class="nav-item ml-auto">
+                                    <a class="btn btn-success text-white" type="button" onclick="ApprovePaymentOrderSeller({{ $order->id }}, false)" title="Pedido aprobado para vendedor.">
+                                        <i class="fas fa-check"></i>
+                                    </a>
+                                </li>
+                                <li class="nav-item ml-2">
+                                    <a class="btn btn-danger text-white" type="button" onclick="CancelPaymentOrderSeller({{ $order->id }}, false)" title="Pedido cancelado para vendedor.">
+                                        <i class="fas fa-xmark"></i>
+                                    </a>
+                                </li>
                             @endif
                         </ul>
                     </div>
@@ -288,4 +298,6 @@
 <script src="{{ asset('js/Dashboard/OrderSellers/DataTablePayments.js') }}"></script>
 <script src="{{ asset('js/Dashboard/OrderSellers/AssignPayment.js') }}"></script>
 <script src="{{ asset('js/Dashboard/OrderSellers/RemovePayment.js') }}"></script>
+<script src="{{ asset('js/Dashboard/OrderSellers/ApprovePayment.js') }}"></script>
+<script src="{{ asset('js/Dashboard/OrderSellers/CancelPayment.js') }}"></script>
 @endsection

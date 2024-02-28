@@ -34,7 +34,7 @@ class OrderWalletDetailController extends Controller
     public function index($id)
     {
         try {
-            $order = Order::with('seller_user', 'client.document_type', 'client_branch.country', 'client_branch.departament', 'client_branch.city')->findOrFail($id);
+            $order = Order::with('sale_channel', 'seller_user', 'client.document_type', 'client_branch.country', 'client_branch.departament', 'client_branch.city')->findOrFail($id);
             return view('Dashboard.OrderWalletDetails.Index', compact('order'));
         } catch (ModelNotFoundException $e) {
             return back()->with('danger', 'Ocurrió un error al cargar el pedido: ' . $this->getMessage('ModelNotFoundException'));

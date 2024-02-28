@@ -28,6 +28,9 @@ function AssignPaymentOrderSellerModalCleaned() {
     $('#value_a').val('');
     $('#reference_a').val('');
     $('#date_a').val('');
+    $('#supports_c').val('');
+    $('#supports_c').dropify().data('dropify').destroy();
+    $('#supports_c').dropify().data('dropify').init();
 }
 
 function AssignPaymentOrderSellerModalResetSelect(id) {
@@ -78,6 +81,18 @@ function AssignPaymentOrderSellerModalBank(banks) {
 }
 
 function AssignPaymentOrderSeller() {
+    let formData = new FormData();
+    formData.append('_token', $('meta[name="csrf-token"]').attr('content'));
+    formData.append('order_id', $('#IndexOrderSellerDetail').attr('data-id'));
+    formData.append('value', $('#value_a').val());
+    formData.append('reference', $('#reference_a').val());
+    formData.append('date', $('#date_a').val());
+    formData.append('payment_type_id', $('#payment_type_id_a').val());
+    formData.append('bank_id', $('#bank_id_a').val());
+    for (let i = 0; i < $('#supports_c')[0].files.length; i++) {
+        formData.append('supports[]', $('#supports_c')[0].files[i]);
+    }
+
     Swal.fire({
         title: '¿Desea asignar el pago al pedido?',
         text: 'El pago será asignado al pedido.',
@@ -92,15 +107,9 @@ function AssignPaymentOrderSeller() {
             $.ajax({
                 url: `/Dashboard/Orders/Seller/AssignPayment`,
                 type: 'POST',
-                data: {
-                    '_token': $('meta[name="csrf-token"]').attr('content'),
-                    'order_id': $('#IndexOrderSellerDetail').attr('data-id'),
-                    'value': $('#value_a').val(),
-                    'reference': $('#reference_a').val(),
-                    'date': $('#date_a').val(),
-                    'payment_type_id': $('#payment_type_id_a').val(),
-                    'bank_id': $('#bank_id_a').val()
-                },
+                data: formData,
+                processData: false,
+                contentType: false,
                 success: function (response) {
                     tableOrderSellerPayments.ajax.reload();
                     AssignPaymentOrderSellerAjaxSuccess(response);

@@ -26,6 +26,7 @@ class OrderSellerPaymentIndexQueryCollection extends ResourceCollection
                     'payment_type' => $orderSellerPayment->payment_type,
                     'bank_id' => $orderSellerPayment->bank_id,
                     'bank' => $orderSellerPayment->bank,
+                    'model' => $orderSellerPayment->model,
                     'created_at' => $this->formatDate($orderSellerPayment->created_at),
                     'updated_at' => $this->formatDate($orderSellerPayment->updated_at),
                     'deleted_at' => $orderSellerPayment->deleted_at,

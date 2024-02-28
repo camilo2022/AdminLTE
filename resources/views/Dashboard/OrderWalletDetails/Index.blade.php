@@ -239,6 +239,37 @@
                 </div>
             </div>
         </div>
+        @if($order->seller_status == 'Aprobado' && !$order->sale_channel->require_verify_wallet)
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header p-2">
+                        <ul class="nav nav-pills">
+                        </ul>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="orderWalletPayments" class="table table-bordered table-hover dataTable dtr-inline nowrap w-100">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Valor</th>
+                                        <th>Referencia de Pago</th>
+                                        <th>Fecha de Pago</th>
+                                        <th>Tipo de Pago</th>
+                                        <th>Banco</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @endif
         <div class="row">
             <div class="col-12">
                 <div class="card">
@@ -290,4 +321,5 @@
 <script src="{{ asset('js/Dashboard/OrderWallets/PartiallyApprove.js') }}"></script>
 <script src="{{ asset('js/Dashboard/OrderWallets/Pending.js') }}"></script>
 <script src="{{ asset('js/Dashboard/OrderWallets/Cancel.js') }}"></script>
+<script src="{{ asset('js/Dashboard/OrderWallets/DataTablePayments.js') }}"></script>
 @endsection

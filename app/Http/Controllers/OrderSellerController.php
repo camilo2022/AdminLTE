@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\OrderSeller\OrderSellerApprovePaymentRequest;
 use App\Http\Requests\OrderSeller\OrderSellerApproveRequest;
 use App\Http\Requests\OrderSeller\OrderSellerAssignPaymentQueryRequest;
 use App\Http\Requests\OrderSeller\OrderSellerAssignPaymentRequest;
+use App\Http\Requests\OrderSeller\OrderSellerCancelPaymentRequest;
 use App\Http\Requests\OrderSeller\OrderSellerCancelRequest;
 use App\Http\Requests\OrderSeller\OrderSellerCreateRequest;
 use App\Http\Requests\OrderSeller\OrderSellerEditRequest;
@@ -495,7 +497,7 @@ class OrderSellerController extends Controller
             $start_date = Carbon::parse($request->input('start_date'))->startOfDay();
             $end_date = Carbon::parse($request->input('end_date'))->endOfDay();
             //Consulta por nombre
-            $payments = Payment::with('payment_type', 'bank')
+            $payments = Payment::with('model', 'payment_type', 'bank')
                 ->when($request->filled('search'),
                     function ($query) use ($request) {
                         $query->search($request->input('search'));
@@ -589,8 +591,7 @@ class OrderSellerController extends Controller
 
             if ($request->hasFile('supports')) {
                 foreach($request->file('supports') as $support) {
-                    $path = $support->store('supports/' . $payment->id, 'public');
-                    $payment->addMedia($path)->toMediaCollection('supports', 'public');
+                    $payment->addMedia($support)->toMediaCollection('Supports', 'media');
                 }
             }
 
@@ -635,6 +636,116 @@ class OrderSellerController extends Controller
                 $payment,
                 'El pago con los soportes fueron eliminado del pedido.',
                 204
+            );
+        } catch (ModelNotFoundException $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('ModelNotFoundException'),
+                    'error' => $e->getMessage()
+                ],
+                404
+            );
+        } catch (QueryException $e) {
+            // Manejar la excepción de la base de datos
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('QueryException'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        } catch (Exception $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('Exception'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        }
+    }
+
+    public function approvePayment(OrderSellerApprovePaymentRequest $request)
+    {
+        try {
+            $order = Order::with('details')->findOrFail($request->input('id'));
+
+            foreach($order->details as $detail) {
+                if($detail->status == 'Revision') {
+                    $detail->status = 'Aprobado';
+                    $detail->save();
+                }
+            }
+
+            $order->wallet_status = 'Parcialmente Aprobado';
+            $order->save();
+
+            return $this->successResponse(
+                $order,
+                'El pedido fue aprobado por el asesor exitosamente.',
+                200
+            );
+        } catch (ModelNotFoundException $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('ModelNotFoundException'),
+                    'error' => $e->getMessage()
+                ],
+                404
+            );
+        } catch (QueryException $e) {
+            // Manejar la excepción de la base de datos
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('QueryException'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        } catch (Exception $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('Exception'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        }
+    }
+
+    public function cancelPayment(OrderSellerCancelPaymentRequest $request)
+    {
+        try {
+            $order = Order::with('details.quantities')->findOrFail($request->input('id'));
+
+            foreach($order->details as $detail) {
+                if($detail->status == 'Revision') {
+                    foreach($detail->quantities as $quantity) {
+                        $inventory = Inventory::with('warehouse')
+                            ->whereHas('warehouse', fn($subQuery) => $subQuery->where('to_discount', true))
+                            ->where('product_id', $detail->product_id)
+                            ->where('size_id', $quantity->size_id)
+                            ->where('color_id', $detail->color_id)
+                            ->where('tone_id', $detail->tone_id)
+                            ->first();
+
+                        $inventory->quantity += $quantity->quantity;
+                        $inventory->save();
+                    }
+                }
+
+                $detail->status = 'Rechazado';
+                $detail->save();
+            }
+
+            $order->wallet_status = 'Cancelado';
+            $order->dispatched_status = 'Cancelado';
+            $order->save();
+
+            return $this->successResponse(
+                $order,
+                'El pedido fue cancelado por el asesor exitosamente.',
+                200
             );
         } catch (ModelNotFoundException $e) {
             return $this->errorResponse(
