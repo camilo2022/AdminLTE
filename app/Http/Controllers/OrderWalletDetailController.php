@@ -288,9 +288,7 @@ class OrderWalletDetailController extends Controller
             $orderDetail->seller_observation = $request->input('seller_observation');
             $orderDetail->save();
 
-            foreach($orderDetail->quantities as $quantity) {
-                $quantity->delete();
-            }
+            $orderDetail->quantities()->delete();
 
             collect($request->order_detail_quantities)->map(function ($orderDetailQuantity) use ($orderDetail) {
                 $orderDetailQuantity = (object) $orderDetailQuantity;
@@ -300,6 +298,47 @@ class OrderWalletDetailController extends Controller
                 $orderDetailQuantityNew->quantity = $orderDetailQuantity->quantity;
                 $orderDetailQuantityNew->save();
             });
+
+            $orderDetail->load('quantities');
+
+            if($orderDetail->status == 'Agotado') {
+                $boolean = true;
+                foreach($orderDetail->quantities as $quantity) {
+                    $inventory = Inventory::with('warehouse')
+                        ->whereHas('warehouse', fn($subQuery) => $subQuery->where('to_discount', true))
+                        ->where('product_id', $orderDetail->product_id)
+                        ->where('size_id', $quantity->size_id)
+                        ->where('color_id', $orderDetail->color_id)
+                        ->where('tone_id', $orderDetail->tone_id)
+                        ->first();
+
+                    if($inventory->quantity < $quantity->quantity) {
+                        $boolean = false;
+                        break;
+                    }
+                }
+
+                if($boolean){
+                    foreach($orderDetail->quantities as $quantity) {
+                        $inventory = Inventory::with('warehouse')
+                            ->whereHas('warehouse', fn($subQuery) => $subQuery->where('to_discount', true))
+                            ->where('product_id', $orderDetail->product_id)
+                            ->where('size_id', $quantity->size_id)
+                            ->where('color_id', $orderDetail->color_id)
+                            ->where('tone_id', $orderDetail->tone_id)
+                            ->first();
+
+                        $inventory->quantity -= $quantity->quantity;
+                        $inventory->save();
+                    }
+
+                    $orderDetail->status = 'Aprobado';
+                } else {
+                    $orderDetail->status = 'Agotado';
+                }
+
+                $orderDetail->save();
+            }
 
             return $this->successResponse(
                 $orderDetail,

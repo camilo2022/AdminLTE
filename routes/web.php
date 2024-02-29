@@ -560,8 +560,8 @@ Route::middleware(['auth'])->group(function () {
                     Route::get('/Index', 'index')->middleware('can:Dashboard.Orders.Dispatch.Index')->name('Dashboard.Orders.Dispatch.Index');
                     Route::post('/Index/Query', 'indexQuery')->middleware('can:Dashboard.Orders.Dispatch.Index.Query')->name('Dashboard.Orders.Dispatch.Index.Query');
                     Route::get('/Filter', 'filter')->middleware('can:Dashboard.Orders.Dispatch.Filter')->name('Dashboard.Orders.Dispatch.Filter');
+                    Route::post('/Filter/Query/Details', 'filterQueryDetails')->middleware('can:Dashboard.Orders.Dispatch.Filter.Query.Details')->name('Dashboard.Orders.Dispatch.Filter.Query.Details');
                     Route::post('/Filter/Query/References', 'filterQueryReferences')->middleware('can:Dashboard.Orders.Dispatch.Filter.Query.References')->name('Dashboard.Orders.Dispatch.Filter.Query.References');
-                    Route::post('/Filter/Query/Orders', 'filterQueryOrders')->middleware('can:Dashboard.Orders.Dispatch.Filter.Query.Orders')->name('Dashboard.Orders.Dispatch.Filter.Query.Orders');
                     Route::post('/Store', 'store')->middleware('can:Dashboard.Orders.Dispatch.Store')->name('Dashboard.Orders.Dispatch.Store');
                     Route::put('/Approve', 'approve')->middleware('can:Dashboard.Orders.Dispatch.Approve')->name('Dashboard.Orders.Dispatch.Approve');
                     Route::put('/Cancel', 'cancel')->middleware('can:Dashboard.Orders.Dispatch.Cancel')->name('Dashboard.Orders.Dispatch.Cancel');

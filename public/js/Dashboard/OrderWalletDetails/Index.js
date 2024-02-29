@@ -96,6 +96,11 @@ function IndexOrderWalletDetailModalCleaned(details, sizes) {
                     <i class="fas fa-ban text-white"></i>
                 </a>`;
                 break;
+            case 'Agotado':
+                btn += `<a onclick="EditOrderWalletDetailModal(${detail.id})" type="button"
+                class="btn btn-primary btn-sm mr-2" title="Editar detalle pedido.">
+                    <i class="fas fa-pen text-white"></i>
+                </a>`;
             default:
                 btn += ``;
                 break;
@@ -183,7 +188,7 @@ function IndexOrderWalletDetailModalCleaned(details, sizes) {
 
     $('#OrderWalletDetailHead').html(head);
     $('#OrderWalletDetailBody').html(body);
-    $('#OrderSellerDetailFoot').html(foot);
+    $('#OrderWalletDetailFoot').html(foot);
 }
 
 function IndexOrderWalletDetailAjaxSuccess(response) {

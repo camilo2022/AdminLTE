@@ -49,7 +49,7 @@ let tableAreasAndCharges = $('#areasAndCharges').DataTable({
                     table += `<tr>
                                     <td>${charge.id}</td>
                                     <td>${charge.name}</td>
-                                    <td>${charge.description === null ? '' : charge.description}</td>
+                                    <td>${charge.description ?? ''}</td>
                                     <td>${charge.deleted_at === null ?
                                         '<span class="badge badge-success"><i class="fas fa-check mr-2"></i>Activa</span>' :
                                         '<span class="badge badge-danger"><i class="fas fa-xmark mr-2"></i>Inactiva</span>'}</td>

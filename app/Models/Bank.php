@@ -27,7 +27,8 @@ class Bank extends Model implements Auditable
 
     public function scopeSearch($query, $search)
     {
-        return $query->where('name', 'like', '%' . $search . '%')
+        return $query->where('id', 'like', '%' . $search . '%')
+        ->orWhere('name', 'like', '%' . $search . '%')
         ->orWhere('sector_code', 'like', '%' . $search . '%')
         ->orWhere('entity_code', 'like', '%' . $search . '%');
     }

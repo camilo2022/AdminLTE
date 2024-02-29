@@ -22,6 +22,7 @@ use App\Http\Resources\OrderSeller\OrderSellerPaymentIndexQueryCollection;
 use App\Models\Bank;
 use App\Models\Client;
 use App\Models\ClientBranch;
+use App\Models\File;
 use App\Models\Inventory;
 use App\Models\Order;
 use App\Models\OrderPaymentType;
@@ -497,7 +498,7 @@ class OrderSellerController extends Controller
             $start_date = Carbon::parse($request->input('start_date'))->startOfDay();
             $end_date = Carbon::parse($request->input('end_date'))->endOfDay();
             //Consulta por nombre
-            $payments = Payment::with('model', 'payment_type', 'bank')
+            $payments = Payment::with('model', 'files.user', 'payment_type', 'bank')
                 ->when($request->filled('search'),
                     function ($query) use ($request) {
                         $query->search($request->input('search'));
@@ -591,7 +592,17 @@ class OrderSellerController extends Controller
 
             if ($request->hasFile('supports')) {
                 foreach($request->file('supports') as $support) {
-                    $payment->addMedia($support)->toMediaCollection('Supports', 'media');
+                    $file = new File();
+                    $file->model_type = Payment::class;
+                    $file->model_id = $payment->id;
+                    $file->name = $support->getClientOriginalName();
+                    $file->path = $support->store('Payments/' . $payment->id, 'public');
+                    $file->mime = $support->getMimeType();
+                    $file->extension = $support->getClientOriginalExtension();
+                    $file->size = $support->getSize();
+                    $file->user_id = Auth::user()->id;
+                    $file->metadata = json_encode((array) stat($support));
+                    $file->save();
                 }
             }
 

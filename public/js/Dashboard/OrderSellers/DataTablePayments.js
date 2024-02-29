@@ -48,13 +48,42 @@ let tableOrderSellerPayments = $('#orderSellerPayments').DataTable({
             }
         },
         {
+            data: 'files',
+            render: function(data, type, row) {
+                var table = `<table border="1" class="w-100">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>#</th>
+                            <th>Nombre</th>
+                            <th>Extension</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>`;
+
+                $.each(data, function(index, file) {
+                    table += `<tr>
+                                    <td>${file.id}</td>
+                                    <td>${file.name}</td>
+                                    <td>${file.extension}</td>
+                                    <td>
+                                        <a href="${file.path}" target="_blank"
+                                        class="btn btn-info btn-sm mr-2" title="Ver soporte de pago.">
+                                            <i class="fas fa-eye text-white"></i>
+                                        </a>
+                                    </td>
+                                </tr>`;
+                });
+
+                table += `</tbody></table>`;
+
+                return data.length > 0 ? table : '';
+            }
+        },
+        {
             data: 'deleted_at',
             render: function (data, type, row) {
                 let btn = `<div class="text-center" style="width: 100%;">`;
-                
-                btn += `<a class="btn btn-info btn-sm mr-2" title="Visualizar comprobantes de pago del pedido.">
-                    <i class="fas fa-eye text-white"></i>
-                </a>`;
 
                 if(row.model.wallet_status === 'Pendiente') {
                     btn += `<a onclick="RemovePaymentOrderSeller(${row.id})"
@@ -75,7 +104,7 @@ let tableOrderSellerPayments = $('#orderSellerPayments').DataTable({
         },
         {
             orderable: false,
-            targets: [6]
+            targets: [6, 7]
         }
     ],
     pagingType: 'full_numbers',

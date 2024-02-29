@@ -283,9 +283,7 @@ class OrderSellerDetailController extends Controller
             $orderDetail->seller_observation = $request->input('seller_observation');
             $orderDetail->save();
 
-            foreach($orderDetail->quantities as $quantity) {
-                $quantity->delete();
-            }
+            $orderDetail->quantities()->delete();
 
             collect($request->order_detail_quantities)->map(function ($orderDetailQuantity) use ($orderDetail) {
                 $orderDetailQuantity = (object) $orderDetailQuantity;

@@ -103,8 +103,7 @@ function EditOrderWalletDetailModalColorToneGetSizesQuantity() {
                 '_token': $('meta[name="csrf-token"]').attr('content'),
                 'product_id':  $('#product_id_e').val(),
                 'color_id':  $('#color_id_tone_id_e').val().split('-')[0],
-                'tone_id':  $('#color_id_tone_id_e').val().split('-')[1],
-                'size_id':  $('#size_id_e').val(),
+                'tone_id':  $('#color_id_tone_id_e').val().split('-')[1]
             },
             success: function(response) {
                 EditOrderWalletDetailModalSizes(response.data);

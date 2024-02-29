@@ -27,6 +27,20 @@ class OrderWalletPaymentIndexQueryCollection extends ResourceCollection
                     'bank_id' => $orderWalletPayment->bank_id,
                     'bank' => $orderWalletPayment->bank,
                     'model' => $orderWalletPayment->model,
+                    'files' => $orderWalletPayment->files->map(function ($file) {
+                            return [
+                                'id' => $file->id,
+                                'name' => $file->name,
+                                'path' => asset('storage/' . $file->path),
+                                'mime' => $file->mime,
+                                'extension' => $file->extension,
+                                'size' => $file->size,
+                                'user_id' => $file->user_id,
+                                'user' => $file->user,
+                                'metadata' => json_decode($file->path, true)
+                            ];
+                        }
+                    )->toArray(),
                     'created_at' => $this->formatDate($orderWalletPayment->created_at),
                     'updated_at' => $this->formatDate($orderWalletPayment->updated_at),
                     'deleted_at' => $orderWalletPayment->deleted_at,

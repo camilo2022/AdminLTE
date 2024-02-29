@@ -32,9 +32,9 @@ class OrderDispatch extends Model implements Auditable
         'consecutive'
     ];
 
-    public function supports() : MorphMany
+    public function files() : MorphMany
     {
-      return $this->morphMany(Support::class, 'model');
+      return $this->morphMany(File::class, 'model');
     }
 
     public function order_packing() : HasOne

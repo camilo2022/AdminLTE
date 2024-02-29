@@ -333,7 +333,7 @@ class OrderWalletController extends Controller
             $start_date = Carbon::parse($request->input('start_date'))->startOfDay();
             $end_date = Carbon::parse($request->input('end_date'))->endOfDay();
             //Consulta por nombre
-            $payments = Payment::with('model', 'payment_type', 'bank')
+            $payments = Payment::with('model', 'files.user', 'payment_type', 'bank')
                 ->when($request->filled('search'),
                     function ($query) use ($request) {
                         $query->search($request->input('search'));

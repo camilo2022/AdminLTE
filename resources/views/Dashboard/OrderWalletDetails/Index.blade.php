@@ -291,7 +291,7 @@
                                 </thead>
                                 <tbody id="OrderWalletDetailBody">
                                 </tbody>
-                                <tfoot class="thead-dark" id="OrderSellerDetailFoot">
+                                <tfoot class="thead-dark" id="OrderWalletDetailFoot">
                                 </tfoot>
                             </table>
                         </div>

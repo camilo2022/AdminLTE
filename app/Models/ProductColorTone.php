@@ -7,12 +7,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as Auditing;
-use Spatie\MediaLibrary\HasMedia;
-use Spatie\MediaLibrary\InteractsWithMedia;
 
-class ProductColorTone extends Model implements Auditable, HasMedia
+class ProductColorTone extends Model implements Auditable
 {
-    use HasFactory, SoftDeletes, Auditing, InteractsWithMedia;
+    use HasFactory, SoftDeletes, Auditing;
 
     protected $table = 'product_color_tone';
     protected $fillable = [

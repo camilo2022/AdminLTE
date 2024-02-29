@@ -239,6 +239,7 @@
                                         <th>Fecha de Pago</th>
                                         <th>Tipo de Pago</th>
                                         <th>Banco</th>
+                                        <th>Soportes</th>
                                         <th>Acciones</th>
                                     </tr>
                                 </thead>

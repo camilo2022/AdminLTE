@@ -27,6 +27,20 @@ class OrderSellerPaymentIndexQueryCollection extends ResourceCollection
                     'bank_id' => $orderSellerPayment->bank_id,
                     'bank' => $orderSellerPayment->bank,
                     'model' => $orderSellerPayment->model,
+                    'files' => $orderSellerPayment->files->map(function ($file) {
+                            return [
+                                'id' => $file->id,
+                                'name' => $file->name,
+                                'path' => asset('storage/' . $file->path),
+                                'mime' => $file->mime,
+                                'extension' => $file->extension,
+                                'size' => $file->size,
+                                'user_id' => $file->user_id,
+                                'user' => $file->user,
+                                'metadata' => json_decode($file->path, true)
+                            ];
+                        }
+                    )->toArray(),
                     'created_at' => $this->formatDate($orderSellerPayment->created_at),
                     'updated_at' => $this->formatDate($orderSellerPayment->updated_at),
                     'deleted_at' => $orderSellerPayment->deleted_at,
