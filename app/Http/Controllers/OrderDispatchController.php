@@ -128,6 +128,7 @@ class OrderDispatchController extends Controller
 
                 $quantities = collect($orderDetail->quantities)->mapWithKeys(function ($quantity) {
                     return [$quantity['size']->id => [
+                        'id' => $quantity['id'],
                         'order_detail_id' => $quantity['order_detail_id'],
                         'quantity' => $quantity['quantity'],
                     ]];
@@ -135,6 +136,7 @@ class OrderDispatchController extends Controller
 
                 $missingSizes->each(function ($missingSize) use ($quantities, $orderDetail) {
                     $quantities[$missingSize] = [
+                        'id' => null,
                         'order_detail_id' => $orderDetail->id,
                         'quantity' => 0,
                     ];

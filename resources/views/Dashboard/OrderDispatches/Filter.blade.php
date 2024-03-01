@@ -201,7 +201,7 @@
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table id="orderWallets" class="table table-bordered table-hover dataTable dtr-inline nowrap w-100">
+                            <table id="orderDetailsDispatch" class="table table-bordered table-hover dataTable dtr-inline nowrap w-100">
                                 <thead class="thead-dark" id="OrderDispatchDetailHead">
                                 </thead>
                                 <tbody id="OrderDispatchDetailBody">
