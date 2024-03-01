@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\OrderDispatch\OrderDispatchFilterQueryDetailsRequest;
+use App\Http\Requests\OrderDispatch\OrderDispatchFilterQueryInventoriesRequest;
 use App\Http\Requests\OrderDispatch\OrderDispatchIndexQueryRequest;
 use App\Http\Resources\OrderDispatch\OrderDispatchIndexQueryCollection;
+use App\Models\Inventory;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\OrderDetailQuantity;
@@ -158,6 +160,57 @@ class OrderDispatchController extends Controller
                     'orderDetails' => $orderDetails,
                     'sizes' => $orderDetailQuantitySizes->pluck('size')->unique()->values()
                 ],
+                $this->getMessage('Success'),
+                200
+            );
+        } catch (QueryException $e) {
+            // Manejar la excepción de la base de datos
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('QueryException'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        } catch (Exception $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('Exception'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        }
+    }
+
+    public function filterQueryInventories(OrderDispatchFilterQueryInventoriesRequest $request)
+    {
+        try {
+            $inventories = Inventory::with('warehouse')
+                ->whereHas('warehouse', fn($subQuery) => $subQuery->where('to_discount', true))
+                ->where('product_id', $request->input('product_id'))
+                ->where('color_id', $request->input('color_id'))
+                ->where('tone_id', $request->input('tone_id'))
+                ->whereIn('size_id', collect($request->input('size_ids'))->pluck('id'))
+                ->get();
+
+            $existingSizes = $inventories->pluck('size_id')->unique();
+            $missingSizes = collect($request->input('size_ids'))->pluck('id')->diff($existingSizes)->values();
+
+            $inventories = $inventories->mapWithKeys(function ($inventory) {
+                return [$inventory->size_id => [
+                    'quantity' => $inventory->quantity
+                ]];
+            });
+
+            $missingSizes->each(function ($missingSize) use ($inventories) {
+                $inventories[$missingSize] = [
+                    'quantity' => 0,
+                ];
+            });
+
+            return $this->successResponse(
+                $inventories,
                 $this->getMessage('Success'),
                 200
             );

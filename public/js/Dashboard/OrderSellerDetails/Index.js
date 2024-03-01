@@ -93,7 +93,7 @@ function IndexOrderSellerDetailModalCleaned(details, sizes) {
                 <td>${quantities}</td>
                 <td>${detail.product.code}</td>
                 <td>${detail.color.name + ' - ' + detail.color.code}</td>
-                <td>${detail.tone.name}</td>`;
+                <td>${detail.tone.name + ' - ' + detail.tone.code}</td>`;
 
         $.each(sizes, function(index, size) {
             body += `<td>${detail.quantities[size.id].quantity}</td>`;

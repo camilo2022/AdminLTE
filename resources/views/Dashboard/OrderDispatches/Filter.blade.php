@@ -197,13 +197,6 @@
                 <div class="card">
                     <div class="card-header p-2">
                         <ul class="nav nav-pills">
-                            @if(($order->seller_status == 'Pendiente' || $order->wallet_status == 'Pendiente') && ($order->wallet_status == 'Pendiente' || $order->wallet_status == 'Parcialmente Aprobado') && $order->dispatched_status == 'Pendiente')
-                                <li class="nav-item">
-                                    <a class="nav-link active" type="button" onclick="CreateOrderDispatchDetailModal()" title="Agregar detalle de pedido.">
-                                        <i class="fas fa-plus"></i>
-                                    </a>
-                                </li>
-                            @endif
                         </ul>
                     </div>
                     <div class="card-body">
@@ -213,8 +206,6 @@
                                 </thead>
                                 <tbody id="OrderDispatchDetailBody">
                                 </tbody>
-                                <tfoot class="thead-dark" id="OrderSellerDetailFoot">
-                                </tfoot>
                             </table>
                         </div>
                     </div>
@@ -225,21 +216,5 @@
 </section>
 @endsection
 @section('script')
-<script src="{{ asset('js/Dashboard/OrderDispatchDetails/Index.js') }}"></script>
-<script src="{{ asset('js/Dashboard/OrderDispatchDetails/Create.js') }}"></script>
-<script src="{{ asset('js/Dashboard/OrderDispatchDetails/Edit.js') }}"></script>
-<script src="{{ asset('js/Dashboard/OrderDispatchDetails/Approve.js') }}"></script>
-<script src="{{ asset('js/Dashboard/OrderDispatchDetails/Pending.js') }}"></script>
-<script src="{{ asset('js/Dashboard/OrderDispatchDetails/Review.js') }}"></script>
-<script src="{{ asset('js/Dashboard/OrderDispatchDetails/Cancel.js') }}"></script>
-<script src="{{ asset('js/Dashboard/OrderDispatchDetails/Decline.js') }}"></script>
-
-<script src="{{ asset('js/Dashboard/OrderSellers/Pending.js') }}"></script>
-
-<script src="{{ asset('js/Dashboard/OrderDispatchs/Observation.js') }}"></script>
-<script src="{{ asset('js/Dashboard/OrderDispatchs/Approve.js') }}"></script>
-<script src="{{ asset('js/Dashboard/OrderDispatchs/PartiallyApprove.js') }}"></script>
-<script src="{{ asset('js/Dashboard/OrderDispatchs/Pending.js') }}"></script>
-<script src="{{ asset('js/Dashboard/OrderDispatchs/Cancel.js') }}"></script>
-<script src="{{ asset('js/Dashboard/OrderDispatchs/DataTablePayments.js') }}"></script>
+<script src="{{ asset('js/Dashboard/OrderDispatches/Filter.js') }}"></script>
 @endsection

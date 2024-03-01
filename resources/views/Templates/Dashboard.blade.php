@@ -72,42 +72,11 @@
             font-weight: bold;
             border: 0; 
             box-shadow: none; 
-            width: 100%;
+            width: 100px;
         }
-        
-        #Inventory {
-            table-layout: fixed;
-            width: 100%;
-            border-collapse: collapse;
-        }
-        #Inventory thead th:nth-child(1) {
-            width: 525px;
-        }
-        #Inventory thead th {
-            width: 70px;
-        }
-        #OrdersReference {
-            table-layout: fixed;
-            width: 100%;
-            border-collapse: collapse;
-        }
-        #OrdersReference thead th:nth-child(1) {
-            width: 25px;
-        }
-        #OrdersReference thead th:nth-child(2) {
-            width: 35px;
-        }
-        #OrdersReference thead th:nth-child(3) {
-            width: 155px;
-        }
-        #OrdersReference thead th:nth-child(4) {
-            width: 155px;
-        }
-        #OrdersReference thead th:nth-child(5) {
-            width: 150px;
-        }
-        #OrdersReference thead th {
-            width: 70px;
+
+        #orderWallets thead th {
+            width: 2000px !important;
         }
     </style>
 </head>
