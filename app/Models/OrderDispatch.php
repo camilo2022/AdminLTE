@@ -28,7 +28,7 @@ class OrderDispatch extends Model implements Auditable
         'order_id',
         'dispatch_user_id',
         'dispatch_status',
-        'dispatched_date',
+        'dispatch_date',
         'consecutive'
     ];
 

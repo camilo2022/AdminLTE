@@ -197,6 +197,11 @@
                 <div class="card">
                     <div class="card-header p-2">
                         <ul class="nav nav-pills">
+                            <li class="nav-item">
+                                <a class="btn btn-success text-white" type="button" onclick="FilterOrderDispatch()" title="Filtrar pedido para crear orden de despacho.">
+                                    <i class="fas fa-filter"></i>
+                                </a>
+                            </li>
                         </ul>
                     </div>
                     <div class="card-body">

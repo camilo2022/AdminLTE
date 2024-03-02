@@ -6,17 +6,23 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\OrderDispatch\OrderDispatchFilterQueryDetailsRequest;
 use App\Http\Requests\OrderDispatch\OrderDispatchFilterQueryInventoriesRequest;
 use App\Http\Requests\OrderDispatch\OrderDispatchIndexQueryRequest;
+use App\Http\Requests\OrderDispatch\OrderDispatchStoreRequest;
 use App\Http\Resources\OrderDispatch\OrderDispatchIndexQueryCollection;
 use App\Models\Inventory;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\OrderDetailQuantity;
+use App\Models\OrderDispatch;
+use App\Models\OrderDispatchDetail;
+use App\Models\OrderDispatchDetailQuantity;
 use App\Traits\ApiMessage;
 use App\Traits\ApiResponser;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class OrderDispatchController extends Controller
 {
@@ -193,7 +199,6 @@ class OrderDispatchController extends Controller
                 ->where('product_id', $request->input('product_id'))
                 ->where('color_id', $request->input('color_id'))
                 ->where('tone_id', $request->input('tone_id'))
-                ->whereIn('size_id', collect($request->input('size_ids'))->pluck('id'))
                 ->get();
 
             $existingSizes = $inventories->pluck('size_id')->unique();
@@ -214,6 +219,75 @@ class OrderDispatchController extends Controller
             return $this->successResponse(
                 $inventories,
                 $this->getMessage('Success'),
+                200
+            );
+        } catch (QueryException $e) {
+            // Manejar la excepción de la base de datos
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('QueryException'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        } catch (Exception $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('Exception'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        }
+    }
+
+    public function store(OrderDispatchStoreRequest $request) 
+    {
+        try {
+            $order_dispatch = OrderDispatch::where('order_id', $request->input('order_id'))->where('dispatch_status', 'Pendiente')->first();
+
+            if(!$order_dispatch) {
+                $order_dispatch = new OrderDispatch();
+                $order_dispatch->order_id = $request->input('order_id');
+                $order_dispatch->dispatch_user_id = Auth::user()->id;
+                $order_dispatch->consecutive = DB::selectOne('CALL order_dispatches()')->consecutive;;
+                $order_dispatch->save();
+            }
+
+            foreach($request->input('details') as $detail) {
+                $order_dispatch_detail = new OrderDispatchDetail();
+                $order_dispatch_detail->order_dispatch_id = $order_dispatch->id;
+                $order_dispatch_detail->order_detail_id = $detail->id;
+                $order_dispatch_detail->save();
+
+                $orderDetail = OrderDetail::with('quantities')->findOrFail($detail->id);
+
+                foreach($detail->quantities as $quantity) {
+                    if(!is_null($quantity->id)) {
+                        $orderDetailQuantity = $orderDetail->quantities()->findOrFail($quantity->id);
+
+                        $inventory = Inventory::with('warehouse')
+                            ->whereHas('warehouse', fn($subQuery) => $subQuery->where('to_discount', true))
+                            ->where('product_id', $orderDetail->product_id)
+                            ->where('color_id', $orderDetail->color_id)
+                            ->where('tone_id', $orderDetail->tone_id)
+                            ->where('size_id', $orderDetailQuantity->size_id)
+                            ->firstOrFail();
+
+                        $inventory->quantity -= ($quantity->quantity - $orderDetailQuantity->quantity);
+
+                        $order_dispatch_detail_quantity = new OrderDispatchDetailQuantity();
+                        $order_dispatch_detail_quantity->order_dispatch_detail_id = $order_dispatch_detail->id;
+                        $order_dispatch_detail_quantity->order_detail_quantity = $quantity->id;
+                        $order_dispatch_detail_quantity->quantity = $quantity->quantity;
+                        $order_dispatch_detail_quantity->save();
+                    }
+                }
+            }
+
+            return $this->successResponse(
+                '',
+                'Los detalles del pedido fueron filtrados exitosamente.',
                 200
             );
         } catch (QueryException $e) {

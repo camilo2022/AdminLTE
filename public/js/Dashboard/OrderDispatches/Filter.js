@@ -57,9 +57,9 @@ function InventoriesOrderDispatch(orderDetail, sizes, index) {
         type: 'POST',
         data: {
             '_token': $('meta[name="csrf-token"]').attr('content'),
-            'product_id': orderDetail.product_id,
-            'color_id': orderDetail.color_id,
-            'tone_id': orderDetail.tone_id,
+            'product_id': orderDetail.product.id,
+            'color_id': orderDetail.color.id,
+            'tone_id': orderDetail.tone.id,
             'size_ids': sizes
         },
         success: function(response) {
@@ -79,9 +79,9 @@ function OrdersDetailsRowsOrderDispatch(orderDetail, sizes, inventories, index) 
     let bodyColumnsInventories = '';
     let sumColumnsSizes = 0;
     let sumColumnsInventories = 0;
-
+    
     $.each(sizes, function(index, size) {
-        bodyColumnsSizes += `<td><input type="number" class="form-control filterInputNumber details" id="detail_${orderDetail.id}_t${size.id}" value="-${orderDetail.quantities[size.id].quantity}" data-size_id="${size.id}" data-quantity="-${orderDetail.quantities[size.id].quantity}" data-id="${orderDetail.quantities[size.id].id}" onkeyup="SubtractInputValueOrderDispatch('detail_${orderDetail.id}_t${size.id}', 'inventory_${orderDetail.id}_t${size.id}')" onblur="ResetInputValueOrderDispatch('detail_${orderDetail.id}_t${size.id}', 'inventory_${orderDetail.id}_t${size.id}', ${orderDetail.id}, ${JSON.stringify(sizes).replace(/"/g, "'")})"></td>`;
+        bodyColumnsSizes += `<td><input type="number" class="form-control filterInputNumber details" id="detail_${orderDetail.id}_t${size.id}" value="-${orderDetail.quantities[size.id].quantity}" data-size_id="${size.id}" data-quantity="-${orderDetail.quantities[size.id].quantity}" data-id="${orderDetail.quantities[size.id].id}" onkeyup="SubtractInputValueOrderDispatch('detail_${orderDetail.id}_t${size.id}', 'inventory_${orderDetail.id}_t${size.id}', ${orderDetail.id}, ${JSON.stringify(sizes).replace(/"/g, "'")})" onblur="ResetInputValueOrderDispatch('detail_${orderDetail.id}_t${size.id}', 'inventory_${orderDetail.id}_t${size.id}', ${orderDetail.id}, ${JSON.stringify(sizes).replace(/"/g, "'")})"></td>`;
         bodyColumnsInventories += `<td><input type="number" class="form-control filterInputNumber" id="inventory_${orderDetail.id}_t${size.id}" value="${inventories[size.id].quantity}" data-size_id="${size.id}" data-quantity="${inventories[size.id].quantity}" readonly></td>`;
         sumColumnsSizes += orderDetail.quantities[size.id].quantity;
         sumColumnsInventories += inventories[size.id].quantity;
@@ -132,6 +132,9 @@ function ResetInputValueOrderDispatch(quantity, inventory, id, sizes) {
         })
 
         $(`#detail_${id}_total`).val(quantities);
+        
+        $(`#${inventory}`).parent().css({'background': 'transparent'});
+        $(`#${inventory}`).css({'color': '#495057'});
     }
 
     if (valueQuantity === '-' || isNaN(valueQuantity) || valueQuantity === '') {
@@ -143,41 +146,106 @@ function ResetInputValueOrderDispatch(quantity, inventory, id, sizes) {
         })
 
         $(`#inventory_${id}_total`).val(inventories);
+    
+        if (inventories < 0) {
+            $(`#inventory_${id}_total`).parent().css({'background': '#ff4141'});
+            $(`#inventory_${id}_total`).css({'color': '#fff'});
+        } else {
+            $(`#inventory_${id}_total`).parent().css({'background': 'transparent'});
+            $(`#inventory_${id}_total`).css({'color': '#495057'});
+        }
     }
 }
 
-function SubtractInputValueOrderDispatch(quantity, inventory) {
+function SubtractInputValueOrderDispatch(quantity, inventory, id, sizes) {
     let valueQuantity = parseInt($(`#${quantity}`).val());
     let dataQuantity = parseInt($(`#${quantity}`).attr('data-quantity'));
-
+    
     let valueInventory = parseInt($(`#${inventory}`).val());
     let dataInventory = parseInt($(`#${inventory}`).attr('data-quantity'));
 
-
     if (valueQuantity === '-' || isNaN(valueQuantity) || valueQuantity === '') {
         $(`#${inventory}`).val(dataInventory);
+
+        $(`#${inventory}`).parent().css({'background': 'transparent'});
+        $(`#${inventory}`).css({'color': '#495057'});
     } else {
-        let difference = valueQuantity - (dataQuantity * -1);
+        let difference = (dataInventory + (dataQuantity * -1)) - (valueQuantity * -1);
         $(`#${inventory}`).val(difference);
+        if (difference < 0) {
+            $(`#${inventory}`).parent().css({'background': '#ff4141'});
+            $(`#${inventory}`).css({'color': '#fff'});
+        } else {
+            $(`#${inventory}`).parent().css({'background': 'transparent'});
+            $(`#${inventory}`).css({'color': '#495057'});
+        }
+    }
+
+    let quantities = 0;
+    $.each(sizes, function(index, size) {
+        quantities += parseInt($(`#detail_${id}_t${size.id}`).val());
+    })
+
+    let inventories = 0;
+    $.each(sizes, function(index, size) {
+        inventories += parseInt($(`#inventory_${id}_t${size.id}`).val());
+    })
+
+    $(`#detail_${id}_total`).val(quantities);
+    $(`#inventory_${id}_total`).val(inventories);
+
+    if (inventories < 0) {
+        $(`#inventory_${id}_total`).parent().css({'background': '#ff4141'});
+        $(`#inventory_${id}_total`).css({'color': '#fff'});
+    } else {
+        $(`#inventory_${id}_total`).parent().css({'background': 'transparent'});
+        $(`#inventory_${id}_total`).css({'color': '#495057'});
     }
 }
 
-function GetDataFilterOrderDetailsOrderDispatch() {
-    return $('#orderDetailsDispatch tbody tr').map(function() {
-        if ($(this).find('input[type="checkbox"]').prop('checked')) {
-            let quantities = $(this).find('.details').map(function() {
-                return {
-                    id: $(this).attr('data-id'),
-                    quantity: $(this).val()
-                };
-            }).get();
-
-            return {
-                id: $(this).find('input[type="checkbox"]').attr('id'),
-                quantities: quantities
-            };
+function FilterOrderDispatch() {
+    Swal.fire({
+        title: '¿Desea filtrar los detalles del pedido?',
+        text: 'Los detalles del pedido se filtrarán.',
+        icon: 'warning',
+        showCancelButton: true,
+        cancelButtonColor: '#DD6B55',
+        confirmButtonColor: '#3085d6',
+        confirmButtonText: 'Si, filtrar!',
+        cancelButtonText: 'No, cancelar!',
+    }).then((result) => {
+        if (result.value) {
+            $.ajax({
+                url: `/Dashboard/Orders/Dispatch/Store`,
+                type: 'POST',
+                data: {
+                    '_token': $('meta[name="csrf-token"]').attr('content'),
+                    'order_id': $('#IndexOrderDispatchDetail').attr('data-id'),
+                    'details': $('#orderDetailsDispatch tbody tr').map(function() {
+                        if ($(this).find('input[type="checkbox"]').prop('checked')) {
+                            return {
+                                id: $(this).find('input[type="checkbox"]').attr('id'),
+                                quantities: $(this).find('.details').map(function() {
+                                    return {
+                                        id: $(this).attr('data-id'),
+                                        quantity: parseInt($(this).val()) * -1
+                                    };
+                                }).get()
+                            };
+                        }
+                    }).get()
+                },
+                success: function(response) {
+                    FilterOrderDispatchAjaxSuccess(response);
+                },
+                error: function(xhr, textStatus, errorThrown) {
+                    FilterOrderDispatchAjaxError(xhr);
+                }
+            });
+        } else {
+            toastr.info('Los detalles del pedido no se filtraron.')
         }
-    }).get();
+    });
 }
 
 function FilterOrderDispatchAjaxSuccess(response) {
