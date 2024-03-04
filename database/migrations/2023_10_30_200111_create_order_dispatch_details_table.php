@@ -21,10 +21,11 @@ return new class extends Migration
             $table->unsignedBigInteger('order_detail_id')->comment('Identificador del detalle de la orden.'); */
             $table->foreignIdFor(OrderDispatch::class)->constrained();
             $table->foreignIdFor(OrderDetail::class)->constrained();
-            $table->enum('detail_status', ['Pendiente', 'Rechazado', 'Cancelado', 'Aprobado', 'Empacado', 'Despachado'])->default('Pendiente')->comment('Estado del detalle de la orden de despacho.');
+            $table->enum('status', ['Pendiente', 'Rechazado', 'Cancelado', 'Aprobado', 'Empacado', 'Despachado'])->default('Pendiente')->comment('Estado del detalle de la orden de despacho.');
             /* $table->foreign('order_dispatch_id')->references('id')->on('order_dispatches')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('order_detail_id')->references('id')->on('order_details')->onUpdate('cascade')->onDelete('cascade'); */
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

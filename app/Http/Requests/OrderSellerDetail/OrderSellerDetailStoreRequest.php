@@ -26,13 +26,13 @@ class OrderSellerDetailStoreRequest extends FormRequest
         $updated_order_details = [];
 
         foreach($order_detail_quantities as $order_detail_quantity) {
-            $inventory = Inventory::with('product', 'warehouse', 'color', 'tone', 'size')
-            ->whereHas('product', fn($subQuery) => $subQuery->where('id', $this->input('product_id')))
-            ->whereHas('warehouse', fn($subQuery) => $subQuery->where('to_discount', true))
-            ->whereHas('color', fn($subQuery) => $subQuery->where('id', $this->input('color_id')))
-            ->whereHas('tone', fn($subQuery) => $subQuery->where('id', $this->input('tone_id')))
-            ->whereHas('size', fn($subQuery) => $subQuery->where('id', $order_detail_quantity['size_id']))
-            ->first();
+            $inventory = Inventory::with('warehouse')
+                ->whereHas('warehouse', fn($subQuery) => $subQuery->where('to_discount', true))
+                ->where('product', $this->input('product_id'))
+                ->where('color', $this->input('color_id'))
+                ->where('tone', $this->input('tone_id'))
+                ->where('size', $order_detail_quantity['size_id'])
+                ->first();
 
             $order_detail_quantity['min'] = 0;
             $order_detail_quantity['max'] = $inventory ? $inventory->quantity : 0;
@@ -69,8 +69,8 @@ class OrderSellerDetailStoreRequest extends FormRequest
             'order_detail_quantities.*.product_size' => ['exists:product_sizes,size_id,product_id,' . $this->input('product_id')]
         ];
 
-        foreach ($this->input('order_detail_quantities') as $index => $order_detail_quantity) {
-            $rules["order_detail_quantities.{$index}.quantity"] = [
+        foreach ($this->input('order_detail_quantities') as $i => $order_detail_quantity) {
+            $rules["order_detail_quantities.{$i}.quantity"] = [
                 'required', 'numeric', 'min:' . $order_detail_quantity['min'], 'max:' . $order_detail_quantity['max'],
             ];
         }
@@ -101,8 +101,8 @@ class OrderSellerDetailStoreRequest extends FormRequest
             'order_detail_quantities.*.required' => 'El item :position del campo Detalles del pedido es requerido.',
             'order_detail_quantities.*.array' => 'El item :position del campo Detalles del pedido debe ser un arreglo.',
             'order_detail_quantities.*.size_id.required' => 'El Identificador de la Talla es requerido.',
-            'order_detail_quantities.*.size_id.exists' => 'El Identificador de la Talla no es valido.',     
-            'order_detail_quantities.*.product_size.exists' => 'La talla no pertenece al producto seleccionado.',    
+            'order_detail_quantities.*.size_id.exists' => 'El Identificador de la Talla no es valido.',
+            'order_detail_quantities.*.product_size.exists' => 'La talla no pertenece al producto seleccionado.',
             'order_detail_quantities.*.quantity.required' => 'El campo Cantidad de unidades es requerido.',
             'order_detail_quantities.*.quantity.numeric' => 'El campo Cantidad de unidades debe ser un valor numérico.',
             'order_detail_quantities.*.quantity.max' => 'El campo Cantidad de unidades no debe exceder los :max unidades.',

@@ -119,38 +119,29 @@ return new class extends Migration
                 DECLARE totalDevuelto INT;
                 DECLARE totalCanceladoRechazado INT;
                 DECLARE totalDetalles INT;
-                DECLARE porcentajeDespachado DECIMAL(5,2);
-                DECLARE porcentajeDevuelto DECIMAL(5,2);
 
                 SELECT COUNT(*) INTO totalFiltrado FROM order_details WHERE order_id = order_id AND status = "Filtrado";
                 SELECT COUNT(*) INTO totalEmpacado FROM order_details WHERE order_id = order_id AND status = "Empacado";
                 SELECT COUNT(*) INTO totalAprobado FROM order_details WHERE order_id = order_id AND status = "Aprobado";
                 SELECT COUNT(*) INTO totalDespachado FROM order_details WHERE order_id = order_id AND status = "Despachado";
                 SELECT COUNT(*) INTO totalDevuelto FROM order_details WHERE order_id = order_id AND status = "Devuelto";
-                SELECT COUNT(*) INTO totalCanceladoRechazado FROM order_details WHERE order_id = order_id AND (status = "Cancelado" OR status = "Rechazado");
-                SELECT COUNT(*) INTO totalDetalles FROM order_details WHERE order_id = order_id;
+                SELECT COUNT(*) INTO totalCanceladoRechazado FROM order_details WHERE order_id = order_id AND status IN ("Cancelado", "Rechazado");
+                SELECT COUNT(*) INTO totalDetalles FROM order_details WHERE order_id = order_id AND status NOT IN ("Agotado");
 
-                SET porcentajeDespachado = IF(totalDetalles > 0, (totalDespachado / totalDetalles) * 100, 0);
-                SET porcentajeDevuelto = IF(totalDetalles > 0, (totalDevuelto / (totalDevuelto + totalDespachado)) * 100, 0);
-
-                IF totalCanceladoRechazado > 0 THEN
+                IF totalCanceladoRechazado = totalDetalles THEN
                     UPDATE orders SET dispatched_status = "Cancelado" WHERE id = order_id;
-                ELSEIF totalDevuelto > 0 AND porcentajeDevuelto > 50 THEN
+                ELSEIF totalDevuelto > 0 AND totalDevuelto < totalDetalles THEN
                     UPDATE orders SET dispatched_status = "Parcialmente Devuelto" WHERE id = order_id;
                 ELSEIF totalDevuelto = totalDetalles THEN
                     UPDATE orders SET dispatched_status = "Devuelto" WHERE id = order_id;
-                ELSEIF porcentajeDespachado > 50 THEN
+                ELSEIF totalDespachado > 0 AND totalDespachado < totalDetalles THEN
                     UPDATE orders SET dispatched_status = "Parcialmente Despachado" WHERE id = order_id;
                 ELSEIF totalDespachado = totalDetalles THEN
                     UPDATE orders SET dispatched_status = "Despachado" WHERE id = order_id;
-                ELSEIF totalFiltrado > 0 OR totalEmpacado > 0 THEN
-                    IF totalAprobado > 0 THEN
-                        UPDATE orders SET dispatched_status = "Parcialmente Aprobado" WHERE id = order_id;
-                    ELSE
-                        UPDATE orders SET dispatched_status = "Aprobado" WHERE id = order_id;
-                    END IF;
-                ELSE
-                    UPDATE orders SET dispatched_status = "Pendiente" WHERE id = order_id;
+                ELSEIF totalFiltrado > 0 AND totalFiltrado < totalDetalles THEN
+                    UPDATE orders SET dispatched_status = "Parcialmente Aprobado" WHERE id = order_id;
+                ELSEIF totalFiltrado = totalDetalles THEN
+                    UPDATE orders SET dispatched_status = "Aprobado" WHERE id = order_id;
                 END IF;
             END
         ');

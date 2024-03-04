@@ -60,7 +60,7 @@ function InventoriesOrderDispatch(orderDetail, sizes, index) {
             'product_id': orderDetail.product.id,
             'color_id': orderDetail.color.id,
             'tone_id': orderDetail.tone.id,
-            'size_ids': sizes
+            'size_ids': sizes.reduce((array, size) => { array.push(size.id); return array; }, [])
         },
         success: function(response) {
             FilterOrderDispatchAjaxSuccess(response);
@@ -79,7 +79,7 @@ function OrdersDetailsRowsOrderDispatch(orderDetail, sizes, inventories, index) 
     let bodyColumnsInventories = '';
     let sumColumnsSizes = 0;
     let sumColumnsInventories = 0;
-    
+
     $.each(sizes, function(index, size) {
         bodyColumnsSizes += `<td><input type="number" class="form-control filterInputNumber details" id="detail_${orderDetail.id}_t${size.id}" value="-${orderDetail.quantities[size.id].quantity}" data-size_id="${size.id}" data-quantity="-${orderDetail.quantities[size.id].quantity}" data-id="${orderDetail.quantities[size.id].id}" onkeyup="SubtractInputValueOrderDispatch('detail_${orderDetail.id}_t${size.id}', 'inventory_${orderDetail.id}_t${size.id}', ${orderDetail.id}, ${JSON.stringify(sizes).replace(/"/g, "'")})" onblur="ResetInputValueOrderDispatch('detail_${orderDetail.id}_t${size.id}', 'inventory_${orderDetail.id}_t${size.id}', ${orderDetail.id}, ${JSON.stringify(sizes).replace(/"/g, "'")})"></td>`;
         bodyColumnsInventories += `<td><input type="number" class="form-control filterInputNumber" id="inventory_${orderDetail.id}_t${size.id}" value="${inventories[size.id].quantity}" data-size_id="${size.id}" data-quantity="${inventories[size.id].quantity}" readonly></td>`;
@@ -132,7 +132,7 @@ function ResetInputValueOrderDispatch(quantity, inventory, id, sizes) {
         })
 
         $(`#detail_${id}_total`).val(quantities);
-        
+
         $(`#${inventory}`).parent().css({'background': 'transparent'});
         $(`#${inventory}`).css({'color': '#495057'});
     }
@@ -146,7 +146,7 @@ function ResetInputValueOrderDispatch(quantity, inventory, id, sizes) {
         })
 
         $(`#inventory_${id}_total`).val(inventories);
-    
+
         if (inventories < 0) {
             $(`#inventory_${id}_total`).parent().css({'background': '#ff4141'});
             $(`#inventory_${id}_total`).css({'color': '#fff'});
@@ -160,7 +160,7 @@ function ResetInputValueOrderDispatch(quantity, inventory, id, sizes) {
 function SubtractInputValueOrderDispatch(quantity, inventory, id, sizes) {
     let valueQuantity = parseInt($(`#${quantity}`).val());
     let dataQuantity = parseInt($(`#${quantity}`).attr('data-quantity'));
-    
+
     let valueInventory = parseInt($(`#${inventory}`).val());
     let dataInventory = parseInt($(`#${inventory}`).attr('data-quantity'));
 

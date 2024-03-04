@@ -195,7 +195,7 @@ class Role extends Model implements RoleContract
 
         return $this->permissions->contains($permission->getKeyName(), $permission->getKey());
     }
-    
+
     public function modules(): BelongsToMany
     {
         return $this->belongsToMany(Module::class, 'model_has_roles', 'role_id', 'model_id')
@@ -210,7 +210,7 @@ class Role extends Model implements RoleContract
         } elseif (is_string($search)) {
             // Filtrar por campos de texto
             return $this->scopeSearchByString($query, $search);
-        } 
+        }
     }
 
     public function scopeSearchByString($query, $search)
