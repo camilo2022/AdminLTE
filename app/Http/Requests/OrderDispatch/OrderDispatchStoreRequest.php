@@ -24,12 +24,13 @@ class OrderDispatchStoreRequest extends FormRequest
         $details = $this->input('details')  ? $this->input('details') : [];
         $updated_details = [];
 
-        foreach($details as $detail) {
-            $order_detail = OrderDetail::findOrFail($detail->id);
+        foreach($details as $i => $detail) {
+            $order_detail = OrderDetail::findOrFail($detail['id']);
+            $updated_details[$i]['id'] = $detail['id'];
 
-            foreach($detail->quantities as $quantity) {
-                if(!is_null($quantity->id)) {
-                    $order_detail_quantity = OrderDetailQuantity::findOrFail($quantity->id);
+            foreach($detail['quantities'] as $quantity) {
+                if(!is_null($quantity['id'])) {
+                    $order_detail_quantity = OrderDetailQuantity::findOrFail($quantity['id']);
 
                     $inventory = Inventory::with('warehouse')
                         ->whereHas('warehouse', fn($subQuery) => $subQuery->where('to_discount', true))
@@ -41,12 +42,14 @@ class OrderDispatchStoreRequest extends FormRequest
 
                     $quantity['min'] = 0;
                     $quantity['max'] = $inventory ? $inventory->quantity : 0;
-
-                    $updated_details[] = $quantity;
+                } else {
+                    $quantity['min'] = 0;
+                    $quantity['max'] =  0;
                 }
+                $updated_details[$i]['quantities'][] = $quantity;
             }
         }
-
+        
         $this->merge([
             'details' => $updated_details,
         ]);
@@ -68,7 +71,7 @@ class OrderDispatchStoreRequest extends FormRequest
         ];
 
         foreach ($this->input('details') as $i => $detail) {
-            foreach($detail->quantities as $j => $quantity) {
+            foreach($detail['quantities'] as $j => $quantity) {
                 $rules["details.{$i}.quantities.{$j}.quantity"] = [
                     'required', 'numeric', 'min:' . $quantity['min'], 'max:' . $quantity['max'],
                 ];

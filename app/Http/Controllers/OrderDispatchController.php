@@ -26,6 +26,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use PhpParser\Node\Expr\Cast\Object_;
 
 class OrderDispatchController extends Controller
 {
@@ -258,6 +259,7 @@ class OrderDispatchController extends Controller
             }
 
             foreach($request->input('details') as $detail) {
+                $detail = (object) $detail;
                 $order_dispatch_detail = new OrderDispatchDetail();
                 $order_dispatch_detail->order_dispatch_id = $order_dispatch->id;
                 $order_dispatch_detail->order_detail_id = $detail->id;
@@ -268,6 +270,7 @@ class OrderDispatchController extends Controller
                 $orderDetail->save();
 
                 foreach($detail->quantities as $quantity) {
+                    $quantity = (object) $quantity;
                     if(!is_null($quantity->id)) {
                         $orderDetailQuantity = $orderDetail->quantities()->findOrFail($quantity->id);
 
@@ -283,7 +286,7 @@ class OrderDispatchController extends Controller
 
                         $order_dispatch_detail_quantity = new OrderDispatchDetailQuantity();
                         $order_dispatch_detail_quantity->order_dispatch_detail_id = $order_dispatch_detail->id;
-                        $order_dispatch_detail_quantity->order_detail_quantity = $quantity->id;
+                        $order_dispatch_detail_quantity->order_detail_quantity_id = $quantity->id;
                         $order_dispatch_detail_quantity->quantity = $quantity->quantity;
                         $order_dispatch_detail_quantity->save();
                     }
