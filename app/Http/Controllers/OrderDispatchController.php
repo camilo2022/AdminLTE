@@ -9,6 +9,7 @@ use App\Http\Requests\OrderDispatch\OrderDispatchDeclineRequest;
 use App\Http\Requests\OrderDispatch\OrderDispatchFilterQueryDetailsRequest;
 use App\Http\Requests\OrderDispatch\OrderDispatchFilterQueryInventoriesRequest;
 use App\Http\Requests\OrderDispatch\OrderDispatchIndexQueryRequest;
+use App\Http\Requests\OrderDispatch\OrderDispatchPdfRequest;
 use App\Http\Requests\OrderDispatch\OrderDispatchStoreRequest;
 use App\Http\Resources\OrderDispatch\OrderDispatchIndexQueryCollection;
 use App\Models\Inventory;
@@ -26,7 +27,6 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use PhpParser\Node\Expr\Cast\Object_;
 
 class OrderDispatchController extends Controller
 {
@@ -320,23 +320,35 @@ class OrderDispatchController extends Controller
         }
     }
 
+    public function show($id)
+    {
+        try {
+            $order = Order::with('order_dispatches.details.order_detail', 'order_dispatches.details.quantities.order_detail_quantity')->findOrFail($id);
+            return view('Dashboard.OrderDispatches.Show', compact('order'));
+        } catch (ModelNotFoundException $e) {
+            return back()->with('danger', 'Ocurrió un error al cargar el pedido: ' . $this->getMessage('ModelNotFoundException'));
+        } catch (Exception $e) {
+            return back()->with('danger', 'Ocurrió un error al cargar la vista: ' . $e->getMessage());
+        }
+    }
+
     public function approve(OrderDispatchApproveRequest $request)
     {
         try {
-            $OrderDispatch = OrderDispatch::with('order', 'details.order_detail')->findOrFail($request->input('id'));
+            $orderDispatch = OrderDispatch::with('order', 'details.order_detail')->findOrFail($request->input('id'));
 
-            foreach($OrderDispatch->details as $detail) {
+            foreach($orderDispatch->details as $detail) {
                 $detail->status = 'Aprobado';
                 $detail->save();
             }
 
-            $OrderDispatch->dispatch_status = 'Aprobado';
-            $OrderDispatch->save();
+            $orderDispatch->dispatch_status = 'Aprobado';
+            $orderDispatch->save();
 
-            DB::statement('CALL order_dispatched_status(?)', [$OrderDispatch->order->id]);
+            DB::statement('CALL order_dispatched_status(?)', [$orderDispatch->order->id]);
 
             return $this->successResponse(
-                $OrderDispatch,
+                $orderDispatch,
                 'La orden de despacho fue aprobada exitosamente.',
                 200
             );
@@ -371,9 +383,9 @@ class OrderDispatchController extends Controller
     public function cancel(OrderDispatchCancelRequest $request)
     {
         try {
-            $OrderDispatch = OrderDispatch::with('order.details.quantities', 'details.order_detail', 'details.quantities.order_detail_quantity')->findOrFail($request->input('id'));
+            $orderDispatch = OrderDispatch::with('order.details.quantities', 'details.order_detail', 'details.quantities.order_detail_quantity')->findOrFail($request->input('id'));
 
-            foreach($OrderDispatch->details as $detail) {
+            foreach($orderDispatch->details as $detail) {
                 $detail->status = 'Cancelado';
                 $detail->save();
                 foreach($detail->quantities as $quantity) {
@@ -390,8 +402,8 @@ class OrderDispatchController extends Controller
                 }
             }
 
-            foreach($OrderDispatch->order->details as $detail) {
-                if($OrderDispatch->details->pluck('id')->contains($detail->id)) {
+            foreach($orderDispatch->order->details as $detail) {
+                if($orderDispatch->details->pluck('id')->contains($detail->id)) {
                     $boolean = true;
                     foreach($detail->quantities as $quantity) {
                         $inventory = Inventory::with('warehouse')
@@ -431,13 +443,13 @@ class OrderDispatchController extends Controller
                 }
             }
 
-            $OrderDispatch->dispatch_status = 'Cancelado';
-            $OrderDispatch->save();
+            $orderDispatch->dispatch_status = 'Cancelado';
+            $orderDispatch->save();
 
-            DB::statement('CALL order_dispatched_status(?)', [$OrderDispatch->order->id]);
+            DB::statement('CALL order_dispatched_status(?)', [$orderDispatch->order->id]);
 
             return $this->successResponse(
-                $OrderDispatch,
+                $orderDispatch,
                 'La orden de despacho fue cancelada exitosamente.',
                 200
             );
@@ -472,9 +484,9 @@ class OrderDispatchController extends Controller
     public function decline(OrderDispatchDeclineRequest $request)
     {
         try {
-            $OrderDispatch = OrderDispatch::with('order', 'details.order_detail', 'details.quantities.order_detail_quantity')->findOrFail($request->input('id'));
+            $orderDispatch = OrderDispatch::with('order', 'details.order_detail', 'details.quantities.order_detail_quantity')->findOrFail($request->input('id'));
 
-            foreach($OrderDispatch->details as $detail) {
+            foreach($orderDispatch->details as $detail) {
                 $detail->status = 'Rechazado';
                 $detail->save();
 
@@ -495,16 +507,52 @@ class OrderDispatchController extends Controller
                 $detail->order_detail->save();
             }
 
-            $OrderDispatch->dispatch_status = 'Rechazado';
-            $OrderDispatch->save();
+            $orderDispatch->dispatch_status = 'Rechazado';
+            $orderDispatch->save();
 
-            DB::statement('CALL order_dispatched_status(?)', [$OrderDispatch->order->id]);
+            DB::statement('CALL order_dispatched_status(?)', [$orderDispatch->order->id]);
 
             return $this->successResponse(
-                $OrderDispatch,
+                $orderDispatch,
                 'La orden de despacho fue aprobada para empacarse exitosamente.',
                 200
             );
+        } catch (ModelNotFoundException $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('ModelNotFoundException'),
+                    'error' => $e->getMessage()
+                ],
+                404
+            );
+        } catch (QueryException $e) {
+            // Manejar la excepción de la base de datos
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('QueryException'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        } catch (Exception $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('Exception'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        }
+    }
+
+    public function pdf(OrderDispatchPdfRequest $request)
+    {
+        try {
+            $orderDispatch = OrderDispatch::with('order', 'details.quantities')->findOrFail($request->input('id'));
+            $pdf = \PDF::loadView('Dashboard.OrderDispatches.PDF', compact('orderDispatch'))->setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true]);
+            /* $pdf = \PDF::loadView('Browser_public.pdfdocument', compact('queryic'))->output();
+            return $pdf->download('pdfdocument.pdf'); */
+            return $pdf->stream('pdfdocument.pdf');
         } catch (ModelNotFoundException $e) {
             return $this->errorResponse(
                 [

@@ -6,13 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as Auditing;
 
 class OrderDispatchDetail extends Model implements Auditable
 {
-    use HasFactory, Auditing, SoftDeletes;
+    use HasFactory, Auditing;
 
     protected $table = 'order_dispatch_details';
     protected $fillable = [

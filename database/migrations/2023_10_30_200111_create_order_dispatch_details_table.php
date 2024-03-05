@@ -25,7 +25,6 @@ return new class extends Migration
             /* $table->foreign('order_dispatch_id')->references('id')->on('order_dispatches')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('order_detail_id')->references('id')->on('order_details')->onUpdate('cascade')->onDelete('cascade'); */
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 

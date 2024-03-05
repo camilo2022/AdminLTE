@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Requests\OrderDispatchDetail;
+namespace App\Http\Requests\OrderDispatch;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class OrderDispatchDetailPendingRequest extends FormRequest
+class OrderDispatchPdfRequest extends FormRequest
 {
     protected function failedValidation(Validator $validator)
     {
@@ -24,15 +24,15 @@ class OrderDispatchDetailPendingRequest extends FormRequest
     public function rules()
     {
         return [
-            'id' => ['required', 'exists:order_dispatch_details,id'],
+            'id' => ['required', 'exists:order_dispatches,id'],
         ];
     }
 
     public function messages()
     {
         return [
-            'id.required' => 'El Identificador del detalle de la orden de despacho es requerido.',
-            'id.exists' => 'El Identificador del detalle de la orden de despacho no es válido.',
+            'id.required' => 'El Identificador de la orden de despacho es requerido.',
+            'id.exists' => 'El Identificador de la orden de despacho no es válido.',
         ];
     }
 }

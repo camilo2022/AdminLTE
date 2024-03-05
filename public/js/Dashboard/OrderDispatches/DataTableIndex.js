@@ -33,11 +33,16 @@ let tableOrderDispatches = $('#orderDispatches').DataTable({
         }
     },
     columns: [
+        {
+            className: 'dt-control',
+            data: null,
+            defaultContent: ''
+        },
         { data: 'id' },
         {
             data: 'client_id',
             render: function (data, type, row) {
-                return `${row.client.document_number}-${row.client_branch.code}`;
+                return `${row.client.document_number} - ${row.client_branch.code}`;
             }
         },
         {
@@ -189,11 +194,11 @@ let tableOrderDispatches = $('#orderDispatches').DataTable({
     columnDefs: [
         {
             orderable: true,
-            targets: [0, 1, 2, 8, 9, 10, 11, 12, 13]
+            targets: [1, 2, 3, 9, 10, 11, 12, 13, 14]
         },
         {
             orderable: false,
-            targets: [3, 4, 5, 6, 7, 14]
+            targets: [0, 4, 5, 6, 7, 8, 15]
         }
     ],
     pagingType: 'full_numbers',
@@ -224,3 +229,33 @@ let tableOrderDispatches = $('#orderDispatches').DataTable({
     searching: true,
     autoWidth: true
 });
+
+tableOrderDispatches.on('click', 'td.dt-control', function (e) {
+    let tr = e.target.closest('tr');
+    let row = table.row(tr);
+
+    if (row.child.isShown()) {
+        row.child.hide();
+    }
+    else {
+        // Open this row
+        row.child(tableOrderDispatchesFilter(row.data())).show();
+    }
+});
+
+function tableOrderDispatchesFilter(d) {
+    return (
+        '<dl>' +
+        '<dt>Full name:</dt>' +
+        '<dd>' +
+        d.name +
+        '</dd>' +
+        '<dt>Extension number:</dt>' +
+        '<dd>' +
+        d.extn +
+        '</dd>' +
+        '<dt>Extra info:</dt>' +
+        '<dd>And any further details here (images etc)...</dd>' +
+        '</dl>'
+    );
+}
