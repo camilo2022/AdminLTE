@@ -61,6 +61,7 @@
                                 <table id="orderDispatches" class="table table-bordered table-hover dataTable dtr-inline nowrap w-100">
                                     <thead class="thead-dark">
                                         <tr>
+                                            <th></th>
                                             <th>#</th>
                                             <th>Nit</th>
                                             <th>Nombre</th>

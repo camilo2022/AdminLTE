@@ -36,7 +36,7 @@ let tableOrderDispatches = $('#orderDispatches').DataTable({
         {
             className: 'dt-control',
             data: null,
-            defaultContent: ''
+            defaultContent: '<button class="btn btn-sm btn-success dt-expand rounded-circle"><i class="fas fa-plus"></i</button>'
         },
         { data: 'id' },
         {
@@ -230,32 +230,40 @@ let tableOrderDispatches = $('#orderDispatches').DataTable({
     autoWidth: true
 });
 
-tableOrderDispatches.on('click', 'td.dt-control', function (e) {
+tableOrderDispatches.on('click', 'button.dt-expand', function (e) {
     let tr = e.target.closest('tr');
-    let row = table.row(tr);
+    let row = tableOrderDispatches.row(tr);
+
+    let iconButton = $(this);
 
     if (row.child.isShown()) {
         row.child.hide();
-    }
-    else {
-        // Open this row
+        iconButton.html('<i class="fas fa-plus"></i>').removeClass('btn-danger').addClass('btn-success');
+    } else {
         row.child(tableOrderDispatchesFilter(row.data())).show();
+        iconButton.html('<i class="fas fa-minus"></i>').removeClass('btn-success').addClass('btn-danger');
     }
 });
 
-function tableOrderDispatchesFilter(d) {
-    return (
-        '<dl>' +
-        '<dt>Full name:</dt>' +
-        '<dd>' +
-        d.name +
-        '</dd>' +
-        '<dt>Extension number:</dt>' +
-        '<dd>' +
-        d.extn +
-        '</dd>' +
-        '<dt>Extra info:</dt>' +
-        '<dd>And any further details here (images etc)...</dd>' +
-        '</dl>'
-    );
+function tableOrderDispatchesFilter(row) {
+    let tableHtml = '<table class="table table-bordered">' +
+        '<thead>' +
+        '<tr>' +
+        '<th>ID</th>' +
+        '<th>Nombre</th>' +
+        '</tr>' +
+        '</thead>' +
+        '<tbody>';
+    
+    row.order_dispatches.forEach(function(order) {
+        tableHtml += '<tr>' +
+            '<td>' + order.id + '</td>' +
+            '<td>' + order.id + '</td>' +
+            '</tr>';
+    });
+    
+    tableHtml += '</tbody>' +
+        '</table>';
+
+    return tableHtml;
 }

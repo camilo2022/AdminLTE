@@ -28,10 +28,10 @@ class OrderSellerDetailStoreRequest extends FormRequest
         foreach($order_detail_quantities as $order_detail_quantity) {
             $inventory = Inventory::with('warehouse')
                 ->whereHas('warehouse', fn($subQuery) => $subQuery->where('to_discount', true))
-                ->where('product', $this->input('product_id'))
-                ->where('color', $this->input('color_id'))
-                ->where('tone', $this->input('tone_id'))
-                ->where('size', $order_detail_quantity['size_id'])
+                ->where('product_id', $this->input('product_id'))
+                ->where('color_id', $this->input('color_id'))
+                ->where('tone_id', $this->input('tone_id'))
+                ->where('size_id', $order_detail_quantity['size_id'])
                 ->first();
 
             $order_detail_quantity['min'] = 0;
