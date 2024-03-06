@@ -64,13 +64,13 @@ function IndexOrderWalletDetailModalCleaned(details, sizes) {
                 </a>`;
 
                 btn += `<a onclick="DeclineOrderWalletDetail(${detail.id})" type="button"
-                class="btn btn-warning btn-sm mr-2 text-white" title="Rechazar detalle pedido.">
+                class="btn btn-danger btn-sm mr-2 text-white" title="Rechazar detalle de pedido.">
                     <i class="fas fa-ban text-white"></i>
                 </a>`;
                 break;
             case 'Pendiente':
                 btn += `<a onclick="EditOrderWalletDetailModal(${detail.id})" type="button"
-                class="btn btn-primary btn-sm mr-2" title="Editar detalle pedido.">
+                class="btn btn-primary btn-sm mr-2" title="Editar detalle de pedido.">
                     <i class="fas fa-pen text-white"></i>
                 </a>`;
 
@@ -80,7 +80,7 @@ function IndexOrderWalletDetailModalCleaned(details, sizes) {
                 </a>`;
 
                 btn += `<a onclick="CancelOrderWalletDetail(${detail.id})" type="button"
-                class="btn btn-danger btn-sm mr-2" title="Cancelar detalle pedido.">
+                class="btn btn-warning btn-sm mr-2" title="Cancelar detalle de pedido.">
                     <i class="fas fa-xmark text-white"></i>
                 </a>`;
                 break;
@@ -92,13 +92,13 @@ function IndexOrderWalletDetailModalCleaned(details, sizes) {
                 break;
             case 'Aprobado':
                 btn += `<a onclick="DeclineOrderWalletDetail(${detail.id})" type="button"
-                class="btn btn-warning btn-sm mr-2 text-white" title="Rechazar detalle pedido.">
+                class="btn btn-warning btn-sm mr-2 text-white" title="Rechazar detalle de pedido.">
                     <i class="fas fa-ban text-white"></i>
                 </a>`;
                 break;
             case 'Agotado':
                 btn += `<a onclick="EditOrderWalletDetailModal(${detail.id})" type="button"
-                class="btn btn-primary btn-sm mr-2" title="Editar detalle pedido.">
+                class="btn btn-primary btn-sm mr-2" title="Editar detalle de pedido.">
                     <i class="fas fa-pen text-white"></i>
                 </a>`;
             default:
@@ -113,7 +113,7 @@ function IndexOrderWalletDetailModalCleaned(details, sizes) {
         $.each(detail.quantities, function(index, quantity) {
             quantities += quantity.quantity;
         });
-    
+
         totalSum += quantities * detail.price;
         quantitySum += quantities;
 
@@ -134,7 +134,7 @@ function IndexOrderWalletDetailModalCleaned(details, sizes) {
                 body += `<td><span class="badge badge-pill badge-info"><i class="fas fa-arrows-rotate mr-2"></i>Pendiente</span></td>`;
                 break;
             case 'Cancelado':
-                body += `<td><span class="badge badge-pill badge-danger text-white"><i class="fas fa-xmark mr-2 text-white"></i>Cancelado</span></td>`;
+                body += `<td><span class="badge badge-pill badge-warning text-white"><i class="fas fa-xmark mr-2 text-white"></i>Cancelado</span></td>`;
                 break;
             case 'Revision':
                 body += `<td><span class="badge badge-pill badge-silver"><i class="fas fa-magnifying-glass mr-2"></i>Revision</span></td>`;
@@ -146,7 +146,7 @@ function IndexOrderWalletDetailModalCleaned(details, sizes) {
                 body += `<td><span class="badge badge-pill bg-orange" style="color:white !important;"><i class="fas fa-hourglass-half mr-2 text-white"></i>Agotado</span></td>`;
                 break;
             case 'Rechazado':
-                body += `<td><span class="badge badge-pill badge-warning text-white"><i class="fas fa-ban mr-2 text-white"></i>Rechazado</span></td>`;
+                body += `<td><span class="badge badge-pill badge-danger text-white"><i class="fas fa-ban mr-2 text-white"></i>Rechazado</span></td>`;
                 break;
             case 'Filtrado':
                 body += `<td><span class="badge badge-pill bg-purple" style="color:white !important;"><i class="fas fa-filter mr-2 text-white"></i>Filtrado</span></td>`;
@@ -181,7 +181,7 @@ function IndexOrderWalletDetailModalCleaned(details, sizes) {
         });
         foot += `<th>${sizeSum}</th>`;
     });
-            
+
     foot += `<th>-</th>
             <th>-</th>
         </tr>`;

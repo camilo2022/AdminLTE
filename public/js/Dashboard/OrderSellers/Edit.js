@@ -278,5 +278,5 @@ function RemoveIsInvalidClassEditOrderSeller() {
 }
 
 $('#dispatch_date_e').datetimepicker({
-    format: 'L'
+    format: 'YYYY-MM-DD'
 });

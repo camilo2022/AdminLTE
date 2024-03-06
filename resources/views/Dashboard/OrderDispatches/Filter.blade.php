@@ -55,7 +55,7 @@
                     <div class="card-header p-2">
                         <ul class="nav nav-pills">
                             <li class="nav-item">
-                                <a class="btn btn-info text-white" id="IndexOrderDispatchDetail" data-id="{{ $order->id }}" onclick="IndexOrderDispatchDetail({{ $order->id }})" type="button" title="Orden de pedido.">
+                                <a class="btn btn-info text-white" id="IndexOrderDispatchDetail" data-id="{{ $order->id }}" onclick="ReferencesOrderDispatch({{ $order->id }})" type="button" title="Orden de pedido.">
                                     ORDEN DE PEDIDO: {{ $order->id }}
                                 </a>
                             </li>

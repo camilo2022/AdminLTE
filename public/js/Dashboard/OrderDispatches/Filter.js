@@ -1,12 +1,12 @@
-ReferencesOrderDispatch();
+$('#IndexOrderDispatchDetail').trigger('click');
 
-function ReferencesOrderDispatch() {
+function ReferencesOrderDispatch(id) {
     $.ajax({
         url: `/Dashboard/Orders/Dispatch/Filter/Query/Details`,
         type: 'POST',
         data: {
             '_token': $('meta[name="csrf-token"]').attr('content'),
-            'order_id': $('#IndexOrderDispatchDetail').attr('data-id')
+            'order_id': id
         },
         success: function(response) {
             FilterOrderDispatchAjaxSuccess(response);
@@ -237,6 +237,7 @@ function FilterOrderDispatch() {
                 },
                 success: function(response) {
                     FilterOrderDispatchAjaxSuccess(response);
+                    $('#IndexOrderDispatchDetail').trigger('click');
                 },
                 error: function(xhr, textStatus, errorThrown) {
                     FilterOrderDispatchAjaxError(xhr);

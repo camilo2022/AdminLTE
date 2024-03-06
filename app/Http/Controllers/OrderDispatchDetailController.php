@@ -122,6 +122,9 @@ class OrderDispatchDetailController extends Controller
         try {
             $orderDispatchDetail = OrderDispatchDetail::with('order_dispatch.order', 'quantities.order_detail_quantity', 'order_detail.quantities')->findOrFail($request->input('id'));
 
+            $orderDispatchDetail->status = 'Filtrado';
+            $orderDispatchDetail->save();
+
             $boolean = true;
             foreach($orderDispatchDetail->quantities as $quantity) {
                 $inventory = Inventory::with('warehouse')

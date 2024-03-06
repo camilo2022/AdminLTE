@@ -68,16 +68,11 @@ return new class extends Migration
             BEGIN
                 DECLARE totalRevision INT;
                 DECLARE totalAprobado INT;
-                DECLARE totalFiltrado INT;
-                DECLARE totalDetallesDespacho INT;
 
                 SELECT COUNT(*) INTO totalRevision FROM order_details WHERE order_id = order_id AND status = "Revision";
                 SELECT COUNT(*) INTO totalAprobado FROM order_details WHERE order_id = order_id AND status = "Aprobado";
-                SELECT COUNT(*) INTO totalFiltrado FROM order_details WHERE order_id = order_id AND status = "Filtrado";
-                SELECT COUNT(*) INTO totalDetallesDespacho FROM order_dispatch_details WHERE order_dispatch_id = order_dispatch_id;
 
-                IF (totalRevision = 0 AND totalAprobado = 0 AND totalFiltrado = totalDetallesDespacho) OR (totalRevision = 0 AND totalAprobado = 0 AND totalDetallesDespacho >= 1) THEN
-                    UPDATE order_dispatches SET dispatch_status = "Aprobado" WHERE id = order_dispatch_id;
+                IF totalRevision = 0 AND totalAprobado = 0 THEN
                     UPDATE order_dispatch_details SET status = "Aprobado" WHERE order_dispatch_id = order_dispatch_id;
                 END IF;
             END

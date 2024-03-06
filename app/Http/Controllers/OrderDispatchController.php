@@ -10,6 +10,7 @@ use App\Http\Requests\OrderDispatch\OrderDispatchFilterQueryDetailsRequest;
 use App\Http\Requests\OrderDispatch\OrderDispatchFilterQueryInventoriesRequest;
 use App\Http\Requests\OrderDispatch\OrderDispatchIndexQueryRequest;
 use App\Http\Requests\OrderDispatch\OrderDispatchPdfRequest;
+use App\Http\Requests\OrderDispatch\OrderDispatchPendingRequest;
 use App\Http\Requests\OrderDispatch\OrderDispatchStoreRequest;
 use App\Http\Resources\OrderDispatch\OrderDispatchIndexQueryCollection;
 use App\Models\Inventory;
@@ -48,7 +49,8 @@ class OrderDispatchController extends Controller
             $start_date = Carbon::parse($request->input('start_date'))->startOfDay();
             $end_date = Carbon::parse($request->input('end_date'))->endOfDay();
             //Consulta por nombre
-            $orders = Order::with(['details', 'order_dispatches',
+            $orders = Order::with(['order_dispatches.dispatch_user',
+                    'details' => fn($query) => $query->where('status', 'Aprobado'),
                     'client' => fn($query) => $query->withTrashed(),
                     'client.country', 'client.departament', 'client.city',
                     'client_branch' => fn($query) => $query->withTrashed(),
@@ -67,9 +69,18 @@ class OrderDispatchController extends Controller
                         $query->filterByDate($start_date, $end_date);
                     }
                 )
-                ->whereIn('seller_status', ['Aprobado', 'Parcialmente Aprobado'])
-                ->whereHas('details', function ($query) {
-                    $query->where('status', 'Aprobado');
+                ->where(function ($query) {
+                    $query->whereIn('seller_status', ['Aprobado'])
+                        ->orWhereIn('wallet_status', ['Aprobado', 'Parcialmente Aprobado'])
+                        ->orWhereIn('dispatched_status', ['Pendiente', 'Parcialmente Aprobado', 'Aprobado', 'Parcialmente Despachado']);
+                })
+                ->where(function ($query) {
+                    $query->whereHas('details', function ($query) {
+                        $query->where('status', 'Aprobado');
+                    })
+                    ->orWhereHas('order_dispatches', function ($query) {
+                        $query->whereIn('dispatch_status', ['Pendiente', 'Aprobado', 'Empacado', 'Despachado']);
+                    });
                 })
                 ->orderBy($request->input('column'), $request->input('dir'))
                 ->paginate($request->input('perPage'));
@@ -282,7 +293,8 @@ class OrderDispatchController extends Controller
                             ->where('size_id', $orderDetailQuantity->size_id)
                             ->firstOrFail();
 
-                        $inventory->quantity -= ($quantity->quantity - $orderDetailQuantity->quantity);
+                        $inventory->quantity = ($inventory->quantity + $orderDetailQuantity->quantity) - $quantity->quantity;
+                        $inventory->save();
 
                         $order_dispatch_detail_quantity = new OrderDispatchDetailQuantity();
                         $order_dispatch_detail_quantity->order_dispatch_detail_id = $order_dispatch_detail->id;
@@ -298,7 +310,7 @@ class OrderDispatchController extends Controller
             return $this->successResponse(
                 '',
                 'Los detalles del pedido fueron filtrados exitosamente.',
-                200
+                201
             );
         } catch (QueryException $e) {
             // Manejar la excepción de la base de datos
@@ -332,6 +344,55 @@ class OrderDispatchController extends Controller
         }
     }
 
+    public function pending(OrderDispatchPendingRequest $request)
+    {
+        try {
+            $orderDispatch = OrderDispatch::with('order', 'details.order_detail')->findOrFail($request->input('id'));
+
+            foreach($orderDispatch->details as $detail) {
+                $detail->status = 'Pendiente';
+                $detail->save();
+            }
+
+            $orderDispatch->dispatch_status = 'Pendiente';
+            $orderDispatch->save();
+
+            DB::statement('CALL order_dispatched_status(?)', [$orderDispatch->order->id]);
+            DB::statement('CALL order_dispatch_status(?)', [$orderDispatch->id, $orderDispatch->order->id]);
+
+            return $this->successResponse(
+                $orderDispatch,
+                'La orden de despacho fue pendiente exitosamente.',
+                200
+            );
+        } catch (ModelNotFoundException $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('ModelNotFoundException'),
+                    'error' => $e->getMessage()
+                ],
+                404
+            );
+        } catch (QueryException $e) {
+            // Manejar la excepción de la base de datos
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('QueryException'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        } catch (Exception $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('Exception'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        }
+    }
+
     public function approve(OrderDispatchApproveRequest $request)
     {
         try {
@@ -346,6 +407,7 @@ class OrderDispatchController extends Controller
             $orderDispatch->save();
 
             DB::statement('CALL order_dispatched_status(?)', [$orderDispatch->order->id]);
+            DB::statement('CALL order_dispatch_status(?)', [$orderDispatch->id, $orderDispatch->order->id]);
 
             return $this->successResponse(
                 $orderDispatch,
@@ -447,6 +509,7 @@ class OrderDispatchController extends Controller
             $orderDispatch->save();
 
             DB::statement('CALL order_dispatched_status(?)', [$orderDispatch->order->id]);
+            DB::statement('CALL order_dispatch_status(?)', [$orderDispatch->id, $orderDispatch->order->id]);
 
             return $this->successResponse(
                 $orderDispatch,
@@ -511,6 +574,7 @@ class OrderDispatchController extends Controller
             $orderDispatch->save();
 
             DB::statement('CALL order_dispatched_status(?)', [$orderDispatch->order->id]);
+            DB::statement('CALL order_dispatch_status(?)', [$orderDispatch->id, $orderDispatch->order->id]);
 
             return $this->successResponse(
                 $orderDispatch,
@@ -554,30 +618,9 @@ class OrderDispatchController extends Controller
             return $pdf->download('pdfdocument.pdf'); */
             return $pdf->stream('pdfdocument.pdf');
         } catch (ModelNotFoundException $e) {
-            return $this->errorResponse(
-                [
-                    'message' => $this->getMessage('ModelNotFoundException'),
-                    'error' => $e->getMessage()
-                ],
-                404
-            );
-        } catch (QueryException $e) {
-            // Manejar la excepción de la base de datos
-            return $this->errorResponse(
-                [
-                    'message' => $this->getMessage('QueryException'),
-                    'error' => $e->getMessage()
-                ],
-                500
-            );
+            return back()->with('danger', 'Ocurrió un error al cargar el pdf de la orden de despacho del pedido: ' . $this->getMessage('ModelNotFoundException'));
         } catch (Exception $e) {
-            return $this->errorResponse(
-                [
-                    'message' => $this->getMessage('Exception'),
-                    'error' => $e->getMessage()
-                ],
-                500
-            );
+            return back()->with('danger', 'Ocurrió un error al cargar la vista: ' . $e->getMessage());
         }
     }
 }

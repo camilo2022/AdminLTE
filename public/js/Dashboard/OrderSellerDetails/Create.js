@@ -86,6 +86,7 @@ function CreateOrderSellerDetailModalColorToneGetSizesQuantity() {
             success: function(response) {
                 if(response.data.length == 0) {
                     toastr.warning('No hay inventario cargado.');
+                    $('#sizes_c').html('')
                 } else {
                     toastr.info('Inventario por talla cargado, ingrese las cantidades.');
                     CreateOrderSellerDetailModalSizes(response.data);

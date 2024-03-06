@@ -99,7 +99,7 @@ function CreateOrderSellerModalPaymentType(paymentTypes) {
 function CreateOrderSellerModalDispatchGetDispatchDate(select) {
     if($(select).val() == '' || $(select).val() == 'De inmediato') {
         $('#div_dispatch_date_c').hide();
-        $('#dispatch_date_c').val('');
+        $('#dispatch_date_c').val(new Date().toISOString().split('T')[0]);
     } else {
         $('#div_dispatch_date_c').show();
     }
@@ -249,5 +249,5 @@ function RemoveIsInvalidClassCreateOrderSeller() {
 }
 
 $('#dispatch_date_c').datetimepicker({
-    format: 'L'
+    format: 'YYYY-MM-DD'
 });

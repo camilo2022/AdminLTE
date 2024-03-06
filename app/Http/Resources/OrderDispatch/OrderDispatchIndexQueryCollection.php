@@ -39,7 +39,21 @@ class OrderDispatchIndexQueryCollection extends ResourceCollection
                     'dispatched_date' => $orderDispatch->dispatched_date,
                     'correria_id' => $orderDispatch->correria_id,
                     'correria' => $orderDispatch->correria,
-                    'order_dispatches' => $orderDispatch->order_dispatches,
+                    'order_dispatches' => $orderDispatch->order_dispatches->map(function ($order_dispatch) {
+                            return [
+                                'id' => $order_dispatch->id,
+                                'consecutive' => $order_dispatch->consecutive,
+                                'dispatch_status' => $order_dispatch->dispatch_status,
+                                'dispatch_user_id' => $order_dispatch->dispatch_user_id,
+                                'dispatch_user' => $order_dispatch->dispatch_user,
+                                'dispatch_date' => is_null($order_dispatch->dispatch_date) ? '' : $this->formatDate($order_dispatch->dispatch_date),
+                                'payment_status' => $order_dispatch->payment_status,
+                                'created_at' => $this->formatDate($order_dispatch->created_at),
+                                'updated_at' => $this->formatDate($order_dispatch->updated_at),
+                            ];
+                        }
+                    )->toArray(),
+                    'details' => $orderDispatch->details,
                     'created_at' => $this->formatDate($orderDispatch->created_at),
                     'updated_at' => $this->formatDate($orderDispatch->updated_at),
                 ];
