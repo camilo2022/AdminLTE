@@ -92,4 +92,8 @@
 @endsection
 @section('script')
 <script src="{{ asset('js/Dashboard/OrderDispatches/DataTableIndex.js') }}"></script>
+<script src="{{ asset('js/Dashboard/OrderDispatches/Pending.js') }}"></script>
+<script src="{{ asset('js/Dashboard/OrderDispatches/Approve.js') }}"></script>
+<script src="{{ asset('js/Dashboard/OrderDispatches/Cancel.js') }}"></script>
+<script src="{{ asset('js/Dashboard/OrderDispatches/Decline.js') }}"></script>
 @endsection

@@ -347,9 +347,9 @@ class OrderDispatchController extends Controller
     public function pending(OrderDispatchPendingRequest $request)
     {
         try {
-            $orderDispatch = OrderDispatch::with('order', 'details.order_detail')->findOrFail($request->input('id'));
+            $orderDispatch = OrderDispatch::with('order', 'order_dispatch_details.order_detail')->findOrFail($request->input('id'));
 
-            foreach($orderDispatch->details as $detail) {
+            foreach($orderDispatch->order_dispatch_details as $detail) {
                 $detail->status = 'Pendiente';
                 $detail->save();
             }
@@ -358,7 +358,7 @@ class OrderDispatchController extends Controller
             $orderDispatch->save();
 
             DB::statement('CALL order_dispatched_status(?)', [$orderDispatch->order->id]);
-            DB::statement('CALL order_dispatch_status(?)', [$orderDispatch->id, $orderDispatch->order->id]);
+            DB::statement('CALL order_dispatch_status(?,?)', [$orderDispatch->id, $orderDispatch->order->id]);
 
             return $this->successResponse(
                 $orderDispatch,
@@ -396,9 +396,9 @@ class OrderDispatchController extends Controller
     public function approve(OrderDispatchApproveRequest $request)
     {
         try {
-            $orderDispatch = OrderDispatch::with('order', 'details.order_detail')->findOrFail($request->input('id'));
+            $orderDispatch = OrderDispatch::with('order', 'order_dispatch_details.order_detail')->findOrFail($request->input('id'));
 
-            foreach($orderDispatch->details as $detail) {
+            foreach($orderDispatch->order_dispatch_details as $detail) {
                 $detail->status = 'Aprobado';
                 $detail->save();
             }
@@ -407,7 +407,7 @@ class OrderDispatchController extends Controller
             $orderDispatch->save();
 
             DB::statement('CALL order_dispatched_status(?)', [$orderDispatch->order->id]);
-            DB::statement('CALL order_dispatch_status(?)', [$orderDispatch->id, $orderDispatch->order->id]);
+            DB::statement('CALL order_dispatch_status(?,?)', [$orderDispatch->id, $orderDispatch->order->id]);
 
             return $this->successResponse(
                 $orderDispatch,
@@ -445,12 +445,12 @@ class OrderDispatchController extends Controller
     public function cancel(OrderDispatchCancelRequest $request)
     {
         try {
-            $orderDispatch = OrderDispatch::with('order.details.quantities', 'details.order_detail', 'details.quantities.order_detail_quantity')->findOrFail($request->input('id'));
+            $orderDispatch = OrderDispatch::with('order.details.quantities', 'order_dispatch_details.order_detail', 'order_dispatch_details.order_dispatch_detail_quantities.order_detail_quantity')->findOrFail($request->input('id'));
 
             foreach($orderDispatch->details as $detail) {
                 $detail->status = 'Cancelado';
                 $detail->save();
-                foreach($detail->quantities as $quantity) {
+                foreach($detail->order_dispatch_detail_quantities as $quantity) {
                     $inventory = Inventory::with('warehouse')
                         ->whereHas('warehouse', fn($subQuery) => $subQuery->where('to_discount', true))
                         ->where('product_id', $detail->order_detail->product_id)
@@ -509,7 +509,7 @@ class OrderDispatchController extends Controller
             $orderDispatch->save();
 
             DB::statement('CALL order_dispatched_status(?)', [$orderDispatch->order->id]);
-            DB::statement('CALL order_dispatch_status(?)', [$orderDispatch->id, $orderDispatch->order->id]);
+            DB::statement('CALL order_dispatch_status(?,?)', [$orderDispatch->id, $orderDispatch->order->id]);
 
             return $this->successResponse(
                 $orderDispatch,
@@ -547,13 +547,13 @@ class OrderDispatchController extends Controller
     public function decline(OrderDispatchDeclineRequest $request)
     {
         try {
-            $orderDispatch = OrderDispatch::with('order', 'details.order_detail', 'details.quantities.order_detail_quantity')->findOrFail($request->input('id'));
+            $orderDispatch = OrderDispatch::with('order', 'order_dispatch_details.order_detail', 'order_dispatch_details.order_dispatch_detail_quantities.order_detail_quantity')->findOrFail($request->input('id'));
 
-            foreach($orderDispatch->details as $detail) {
+            foreach($orderDispatch->order_dispatch_details as $detail) {
                 $detail->status = 'Rechazado';
                 $detail->save();
-
-                foreach($detail->quantities as $quantity) {
+                
+                foreach($detail->order_dispatch_detail_quantities as $quantity) {
                     $inventory = Inventory::with('warehouse')
                         ->whereHas('warehouse', fn($subQuery) => $subQuery->where('to_discount', true))
                         ->where('product_id', $detail->order_detail->product_id)
@@ -574,11 +574,11 @@ class OrderDispatchController extends Controller
             $orderDispatch->save();
 
             DB::statement('CALL order_dispatched_status(?)', [$orderDispatch->order->id]);
-            DB::statement('CALL order_dispatch_status(?)', [$orderDispatch->id, $orderDispatch->order->id]);
+            DB::statement('CALL order_dispatch_status(?,?)', [$orderDispatch->id, $orderDispatch->order->id]);
 
             return $this->successResponse(
                 $orderDispatch,
-                'La orden de despacho fue aprobada para empacarse exitosamente.',
+                'La orden de despacho fue rechazada exitosamente.',
                 200
             );
         } catch (ModelNotFoundException $e) {

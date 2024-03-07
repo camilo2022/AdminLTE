@@ -39,7 +39,7 @@ class OrderDispatchDetailController extends Controller
     {
         try {
             $orderDispatchDetails = OrderDispatchDetail::with([
-                    'quantities',
+                    'order_dispatch_detail_quantities',
                     'order_dispatch.order',
                     'order_detail.quantities.size',
                     'order_detail.product' => fn($query) => $query->withTrashed(),
@@ -57,10 +57,10 @@ class OrderDispatchDetailController extends Controller
 
             $orderDispatchDetails = $orderDispatchDetails->map(function ($orderDispatchDetail) use ($orderDetailQuantitySizes) {
 
-                $orderDetailSizes = $orderDispatchDetail->order_detail->quantities->pluck('size_id')->unique();
+                $orderDetailSizes = $orderDispatchDetail->order_detail->order_dispatch_detail_quantities->pluck('size_id')->unique();
                 $missingSizes = $orderDetailQuantitySizes->pluck('order_detail_quantity')->pluck('size_id')->unique()->values()->diff($orderDetailSizes)->values();
 
-                $quantities = collect($orderDispatchDetail->quantities)->mapWithKeys(function ($quantity) {
+                $quantities = collect($orderDispatchDetail->order_dispatch_detail_quantities)->mapWithKeys(function ($quantity) {
                     return [$quantity['size']->id => [
                         'order_dispatch_detail_id' => $quantity['order_dispatch_detail_id'],
                         'quantity' => $quantity['quantity'],
@@ -120,13 +120,13 @@ class OrderDispatchDetailController extends Controller
     public function pending(OrderDispatchDetailPendingRequest $request)
     {
         try {
-            $orderDispatchDetail = OrderDispatchDetail::with('order_dispatch.order', 'quantities.order_detail_quantity', 'order_detail.quantities')->findOrFail($request->input('id'));
+            $orderDispatchDetail = OrderDispatchDetail::with('order_dispatch.order', 'order_dispatch_detail_quantities.order_detail_quantity', 'order_detail.quantities')->findOrFail($request->input('id'));
 
             $orderDispatchDetail->status = 'Filtrado';
             $orderDispatchDetail->save();
 
             $boolean = true;
-            foreach($orderDispatchDetail->quantities as $quantity) {
+            foreach($orderDispatchDetail->order_dispatch_detail_quantities as $quantity) {
                 $inventory = Inventory::with('warehouse')
                     ->whereHas('warehouse', fn($subQuery) => $subQuery->where('to_discount', true))
                     ->where('product_id', $orderDispatchDetail->order_detail->product_id)
@@ -141,7 +141,7 @@ class OrderDispatchDetailController extends Controller
                 }
             }
 
-            foreach($orderDispatchDetail->quantities as $quantity) {
+            foreach($orderDispatchDetail->order_dispatch_detail_quantities as $quantity) {
                 if($boolean){
                     $inventory = Inventory::with('warehouse')
                         ->whereHas('warehouse', fn($subQuery) => $subQuery->where('to_discount', true))
@@ -200,12 +200,12 @@ class OrderDispatchDetailController extends Controller
     public function cancel(OrderDispatchDetailCancelRequest $request)
     {
         try {
-            $orderDispatchDetail = OrderDispatchDetail::with('order_dispatch.order', 'order_detail', 'quantities.order_detail_quantity')->findOrFail($request->input('id'));
+            $orderDispatchDetail = OrderDispatchDetail::with('order_dispatch.order', 'order_detail', 'order_dispatch_detail_quantities.order_detail_quantity')->findOrFail($request->input('id'));
 
             $orderDispatchDetail->status = 'Cancelado';
             $orderDispatchDetail->save();
 
-            foreach($orderDispatchDetail->quantities as $quantity) {
+            foreach($orderDispatchDetail->order_dispatch_detail_quantities as $quantity) {
                 $inventory = Inventory::with('warehouse')
                     ->whereHas('warehouse', fn($subQuery) => $subQuery->where('to_discount', true))
                     ->where('product_id', $orderDispatchDetail->order_detail->product_id)
@@ -219,7 +219,7 @@ class OrderDispatchDetailController extends Controller
             }
 
             $boolean = true;
-            foreach($orderDispatchDetail->quantities as $quantity) {
+            foreach($orderDispatchDetail->order_dispatch_detail_quantities as $quantity) {
                 $inventory = Inventory::with('warehouse')
                     ->whereHas('warehouse', fn($subQuery) => $subQuery->where('to_discount', true))
                     ->where('product_id', $orderDispatchDetail->order_detail->product_id)
@@ -235,7 +235,7 @@ class OrderDispatchDetailController extends Controller
             }
 
             if($boolean){
-                foreach($orderDispatchDetail->quantities as $quantity) {
+                foreach($orderDispatchDetail->order_dispatch_detail_quantities as $quantity) {
                     $inventory = Inventory::with('warehouse')
                         ->whereHas('warehouse', fn($subQuery) => $subQuery->where('to_discount', true))
                         ->where('product_id', $orderDispatchDetail->order_detail->product_id)
@@ -293,12 +293,12 @@ class OrderDispatchDetailController extends Controller
     public function decline(OrderDispatchDetailDeclineRequest $request)
     {
         try {
-            $orderDispatchDetail = OrderDispatchDetail::with('order_dispatch.order', 'order_detail', 'quantities.order_detail_quantity')->findOrFail($request->input('id'));
+            $orderDispatchDetail = OrderDispatchDetail::with('order_dispatch.order', 'order_detail', 'order_dispatch_detail_quantities.order_detail_quantity')->findOrFail($request->input('id'));
 
             $orderDispatchDetail->status = 'Rechazado';
             $orderDispatchDetail->save();
 
-            foreach($orderDispatchDetail->quantities as $quantity) {
+            foreach($orderDispatchDetail->order_dispatch_detail_quantities as $quantity) {
                 $inventory = Inventory::with('warehouse')
                     ->whereHas('warehouse', fn($subQuery) => $subQuery->where('to_discount', true))
                     ->where('product_id', $orderDispatchDetail->order_detail->product_id)

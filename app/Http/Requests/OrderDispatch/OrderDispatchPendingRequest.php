@@ -24,7 +24,7 @@ class OrderDispatchPendingRequest extends FormRequest
     public function rules()
     {
         return [
-            'id' => ['required', 'exists:orders,id']
+            'id' => ['required', 'exists:order_dispatches,id']
         ];
     }
 

@@ -6,6 +6,7 @@ let tableOrderDispatches = $('#orderDispatches').DataTable({
         type: 'POST',
         data: function (request) {
             var columnMappings = {
+                0: 'id',
                 1: 'id',
                 2: 'client_id',
                 3: 'client_branch_id',
@@ -328,9 +329,9 @@ function tableOrderDispatchesFilter(row) {
                     <i class="fas fa-arrows-rotate text-white"></i>
                 </a>`;
 
-                table += `<a href="/Dashboard/Orders/Dispatch/Details/Index/${order_dispatch.id}" type="button" target="_blank
+                table += `<a href="/Dashboard/Orders/Dispatch/Details/Index/${order_dispatch.id}" type="button" target="_blank"
                 class="btn btn-sm mr-2" style="background: mediumvioletred; color: white;" title="Editar orden de despacho del pedido.">
-                    <i class="fas fa-pen text-white"></i>
+                    <i class="fas fa-file-pdf text-white"></i>
                 </a>`;
 
                 table += `<a onclick="PackingOrderDispatch(${order_dispatch.id})" type="button"
@@ -341,7 +342,7 @@ function tableOrderDispatchesFilter(row) {
             case 'Empacado':
                 table += `<a onclick="InvoiceOrderDispatchModal(${order_dispatch.id})" type="button"
                 class="btn btn-sm mr-2" style="background: slateblue; color: white;" title="Facturar orden de despacho del pedido.">
-                    <i class="fas fa-pen text-white"></i>
+                    <i class="fas fa-file-pdf text-white"></i>
                 </a>`;
             case 'Despachado':
                 table += `<a onclick="PdfOrderDispatch(${order_dispatch.id})" type="button"

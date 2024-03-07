@@ -126,7 +126,7 @@ return new class extends Migration
                 SELECT COUNT(*) INTO totalDespachado FROM order_details WHERE order_id = order_id AND status = "Despachado";
                 SELECT COUNT(*) INTO totalDevuelto FROM order_details WHERE order_id = order_id AND status = "Devuelto";
                 SELECT COUNT(*) INTO totalCanceladoRechazado FROM order_details WHERE order_id = order_id AND status IN ("Cancelado", "Rechazado");
-                SELECT COUNT(*) INTO totalDetalles FROM order_details WHERE order_id = order_id AND status NOT IN ("Agotado");
+                SELECT COUNT(*) INTO totalDetalles FROM order_details WHERE order_id = order_id AND status NOT IN ("Agotado", "Cancelado", "Rechazado");
 
                 IF totalCanceladoRechazado = totalDetalles THEN
                     UPDATE orders SET dispatched_status = "Cancelado" WHERE id = order_id;

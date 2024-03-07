@@ -32,6 +32,6 @@ class OrderDispatchDetailQuantity extends Model implements Auditable
 
     public function order_detail_quantity() : BelongsTo
     {
-        return $this->belongsTo(OrderDetailQuantity::class, 'order_dispatch_detail_id');
+        return $this->belongsTo(OrderDetailQuantity::class, 'order_detail_quantity_id');
     }
 }
