@@ -66,14 +66,56 @@ return new class extends Migration
         DB::unprepared('
             CREATE PROCEDURE order_dispatch_status(IN order_dispatch_id INT, order_id INT)
             BEGIN
-                DECLARE totalRevision INT;
+                DECLARE totalOrdenDetallesFiltrado INT;
+                DECLARE totalOrdenDetallesAprobadoRevisionPendiente INT;
+                DECLARE totalOrdenDespachoDetalles INT;
+                DECLARE totalPendiente INT;
+                DECLARE totalRechazado INT;
+                DECLARE totalCancelado INT;
                 DECLARE totalAprobado INT;
+                DECLARE totalEmpacado INT;
+                DECLARE totalDespachado INT;
+                DECLARE totalOrdenDespacho INT;
 
-                SELECT COUNT(*) INTO totalRevision FROM order_details WHERE order_id = order_id AND status = "Revision";
-                SELECT COUNT(*) INTO totalAprobado FROM order_details WHERE order_id = order_id AND status = "Aprobado";
+                IF order_dispatch_id > 0 THEN
+                    SELECT COUNT(*) INTO totalOrdenDetallesFiltrado FROM order_details WHERE order_details.order_id = order_id AND status = "Filtrado";
+                    SELECT COUNT(*) INTO totalOrdenDetallesAprobadoRevisionPendiente FROM order_details WHERE order_details.order_id = order_id AND status IN ("Pendiente", "Revision", "Aprobado");
+                    SELECT COUNT(*) INTO totalOrdenDespachoDetalles FROM order_dispatch_details WHERE order_dispatch_details.order_dispatch_id = order_dispatch_id AND status = "Pendiente";
+                END IF;
+                SELECT COUNT(*) INTO totalPendiente FROM order_dispatches WHERE order_dispatches.order_id = order_id AND dispatch_status = "Pendiente";
+                SELECT COUNT(*) INTO totalRechazado FROM order_dispatches WHERE order_dispatches.order_id = order_id AND dispatch_status = "Rechazado";
+                SELECT COUNT(*) INTO totalCancelado FROM order_dispatches WHERE order_dispatches.order_id = order_id AND dispatch_status = "Cancelado";
+                SELECT COUNT(*) INTO totalAprobado FROM order_dispatches WHERE order_dispatches.order_id = order_id AND dispatch_status = "Aprobado";
+                SELECT COUNT(*) INTO totalEmpacado FROM order_dispatches WHERE order_dispatches.order_id = order_id AND dispatch_status = "Empacado";
+                SELECT COUNT(*) INTO totalDespachado FROM order_dispatches WHERE order_dispatches.order_id = order_id AND dispatch_status = "Despachado";
+                SELECT COUNT(*) INTO totalOrdenDespacho FROM order_dispatches WHERE order_dispatches.order_id = order_id;
 
-                IF totalRevision = 0 AND totalAprobado = 0 THEN
-                    UPDATE order_dispatch_details SET status = "Aprobado" WHERE order_dispatch_id = order_dispatch_id;
+                IF totalDespachado = totalOrdenDespacho THEN
+                    UPDATE orders SET dispatched_status = "Despachado" WHERE id = order_id;
+                ELSEIF totalDespachado >= 1 AND (totalPendiente + totalRechazado + totalCancelado + totalAprobado + totalEmpacado) >= 1 THEN
+                    UPDATE orders SET dispatched_status = "Parcialmente Despachado" WHERE id = order_id;
+                ELSEIF totalEmpacado = totalOrdenDespacho THEN
+                    UPDATE orders SET dispatched_status = "Aprobado" WHERE id = order_id;
+                ELSEIF totalEmpacado >= 1 AND (totalRechazado + totalCancelado + totalAprobado) >= 1 AND totalPendiente = 0 THEN
+                    UPDATE orders SET dispatched_status = "Aprobado" WHERE id = order_id;
+                ELSEIF totalEmpacado >= 1 AND (totalRechazado + totalCancelado + totalAprobado) >= 1 AND totalPendiente >= 1 THEN
+                    UPDATE orders SET dispatched_status = "Parcialmente Aprobado" WHERE id = order_id;
+                ELSEIF totalAprobado = totalOrdenDespacho THEN
+                    UPDATE orders SET dispatched_status = "Aprobado" WHERE id = order_id;
+                ELSEIF totalAprobado >= 1 AND totalPendiente = 0 THEN
+                    UPDATE orders SET dispatched_status = "Aprobado" WHERE id = order_id;
+                ELSEIF totalAprobado >= 1 AND totalPendiente >= 1 THEN
+                    UPDATE orders SET dispatched_status = "Parcialmente Aprobado" WHERE id = order_id;
+                ELSEIF totalCancelado = totalOrdenDespacho THEN
+                    UPDATE orders SET dispatched_status = "Cancelado" WHERE id = order_id;
+                ELSEIF totalRechazado = totalOrdenDespacho THEN
+                    UPDATE orders SET dispatched_status = "Rechazado" WHERE id = order_id;
+                ELSE
+                    UPDATE orders SET dispatched_status = "Pendiente" WHERE id = order_id;
+                END IF;
+
+                IF order_dispatch_id > 0 and ((totalOrdenDetallesFiltrado = totalOrdenDespachoDetalles) OR (totalOrdenDetallesAprobadoRevisionPendiente = 0)) THEN
+                    UPDATE order_dispatches SET dispatch_status = "Aprobado" WHERE id = order_dispatch_id;
                 END IF;
             END
         ');

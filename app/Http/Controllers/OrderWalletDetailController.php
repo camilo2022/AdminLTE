@@ -7,7 +7,6 @@ use App\Http\Requests\OrderWalletDetail\OrderWalletDetailApproveRequest;
 use App\Http\Requests\OrderWalletDetail\OrderWalletDetailCancelRequest;
 use App\Http\Requests\OrderWalletDetail\OrderWalletDetailCreateRequest;
 use App\Http\Requests\OrderWalletDetail\OrderWalletDetailDeclineRequest;
-use App\Http\Requests\OrderWalletDetail\OrderWalletDetailEditRequest;
 use App\Http\Requests\OrderWalletDetail\OrderWalletDetailIndexQueryRequest;
 use App\Http\Requests\OrderWalletDetail\OrderWalletDetailPendingRequest;
 use App\Http\Requests\OrderWalletDetail\OrderWalletDetailReviewRequest;
@@ -48,7 +47,7 @@ class OrderWalletDetailController extends Controller
         try {
             $orderDetails = OrderDetail::with([
                     'order',
-                    'quantities.size',
+                    'order_detail_quantities.size',
                     'product' => fn($query) => $query->withTrashed(),
                     'color' => fn($query) => $query->withTrashed(),
                     'tone' => fn($query) => $query->withTrashed(),
@@ -64,10 +63,10 @@ class OrderWalletDetailController extends Controller
 
             $orderDetails = $orderDetails->map(function ($orderDetail) use ($orderDetailQuantitySizes) {
 
-                $orderDetailSizes = $orderDetail->quantities->pluck('size_id')->unique();
+                $orderDetailSizes = $orderDetail->order_detail_quantities->pluck('size_id')->unique();
                 $missingSizes = $orderDetailQuantitySizes->pluck('size_id')->unique()->values()->diff($orderDetailSizes)->values();
 
-                $quantities = collect($orderDetail->quantities)->mapWithKeys(function ($quantity) {
+                $quantities = collect($orderDetail->order_detail_quantities)->mapWithKeys(function ($quantity) {
                     return [$quantity['size']->id => [
                         'order_detail_id' => $quantity['order_detail_id'],
                         'quantity' => $quantity['quantity'],
@@ -253,7 +252,7 @@ class OrderWalletDetailController extends Controller
                     'products' => Product::with('inventories.warehouse')
                     ->whereHas('inventories.warehouse', fn($subQuery) => $subQuery->where('to_discount', true))
                     ->get(),
-                    'orderDetail' => OrderDetail::with('quantities')->findOrFail($id)
+                    'orderDetail' => OrderDetail::with('order_detail_quantities')->findOrFail($id)
                 ],
                 'El detalle del pedido fue encontrado exitosamente.',
                 204
@@ -280,7 +279,7 @@ class OrderWalletDetailController extends Controller
     public function update(OrderWalletDetailUpdateRequest $request, $id)
     {
         try {
-            $orderDetail = OrderDetail::with('quantities')->findOrFail($id);
+            $orderDetail = OrderDetail::with('order_detail_quantities')->findOrFail($id);
             $orderDetail->order_id = $request->input('order_id');
             $orderDetail->product_id = $request->input('product_id');
             $orderDetail->color_id = $request->input('color_id');
@@ -288,7 +287,7 @@ class OrderWalletDetailController extends Controller
             $orderDetail->seller_observation = $request->input('seller_observation');
             $orderDetail->save();
 
-            $orderDetail->quantities()->delete();
+            $orderDetail->order_detail_quantities()->delete();
 
             collect($request->order_detail_quantities)->map(function ($orderDetailQuantity) use ($orderDetail) {
                 $orderDetailQuantity = (object) $orderDetailQuantity;
@@ -299,11 +298,11 @@ class OrderWalletDetailController extends Controller
                 $orderDetailQuantityNew->save();
             });
 
-            $orderDetail->load('quantities');
+            $orderDetail->load('order_detail_quantities');
 
             if($orderDetail->status == 'Agotado') {
                 $boolean = true;
-                foreach($orderDetail->quantities as $quantity) {
+                foreach($orderDetail->order_detail_quantities as $quantity) {
                     $inventory = Inventory::with('warehouse')
                         ->whereHas('warehouse', fn($subQuery) => $subQuery->where('to_discount', true))
                         ->where('product_id', $orderDetail->product_id)
@@ -319,7 +318,7 @@ class OrderWalletDetailController extends Controller
                 }
 
                 if($boolean){
-                    foreach($orderDetail->quantities as $quantity) {
+                    foreach($orderDetail->order_detail_quantities as $quantity) {
                         $inventory = Inventory::with('warehouse')
                             ->whereHas('warehouse', fn($subQuery) => $subQuery->where('to_discount', true))
                             ->where('product_id', $orderDetail->product_id)
@@ -460,10 +459,10 @@ class OrderWalletDetailController extends Controller
     public function review(OrderWalletDetailReviewRequest $request)
     {
         try {
-            $orderDetail = OrderDetail::with('quantities')->findOrFail($request->input('id'));
+            $orderDetail = OrderDetail::with('order_detail_quantities')->findOrFail($request->input('id'));
 
             $boolean = true;
-            foreach($orderDetail->quantities as $quantity) {
+            foreach($orderDetail->order_detail_quantities as $quantity) {
                 $inventory = Inventory::with('warehouse')
                     ->whereHas('warehouse', fn($subQuery) => $subQuery->where('to_discount', true))
                     ->where('product_id', $orderDetail->product_id)
@@ -479,7 +478,7 @@ class OrderWalletDetailController extends Controller
             }
 
             if($boolean){
-                foreach($orderDetail->quantities as $quantity) {
+                foreach($orderDetail->order_detail_quantities as $quantity) {
                     $inventory = Inventory::with('warehouse')
                         ->whereHas('warehouse', fn($subQuery) => $subQuery->where('to_discount', true))
                         ->where('product_id', $orderDetail->product_id)
@@ -577,8 +576,9 @@ class OrderWalletDetailController extends Controller
     public function decline(OrderWalletDetailDeclineRequest $request)
     {
         try {
-            $orderDetail = OrderDetail::with('quantities')->findOrFail($request->input('id'));
-            foreach($orderDetail->quantities as $quantity) {
+            $orderDetail = OrderDetail::with('order_detail_quantities')->findOrFail($request->input('id'));
+
+            foreach($orderDetail->order_detail_quantities as $quantity) {
                 $inventory = Inventory::with('warehouse')
                     ->whereHas('warehouse', fn($subQuery) => $subQuery->where('to_discount', true))
                     ->where('product_id', $orderDetail->product_id)

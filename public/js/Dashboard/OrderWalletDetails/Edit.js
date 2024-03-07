@@ -31,7 +31,7 @@ function EditOrderWalletDetailModalCleaned(orderDetail) {
     $('#EditOrderWalletDetailButton').attr('data-product_id', orderDetail.product_id);
     $('#EditOrderWalletDetailButton').attr('data-color_id', orderDetail.color_id);
     $('#EditOrderWalletDetailButton').attr('data-tone_id', orderDetail.tone_id);
-    $('#EditOrderWalletDetailButton').attr('data-quantities', JSON.stringify(orderDetail.quantities));
+    $('#EditOrderWalletDetailButton').attr('data-quantities', JSON.stringify(orderDetail.order_detail_quantities));
 }
 
 function EditOrderWalletDetailModalResetSelect(id) {

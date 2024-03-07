@@ -43,7 +43,7 @@ class OrderSellerDetailController extends Controller
     {
         try {
             $orderDetails = OrderDetail::with([
-                    'order', 'quantities.size',
+                    'order', 'order_detail_quantities.size',
                     'product' => fn($query) => $query->withTrashed(),
                     'color' => fn($query) => $query->withTrashed(),
                     'tone' => fn($query) => $query->withTrashed(),
@@ -59,10 +59,10 @@ class OrderSellerDetailController extends Controller
 
             $orderDetails = $orderDetails->map(function ($orderDetail) use ($orderDetailQuantitySizes) {
 
-                $orderDetailSizes = $orderDetail->quantities->pluck('size_id')->unique();
+                $orderDetailSizes = $orderDetail->order_detail_quantities->pluck('size_id')->unique();
                 $missingSizes = $orderDetailQuantitySizes->pluck('size_id')->unique()->values()->diff($orderDetailSizes)->values();
 
-                $quantities = collect($orderDetail->quantities)->mapWithKeys(function ($quantity) {
+                $quantities = collect($orderDetail->order_detail_quantities)->mapWithKeys(function ($quantity) {
                     return [$quantity['size']->id => [
                         'order_detail_id' => $quantity['order_detail_id'],
                         'quantity' => $quantity['quantity'],
@@ -248,7 +248,7 @@ class OrderSellerDetailController extends Controller
                     'products' => Product::with('inventories.warehouse')
                     ->whereHas('inventories.warehouse', fn($subQuery) => $subQuery->where('to_discount', true))
                     ->get(),
-                    'orderDetail' => OrderDetail::with('quantities')->findOrFail($id)
+                    'orderDetail' => OrderDetail::with('order_detail_quantities')->findOrFail($id)
                 ],
                 'El detalle del pedido fue encontrado exitosamente.',
                 204
@@ -275,7 +275,7 @@ class OrderSellerDetailController extends Controller
     public function update(OrderSellerDetailUpdateRequest $request, $id)
     {
         try {
-            $orderDetail = OrderDetail::with('quantities')->findOrFail($id);
+            $orderDetail = OrderDetail::with('order_detail_quantities')->findOrFail($id);
             $orderDetail->order_id = $request->input('order_id');
             $orderDetail->product_id = $request->input('product_id');
             $orderDetail->color_id = $request->input('color_id');
@@ -283,7 +283,7 @@ class OrderSellerDetailController extends Controller
             $orderDetail->seller_observation = $request->input('seller_observation');
             $orderDetail->save();
 
-            $orderDetail->quantities()->delete();
+            $orderDetail->order_detail_quantities()->delete();
 
             collect($request->order_detail_quantities)->map(function ($orderDetailQuantity) use ($orderDetail) {
                 $orderDetailQuantity = (object) $orderDetailQuantity;

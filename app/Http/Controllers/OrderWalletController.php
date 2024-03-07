@@ -133,9 +133,9 @@ class OrderWalletController extends Controller
     public function approve(OrderWalletApproveRequest $request)
     {
         try {
-            $order = Order::with('details')->findOrFail($request->input('id'));
+            $order = Order::with('order_details')->findOrFail($request->input('id'));
 
-            foreach($order->details as $detail) {
+            foreach($order->order_details as $detail) {
                 $detail->status = $detail->status == 'Revision' ? 'Aprobado' : $detail->status;
                 $detail->save();
             }
@@ -219,9 +219,9 @@ class OrderWalletController extends Controller
     public function pending(OrderWalletPendingRequest $request)
     {
         try {
-            $order = Order::with('details')->findOrFail($request->input('id'));
+            $order = Order::with('order_details')->findOrFail($request->input('id'));
 
-            foreach($order->details as $detail) {
+            foreach($order->order_details as $detail) {
                 if($detail->status == 'Rechazado') {
                     $detail->status = 'Pendiente';
                     $detail->save();
@@ -268,11 +268,11 @@ class OrderWalletController extends Controller
     public function cancel(OrderWalletCancelRequest $request)
     {
         try {
-            $order = Order::with('details.quantities')->findOrFail($request->input('id'));
+            $order = Order::with('order_details.order_detail_quantities')->findOrFail($request->input('id'));
 
-            foreach($order->details as $detail) {
+            foreach($order->order_details as $detail) {
                 if($detail->status == 'Revision') {
-                    foreach($detail->quantities as $quantity) {
+                    foreach($detail->order_detail_quantities as $quantity) {
                         $inventory = Inventory::with('warehouse')
                             ->whereHas('warehouse', fn($subQuery) => $subQuery->where('to_discount', true))
                             ->where('product_id', $detail->product_id)

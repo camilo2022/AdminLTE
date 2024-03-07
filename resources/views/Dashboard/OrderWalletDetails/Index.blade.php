@@ -275,7 +275,7 @@
                 <div class="card">
                     <div class="card-header p-2">
                         <ul class="nav nav-pills">
-                            @if(($order->seller_status == 'Pendiente' || $order->wallet_status == 'Pendiente') && ($order->wallet_status == 'Pendiente' || $order->wallet_status == 'Parcialmente Aprobado') && $order->dispatched_status == 'Pendiente')
+                            @if($order->seller_status == 'Aprobado' && ($order->wallet_status == 'Pendiente' || $order->wallet_status == 'Parcialmente Aprobado' || $order->wallet_status == 'Aprobado') && $order->dispatched_status == 'Pendiente')
                                 <li class="nav-item">
                                     <a class="nav-link active" type="button" onclick="CreateOrderWalletDetailModal()" title="Agregar detalle de pedido.">
                                         <i class="fas fa-plus"></i>

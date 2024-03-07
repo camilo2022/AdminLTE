@@ -187,7 +187,7 @@ let tableOrderDispatches = $('#orderDispatches').DataTable({
                     </a>`;
                 }
 
-                if(row.details.length > 0){
+                if(row.order_details.length > 0){
                     btn += `<a href="/Dashboard/Orders/Dispatch/Filter/${row.id}" type="button"
                     class="btn btn-primary btn-sm mr-2" title="Filtrar pedido.">
                         <i class="fas fa-filter text-white"></i>

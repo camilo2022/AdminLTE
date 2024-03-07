@@ -6,7 +6,7 @@ function PendingOrderDispatch(id, status = true) {
         showCancelButton: true,
         cancelButtonColor: '#DD6B55',
         confirmButtonColor: '#3085d6',
-        confirmButtonText: 'Si, aprobar!',
+        confirmButtonText: 'Si, pendiente!',
         cancelButtonText: 'No, cancelar!',
     }).then((result) => {
         if (result.value) {

@@ -106,7 +106,7 @@ function IndexOrderWalletDetailModalCleaned(details, sizes) {
                 break;
         };
 
-        body += `<td><div class="text-center">${detail.order.seller_status == 'Aprobado' &&(detail.order.wallet_status == 'Pendiente' || detail.order.wallet_status == 'Parcialmente Aprobado') && detail.order.dispatched_status == 'Pendiente' ? btn : ''}</div></td>`;
+        body += `<td><div class="text-center">${detail.order.seller_status == 'Aprobado' &&(detail.order.wallet_status == 'Pendiente' || detail.order.wallet_status == 'Parcialmente Aprobado' || detail.order.wallet_status == 'Aprobado') && detail.order.dispatched_status == 'Pendiente' ? btn : ''}</div></td>`;
 
         let quantities = 0;
 

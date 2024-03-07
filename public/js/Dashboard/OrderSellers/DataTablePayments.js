@@ -32,10 +32,15 @@ let tableOrderSellerPayments = $('#orderSellerPayments').DataTable({
     },
     columns: [
         { data: 'id' },
-        { data: 'value' },
+        {
+            data: 'value',
+            render: function(data, type, row) {
+                return `${(data).toLocaleString('es-CO', { style: 'currency', currency: 'COP' })} COP`;
+            }
+        },
         { data: 'reference' },
         { data: 'date' },
-        { 
+        {
             data: 'payment_type_id',
             render: function (data, type, row) {
                 return row.payment_type.name;

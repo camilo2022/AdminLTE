@@ -39,7 +39,7 @@ return new class extends Migration
             $table->enum('wallet_status', ['Pendiente', 'Cancelado', 'Parcialmente Aprobado', 'Aprobado'])->default('Pendiente')->comment('Estado de cartera.');
             $table->datetime('wallet_date')->nullable()->comment('Fecha de cartera');
             $table->string('wallet_observation')->nullable()->comment('Observacion de cartera');
-            $table->enum('dispatched_status', ['Pendiente', 'Cancelado', 'Parcialmente Aprobado', 'Aprobado', 'Parcialmente Devuelto', 'Devuelto', 'Parcialmente Despachado', 'Despachado'])->default('Pendiente')->comment('Estado de despacho.');
+            $table->enum('dispatched_status', ['Pendiente', 'Cancelado', 'Rechazado', 'Parcialmente Aprobado', 'Aprobado', 'Parcialmente Devuelto', 'Devuelto', 'Parcialmente Despachado', 'Despachado'])->default('Pendiente')->comment('Estado de despacho.');
             $table->datetime('dispatched_date')->nullable()->comment('Fecha de despacho.');
             /* $table->unsignedBigInteger('correria_id')->comment('Identificador de la correria.'); */
             $table->foreignIdFor(Correria::class)->constrained();
@@ -61,8 +61,8 @@ return new class extends Migration
                 DECLARE totalCancelados INT;
                 DECLARE totalDetalles INT;
 
-                SELECT COUNT(*) INTO totalCancelados FROM order_details WHERE order_id = order_id AND status = "Cancelado";
-                SELECT COUNT(*) INTO totalDetalles FROM order_details WHERE order_id = order_id;
+                SELECT COUNT(*) INTO totalCancelados FROM order_details WHERE order_details.order_id = order_id AND status = "Cancelado";
+                SELECT COUNT(*) INTO totalDetalles FROM order_details WHERE order_details.order_id = order_id;
 
                 IF totalCancelados = totalDetalles THEN
                     UPDATE orders SET seller_status = "Cancelado", wallet_status = "Cancelado", dispatched_status = "Cancelado" WHERE id = order_id;
@@ -84,14 +84,14 @@ return new class extends Migration
                 DECLARE totalCanceladoRechazado INT;
                 DECLARE totalDetalles INT;
 
-                SELECT COUNT(*) INTO totalPendienteRevision FROM order_details WHERE order_id = order_id AND (status = "Pendiente" OR status = "Revision");
-                SELECT COUNT(*) INTO totalAprobado FROM order_details WHERE order_id = order_id AND status = "Aprobado";
-                SELECT COUNT(*) INTO totalFiltrado FROM order_details WHERE order_id = order_id AND status = "Filtrado";
-                SELECT COUNT(*) INTO totalEmpacado FROM order_details WHERE order_id = order_id AND status = "Empacado";
-                SELECT COUNT(*) INTO totalDevuelto FROM order_details WHERE order_id = order_id AND status = "Devuelto";
-                SELECT COUNT(*) INTO totalDespachado FROM order_details WHERE order_id = order_id AND status = "Despachado";
-                SELECT COUNT(*) INTO totalCanceladoRechazado FROM order_details WHERE order_id = order_id AND (status = "Cancelado" OR status = "Rechazado");
-                SELECT COUNT(*) INTO totalDetalles FROM order_details WHERE order_id = order_id;
+                SELECT COUNT(*) INTO totalPendienteRevision FROM order_details WHERE order_details.order_id = order_id AND (status = "Pendiente" OR status = "Revision");
+                SELECT COUNT(*) INTO totalAprobado FROM order_details WHERE order_details.order_id = order_id AND status = "Aprobado";
+                SELECT COUNT(*) INTO totalFiltrado FROM order_details WHERE order_details.order_id = order_id AND status = "Filtrado";
+                SELECT COUNT(*) INTO totalEmpacado FROM order_details WHERE order_details.order_id = order_id AND status = "Empacado";
+                SELECT COUNT(*) INTO totalDevuelto FROM order_details WHERE order_details.order_id = order_id AND status = "Devuelto";
+                SELECT COUNT(*) INTO totalDespachado FROM order_details WHERE order_details.order_id = order_id AND status = "Despachado";
+                SELECT COUNT(*) INTO totalCanceladoRechazado FROM order_details WHERE order_details.order_id = order_id AND (status = "Cancelado" OR status = "Rechazado");
+                SELECT COUNT(*) INTO totalDetalles FROM order_details WHERE order_details.order_id = order_id;
 
                 IF totalCanceladoRechazado = totalDetalles THEN
                     UPDATE orders SET wallet_status = "Cancelado", dispatched_status = "Cancelado" WHERE id = order_id;
@@ -120,13 +120,13 @@ return new class extends Migration
                 DECLARE totalCanceladoRechazado INT;
                 DECLARE totalDetalles INT;
 
-                SELECT COUNT(*) INTO totalFiltrado FROM order_details WHERE order_id = order_id AND status = "Filtrado";
-                SELECT COUNT(*) INTO totalEmpacado FROM order_details WHERE order_id = order_id AND status = "Empacado";
-                SELECT COUNT(*) INTO totalAprobado FROM order_details WHERE order_id = order_id AND status = "Aprobado";
-                SELECT COUNT(*) INTO totalDespachado FROM order_details WHERE order_id = order_id AND status = "Despachado";
-                SELECT COUNT(*) INTO totalDevuelto FROM order_details WHERE order_id = order_id AND status = "Devuelto";
-                SELECT COUNT(*) INTO totalCanceladoRechazado FROM order_details WHERE order_id = order_id AND status IN ("Cancelado", "Rechazado");
-                SELECT COUNT(*) INTO totalDetalles FROM order_details WHERE order_id = order_id AND status NOT IN ("Agotado", "Cancelado", "Rechazado");
+                SELECT COUNT(*) INTO totalFiltrado FROM order_details WHERE order_details.order_id = order_id AND status = "Filtrado";
+                SELECT COUNT(*) INTO totalEmpacado FROM order_details WHERE order_details.order_id = order_id AND status = "Empacado";
+                SELECT COUNT(*) INTO totalAprobado FROM order_details WHERE order_details.order_id = order_id AND status = "Aprobado";
+                SELECT COUNT(*) INTO totalDespachado FROM order_details WHERE order_details.order_id = order_id AND status = "Despachado";
+                SELECT COUNT(*) INTO totalDevuelto FROM order_details WHERE order_details.order_id = order_id AND status = "Devuelto";
+                SELECT COUNT(*) INTO totalCanceladoRechazado FROM order_details WHERE order_details.order_id = order_id AND status IN ("Cancelado", "Rechazado");
+                SELECT COUNT(*) INTO totalDetalles FROM order_details WHERE order_details.order_id = order_id AND status NOT IN ("Agotado", "Cancelado", "Rechazado");
 
                 IF totalCanceladoRechazado = totalDetalles THEN
                     UPDATE orders SET dispatched_status = "Cancelado" WHERE id = order_id;

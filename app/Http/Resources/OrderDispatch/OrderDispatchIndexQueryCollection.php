@@ -53,7 +53,7 @@ class OrderDispatchIndexQueryCollection extends ResourceCollection
                             ];
                         }
                     )->toArray(),
-                    'details' => $orderDispatch->details,
+                    'order_details' => $orderDispatch->order_details,
                     'created_at' => $this->formatDate($orderDispatch->created_at),
                     'updated_at' => $this->formatDate($orderDispatch->updated_at),
                 ];

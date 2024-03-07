@@ -45,7 +45,7 @@ class OrderDetail extends Model implements Auditable
         'status'
     ];
 
-    public function quantities() : HasMany
+    public function order_detail_quantities() : HasMany
     {
         return $this->hasMany(OrderDetailQuantity::class, 'order_detail_id');
     }

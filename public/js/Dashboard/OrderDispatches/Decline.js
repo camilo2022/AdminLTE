@@ -6,7 +6,7 @@ function DeclineOrderDispatch(id, status = true) {
         showCancelButton: true,
         cancelButtonColor: '#DD6B55',
         confirmButtonColor: '#3085d6',
-        confirmButtonText: 'Si, aprobar!',
+        confirmButtonText: 'Si, rechazar!',
         cancelButtonText: 'No, cancelar!',
     }).then((result) => {
         if (result.value) {
