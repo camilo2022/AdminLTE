@@ -114,8 +114,12 @@ return new class extends Migration
                     UPDATE orders SET dispatched_status = "Pendiente" WHERE id = order_id;
                 END IF;
 
-                IF order_dispatch_id > 0 and ((totalOrdenDetallesFiltrado = totalOrdenDespachoDetalles) OR (totalOrdenDetallesAprobadoRevisionPendiente = 0)) THEN
-                    UPDATE order_dispatches SET dispatch_status = "Aprobado" WHERE id = order_dispatch_id;
+                IF order_dispatch_id > 0 THEN
+                	IF (totalOrdenDetallesFiltrado = totalOrdenDespachoDetalles) AND (totalOrdenDetallesAprobadoRevisionPendiente = 0) THEN
+                    	UPDATE order_dispatches SET dispatch_status = "Aprobado" WHERE id = order_dispatch_id;
+                    ELSE
+                    	UPDATE order_dispatches SET dispatch_status = "Parcialmente Aprobado" WHERE id = order_dispatch_id;
+                	END IF;
                 END IF;
             END
         ');

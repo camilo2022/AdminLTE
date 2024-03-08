@@ -70,6 +70,7 @@ return array(
     'Matrix\\' => array($vendorDir . '/markbaker/matrix/classes/src'),
     'Masterminds\\' => array($vendorDir . '/masterminds/html5/src'),
     'Maatwebsite\\Excel\\' => array($vendorDir . '/maatwebsite/excel/src'),
+    'Luecano\\NumeroALetras\\' => array($vendorDir . '/luecano/numero-a-letras/src'),
     'League\\MimeTypeDetection\\' => array($vendorDir . '/league/mime-type-detection/src'),
     'League\\Flysystem\\Local\\' => array($vendorDir . '/league/flysystem-local'),
     'League\\Flysystem\\' => array($vendorDir . '/league/flysystem/src'),

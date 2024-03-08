@@ -9,7 +9,6 @@ use App\Http\Requests\OrderDispatch\OrderDispatchDeclineRequest;
 use App\Http\Requests\OrderDispatch\OrderDispatchFilterQueryDetailsRequest;
 use App\Http\Requests\OrderDispatch\OrderDispatchFilterQueryInventoriesRequest;
 use App\Http\Requests\OrderDispatch\OrderDispatchIndexQueryRequest;
-use App\Http\Requests\OrderDispatch\OrderDispatchDownloadRequest;
 use App\Http\Requests\OrderDispatch\OrderDispatchPendingRequest;
 use App\Http\Requests\OrderDispatch\OrderDispatchStoreRequest;
 use App\Http\Resources\OrderDispatch\OrderDispatchIndexQueryCollection;
@@ -606,14 +605,30 @@ class OrderDispatchController extends Controller
         }
     }
 
-    public function download(OrderDispatchDownloadRequest $request)
+    public function download($id)
     {
         try {
-            $orderDispatch = OrderDispatch::with('order', 'order_dispatch_details.order_dispatch_detail_quantities')->findOrFail($request->input('id'));
-            $pdf = \PDF::loadView('Dashboard.OrderDispatches.PDF', compact('orderDispatch'))->setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true]);
+            $orderDispatch = OrderDispatch::with([
+                    'dispatch_user'  => fn($query) => $query->withTrashed(),
+                    'order.seller_user'  => fn($query) => $query->withTrashed(),
+                    'order.wallet_user'  => fn($query) => $query->withTrashed(),
+                    'order.client.document_type' => fn($query) => $query->withTrashed(),
+                    'order.client_branch' => fn($query) => $query->withTrashed(),
+                    'order.client_branch.country', 'order.client_branch.departament', 'order.client_branch.city',
+                    'order.seller_user' => fn($query) => $query->withTrashed(),
+                    'order_dispatch_details' => fn($query) => $query->whereNotIn('status', ['Cancelado', 'Rechazado']),
+                    'order_dispatch_details.order_detail', 'order_dispatch_details.order_detail.product',
+                    'order_dispatch_details.order_detail.color','order_dispatch_details.order_detail.tone',
+                    'order_dispatch_details.order_dispatch_detail_quantities.order_detail_quantity.size'
+                ])
+                ->findOrFail($id);
+
+            $sizes = $orderDispatch->order_dispatch_details->pluck('order_dispatch_detail_quantities')->flatten()->where('quantity', '>', 0)->pluck('order_detail_quantity')->pluck('size')->unique()->sortBy('id')->values();
+
+            $pdf = \PDF::loadView('Dashboard.OrderDispatches.PDF', compact('orderDispatch', 'sizes'))->setPaper('a4', 'landscape')->setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true]);
             /* $pdf = \PDF::loadView('Browser_public.pdfdocument', compact('queryic'))->output();
             return $pdf->download('pdfdocument.pdf'); */
-            return $pdf->stream('pdfdocument.pdf');
+            return $pdf->stream("{$orderDispatch->consecutive}.pdf");
         } catch (ModelNotFoundException $e) {
             return back()->with('danger', 'Ocurrió un error al cargar el pdf de la orden de despacho del pedidos: ' . $this->getMessage('ModelNotFoundException'));
         } catch (Exception $e) {

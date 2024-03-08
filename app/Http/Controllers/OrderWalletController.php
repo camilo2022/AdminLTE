@@ -21,6 +21,7 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Auth;
 
 class OrderWalletController extends Controller
 {
@@ -141,6 +142,8 @@ class OrderWalletController extends Controller
             }
 
             $order->wallet_status = 'Aprobado';
+            $order->wallet_date = Carbon::now()->format('Y-m-d H:i:s');
+            $order->wallet_user_id = Auth::user()->id;
             $order->save();
 
             return $this->successResponse(
@@ -181,6 +184,8 @@ class OrderWalletController extends Controller
         try {
             $order = Order::findOrFail($request->input('id'));
             $order->wallet_status = 'Parcialmente Aprobado';
+            $order->wallet_date = Carbon::now()->format('Y-m-d H:i:s');
+            $order->wallet_user_id = Auth::user()->id;
             $order->save();
 
             return $this->successResponse(
@@ -229,6 +234,8 @@ class OrderWalletController extends Controller
             }
 
             $order->wallet_status = 'Pendiente';
+            $order->wallet_date = Carbon::now()->format('Y-m-d H:i:s');
+            $order->wallet_user_id = Auth::user()->id;
             $order->dispatched_status = 'Pendiente';
             $order->save();
 
@@ -291,7 +298,10 @@ class OrderWalletController extends Controller
             }
 
             $order->wallet_status = 'Cancelado';
+            $order->wallet_date = Carbon::now()->format('Y-m-d H:i:s');
+            $order->wallet_user_id = Auth::user()->id;
             $order->dispatched_status = 'Cancelado';
+            $order->dispatched_date = Carbon::now()->format('Y-m-d H:i:s');
             $order->save();
 
             return $this->successResponse(

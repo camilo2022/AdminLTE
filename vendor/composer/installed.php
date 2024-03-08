@@ -6,7 +6,7 @@
     'aliases' => 
     array (
     ),
-    'reference' => '29e6bd7da54693e15466488948dec1d28b32d15c',
+    'reference' => '4248c3a37961fa816ccae5b7080bdb29dd4df829',
     'name' => 'laravel/laravel',
   ),
   'versions' => 
@@ -497,7 +497,7 @@
       'aliases' => 
       array (
       ),
-      'reference' => '29e6bd7da54693e15466488948dec1d28b32d15c',
+      'reference' => '4248c3a37961fa816ccae5b7080bdb29dd4df829',
     ),
     'laravel/pint' => 
     array (
@@ -597,6 +597,15 @@
       array (
       ),
       'reference' => 'ce0f4d1e8a6f4eb0ddff33f57c69c50fd09f4301',
+    ),
+    'luecano/numero-a-letras' => 
+    array (
+      'pretty_version' => 'v3.0.0',
+      'version' => '3.0.0.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => 'bab51e3e81545e38d6a11efccb3e6d568765ba7c',
     ),
     'maatwebsite/excel' => 
     array (

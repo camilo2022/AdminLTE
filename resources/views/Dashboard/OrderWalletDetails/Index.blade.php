@@ -183,7 +183,10 @@
                                         <td style="font-size:14px;">
                                             @switch($order->dispatched_status)
                                                 @case('Cancelado')
-                                                    <span class="badge badge-pill badge-danger text-white" id="dispatched_status"><i class="fas fa-xmark mr-2 text-white"></i>Cancelado</span>
+                                                    <span class="badge badge-pill bg-orange text-white" id="dispatched_status" style="color:white !important;"><i class="fas fa-xmark mr-2 text-white"></i>Cancelado</span>
+                                                    @break
+                                                @case('Rechazado')
+                                                    <span class="badge badge-pill badge-danger text-white" id="dispatched_status"><i class="fas fa-ban mr-2 text-white"></i>Rechazado</span>
                                                     @break
                                                 @case('Pendiente')
                                                     <span class="badge badge-pill badge-info" id="dispatched_status"><i class="fas fa-arrows-rotate mr-2"></i>Pendiente</span>

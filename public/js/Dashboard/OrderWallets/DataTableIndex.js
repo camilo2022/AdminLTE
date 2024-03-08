@@ -129,8 +129,11 @@ let tableOrderWallets = $('#orderWallets').DataTable({
             render: function (data, type, row) {
                 switch (data) {
                     case 'Cancelado':
-                        return `<h5><span class="badge badge-pill badge-danger text-white"><i class="fas fa-xmark mr-2 text-white"></i>Cancelado</span></h5>`;
+                        return `<h5><span class="badge badge-pill bg-orange text-white" style="color:white !important;"><i class="fas fa-xmark mr-2 text-white"></i>Cancelado</span></h5>`;
                         break;
+                    case 'Rechazado':
+                        return `<span class="badge badge-pill badge-danger text-white" id="dispatched_status"><i class="fas fa-ban mr-2 text-white"></i>Rechazado</span>`;
+                        break
                     case 'Pendiente':
                         return `<h5><span class="badge badge-pill badge-info"><i class="fas fa-arrows-rotate mr-2"></i>Pendiente</span></h5>`;
                         break;
@@ -147,7 +150,7 @@ let tableOrderWallets = $('#orderWallets').DataTable({
                         return `<h5><span class="badge badge-pill bg-dark text-white"><i class="fas fa-reply-all mr-2 text-white"></i>Devuelto</span></h5>`;
                         break;
                     case 'Parcialmente Despachado':
-                        return `<h5><span class="badge badge-pill bg-purple text-white"><i class="fas fa-share mr-2 text-white"></i>Parcialmente Despachado</span></h5>`;
+                        return `<h5><span class="badge badge-pill bg-purple text-white" style="color:white !important;"><i class="fas fa-share mr-2 text-white"></i>Parcialmente Despachado</span></h5>`;
                         break;
                     case 'Despachado':
                         return `<h5><span class="badge badge-pill badge-primary"><i class="fas fa-share-all mr-2"></i>Despachado</span></h5>`;

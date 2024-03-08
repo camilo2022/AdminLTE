@@ -689,6 +689,8 @@ class OrderSellerController extends Controller
             }
 
             $order->wallet_status = 'Parcialmente Aprobado';
+            $order->wallet_date = Carbon::now()->format('Y-m-d H:i:s');
+            $order->wallet_user_id = Auth::user()->id;
             $order->save();
 
             return $this->successResponse(
@@ -750,7 +752,10 @@ class OrderSellerController extends Controller
             }
 
             $order->wallet_status = 'Cancelado';
+            $order->wallet_date = Carbon::now()->format('Y-m-d H:i:s');
+            $order->wallet_user_id = Auth::user()->id;
             $order->dispatched_status = 'Cancelado';
+            $order->dispatched_date = Carbon::now()->format('Y-m-d H:i:s');
             $order->save();
 
             return $this->successResponse(

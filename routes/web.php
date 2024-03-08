@@ -567,7 +567,7 @@ Route::middleware(['auth'])->group(function () {
                     Route::put('/Approve', 'approve')->middleware('can:Dashboard.Orders.Dispatch.Approve')->name('Dashboard.Orders.Dispatch.Approve');
                     Route::put('/Cancel', 'cancel')->middleware('can:Dashboard.Orders.Dispatch.Cancel')->name('Dashboard.Orders.Dispatch.Cancel');
                     Route::put('/Decline', 'decline')->middleware('can:Dashboard.Orders.Dispatch.Decline')->name('Dashboard.Orders.Dispatch.Decline');
-                    Route::post('/Download', 'download')->middleware('can:Dashboard.Orders.Dispatch.Download')->name('Dashboard.Orders.Dispatch.Download');
+                    Route::get('/Download/{id}', 'download')->middleware('can:Dashboard.Orders.Dispatch.Download')->name('Dashboard.Orders.Dispatch.Download');
                 });
                 Route::prefix('/Details')->group(function () {
                     Route::controller(OrderDispatchDetailController::class)->group(function () {

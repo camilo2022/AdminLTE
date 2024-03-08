@@ -34,7 +34,7 @@ let tableOrderSellers = $('#orderSellers').DataTable({
     },
     columns: [
         { data: 'id' },
-        { 
+        {
             data: 'client_id',
             render: function (data, type, row) {
                 return `${row.client.document_number}-${row.client_branch.code}`;
@@ -64,20 +64,20 @@ let tableOrderSellers = $('#orderSellers').DataTable({
                 return row.client_branch.city.name;
             }
         },
-        { 
+        {
             data: 'client_branch_id',
             render: function (data, type, row) {
                 return row.client_branch.address;
             }
         },
-        { 
+        {
             data: 'client_branch_id' ,
             render: function (data, type, row) {
                 return row.client_branch.neighborhood;
             }
         },
         { data: 'seller_date' },
-        { 
+        {
             data: 'seller_user_id' ,
             render: function (data, type, row) {
                 return `${row.seller_user.name} ${row.seller_user.last_name}`;
@@ -129,8 +129,11 @@ let tableOrderSellers = $('#orderSellers').DataTable({
             render: function (data, type, row) {
                 switch (data) {
                     case 'Cancelado':
-                        return `<h5><span class="badge badge-pill badge-danger text-white"><i class="fas fa-xmark mr-2 text-white"></i>Cancelado</span></h5>`;
+                        return `<h5><span class="badge badge-pill bg-orange text-white" style="color:white !important;"><i class="fas fa-xmark mr-2 text-white"></i>Cancelado</span></h5>`;
                         break;
+                    case 'Rechazado':
+                        return `<span class="badge badge-pill badge-danger text-white" id="dispatched_status"><i class="fas fa-ban mr-2 text-white"></i>Rechazado</span>`;
+                        break
                     case 'Pendiente':
                         return `<h5><span class="badge badge-pill badge-info"><i class="fas fa-arrows-rotate mr-2"></i>Pendiente</span></h5>`;
                         break;
@@ -147,7 +150,7 @@ let tableOrderSellers = $('#orderSellers').DataTable({
                         return `<h5><span class="badge badge-pill bg-dark text-white"><i class="fas fa-reply-all mr-2 text-white"></i>Devuelto</span></h5>`;
                         break;
                     case 'Parcialmente Despachado':
-                        return `<h5><span class="badge badge-pill bg-purple text-white"><i class="fas fa-share mr-2 text-white"></i>Parcialmente Despachado</span></h5>`;
+                        return `<h5><span class="badge badge-pill bg-purple text-white" style="color:white !important;"><i class="fas fa-share mr-2 text-white"></i>Parcialmente Despachado</span></h5>`;
                         break;
                     case 'Despachado':
                         return `<h5><span class="badge badge-pill badge-primary"><i class="fas fa-share-all mr-2"></i>Despachado</span></h5>`;
@@ -168,13 +171,13 @@ let tableOrderSellers = $('#orderSellers').DataTable({
             data: 'seller_status',
             render: function (data, type, row) {
                 let btn = `<div class="text-center" style="width: 100%;">`;
-                
+
                 btn += `<a href="/Dashboard/Orders/Seller/Details/Index/${row.id}" type="button"
                 class="btn btn-info btn-sm mr-2" title="Visualizar detalles del pedido.">
                     <i class="fas fa-eye text-white"></i>
                 </a>`;
 
-                if (data === 'Pendiente') {                    
+                if (data === 'Pendiente') {
                     btn += `<a onclick="EditOrderSellerModal(${row.id})" type="button"
                     class="btn btn-primary btn-sm mr-2" title="Editar pedido.">
                         <i class="fas fa-pen text-white"></i>

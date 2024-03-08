@@ -223,6 +223,7 @@ return [
         'Broadcast' => Illuminate\Support\Facades\Broadcast::class,
         'Bus' => Illuminate\Support\Facades\Bus::class,
         'Cache' => Illuminate\Support\Facades\Cache::class,
+        'Carbon' => Carbon\Carbon::class,
         'Config' => Illuminate\Support\Facades\Config::class,
         'Cookie' => Illuminate\Support\Facades\Cookie::class,
         'Crypt' => Illuminate\Support\Facades\Crypt::class,
@@ -257,6 +258,7 @@ return [
         'DNS1D' => Milon\Barcode\Facades\DNS1DFacade::class,
         'DNS2D' => Milon\Barcode\Facades\DNS2DFacade::class,
         'Image' => Intervention\Image\Facades\Image::class,
+        'NumeroALetras' => Luecano\NumeroALetras\NumeroALetras::class,
         // 'ExampleClass' => App\Example\ExampleClass::class,
     ])->toArray(),
 

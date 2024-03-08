@@ -92,7 +92,7 @@ function IndexOrderWalletDetailModalCleaned(details, sizes) {
                 break;
             case 'Aprobado':
                 btn += `<a onclick="DeclineOrderWalletDetail(${detail.id})" type="button"
-                class="btn btn-warning btn-sm mr-2 text-white" title="Rechazar detalle de pedido.">
+                class="btn btn-danger btn-sm mr-2 text-white" title="Rechazar detalle de pedido.">
                     <i class="fas fa-ban text-white"></i>
                 </a>`;
                 break;

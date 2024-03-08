@@ -138,7 +138,7 @@
                                                     <span class="badge badge-pill badge-warning text-white" id="seller_status"><i class="fas fa-check mr-2 text-white"></i>Parcialmente Aprobado</span>
                                                     @break
                                                 @case('Aprobado')
-                                                    <span class="badge badge-pill badge-success" id="wallet_status"><i class="fas fa-check mr-2"></i>Aprobado</span>
+                                                    <span class="badge badge-pill badge-success" id="wallet_status"><i class="fas fa-check-double mr-2"></i>Aprobado</span>
                                                     @break
                                                 @default
                                                     <span class="badge badge-pill badge-info" id="wallet_status"><i class="fas fa-arrows-rotate mr-2"></i>Pendiente</span>
@@ -154,7 +154,10 @@
                                         <td style="font-size:14px;">
                                             @switch($order->dispatched_status)
                                                 @case('Cancelado')
-                                                    <span class="badge badge-pill badge-danger text-white" id="dispatched_status"><i class="fas fa-xmark mr-2 text-white"></i>Cancelado</span>
+                                                    <span class="badge badge-pill bg-orange text-white" id="dispatched_status" style="color:white !important;"><i class="fas fa-xmark mr-2 text-white"></i>Cancelado</span>
+                                                    @break
+                                                @case('Rechazado')
+                                                    <span class="badge badge-pill badge-danger text-white" id="dispatched_status"><i class="fas fa-ban mr-2 text-white"></i>Rechazado</span>
                                                     @break
                                                 @case('Pendiente')
                                                     <span class="badge badge-pill badge-info" id="dispatched_status"><i class="fas fa-arrows-rotate mr-2"></i>Pendiente</span>

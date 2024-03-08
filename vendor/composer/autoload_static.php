@@ -140,6 +140,7 @@ class ComposerStaticInitd8dacbe985ec62888937197aae0da1ad
         ),
         'L' => 
         array (
+            'Luecano\\NumeroALetras\\' => 22,
             'League\\MimeTypeDetection\\' => 25,
             'League\\Flysystem\\Local\\' => 23,
             'League\\Flysystem\\' => 17,
@@ -466,6 +467,10 @@ class ComposerStaticInitd8dacbe985ec62888937197aae0da1ad
         'Maatwebsite\\Excel\\' => 
         array (
             0 => __DIR__ . '/..' . '/maatwebsite/excel/src',
+        ),
+        'Luecano\\NumeroALetras\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/luecano/numero-a-letras/src',
         ),
         'League\\MimeTypeDetection\\' => 
         array (
@@ -803,23 +808,17 @@ class ComposerStaticInitd8dacbe985ec62888937197aae0da1ad
         'App\\Http\\Requests\\ModulesAndSubmodules\\ModulesAndSubmodulesIndexQueryRequest' => __DIR__ . '/../..' . '/app/Http/Requests/ModulesAndSubmodules/ModulesAndSubmodulesIndexQueryRequest.php',
         'App\\Http\\Requests\\ModulesAndSubmodules\\ModulesAndSubmodulesStoreRequest' => __DIR__ . '/../..' . '/app/Http/Requests/ModulesAndSubmodules/ModulesAndSubmodulesStoreRequest.php',
         'App\\Http\\Requests\\ModulesAndSubmodules\\ModulesAndSubmodulesUpdateRequest' => __DIR__ . '/../..' . '/app/Http/Requests/ModulesAndSubmodules/ModulesAndSubmodulesUpdateRequest.php',
-        'App\\Http\\Requests\\OrderDispatchDetail\\OrderDispatchDetailAcceptRequest' => __DIR__ . '/../..' . '/app/Http/Requests/OrderDispatchDetail/OrderDispatchDetailAcceptRequest.php',
         'App\\Http\\Requests\\OrderDispatchDetail\\OrderDispatchDetailCancelRequest' => __DIR__ . '/../..' . '/app/Http/Requests/OrderDispatchDetail/OrderDispatchDetailCancelRequest.php',
-        'App\\Http\\Requests\\OrderDispatchDetail\\OrderDispatchDetailCreateRequest' => __DIR__ . '/../..' . '/app/Http/Requests/OrderDispatchDetail/OrderDispatchDetailCreateRequest.php',
-        'App\\Http\\Requests\\OrderDispatchDetail\\OrderDispatchDetailDeleteRequest' => __DIR__ . '/../..' . '/app/Http/Requests/OrderDispatchDetail/OrderDispatchDetailDeleteRequest.php',
-        'App\\Http\\Requests\\OrderDispatchDetail\\OrderDispatchDetailEditRequest' => __DIR__ . '/../..' . '/app/Http/Requests/OrderDispatchDetail/OrderDispatchDetailEditRequest.php',
+        'App\\Http\\Requests\\OrderDispatchDetail\\OrderDispatchDetailDeclineRequest' => __DIR__ . '/../..' . '/app/Http/Requests/OrderDispatchDetail/OrderDispatchDetailDeclineRequest.php',
+        'App\\Http\\Requests\\OrderDispatchDetail\\OrderDispatchDetailIndexQueryRequest' => __DIR__ . '/../..' . '/app/Http/Requests/OrderDispatchDetail/OrderDispatchDetailIndexQueryRequest.php',
         'App\\Http\\Requests\\OrderDispatchDetail\\OrderDispatchDetailPendingRequest' => __DIR__ . '/../..' . '/app/Http/Requests/OrderDispatchDetail/OrderDispatchDetailPendingRequest.php',
-        'App\\Http\\Requests\\OrderDispatchDetail\\OrderDispatchDetailStoreRequest' => __DIR__ . '/../..' . '/app/Http/Requests/OrderDispatchDetail/OrderDispatchDetailStoreRequest.php',
-        'App\\Http\\Requests\\OrderDispatchDetail\\OrderDispatchDetailUpdateRequest' => __DIR__ . '/../..' . '/app/Http/Requests/OrderDispatchDetail/OrderDispatchDetailUpdateRequest.php',
-        'App\\Http\\Requests\\OrderDispatch\\OrderDispatchAcceptRequest' => __DIR__ . '/../..' . '/app/Http/Requests/OrderDispatch/OrderDispatchAcceptRequest.php',
+        'App\\Http\\Requests\\OrderDispatch\\OrderDispatchApproveRequest' => __DIR__ . '/../..' . '/app/Http/Requests/OrderDispatch/OrderDispatchApproveRequest.php',
         'App\\Http\\Requests\\OrderDispatch\\OrderDispatchCancelRequest' => __DIR__ . '/../..' . '/app/Http/Requests/OrderDispatch/OrderDispatchCancelRequest.php',
-        'App\\Http\\Requests\\OrderDispatch\\OrderDispatchCreateRequest' => __DIR__ . '/../..' . '/app/Http/Requests/OrderDispatch/OrderDispatchCreateRequest.php',
-        'App\\Http\\Requests\\OrderDispatch\\OrderDispatchDownloadRequest' => __DIR__ . '/../..' . '/app/Http/Requests/OrderDispatch/OrderDispatchDownloadRequest.php',
+        'App\\Http\\Requests\\OrderDispatch\\OrderDispatchDeclineRequest' => __DIR__ . '/../..' . '/app/Http/Requests/OrderDispatch/OrderDispatchDeclineRequest.php',
         'App\\Http\\Requests\\OrderDispatch\\OrderDispatchFilterQueryDetailsRequest' => __DIR__ . '/../..' . '/app/Http/Requests/OrderDispatch/OrderDispatchFilterQueryDetailsRequest.php',
         'App\\Http\\Requests\\OrderDispatch\\OrderDispatchFilterQueryInventoriesRequest' => __DIR__ . '/../..' . '/app/Http/Requests/OrderDispatch/OrderDispatchFilterQueryInventoriesRequest.php',
         'App\\Http\\Requests\\OrderDispatch\\OrderDispatchIndexQueryRequest' => __DIR__ . '/../..' . '/app/Http/Requests/OrderDispatch/OrderDispatchIndexQueryRequest.php',
         'App\\Http\\Requests\\OrderDispatch\\OrderDispatchPendingRequest' => __DIR__ . '/../..' . '/app/Http/Requests/OrderDispatch/OrderDispatchPendingRequest.php',
-        'App\\Http\\Requests\\OrderDispatch\\OrderDispatchShowQueryRequest' => __DIR__ . '/../..' . '/app/Http/Requests/OrderDispatch/OrderDispatchShowQueryRequest.php',
         'App\\Http\\Requests\\OrderDispatch\\OrderDispatchStoreRequest' => __DIR__ . '/../..' . '/app/Http/Requests/OrderDispatch/OrderDispatchStoreRequest.php',
         'App\\Http\\Requests\\OrderSellerDetail\\OrderSellerDetailCancelRequest' => __DIR__ . '/../..' . '/app/Http/Requests/OrderSellerDetail/OrderSellerDetailCancelRequest.php',
         'App\\Http\\Requests\\OrderSellerDetail\\OrderSellerDetailCreateRequest' => __DIR__ . '/../..' . '/app/Http/Requests/OrderSellerDetail/OrderSellerDetailCreateRequest.php',
@@ -4251,6 +4250,7 @@ class ComposerStaticInitd8dacbe985ec62888937197aae0da1ad
         'League\\MimeTypeDetection\\GeneratedExtensionToMimeTypeMap' => __DIR__ . '/..' . '/league/mime-type-detection/src/GeneratedExtensionToMimeTypeMap.php',
         'League\\MimeTypeDetection\\MimeTypeDetector' => __DIR__ . '/..' . '/league/mime-type-detection/src/MimeTypeDetector.php',
         'League\\MimeTypeDetection\\OverridingExtensionToMimeTypeMap' => __DIR__ . '/..' . '/league/mime-type-detection/src/OverridingExtensionToMimeTypeMap.php',
+        'Luecano\\NumeroALetras\\NumeroALetras' => __DIR__ . '/..' . '/luecano/numero-a-letras/src/NumeroALetras.php',
         'Maatwebsite\\Excel\\Cache\\BatchCache' => __DIR__ . '/..' . '/maatwebsite/excel/src/Cache/BatchCache.php',
         'Maatwebsite\\Excel\\Cache\\BatchCacheDeprecated' => __DIR__ . '/..' . '/maatwebsite/excel/src/Cache/BatchCacheDeprecated.php',
         'Maatwebsite\\Excel\\Cache\\CacheManager' => __DIR__ . '/..' . '/maatwebsite/excel/src/Cache/CacheManager.php',

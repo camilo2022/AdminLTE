@@ -140,8 +140,11 @@ let tableOrderDispatches = $('#orderDispatches').DataTable({
             render: function (data, type, row) {
                 switch (data) {
                     case 'Cancelado':
-                        return `<h5><span class="badge badge-pill badge-danger text-white"><i class="fas fa-xmark mr-2 text-white"></i>Cancelado</span></h5>`;
+                        return `<h5><span class="badge badge-pill bg-orange text-white" style="color:white !important;"><i class="fas fa-xmark mr-2 text-white"></i>Cancelado</span></h5>`;
                         break;
+                    case 'Rechazado':
+                        return `<span class="badge badge-pill badge-danger text-white" id="dispatched_status"><i class="fas fa-ban mr-2 text-white"></i>Rechazado</span>`;
+                        break
                     case 'Pendiente':
                         return `<h5><span class="badge badge-pill badge-info"><i class="fas fa-arrows-rotate mr-2"></i>Pendiente</span></h5>`;
                         break;
@@ -158,7 +161,7 @@ let tableOrderDispatches = $('#orderDispatches').DataTable({
                         return `<h5><span class="badge badge-pill bg-dark text-white"><i class="fas fa-reply-all mr-2 text-white"></i>Devuelto</span></h5>`;
                         break;
                     case 'Parcialmente Despachado':
-                        return `<h5><span class="badge badge-pill bg-purple text-white"><i class="fas fa-share mr-2 text-white"></i>Parcialmente Despachado</span></h5>`;
+                        return `<h5><span class="badge badge-pill bg-purple text-white" style="color:white !important;"><i class="fas fa-share mr-2 text-white"></i>Parcialmente Despachado</span></h5>`;
                         break;
                     case 'Despachado':
                         return `<h5><span class="badge badge-pill badge-primary"><i class="fas fa-share-all mr-2"></i>Despachado</span></h5>`;
@@ -268,7 +271,7 @@ function tableOrderDispatchesFilter(row) {
                         </tr>
                     </thead>
                     <tbody>`;
-                    
+
     $.each(row.order_dispatches, function(index, order_dispatch) {
         table += `<tr>
             <td> ${order_dispatch.id} </td>
@@ -330,13 +333,10 @@ function tableOrderDispatchesFilter(row) {
                     <i class="fas fa-arrows-rotate text-white"></i>
                 </a>`;
 
-                table += `<form id="downloadForm" action="/Dashboard/Orders/Dispatch/Download" method="POST" target="_blank">
-                    <input type="hidden" name="_token" value="${$('meta[name="csrf-token"]').attr('content')}">
-                    <input type="hidden" name="id" value="${order_dispatch.id}">
-                    <button type="submit" class="btn btn-sm mr-2" style="background: mediumvioletred; color: white;" title="PDF orden de despacho del pedido.">
-                        <i class="fas fa-file-pdf text-white"></i>
-                    </button>
-                </form>`;
+                table += `<a href="/Dashboard/Orders/Dispatch/Download/${order_dispatch.id}" target="_blank" type="button"
+                class="btn btn-sm mr-2" style="background: mediumvioletred; color: white;" title="PDF orden de despacho del pedido.">
+                    <i class="fas fa-file-pdf text-white"></i>
+                </a>`;
 
                 table += `<a onclick="PackingOrderDispatch(${order_dispatch.id})" type="button"
                 class="btn btn-primary btn-sm mr-2 text-white" title="Empacar orden de despacho del pedido.">
