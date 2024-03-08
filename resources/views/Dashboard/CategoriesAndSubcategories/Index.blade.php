@@ -65,12 +65,12 @@
                                 <table id="categoriesAndSubcategories" class="table table-bordered table-hover dataTable dtr-inline nowrap w-100">
                                     <thead class="thead-dark">
                                         <tr>
+                                            <th></th>
                                             <th>#</th>
                                             <th>Linea</th>
                                             <th>Categoria</th>
                                             <th>Codigo</th>
                                             <th>Description</th>
-                                            <th>Subcategorias</th>
                                             <th>Estado</th>
                                             <th>Acciones</th>
                                         </tr>

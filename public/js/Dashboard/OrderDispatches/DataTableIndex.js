@@ -256,18 +256,19 @@ tableOrderDispatches.on('click', 'button.dt-expand', function (e) {
 
 function tableOrderDispatchesFilter(row) {
     let table = `<table class="table table-bordered table-hover dataTable dtr-inline nowrap w-100" id="orderDispatches${row.id}">
-        <thead>
-        <tr>
-        <th>#</th>
-        <th>Consecutivo</th>
-        <th>Filtrador</th>
-        <th>Fecha de Filtrado</th>
-        <th>Fecha de Despacho</th>
-        <th>Estado</th>
-        <th>Acciones</th>
-        </tr>
-        </thead>
-        <tbody>`;
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Consecutivo</th>
+                            <th>Filtrador</th>
+                            <th>Fecha de Filtrado</th>
+                            <th>Fecha de Despacho</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>`;
+                    
     $.each(row.order_dispatches, function(index, order_dispatch) {
         table += `<tr>
             <td> ${order_dispatch.id} </td>
@@ -329,10 +330,13 @@ function tableOrderDispatchesFilter(row) {
                     <i class="fas fa-arrows-rotate text-white"></i>
                 </a>`;
 
-                table += `<a href="/Dashboard/Orders/Dispatch/Details/Index/${order_dispatch.id}" type="button" target="_blank"
-                class="btn btn-sm mr-2" style="background: mediumvioletred; color: white;" title="Editar orden de despacho del pedido.">
-                    <i class="fas fa-file-pdf text-white"></i>
-                </a>`;
+                table += `<form id="downloadForm" action="/Dashboard/Orders/Dispatch/Download" method="POST" target="_blank">
+                    <input type="hidden" name="_token" value="${$('meta[name="csrf-token"]').attr('content')}">
+                    <input type="hidden" name="id" value="${order_dispatch.id}">
+                    <button type="submit" class="btn btn-sm mr-2" style="background: mediumvioletred; color: white;" title="PDF orden de despacho del pedido.">
+                        <i class="fas fa-file-pdf text-white"></i>
+                    </button>
+                </form>`;
 
                 table += `<a onclick="PackingOrderDispatch(${order_dispatch.id})" type="button"
                 class="btn btn-primary btn-sm mr-2 text-white" title="Empacar orden de despacho del pedido.">

@@ -65,10 +65,10 @@
                                 <table id="areasAndCharges" class="table table-bordered table-hover dataTable dtr-inline nowrap w-100">
                                     <thead class="thead-dark">
                                         <tr>
+                                            <th></th>
                                             <th>#</th>
                                             <th>Area</th>
                                             <th>Description</th>
-                                            <th>Cargos</th>
                                             <th>Estado</th>
                                             <th>Acciones</th>
                                         </tr>

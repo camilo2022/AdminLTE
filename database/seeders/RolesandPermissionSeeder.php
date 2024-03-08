@@ -447,7 +447,7 @@ class RolesAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Dashboard.Orders.Dispatch.Cancel'])->syncRoles([$OrderDispatches]);
         Permission::create(['name' => 'Dashboard.Orders.Dispatch.Decline'])->syncRoles([$OrderDispatches]);
         Permission::create(['name' => 'Dashboard.Orders.Dispatch.Show'])->syncRoles([$OrderDispatches]);
-        Permission::create(['name' => 'Dashboard.Orders.Dispatch.Pdf'])->syncRoles([$OrderDispatches]);
+        Permission::create(['name' => 'Dashboard.Orders.Dispatch.Download'])->syncRoles([$OrderDispatches]);
         Permission::create(['name' => 'Dashboard.Orders.Dispatch.Details.Index'])->syncRoles([$OrderDispatches]);
         Permission::create(['name' => 'Dashboard.Orders.Dispatch.Details.Index.Query'])->syncRoles([$OrderDispatches]);
         Permission::create(['name' => 'Dashboard.Orders.Dispatch.Details.Pending'])->syncRoles([$OrderDispatches]);

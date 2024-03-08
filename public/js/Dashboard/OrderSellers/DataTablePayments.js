@@ -7,11 +7,12 @@ let tableOrderSellerPayments = $('#orderSellerPayments').DataTable({
         data: function (request) {
             var columnMappings = {
                 0: 'id',
-                1: 'value',
-                2: 'reference',
-                3: 'date',
-                4: 'payment_type_id',
-                5: 'bank_id',
+                1: 'id',
+                2: 'value',
+                3: 'reference',
+                4: 'date',
+                5: 'payment_type_id',
+                6: 'bank_id',
             };
             request._token = $('meta[name="csrf-token"]').attr('content');
             request.order_id = $('#IndexOrderSellerDetail').attr('data-id');
@@ -31,6 +32,16 @@ let tableOrderSellerPayments = $('#orderSellerPayments').DataTable({
         }
     },
     columns: [
+        {
+            data: 'files',
+            render: function (data, type, row) {
+                let btn = '';
+                if(data.length > 0) {
+                    btn += '<button class="btn btn-sm btn-success dt-expand rounded-circle"><i class="fas fa-plus"></i</button>';
+                }
+                return btn;
+            },
+        },
         { data: 'id' },
         {
             data: 'value',
@@ -53,39 +64,6 @@ let tableOrderSellerPayments = $('#orderSellerPayments').DataTable({
             }
         },
         {
-            data: 'files',
-            render: function(data, type, row) {
-                var table = `<table border="1" class="w-100">
-                    <thead class="thead-dark">
-                        <tr>
-                            <th>#</th>
-                            <th>Nombre</th>
-                            <th>Extension</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>`;
-
-                $.each(data, function(index, file) {
-                    table += `<tr>
-                                    <td>${file.id}</td>
-                                    <td>${file.name}</td>
-                                    <td>${file.extension}</td>
-                                    <td>
-                                        <a href="${file.path}" target="_blank"
-                                        class="btn btn-info btn-sm mr-2" title="Ver soporte de pago.">
-                                            <i class="fas fa-eye text-white"></i>
-                                        </a>
-                                    </td>
-                                </tr>`;
-                });
-
-                table += `</tbody></table>`;
-
-                return data.length > 0 ? table : '';
-            }
-        },
-        {
             data: 'deleted_at',
             render: function (data, type, row) {
                 let btn = `<div class="text-center" style="width: 100%;">`;
@@ -105,11 +83,11 @@ let tableOrderSellerPayments = $('#orderSellerPayments').DataTable({
     columnDefs: [
         {
             orderable: true,
-            targets: [0, 1, 2, 3, 4, 5]
+            targets: [1, 2, 3, 4, 5, 6]
         },
         {
             orderable: false,
-            targets: [6, 7]
+            targets: [0, 7]
         }
     ],
     pagingType: 'full_numbers',
@@ -140,3 +118,50 @@ let tableOrderSellerPayments = $('#orderSellerPayments').DataTable({
     searching: true,
     autoWidth: true
 });
+
+tableOrderSellerPayments.on('click', 'button.dt-expand', function (e) {
+    let tr = e.target.closest('tr');
+    let row = tableOrderSellerPayments.row(tr);
+
+    let iconButton = $(this);
+
+    if (row.child.isShown()) {
+        row.child.hide();
+        iconButton.html('<i class="fas fa-plus"></i>').removeClass('btn-danger').addClass('btn-success');
+    } else {
+        row.child(tableOrderSellerPaymentFiles(row.data())).show();
+        iconButton.html('<i class="fas fa-minus"></i>').removeClass('btn-success').addClass('btn-danger');
+        $(`#files${row.data().id}`).DataTable({});
+    }
+});
+
+function tableOrderSellerPaymentFiles(row) {
+    let table = `<table class="table table-bordered table-hover dataTable dtr-inline nowrap w-100" id="files${row.id}">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Nombre</th>
+                            <th>Extension</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>`;
+
+    $.each(row.files, function(index, file) {
+        table += `<tr>
+                        <td>${file.id}</td>
+                        <td>${file.name}</td>
+                        <td>${file.extension}</td>
+                        <td>
+                            <a href="${file.path}" target="_blank"
+                            class="btn btn-info btn-sm mr-2" title="Ver soporte de pago.">
+                                <i class="fas fa-eye text-white"></i>
+                            </a>
+                        </td>
+                    </tr>`;
+    });
+
+    table += `</tbody></table>`;
+
+    return table;
+}

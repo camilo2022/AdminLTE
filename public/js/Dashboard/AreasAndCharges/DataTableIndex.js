@@ -7,8 +7,9 @@ let tableAreasAndCharges = $('#areasAndCharges').DataTable({
         data: function (request) {
             var columnMappings = {
                 0: 'id',
-                1: 'name',
-                2: 'description',
+                1: 'id',
+                2: 'name',
+                3: 'description',
                 4: 'deleted_at',
             };
             request._token = $('meta[name="csrf-token"]').attr('content');
@@ -28,39 +29,19 @@ let tableAreasAndCharges = $('#areasAndCharges').DataTable({
         }
     },
     columns: [
+        {
+            data: 'charges',
+            render: function (data, type, row) {
+                let btn = '';
+                if(data.length > 0) {
+                    btn += '<button class="btn btn-sm btn-success dt-expand rounded-circle"><i class="fas fa-plus"></i</button>';
+                }
+                return btn;
+            },
+        },
         { data: 'id' },
         { data: 'name' },
         { data: 'description' },
-        {
-            data: 'charges',
-            render: function(data, type, row) {
-                var table = `<table border="1" class="w-100">
-                    <thead class="thead-dark">
-                        <tr>
-                            <th>#</th>
-                            <th>Cargo</th>
-                            <th>Descripción</th>
-                            <th>Estado</th>
-                        </tr>
-                    </thead>
-                    <tbody>`;
-
-                $.each(data, function(index, charge) {
-                    table += `<tr>
-                                    <td>${charge.id}</td>
-                                    <td>${charge.name}</td>
-                                    <td>${charge.description ?? ''}</td>
-                                    <td>${charge.deleted_at === null ?
-                                        '<span class="badge badge-success"><i class="fas fa-check mr-2"></i>Activa</span>' :
-                                        '<span class="badge badge-danger"><i class="fas fa-xmark mr-2"></i>Inactiva</span>'}</td>
-                                </tr>`;
-                });
-
-                table += `</tbody></table>`;
-
-                return data.length > 0 ? table : '';
-            }
-        },
         {
             data: 'deleted_at',
             render: function (data, type, row) {
@@ -99,11 +80,11 @@ let tableAreasAndCharges = $('#areasAndCharges').DataTable({
     columnDefs: [
         {
             orderable: true,
-            targets: [0, 1, 2, 4]
+            targets: [0, 1, 2, 3, 4]
         },
         {
             orderable: false,
-            targets: [3, 5]
+            targets: [5]
         }
     ],
     pagingType: 'full_numbers',
@@ -134,3 +115,47 @@ let tableAreasAndCharges = $('#areasAndCharges').DataTable({
     searching: true,
     autoWidth: true
 });
+
+tableAreasAndCharges.on('click', 'button.dt-expand', function (e) {
+    let tr = e.target.closest('tr');
+    let row = tableAreasAndCharges.row(tr);
+
+    let iconButton = $(this);
+
+    if (row.child.isShown()) {
+        row.child.hide();
+        iconButton.html('<i class="fas fa-plus"></i>').removeClass('btn-danger').addClass('btn-success');
+    } else {
+        row.child(tableCharges(row.data())).show();
+        iconButton.html('<i class="fas fa-minus"></i>').removeClass('btn-success').addClass('btn-danger');
+        $(`#charges${row.data().id}`).DataTable({});
+    }
+});
+
+function tableCharges(row) {
+    let table = `<table class="table table-bordered table-hover dataTable dtr-inline nowrap w-100" id="charges${row.id}">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Cargo</th>
+                            <th>Descripción</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>`;
+
+    $.each(row.charges, function(index, charge) {
+    table += `<tr>
+            <td>${charge.id}</td>
+            <td>${charge.name}</td>
+            <td>${charge.description ?? ''}</td>
+            <td>${charge.deleted_at === null ?
+                '<span class="badge badge-pill badge-success"><i class="fas fa-check mr-2"></i>Activa</span>' :
+                '<span class="badge badge-pill badge-danger"><i class="fas fa-xmark mr-2"></i>Inactiva</span>'}</td>
+        </tr>`;
+    });
+
+    table += `</tbody></table>`;
+
+    return table;
+}

@@ -1,0 +1,9 @@
+{
+    "font awesome 5 brands": {
+        "normal": "font_awesome_5_brands_normal_0a90141515ab79f21572abbb40aa93ec"
+    },
+    "font awesome 5 free": {
+        "normal": "C:\\laragon\\www\\AdminLTE\\vendor\\dompdf\\dompdf\/lib\/fonts\/font_awesome_5_free_normal_1e4eb65c8909b692fa93ec104b292da7",
+        "900": "font_awesome_5_free_900_7a391bfaa5a3bae95b80e593a78c65b9"
+    }
+}

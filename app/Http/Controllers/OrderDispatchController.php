@@ -9,7 +9,7 @@ use App\Http\Requests\OrderDispatch\OrderDispatchDeclineRequest;
 use App\Http\Requests\OrderDispatch\OrderDispatchFilterQueryDetailsRequest;
 use App\Http\Requests\OrderDispatch\OrderDispatchFilterQueryInventoriesRequest;
 use App\Http\Requests\OrderDispatch\OrderDispatchIndexQueryRequest;
-use App\Http\Requests\OrderDispatch\OrderDispatchPdfRequest;
+use App\Http\Requests\OrderDispatch\OrderDispatchDownloadRequest;
 use App\Http\Requests\OrderDispatch\OrderDispatchPendingRequest;
 use App\Http\Requests\OrderDispatch\OrderDispatchStoreRequest;
 use App\Http\Resources\OrderDispatch\OrderDispatchIndexQueryCollection;
@@ -606,10 +606,10 @@ class OrderDispatchController extends Controller
         }
     }
 
-    public function pdf(OrderDispatchPdfRequest $request)
+    public function download(OrderDispatchDownloadRequest $request)
     {
         try {
-            $orderDispatch = OrderDispatch::with('order', 'details.quantities')->findOrFail($request->input('id'));
+            $orderDispatch = OrderDispatch::with('order', 'order_dispatch_details.order_dispatch_detail_quantities')->findOrFail($request->input('id'));
             $pdf = \PDF::loadView('Dashboard.OrderDispatches.PDF', compact('orderDispatch'))->setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true]);
             /* $pdf = \PDF::loadView('Browser_public.pdfdocument', compact('queryic'))->output();
             return $pdf->download('pdfdocument.pdf'); */

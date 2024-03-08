@@ -64,25 +64,14 @@
         <br><br>
 
         <p style="position: relative;bottom:1%;text-align:justify;">
-            El señor <label
-                style="position: relative;top:14px;font-weight:bold;font-size:14px;">{{ $queryic->nombrecompleto }}</label>
-            &nbsp;<label style="position: relative;top:14px;font-weight:bold;font-size:14px;">{{ $queryic->lastname }}</label>
-            Identificado con la
-            Cédula de Ciudadanía No.{{ $resultadocedul }}de Cúcuta,
-            labora en esta Empresa con un contrato a término <font style="font-weight:bold;font-size:14px;">
-                {{ $queryic->name_type_contract }}</font> desde el <font style="font-weight:bold;font-size:14px;">
-                {{ $fechaAdmision }}</font> desempeñando el cargo
-            de <font style="font-weight:bold;font-size:14px;">{{ $queryic->cargo }}</font>. Devengando un salario mensual de <font
-                style="font-weight:bold;font-size:14px;">{{ $numero_en_palabras }} </font> (M/CTE) (${{ $resultadovamor }}), Más
-            auxilio de transporte por el
-            valor de <font style="font-weight:bold;font-size:14px;">${{ $resultadoauxiliotrasporte }}.</font>
+            
         </p>
 
         <br>
 
         <p>
 
-            Se expide la presente solicitud a quien pueda interesar el dia {{-- {{ $carbon1 }} --}}.
+            Se expide la presente solicitud a quien pueda interesar el dia .
 
         </p>
 

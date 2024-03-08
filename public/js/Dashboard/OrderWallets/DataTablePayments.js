@@ -7,11 +7,12 @@ let tableOrderWalletPayments = $('#orderWalletPayments').DataTable({
         data: function (request) {
             var columnMappings = {
                 0: 'id',
-                1: 'value',
-                2: 'reference',
-                3: 'date',
-                4: 'payment_type_id',
-                5: 'bank_id',
+                1: 'id',
+                2: 'value',
+                3: 'reference',
+                4: 'date',
+                5: 'payment_type_id',
+                6: 'bank_id',
             };
             request._token = $('meta[name="csrf-token"]').attr('content');
             request.order_id = $('#IndexOrderWalletDetail').attr('data-id');
@@ -31,6 +32,16 @@ let tableOrderWalletPayments = $('#orderWalletPayments').DataTable({
         }
     },
     columns: [
+        {
+            data: 'files',
+            render: function (data, type, row) {
+                let btn = '';
+                if(data.length > 0) {
+                    btn += '<button class="btn btn-sm btn-success dt-expand rounded-circle"><i class="fas fa-plus"></i</button>';
+                }
+                return btn;
+            },
+        },
         { data: 'id' },
         {
             data: 'value',
@@ -53,38 +64,21 @@ let tableOrderWalletPayments = $('#orderWalletPayments').DataTable({
             }
         },
         {
-            data: 'files',
-            render: function(data, type, row) {
-                var table = `<table border="1" class="w-100">
-                    <thead class="thead-dark">
-                        <tr>
-                            <th>#</th>
-                            <th>Nombre</th>
-                            <th>Extension</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>`;
+            data: 'deleted_at',
+            render: function (data, type, row) {
+                let btn = `<div class="text-center" style="width: 100%;">`;
 
-                $.each(data, function(index, file) {
-                    table += `<tr>
-                                    <td>${file.id}</td>
-                                    <td>${file.name}</td>
-                                    <td>${file.extension}</td>
-                                    <td>
-                                        <a href="${file.path}" target="_blank"
-                                        class="btn btn-info btn-sm mr-2" title="Ver soporte de pago.">
-                                            <i class="fas fa-eye text-white"></i>
-                                        </a>
-                                    </td>
-                                </tr>`;
-                });
+                if(row.model.wallet_status === 'Pendiente') {
+                    btn += `<a onclick="RemovePaymentOrderSeller(${row.id})"
+                    class="btn btn-danger btn-sm mr-2" title="Eliminar pago del pedido.">
+                        <i class="fas fa-trash text-white"></i>
+                    </a>`;
+                }
 
-                table += `</tbody></table>`;
-
-                return data.length > 0 ? table : '';
+                btn += `</div>`;
+                return btn;
             }
-        },
+        }
     ],
     columnDefs: [
         {
@@ -124,3 +118,50 @@ let tableOrderWalletPayments = $('#orderWalletPayments').DataTable({
     searching: true,
     autoWidth: true
 });
+
+tableOrderWalletPayments.on('click', 'button.dt-expand', function (e) {
+    let tr = e.target.closest('tr');
+    let row = tableOrderWalletPayments.row(tr);
+
+    let iconButton = $(this);
+
+    if (row.child.isShown()) {
+        row.child.hide();
+        iconButton.html('<i class="fas fa-plus"></i>').removeClass('btn-danger').addClass('btn-success');
+    } else {
+        row.child(tableOrderWalletPaymentFiles(row.data())).show();
+        iconButton.html('<i class="fas fa-minus"></i>').removeClass('btn-success').addClass('btn-danger');
+        $(`#files${row.data().id}`).DataTable({});
+    }
+});
+
+function tableOrderWalletPaymentFiles(row) {
+    let table = `<table class="table table-bordered table-hover dataTable dtr-inline nowrap w-100" id="files${row.id}">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Nombre</th>
+                            <th>Extension</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>`;
+
+    $.each(row.files, function(index, file) {
+        table += `<tr>
+                        <td>${file.id}</td>
+                        <td>${file.name}</td>
+                        <td>${file.extension}</td>
+                        <td>
+                            <a href="${file.path}" target="_blank"
+                            class="btn btn-info btn-sm mr-2" title="Ver soporte de pago.">
+                                <i class="fas fa-eye text-white"></i>
+                            </a>
+                        </td>
+                    </tr>`;
+    });
+
+    table += `</tbody></table>`;
+
+    return table;
+}
