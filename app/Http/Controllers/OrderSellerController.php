@@ -312,9 +312,24 @@ class OrderSellerController extends Controller
         try {
             $order = Order::with('order_details.order_detail_quantities')->findOrFail($request->input('id'));
 
-            foreach($order->order_details as $detail) {
-                if($detail->status == 'Pendiente') {
-                    $boolean = true;
+            foreach($order->order_details->whereIn('status', ['Pendiente']) as $detail) {
+                $boolean = true;
+                foreach($detail->order_detail_quantities as $quantity) {
+                    $inventory = Inventory::with('warehouse')
+                        ->whereHas('warehouse', fn($subQuery) => $subQuery->where('to_discount', true))
+                        ->where('product_id', $detail->product_id)
+                        ->where('size_id', $quantity->size_id)
+                        ->where('color_id', $detail->color_id)
+                        ->where('tone_id', $detail->tone_id)
+                        ->first();
+
+                    if($inventory->quantity < $quantity->quantity) {
+                        $boolean = false;
+                        break;
+                    }
+                }
+
+                if($boolean){
                     foreach($detail->order_detail_quantities as $quantity) {
                         $inventory = Inventory::with('warehouse')
                             ->whereHas('warehouse', fn($subQuery) => $subQuery->where('to_discount', true))
@@ -324,33 +339,16 @@ class OrderSellerController extends Controller
                             ->where('tone_id', $detail->tone_id)
                             ->first();
 
-                        if($inventory->quantity < $quantity->quantity) {
-                            $boolean = false;
-                            break;
-                        }
+                        $inventory->quantity -= $quantity->quantity;
+                        $inventory->save();
                     }
 
-                    if($boolean){
-                        foreach($detail->order_detail_quantities as $quantity) {
-                            $inventory = Inventory::with('warehouse')
-                                ->whereHas('warehouse', fn($subQuery) => $subQuery->where('to_discount', true))
-                                ->where('product_id', $detail->product_id)
-                                ->where('size_id', $quantity->size_id)
-                                ->where('color_id', $detail->color_id)
-                                ->where('tone_id', $detail->tone_id)
-                                ->first();
-
-                            $inventory->quantity -= $quantity->quantity;
-                            $inventory->save();
-                        }
-
-                        $detail->status = 'Revision';
-                    } else {
-                        $detail->status = 'Agotado';
-                    }
-
-                    $detail->save();
+                    $detail->status = 'Revision';
+                } else {
+                    $detail->status = 'Agotado';
                 }
+
+                $detail->save();
             }
 
             $order->seller_status = 'Aprobado';
@@ -434,7 +432,7 @@ class OrderSellerController extends Controller
         try {
             $order = Order::with('order_details.order_detail_quantities')->findOrFail($request->input('id'));
 
-            foreach($order->order_details as $detail) {
+            foreach($order->order_details->whereIn('status', ['Pendiente', 'Revision']) as $detail) {
                 if($detail->status == 'Revision') {
                     foreach($detail->order_detail_quantities as $quantity) {
                         $inventory = Inventory::with('warehouse')

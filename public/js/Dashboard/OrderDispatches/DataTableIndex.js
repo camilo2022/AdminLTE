@@ -143,7 +143,7 @@ let tableOrderDispatches = $('#orderDispatches').DataTable({
                         return `<h5><span class="badge badge-pill bg-orange text-white" style="color:white !important;"><i class="fas fa-xmark mr-2 text-white"></i>Cancelado</span></h5>`;
                         break;
                     case 'Rechazado':
-                        return `<span class="badge badge-pill badge-danger text-white" id="dispatched_status"><i class="fas fa-ban mr-2 text-white"></i>Rechazado</span>`;
+                        return `<span class="badge badge-pill badge-danger text-white"><i class="fas fa-ban mr-2 text-white"></i>Rechazado</span>`;
                         break
                     case 'Pendiente':
                         return `<h5><span class="badge badge-pill badge-info"><i class="fas fa-arrows-rotate mr-2"></i>Pendiente</span></h5>`;
@@ -318,7 +318,7 @@ function tableOrderDispatchesFilter(row) {
                 </a>`;
 
                 table += `<a onclick="CancelOrderDispatch(${order_dispatch.id})" type="button"
-                class="btn btn-warning btn-sm mr-2" title="Cancelar detalle pedido.">
+                class="btn btn-warning btn-sm mr-2" title="Cancelar orden de despacho del pedido.">
                     <i class="fas fa-xmark text-white"></i>
                 </a>`;
 

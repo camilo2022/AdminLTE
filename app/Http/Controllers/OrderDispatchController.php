@@ -349,7 +349,7 @@ class OrderDispatchController extends Controller
         try {
             $orderDispatch = OrderDispatch::with('order', 'order_dispatch_details.order_detail')->findOrFail($request->input('id'));
 
-            foreach($orderDispatch->order_dispatch_details as $detail) {
+            foreach($orderDispatch->order_dispatch_details->whereIn('status', ['Aprobado']) as $detail) {
                 $detail->status = 'Pendiente';
                 $detail->save();
             }
@@ -397,7 +397,7 @@ class OrderDispatchController extends Controller
         try {
             $orderDispatch = OrderDispatch::with('order', 'order_dispatch_details.order_detail')->findOrFail($request->input('id'));
 
-            foreach($orderDispatch->order_dispatch_details as $detail) {
+            foreach($orderDispatch->order_dispatch_details->whereIn('status', ['Pendiente']) as $detail) {
                 $detail->status = 'Aprobado';
                 $detail->save();
             }
@@ -445,7 +445,7 @@ class OrderDispatchController extends Controller
         try {
             $orderDispatch = OrderDispatch::with('order.order_details.order_detail_quantities', 'order_dispatch_details.order_detail', 'order_dispatch_details.order_dispatch_detail_quantities.order_detail_quantity')->findOrFail($request->input('id'));
 
-            foreach($orderDispatch->order_dispatch_details as $detail) {
+            foreach($orderDispatch->order_dispatch_details->whereIn('status', ['Pendiente', 'Aprobado']) as $detail) {
                 $detail->status = 'Cancelado';
                 $detail->save();
                 foreach($detail->order_dispatch_detail_quantities as $quantity) {
@@ -546,7 +546,7 @@ class OrderDispatchController extends Controller
         try {
             $orderDispatch = OrderDispatch::with('order', 'order_dispatch_details.order_detail', 'order_dispatch_details.order_dispatch_detail_quantities.order_detail_quantity')->findOrFail($request->input('id'));
 
-            foreach($orderDispatch->order_dispatch_details as $detail) {
+            foreach($orderDispatch->order_dispatch_details->whereIn('status', ['Pendiente']) as $detail) {
                 $detail->status = 'Rechazado';
                 $detail->save();
 

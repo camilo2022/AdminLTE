@@ -26,7 +26,7 @@ class OrderDispatchDetailController extends Controller
     public function index($id)
     {
         try {
-            $orderDispatch = OrderDispatch::with('order.sale_channel', 'order.seller_user', 'order.client.document_type', 'order.client_branch.country', 'order.client_branch.departament', 'order.client_branch.city')->findOrFail($id);
+            $orderDispatch = OrderDispatch::with('order.sale_channel', 'order.seller_user', 'order.wallet_user', 'order.client.document_type', 'order.client_branch.country', 'order.client_branch.departament', 'order.client_branch.city')->findOrFail($id);
             return view('Dashboard.OrderDispatchDetails.Index', compact('orderDispatch'));
         } catch (ModelNotFoundException $e) {
             return back()->with('danger', 'Ocurrió un error al cargar el pedido: ' . $this->getMessage('ModelNotFoundException'));

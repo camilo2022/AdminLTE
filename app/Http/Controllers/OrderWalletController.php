@@ -136,8 +136,8 @@ class OrderWalletController extends Controller
         try {
             $order = Order::with('order_details')->findOrFail($request->input('id'));
 
-            foreach($order->order_details as $detail) {
-                $detail->status = $detail->status == 'Revision' ? 'Aprobado' : $detail->status;
+            foreach($order->order_details->whereIn('status', ['Revision']) as $detail) {
+                $detail->status = 'Aprobado';
                 $detail->save();
             }
 
@@ -226,11 +226,9 @@ class OrderWalletController extends Controller
         try {
             $order = Order::with('order_details')->findOrFail($request->input('id'));
 
-            foreach($order->order_details as $detail) {
-                if($detail->status == 'Rechazado') {
-                    $detail->status = 'Pendiente';
-                    $detail->save();
-                }
+            foreach($order->order_details->whereIn('status', ['Agotado']) as $detail) {
+                $detail->status = 'Pendiente';
+                $detail->save();
             }
 
             $order->wallet_status = 'Pendiente';
@@ -277,20 +275,18 @@ class OrderWalletController extends Controller
         try {
             $order = Order::with('order_details.order_detail_quantities')->findOrFail($request->input('id'));
 
-            foreach($order->order_details as $detail) {
-                if($detail->status == 'Revision') {
-                    foreach($detail->order_detail_quantities as $quantity) {
-                        $inventory = Inventory::with('warehouse')
-                            ->whereHas('warehouse', fn($subQuery) => $subQuery->where('to_discount', true))
-                            ->where('product_id', $detail->product_id)
-                            ->where('size_id', $quantity->size_id)
-                            ->where('color_id', $detail->color_id)
-                            ->where('tone_id', $detail->tone_id)
-                            ->first();
+            foreach($order->order_details->whereIn('status', ['Revision', 'Aprobado']) as $detail) {
+                foreach($detail->order_detail_quantities as $quantity) {
+                    $inventory = Inventory::with('warehouse')
+                        ->whereHas('warehouse', fn($subQuery) => $subQuery->where('to_discount', true))
+                        ->where('product_id', $detail->product_id)
+                        ->where('size_id', $quantity->size_id)
+                        ->where('color_id', $detail->color_id)
+                        ->where('tone_id', $detail->tone_id)
+                        ->first();
 
-                        $inventory->quantity += $quantity->quantity;
-                        $inventory->save();
-                    }
+                    $inventory->quantity += $quantity->quantity;
+                    $inventory->save();
                 }
 
                 $detail->status = 'Rechazado';
