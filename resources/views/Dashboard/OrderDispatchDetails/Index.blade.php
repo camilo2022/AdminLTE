@@ -88,11 +88,11 @@
                                         <i class="fas fa-file-pdf text-white"></i>
                                     </a>
                                 </li>
-                                <li class="nav-item ml-2">
+                                <!-- <li class="nav-item ml-2">
                                     <a class="btn btn-primary text-white" type="button" onclick="PackingOrderDispatch(({{ $orderDispatch->id }}, false)" title="Empacar orden de despacho del pedido.">
                                         <i class="fas fa-box-open text-white"></i>
                                     </a>
-                                </li>
+                                </li> -->
                             @endif
                         </ul>
                     </div>

@@ -1,17 +1,17 @@
-function DeclineOrderDispatchDetail(id) {
+function ApproveOrderDispatchDetail(id) {
     Swal.fire({
-        title: '¿Desea cancelar el detalle de la orden de despacho del pedido?',
-        text: 'El detalle de la orden de despacho del pedido será cancelado.',
+        title: '¿Desea aprobar el detalle de la orden de despacho del pedido?',
+        text: 'El detalle de la orden de despacho del pedido será aprobado.',
         icon: 'warning',
         showCancelButton: true,
         cancelButtonColor: '#DD6B55',
         confirmButtonColor: '#3085d6',
-        confirmButtonText: 'Si, cancelar!',
+        confirmButtonText: 'Si, aprobar!',
         cancelButtonText: 'No, cancelar!',
     }).then((result) => {
         if (result.value) {
             $.ajax({
-                url: `/Dashboard/Orders/Dispatch/Details/Decline`,
+                url: `/Dashboard/Orders/Dispatch/Details/Approve`,
                 type: 'PUT',
                 data: {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
@@ -19,20 +19,20 @@ function DeclineOrderDispatchDetail(id) {
                 },
                 success: function(response) {
                     $('#IndexOrderDispatchDetail').trigger('click');
-                    DeclineOrderDispatchDetailAjaxSuccess(response);
+                    ApproveOrderDispatchDetailAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
                     $('#IndexOrderDispatchDetail').trigger('click');
-                    DeclineOrderDispatchDetailAjaxError(xhr);
+                    ApproveOrderDispatchDetailAjaxError(xhr);
                 }
             });
         } else {
-            toastr.info('El detalle de la orden de despacho del pedido seleccionada no fue cancelado.')
+            toastr.info('El detalle de la orden de despacho del pedido seleccionada no fue aprobado.')
         }
     });
 }
 
-function DeclineOrderDispatchDetailAjaxSuccess(response) {
+function ApproveOrderDispatchDetailAjaxSuccess(response) {
     if(response.status === 200) {
         toastr.success(response.message);
     }
@@ -42,7 +42,7 @@ function DeclineOrderDispatchDetailAjaxSuccess(response) {
     }
 }
 
-function DeclineOrderDispatchDetailAjaxError(xhr) {
+function ApproveOrderDispatchDetailAjaxError(xhr) {
     if(xhr.status === 403) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
     }

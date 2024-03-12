@@ -1,26 +1,26 @@
-$('#IndexOrderSellerDetail').trigger('click');
+$('#IndexOrderDispatchDetail').trigger('click');
 
-function IndexOrderSellerDetail(order_id) {
+function IndexOrderDispatchDetail(order_dispatch_id) {
     $.ajax({
-        url: `/Dashboard/Orders/Seller/Details/Index/Query`,
+        url: `/Dashboard/Orders/Dispatch/Details/Index/Query`,
         type: 'POST',
         data: {
             '_token': $('meta[name="csrf-token"]').attr('content'),
-            'order_id': order_id
+            'order_dispatch_id': order_dispatch_id
         },
         success: function(response) {
-            IndexOrderSellerDetailModalCleaned(response.data.orderDetails, response.data.sizes);
-            IndexOrderSellerDetailAjaxSuccess(response);
+            IndexOrderDispatchDetailModalCleaned(response.data.orderDispatchDetails, response.data.sizes);
+            IndexOrderDispatchDetailAjaxSuccess(response);
         },
         error: function(xhr, textStatus, errorThrown) {
-            IndexOrderSellerDetailAjaxError(xhr);
+            IndexOrderDispatchDetailAjaxError(xhr);
         }
     });
 }
 
-function IndexOrderSellerDetailModalCleaned(details, sizes) {
-    $('#OrderSellerDetailHead').html('');
-    $('#OrderSellerDetailBody').html('');
+function IndexOrderDispatchDetailModalCleaned(details, sizes) {
+    $('#OrderDispatchDetailHead').html('');
+    $('#OrderDispatchDetailBody').html('');
 
     let columns = '';
 
@@ -32,13 +32,14 @@ function IndexOrderSellerDetailModalCleaned(details, sizes) {
                     <th>#</th>
                     <th>Acciones</th>
                     <th>Precio Total</th>
-                    <th>Total</th>
                     <th>Referencia</th>
                     <th>Color</th>
                     <th>Tono</th>
                     ${columns}
+                    <th>Total</th>
                     <th>Observacion</th>
                     <th>Estado</th>
+                    <th>Detalle</th>
                 </tr>`;
 
     let foot = `<tr>
@@ -57,28 +58,71 @@ function IndexOrderSellerDetailModalCleaned(details, sizes) {
 
         switch (detail.status) {
             case 'Pendiente':
-                btn += `<a onclick="EditOrderSellerDetailModal(${detail.id})" type="button"
-                class="btn btn-primary btn-sm mr-2" title="Editar detalle de pedido.">
-                    <i class="fas fa-pen text-white"></i>
+                btn += `<a onclick="CancelOrderDispatchDetail(${detail.id})" type="button"
+                class="btn btn-warning btn-sm mr-2" title="Cancelar detalle de la orden de desoacho del pedido.">
+                    <i class="fas fa-xmark text-white"></i>
                 </a>`;
 
-                btn += `<a onclick="CancelOrderSellerDetail(${detail.id})" type="button"
-                class="btn btn-warning btn-sm mr-2" title="Cancelar detalle de pedido.">
+                btn += `<a onclick="DeclineOrderDispatchDetail(${detail.id})" type="button"
+                class="btn btn-danger btn-sm mr-2" title="Rechazar detalle de la orden de desoacho del pedido.">
+                    <i class="fas fa-ban text-white"></i>
+                </a>`;
+                break;
+            case 'Aprobado':
+                btn += `<a onclick="CancelOrderDispatchDetail(${detail.id})" type="button"
+                class="btn btn-warning btn-sm mr-2" title="Cancelar detalle de la orden de desoacho del pedido.">
                     <i class="fas fa-xmark text-white"></i>
+                </a>`;
+
+                btn += `<a onclick="DeclineOrderDispatchDetail(${detail.id})" type="button"
+                class="btn btn-danger btn-sm mr-2" title="Rechazar detalle de la orden de desoacho del pedido.">
+                    <i class="fas fa-ban text-white"></i>
                 </a>`;
                 break;
             case 'Cancelado':
-                btn += `<a onclick="PendingOrderSellerDetail(${detail.id})" type="button"
-                class="btn btn-info btn-sm mr-2" title="Pendiente detalle de pedido.">
-                    <i class="fas fa-arrows-rotate text-white"></i>
-                </a>`;
+                switch (detail.order_dispatch.dispatch_status) {
+                    case 'Pendiente':
+                        btn += `<a onclick="PendingOrderDispatchDetail(${detail.id})" type="button"
+                        class="btn btn-info btn-sm mr-2" title="Pendiente detalle de la orden de desoacho del pedido.">
+                            <i class="fas fa-arrows-rotate text-white"></i>
+                        </a>`;
+                        break;
+                    case 'Aprobado':
+                        btn += `<a onclick="ApproveOrderDispatchDetail(${detail.id})" type="button"
+                        class="btn btn-success btn-sm mr-2" title="Aprobar detalle de la orden de desoacho del pedido.">
+                            <i class="fas fa-check text-white"></i>
+                        </a>`;
+                        break;
+                    default:
+                        btn += ``;
+                        break;
+                }
+                break;
+            case 'Rechazado':
+                switch (detail.order_dispatch.dispatch_status) {
+                    case 'Pendiente':
+                        btn += `<a onclick="PendingOrderDispatchDetail(${detail.id})" type="button"
+                        class="btn btn-info btn-sm mr-2" title="Pendiente detalle de la orden de desoacho del pedido.">
+                            <i class="fas fa-arrows-rotate text-white"></i>
+                        </a>`;
+                        break;
+                    case 'Aprobado':
+                        btn += `<a onclick="ApproveOrderDispatchDetail(${detail.id})" type="button"
+                        class="btn btn-success btn-sm mr-2" title="Aprobar detalle de la orden de desoacho del pedido..">
+                            <i class="fas fa-check text-white"></i>
+                        </a>`;
+                        break;
+                    default:
+                        btn += ``;
+                        break;
+                }
                 break;
             default:
                 btn += ``;
                 break;
         };
 
-        body += `<td><div class="text-center">${detail.order.seller_status == 'Pendiente' && detail.order.wallet_status == 'Pendiente' && detail.order.dispatched_status == 'Pendiente' ? btn : ''}</div></td>`;
+        body += `<td><div class="text-center">${!detail.order_dispatch.dispatch_status.includes(['Rechazado', 'Cancelado', 'Empacado', 'Despachado']) ? btn : ''}</div></td>`;
 
         let quantities = 0;
 
@@ -90,7 +134,6 @@ function IndexOrderSellerDetailModalCleaned(details, sizes) {
         quantitySum += quantities;
 
         body += `<td>${(quantities * detail.price).toLocaleString('es-CO', { style: 'currency', currency: 'COP' })} COP</td>
-                <td>${quantities}</td>
                 <td>${detail.product.code}</td>
                 <td>${detail.color.name + ' - ' + detail.color.code}</td>
                 <td>${detail.tone.name + ' - ' + detail.tone.code}</td>`;
@@ -99,9 +142,37 @@ function IndexOrderSellerDetailModalCleaned(details, sizes) {
             body += `<td>${detail.quantities[size.id].quantity}</td>`;
         });
 
-        body += `<td>${detail.seller_observation == null ? '' : detail.seller_observation}</td>`;
+        body += `<td>${quantities}</td>
+            <td>${detail.Dispatch_observation == null ? '' : detail.Dispatch_observation}</td>`;
 
         switch (detail.status) {
+            case 'Pendiente':
+                body += `<td><span class="badge badge-pill badge-info"><i class="fas fa-arrows-rotate mr-2"></i>Pendiente</span></td>`;
+                break;
+            case 'Cancelado':
+                body += `<td><span class="badge badge-pill badge-warning text-white"><i class="fas fa-xmark mr-2 text-white"></i>Cancelado</span></td>`;
+                break;
+            case 'Revision':
+                body += `<td><span class="badge badge-pill badge-silver"><i class="fas fa-magnifying-glass mr-2"></i>Revision</span></td>`;
+                break;
+            case 'Aprobado':
+                body += `<td><span class="badge badge-pill badge-success"><i class="fas fa-check mr-2"></i>Aprobado</span></td>`;
+                break;
+            case 'Rechazado':
+                body += `<td><span class="badge badge-pill badge-danger text-white"><i class="fas fa-ban mr-2 text-white"></i>Rechazado</span></td>`;
+                break;
+            case 'Empacado':
+                body += `<td><span class="badge badge-pill bg-gray" style="color:white !important;"><i class="fas fa-box mr-2 text-white"></i>Empacado</span></td>`;
+                break;
+            case 'Despachado':
+                body += `<td><span class="badge badge-pill badge-primary"><i class="fas fa-share mr-2 text-white"></i>Despachado</span></td>`;
+                break;
+            default:
+                body += `<td><span class="badge badge-pill badge-info"><i class="fas fa-arrows-rotate mr-2"></i>Pendiente</span></td>`;
+                break;
+        };
+
+        switch (detail.order_detail_status) {
             case 'Pendiente':
                 body += `<td><span class="badge badge-pill badge-info"><i class="fas fa-arrows-rotate mr-2"></i>Pendiente</span></td>`;
                 break;
@@ -144,6 +215,7 @@ function IndexOrderSellerDetailModalCleaned(details, sizes) {
             <th>${quantitySum}</th>
             <th>-</th>
             <th>-</th>
+            <th>-</th>
             <th>-</th>`;
 
     $.each(sizes, function(index, size) {
@@ -158,18 +230,18 @@ function IndexOrderSellerDetailModalCleaned(details, sizes) {
             <th>-</th>
         </tr>`;
 
-    $('#OrderSellerDetailHead').html(head);
-    $('#OrderSellerDetailBody').html(body);
-    $('#OrderSellerDetailFoot').html(foot);
+    $('#OrderDispatchDetailHead').html(head);
+    $('#OrderDispatchDetailBody').html(body);
+    $('#OrderDispatchDetailFoot').html(foot);
 }
 
-function IndexOrderSellerDetailAjaxSuccess(response) {
+function IndexOrderDispatchDetailAjaxSuccess(response) {
     if(response.status === 204) {
         toastr.info(response.message);
     }
 }
 
-function IndexOrderSellerDetailAjaxError(xhr) {
+function IndexOrderDispatchDetailAjaxError(xhr) {
     if(xhr.status === 403) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
     }

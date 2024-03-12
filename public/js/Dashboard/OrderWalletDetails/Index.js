@@ -33,11 +33,11 @@ function IndexOrderWalletDetailModalCleaned(details, sizes) {
                     <th>#</th>
                     <th>Acciones</th>
                     <th>Precio Total</th>
-                    <th>Total</th>
                     <th>Referencia</th>
                     <th>Color</th>
                     <th>Tono</th>
                     ${columns}
+                    <th>Total</th>
                     <th>Observacion</th>
                     <th>Estado</th>
                 </tr>`;
@@ -118,7 +118,6 @@ function IndexOrderWalletDetailModalCleaned(details, sizes) {
         quantitySum += quantities;
 
         body += `<td>${(quantities * detail.price).toLocaleString('es-CO', { style: 'currency', currency: 'COP' })} COP</td>
-                <td>${quantities}</td>
                 <td>${detail.product.code}</td>
                 <td>${detail.color.name + ' - ' + detail.color.code}</td>
                 <td>${detail.tone.name + ' - ' + detail.tone.code}</td>`;
@@ -127,7 +126,8 @@ function IndexOrderWalletDetailModalCleaned(details, sizes) {
             body += `<td>${detail.quantities[size.id].quantity}</td>`;
         });
 
-        body += `<td>${detail.Wallet_observation == null ? '' : detail.Wallet_observation}</td>`;
+        body += `<td>${quantities}</td>
+            <td>${detail.Wallet_observation == null ? '' : detail.Wallet_observation}</td>`;
 
         switch (detail.status) {
             case 'Pendiente':
@@ -169,7 +169,6 @@ function IndexOrderWalletDetailModalCleaned(details, sizes) {
     });
 
     foot += `<th>${totalSum.toLocaleString('es-CO', { style: 'currency', currency: 'COP' })} COP</th>
-            <th>${quantitySum}</th>
             <th>-</th>
             <th>-</th>
             <th>-</th>`;
@@ -182,7 +181,8 @@ function IndexOrderWalletDetailModalCleaned(details, sizes) {
         foot += `<th>${sizeSum}</th>`;
     });
 
-    foot += `<th>-</th>
+    foot += `<th>${quantitySum}</th>
+            <th>-</th>
             <th>-</th>
         </tr>`;
 

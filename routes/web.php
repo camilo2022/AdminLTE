@@ -573,6 +573,7 @@ Route::middleware(['auth'])->group(function () {
                     Route::controller(OrderDispatchDetailController::class)->group(function () {
                         Route::get('/Index/{id}', 'index')->middleware('can:Dashboard.Orders.Dispatch.Details.Index')->name('Dashboard.Orders.Dispatch.Details.Index');
                         Route::post('/Index/Query', 'indexQuery')->middleware('can:Dashboard.Orders.Dispatch.Details.Index.Query')->name('Dashboard.Orders.Dispatch.Details.Index.Query');
+                        Route::put('/Approve', 'approve')->middleware('can:Dashboard.Orders.Dispatch.Details.Approve')->name('Dashboard.Orders.Dispatch.Details.Approve');
                         Route::put('/Pending', 'pending')->middleware('can:Dashboard.Orders.Dispatch.Details.Pending')->name('Dashboard.Orders.Dispatch.Details.Pending');
                         Route::put('/Cancel', 'cancel')->middleware('can:Dashboard.Orders.Dispatch.Details.Cancel')->name('Dashboard.Orders.Dispatch.Details.Cancel');
                         Route::put('/Decline', 'decline')->middleware('can:Dashboard.Orders.Dispatch.Details.Decline')->name('Dashboard.Orders.Dispatch.Details.Decline');

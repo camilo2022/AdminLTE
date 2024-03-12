@@ -338,10 +338,10 @@ function tableOrderDispatchesFilter(row) {
                     <i class="fas fa-file-pdf text-white"></i>
                 </a>`;
 
-                table += `<a onclick="PackingOrderDispatch(${order_dispatch.id})" type="button"
+                /* table += `<a onclick="PackingOrderDispatch(${order_dispatch.id})" type="button"
                 class="btn btn-primary btn-sm mr-2 text-white" title="Empacar orden de despacho del pedido.">
                     <i class="fas fa-box-open text-white"></i>
-                </a>`;
+                </a>`; */
                 break;
             case 'Empacado':
                 table += `<a onclick="InvoiceOrderDispatchModal(${order_dispatch.id})" type="button"
