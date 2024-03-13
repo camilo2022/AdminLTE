@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\OrderPacked\OrderPackedDeleteRequest;
+use App\Http\Requests\OrderPacked\OrderPackedIndexQueryRequest;
+use App\Http\Requests\OrderPacked\OrderPackedStoreRequest;
+use App\Http\Resources\OrderPacked\OrderPackedIndexQueryCollection;
 use App\Models\OrderDispatch;
 use App\Models\OrderPacking;
 use App\Traits\ApiMessage;
@@ -129,7 +133,7 @@ class OrderPackedController extends Controller
             $order_packed = OrderPacking::findOrFail($request->input('id'))->delete();
             return $this->successResponse(
                 $order_packed,
-                'El tipo de persona fue eliminada exitosamente.',
+                'La orden de empacado fue eliminada exitosamente.',
                 204
             );
         } catch (ModelNotFoundException $e) {
