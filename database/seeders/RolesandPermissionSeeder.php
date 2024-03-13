@@ -458,11 +458,15 @@ class RolesAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Dashboard.Orders.Packed.Index'])->syncRoles([$OrderPackets]);
         Permission::create(['name' => 'Dashboard.Orders.Packed.Index.Query'])->syncRoles([$OrderPackets]);
         Permission::create(['name' => 'Dashboard.Orders.Packed.Store'])->syncRoles([$OrderPackets]);
+        Permission::create(['name' => 'Dashboard.Orders.Packed.Delete'])->syncRoles([$OrderPackets]);
+        Permission::create(['name' => 'Dashboard.Orders.Packed.Package.Index'])->syncRoles([$OrderPackets]);
+        Permission::create(['name' => 'Dashboard.Orders.Packed.Package.Index.Query'])->syncRoles([$OrderPackets]);
+        Permission::create(['name' => 'Dashboard.Orders.Packed.Package.Create'])->syncRoles([$OrderPackets]);
         Permission::create(['name' => 'Dashboard.Orders.Packed.Package.Store'])->syncRoles([$OrderPackets]);
+        Permission::create(['name' => 'Dashboard.Orders.Packed.Package.Edit'])->syncRoles([$OrderPackets]);
+        Permission::create(['name' => 'Dashboard.Orders.Packed.Package.Update'])->syncRoles([$OrderPackets]);
         Permission::create(['name' => 'Dashboard.Orders.Packed.Package.Delete'])->syncRoles([$OrderPackets]);
         Permission::create(['name' => 'Dashboard.Orders.Packed.Package.Details.Add'])->syncRoles([$OrderPackets]);
-        Permission::create(['name' => 'Dashboard.Orders.Packed.Pending'])->syncRoles([$OrderPackets]);
-        Permission::create(['name' => 'Dashboard.Orders.Packed.Cancel'])->syncRoles([$OrderPackets]);
 
         Permission::create(['name' => 'Dashboard.Orders.Invoiced.Index'])->syncRoles([$OrderInvoices]);
         Permission::create(['name' => 'Dashboard.Orders.Invoiced.Index.Query'])->syncRoles([$OrderInvoices]);
