@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as Auditing;
 
@@ -22,8 +23,13 @@ class OrderPackageDetail extends Model implements Auditable
     protected $auditInclude = [
         'order_package_id',
         'order_dispatch_detail_id',
-        'quantity',
+        'quantity'
     ];
+
+    public function order_package_detail_quantities() : HasMany
+    {
+        return $this->hasMany(OrderPackageDetailQuantity::class, 'order_package_detail_id');
+    }
 
     public function order_package() : BelongsTo
     {

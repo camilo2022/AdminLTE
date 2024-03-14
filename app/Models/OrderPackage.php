@@ -16,7 +16,7 @@ class OrderPackage extends Model implements Auditable
     protected $table = 'order_packages';
     protected $fillable = [
         'order_packing_id',
-        'package_id',
+        'package_type_id',
         'weight',
         'package_status',
         'package_date',
@@ -24,13 +24,13 @@ class OrderPackage extends Model implements Auditable
 
     protected $auditInclude = [
         'order_packing_id',
-        'package_id',
+        'package_type_id',
         'weight',
         'package_status',
         'package_date',
     ];
 
-    public function details() : HasMany
+    public function order_package_details() : HasMany
     {
         return $this->hasMany(OrderPackageDetail::class, 'order_package_id');
     }

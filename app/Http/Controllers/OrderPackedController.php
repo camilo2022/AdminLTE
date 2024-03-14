@@ -28,10 +28,10 @@ class OrderPackedController extends Controller
     public function index()
     {
         try {
-            $order_packing = OrderPacking::where('packing_user_id', Auth::user()->id)->where('packing_status', 'Empacando')->first();
-            if($order_packing) {
-                return Redirect::route('Dashboard.Orders.Packed.Package.Index', ['id' => $order_packing->id]);
-            }            
+            $orderPacking = OrderPacking::where('packing_user_id', Auth::user()->id)->where('packing_status', 'Empacando')->first();
+            if($orderPacking) {
+                return Redirect::route('Dashboard.Orders.Packed.Index', ['id' => $orderPacking->id]);
+            }
             return view('Dashboard.OrderPackings.Index');
         } catch (Exception $e) {
             return back()->with('danger', 'Ocurrió un error al cargar la vista: ' . $e->getMessage());
