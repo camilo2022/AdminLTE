@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\OrderPacked\OrderPackedDeleteRequest;
+use App\Http\Requests\OrderPacked\OrderPackedFinishRequest;
 use App\Http\Requests\OrderPacked\OrderPackedIndexQueryRequest;
 use App\Http\Requests\OrderPacked\OrderPackedStoreRequest;
 use App\Http\Resources\OrderPacked\OrderPackedIndexQueryCollection;
@@ -15,6 +16,8 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\URL;
 
 class OrderPackedController extends Controller
@@ -25,6 +28,10 @@ class OrderPackedController extends Controller
     public function index()
     {
         try {
+            $order_packing = OrderPacking::where('packing_user_id', Auth::user()->id)->where('packing_status', 'Empacando')->first();
+            if($order_packing) {
+                return Redirect::route('Dashboard.Orders.Packed.Package.Index', ['id' => $order_packing->id]);
+            }            
             return view('Dashboard.OrderPackings.Index');
         } catch (Exception $e) {
             return back()->with('danger', 'Ocurrió un error al cargar la vista: ' . $e->getMessage());
@@ -37,8 +44,14 @@ class OrderPackedController extends Controller
             $start_date = Carbon::parse($request->input('start_date'))->startOfDay();
             $end_date = Carbon::parse($request->input('end_date'))->endOfDay();
             //Consulta por nombre
-            $orderDispatches = OrderDispatch::with(['order_packing.packing_user',
-                    'order_dispatch_details' => fn($query) => $query->where('status', 'Aprobado'),
+            $orderPackings = OrderDispatch::with(['order', 'dispatch_user',
+                    'order.client' => fn($query) => $query->withTrashed(),
+                    'order.client.country', 'order.client.departament', 'order.client.city',
+                    'order.client_branch' => fn($query) => $query->withTrashed(),
+                    'order.client_branch.country', 'order.client_branch.departament', 'order.client_branch.city',
+                    'order.seller_user' => fn($query) => $query->withTrashed(),
+                    'order.wallet_user' => fn($query) => $query->withTrashed(),
+                    'order.correria' => fn($query) => $query->withTrashed(),
                     'order_dispatch_details.order_dispatch_detail_quantities',
                 ])
                 ->when($request->filled('search'),
@@ -51,12 +64,13 @@ class OrderPackedController extends Controller
                         $query->filterByDate($start_date, $end_date);
                     }
                 )
+                ->whereDoesntHave('order_packing')
                 ->where('dispatch_status', 'Aprobado')
                 ->orderBy($request->input('column'), $request->input('dir'))
                 ->paginate($request->input('perPage'));
 
             return $this->successResponse(
-                new OrderPackedIndexQueryCollection($orderDispatches),
+                new OrderPackedIndexQueryCollection($orderPackings),
                 $this->getMessage('Success'),
                 200
             );
@@ -83,30 +97,56 @@ class OrderPackedController extends Controller
     public function store(OrderPackedStoreRequest $request)
     {
         try {
-            $order_packing = new OrderPacking();
-            $order_packing->order_dispatch_id = $request->input('order_dispatch_id');
-            $order_packing->packing_user_id = $request->input('packing_user_id');
-            $order_packing->packing_status = $request->input('packing_status');
-            $order_packing->sale_channel_id = $request->input('sale_channel_id');
-            $order_packing->save();
+            $order_packed = new OrderPacking();
+            $order_packed->order_dispatch_id = $request->input('order_dispatch_id');
+            $order_packed->packing_user_id = Auth::user()->id;
+            $order_packed->packing_date = Carbon::now()->format('Y-m-d H:i:s');
+            $order_packed->save();
 
             return $this->successResponse(
                 [
-                    'url' => URL::route('Dashboard.Orders.Packed.Details.Index', ['id' => $order_packing->id])
+                    'url' => URL::route('Dashboard.Orders.Packed.Package.Index', ['id' => $order_packed->id])
                 ],
                 'La orden de empacado fue creada exitosamente.',
                 201
             );
-        } catch (ModelNotFoundException $e) {
+        }  catch (QueryException $e) {
             // Manejar la excepción de la base de datos
             return $this->errorResponse(
                 [
-                    'message' => $this->getMessage('ModelNotFoundException'),
+                    'message' => $this->getMessage('QueryException'),
                     'error' => $e->getMessage()
                 ],
                 500
             );
-        } catch (QueryException $e) {
+        } catch (Exception $e) {
+            // Devolver una respuesta de error en caso de excepción
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('Exception'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        }
+    }
+
+    public function finish(OrderPackedFinishRequest $request)
+    {
+        try {
+            $order_packed = OrderPacking::findOrFail($request->input('id'));
+            $order_packed->packing_status = 'Finalizado';
+            $order_packed->save();
+
+            return $this->successResponse(
+                [
+                    'url' => URL::route('Dashboard.Orders.Packed.Index'),
+                    'orderPacked' => $order_packed
+                ],
+                'La orden de empacado fue finalizada exitosamente.',
+                200
+            );
+        }  catch (QueryException $e) {
             // Manejar la excepción de la base de datos
             return $this->errorResponse(
                 [
@@ -131,8 +171,12 @@ class OrderPackedController extends Controller
     {
         try {
             $order_packed = OrderPacking::findOrFail($request->input('id'))->delete();
+
             return $this->successResponse(
-                $order_packed,
+                [
+                    'url' => URL::route('Dashboard.Orders.Packed.Index'),
+                    'orderPacked' => $order_packed
+                ],
                 'La orden de empacado fue eliminada exitosamente.',
                 204
             );

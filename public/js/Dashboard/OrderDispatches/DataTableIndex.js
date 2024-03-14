@@ -275,7 +275,7 @@ function tableOrderDispatchesFilter(row) {
     $.each(row.order_dispatches, function(index, order_dispatch) {
         table += `<tr>
             <td> ${order_dispatch.id} </td>
-            <td> ${order_dispatch.consecutive} </td>
+            <td> <h5><span class="badge badge-pill bg-info text-white"><i class="fas fa-paperclip mr-2 text-white"></i>${order_dispatch.consecutive}</span></h5> </td>
             <td> ${order_dispatch.dispatch_user.name + ' ' + order_dispatch.dispatch_user.last_name} </td>
             <td> ${order_dispatch.created_at} </td>
             <td> ${order_dispatch.dispatch_date} </td>`;

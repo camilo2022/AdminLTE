@@ -18,6 +18,8 @@ use App\Http\Controllers\ModelController;
 use App\Http\Controllers\ModulesAndSubmodulesController;
 use App\Http\Controllers\OrderDispatchController;
 use App\Http\Controllers\OrderDispatchDetailController;
+use App\Http\Controllers\OrderPackedController;
+use App\Http\Controllers\OrderPackedPackageController;
 use App\Http\Controllers\OrderSellerController;
 use App\Http\Controllers\OrderSellerDetailController;
 use App\Http\Controllers\OrderWalletController;
@@ -578,6 +580,29 @@ Route::middleware(['auth'])->group(function () {
                         Route::put('/Cancel', 'cancel')->middleware('can:Dashboard.Orders.Dispatch.Details.Cancel')->name('Dashboard.Orders.Dispatch.Details.Cancel');
                         Route::put('/Decline', 'decline')->middleware('can:Dashboard.Orders.Dispatch.Details.Decline')->name('Dashboard.Orders.Dispatch.Details.Decline');
                     });
+                });
+            });
+            Route::prefix('/Packed')->group(function () {
+                Route::controller(OrderPackedController::class)->group(function () {
+                    Route::get('/Index', 'index')->middleware('can:Dashboard.Orders.Packed.Index')->name('Dashboard.Orders.Packed.Index');
+                    Route::post('/Index/Query', 'indexQuery')->middleware('can:Dashboard.Orders.Packed.Index.Query')->name('Dashboard.Orders.Packed.Index.Query');
+                    Route::post('/Store', 'store')->middleware('can:Dashboard.Orders.Packed.Store')->name('Dashboard.Orders.Packed.Store');
+                    Route::put('/Finish', 'finish')->middleware('can:Dashboard.Orders.Packed.Finish')->name('Dashboard.Orders.Packed.Finish');
+                    Route::delete('/Delete', 'delete')->middleware('can:Dashboard.Orders.Packed.Delete')->name('Dashboard.Orders.Packed.Delete');
+                    Route::get('/Download/{id}', 'download')->middleware('can:Dashboard.Orders.Packed.Download')->name('Dashboard.Orders.Packed.Download');
+                });
+                Route::prefix('/Packages')->group(function () {
+                    Route::controller(OrderPackedPackageController::class)->group(function () {
+                        Route::get('/Index/{id}', 'index')->middleware('can:Dashboard.Orders.Packed.Package.Index')->name('Dashboard.Orders.Packed.Package.Index');
+                        Route::post('/Index/Query', 'indexQuery')->middleware('can:Dashboard.Orders.Packed.Package.Index.Query')->name('Dashboard.Orders.Packed.Package.Index.Query');
+                        Route::post('/Store', 'store')->middleware('can:Dashboard.Orders.Packed.Package.Store')->name('Dashboard.Orders.Packed.Package.Store');
+                        Route::post('/Detail', 'detail')->middleware('can:Dashboard.Orders.Packed.Package.Detail')->name('Dashboard.Orders.Packed.Package.Detail');
+                        Route::get('/Show/{id}', 'show')->middleware('can:Dashboard.Orders.Packed.Package.Show')->name('Dashboard.Orders.Packed.Package.Show');
+                        Route::put('/Open', 'open')->middleware('can:Dashboard.Orders.Packed.Package.Open')->name('Dashboard.Orders.Packed.Package.Open');
+                        Route::put('/Close', 'close')->middleware('can:Dashboard.Orders.Packed.Package.Close')->name('Dashboard.Orders.Packed.Package.Close');
+                        Route::delete('/Delete', 'delete')->middleware('can:Dashboard.Orders.Packed.Package.Delete')->name('Dashboard.Orders.Packed.Package.Delete');
+                    });
+                    
                 });
             });
 

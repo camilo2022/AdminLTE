@@ -19,8 +19,8 @@ return new class extends Migration
             /* $table->unsignedBigInteger('order_dispatch_id')->unique(); */
             $table->foreignIdFor(OrderDispatch::class)->constrained();
             $table->unsignedBigInteger('packing_user_id');
-            $table->enum('packing_status', ['Pendiente', 'Empacando', 'Finalizado'])->default('Pendiente');
-            $table->datetime('packing_status');
+            $table->enum('packing_status', ['Empacando', 'Finalizado'])->default('Empacando');
+            $table->datetime('packing_date');
 /*             $table->foreign('order_dispatch_id')->references('id')->on('order_dispatches')->onUpdate('cascade')->onDelete('cascade'); */
             $table->foreign('packing_user_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
