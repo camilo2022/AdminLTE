@@ -12,7 +12,7 @@ function FinishOrderPacked(id) {
         if (result.value) {
             $.ajax({
                 url: `/Dashboard/Orders/Packed/Store`,
-                type: 'PUT',
+                type: 'POST',
                 data: {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
                     'id': id
@@ -34,10 +34,6 @@ function FinishOrderPacked(id) {
 function FinishOrderPackedAjaxSuccess(response) {
     if(response.status === 204) {
         toastr.success(response.message);
-    }
-
-    if(response.status === 422) {
-        toastr.warning(response.message);
     }
 }
 

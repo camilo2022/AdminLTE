@@ -30,7 +30,7 @@ class OrderPackedController extends Controller
         try {
             $orderPacking = OrderPacking::where('packing_user_id', Auth::user()->id)->where('packing_status', 'Empacando')->first();
             if($orderPacking) {
-                return Redirect::route('Dashboard.Orders.Packed.Index', ['id' => $orderPacking->id]);
+                return Redirect::route('Dashboard.Orders.Packed.Package.Index', ['id' => $orderPacking->id]);
             }
             return view('Dashboard.OrderPackings.Index');
         } catch (Exception $e) {
@@ -97,15 +97,15 @@ class OrderPackedController extends Controller
     public function store(OrderPackedStoreRequest $request)
     {
         try {
-            $order_packed = new OrderPacking();
-            $order_packed->order_dispatch_id = $request->input('order_dispatch_id');
-            $order_packed->packing_user_id = Auth::user()->id;
-            $order_packed->packing_date = Carbon::now()->format('Y-m-d H:i:s');
-            $order_packed->save();
+            $orderPacked = new OrderPacking();
+            $orderPacked->order_dispatch_id = $request->input('order_dispatch_id');
+            $orderPacked->packing_user_id = Auth::user()->id;
+            $orderPacked->packing_date = Carbon::now()->format('Y-m-d H:i:s');
+            $orderPacked->save();
 
             return $this->successResponse(
                 [
-                    'url' => URL::route('Dashboard.Orders.Packed.Package.Index', ['id' => $order_packed->id])
+                    'url' => URL::route('Dashboard.Orders.Packed.Package.Index', ['id' => $orderPacked->id])
                 ],
                 'La orden de empacado fue creada exitosamente.',
                 201
@@ -134,14 +134,14 @@ class OrderPackedController extends Controller
     public function finish(OrderPackedFinishRequest $request)
     {
         try {
-            $order_packed = OrderPacking::findOrFail($request->input('id'));
-            $order_packed->packing_status = 'Finalizado';
-            $order_packed->save();
+            $orderPacked = OrderPacking::findOrFail($request->input('id'));
+            $orderPacked->packing_status = 'Finalizado';
+            $orderPacked->save();
 
             return $this->successResponse(
                 [
                     'url' => URL::route('Dashboard.Orders.Packed.Index'),
-                    'orderPacked' => $order_packed
+                    'orderPacked' => $orderPacked
                 ],
                 'La orden de empacado fue finalizada exitosamente.',
                 200
@@ -170,12 +170,12 @@ class OrderPackedController extends Controller
     public function delete(OrderPackedDeleteRequest $request)
     {
         try {
-            $order_packed = OrderPacking::findOrFail($request->input('id'))->delete();
+            $orderPacked = OrderPacking::findOrFail($request->input('id'))->delete();
 
             return $this->successResponse(
                 [
                     'url' => URL::route('Dashboard.Orders.Packed.Index'),
-                    'orderPacked' => $order_packed
+                    'orderPacked' => $orderPacked
                 ],
                 'La orden de empacado fue eliminada exitosamente.',
                 204

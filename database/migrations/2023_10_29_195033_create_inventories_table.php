@@ -20,11 +20,11 @@ return new class extends Migration
     {
         Schema::create('inventories', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Product::class)->constrained();
-            $table->foreignIdFor(Size::class)->constrained();
-            $table->foreignIdFor(Warehouse::class)->constrained();
-            $table->foreignIdFor(Color::class)->constrained();
-            $table->foreignIdFor(Tone::class)->constrained();
+            $table->foreignIdFor(Product::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignIdFor(Size::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignIdFor(Warehouse::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignIdFor(Color::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignIdFor(Tone::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
             /* $table->unsignedBigInteger('product_id');
             $table->unsignedBigInteger('size_id');
             $table->unsignedBigInteger('warehouse_id');

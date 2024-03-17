@@ -22,9 +22,9 @@ return new class extends Migration
             $table->string('reference');
             $table->dateTime('date');
             /* $table->unsignedBigInteger('payment_type_id')->nullable(); */
-            $table->foreignIdFor(PaymentType::class)->constrained();
+            $table->foreignIdFor(PaymentType::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
             /* $table->unsignedBigInteger('bank_id')->nullable(); */
-            $table->foreignIdFor(Bank::class)->nullable()->constrained();
+            $table->foreignIdFor(Bank::class)->nullable()->constrained()->onUpdate('cascade')->onDelete('cascade');
             /* $table->foreign('bank_id')->references('id')->on('banks')->onUpdate('cascade')->onDelete('cascade'); 
             $table->foreign('payment_type_id')->references('id')->on('payment_types')->onUpdate('cascade')->onDelete('cascade'); */
             $table->timestamps();

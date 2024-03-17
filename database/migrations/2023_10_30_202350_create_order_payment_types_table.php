@@ -19,8 +19,8 @@ return new class extends Migration
             $table->id();
             /* $table->unsignedBigInteger('order_id');
             $table->unsignedBigInteger('return_type_id'); */
-            $table->foreignIdFor(Order::class)->constrained();
-            $table->foreignIdFor(PaymentType::class)->constrained();
+            $table->foreignIdFor(Order::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignIdFor(PaymentType::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
             /* $table->foreign('order_id')->references('id')->on('orders')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('return_type_id')->references('id')->on('return_types')->onUpdate('cascade')->onDelete('cascade'); */
             $table->timestamps();

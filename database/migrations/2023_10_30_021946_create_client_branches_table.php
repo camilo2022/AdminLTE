@@ -20,15 +20,15 @@ return new class extends Migration
         Schema::create('client_branches', function (Blueprint $table) {
             $table->id();
             /* $table->unsignedBigInteger('client_id'); */
-            $table->foreignIdFor(Client::class)->constrained();
+            $table->foreignIdFor(Client::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->string('name');
             $table->string('code');
             /* $table->unsignedBigInteger('country_id');
             $table->unsignedBigInteger('departament_id');
             $table->unsignedBigInteger('city_id'); */
-            $table->foreignIdFor(Country::class)->constrained();
-            $table->foreignIdFor(Departament::class)->constrained();
-            $table->foreignIdFor(City::class)->constrained();
+            $table->foreignIdFor(Country::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignIdFor(Departament::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignIdFor(City::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->string('address');
             $table->string('neighborhood');
             $table->string('description')->nullable();

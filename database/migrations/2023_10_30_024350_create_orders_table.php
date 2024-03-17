@@ -25,10 +25,10 @@ return new class extends Migration
             $table->unsignedBigInteger('client_branch_id')->comment('Identificador de la sucursal del cliente.');
             $table->unsignedBigInteger('transporter_id')->comment('Identificador de la transportadora del pedido');
             $table->unsignedBigInteger('sale_channel_id')->comment('Identificador del canal de venta del pedido'); */
-            $table->foreignIdFor(Client::class)->constrained();
-            $table->foreignIdFor(ClientBranch::class)->constrained();
-            $table->foreignIdFor(Transporter::class)->constrained();
-            $table->foreignIdFor(SaleChannel::class)->constrained();
+            $table->foreignIdFor(Client::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignIdFor(ClientBranch::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignIdFor(Transporter::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignIdFor(SaleChannel::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->enum('dispatch', ['De inmediato', 'Antes de', 'Despues de'])->comment('Cuando despachar.');
             $table->date('dispatch_date')->nullable()->comment('Fecha de cuando despachar.');
             $table->unsignedBigInteger('seller_user_id')->comment('Identificador del usuario de vendedor.');
@@ -42,7 +42,7 @@ return new class extends Migration
             $table->enum('dispatched_status', ['Pendiente', 'Cancelado', 'Rechazado', 'Parcialmente Aprobado', 'Aprobado', 'Parcialmente Devuelto', 'Devuelto', 'Parcialmente Despachado', 'Despachado'])->default('Pendiente')->comment('Estado de despacho.');
             $table->datetime('dispatched_date')->nullable()->comment('Fecha de despacho.');
             /* $table->unsignedBigInteger('correria_id')->comment('Identificador de la correria.'); */
-            $table->foreignIdFor(Correria::class)->constrained();
+            $table->foreignIdFor(Correria::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
             /* $table->foreign('client_id')->references('id')->on('clients')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('client_branch_id')->references('id')->on('client_branches')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('transporter_id')->references('id')->on('transporters')->onUpdate('cascade')->onDelete('cascade');

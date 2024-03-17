@@ -36,10 +36,6 @@ function CreateOrderPackedAjaxSuccess(response) {
     if(response.status === 200) {
         toastr.success(response.message);
     }
-
-    if(response.status === 422) {
-        toastr.warning(response.message);
-    }
 }
 
 function CreateOrderPackedAjaxError(xhr) {

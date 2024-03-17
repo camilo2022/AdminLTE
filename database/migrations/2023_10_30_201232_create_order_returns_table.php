@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Order;
 use App\Models\ReturnType;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -16,12 +17,13 @@ return new class extends Migration
     {
         Schema::create('order_returns', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('order_id')->unique();
+            /* $table->unsignedBigInteger('order_id')->unique(); */
+            $table->foreignIdFor(Order::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->unsignedBigInteger('return_user_id');
             /* $table->unsignedBigInteger('return_type_id'); */
-            $table->foreignIdFor(ReturnType::class)->constrained();
+            $table->foreignIdFor(ReturnType::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->datetime('return_date');
-            $table->foreign('order_id')->references('id')->on('orders')->onUpdate('cascade')->onDelete('cascade');
+            /* $table->foreign('order_id')->references('id')->on('orders')->onUpdate('cascade')->onDelete('cascade'); */
             $table->foreign('return_user_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
             /* $table->foreign('return_type_id')->references('id')->on('return_types')->onUpdate('cascade')->onDelete('cascade'); */
             $table->timestamps();

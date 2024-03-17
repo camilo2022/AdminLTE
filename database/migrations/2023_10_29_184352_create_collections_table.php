@@ -16,7 +16,7 @@ return new class extends Migration
     {
         Schema::create('collections', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Correria::class)->constrained()->unique();
+            $table->foreignIdFor(Correria::class)->constrained()->unique()->onUpdate('cascade')->onDelete('cascade');
             /* $table->unsignedBigInteger('correria_id')->unique(); */
             $table->date('date_definition_start_pilots');
             $table->date('date_definition_start_samples');

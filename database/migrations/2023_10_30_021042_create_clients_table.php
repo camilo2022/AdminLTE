@@ -22,16 +22,16 @@ return new class extends Migration
         Schema::create('clients', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->foreignIdFor(PersonType::class)->constrained();
-            $table->foreignIdFor(ClientType::class)->constrained();
-            $table->foreignIdFor(DocumentType::class)->constrained();
+            $table->foreignIdFor(PersonType::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignIdFor(ClientType::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignIdFor(DocumentType::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
             /* $table->unsignedBigInteger('person_type_id');
             $table->unsignedBigInteger('client_type_id');
             $table->unsignedBigInteger('document_type_id'); */
             $table->string('document_number')->unique();
-            $table->foreignIdFor(Country::class)->constrained();
-            $table->foreignIdFor(Departament::class)->constrained();
-            $table->foreignIdFor(City::class)->constrained();
+            $table->foreignIdFor(Country::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignIdFor(Departament::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignIdFor(City::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
             /* $table->unsignedBigInteger('country_id');
             $table->unsignedBigInteger('departament_id');
             $table->unsignedBigInteger('city_id'); */

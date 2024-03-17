@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('mime');
             $table->string('extension');
             $table->string('size');
-            $table->foreignIdFor(User::class)->constrained();
+            $table->foreignIdFor(User::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->json('metadata');
             $table->timestamps();
             $table->softDeletes();

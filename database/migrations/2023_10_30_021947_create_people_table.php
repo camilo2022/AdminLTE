@@ -23,14 +23,14 @@ return new class extends Migration
             $table->string('name');
             $table->string('last_name');
             /* $table->unsignedBigInteger('document_type_id'); */
-            $table->foreignIdFor(DocumentType::class)->constrained();
+            $table->foreignIdFor(DocumentType::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->string('document_number')->unique();
             /* $table->unsignedBigInteger('country_id');
             $table->unsignedBigInteger('departament_id');
             $table->unsignedBigInteger('city_id'); */
-            $table->foreignIdFor(Country::class)->constrained();
-            $table->foreignIdFor(Departament::class)->constrained();
-            $table->foreignIdFor(City::class)->constrained();
+            $table->foreignIdFor(Country::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignIdFor(Departament::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignIdFor(City::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->string('address');
             $table->string('neighborhood');
             $table->string('email');

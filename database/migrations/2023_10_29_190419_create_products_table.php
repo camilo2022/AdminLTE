@@ -24,12 +24,12 @@ return new class extends Migration
             $table->string('code')->unique();
             $table->float('price', 8, 2);
             $table->float('cost', 8, 2);
-            $table->foreignIdFor(ClothingLine::class)->constrained();
-            $table->foreignIdFor(Category::class)->constrained();
-            $table->foreignIdFor(Subcategory::class)->constrained();
-            $table->foreignIdFor(Model::class)->constrained();
-            $table->foreignIdFor(Trademark::class)->constrained();
-            $table->foreignIdFor(Correria::class)->constrained();
+            $table->foreignIdFor(ClothingLine::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignIdFor(Category::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignIdFor(Subcategory::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignIdFor(Model::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignIdFor(Trademark::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignIdFor(Correria::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
             /* $table->unsignedBigInteger('clothing_line_id');
             $table->unsignedBigInteger('category_id');
             $table->unsignedBigInteger('subcategory_id');

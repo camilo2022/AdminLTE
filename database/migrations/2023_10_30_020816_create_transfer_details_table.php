@@ -20,11 +20,11 @@ return new class extends Migration
     {
         Schema::create('transfer_details', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Transfer::class)->constrained();
-            $table->foreignIdFor(Product::class)->constrained();
-            $table->foreignIdFor(Size::class)->constrained();
-            $table->foreignIdFor(Color::class)->constrained();
-            $table->foreignIdFor(Tone::class)->constrained();
+            $table->foreignIdFor(Transfer::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignIdFor(Product::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignIdFor(Size::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignIdFor(Color::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignIdFor(Tone::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
             /* $table->unsignedBigInteger('transfer_id');
             $table->unsignedBigInteger('product_id');
             $table->unsignedBigInteger('size_id');

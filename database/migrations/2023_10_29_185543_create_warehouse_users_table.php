@@ -17,8 +17,8 @@ return new class extends Migration
     {
         Schema::create('warehouse_users', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Warehouse::class)->constrained();
-            $table->foreignIdFor(User::class)->constrained();
+            $table->foreignIdFor(Warehouse::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignIdFor(User::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
             /* $table->unsignedBigInteger('warehouse_id')->comment('Identificador de la bodega.');
             $table->unsignedBigInteger('user_id')->comment('Identificador del usuario.');
             $table->foreign('warehouse_id')->references('id')->on('warehouses')->onUpdate('cascade')->onDelete('cascade');

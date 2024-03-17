@@ -18,7 +18,7 @@ return new class extends Migration
         Schema::create('order_dispatches', function (Blueprint $table) {
             $table->id();
             /* $table->unsignedBigInteger('order_id'); */
-            $table->foreignIdFor(Order::class)->constrained();
+            $table->foreignIdFor(Order::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->unsignedBigInteger('dispatch_user_id');
             $table->enum('dispatch_status', ['Pendiente', 'Rechazado', 'Cancelado', 'Aprobado', 'Empacado', 'Despachado'])->default('Pendiente');
             $table->datetime('dispatch_date')->nullable();

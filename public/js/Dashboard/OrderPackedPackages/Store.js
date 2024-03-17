@@ -1,43 +1,54 @@
-function DeleteOrderPacked(id) {
+function StoreOrderPackedPackage(id, packageTypes) {
+    let html = `<select class="form-control select2" id="package_type_id_c">
+        <option value="">Seleccione</option>`;
+    
+    $.each(packageTypes, function(index, packageType) {
+        html += `<option value="${packageType.id}">${packageType.name}</option>`;
+    });
+
+    html += `</select>` 
     Swal.fire({
-        title: '¿Desea eliminar la orden de alistamiento y empacado?',
-        text: 'La orden de alistamiento y empacado será creada.',
+        title: '¿Desea crear un empaque para alistar y empacar la orden de desacho?',
+        text: 'El empaque será creado a la orden de despacho.',
         icon: 'warning',
         showCancelButton: true,
         cancelButtonColor: '#DD6B55',
         confirmButtonColor: '#3085d6',
-        confirmButtonText: 'Si, eliminar!',
+        confirmButtonText: 'Si, empacar!',
         cancelButtonText: 'No, cancelar!',
+        html: html,
+        footer: '<div class="text-center">Selecciona un empaque para crearlo y poder empacar la mercancia de la orden de despacho.</div>'
     }).then((result) => {
         if (result.value) {
             $.ajax({
-                url: `/Dashboard/Orders/Packed/Store`,
-                type: 'DELETE',
+                url: `/Dashboard/Orders/Packed/Packages/Store`,
+                type: 'POST',
                 data: {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
-                    'id': id
+                    'id': id,
+                    'package_type_id': $('#package_type_id_c').val()
                 },
                 success: function(response) {
                     window.location.href = response.data.url;
-                    DeleteOrderPackedAjaxSuccess(response);
+                    StoreOrderPackedPackageAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    DeleteOrderPackedAjaxError(xhr);
+                    StoreOrderPackedPackageAjaxError(xhr);
                 }
             });
         } else {
-            toastr.info('La orden de alistamiento y empacado no fue eliminada.')
+            toastr.info('El empaque de la orden de despacho no fue creado.')
         }
     });
 }
 
-function DeleteOrderPackedAjaxSuccess(response) {
-    if(response.status === 204) {
+function StoreOrderPackedPackageAjaxSuccess(response) {
+    if(response.status === 201) {
         toastr.success(response.message);
     }
 }
 
-function DeleteOrderPackedAjaxError(xhr) {
+function StoreOrderPackedPackageAjaxError(xhr) {
     if(xhr.status === 403) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
     }

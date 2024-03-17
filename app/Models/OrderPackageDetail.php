@@ -17,13 +17,11 @@ class OrderPackageDetail extends Model implements Auditable
     protected $fillable = [
         'order_package_id',
         'order_dispatch_detail_id',
-        'quantity',
     ];
 
     protected $auditInclude = [
         'order_package_id',
         'order_dispatch_detail_id',
-        'quantity'
     ];
 
     public function order_package_detail_quantities() : HasMany

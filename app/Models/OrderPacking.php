@@ -35,7 +35,7 @@ class OrderPacking extends Model implements Auditable
 
     public function order_dispatch() : BelongsTo
     {
-        return $this->belongsTo(OrderPacking::class, 'order_dispatch_id');
+        return $this->belongsTo(OrderDispatch::class, 'order_dispatch_id');
     }
 
     public function packing_user() : BelongsTo

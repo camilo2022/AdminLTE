@@ -16,7 +16,7 @@ return new class extends Migration
     {
         Schema::create('charges', function (Blueprint $table) {
             $table->id()->comment('Identificador del cargo.');
-            $table->foreignIdFor(Area::class)->constrained();
+            $table->foreignIdFor(Area::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
             /* $table->unsignedBigInteger('area_id')->comment('Identificador del area.'); */
             $table->string('name')->unique()->comment('Nombre del cargo.');
             $table->string('description')->nullable()->comment('Descripción del cargo.');

@@ -19,8 +19,8 @@ return new class extends Migration
             $table->id();
             /* $table->unsignedBigInteger('order_package_id');
             $table->unsignedBigInteger('order_dispatch_detail_id'); */
-            $table->foreignIdFor(OrderPackage::class)->constrained();
-            $table->foreignIdFor(OrderDispatchDetail::class)->constrained();
+            $table->foreignIdFor(OrderPackage::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignIdFor(OrderDispatchDetail::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
             /* $table->foreign('order_package_id')->references('id')->on('order_packages')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('order_dispatch_detail_id')->references('id')->on('order_dispatch_details')->onUpdate('cascade')->onDelete('cascade'); */
             $table->timestamps();

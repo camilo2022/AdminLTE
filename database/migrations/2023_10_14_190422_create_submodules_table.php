@@ -21,8 +21,8 @@ return new class extends Migration
             $table->string('type')->default('subitem')->comment('Tipo de registro');
             $table->string('url')->unique()->comment('Url de navegacion del submodulo.');
             $table->string('icon')->unique()->comment('Icono del submodulo.');
-            $table->foreignIdFor(Module::class)->constrained();
-            $table->foreignIdFor(Permission::class)->constrained();
+            $table->foreignIdFor(Module::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignIdFor(Permission::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
             /* $table->unsignedBigInteger('module_id')->comment('Identificador del modulo.');
             $table->unsignedBigInteger('permission_id')->unique()->comment('Identificador del permiso.');
             $table->foreign('module_id')->references('id')->on('modules')->onUpdate('cascade')->onDelete('cascade');

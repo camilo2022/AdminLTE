@@ -26,8 +26,8 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique()->comment('Correo del usuario.');
             $table->timestamp('email_verified_at')->nullable()->comment('Verificacion del correo del usuario.');
             $table->string('password')->comment('Contraseña del usuario.');
-            $table->foreignIdFor(Area::class)->constrained();
-            $table->foreignIdFor(Charge::class)->constrained();
+            $table->foreignIdFor(Area::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignIdFor(Charge::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
             /* $table->unsignedBigInteger('area_id')->comment('Identificador del area.');
             $table->unsignedBigInteger('charge_id')->comment('Identificador del cargo.');
             $table->foreign('area_id')->references('id')->on('areas')->onUpdate('cascade')->onDelete('cascade');

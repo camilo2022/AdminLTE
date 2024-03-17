@@ -598,6 +598,7 @@ Route::middleware(['auth'])->group(function () {
                         Route::post('/Store', 'store')->middleware('can:Dashboard.Orders.Packed.Package.Store')->name('Dashboard.Orders.Packed.Package.Store');
                         Route::post('/Detail', 'detail')->middleware('can:Dashboard.Orders.Packed.Package.Detail')->name('Dashboard.Orders.Packed.Package.Detail');
                         Route::get('/Show/{id}', 'show')->middleware('can:Dashboard.Orders.Packed.Package.Show')->name('Dashboard.Orders.Packed.Package.Show');
+                        Route::post('/Show/Query', 'showQuery')->middleware('can:Dashboard.Orders.Packed.Package.Show.Query')->name('Dashboard.Orders.Packed.Package.Show.Query');
                         Route::put('/Open', 'open')->middleware('can:Dashboard.Orders.Packed.Package.Open')->name('Dashboard.Orders.Packed.Package.Open');
                         Route::put('/Close', 'close')->middleware('can:Dashboard.Orders.Packed.Package.Close')->name('Dashboard.Orders.Packed.Package.Close');
                         Route::delete('/Delete', 'delete')->middleware('can:Dashboard.Orders.Packed.Package.Delete')->name('Dashboard.Orders.Packed.Package.Delete');

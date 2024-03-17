@@ -16,7 +16,7 @@ return new class extends Migration
     {
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(ClothingLine::class)->constrained();
+            $table->foreignIdFor(ClothingLine::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
             /* $table->unsignedBigInteger('clothing_line_id'); */
             $table->string('name')->unique();
             $table->string('code')->unique();

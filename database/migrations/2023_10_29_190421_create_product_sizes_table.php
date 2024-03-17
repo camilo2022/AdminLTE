@@ -17,8 +17,8 @@ return new class extends Migration
     {
         Schema::create('product_sizes', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Product::class)->constrained();
-            $table->foreignIdFor(Size::class)->constrained();
+            $table->foreignIdFor(Product::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignIdFor(Size::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
             /* $table->unsignedBigInteger('product_id')->comment('Identificador del prodcuto.');
             $table->unsignedBigInteger('size_id')->comment('Identificador de la talla.');
             $table->foreign('product_id')->references('id')->on('products')->onUpdate('cascade')->onDelete('cascade');

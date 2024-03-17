@@ -23,10 +23,10 @@ return new class extends Migration
             $table->unsignedBigInteger('product_id')->comment('Identificador del producto.');
             $table->unsignedBigInteger('color_id')->comment('Identificador del color.');
             $table->unsignedBigInteger('tone_id')->comment('Identificador del tono.'); */
-            $table->foreignIdFor(Order::class)->constrained();
-            $table->foreignIdFor(Product::class)->constrained();
-            $table->foreignIdFor(Color::class)->constrained();
-            $table->foreignIdFor(Tone::class)->constrained();
+            $table->foreignIdFor(Order::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignIdFor(Product::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignIdFor(Color::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignIdFor(Tone::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->float('price', 8, 2)->comment('Valor de venta del producto.');
             $table->datetime('seller_date')->comment('Fecha de vendedor');
             $table->string('seller_observation')->nullable()->comment('Observacion de vendedor');

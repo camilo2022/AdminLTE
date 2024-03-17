@@ -22,15 +22,15 @@ return new class extends Migration
             $table->id();
             $table->string('name')->unique();
             /* $table->unsignedBigInteger('person_type_id'); */
-            $table->foreignIdFor(PersonType::class)->constrained();
+            $table->foreignIdFor(PersonType::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
             /* $table->unsignedBigInteger('document_type_id'); */
-            $table->foreignIdFor(DocumentType::class)->constrained();
+            $table->foreignIdFor(DocumentType::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->string('document_number')->unique();
             $table->string('telephone_number');
             $table->string('email')->unique();
-            $table->foreignIdFor(Country::class)->constrained();
-            $table->foreignIdFor(Departament::class)->constrained();
-            $table->foreignIdFor(City::class)->constrained();
+            $table->foreignIdFor(Country::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignIdFor(Departament::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignIdFor(City::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
             /* $table->unsignedBigInteger('country_id');
             $table->unsignedBigInteger('departament_id');
             $table->unsignedBigInteger('city_id'); */

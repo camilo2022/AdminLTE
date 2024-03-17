@@ -17,8 +17,8 @@ return new class extends Migration
     {
         Schema::create('sale_channel_return_types', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(SaleChannel::class)->constrained();
-            $table->foreignIdFor(ReturnType::class)->constrained();
+            $table->foreignIdFor(SaleChannel::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignIdFor(ReturnType::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
             /* $table->unsignedBigInteger('sale_channel_id')->comment('Identificador de la bodega.');
             $table->unsignedBigInteger('return_type_id')->comment('Identificador del usuario.');
             $table->foreign('sale_channel_id')->references('id')->on('sale_channels')->onUpdate('cascade')->onDelete('cascade');

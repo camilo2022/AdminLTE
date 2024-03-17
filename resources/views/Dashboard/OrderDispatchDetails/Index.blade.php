@@ -67,12 +67,12 @@
                                     </a>
                                 </li>
                                 <li class="nav-item ml-2">
-                                    <a class="btn btn-warning" type="button" onclick="CancelOrderDispatch({{ $orderDispatch->id }}, false)" title="Cancelar detalle pedido.">
+                                    <a class="btn btn-warning" type="button" onclick="CancelOrderDispatch({{ $orderDispatch->id }}, false)" title="Cancelar orden de despacho del pedido.">
                                         <i class="fas fa-xmark text-white"></i>
                                     </a>
                                 </li>
                                 <li class="nav-item ml-2">
-                                    <a class="btn btn-danger text-white" type="button" onclick="CancelOrderDispatch({{ $orderDispatch->id }}, false)" title="Rechazar orden de despacho del pedido.">
+                                    <a class="btn btn-danger text-white" type="button" onclick="DeclineOrderDispatch({{ $orderDispatch->id }}, false)" title="Rechazar orden de despacho del pedido.">
                                         <i class="fas fa-ban text-white"></i>
                                     </a>
                                 </li>

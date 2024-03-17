@@ -19,8 +19,8 @@ return new class extends Migration
             $table->id();
             /* $table->unsignedBigInteger('order_detail_id')->comment('Identificador del detalle de la orden.');
             $table->unsignedBigInteger('size_id')->comment('Identificador de la talla.'); */
-            $table->foreignIdFor(OrderDetail::class)->constrained();
-            $table->foreignIdFor(Size::class)->constrained();
+            $table->foreignIdFor(OrderDetail::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignIdFor(Size::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->unsignedBigInteger('quantity')->default(0);
             /* $table->foreign('order_detail_id')->references('id')->on('order_details')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('size_id')->references('id')->on('sizes')->onUpdate('cascade')->onDelete('cascade'); */

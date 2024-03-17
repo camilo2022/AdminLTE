@@ -18,9 +18,9 @@ return new class extends Migration
     {
         Schema::create('product_color_tone', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Product::class)->constrained();
-            $table->foreignIdFor(Color::class)->constrained();
-            $table->foreignIdFor(Tone::class)->constrained();
+            $table->foreignIdFor(Product::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignIdFor(Color::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignIdFor(Tone::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
             /* $table->unsignedBigInteger('product_id')->comment('Identificador del prodcuto.');
             $table->unsignedBigInteger('color_id')->comment('Identificador del color.');
             $table->unsignedBigInteger('tone_id')->comment('Identificador del tono.');
