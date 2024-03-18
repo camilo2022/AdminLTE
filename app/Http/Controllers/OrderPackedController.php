@@ -134,7 +134,7 @@ class OrderPackedController extends Controller
     public function finish(OrderPackedFinishRequest $request)
     {
         try {
-            $orderPacked = OrderPacking::findOrFail($request->input('id'));
+            $orderPacked = OrderPacking::with('order_packages.order_package_details.order_dispatch_detail.order_detail')->findOrFail($request->input('id'));
             $orderPacked->packing_status = 'Finalizado';
             $orderPacked->save();
 

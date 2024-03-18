@@ -23,7 +23,7 @@ return new class extends Migration
             $table->enum('dispatch_status', ['Pendiente', 'Rechazado', 'Cancelado', 'Aprobado', 'Empacado', 'Despachado'])->default('Pendiente');
             $table->datetime('dispatch_date')->nullable();
             $table->string('consecutive')->unique();
-            $table->enum('payment_status', ['Pendiente de Pago', 'Parcialmente Pagado', 'Pagado'])->default('Pendiente de Pago');
+            $table->enum('payment_status', ['Pendiente de Pago', 'Parcialmente Pagado', 'Pagado', 'Cancelado'])->default('Pendiente de Pago');
             /* $table->foreign('order_id')->references('id')->on('orders')->onUpdate('cascade')->onDelete('cascade'); */
             $table->foreign('dispatch_user_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();

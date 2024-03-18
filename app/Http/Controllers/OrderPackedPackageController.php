@@ -56,8 +56,6 @@ class OrderPackedPackageController extends Controller
                 ->where('order_packing_id', $request->input('order_packing_id'))
                 ->get();
 
-            $packageTypes = PackageType::all();
-
             return $this->successResponse(
                 $orderPackages,
                 $this->getMessage('Success'),
@@ -99,6 +97,76 @@ class OrderPackedPackageController extends Controller
                 ],
                 'El empaque fue creado exitosamente.',
                 201
+            );
+        }  catch (QueryException $e) {
+            // Manejar la excepción de la base de datos
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('QueryException'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        } catch (Exception $e) {
+            // Devolver una respuesta de error en caso de excepción
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('Exception'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        }
+    }
+
+    public function show($id)
+    {
+        try {
+            $orderPackage = OrderPackage::with('package_type', 'order_packing.order_dispatch', 'order_package_details.order_package_detail_quantities.order_dispatch_detail_quantity.order_detail_quantity')->findOrFail($id);
+            return view('Dashboard.OrderPackedPackages.Show', compact('orderPackage'));
+        } catch (ModelNotFoundException $e) {
+            // Manejar la excepción de la base de datos
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('ModelNotFoundException'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        }  catch (QueryException $e) {
+            // Manejar la excepción de la base de datos
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('QueryException'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        } catch (Exception $e) {
+            // Devolver una respuesta de error en caso de excepción
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('Exception'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        }
+    }
+
+    public function showQuery($id)
+    {
+        try {
+            $orderPackage = OrderPackage::with('order_packing.order_dispatch', 'order_package_details.order_package_detail_quantities.order_dispatch_detail_quantity.order_detail_quantity')->findOrFail($id);
+            $orderDispatchDetails = OrderDispatchDetail::with('order_detail', 'order_dispatch_detail_quantities')->where('order_dispatch_id', $orderPackage->order_packing->order_dispatch->id)->whereIn('status', ['Aprobado'])->get();
+        } catch (ModelNotFoundException $e) {
+            // Manejar la excepción de la base de datos
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('ModelNotFoundException'),
+                    'error' => $e->getMessage()
+                ],
+                500
             );
         }  catch (QueryException $e) {
             // Manejar la excepción de la base de datos

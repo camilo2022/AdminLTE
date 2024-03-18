@@ -423,7 +423,7 @@ class RolesAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Dashboard.Orders.Wallet.PartiallyApprove'])->syncRoles([$OrderWallets]);
         Permission::create(['name' => 'Dashboard.Orders.Wallet.Pending'])->syncRoles([$OrderWallets]);
         Permission::create(['name' => 'Dashboard.Orders.Wallet.Cancel'])->syncRoles([$OrderWallets]);
-        Permission::create(['name' => 'Dashboard.Orders.Wallet.Payments.Query'])->syncRoles([$OrderSellers]);
+        Permission::create(['name' => 'Dashboard.Orders.Wallet.Payments.Query'])->syncRoles([$OrderWallets]);
         Permission::create(['name' => 'Dashboard.Orders.Wallet.Details.Index'])->syncRoles([$OrderWallets]);
         Permission::create(['name' => 'Dashboard.Orders.Wallet.Details.Index.Query'])->syncRoles([$OrderWallets]);
         Permission::create(['name' => 'Dashboard.Orders.Wallet.Details.Create'])->syncRoles([$OrderWallets]);

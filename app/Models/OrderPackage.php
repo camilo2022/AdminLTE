@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -12,7 +11,7 @@ use OwenIt\Auditing\Auditable as Auditing;
 
 class OrderPackage extends Model implements Auditable
 {
-    use HasFactory, Auditing, HasUuids;
+    use HasFactory, Auditing;
 
     protected $table = 'order_packages';
     protected $fillable = [
@@ -45,6 +44,6 @@ class OrderPackage extends Model implements Auditable
 
     public function package_type() : BelongsTo
     {
-        return $this->belongsTo(User::class, 'package_type_id');
+        return $this->belongsTo(PackageType::class, 'package_type_id');
     }
 }

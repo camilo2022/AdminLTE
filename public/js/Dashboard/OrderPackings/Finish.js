@@ -1,7 +1,7 @@
 function FinishOrderPacked(id) {
     Swal.fire({
         title: '¿Desea finalizar la orden de alistamiento y empacado?',
-        text: 'La orden de alistamiento y empacado será creada.',
+        text: 'La orden de alistamiento y empacado será finalizada.',
         icon: 'warning',
         showCancelButton: true,
         cancelButtonColor: '#DD6B55',
@@ -11,8 +11,8 @@ function FinishOrderPacked(id) {
     }).then((result) => {
         if (result.value) {
             $.ajax({
-                url: `/Dashboard/Orders/Packed/Store`,
-                type: 'POST',
+                url: `/Dashboard/Orders/Packed/Finish`,
+                type: 'PUT',
                 data: {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
                     'id': id

@@ -21,7 +21,6 @@ return new class extends Migration
             $table->unsignedBigInteger('package_type_id'); */
             $table->foreignIdFor(OrderPacking::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->foreignIdFor(PackageType::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
-            $table->uuid('coding')->unique();
             $table->string('weight')->nullable();
             $table->enum('package_status', ['Abierto', 'Cerrado'])->default('Abierto');
             $table->datetime('package_date');
