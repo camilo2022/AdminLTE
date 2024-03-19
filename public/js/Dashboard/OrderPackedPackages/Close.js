@@ -1,28 +1,39 @@
-function DeleteOrderPackedPackage(id, status = true) {
+function CloseOrderPackedPackage(id, status = true) {
     Swal.fire({
-        title: '¿Desea eliminar el empaque de la orden de alistamiento y empacado?',
-        text: 'El empaque de la orden de alistamiento y empacado será eliminada.',
+        title: '¿Desea cerrar el empaque de la orden de alistamiento y empacado?',
+        text: 'El empaque de la orden de alistamiento y empacado será cerrado.',
         icon: 'warning',
         showCancelButton: true,
         cancelButtonColor: '#DD6B55',
         confirmButtonColor: '#3085d6',
-        confirmButtonText: 'Si, eliminar!',
+        confirmButtonText: 'Si, cerrar!',
         cancelButtonText: 'No, cancelar!',
+        html:`<div class="input-group">
+            <input type="number" class="form-control" id="weight_val" name="weight_val" placeholder="Ingrese el peso.">
+            <select class="form-control" id="weight_uni" name="weight_uni">
+                <option value="">Seleccione</option>
+                <option value=" KG">KG</option>
+                <option value=" LB">LB</option>
+                <option value=" OZ">OZ</option>
+            </select>
+        </div>`,
+        footer: '<div class="text-center">Ingresa el peso y selecciona la unidad de medida.</div>'
     }).then((result) => {
         if (result.value) {
             $.ajax({
-                url: `/Dashboard/Orders/Packed/Packages/Delete`,
-                type: 'DELETE',
+                url: `/Dashboard/Orders/Packed/Packages/Close`,
+                type: 'PUT',
                 data: {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
-                    'id': id
+                    'id': id,
+                    'weight': $('#weight_val').val() + $('#weight_uni').val()
                 },
                 success: function(response) {
                     status ? window.location.href = response.data.url : $('#IndexOrderPackedDetail').trigger('click') ;
-                    DeleteOrderPackedPackageAjaxSuccess(response);
+                    CloseOrderPackedPackageAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    DeleteOrderPackedPackageAjaxError(xhr);
+                    CloseOrderPackedPackageAjaxError(xhr);
                 }
             });
         } else {
@@ -31,13 +42,13 @@ function DeleteOrderPackedPackage(id, status = true) {
     });
 }
 
-function DeleteOrderPackedPackageAjaxSuccess(response) {
+function CloseOrderPackedPackageAjaxSuccess(response) {
     if(response.status === 204) {
         toastr.success(response.message);
     }
 }
 
-function DeleteOrderPackedPackageAjaxError(xhr) {
+function CloseOrderPackedPackageAjaxError(xhr) {
     if(xhr.status === 403) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
     }

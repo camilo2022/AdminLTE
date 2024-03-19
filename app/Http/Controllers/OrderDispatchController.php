@@ -403,6 +403,7 @@ class OrderDispatchController extends Controller
                 $detail->save();
             }
 
+            $orderDispatch->payment_status = 'Pendiente de Pago';
             $orderDispatch->dispatch_status = 'Aprobado';
             $orderDispatch->save();
 
@@ -504,6 +505,7 @@ class OrderDispatchController extends Controller
                 }
             }
 
+            $orderDispatch->payment_status = 'Cancelado';
             $orderDispatch->dispatch_status = 'Cancelado';
             $orderDispatch->save();
 
@@ -568,6 +570,7 @@ class OrderDispatchController extends Controller
                 $detail->order_detail->save();
             }
 
+            $orderDispatch->payment_status = 'Cancelado';
             $orderDispatch->dispatch_status = 'Rechazado';
             $orderDispatch->save();
 

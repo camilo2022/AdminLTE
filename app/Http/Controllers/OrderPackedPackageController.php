@@ -50,8 +50,11 @@ class OrderPackedPackageController extends Controller
     {
         try {
             $orderPackages = OrderPackage::with([
-                    'package_type', 'order_package_details.order_dispatch_detail.order_detail',
-                    'order_package_details.order_package_detail_quantities.order_dispatch_detail_quantity.order_detail_quantity',
+                    'order_packing.order_dispatch', 'package_type',
+                    'order_package_details.order_dispatch_detail.order_detail.product', 
+                    'order_package_details.order_dispatch_detail.order_detail.color', 
+                    'order_package_details.order_dispatch_detail.order_detail.tone', 
+                    'order_package_details.order_package_detail_quantities.order_dispatch_detail_quantity.order_detail_quantity.size'
                 ])
                 ->where('order_packing_id', $request->input('order_packing_id'))
                 ->get();
@@ -122,6 +125,10 @@ class OrderPackedPackageController extends Controller
     public function show($id)
     {
         try {
+            $orderPackage = OrderPackage::with('order_packing.order_dispatch', 'order_package_details.order_dispatch_detail.order_detail.product', 'order_package_details.order_dispatch_detail.order_detail.color', 'order_package_details.order_dispatch_detail.order_detail.tone', 'order_package_details.order_package_detail_quantities.order_dispatch_detail_quantity.order_detail_quantity.size')->findOrFail($id);
+            return $orderDispatchDetails = OrderDispatchDetail::with('order_detail.product', 'order_detail.color', 'order_detail.tone', 'order_packages_details.order_package_detail_quantities', 'order_dispatch_detail_quantities.order_detail_quantity.size')->where('order_dispatch_id', $orderPackage->order_packing->order_dispatch->id)->whereIn('status', ['Aprobado'])->get();
+
+
             $orderPackage = OrderPackage::with('package_type', 'order_packing.order_dispatch', 'order_package_details.order_package_detail_quantities.order_dispatch_detail_quantity.order_detail_quantity')->findOrFail($id);
             return view('Dashboard.OrderPackedPackages.Show', compact('orderPackage'));
         } catch (ModelNotFoundException $e) {
@@ -157,8 +164,17 @@ class OrderPackedPackageController extends Controller
     public function showQuery($id)
     {
         try {
-            $orderPackage = OrderPackage::with('order_packing.order_dispatch', 'order_package_details.order_package_detail_quantities.order_dispatch_detail_quantity.order_detail_quantity')->findOrFail($id);
+            $orderPackage = OrderPackage::with('order_packing.order_dispatch', 'order_package_details.order_dispatch_detail.order_detail.product', 'order_package_details.order_dispatch_detail.order_detail.color', 'order_package_details.order_dispatch_detail.order_detail.tone', 'order_package_details.order_package_detail_quantities.order_dispatch_detail_quantity.order_detail_quantity.size')->findOrFail($id);
             $orderDispatchDetails = OrderDispatchDetail::with('order_detail', 'order_dispatch_detail_quantities')->where('order_dispatch_id', $orderPackage->order_packing->order_dispatch->id)->whereIn('status', ['Aprobado'])->get();
+
+            return $this->successResponse(
+                [
+                    'url' => $orderPackage->package_status == 'Cerrado' ? URL::route('Dashboard.Orders.Packed.Package.Index', ['id' => $orderPackage->order_packing_id]) : null,
+                    'orderPackage' => $orderPackage
+                ],
+                'El empaque fue creado exitosamente.',
+                200
+            );
         } catch (ModelNotFoundException $e) {
             // Manejar la excepción de la base de datos
             return $this->errorResponse(

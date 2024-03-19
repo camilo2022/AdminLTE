@@ -12,7 +12,7 @@ class OrderPackageDetailQuantity extends Model implements Auditable
 {
     use HasFactory, Auditing;
 
-    protected $table = 'order_dispatch_details';
+    protected $table = 'order_package_detail_quantities';
     protected $fillable = [
         'order_package_detail_id',
         'order_dispatch_detail_quantity_id',
