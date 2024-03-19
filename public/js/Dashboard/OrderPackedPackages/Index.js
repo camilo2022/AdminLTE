@@ -9,7 +9,7 @@ function IndexOrderPackedDetail(order_packing_id) {
             'order_packing_id': order_packing_id
         },
         success: function(response) {
-            IndexOrderPackedDetailModalCleaned(response.data);
+            IndexOrderPackedDetailCleaned(response.data);
             IndexOrderPackedDetailAjaxSuccess(response);
         },
         error: function(xhr, textStatus, errorThrown) {
@@ -18,7 +18,7 @@ function IndexOrderPackedDetail(order_packing_id) {
     });
 }
 
-function IndexOrderPackedDetailModalCleaned(packages) {
+function IndexOrderPackedDetailCleaned(packages) {
     $('#orderPackages').html('');
 
     let orderPackages = '';

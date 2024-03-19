@@ -8,8 +8,8 @@ use App\Http\Requests\OrderPackedPackage\OrderPackedPackageDeleteRequest;
 use App\Http\Requests\OrderPackedPackage\OrderPackedPackageDetailRequest;
 use App\Http\Requests\OrderPackedPackage\OrderPackedPackageIndexQueryRequest;
 use App\Http\Requests\OrderPackedPackage\OrderPackedPackageOpenRequest;
+use App\Http\Requests\OrderPackedPackage\OrderPackedPackageShowQueryRequest;
 use App\Http\Requests\OrderPackedPackage\OrderPackedPackageStoreRequest;
-use App\Models\OrderDispatchDetail;
 use App\Models\OrderPackage;
 use App\Models\OrderPackageDetail;
 use App\Models\OrderPackageDetailQuantity;
@@ -125,10 +125,6 @@ class OrderPackedPackageController extends Controller
     public function show($id)
     {
         try {
-            $orderPackage = OrderPackage::with('order_packing.order_dispatch', 'order_package_details.order_dispatch_detail.order_detail.product', 'order_package_details.order_dispatch_detail.order_detail.color', 'order_package_details.order_dispatch_detail.order_detail.tone', 'order_package_details.order_package_detail_quantities.order_dispatch_detail_quantity.order_detail_quantity.size')->findOrFail($id);
-            return $orderDispatchDetails = OrderDispatchDetail::with('order_detail.product', 'order_detail.color', 'order_detail.tone', 'order_packages_details.order_package_detail_quantities', 'order_dispatch_detail_quantities.order_detail_quantity.size')->where('order_dispatch_id', $orderPackage->order_packing->order_dispatch->id)->whereIn('status', ['Aprobado'])->get();
-
-
             $orderPackage = OrderPackage::with('package_type', 'order_packing.order_dispatch', 'order_package_details.order_package_detail_quantities.order_dispatch_detail_quantity.order_detail_quantity')->findOrFail($id);
             return view('Dashboard.OrderPackedPackages.Show', compact('orderPackage'));
         } catch (ModelNotFoundException $e) {
@@ -161,18 +157,28 @@ class OrderPackedPackageController extends Controller
         }
     }
 
-    public function showQuery($id)
+    public function showQuery(OrderPackedPackageShowQueryRequest $request)
     {
         try {
-            $orderPackage = OrderPackage::with('order_packing.order_dispatch', 'order_package_details.order_dispatch_detail.order_detail.product', 'order_package_details.order_dispatch_detail.order_detail.color', 'order_package_details.order_dispatch_detail.order_detail.tone', 'order_package_details.order_package_detail_quantities.order_dispatch_detail_quantity.order_detail_quantity.size')->findOrFail($id);
-            $orderDispatchDetails = OrderDispatchDetail::with('order_detail', 'order_dispatch_detail_quantities')->where('order_dispatch_id', $orderPackage->order_packing->order_dispatch->id)->whereIn('status', ['Aprobado'])->get();
+            $orderPackage = OrderPackage::with([
+                'order_packing.order_dispatch.order_dispatch_details' => fn($query) => $query->whereIn('status', ['Aprobado']),
+                'order_packing.order_dispatch.order_dispatch_details.order_detail.product', 
+                'order_packing.order_dispatch.order_dispatch_details.order_detail.color', 
+                'order_packing.order_dispatch.order_dispatch_details.order_detail.tone', 
+                'order_packing.order_dispatch.order_dispatch_details.order_packages_details.order_package_detail_quantities.order_dispatch_detail_quantity.order_detail_quantity.size', 
+                'order_packing.order_dispatch.order_dispatch_details.order_dispatch_detail_quantities.order_detail_quantity.size', 
+                'order_package_details.order_dispatch_detail.order_detail.product', 
+                'order_package_details.order_dispatch_detail.order_detail.color', 
+                'order_package_details.order_dispatch_detail.order_detail.tone', 
+                'order_package_details.order_package_detail_quantities.order_dispatch_detail_quantity.order_detail_quantity.size'
+            ])->findOrFail($request->input('order_package_id'));
 
             return $this->successResponse(
                 [
                     'url' => $orderPackage->package_status == 'Cerrado' ? URL::route('Dashboard.Orders.Packed.Package.Index', ['id' => $orderPackage->order_packing_id]) : null,
                     'orderPackage' => $orderPackage
                 ],
-                'El empaque fue creado exitosamente.',
+                'Empaque cargado exitosamente.',
                 200
             );
         } catch (ModelNotFoundException $e) {
