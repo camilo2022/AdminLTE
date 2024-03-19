@@ -36,13 +36,15 @@ function ShowOrderPackageCleaned(packageDetails) {
                 }, 0) + total;
             }, 0);
 
-        let total = packageDetail.order_dispatch_detail_quantities.reduce((total, objeto) => total + objeto.quantity, 0)
+        let total = packageDetail.order_dispatch_detail_quantities.reduce((total, objeto) => total + objeto.quantity, 0);
+
+        console.log(contar==total)
 
         orderPackageDetails += `<div class="col-lg-6">
             <button type="button" class="mb-2 btn w-100 collapsed btn-dark" data-toggle="collapse" data-target="#collapsePackage${i}" aria-expanded="false" aria-controls="#collapsePackage${i}">
                 <b>
                     <div class="table-responsive">
-                        <span>REF: ${packageDetail.order_detail.product.code}-${packageDetail.order_detail.color.code}-${packageDetail.order_detail.tone.code}</span> | <span class="badge badge-light" id="${packageDetail.order_detail.product.code}-${packageDetail.order_detail.color.code}-${packageDetail.order_detail.tone.code}-contar">${contar}</span> de <span class="badge badge-${contar == total ? 'success' : 'danger'}" id="${packageDetail.order_detail.product.code}-${packageDetail.order_detail.color.code}-${packageDetail.order_detail.tone.code}-total">${total}</span> | <span class="badge badge-danger" id="${packageDetail.order_detail.product.code}-${packageDetail.order_detail.color.code}-${packageDetail.order_detail.tone.code}-badge">${contar == total ? 'Completado' : 'Hace falta'}</span>
+                        <span>REF: ${packageDetail.order_detail.product.code}-${packageDetail.order_detail.color.code}-${packageDetail.order_detail.tone.code}</span> | <span class="badge badge-light" id="${packageDetail.order_detail.product.code}-${packageDetail.order_detail.color.code}-${packageDetail.order_detail.tone.code}-contar">${contar}</span> de <span class="badge badge-warning" id="${packageDetail.order_detail.product.code}-${packageDetail.order_detail.color.code}-${packageDetail.order_detail.tone.code}-total">${total}</span> | <span class="badge badge-${contar == total ? 'success' : 'danger'}" id="${packageDetail.order_detail.product.code}-${packageDetail.order_detail.color.code}-${packageDetail.order_detail.tone.code}-badge">${contar == total ? 'Completado' : 'Hace falta'}</span>
                     </div>
                 </b>
             </button>
