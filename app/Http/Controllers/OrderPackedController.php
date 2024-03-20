@@ -138,6 +138,12 @@ class OrderPackedController extends Controller
             $orderPacked->packing_status = 'Finalizado';
             $orderPacked->save();
 
+            $orderDetails = $orderPacked->order_packages->pluck('order_package_details')->flatten()->pluck('order_dispatch_detail')->pluck('order_detail')->unique()->values();
+            foreach($orderDetails as $orderDetail) {
+                $orderDetail->status = 'Empacado';
+                $orderDetail->save();
+            }
+
             return $this->successResponse(
                 [
                     'url' => URL::route('Dashboard.Orders.Packed.Index'),

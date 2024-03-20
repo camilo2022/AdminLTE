@@ -20,12 +20,12 @@ function ShowOrderPackage(order_package_id) {
 }
 
 function ShowOrderPackageCleaned(packageDetails) {
-    console.log(packageDetails)
     $('#orderPackageDetails').html('');
 
     let orderPackageDetails = '';
     
     $.each(packageDetails.order_packing.order_dispatch.order_dispatch_details, function(i, packageDetail) {
+        
         if (i % 2 === 0) {
             orderPackageDetails += '<div class="row">';
         }
@@ -38,13 +38,11 @@ function ShowOrderPackageCleaned(packageDetails) {
 
         let total = packageDetail.order_dispatch_detail_quantities.reduce((total, objeto) => total + objeto.quantity, 0);
 
-        console.log(contar==total)
-
         orderPackageDetails += `<div class="col-lg-6">
             <button type="button" class="mb-2 btn w-100 collapsed btn-dark" data-toggle="collapse" data-target="#collapsePackage${i}" aria-expanded="false" aria-controls="#collapsePackage${i}">
                 <b>
                     <div class="table-responsive">
-                        <span>REF: ${packageDetail.order_detail.product.code}-${packageDetail.order_detail.color.code}-${packageDetail.order_detail.tone.code}</span> | <span class="badge badge-light" id="${packageDetail.order_detail.product.code}-${packageDetail.order_detail.color.code}-${packageDetail.order_detail.tone.code}-contar">${contar}</span> de <span class="badge badge-warning" id="${packageDetail.order_detail.product.code}-${packageDetail.order_detail.color.code}-${packageDetail.order_detail.tone.code}-total">${total}</span> | <span class="badge badge-${contar == total ? 'success' : 'danger'}" id="${packageDetail.order_detail.product.code}-${packageDetail.order_detail.color.code}-${packageDetail.order_detail.tone.code}-badge">${contar == total ? 'Completado' : 'Hace falta'}</span>
+                        <span>REF: ${packageDetail.order_detail.product.code.toUpperCase()}-${packageDetail.order_detail.color.code.toUpperCase()}-${packageDetail.order_detail.tone.code.toUpperCase()}</span> | <span class="badge badge-light" id="${packageDetail.order_detail.product.code.toUpperCase()}-${packageDetail.order_detail.color.code.toUpperCase()}-${packageDetail.order_detail.tone.code.toUpperCase()}-CONTAR">${contar}</span> de <span class="badge badge-warning" id="${packageDetail.order_detail.product.code.toUpperCase()}-${packageDetail.order_detail.color.code.toUpperCase()}-${packageDetail.order_detail.tone.code.toUpperCase()}-TOTAL">${total}</span> | <span class="badge badge-${contar == total ? 'success' : 'danger'}" id="${packageDetail.order_detail.product.code.toUpperCase()}-${packageDetail.order_detail.color.code.toUpperCase()}-${packageDetail.order_detail.tone.code.toUpperCase()}-BADGE">${contar == total ? 'Completado' : 'Hace falta'}</span>
                     </div>
                 </b>
             </button>
@@ -52,7 +50,7 @@ function ShowOrderPackageCleaned(packageDetails) {
                 <div class="col-12">
                     <div class="row mb-2 text-center">
                         <div class="col-12">
-                            <input onkeyup="DetailOrderPackage" type="text" class="mb-2 w-100 form-control" style="border: 1px solid black !important;" value="">
+                            <input onkeyup="ShowOrderPackageDetail('${packageDetail.order_detail.product.code.toUpperCase()}-${packageDetail.order_detail.color.code.toUpperCase()}-${packageDetail.order_detail.tone.code.toUpperCase()}', event, null, '${packageDetail.order_detail.product.code.toUpperCase()}-${packageDetail.order_detail.color.code.toUpperCase()}-${packageDetail.order_detail.tone.code.toUpperCase()}', ${packageDetails.id}, ${packageDetail.id})" id="${packageDetail.order_detail.product.code.toUpperCase()}-${packageDetail.order_detail.color.code.toUpperCase()}-${packageDetail.order_detail.tone.code.toUpperCase()}" type="text" class="mb-2 w-100 form-control" style="border: 1px solid black !important;" value="">
                         </div>
                     </div>
                     <table id="2-table" class="table text-center">
@@ -61,15 +59,17 @@ function ShowOrderPackageCleaned(packageDetails) {
                                 <th scope="col">TALLA</th>
                                 <th scope="col">CP</th>
                                 <th scope="col">CD</th>
+                                <th scope="col"><i class="fas fa-info"></i></th>
                             </tr>
                         </thead>
                         <tbody>`;
-        $.each(packageDetail.order_dispatch_detail_quantities, function(i, orderDispatchDetailQuantity) {
+        $.each(packageDetail.order_dispatch_detail_quantities, function(j, orderDispatchDetailQuantity) {
             if(orderDispatchDetailQuantity.quantity != 0) {
                 orderPackageDetails += `<tr>
-                    <th scope="col">${orderDispatchDetailQuantity.order_detail_quantity.size.code}</th>
-                    <td id="${packageDetail.order_detail.product.code}-${packageDetail.order_detail.color.code}-${packageDetail.order_detail.tone.code}-${orderDispatchDetailQuantity.order_detail_quantity.size.code.replace('T', '')}-CP">0</td>
-                    <td id="${packageDetail.order_detail.product.code}-${packageDetail.order_detail.color.code}-${packageDetail.order_detail.tone.code}-${orderDispatchDetailQuantity.order_detail_quantity.size.code.replace('T', '')}-CD">0</td>
+                    <th id="${packageDetail.order_detail.product.code.toUpperCase()}-${packageDetail.order_detail.color.code.toUpperCase()}-${packageDetail.order_detail.tone.code.toUpperCase()}-${orderDispatchDetailQuantity.order_detail_quantity.size.code.replace('T', '').toUpperCase()}-DETAIL" data-product_id="${packageDetail.order_detail.product_id}" data-color_id="${packageDetail.order_detail.color_id}" data-tone_id="${packageDetail.order_detail.tone_id}" data-size_id="${orderDispatchDetailQuantity.order_detail_quantity.size_id}" scope="col">${orderDispatchDetailQuantity.order_detail_quantity.size.code}</th>
+                    <td id="${packageDetail.order_detail.product.code.toUpperCase()}-${packageDetail.order_detail.color.code.toUpperCase()}-${packageDetail.order_detail.tone.code.toUpperCase()}-${orderDispatchDetailQuantity.order_detail_quantity.size.code.replace('T', '').toUpperCase()}-CP">${orderDispatchDetailQuantity.order_packages_details_quantities.reduce((total, objeto) => total + objeto.quantity, 0)}</td>
+                    <td id="${packageDetail.order_detail.product.code.toUpperCase()}-${packageDetail.order_detail.color.code.toUpperCase()}-${packageDetail.order_detail.tone.code.toUpperCase()}-${orderDispatchDetailQuantity.order_detail_quantity.size.code.replace('T', '').toUpperCase()}-CD">${orderDispatchDetailQuantity.quantity}</td>
+                    <td id="${packageDetail.order_detail.product.code.toUpperCase()}-${packageDetail.order_detail.color.code.toUpperCase()}-${packageDetail.order_detail.tone.code.toUpperCase()}-${orderDispatchDetailQuantity.order_detail_quantity.size.code.replace('T', '').toUpperCase()}-CA"><span class="badge badge-pill badge-info text-white" style="cursor: pointer;"><i class="fas fa-info text-white"></i></span></td>
                 </tr>`;
             }
         })
@@ -87,6 +87,67 @@ function ShowOrderPackageCleaned(packageDetails) {
     });
 
     $('#orderPackageDetails').html(orderPackageDetails);
+}
+
+function ShowOrderPackageDetail(id, event, quantity, referencia, order_package_id, order_dispatch_detail_id) {
+    if(event.which == 13){
+        let value = $.trim($(`#${id}`).val());
+        $(`#${id}`).val('');
+
+        if(value.substring(0, value.lastIndexOf('-')) == referencia) {
+            let countPicking = parseInt($(`#${value}-CP`).text());
+            let countDispatch = parseInt($(`#${value}-CD`).text());
+
+            let count = parseInt($(`#${value.substring(0, value.lastIndexOf('-'))}-CONTAR`).text());
+            let total = parseInt($(`#${value.substring(0, value.lastIndexOf('-'))}-TOTAL`).text());
+            let badge = $(`#${value.substring(0, value.lastIndexOf('-'))}-BADGE`);
+
+            if(isNaN(countPicking) || isNaN(countDispatch)) {
+                toastr.error('El codigo ingresado es erroneo. Revisar el valor que arroja el codigo');
+            } else if(countPicking == countDispatch) {
+                toastr.warning('Las unidades a despachar ya fueron alistadas y empacadas en su totalidad');
+            } else {
+                if(quantity == null) {
+                    count++;
+                    countPicking++;
+                    $(`#${value.substring(0, value.lastIndexOf('-'))}-CONTAR`).text(count);
+                    $(`#${value}-CP`).text(countPicking);
+                    count == total ? badge.removeClass('badge-danger').addClass('badge-success').text('Completado') : badge.removeClass('badge-success').addClass('badge-danger').text('Hace falta') ;
+                }
+                $.ajax({
+                    url: `/Dashboard/Orders/Packed/Packages/Detail`,
+                    type: 'POST',
+                    data: {
+                        '_token': $('meta[name="csrf-token"]').attr('content'),
+                        'product_id': parseInt($(`#${value}-DETAIL`).attr('data-product_id')),
+                        'color_id': parseInt($(`#${value}-DETAIL`).attr('data-color_id')),
+                        'tone_id': parseInt($(`#${value}-DETAIL`).attr('data-tone_id')),
+                        'size_id': parseInt($(`#${value}-DETAIL`).attr('data-size_id')),
+                        'order_package_id': order_package_id, 
+                        'order_dispatch_detail_id': order_dispatch_detail_id,
+                        'quantity': quantity
+                    },
+                    success: function(response) {
+                        
+                    },
+                    error: function(xhr, textStatus, errorThrown) {
+                        ShowOrderPackageAjaxError(xhr);
+                        if(quantity == null) {
+                            count--;
+                            countPicking--;
+                            $(`#${value.substring(0, value.lastIndexOf('-'))}-CONTAR`).text(count);
+                            $(`#${value}-CP`).text(countPicking);
+                            count == total ? badge.removeClass('badge-danger').addClass('badge-success').text('Completado') : badge.removeClass('badge-success').addClass('badge-danger').text('Hace falta') ;
+                        }
+                    }
+                });
+            }
+        } else if (value == '') {
+            toastr.error('Debe ingresar un codigo de referencia.');
+        } else {
+            toastr.warning(`El codigo ingresado fue ${value}, la referencia a alistar y empacar es ${referencia}. Por favor revisar si el codigo ingresado tiene el formato REFERENCIA-COLOR-TONO-TALLA o si la talla es valida.`);
+        }
+    }
 }
 
 function ShowOrderPackageAjaxSuccess(response) {

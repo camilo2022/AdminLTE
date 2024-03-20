@@ -167,10 +167,11 @@ class OrderPackedPackageController extends Controller
                 'order_packing.order_dispatch.order_dispatch_details.order_detail.tone', 
                 'order_packing.order_dispatch.order_dispatch_details.order_packages_details.order_package_detail_quantities.order_dispatch_detail_quantity.order_detail_quantity.size', 
                 'order_packing.order_dispatch.order_dispatch_details.order_dispatch_detail_quantities.order_detail_quantity.size', 
+                'order_packing.order_dispatch.order_dispatch_details.order_dispatch_detail_quantities.order_packages_details_quantities', 
                 'order_package_details.order_dispatch_detail.order_detail.product', 
                 'order_package_details.order_dispatch_detail.order_detail.color', 
                 'order_package_details.order_dispatch_detail.order_detail.tone', 
-                'order_package_details.order_package_detail_quantities.order_dispatch_detail_quantity.order_detail_quantity.size'
+                'order_package_details.order_package_detail_quantities.order_dispatch_detail_quantity.order_detail_quantity.size',
             ])->findOrFail($request->input('order_package_id'));
 
             return $this->successResponse(
@@ -217,7 +218,8 @@ class OrderPackedPackageController extends Controller
             $orderPackageDetail = OrderPackageDetail::with('order_dispatch_detail.order_dispatch_detail_quantities.order_detail_quantity', 'order_dispatch_detail.order_detail')
                 ->whereHas('order_dispatch_detail.order_detail',
                     function ($subQuery) use ($request) {
-                        $subQuery->where('color_id', $request->input('color_id'))
+                        $subQuery->where('product_id', $request->input('product_id'))
+                            ->where('color_id', $request->input('color_id'))
                             ->where('tone_id', $request->input('tone_id'));
                     }
                 )

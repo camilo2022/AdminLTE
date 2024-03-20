@@ -24,6 +24,7 @@ function IndexOrderPackedDetailCleaned(packages) {
     let orderPackages = '';
     
     $.each(packages, function(i, package) {
+        
         if (i % 2 === 0) {
             orderPackages += '<div class="row">';
         }
@@ -33,7 +34,7 @@ function IndexOrderPackedDetailCleaned(packages) {
                 <b>
                     <div class="table-responsive">
                         <i class="fa fa-box"></i>
-                        <span>${package.package_type.name} #</span> <span class="badge badge-light">${package.package_type.id}</span> | <span> PESO: </span> <span class="badge badge-light">${package.weight}</span>
+                        <span>${package.package_type.name} #</span> <span class="badge badge-light">${package.id}</span> | <span> PESO: </span> <span class="badge badge-light">${package.weight}</span>
                     </div>
                 </b>
             </button>
@@ -77,7 +78,7 @@ function IndexOrderPackedDetailCleaned(packages) {
                         </thead>
                         <tbody>`;
 
-            $.each(package_detail.order_package_detail_quantities, function(j, package_detail_quantity) {
+            $.each(package_detail.order_package_detail_quantities, function(k, package_detail_quantity) {
                 orderPackages += `<tr>
                     <th scope="col">${package_detail_quantity.order_dispatch_detail_quantity.order_detail_quantity.size.code}</th>
                     <td>${package_detail_quantity.quantity}</td>

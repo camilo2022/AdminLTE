@@ -78,7 +78,6 @@
                     </div>
                     <div class="card-body" id="orderPackages">
                         
-                        
                     </div>
                 </div>
             </div>

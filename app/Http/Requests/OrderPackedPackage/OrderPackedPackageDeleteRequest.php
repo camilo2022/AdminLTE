@@ -24,18 +24,15 @@ class OrderPackedPackageDeleteRequest extends FormRequest
     public function rules()
     {
         return [
-            'id' => ['required', 'exists:order_packages,id'],
-            'order_packing_id' => ['required', 'exists:order_packings,id']
+            'id' => ['required', 'exists:order_packages,id']
         ];
     }
 
     public function messages()
     {
         return [
-            'id.required' => 'El Identificador del empaque es requerido.',
-            'id.exists' => 'El Identificador del empaque no es válido.',
-            'order_packing_id.required' => 'El Identificador de la orden de alistamiento y empacado de la orden de despacho del pedido es requerido.',
-            'order_packing_id.exists' => 'El Identificador de la orden de alistamiento y empacado de la orden de despacho del pedido no es válido.'
+            'id.required' => 'El Identificador del empaque de la orden de alistamiento y empacado es requerido.',
+            'id.exists' => 'El Identificador del empaque de la orden de alistamiento y empacado no es válido.',
         ];
     }
 }

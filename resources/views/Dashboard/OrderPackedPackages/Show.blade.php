@@ -82,7 +82,6 @@
 @endsection
 @section('script')
 <script src="{{ asset('js/Dashboard/OrderPackedPackages/Show.js') }}"></script>
-<script src="{{ asset('js/Dashboard/OrderPackedPackages/Detail.js') }}"></script>
 <script src="{{ asset('js/Dashboard/OrderPackedPackages/Close.js') }}"></script>
 <script src="{{ asset('js/Dashboard/OrderPackedPackages/Delete.js') }}"></script>
 @endsection

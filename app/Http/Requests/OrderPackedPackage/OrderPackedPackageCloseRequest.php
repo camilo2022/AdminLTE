@@ -24,7 +24,7 @@ class OrderPackedPackageCloseRequest extends FormRequest
     public function rules()
     {
         return [
-            'id' => ['required', 'exists:order_packings,id'],
+            'id' => ['required', 'exists:order_packages,id'],
             'weight' => ['required']
         ];
     }
