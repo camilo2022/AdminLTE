@@ -50,7 +50,7 @@ class OrderDispatchController extends Controller
             //Consulta por nombre
             $orders = Order::with(['order_dispatches' => fn($query) => $query->whereDoesntHave('order_packing'),
                     'order_dispatches.dispatch_user',
-                    'order_details' => fn($query) => $query->where('status', 'Aprobado'),
+                    'order_details' => fn($query) => $query->whereIn('status', ['Aprobado']),
                     'client' => fn($query) => $query->withTrashed(),
                     'client.country', 'client.departament', 'client.city',
                     'client_branch' => fn($query) => $query->withTrashed(),
@@ -259,20 +259,20 @@ class OrderDispatchController extends Controller
     public function store(OrderDispatchStoreRequest $request)
     {
         try {
-            $order_dispatch = OrderDispatch::where('order_id', $request->input('order_id'))->where('dispatch_status', 'Pendiente')->first();
+            $orderDispatch = OrderDispatch::where('order_id', $request->input('order_id'))->where('dispatch_status', 'Pendiente')->first();
 
-            if(!$order_dispatch) {
-                $order_dispatch = new OrderDispatch();
-                $order_dispatch->order_id = $request->input('order_id');
-                $order_dispatch->dispatch_user_id = Auth::user()->id;
-                $order_dispatch->consecutive = DB::selectOne('CALL order_dispatches()')->consecutive;;
-                $order_dispatch->save();
+            if(!$orderDispatch) {
+                $orderDispatch = new OrderDispatch();
+                $orderDispatch->order_id = $request->input('order_id');
+                $orderDispatch->dispatch_user_id = Auth::user()->id;
+                $orderDispatch->consecutive = DB::selectOne('CALL order_dispatches()')->consecutive;;
+                $orderDispatch->save();
             }
 
             foreach($request->input('details') as $detail) {
                 $detail = (object) $detail;
                 $order_dispatch_detail = new OrderDispatchDetail();
-                $order_dispatch_detail->order_dispatch_id = $order_dispatch->id;
+                $order_dispatch_detail->order_dispatch_id = $orderDispatch->id;
                 $order_dispatch_detail->order_detail_id = $detail->id;
                 $order_dispatch_detail->save();
 
@@ -305,8 +305,7 @@ class OrderDispatchController extends Controller
                 }
             }
 
-            DB::statement('CALL order_dispatch_status(?,?)', [$request->input('order_id'), $order_dispatch->id]);
-            DB::statement('CALL order_dispatch_status(?,?)', [$request->input('order_id'), 0]);
+            DB::statement('CALL order_dispatch_status(?,?)', [$orderDispatch->id, $request->input('order_id')]);
 
             return $this->successResponse(
                 '',
@@ -358,7 +357,7 @@ class OrderDispatchController extends Controller
             $orderDispatch->dispatch_status = 'Pendiente';
             $orderDispatch->save();
 
-            DB::statement('CALL order_dispatch_status(?,?)', [$orderDispatch->order->id, 0]);
+            DB::statement('CALL order_dispatch_status(?,?)', [0, $orderDispatch->order_id]);
 
             return $this->successResponse(
                 $orderDispatch,
@@ -509,7 +508,7 @@ class OrderDispatchController extends Controller
             $orderDispatch->dispatch_status = 'Cancelado';
             $orderDispatch->save();
 
-            DB::statement('CALL order_dispatch_status(?,?)', [$orderDispatch->order->id, 0]);
+            DB::statement('CALL order_dispatch_status(?,?)', [0, $orderDispatch->order_id]);
 
             return $this->successResponse(
                 $orderDispatch,
@@ -574,7 +573,7 @@ class OrderDispatchController extends Controller
             $orderDispatch->dispatch_status = 'Rechazado';
             $orderDispatch->save();
 
-            DB::statement('CALL order_dispatch_status(?,?)', [$orderDispatch->order->id, 0]);
+            DB::statement('CALL order_dispatch_status(?,?)', [0, $orderDispatch->order_id]);
 
             return $this->successResponse(
                 $orderDispatch,

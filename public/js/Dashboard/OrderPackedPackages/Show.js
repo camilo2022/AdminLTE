@@ -65,11 +65,27 @@ function ShowOrderPackageCleaned(packageDetails) {
                         <tbody>`;
         $.each(packageDetail.order_dispatch_detail_quantities, function(j, orderDispatchDetailQuantity) {
             if(orderDispatchDetailQuantity.quantity != 0) {
+
+                let countPickingPackage = 0;
+
+                $.each(packageDetails.order_package_details, function(k, orderPackageDetail) {
+                    if(orderPackageDetail.order_dispatch_detail_id == packageDetail.id && orderPackageDetail.order_package_id == packageDetails.id) {
+
+                        $.each(orderPackageDetail.order_package_detail_quantities, function(l, orderPackageDetailQuantity) {
+                            if(orderPackageDetailQuantity.order_dispatch_detail_quantity.order_detail_quantity.size_id == orderDispatchDetailQuantity.order_detail_quantity.size_id) {
+                                countPickingPackage = orderPackageDetailQuantity.quantity;
+                                return false;
+                            }
+                        })
+
+                    }
+                })
+
                 orderPackageDetails += `<tr>
                     <th id="${packageDetail.order_detail.product.code.toUpperCase()}-${packageDetail.order_detail.color.code.toUpperCase()}-${packageDetail.order_detail.tone.code.toUpperCase()}-${orderDispatchDetailQuantity.order_detail_quantity.size.code.replace('T', '').toUpperCase()}-DETAIL" data-product_id="${packageDetail.order_detail.product_id}" data-color_id="${packageDetail.order_detail.color_id}" data-tone_id="${packageDetail.order_detail.tone_id}" data-size_id="${orderDispatchDetailQuantity.order_detail_quantity.size_id}" scope="col">${orderDispatchDetailQuantity.order_detail_quantity.size.code}</th>
-                    <td id="${packageDetail.order_detail.product.code.toUpperCase()}-${packageDetail.order_detail.color.code.toUpperCase()}-${packageDetail.order_detail.tone.code.toUpperCase()}-${orderDispatchDetailQuantity.order_detail_quantity.size.code.replace('T', '').toUpperCase()}-CP">${orderDispatchDetailQuantity.order_packages_details_quantities.reduce((total, objeto) => total + objeto.quantity, 0)}</td>
+                    <td id="${packageDetail.order_detail.product.code.toUpperCase()}-${packageDetail.order_detail.color.code.toUpperCase()}-${packageDetail.order_detail.tone.code.toUpperCase()}-${orderDispatchDetailQuantity.order_detail_quantity.size.code.replace('T', '').toUpperCase()}-CP" data-countPickingPackage="${countPickingPackage}">${orderDispatchDetailQuantity.order_packages_details_quantities.reduce((total, objeto) => total + objeto.quantity, 0)}</td>
                     <td id="${packageDetail.order_detail.product.code.toUpperCase()}-${packageDetail.order_detail.color.code.toUpperCase()}-${packageDetail.order_detail.tone.code.toUpperCase()}-${orderDispatchDetailQuantity.order_detail_quantity.size.code.replace('T', '').toUpperCase()}-CD">${orderDispatchDetailQuantity.quantity}</td>
-                    <td id="${packageDetail.order_detail.product.code.toUpperCase()}-${packageDetail.order_detail.color.code.toUpperCase()}-${packageDetail.order_detail.tone.code.toUpperCase()}-${orderDispatchDetailQuantity.order_detail_quantity.size.code.replace('T', '').toUpperCase()}-CA"><span class="badge badge-pill badge-info text-white" style="cursor: pointer;"><i class="fas fa-info text-white"></i></span></td>
+                    <td onclick="DetailOrderPackageDetailModal('reference_d', '${packageDetail.order_detail.product.code.toUpperCase()}-${packageDetail.order_detail.color.code.toUpperCase()}-${packageDetail.order_detail.tone.code.toUpperCase()}-${orderDispatchDetailQuantity.order_detail_quantity.size.code.replace('T', '').toUpperCase()}', ${packageDetails.id}, ${packageDetail.id})"><span class="badge badge-pill badge-info text-white" style="cursor: pointer;"><i class="fas fa-info text-white"></i></span></td>
                 </tr>`;
             }
         })
@@ -89,31 +105,72 @@ function ShowOrderPackageCleaned(packageDetails) {
     $('#orderPackageDetails').html(orderPackageDetails);
 }
 
-function ShowOrderPackageDetail(id, event, quantity, referencia, order_package_id, order_dispatch_detail_id) {
+function DetailOrderPackageDetailModal(id, referencia, order_package_id, order_dispatch_detail_id) {
+    $(`#${id}`).val(referencia);
+    $('#DetailOrderPackageDetailButton').attr('onclick', `DetailOrderPackageDetail('${id}', '${referencia.substring(0, referencia.lastIndexOf('-'))}', ${order_package_id}, ${order_dispatch_detail_id})`)
+    $('#DetailOrderPackageDetailModal').modal('show');
+}
+
+function DetailOrderPackageDetail(id, referencia, order_package_id, order_dispatch_detail_id) {
+    let quantity = parseInt($('#quantity_d').val());
+    $('#quantity_d').val('');
+
+    let event = new KeyboardEvent('keyup', {
+        key: 'Enter',
+        code: 'Enter',
+        which: 13,
+        keyCode: 13,
+        bubbles: true,
+        cancelable: true
+    });
+
+    if(quantity == '' || quantity == 0 || isNaN(quantity)) {
+        toastr.error('La cantidad ingresada no es valida.')
+    } else {
+        ShowOrderPackageDetail(id, event, quantity, referencia, order_package_id, order_dispatch_detail_id, false);
+    }
+}
+
+function ShowOrderPackageDetail(id, event, quantity, referencia, order_package_id, order_dispatch_detail_id, status = true) {
+
     if(event.which == 13){
-        let value = $.trim($(`#${id}`).val());
-        $(`#${id}`).val('');
+        let value = $.trim($(`#${id}`).val()).toUpperCase();
+        if(status) {
+            $(`#${id}`).val('');
+        }
 
         if(value.substring(0, value.lastIndexOf('-')) == referencia) {
             let countPicking = parseInt($(`#${value}-CP`).text());
+            let countPickingPackage = parseInt($(`#${value}-CP`).attr('data-countPickingPackage'));
             let countDispatch = parseInt($(`#${value}-CD`).text());
+            let countPickingPackageValue = countPickingPackage;
 
             let count = parseInt($(`#${value.substring(0, value.lastIndexOf('-'))}-CONTAR`).text());
             let total = parseInt($(`#${value.substring(0, value.lastIndexOf('-'))}-TOTAL`).text());
             let badge = $(`#${value.substring(0, value.lastIndexOf('-'))}-BADGE`);
 
-            if(isNaN(countPicking) || isNaN(countDispatch)) {
-                toastr.error('El codigo ingresado es erroneo. Revisar el valor que arroja el codigo');
-            } else if(countPicking == countDispatch) {
-                toastr.warning('Las unidades a despachar ya fueron alistadas y empacadas en su totalidad');
+            if(!status && (quantity > countDispatch - (countPicking - countPickingPackage) || quantity > countDispatch)){
+                toastr.warning('La cantidad ingresada supera el maximo que puede empacar en este empaque.');
+            } else if(isNaN(countPicking) || isNaN(countDispatch)) {
+                toastr.error('El codigo ingresado es erroneo. Revisar el valor que arroja el codigo.');
+            } else if(status && countPicking == countDispatch) {
+                toastr.warning('Las unidades a despachar ya fueron alistadas y empacadas en su totalidad.');
             } else {
-                if(quantity == null) {
+                if(status) {
                     count++;
                     countPicking++;
-                    $(`#${value.substring(0, value.lastIndexOf('-'))}-CONTAR`).text(count);
-                    $(`#${value}-CP`).text(countPicking);
-                    count == total ? badge.removeClass('badge-danger').addClass('badge-success').text('Completado') : badge.removeClass('badge-success').addClass('badge-danger').text('Hace falta') ;
+                    countPickingPackage++;
+                } else {
+                    count = count - countPickingPackage + quantity;
+                    countPicking = countPicking - countPickingPackage + quantity;
+                    countPickingPackage = quantity;
                 }
+                
+                $(`#${value.substring(0, value.lastIndexOf('-'))}-CONTAR`).text(count);
+                $(`#${value}-CP`).text(countPicking);
+                $(`#${value}-CP`).attr('data-countPickingPackage', countPickingPackage);
+                count == total ? badge.removeClass('badge-danger').addClass('badge-success').text('Completado') : badge.removeClass('badge-success').addClass('badge-danger').text('Hace falta') ;
+
                 $.ajax({
                     url: `/Dashboard/Orders/Packed/Packages/Detail`,
                     type: 'POST',
@@ -132,13 +189,20 @@ function ShowOrderPackageDetail(id, event, quantity, referencia, order_package_i
                     },
                     error: function(xhr, textStatus, errorThrown) {
                         ShowOrderPackageAjaxError(xhr);
-                        if(quantity == null) {
-                            count--;
-                            countPicking--;
-                            $(`#${value.substring(0, value.lastIndexOf('-'))}-CONTAR`).text(count);
-                            $(`#${value}-CP`).text(countPicking);
-                            count == total ? badge.removeClass('badge-danger').addClass('badge-success').text('Completado') : badge.removeClass('badge-success').addClass('badge-danger').text('Hace falta') ;
+                        if(status) {
+                            count = count - countPickingPackage + quantity;
+                            countPicking = countPicking - countPickingPackage + quantity;
+                            countPickingPackage = quantity;
+                        } else {
+                            count = count - quantity + countPickingPackageValue;
+                            countPicking = countPicking - quantity + countPickingPackageValue;
+                            countPickingPackage = countPickingPackageValue;
                         }
+
+                        $(`#${value.substring(0, value.lastIndexOf('-'))}-CONTAR`).text(count);
+                        $(`#${value}-CP`).text(countPicking);
+                        $(`#${value}-CP`).attr('data-countPickingPackage', countPickingPackage);
+                        count == total ? badge.removeClass('badge-danger').addClass('badge-success').text('Completado') : badge.removeClass('badge-success').addClass('badge-danger').text('Hace falta') ;
                     }
                 });
             }

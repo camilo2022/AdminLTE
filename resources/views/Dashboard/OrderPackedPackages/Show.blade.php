@@ -78,6 +78,7 @@
             </div>
         </div>
     </div>
+    @include('Dashboard.OrderPackedPackages.Detail')
 </section>
 @endsection
 @section('script')

@@ -17,6 +17,7 @@ use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\URL;
 
@@ -134,7 +135,7 @@ class OrderPackedController extends Controller
     public function finish(OrderPackedFinishRequest $request)
     {
         try {
-            $orderPacked = OrderPacking::with('order_packages.order_package_details.order_dispatch_detail.order_detail')->findOrFail($request->input('id'));
+            $orderPacked = OrderPacking::with('order_dispatch.order', 'order_dispatch.order_dispatch_details', 'order_packages.order_package_details.order_dispatch_detail.order_detail')->findOrFail($request->input('id'));
             $orderPacked->packing_status = 'Finalizado';
             $orderPacked->save();
 
@@ -143,6 +144,16 @@ class OrderPackedController extends Controller
                 $orderDetail->status = 'Empacado';
                 $orderDetail->save();
             }
+
+            foreach($orderPacked->order_dispatch->order_dispatch_details as $orderDispatchDetail) {
+                $orderDispatchDetail->status = 'Empacado';
+                $orderDispatchDetail->save();
+            }
+
+            $orderPacked->order_dispatch->dispatch_status = 'Empacado';
+            $orderPacked->order_dispatch->save();
+            
+            DB::statement('CALL order_dispatch_status(?,?)', [0, $orderPacked->order_dispatch->order_id]);
 
             return $this->successResponse(
                 [

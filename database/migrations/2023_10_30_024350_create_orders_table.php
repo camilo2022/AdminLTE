@@ -39,7 +39,7 @@ return new class extends Migration
             $table->enum('wallet_status', ['Pendiente', 'Cancelado', 'Parcialmente Aprobado', 'Aprobado'])->default('Pendiente')->comment('Estado de cartera.');
             $table->datetime('wallet_date')->nullable()->comment('Fecha de cartera');
             $table->string('wallet_observation')->nullable()->comment('Observacion de cartera');
-            $table->enum('dispatched_status', ['Pendiente', 'Cancelado', 'Rechazado', 'Parcialmente Aprobado', 'Aprobado', 'Parcialmente Devuelto', 'Devuelto', 'Parcialmente Despachado', 'Despachado'])->default('Pendiente')->comment('Estado de despacho.');
+            $table->enum('dispatched_status', ['Pendiente', 'Cancelado', 'Rechazado', 'Parcialmente Aprobado', 'Aprobado', 'Parcialmente Empacado', 'Empacado', 'Parcialmente Devuelto', 'Devuelto', 'Parcialmente Despachado', 'Despachado'])->default('Pendiente')->comment('Estado de despacho.');
             $table->datetime('dispatched_date')->nullable()->comment('Fecha de despacho.');
             /* $table->unsignedBigInteger('correria_id')->comment('Identificador de la correria.'); */
             $table->foreignIdFor(Correria::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
@@ -138,6 +138,10 @@ return new class extends Migration
                     UPDATE orders SET dispatched_status = "Parcialmente Despachado" WHERE id = order_id;
                 ELSEIF totalDespachado = totalDetalles THEN
                     UPDATE orders SET dispatched_status = "Despachado" WHERE id = order_id;
+                ELSEIF totalEmpacado > 0 AND totalEmpacado < totalDetalles THEN
+                    UPDATE orders SET dispatched_status = "Parcialmente Empacado" WHERE id = order_id;
+                ELSEIF totalEmpacado = totalDetalles THEN
+                    UPDATE orders SET dispatched_status = "Empacado" WHERE id = order_id;
                 ELSEIF totalFiltrado > 0 AND totalFiltrado < totalDetalles THEN
                     UPDATE orders SET dispatched_status = "Parcialmente Aprobado" WHERE id = order_id;
                 ELSEIF totalFiltrado = totalDetalles THEN

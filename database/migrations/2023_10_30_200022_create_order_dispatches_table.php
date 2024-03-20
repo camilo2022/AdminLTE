@@ -95,11 +95,11 @@ return new class extends Migration
                 ELSEIF totalDespachado >= 1 AND (totalPendiente + totalRechazado + totalCancelado + totalAprobado + totalEmpacado) >= 1 THEN
                     UPDATE orders SET dispatched_status = "Parcialmente Despachado" WHERE id = order_id;
                 ELSEIF totalEmpacado = totalOrdenDespacho THEN
-                    UPDATE orders SET dispatched_status = "Aprobado" WHERE id = order_id;
+                    UPDATE orders SET dispatched_status = "Empacado" WHERE id = order_id;
                 ELSEIF totalEmpacado >= 1 AND (totalRechazado + totalCancelado + totalAprobado) >= 1 AND totalPendiente = 0 THEN
-                    UPDATE orders SET dispatched_status = "Aprobado" WHERE id = order_id;
+                    UPDATE orders SET dispatched_status = "Empacado" WHERE id = order_id;
                 ELSEIF totalEmpacado >= 1 AND (totalRechazado + totalCancelado + totalAprobado) >= 1 AND totalPendiente >= 1 THEN
-                    UPDATE orders SET dispatched_status = "Parcialmente Aprobado" WHERE id = order_id;
+                    UPDATE orders SET dispatched_status = "Parcialmente Empacado" WHERE id = order_id;
                 ELSEIF totalAprobado = totalOrdenDespacho THEN
                     UPDATE orders SET dispatched_status = "Aprobado" WHERE id = order_id;
                 ELSEIF totalAprobado >= 1 AND totalPendiente = 0 THEN

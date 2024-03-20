@@ -60,7 +60,7 @@ function IndexOrderPackedDetailCleaned(packages) {
 
         $.each(package.order_package_details, function(j, package_detail) {
             orderPackages += `<div class="col-lg-12">
-                <button type="button" class="mb-2 btn btn-info w-100 collapsed" data-toggle="collapse" data-target="#collapsePackageDetail${j}" aria-expanded="false" aria-controls="#collapsePackageDetail${j}">
+                <button type="button" class="mb-2 btn btn-info w-100 collapsed" data-toggle="collapse" data-target="#collapsePackage${i}Detail${j}" aria-expanded="false" aria-controls="#collapsePackage${i}Detail${j}">
                     <b>
                         <div class="table-responsive">
                             <i class="fa fa-solid fa-paperclip"></i>
@@ -68,7 +68,7 @@ function IndexOrderPackedDetailCleaned(packages) {
                         </div>
                     </b>
                 </button>
-                <div class="table-responsive collapse" id="collapsePackageDetail${j}">
+                <div class="table-responsive collapse" id="collapsePackage${i}Detail${j}">
                     <table class="table text-center">
                         <thead>
                             <tr>
