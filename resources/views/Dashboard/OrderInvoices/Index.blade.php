@@ -5,13 +5,13 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1 class="m-0 text-dark">Gestion de Pedidos Despacho</h1>
+                        <h1 class="m-0 text-dark">Facturacion de Pedidos Despacho</h1>
                     </div><!-- /.col -->
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item">Dashboard</li>
                             <li class="breadcrumb-item">Orders</li>
-                            <li class="breadcrumb-item">Dispatch</li>
+                            <li class="breadcrumb-item">Invoice</li>
                             <li class="breadcrumb-item">Index</li>
                         </ol>
                     </div><!-- /.col -->
@@ -92,9 +92,9 @@
     </section>
 @endsection
 @section('script')
-<script src="{{ asset('js/Dashboard/OrderDispatches/DataTableIndex.js') }}"></script>
-<script src="{{ asset('js/Dashboard/OrderDispatches/Pending.js') }}"></script>
-<script src="{{ asset('js/Dashboard/OrderDispatches/Approve.js') }}"></script>
-<script src="{{ asset('js/Dashboard/OrderDispatches/Cancel.js') }}"></script>
-<script src="{{ asset('js/Dashboard/OrderDispatches/Decline.js') }}"></script>
+<script src="{{ asset('js/Dashboard/OrderInvoices/DataTableIndex.js') }}"></script>
+<script src="{{ asset('js/Dashboard/OrderInvoices/Pending.js') }}"></script>
+<script src="{{ asset('js/Dashboard/OrderInvoices/Approve.js') }}"></script>
+<script src="{{ asset('js/Dashboard/OrderInvoices/Cancel.js') }}"></script>
+<script src="{{ asset('js/Dashboard/OrderInvoices/Decline.js') }}"></script>
 @endsection

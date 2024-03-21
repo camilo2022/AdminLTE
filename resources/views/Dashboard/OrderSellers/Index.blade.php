@@ -68,6 +68,7 @@
                                         <tr>
                                             <th>#</th>
                                             <th>Nit</th>
+                                            <th>Sucursal</th>
                                             <th>Nombre</th>
                                             <th>Pais</th>
                                             <th>Departamento</th>

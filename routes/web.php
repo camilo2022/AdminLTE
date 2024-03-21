@@ -68,6 +68,8 @@ Route::get('/', function () {
 
 Route::get('reset-password/{id}/{token}', [ResetPasswordController::class, 'showResetForm']);
 
+Route::get('Packing/Package/Details/{id}', [ResetPasswordController::class, 'detailPackage'])->name('Packing.Package.Details');
+
 Auth::routes(['register' => false]);
 
 Route::middleware(['auth'])->group(function () {

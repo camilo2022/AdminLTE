@@ -32,7 +32,7 @@ let tableOrderPackings = $('#orderPackings').DataTable({
         {
             data: 'client_id',
             render: function (data, type, row) {
-                return `${row.client.document_number} - ${row.client_branch.code}`;
+                return row.client.document_number;
             }
         },
         {

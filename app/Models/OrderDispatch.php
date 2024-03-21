@@ -41,6 +41,11 @@ class OrderDispatch extends Model implements Auditable
       return $this->morphMany(File::class, 'model');
     }
 
+    public function invoices() : MorphMany
+    {
+      return $this->morphMany(Invoice::class, 'model');
+    }
+
     public function order_packing() : HasOne
     {
         return $this->hasOne(OrderPacking::class, 'order_dispatch_id');

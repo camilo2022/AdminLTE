@@ -48,7 +48,13 @@ let tableOrderDispatches = $('#orderDispatches').DataTable({
         {
             data: 'client_id',
             render: function (data, type, row) {
-                return `${row.client.document_number} - ${row.client_branch.code}`;
+                return row.client.document_number;
+            }
+        },
+        {
+            data: 'client_branch_id',
+            render: function (data, type, row) {
+                return row.client_branch.code;
             }
         },
         {
@@ -143,7 +149,7 @@ let tableOrderDispatches = $('#orderDispatches').DataTable({
                         return `<h5><span class="badge badge-pill bg-orange text-white" style="color:white !important;"><i class="fas fa-xmark mr-2 text-white"></i>Cancelado</span></h5>`;
                         break;
                     case 'Rechazado':
-                        return `<span class="badge badge-pill badge-danger text-white"><i class="fas fa-ban mr-2 text-white"></i>Rechazado</span>`;
+                        return `<h5><span class="badge badge-pill badge-danger text-white" id="dispatched_status"><i class="fas fa-ban mr-2 text-white"></i>Rechazado</span></h5>`;
                         break
                     case 'Pendiente':
                         return `<h5><span class="badge badge-pill badge-info"><i class="fas fa-arrows-rotate mr-2"></i>Pendiente</span></h5>`;
@@ -153,6 +159,12 @@ let tableOrderDispatches = $('#orderDispatches').DataTable({
                         break;
                     case 'Aprobado':
                         return `<h5><span class="badge badge-pill badge-success"><i class="fas fa-check-double mr-2"></i>Aprobado</span></h5>`;
+                        break;
+                    case 'Parcialmente Empacado':
+                        return `<h5><span class="badge badge-pill text-white" style="background: #795548;"><i class="fas fa-box-open-full mr-2"></i>Parcialmente Empacado</span></h5>`;
+                        break;
+                    case 'Empacado':
+                        return `<h5><span class="badge badge-pill text-black" style="background: #ffffff;"><i class="fas fa-box-taped mr-2 text-black"></i>Empacado</span></h5>`;
                         break;
                     case 'Parcialmente Devuelto':
                         return `<h5><span class="badge badge-pill bg-gray"><i class="fas fa-reply mr-2"></i>Parcialmente Devuelto</span></h5>`;

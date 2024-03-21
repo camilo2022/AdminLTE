@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\OrderInvoice\OrderInvoiceIndexQueryRequest;
+use App\Http\Requests\OrderInvoice\OrderInvoiceStoreRequest;
+use App\Http\Resources\OrderInvoice\OrderInvoiceIndexQueryCollection;
 use App\Models\File;
 use App\Models\Invoice;
 use App\Models\OrderDispatch;
@@ -115,7 +118,7 @@ class OrderInvoiceController extends Controller
 
             foreach($request->input('invoices') as $invoice){
                 $invoiceNew = new Invoice();
-                $invoiceNew->model_id = $invoice->input('order_dispatch_id');
+                $invoiceNew->model_id = $request->input('order_dispatch_id');
                 $invoiceNew->model_type = OrderDispatch::class;
                 $invoiceNew->value = $invoice->input('value');
                 $invoiceNew->reference = $invoice->input('reference');
@@ -193,10 +196,10 @@ class OrderInvoiceController extends Controller
             $sizes = $orderDispatch->order_packing->order_packages->pluck('order_package_details')->flatten()->pluck('order_package_detail_quantities')->flatten()->pluck('order_dispatch_detail_quantity')->pluck('order_detail_quantity')->pluck('size')->unique()->sortBy('id')->values();
 
             foreach($orderDispatch->order_packing->order_packages as $orderPackage) {
-                $url = /* URL::route('Packing.Package', ['id' => $orderPackage->id]) */ 'url de prueba';
-                $orderPackage->qrCode = QrCode::size(150)->generate($url);
+                $url = URL::route('Packing.Package.Details', ['id' => $orderPackage->id]);
+                $orderPackage->qrCode = QrCode::size(200)->generate($url);
             }
-
+            
             $pdf = \PDF::loadView('Dashboard.OrderInvoices.PDF', compact('orderDispatch', 'sizes'))/* ->setPaper('a4', 'landscape') */->setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true]);
             /* $pdf = \PDF::loadView('Browser_public.pdfdocument', compact('queryic'))->output();
             return $pdf->download('pdfdocument.pdf'); */
