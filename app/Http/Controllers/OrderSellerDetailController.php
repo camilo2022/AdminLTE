@@ -283,11 +283,14 @@ class OrderSellerDetailController extends Controller
             $orderDetail->seller_observation = $request->input('seller_observation');
             $orderDetail->save();
 
-            $orderDetail->order_detail_quantities()->delete();
+            /* $orderDetail->order_detail_quantities()->delete(); */
 
             collect($request->order_detail_quantities)->map(function ($orderDetailQuantity) use ($orderDetail) {
                 $orderDetailQuantity = (object) $orderDetailQuantity;
-                $orderDetailQuantityNew = new OrderDetailQuantity();
+                $orderDetailQuantityNew = OrderDetailQuantity::where('order_detail_id', $orderDetail->id)->where('size_id', $orderDetailQuantity->size_id)->first();
+                if(!$orderDetailQuantityNew) {
+                    $orderDetailQuantityNew = new OrderDetailQuantity();
+                }
                 $orderDetailQuantityNew->order_detail_id = $orderDetail->id;
                 $orderDetailQuantityNew->size_id = $orderDetailQuantity->size_id;
                 $orderDetailQuantityNew->quantity = $orderDetailQuantity->quantity;

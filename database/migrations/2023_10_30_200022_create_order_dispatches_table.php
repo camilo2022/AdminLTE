@@ -24,8 +24,11 @@ return new class extends Migration
             $table->datetime('dispatch_date')->nullable();
             $table->string('consecutive')->unique();
             $table->enum('payment_status', ['Pendiente de Pago', 'Parcialmente Pagado', 'Pagado', 'Cancelado'])->default('Pendiente de Pago');
+            $table->unsignedBigInteger('invoice_user_id')->nullable();
+            $table->datetime('invoice_date')->nullable();
             /* $table->foreign('order_id')->references('id')->on('orders')->onUpdate('cascade')->onDelete('cascade'); */
             $table->foreign('dispatch_user_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('invoice_user_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });
 

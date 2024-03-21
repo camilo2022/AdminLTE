@@ -20,7 +20,7 @@ return new class extends Migration
             $table->morphs('model');
             $table->unsignedBigInteger('value');
             $table->string('reference');
-            $table->dateTime('date');
+            $table->datetime('date');
             /* $table->unsignedBigInteger('payment_type_id')->nullable(); */
             $table->foreignIdFor(PaymentType::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
             /* $table->unsignedBigInteger('bank_id')->nullable(); */

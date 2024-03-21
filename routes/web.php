@@ -18,6 +18,7 @@ use App\Http\Controllers\ModelController;
 use App\Http\Controllers\ModulesAndSubmodulesController;
 use App\Http\Controllers\OrderDispatchController;
 use App\Http\Controllers\OrderDispatchDetailController;
+use App\Http\Controllers\OrderInvoiceController;
 use App\Http\Controllers\OrderPackedController;
 use App\Http\Controllers\OrderPackedPackageController;
 use App\Http\Controllers\OrderSellerController;
@@ -589,7 +590,6 @@ Route::middleware(['auth'])->group(function () {
                     Route::post('/Store', 'store')->middleware('can:Dashboard.Orders.Packed.Store')->name('Dashboard.Orders.Packed.Store');
                     Route::put('/Finish', 'finish')->middleware('can:Dashboard.Orders.Packed.Finish')->name('Dashboard.Orders.Packed.Finish');
                     Route::delete('/Delete', 'delete')->middleware('can:Dashboard.Orders.Packed.Delete')->name('Dashboard.Orders.Packed.Delete');
-                    Route::get('/Download/{id}', 'download')->middleware('can:Dashboard.Orders.Packed.Download')->name('Dashboard.Orders.Packed.Download');
                 });
                 Route::prefix('/Packages')->group(function () {
                     Route::controller(OrderPackedPackageController::class)->group(function () {
@@ -604,6 +604,14 @@ Route::middleware(['auth'])->group(function () {
                         Route::delete('/Delete', 'delete')->middleware('can:Dashboard.Orders.Packed.Package.Delete')->name('Dashboard.Orders.Packed.Package.Delete');
                     });
                     
+                });
+            });
+            Route::prefix('/Invoice')->group(function () {
+                Route::controller(OrderInvoiceController::class)->group(function () {
+                    Route::get('/Index', 'index')->middleware('can:Dashboard.Orders.Invoice.Index')->name('Dashboard.Orders.Invoice.Index');
+                    Route::post('/Index/Query', 'indexQuery')->middleware('can:Dashboard.Orders.Invoice.Index.Query')->name('Dashboard.Orders.Invoice.Index.Query');
+                    Route::post('/Store', 'store')->middleware('can:Dashboard.Orders.Invoice.Store')->name('Dashboard.Orders.Invoice.Store');
+                    Route::get('/Download/{id}', 'download')->middleware('can:Dashboard.Orders.Invoice.Download')->name('Dashboard.Orders.Invoice.Download');
                 });
             });
 

@@ -21,7 +21,9 @@ class OrderDispatch extends Model implements Auditable
         'dispatch_user_id',
         'dispatch_status',
         'dispatched_date',
-        'consecutive'
+        'consecutive',
+        'invoice_user_id',
+        'invoice_date'
     ];
 
     protected $auditInclude = [
@@ -29,7 +31,9 @@ class OrderDispatch extends Model implements Auditable
         'dispatch_user_id',
         'dispatch_status',
         'dispatch_date',
-        'consecutive'
+        'consecutive',
+        'invoice_user_id',
+        'invoice_date'
     ];
 
     public function files() : MorphMany
@@ -55,5 +59,10 @@ class OrderDispatch extends Model implements Auditable
     public function dispatch_user() : BelongsTo
     {
         return $this->belongsTo(User::class, 'dispatch_user_id');
+    }
+
+    public function invoice_user() : BelongsTo
+    {
+        return $this->belongsTo(User::class, 'invoice_user_id');
     }
 }

@@ -301,7 +301,7 @@ class ModulesAndSubmodulesSeeder extends Seeder
 
         Submodule::create([
             'name' => 'Facturacion',
-            'url' => '/Dashboard/Orders/Invoiced/Index',
+            'url' => '/Dashboard/Orders/Invoice/Index',
             'icon' => 'fas fa-file-invoice-dollar',
             'module_id' => $Despacho->id,
             'permission_id' => 353
