@@ -612,6 +612,7 @@ Route::middleware(['auth'])->group(function () {
                 Route::controller(OrderInvoiceController::class)->group(function () {
                     Route::get('/Index', 'index')->middleware('can:Dashboard.Orders.Invoice.Index')->name('Dashboard.Orders.Invoice.Index');
                     Route::post('/Index/Query', 'indexQuery')->middleware('can:Dashboard.Orders.Invoice.Index.Query')->name('Dashboard.Orders.Invoice.Index.Query');
+                    Route::post('/Create', 'create')->middleware('can:Dashboard.Orders.Invoice.Create')->name('Dashboard.Orders.Invoice.Create');
                     Route::post('/Store', 'store')->middleware('can:Dashboard.Orders.Invoice.Store')->name('Dashboard.Orders.Invoice.Store');
                     Route::get('/Download/{id}', 'download')->middleware('can:Dashboard.Orders.Invoice.Download')->name('Dashboard.Orders.Invoice.Download');
                 });

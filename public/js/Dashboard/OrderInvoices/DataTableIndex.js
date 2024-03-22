@@ -1,8 +1,8 @@
-let tableOrderPackings = $('#orderPackings').DataTable({
+let tableOrderInvoices = $('#orderInvoices').DataTable({
     processing: true,
     serverSide: true,
     ajax: {
-        url: `/Dashboard/Orders/Packed/Index/Query`,
+        url: `/Dashboard/Orders/Invoice/Index/Query`,
         type: 'POST',
         data: function (request) {
             var columnMappings = {
@@ -21,7 +21,7 @@ let tableOrderPackings = $('#orderPackings').DataTable({
         dataSrc: function (response) {
             response.recordsTotal = response.data.meta.pagination.count;
             response.recordsFiltered = response.data.meta.pagination.total;
-            return response.data.orderPackings;
+            return response.data.orderInvoices;
         },
         error: function (xhr, error, thrown) {
             toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
@@ -38,19 +38,91 @@ let tableOrderPackings = $('#orderPackings').DataTable({
         {
             data: 'client_branch_id',
             render: function (data, type, row) {
+                return row.client_branch.code;
+            }
+        },
+        {
+            data: 'client_branch_id',
+            render: function (data, type, row) {
                 return `${row.client.name} - ${row.client_branch.name}`;
             }
         },
         {
-            data: 'dispatch_user_id' ,
+            data: 'client_branch_id',
             render: function (data, type, row) {
-                return `${row.dispatch_user.name} ${row.dispatch_user.last_name}`;
+                return row.client_branch.country.name;
             }
         },
         {
-            data: 'consecutive' ,
+            data: 'client_branch_id',
             render: function (data, type, row) {
-                return `<h5><span class="badge badge-pill bg-info text-white"><i class="fas fa-paperclip mr-2 text-white"></i>${data}</span></h5>`;
+                return row.client_branch.departament.name;
+            }
+        },
+        {
+            data: 'client_branch_id',
+            render: function (data, type, row) {
+                return row.client_branch.city.name;
+            }
+        },
+        {
+            data: 'client_branch_id',
+            render: function (data, type, row) {
+                return row.client_branch.address;
+            }
+        },
+        {
+            data: 'client_branch_id' ,
+            render: function (data, type, row) {
+                return row.client_branch.neighborhood;
+            }
+        },
+        { data: 'seller_date' },
+        {
+            data: 'seller_user_id' ,
+            render: function (data, type, row) {
+                return `${row.seller_user.name} ${row.seller_user.last_name}`;
+            }
+        },
+        {
+            data: 'seller_status',
+            render: function (data, type, row) {
+                switch (data) {
+                    case 'Cancelado':
+                        return `<h5><span class="badge badge-pill badge-danger text-white"><i class="fas fa-xmark mr-2 text-white"></i>Cancelado</span></h5>`;
+                        break;
+                    case 'Pendiente':
+                        return `<h5><span class="badge badge-pill badge-info"><i class="fas fa-arrows-rotate mr-2"></i>Pendiente</span></h5>`;
+                        break;
+                    case 'Aprobado':
+                        return `<h5><span class="badge badge-pill badge-success"><i class="fas fa-check mr-2"></i>Aprobado</span></h5>`;
+                        break;
+                    default:
+                        return `<h5><span class="badge badge-pill badge-info"><i class="fas fa-arrows-rotate mr-2"></i>Pendiente</span></h5>`;
+                        break;
+                }
+            }
+        },
+        {
+            data: 'wallet_status',
+            render: function (data, type, row) {
+                switch (data) {
+                    case 'Cancelado':
+                        return `<h5><span class="badge badge-pill badge-danger text-white"><i class="fas fa-xmark mr-2 text-white"></i>Cancelado</span></h5>`;
+                        break;
+                    case 'Pendiente':
+                        return `<h5><span class="badge badge-pill badge-info"><i class="fas fa-arrows-rotate mr-2"></i>Pendiente</span></h5>`;
+                        break;
+                    case 'Parcialmente Aprobado':
+                        return `<h5><span class="badge badge-pill badge-warning text-white"><i class="fas fa-check mr-2 text-white"></i>Parcialmente Aprobado</span></h5>`;
+                        break;
+                    case 'Aprobado':
+                        return `<h5><span class="badge badge-pill badge-success"><i class="fas fa-check-double mr-2"></i>Aprobado</span></h5>`;
+                        break;
+                    default:
+                        return `<h5><span class="badge badge-pill badge-info"><i class="fas fa-arrows-rotate mr-2"></i>Pendiente</span></h5>`;
+                        break;
+                }
             }
         },
         {
@@ -82,13 +154,19 @@ let tableOrderPackings = $('#orderPackings').DataTable({
             }
         },
         {
-            data: null,
+            data: 'correria_id',
+            render: function (data, type, row) {
+                return row.correria.code;
+            }
+        },
+        {
+            data: 'order_dispatches',
             render: function (data, type, row) {
                 let btn = `<div class="text-center" style="width: 100%;">`;
 
-                btn += `<a onclick="CreateOrderPacked(${row.id})" type="button"
-                class="btn bg-gray btn-sm mr-2" title="Empacar orden de despacho del pedido.">
-                    <i class="fas fa-box-open-full text-white"></i>
+                btn += `<a onclick="CreateOrderInvoiceModal(${row.id})" type="button"
+                class="btn btn-primary btn-sm mr-2 text-white" title="Agregar facturas a la orden de despacho.">
+                    <i class="fas fa-file-invoice-dollar"></i>
                 </a>`;
 
                 btn += `</div>`;

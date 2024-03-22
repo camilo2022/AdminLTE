@@ -58,10 +58,9 @@
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table id="orderDispatches" class="table table-bordered table-hover dataTable dtr-inline nowrap w-100">
+                                <table id="orderInvoices" class="table table-bordered table-hover dataTable dtr-inline nowrap w-100">
                                     <thead class="thead-dark">
                                         <tr>
-                                            <th></th>
                                             <th>#</th>
                                             <th>Nit</th>
                                             <th>Sucursal</th>
@@ -89,12 +88,10 @@
                 </div>
             </div>
         </div>
+        @include('Dashboard.OrderInvoices.Create')
     </section>
 @endsection
 @section('script')
 <script src="{{ asset('js/Dashboard/OrderInvoices/DataTableIndex.js') }}"></script>
-<script src="{{ asset('js/Dashboard/OrderInvoices/Pending.js') }}"></script>
-<script src="{{ asset('js/Dashboard/OrderInvoices/Approve.js') }}"></script>
-<script src="{{ asset('js/Dashboard/OrderInvoices/Cancel.js') }}"></script>
-<script src="{{ asset('js/Dashboard/OrderInvoices/Decline.js') }}"></script>
+<script src="{{ asset('js/Dashboard/OrderInvoices/Create.js') }}"></script>
 @endsection
