@@ -19,6 +19,28 @@ class OrderInvoiceIndexQueryCollection extends ResourceCollection
             'orderInvoices' => $this->collection->map(function ($orderInvoice) {
                 return [
                     'id' => $orderInvoice->id,
+                    'invoices' => $orderInvoice->invoices->map(function ($invoice) {
+                            return [
+                                'id' => $invoice->id,
+                                'reference' => $invoice->reference,
+                                'value' => $invoice->value,
+                                'date' => $invoice->date,
+                                'files' => $invoice->files->map(function ($file) {
+                                        return [
+                                            'path' => asset('storage/' . $file->path),
+                                            'name' => $file->name,
+                                            'mime' => $file->mime,
+                                            'extension' => $file->extension,
+                                            'size' => $file->size,
+                                            'user_id' => $file->user_id,
+                                            'user' => $file->user,
+                                            'metadata' => json_decode($file->path, true)
+                                        ];
+                                    }
+                                )->toArray(),
+                            ];
+                        }
+                    )->toArray(),
                     'order' => $orderInvoice->order,
                     'client_id' => $orderInvoice->order->client_id,
                     'client' => $orderInvoice->order->client,
@@ -42,6 +64,8 @@ class OrderInvoiceIndexQueryCollection extends ResourceCollection
                     'correria' => $orderInvoice->order->correria,
                     'dispatch_user_id' => $orderInvoice->dispatch_user_id,
                     'dispatch_user' => $orderInvoice->dispatch_user,
+                    'invoice_user_id' => $orderInvoice->invoice_user_id,
+                    'invoice_user' => $orderInvoice->invoice_user,
                     'dispatch_status' => $orderInvoice->dispatch_status,
                     'dispatch_date' => $orderInvoice->dispatch_date,
                     'consecutive' => $orderInvoice->consecutive,

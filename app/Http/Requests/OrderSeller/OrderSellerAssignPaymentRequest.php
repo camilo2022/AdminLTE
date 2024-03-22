@@ -52,7 +52,7 @@ class OrderSellerAssignPaymentRequest extends FormRequest
             'bank_id.exists' => 'El Identificador del banco no es válido.',
             'supports.array' => 'El campo Soportes de pago debe ser un arreglo.',
             'supports.*.file' => 'El Soporte #:position debe ser un archivo.',
-            'supports.*..mimes' => 'El Soporte #:position debe tener una extensión válida (jpeg, jpg, png, gif).',
+            'supports.*.mimes' => 'El Soporte #:position debe tener una extensión válida (jpeg, jpg, png, gif).',
             'supports.*.max' => 'El Soporte #:position no debe superar los 5 MB (5120 KB).',
         ];
     }

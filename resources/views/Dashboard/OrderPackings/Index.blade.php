@@ -63,6 +63,7 @@
                                         <tr>
                                             <th>#</th>
                                             <th>Nit</th>
+                                            <th>Sucursal</th>
                                             <th>Nombre</th>
                                             <th>Filtrador</th>
                                             <th>Orden Despacho</th>

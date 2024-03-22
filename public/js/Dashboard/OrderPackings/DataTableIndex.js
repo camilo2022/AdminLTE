@@ -7,9 +7,9 @@ let tableOrderPackings = $('#orderPackings').DataTable({
         data: function (request) {
             var columnMappings = {
                 0: 'id',
-                3: 'dispatch_user_id',
-                4: 'consecutive',
-                5: 'dispatch_status',
+                4: 'dispatch_user_id',
+                5: 'consecutive',
+                6: 'dispatch_status',
             };
             request._token = $('meta[name="csrf-token"]').attr('content');
             request.perPage = request.length;
@@ -32,7 +32,13 @@ let tableOrderPackings = $('#orderPackings').DataTable({
         {
             data: 'client_id',
             render: function (data, type, row) {
-                return `${row.client.document_number} - ${row.client_branch.code}`;
+                return row.client.document_number;
+            }
+        },
+        {
+            data: 'client_id',
+            render: function (data, type, row) {
+                return row.client_branch.code;
             }
         },
         {
@@ -99,11 +105,11 @@ let tableOrderPackings = $('#orderPackings').DataTable({
     columnDefs: [
         {
             orderable: true,
-            targets: [0, 3, 4, 5]
+            targets: [0, 4, 5, 6]
         },
         {
             orderable: false,
-            targets: [1, 2, 6]
+            targets: [1, 2, 3, 7]
         }
     ],
     pagingType: 'full_numbers',

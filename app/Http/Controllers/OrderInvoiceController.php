@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\URL;
+use PhpParser\Node\Expr\Cast\Object_;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class OrderInvoiceController extends Controller
@@ -38,7 +39,7 @@ class OrderInvoiceController extends Controller
             $start_date = Carbon::parse($request->input('start_date'))->startOfDay();
             $end_date = Carbon::parse($request->input('end_date'))->endOfDay();
             //Consulta por nombre
-            $orderInvoices = OrderDispatch::with(['order', 'dispatch_user',
+            $orderInvoices = OrderDispatch::with(['order', 'dispatch_user', 'invoices.files', 'invoice_user',
                     'order.client' => fn($query) => $query->withTrashed(),
                     'order.client.country', 'order.client.departament', 'order.client.city',
                     'order.client_branch' => fn($query) => $query->withTrashed(),
@@ -59,7 +60,7 @@ class OrderInvoiceController extends Controller
                     }
                 )
                 ->whereHas('order_packing')
-                ->where('dispatch_status', 'Empacado')
+                ->whereIn('dispatch_status', ['Empacado', 'Despachado'])
                 ->orderBy($request->input('column'), $request->input('dir'))
                 ->paginate($request->input('perPage'));
 
@@ -112,38 +113,41 @@ class OrderInvoiceController extends Controller
     {
         try {
             $orderDispatch = OrderDispatch::findOrFail($request->input('order_dispatch_id'));
-            $orderDispatch->invoice_user_id = Auth::user()->id;
-            $orderDispatch->invoice_date = Carbon::now()->format('Y-m-d H:i:s');
-            $orderDispatch->save();
 
-            foreach($request->input('invoices') as $invoice){
+            foreach($request->input('invoices') as $index => $invoice){
                 $invoiceNew = new Invoice();
                 $invoiceNew->model_id = $request->input('order_dispatch_id');
                 $invoiceNew->model_type = OrderDispatch::class;
-                $invoiceNew->value = $invoice->input('value');
-                $invoiceNew->reference = $invoice->input('reference');
-                $invoiceNew->date = $invoice->input('date');
+                $invoiceNew->value = $invoice['value'];
+                $invoiceNew->reference = $invoice['reference'];
+                $invoiceNew->date = Carbon::parse($invoice['date'])->format('Y-m-d H:i:s');
                 $invoiceNew->save();
     
-                if ($invoice->hasFile('supports')) {
-                    foreach($invoice->file('supports') as $support) {
-                        $file = new File();
-                        $file->model_type = Invoice::class;
-                        $file->model_id = $invoiceNew->id;
-                        $file->name = $support->getClientOriginalName();
-                        $file->path = $support->store('Invoices/' . $invoiceNew->id, 'public');
-                        $file->mime = $support->getMimeType();
-                        $file->extension = $support->getClientOriginalExtension();
-                        $file->size = $support->getSize();
-                        $file->user_id = Auth::user()->id;
-                        $file->metadata = json_encode((array) stat($support));
-                        $file->save();
-                    }
+                foreach($request->invoices[$index]['supports'] as $support) {
+                    $file = new File();
+                    $file->model_type = Invoice::class;
+                    $file->model_id = $invoiceNew->id;
+                    $file->name = $support->getClientOriginalName();
+                    $file->path = $support->store('Invoices/' . $invoiceNew->id, 'public');
+                    $file->mime = $support->getMimeType();
+                    $file->extension = $support->getClientOriginalExtension();
+                    $file->size = $support->getSize();
+                    $file->user_id = Auth::user()->id;
+                    $file->metadata = json_encode((array) stat($support));
+                    $file->save();
                 }
-            }             
+            }     
+            
+            $orderDispatch->invoice_user_id = Auth::user()->id;
+            $orderDispatch->invoice_date = Carbon::now()->format('Y-m-d H:i:s');
+            $orderDispatch->dispatch_status = 'Despachado';
+            $orderDispatch->save();
 
             return $this->successResponse(
-                $orderDispatch,
+                [
+                    'orderDispatch' => $orderDispatch,
+                    'url' => URL::route('Dashboard.Orders.Invoice.Download', ['id' => $orderDispatch->id])
+                ],
                 'Las facturas fueron registradas exitosamente.',
                 201
             );
@@ -180,7 +184,7 @@ class OrderInvoiceController extends Controller
     public function download($id)
     {
         try {
-            $orderDispatch = OrderDispatch::with([
+            $orderDispatch = OrderDispatch::with([ 'invoices',
                     'dispatch_user'  => fn($query) => $query->withTrashed(),
                     'order.seller_user'  => fn($query) => $query->withTrashed(),
                     'order.wallet_user'  => fn($query) => $query->withTrashed(),

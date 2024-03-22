@@ -519,6 +519,8 @@ Route::middleware(['auth'])->group(function () {
                     Route::delete('/RemovePayment', 'removePayment')->middleware('can:Dashboard.Orders.Seller.RemovePayment')->name('Dashboard.Orders.Seller.RemovePayment');
                     Route::put('/ApprovePayment', 'approvePayment')->middleware('can:Dashboard.Orders.Seller.ApprovePayment')->name('Dashboard.Orders.Seller.ApprovePayment');
                     Route::put('/CancelPayment', 'cancelPayment')->middleware('can:Dashboard.Orders.Seller.CancelPayment')->name('Dashboard.Orders.Seller.CancelPayment');
+                    Route::post('/Email', 'email')->middleware('can:Dashboard.Orders.Seller.Email')->name('Dashboard.Orders.Seller.Email');
+                    Route::get('/Download/{id}', 'download')->middleware('can:Dashboard.Orders.Seller.Download')->name('Dashboard.Orders.Seller.Download');
                 });
                 Route::prefix('/Details')->group(function () {
                     Route::controller(OrderSellerDetailController::class)->group(function () {

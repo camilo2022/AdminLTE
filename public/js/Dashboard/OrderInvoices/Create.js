@@ -1,4 +1,4 @@
-function CreateOrderInvoiceModal() {
+function CreateOrderInvoiceModal(order_dispatch_id) {
     $.ajax({
         url: `/Dashboard/Orders/Invoice/Create`,
         type: 'POST',
@@ -6,7 +6,7 @@ function CreateOrderInvoiceModal() {
             '_token': $('meta[name="csrf-token"]').attr('content'),
         },
         success: function(response) {
-            CreateOrderInvoiceModalCleaned();
+            CreateOrderInvoiceModalCleaned(order_dispatch_id);
             CreateOrderInvoiceAjaxSuccess(response);
             $('#CreateOrderInvoiceModal').modal('show');
         },
@@ -16,15 +16,31 @@ function CreateOrderInvoiceModal() {
     });
 }
 
-function CreateOrderInvoiceModalCleaned() {
+function CreateOrderInvoiceModalCleaned(order_dispatch_id) {
     RemoveIsInvalidClassCreateOrderInvoice();
     RemoveIsValidClassCreateOrderInvoice();
     $('.invoices_c').empty();
+    $('#CreateOrderInvoiceButton').attr('onclick', `CreateOrderInvoice(${order_dispatch_id})`);
     $('#CreateOrderInvoiceAddInvoiceButton').attr('data-count', 0);
     CreateOrderInvoiceAddInvoice();
 }
 
 function CreateOrderInvoice(order_dispatch_id) {
+
+    let formData = new FormData();
+    formData.append('_token', $('meta[name="csrf-token"]').attr('content'));
+    formData.append('order_dispatch_id', order_dispatch_id);
+    $('.invoices_c').find('div.invoice_c').each(function(i) {
+        formData.append(`invoices[${i}][reference]`, $(this).find('input.reference_c').val());
+        formData.append(`invoices[${i}][value]`, $(this).find('input.value_c').val());
+        formData.append(`invoices[${i}][date]`, $(this).find('input.date_c').val() == '' ? '' : new Date($(this).find('input.date_c').val()).toISOString().slice(0, 19).replace('T', ' '));    
+        for (let j = 0; j < $(this).find('input.supports_c')[0].files.length; j++) {
+            formData.append(`invoices[${i}][supports][${j}]`, $(this).find('input.supports_c')[0].files[j]);
+        }
+    });
+    formData.forEach(function(value, key) {
+        console.log(key, value);
+    });
     Swal.fire({
         title: '¿Desea guardar la categoria y subcategorias?',
         text: 'La categoria y subcategorias serán creados.',
@@ -39,24 +55,18 @@ function CreateOrderInvoice(order_dispatch_id) {
             $.ajax({
                 url: `/Dashboard/Orders/Invoice/Store`,
                 type: 'POST',
-                data: {
-                    '_token': $('meta[name="csrf-token"]').attr('content'),
-                    'order_dispatch_id': order_dispatch_id,
-                    'subcategories': $('.subcategories_c').find('div.invoice_c').map(function(index) {
-                        return {
-                            'name': $(this).find('input.name_c').val(),
-                            'code': $(this).find('input.code_c').val(),
-                            'description': $(this).find('textarea.description_c').val()
-                        };
-                    }).get()
-                },
+                data: formData,
+                processData: false,
+                contentType: false,
                 success: function(response) {
                     tableOrderInvoices.ajax.reload();
+                    window.open(response.data.url, '_blank');
                     CreateOrderInvoiceAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
                     tableOrderInvoices.ajax.reload();
                     CreateOrderInvoiceAjaxError(xhr);
+                    console.log(xhr);
                 }
             });
         } else {
@@ -132,20 +142,15 @@ function CreateOrderInvoiceAddInvoice() {
 
     let dateForm = $('<div>').addClass('form-group');
     let dateLabel = $('<label>').attr('for', '').text('Fecha');
-    let dateInputGroup = $('<div>').addClass('input-group').addClass('date').attr({
-        'data-target-input': 'nearest'
-    });
+    let dateInputGroup = $('<div>').addClass('input-group').addClass('date');
+    
     let dateInput = $('<input>').attr({
-        'type': 'text',
+        'type': 'datetime-local',
         'id': `date${id}_c`,
         'name': `date${id}_c`,
-        'class': 'form-control datetimepicker-input',
-        'data-target': `#date${id}_c`
+        'class': 'form-control date_c',
     });
-    let dateInputAppend = $('<div>').addClass('input-group-append').attr({
-        'data-target': `#date${id}_c`, 
-        'data-toggle': 'datetimepicker'
-    });
+    let dateInputAppend = $('<div>').addClass('input-group-append');
     let dateIcon = $('<span>').addClass('input-group-text').append($('<i>').addClass('fas fa-calendar'));
     dateInputAppend.append(dateIcon);
     dateInputGroup.append(dateInput, dateInputAppend);
@@ -158,8 +163,8 @@ function CreateOrderInvoiceAddInvoice() {
         'type': 'file',
         'id': `supports${id}_c`,
         'name': `supports${id}_c`,
-        'class': 'form-control dropify',
-        'accept': '.jpg, .jpeg, .png, .gif, .pdf',
+        'class': 'form-control dropify supports_c',
+        'accept': '.jpeg, .jpg, .png, .gif, .pdf, .txt, .docx, .xlsx, .xlsm, .xlsb, .xltx',
         'multiple': true
     });
     supportsInputGroup.append(supportsInput);
@@ -233,84 +238,53 @@ function CreateOrderInvoiceAjaxError(xhr) {
 }
 
 function AddIsValidClassCreateOrderInvoice() {
-    if (!$('#name_c').hasClass('is-invalid')) {
-        $('#name_c').addClass('is-valid');
-    }
-    if (!$('#code_c').hasClass('is-invalid')) {
-        $('#code_c').addClass('is-valid');
-    }
-    if (!$('#description_c').hasClass('is-invalid')) {
-        $('#description_c').addClass('is-valid');
-    }
-    if (!$('span[aria-labelledby="select2-clothing_line_id_c-container"]').hasClass('is-invalid')) {
-        $('span[aria-labelledby="select2-clothing_line_id_c-container"]').addClass('is-valid');
-    }
-
-    $('.subcategories_c').find('div.invoice_c').each(function(index) {
-        if (!$(this).find('input.name_c').hasClass('is-invalid')) {
-            $(this).find('input.name_c').addClass('is-valid');
+    $('.invoices_c').find('div.invoice_c').each(function(index) {
+        if (!$(this).find('input.reference_c').hasClass('is-invalid')) {
+            $(this).find('input.reference_c').addClass('is-valid');
         }
-        if (!$(this).find('input.code_c').hasClass('is-invalid')) {
-            $(this).find('input.code_c').addClass('is-valid');
+        if (!$(this).find('input.value_c').hasClass('is-invalid')) {
+            $(this).find('input.value_c').addClass('is-valid');
         }
-        if (!$(this).find('textarea.description_c').hasClass('is-invalid')) {
-            $(this).find('textarea.description_c').addClass('is-valid');
+        if (!$(this).find('input.date_c').hasClass('is-invalid')) {
+            $(this).find('input.date_c').addClass('is-valid');
         }
     });
 }
 
 function RemoveIsValidClassCreateOrderInvoice() {
-    $('#name_c').removeClass('is-valid');
-    $('#code_c').removeClass('is-valid');
-    $('#description_c').removeClass('is-valid');
-    $('span[aria-labelledby="select2-clothing_line_id_c-container"]').removeClass('is-valid');
-
-    $('.subcategories_c').find('div.invoice_c').each(function(index) {
-        $(this).find('input.name_c').removeClass('is-valid');
-        $(this).find('input.code_c').removeClass('is-valid');
-        $(this).find('textarea.description_c').removeClass('is-valid');
+    $('.invoices_c').find('div.invoice_c').each(function(index) {
+        $(this).find('input.reference_c').removeClass('is-valid');
+        $(this).find('input.value_c').removeClass('is-valid');
+        $(this).find('input.date_c').removeClass('is-valid');
     });
 }
 
 function AddIsInvalidClassCreateOrderInvoice(input) {
-    if (!$(`#${input}_c`).hasClass('is-valid')) {
-        $(`#${input}_c`).addClass('is-invalid');
-    }
-
-    if (!$(`#span[aria-labelledby="select2-${input}_c-container`).hasClass('is-valid')) {
-        $(`span[aria-labelledby="select2-${input}_c-container"]`).addClass('is-invalid');
-    }
-
-    $('.subcategories_c').find('div.invoice_c').each(function(index) {
+    $('.invoices_c').find('div.invoice_c').each(function(index) {
         // Agrega la clase 'is-invalid'
-        if(input === `subcategories.${index}.name`) {
-            if (!$(this).find('input.name_c').hasClass('is-valid')) {
-                $(this).find('input.name_c').addClass('is-invalid');
+        if(input === `invoices.${index}.reference`) {
+            if (!$(this).find('input.reference_c').hasClass('is-valid')) {
+                $(this).find('input.reference_c').addClass('is-invalid');
             }
         }
-        if(input === `subcategories.${index}.code`) {
-            if (!$(this).find('input.code_c').hasClass('is-valid')) {
-                $(this).find('input.code_c').addClass('is-invalid');
+        if(input === `invoices.${index}.value`) {
+            if (!$(this).find('input.value_c').hasClass('is-valid')) {
+                $(this).find('input.value_c').addClass('is-invalid');
             }
         }
-        if(input === `subcategories.${index}.description`) {
-            if (!$(this).find('textarea.description_c').hasClass('is-valid')) {
-                $(this).find('textarea.description_c').addClass('is-invalid');
+        if(input === `invoices.${index}.date`) {
+            if (!$(this).find('input.date_c').hasClass('is-valid')) {
+                $(this).find('input.date_c').addClass('is-invalid');
             }
         }
     });
 }
 
 function RemoveIsInvalidClassCreateOrderInvoice() {
-    $('#name_c').removeClass('is-invalid');
-    $('#code_c').removeClass('is-invalid');
-    $('#description_c').removeClass('is-invalid');
-    $('span[aria-labelledby="select2-clothing_line_id_c-container"]').removeClass('is-invalid');
-
-    $('.subcategories_c').find('div.invoice_c').each(function(index) {
-        $(this).find('input.name_c').removeClass('is-invalid');
+    $('.invoices_c').find('div.invoice_c').each(function(index) {
+        $(this).find('input.reference_c').removeClass('is-invalid');
+        $(this).find('input.value_c').removeClass('is-invalid');
         $(this).find('input.code_c').removeClass('is-invalid');
-        $(this).find('textarea.description_c').removeClass('is-invalid');
     });
 }
 

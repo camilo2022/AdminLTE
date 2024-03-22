@@ -51,7 +51,9 @@
                         </tr>
                         <tr>
                             <th>FACTURAS:</th>
-                            <th colspan="3"></th>
+                            <th colspan="3">
+                                {{ implode(' | ', $orderDispatch->invoices->pluck('reference')->toArray()) }}
+                            </th>
                         </tr>                   
                         <tr>
                             <th>EMPAQUE ({{ $orderPackage->package_type->name }}):</th>
