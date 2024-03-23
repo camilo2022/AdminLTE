@@ -24,11 +24,8 @@ use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Hash;
-use App\Mail\EmailWithAttachment;
 use App\Models\Area;
 use App\Models\Charge;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
@@ -38,19 +35,6 @@ class UserController extends Controller
 
     public function index()
     {
-        $pdfFilePath = Storage::path('pdfs/example.pdf');
-
-        $data = [
-            'title' => 'Correo con PDF Adjunto',
-            'message' => 'Este es un ejemplo de un correo con un PDF adjunto.',
-        ];
-
-        $recipientEmails = [
-            'camiloacacio16@gmail.com'
-        ];
-
-        Mail::to($recipientEmails)->send(new EmailWithAttachment($data, $pdfFilePath));
-
         try {
             return view('Dashboard.Users.Index');
         } catch (Exception $e) {

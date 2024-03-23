@@ -19,6 +19,7 @@ use App\Http\Requests\OrderSeller\OrderSellerStoreRequest;
 use App\Http\Requests\OrderSeller\OrderSellerUpdateRequest;
 use App\Http\Resources\OrderSeller\OrderSellerIndexQueryCollection;
 use App\Http\Resources\OrderSeller\OrderSellerPaymentIndexQueryCollection;
+use App\Mail\EmailWithAttachment;
 use App\Models\Bank;
 use App\Models\Client;
 use App\Models\ClientBranch;
@@ -38,6 +39,8 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 
 class OrderSellerController extends Controller
 {
@@ -786,6 +789,49 @@ class OrderSellerController extends Controller
                 ],
                 500
             );
+        }
+    }
+
+    public function email() 
+    {
+        return view('Dashboard.OrderSellers.Email');
+        $pdfFilePath = Storage::path('pdfs/example.pdf');
+
+        $data = [
+            'title' => 'Correo con PDF Adjunto',
+            'message' => 'Este es un ejemplo de un correo con un PDF adjunto.',
+        ];
+
+        $recipientEmails = [
+            'camiloacacio16@gmail.com'
+        ];
+
+        Mail::to($recipientEmails)->send(new EmailWithAttachment($data, $pdfFilePath));
+    }
+    
+    public function download($id)
+    {
+        try {
+            $order = Order::with([
+                    'order_details.product', 'order_details.color', 'order_details.tone',
+                    'order_details.order_detail_quantities.size',
+                    'seller_user' => fn($query) => $query->withTrashed(),
+                    'client.document_type' => fn($query) => $query->withTrashed(),
+                    'client_branch' => fn($query) => $query->withTrashed(),
+                    'client_branch.country', 'client_branch.departament', 'client_branch.city',
+                ])
+                ->findOrFail($id);
+            
+            $sizes = $order->order_details->pluck('order_detail_quantities')->flatten()->where('quantity', '>', 0)->pluck('size')->unique()->sortBy('id')->values();
+            
+            $pdf = \PDF::loadView('Dashboard.OrderSellers.PDF', compact('order', 'sizes'))/* ->setPaper('a4', 'landscape') */->setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true]);
+            /* $pdf = \PDF::loadView('Browser_public.pdfdocument', compact('queryic'))->output();
+            return $pdf->download('pdfdocument.pdf'); */
+            return $pdf->stream("{$order->id}-PEDIDO.pdf");
+        } catch (ModelNotFoundException $e) {
+            return back()->with('danger', 'Ocurrió un error al cargar el pdf de la orden de despacho del pedidos: ' . $this->getMessage('ModelNotFoundException'));
+        } catch (Exception $e) {
+            return back()->with('danger', 'Ocurrió un error al cargar la vista: ' . $e->getMessage());
         }
     }
 }

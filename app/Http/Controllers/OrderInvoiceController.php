@@ -16,7 +16,6 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\URL;
-use PhpParser\Node\Expr\Cast\Object_;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class OrderInvoiceController extends Controller
