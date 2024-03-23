@@ -93,7 +93,7 @@ return [
 
     'from' => [
         'address' => env('MAIL_FROM_ADDRESS', 'desarrollador2@redinstantic.com'),
-        'name' => env('MAIL_FROM_NAME', '${APP_NAME}'),
+        'name' => env('MAIL_FROM_NAME', 'MARIANGEL FULL MODA SAS'),
     ],
 
     /*

@@ -24,7 +24,7 @@
             border: 1px solid #ccc;
         }
         .header, .footer {
-            background-color: #44525f;
+            background-color: #fff;
             color: #ffffff;
             padding: 10px 20px;
         }
@@ -62,7 +62,7 @@
                 <table class="content" align="center" cellpadding="0" cellspacing="0" border="0">
                     <tr>
                         <td class="header">
-                            <!-- Aquí puedes colocar el logo de tu empresa si lo deseas -->
+                            <img src="data:image/jpeg;base64,{{ $logoname }}"  style="width:100%;height:auto;" alt="LOGO MARIANGEL FULL MODA SAS">
                         </td>
                     </tr>
                     <tr>
@@ -70,7 +70,7 @@
                             <table width="100%" border="0" cellspacing="0" cellpadding="0">
                                 <tr>
                                     <td class="h2">
-                                        Estimado(a) Camilo Andres Acacio Gutierrez
+                                        Estimado(a) {{ $order->client->name .' - ' . $order->client_branch->name }}
                                     </td>
                                 </tr>
                                 <tr>
@@ -107,7 +107,7 @@
                             <table width="100%" border="0" cellspacing="0" cellpadding="0">
                                 <tr>
                                     <td align="center">
-                                        <p>© {{ Carbon::now()->format('Y') }} MARIANGEL FULL MODA SAS. Todos los derechos reservados.</p>
+                                        <p>© {{ Carbon::now()->format('Y') }} MARIANGEL FULL MODA SAS.</p> <p>Todos los derechos reservados.</p>
                                         <p>Este correo electrónico y su contenido están destinados únicamente para el uso del destinatario y pueden contener información confidencial y privilegiada. Si has recibido este mensaje por error, te rogamos que nos lo notifiques de inmediato y lo elimines de tu sistema. Cualquier divulgación, distribución o copia de este correo electrónico está estrictamente prohibida. MARIANGEL FULL MODA SAS no se hace responsable de los errores u omisiones en este mensaje ni de los daños derivados de la recepción o uso de este correo electrónico.</p>
                                         <p>Por favor, no respondas a este correo electrónico. Este mensaje se ha generado automáticamente y no se monitorea de manera activa. Si necesitas asistencia adicional o tienes alguna pregunta, por favor ponte en contacto con nosotros utilizando la información de contacto proporcionada anteriormente. Gracias.</p>
                                     </td>

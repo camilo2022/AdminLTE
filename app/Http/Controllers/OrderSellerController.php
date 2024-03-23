@@ -792,21 +792,47 @@ class OrderSellerController extends Controller
         }
     }
 
-    public function email() 
+    public function email($id) 
     {
-        return view('Dashboard.OrderSellers.Email');
-        $pdfFilePath = Storage::path('pdfs/example.pdf');
+        try {
+            $order = Order::with([
+                    'order_details.product', 'order_details.color', 'order_details.tone',
+                    'order_details.order_detail_quantities.size',
+                    'seller_user' => fn($query) => $query->withTrashed(),
+                    'client.document_type' => fn($query) => $query->withTrashed(),
+                    'client_branch' => fn($query) => $query->withTrashed(),
+                    'client_branch.country', 'client_branch.departament', 'client_branch.city',
+                ])
+                ->findOrFail($id);
 
-        $data = [
-            'title' => 'Correo con PDF Adjunto',
-            'message' => 'Este es un ejemplo de un correo con un PDF adjunto.',
-        ];
+            $sizes = $order->order_details->pluck('order_detail_quantities')->flatten()->where('quantity', '>', 0)->pluck('size')->unique()->sortBy('id')->values();
+            
+            $pdf = \PDF::loadView('Dashboard.OrderSellers.PDF', compact('order', 'sizes'))->setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true]);
 
-        $recipientEmails = [
-            'camiloacacio16@gmail.com'
-        ];
+            $path = "Orders/{$order->id}-PEDIDO.pdf";
 
-        Mail::to($recipientEmails)->send(new EmailWithAttachment($data, $pdfFilePath));
+            if (Storage::disk('public')->exists($path)) {
+                Storage::disk('public')->delete($path);
+            }
+
+            Storage::disk('public')->put($path, $pdf->output()); 
+
+            $filePath = Storage::disk('public')->path($path);
+    
+            $recipientEmails = [
+                $order->client->email,
+                $order->client_branch->email
+            ];
+            
+            $imageBase64 = base64_encode(file_get_contents(asset('images/logo-name.jpg')));
+
+            /* return view('Dashboard.OrderSellers.Email')->with('order', $order)->with('logoname', $imageBase64); */
+            Mail::to($recipientEmails)->send(new EmailWithAttachment($order, $filePath, $imageBase64)); 
+            return redirect()->route('Dashboard.Orders.Seller.Index')->with('success', 'El correo electronico de confirmacion de orden de pedido con id de registro ' . $order->id . ' fue enviado y notificado al cliente via correo electronico anexado el pdf con la informacion del pedido solicitado y registrado.');
+        
+        } catch (Exception $e) {
+            return back()->with('danger', 'Ocurrió un error al cargar la vista: ' . $e->getMessage());
+        }
     }
     
     public function download($id)
@@ -824,7 +850,7 @@ class OrderSellerController extends Controller
             
             $sizes = $order->order_details->pluck('order_detail_quantities')->flatten()->where('quantity', '>', 0)->pluck('size')->unique()->sortBy('id')->values();
             
-            $pdf = \PDF::loadView('Dashboard.OrderSellers.PDF', compact('order', 'sizes'))/* ->setPaper('a4', 'landscape') */->setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true]);
+            $pdf = \PDF::loadView('Dashboard.OrderSellers.PDF', compact('order', 'sizes'))->setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true]);
             /* $pdf = \PDF::loadView('Browser_public.pdfdocument', compact('queryic'))->output();
             return $pdf->download('pdfdocument.pdf'); */
             return $pdf->stream("{$order->id}-PEDIDO.pdf");
