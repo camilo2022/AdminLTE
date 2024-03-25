@@ -22,7 +22,7 @@ function ApproveOrderSeller(id, status = true) {
                     ApproveOrderSellerAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    status ? tableOrderSellers.ajax.reload() : location.reload() ;
+                    status ? tableOrderSellers.ajax.reload() : '' ;
                     ApproveOrderSellerAjaxError(xhr);
                 }
             });
@@ -58,7 +58,15 @@ function ApproveOrderSellerAjaxError(xhr) {
     if(xhr.status === 422){
         $.each(xhr.responseJSON.errors, function(field, messages) {
             $.each(messages, function(index, message) {
-                toastr.error(message);
+                if(field === 'quota_available') {
+                    $(document).Toasts('create', {
+                        class: 'bg-danger',
+                        title: 'Cupo disponible insuficiente',
+                        body: message
+                    });
+                } else {
+                    toastr.error(message);
+                }
             });
         });
     }

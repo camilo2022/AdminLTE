@@ -134,9 +134,11 @@ class OrderWalletController extends Controller
     public function approve(OrderWalletApproveRequest $request)
     {
         try {
-            $order = Order::with('order_details')->findOrFail($request->input('id'));
+            $order = Order::with('client.client_type', 'order_details.order_detail_quantities')->findOrFail($request->input('id'));
+            $order_value = 0;
 
             foreach($order->order_details->whereIn('status', ['Revision']) as $detail) {
+                $order_value += $detail->order_detail_quantities->pluck('quantity')->sum() * $detail->price;
                 $detail->status = 'Aprobado';
                 $detail->save();
             }
@@ -145,6 +147,11 @@ class OrderWalletController extends Controller
             $order->wallet_date = Carbon::now()->format('Y-m-d H:i:s');
             $order->wallet_user_id = Auth::user()->id;
             $order->save();
+
+            if($order->client->client_type->require_quota) {
+                $order->client->quota -= $order_value;
+                $order->client->save();
+            }
 
             return $this->successResponse(
                 $order,

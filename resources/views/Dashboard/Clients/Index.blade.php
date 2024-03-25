@@ -95,6 +95,7 @@
         </div>
         @include('Dashboard.Clients.Create')
         @include('Dashboard.Clients.Edit')
+        @include('Dashboard.Clients.Quota')
         @include('Dashboard.ClientBranches.Index')
         @include('Dashboard.ClientBranches.Create')
         @include('Dashboard.ClientBranches.Edit')
@@ -109,6 +110,7 @@
 <script src="{{ asset('js/Dashboard/Clients/DataTableIndex.js') }}"></script>
 <script src="{{ asset('js/Dashboard/Clients/Create.js') }}"></script>
 <script src="{{ asset('js/Dashboard/Clients/Edit.js') }}"></script>
+<script src="{{ asset('js/Dashboard/Clients/Quota.js') }}"></script>
 <script src="{{ asset('js/Dashboard/Clients/Delete.js') }}"></script>
 <script src="{{ asset('js/Dashboard/Clients/Restore.js') }}"></script>
 

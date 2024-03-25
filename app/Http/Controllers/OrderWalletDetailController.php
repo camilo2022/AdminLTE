@@ -190,7 +190,7 @@ class OrderWalletDetailController extends Controller
 
             return $this->successResponse(
                 $orderDetail,
-                'El detalle del pedido fue registrado por el asesor exitosamente.',
+                'El detalle del pedido fue registrado por cartera exitosamente.',
                 201
             );
         } catch (ModelNotFoundException $e) {
@@ -279,13 +279,15 @@ class OrderWalletDetailController extends Controller
     public function update(OrderWalletDetailUpdateRequest $request, $id)
     {
         try {
-            $orderDetail = OrderDetail::with('order_detail_quantities')->findOrFail($id);
+            $orderDetail = OrderDetail::with('order.client.client_type', 'order_detail_quantities')->findOrFail($id);
             $orderDetail->order_id = $request->input('order_id');
             $orderDetail->product_id = $request->input('product_id');
             $orderDetail->color_id = $request->input('color_id');
             $orderDetail->tone_id = $request->input('tone_id');
             $orderDetail->seller_observation = $request->input('seller_observation');
             $orderDetail->save();
+            $order_detail_value = 0;
+            $order_detail_value_discount = $orderDetail->status = 'Revision' ? $orderDetail->order_detail_quantities->pluck('quantity') : 0;
 
             $orderDetail->order_detail_quantities()->delete();
 
@@ -300,7 +302,7 @@ class OrderWalletDetailController extends Controller
 
             $orderDetail->load('order_detail_quantities');
 
-            if($orderDetail->status == 'Agotado') {
+            if($orderDetail->status != 'Pendiente') {
                 $boolean = true;
                 foreach($orderDetail->order_detail_quantities as $quantity) {
                     $inventory = Inventory::with('warehouse')
@@ -310,7 +312,6 @@ class OrderWalletDetailController extends Controller
                         ->where('color_id', $orderDetail->color_id)
                         ->where('tone_id', $orderDetail->tone_id)
                         ->first();
-
                     if($inventory->quantity < $quantity->quantity) {
                         $boolean = false;
                         break;
@@ -319,6 +320,7 @@ class OrderWalletDetailController extends Controller
 
                 if($boolean){
                     foreach($orderDetail->order_detail_quantities as $quantity) {
+                        $order_detail_value += $quantity->quantity * $orderDetail->price;
                         $inventory = Inventory::with('warehouse')
                             ->whereHas('warehouse', fn($subQuery) => $subQuery->where('to_discount', true))
                             ->where('product_id', $orderDetail->product_id)
@@ -326,12 +328,26 @@ class OrderWalletDetailController extends Controller
                             ->where('color_id', $orderDetail->color_id)
                             ->where('tone_id', $orderDetail->tone_id)
                             ->first();
-
                         $inventory->quantity -= $quantity->quantity;
                         $inventory->save();
                     }
-
-                    $orderDetail->status = 'Aprobado';
+                    switch ($orderDetail->status) {
+                        case 'Revision':
+                            $orderDetail->status = 'Revision';
+                            $orderDetail->order->client->quota = ($orderDetail->order->client->quota + $order_detail_value_discount) - $order_detail_value;
+                            break;
+                        case 'Agotado':
+                            $orderDetail->status = 'Revision';
+                            $orderDetail->order->client->quota -= $order_detail_value;
+                            break;
+                        case 'Aprobado':
+                            $orderDetail->status = 'Aprobado';
+                            $orderDetail->order->client->quota = ($orderDetail->order->client->quota + $order_detail_value_discount) - $order_detail_value;
+                            break;
+                        default:
+                        $orderDetail->status = 'Revision';
+                            break;
+                    }
                 } else {
                     $orderDetail->status = 'Agotado';
                 }

@@ -313,7 +313,7 @@ class OrderSellerController extends Controller
     public function approve(OrderSellerApproveRequest $request)
     {
         try {
-            $order = Order::with('order_details.order_detail_quantities')->findOrFail($request->input('id'));
+            $order = Order::with('client', 'order_details.order_detail_quantities')->findOrFail($request->input('id'));
 
             foreach($order->order_details->whereIn('status', ['Pendiente']) as $detail) {
                 $boolean = true;

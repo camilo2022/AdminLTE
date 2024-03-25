@@ -3,6 +3,7 @@
 namespace App\Http\Requests\OrderWalletDetail;
 
 use App\Models\Inventory;
+use App\Models\OrderDetail;
 use App\Models\OrderDetailQuantity;
 use App\Models\Product;
 use Illuminate\Foundation\Http\FormRequest;
@@ -22,10 +23,14 @@ class OrderWalletDetailUpdateRequest extends FormRequest
     protected function prepareForValidation()
     {
         $product = Product::findOrFail($this->input('product_id'));
+        $orderDetail = OrderDetail::with('order.client.client_type', 'order_detail_quantities')->findOrFail($this->input('id'));
+        $order_value = 0;
+        $quota_available = $orderDetail->order->client->quota;
 
         $order_detail_quantities = $this->input('order_detail_quantities')  ? $this->input('order_detail_quantities') : [];
         $updated_order_details = [];
 
+        $boolean = true;
         foreach($order_detail_quantities as $order_detail_quantity) {
             $inventory = Inventory::with('product', 'warehouse', 'color', 'tone', 'size')
             ->whereHas('product', fn($subQuery) => $subQuery->where('id', $this->input('product_id')))
@@ -35,17 +40,29 @@ class OrderWalletDetailUpdateRequest extends FormRequest
             ->whereHas('size', fn($subQuery) => $subQuery->where('id', $order_detail_quantity['size_id']))
             ->first();
 
+            if($boolean && $inventory->quantity < $order_detail_quantity['quantity']) {
+                $boolean = false;
+            }
+
             $order_detail_quantity['min'] = 0;
             $order_detail_quantity['max'] = $inventory ? $inventory->quantity : 0;
             $order_detail_quantity['product_size'] = $order_detail_quantity['size_id'];
 
             $updated_order_details[] = $order_detail_quantity;
+            
+            $order_value += $order_detail_quantity->quantity * $orderDetail->price;
+        }
+
+        if($orderDetail->status == 'Revision') {
+            $quota_available += ($orderDetail->order_detail_quantities->pluck('quantity')->sum() * $orderDetail->price);
         }
 
         $this->merge([
             'order_detail_quantities' => $updated_order_details,
             'product_color_tone' => $this->input('product_id'),
-            'price' => $product->price
+            'price' => $product->price,
+            'order_value' => $orderDetail->order->client->client_type->require_quota && $boolean && in_array($orderDetail->status, ['Revision', 'Aprobado']) ? $order_value : '',
+            'quota_available' => $orderDetail->order->client->client_type->require_quota && $boolean && in_array($orderDetail->status, ['Revision', 'Aprobado']) ? $quota_available : '',
         ]);
     }
 
@@ -67,7 +84,8 @@ class OrderWalletDetailUpdateRequest extends FormRequest
             'order_detail_quantities' => ['required', 'array'],
             'order_detail_quantities.*' => ['required', 'array'],
             'order_detail_quantities.*.size_id' => ['required', 'exists:sizes,id'],
-            'order_detail_quantities.*.product_size' => ['required', 'exists:product_sizes,size_id,product_id,' . $this->input('product_id')]
+            'order_detail_quantities.*.product_size' => ['required', 'exists:product_sizes,size_id,product_id,' . $this->input('product_id')],
+            'quota_available' => ['nullable', 'numeric', 'min:' . $this->input('order_value')],
         ];
 
         foreach ($this->input('order_detail_quantities') as $index => $order_detail_quantity) {
@@ -108,6 +126,7 @@ class OrderWalletDetailUpdateRequest extends FormRequest
             'order_detail_quantities.*.quantity.numeric' => 'El campo Cantidad de unidades debe ser un valor numérico.',
             'order_detail_quantities.*.quantity.max' => 'El campo Cantidad de unidades no debe exceder los :max unidades.',
             'order_detail_quantities.*.quantity.min' => 'El campo Cantidad de unidades debe tener al menos :min unidades.',
+            'quota_available.min' => 'El cliente tiene un cupo disponible actual de ' . number_format($this->input('quota_available'), 0, ',', '.') . '. El valor del detalle del pedido es de ' . number_format($this->input('order_value'), 0, ',', '.') . '. No se puede aprobar el detalle del pedido hasta que el cliente tengo cupo disponible.',
         ];
     }
 }

@@ -462,8 +462,8 @@ Route::middleware(['auth'])->group(function () {
                 Route::put('/Update/{id}', 'update')->middleware('can:Dashboard.Clients.Update')->name('Dashboard.Clients.Update');
                 Route::post('/Show/{id}', 'show')->middleware('can:Dashboard.Clients.Show')->name('Dashboard.Clients.Show');
                 Route::post('/Show/Query/{id}', 'showQuery')->middleware('can:Dashboard.Clients.Show.Query')->name('Dashboard.Clients.Show.Query');
-                Route::post('/Quota', 'quota')->middleware('can:Dashboard.Clients.Quota')->name('Dashboard.Clients.Quota');
-                Route::put('/Quota/Query', 'quotaQuery')->middleware('can:Dashboard.Clients.Quota.Query')->name('Dashboard.Clients.Quota.Query');
+                Route::post('/Quota/{id}', 'quota')->middleware('can:Dashboard.Clients.Quota')->name('Dashboard.Clients.Quota');
+                Route::put('/Quota/Query/{id}', 'quotaQuery')->middleware('can:Dashboard.Clients.Quota.Query')->name('Dashboard.Clients.Quota.Query');
                 Route::delete('/Delete', 'delete')->middleware('can:Dashboard.Clients.Delete')->name('Dashboard.Clients.Delete');
                 Route::put('/Restore', 'restore')->middleware('can:Dashboard.Clients.Restore')->name('Dashboard.Clients.Restore');
             });

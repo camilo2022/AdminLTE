@@ -383,7 +383,7 @@ class ClientController extends Controller
             return $this->successResponse(
                 Client::withTrashed()->findOrFail($id),
                 'El cliente fue encontrado exitosamente.',
-                204
+                200
             );
         } catch (ModelNotFoundException $e) {
             return $this->errorResponse(

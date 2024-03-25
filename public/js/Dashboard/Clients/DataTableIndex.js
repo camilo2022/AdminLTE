@@ -104,6 +104,13 @@ let tableClients = $('#clients').DataTable({
                         <i class="fas fa-eye text-white"></i>
                     </a>`;
 
+                    if(row.client_type.require_quota === 1) {
+                        btn += `<a onclick="QuotaClientModal(${row.id})" type="button"
+                        class="btn bg-gray btn-sm mr-2" title="Asignar cupo disponible del cliente.">
+                            <i class="fas fa-circle-dollar text-white"></i>
+                        </a>`;
+                    }
+
                     if(row.person_type.require_people === 1) {
                         if(row.person === null) {
                             btn += `<a onclick="CreatePersonModal(${row.id})" type="button"

@@ -18,11 +18,11 @@ function ApproveOrderWallet(id, status = true) {
                     'id': id
                 },
                 success: function(response) {
-                    status ? tableOrderWallets.ajax.reload() : location.reload() ;
+                    /* status ? tableOrderWallets.ajax.reload() : location.reload() ; */
                     ApproveOrderWalletAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    status ? tableOrderWallets.ajax.reload() : location.reload() ;
+                    status ? tableOrderWallets.ajax.reload() : '' ;
                     ApproveOrderWalletAjaxError(xhr);
                 }
             });
