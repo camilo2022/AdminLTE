@@ -433,10 +433,12 @@ class OrderSellerController extends Controller
     public function cancel(OrderSellerCancelRequest $request)
     {
         try {
-            $order = Order::with('order_details.order_detail_quantities')->findOrFail($request->input('id'));
+            $order = Order::with('client.client_type', 'order_details.order_detail_quantities')->findOrFail($request->input('id'));
+            $order_value = 0;
 
-            foreach($order->order_details->whereIn('status', ['Pendiente', 'Revision']) as $detail) {
-                if($detail->status == 'Revision') {
+            foreach($order->order_details->whereIn('status', ['Pendiente', 'Revision', 'Aprobado']) as $detail) {
+                if(in_array($detail->status, ['Revision', 'Aprobado'])) {
+                    $order_value += $detail->status == 'Aprobado' ? $detail->order_detail_quantities->pluck('quantity')->sum() * $detail->price : 0 ;
                     foreach($detail->order_detail_quantities as $quantity) {
                         $inventory = Inventory::with('warehouse')
                             ->whereHas('warehouse', fn($subQuery) => $subQuery->where('to_discount', true))
@@ -448,6 +450,10 @@ class OrderSellerController extends Controller
 
                         $inventory->quantity += $quantity->quantity;
                         $inventory->save();
+                    }
+                    if($detail->status == 'Aprobado' && $order->client->client_type->require_quota) {
+                        $order->client->debt -= $order->client->debt - $order_value < 0 ? 0 : $order_value;
+                        $order->client->save();
                     }
                 }
 

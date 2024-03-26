@@ -41,6 +41,7 @@ return new class extends Migration
             $table->string('telephone_number_first');
             $table->string('telephone_number_second')->nullable();
             $table->unsignedBigInteger('quota')->default(0);
+            $table->unsignedBigInteger('debt')->default(0);
             /* $table->foreign('person_type_id')->references('id')->on('person_types')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('client_type_id')->references('id')->on('client_types')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('document_type_id')->references('id')->on('document_types')->onUpdate('cascade')->onDelete('cascade');

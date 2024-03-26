@@ -289,11 +289,27 @@ class OrderWalletDetailController extends Controller
             $order_detail_value = 0;
             $order_detail_value_discount = $orderDetail->status = 'Revision' ? $orderDetail->order_detail_quantities->pluck('quantity') : 0;
 
-            $orderDetail->order_detail_quantities()->delete();
+            if(in_array($orderDetail->status, ['Revision', 'Aprobado'])) {
+                foreach($orderDetail->order_detail_quantities as $quantity) {
+                    $order_detail_value += $quantity->quantity * $orderDetail->price;
+                    $inventory = Inventory::with('warehouse')
+                        ->whereHas('warehouse', fn($subQuery) => $subQuery->where('to_discount', true))
+                        ->where('product_id', $orderDetail->product_id)
+                        ->where('size_id', $quantity->size_id)
+                        ->where('color_id', $orderDetail->color_id)
+                        ->where('tone_id', $orderDetail->tone_id)
+                        ->first();
+                    $inventory->quantity += $quantity->quantity;
+                    $inventory->save();
+                }
+            }
 
             collect($request->order_detail_quantities)->map(function ($orderDetailQuantity) use ($orderDetail) {
                 $orderDetailQuantity = (object) $orderDetailQuantity;
-                $orderDetailQuantityNew = new OrderDetailQuantity();
+                $orderDetailQuantityNew = OrderDetailQuantity::where('order_detail_id', $orderDetail->id)->where('size_id', $orderDetailQuantity->size_id)->first();
+                if(!$orderDetailQuantityNew) {
+                    $orderDetailQuantityNew = new OrderDetailQuantity();
+                }
                 $orderDetailQuantityNew->order_detail_id = $orderDetail->id;
                 $orderDetailQuantityNew->size_id = $orderDetailQuantity->size_id;
                 $orderDetailQuantityNew->quantity = $orderDetailQuantity->quantity;
@@ -334,15 +350,15 @@ class OrderWalletDetailController extends Controller
                     switch ($orderDetail->status) {
                         case 'Revision':
                             $orderDetail->status = 'Revision';
-                            $orderDetail->order->client->quota = ($orderDetail->order->client->quota + $order_detail_value_discount) - $order_detail_value;
+                            $orderDetail->order->client->debt = ($orderDetail->order->client->debt - $order_detail_value_discount) + $order_detail_value;
                             break;
                         case 'Agotado':
                             $orderDetail->status = 'Revision';
-                            $orderDetail->order->client->quota -= $order_detail_value;
+                            $orderDetail->order->client->debt += $order_detail_value;
                             break;
                         case 'Aprobado':
                             $orderDetail->status = 'Aprobado';
-                            $orderDetail->order->client->quota = ($orderDetail->order->client->quota + $order_detail_value_discount) - $order_detail_value;
+                            $orderDetail->order->client->debt = ($orderDetail->order->client->debt - $order_detail_value_discount) + $order_detail_value;
                             break;
                         default:
                         $orderDetail->status = 'Revision';
@@ -353,6 +369,10 @@ class OrderWalletDetailController extends Controller
                 }
 
                 $orderDetail->save();
+
+                if($orderDetail->order->client->client_type->require_quota) {
+                    $orderDetail->order->client->save();
+                }
             }
 
             return $this->successResponse(
@@ -391,9 +411,14 @@ class OrderWalletDetailController extends Controller
     public function approve(OrderWalletDetailApproveRequest $request)
     {
         try {
-            $orderDetail = OrderDetail::with('order')->findOrFail($request->input('id'));
+            $orderDetail = OrderDetail::with('order.client.client_type', 'order_detail_quantities')->findOrFail($request->input('id'));
             $orderDetail->status = 'Aprobado';
             $orderDetail->save();
+            
+            if($orderDetail->order->client->client_type->require_quota) {
+                $orderDetail->order->client->debt += $orderDetail->order_detail_quantities->pluck('quantity');
+                $orderDetail->order->client->save();
+            }
 
             DB::statement('CALL order_wallet_status(?)', [$orderDetail->order->id]);
 

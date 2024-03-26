@@ -22,7 +22,7 @@ class OrderWalletApproveRequest extends FormRequest
     {
         $order = Order::with('order_details.order_detail_quantities', 'client')->findOrFail($this->input('id'));
         $order_value = 0;
-        $quota_available = $order->client->quota;
+        $quota_available = $order->client->quota - $order->client->debt;
 
         foreach($order->order_details->whereIn('status', ['Revision']) as $detail) {
             $boolean = true;

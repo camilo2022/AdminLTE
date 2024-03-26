@@ -149,7 +149,7 @@ class OrderWalletController extends Controller
             $order->save();
 
             if($order->client->client_type->require_quota) {
-                $order->client->quota -= $order_value;
+                $order->client->debt += $order_value;
                 $order->client->save();
             }
 
@@ -233,7 +233,7 @@ class OrderWalletController extends Controller
         try {
             $order = Order::with('order_details')->findOrFail($request->input('id'));
 
-            foreach($order->order_details->whereIn('status', ['Agotado']) as $detail) {
+            foreach($order->order_details->whereIn('status', ['Agotado', 'Rechazado']) as $detail) {
                 $detail->status = 'Pendiente';
                 $detail->save();
             }
@@ -280,20 +280,28 @@ class OrderWalletController extends Controller
     public function cancel(OrderWalletCancelRequest $request)
     {
         try {
-            $order = Order::with('order_details.order_detail_quantities')->findOrFail($request->input('id'));
+            $order = Order::with('client.client_type', 'order_details.order_detail_quantities')->findOrFail($request->input('id'));
+            $order_value = 0;
 
-            foreach($order->order_details->whereIn('status', ['Revision', 'Aprobado']) as $detail) {
-                foreach($detail->order_detail_quantities as $quantity) {
-                    $inventory = Inventory::with('warehouse')
-                        ->whereHas('warehouse', fn($subQuery) => $subQuery->where('to_discount', true))
-                        ->where('product_id', $detail->product_id)
-                        ->where('size_id', $quantity->size_id)
-                        ->where('color_id', $detail->color_id)
-                        ->where('tone_id', $detail->tone_id)
-                        ->first();
+            foreach($order->order_details->whereIn('status', ['Pendiente', 'Revision', 'Aprobado']) as $detail) {
+                if(in_array($detail->status, ['Revision', 'Aprobado'])) {
+                    $order_value += $detail->status == 'Aprobado' ? $detail->order_detail_quantities->pluck('quantity')->sum() * $detail->price : 0 ;
+                    foreach($detail->order_detail_quantities as $quantity) {
+                        $inventory = Inventory::with('warehouse')
+                            ->whereHas('warehouse', fn($subQuery) => $subQuery->where('to_discount', true))
+                            ->where('product_id', $detail->product_id)
+                            ->where('size_id', $quantity->size_id)
+                            ->where('color_id', $detail->color_id)
+                            ->where('tone_id', $detail->tone_id)
+                            ->first();
 
-                    $inventory->quantity += $quantity->quantity;
-                    $inventory->save();
+                        $inventory->quantity += $quantity->quantity;
+                        $inventory->save();
+                    }
+                    if($detail->status == 'Aprobado' && $order->client->client_type->require_quota) {
+                        $order->client->debt -= $order->client->debt - $order_value < 0 ? 0 : $order_value;
+                        $order->client->save();
+                    }
                 }
 
                 $detail->status = 'Rechazado';
