@@ -36,9 +36,9 @@ class OrderDispatch extends Model implements Auditable
         'invoice_date'
     ];
 
-    public function files() : MorphMany
+    public function payments() : MorphMany
     {
-      return $this->morphMany(File::class, 'model');
+      return $this->morphMany(Payment::class, 'model');
     }
 
     public function invoices() : MorphMany

@@ -41,6 +41,7 @@ use App\Http\Controllers\TransferController;
 use App\Http\Controllers\TransferDetailController;
 use App\Http\Controllers\TransporterController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\WalletController;
 use App\Http\Controllers\WarehouseController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
@@ -498,6 +499,13 @@ Route::middleware(['auth'])->group(function () {
                         Route::put('/Restore', 'restore')->middleware('can:Dashboard.Clients.People.References.Restore')->name('Dashboard.Clients.People.References.Restore');
                     });
                 });
+            });
+        });
+
+        Route::prefix('/Wallets')->group(function () {
+            Route::controller(WalletController::class)->group(function () {
+                Route::get('/Index', 'index')->middleware('can:Dashboard.Wallets.Index')->name('Dashboard.Wallets.Index');
+                Route::post('/Index/Query', 'indexQuery')->middleware('can:Dashboard.Wallets.Index.Query')->name('Dashboard.Wallets.Index.Query');
             });
         });
 

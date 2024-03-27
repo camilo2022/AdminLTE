@@ -83,7 +83,12 @@ let tableClients = $('#clients').DataTable({
         { data: 'email' },
         { data: 'telephone_number_first' },
         { data: 'telephone_number_second' },
-        { data: 'quota' },
+        { 
+            data: 'quota',
+            render: function(data, type, row) {
+                return `${data.toLocaleString('es-CO', { style: 'currency', currency: 'COP' })} COP`;
+            }
+        },
         {
             data: 'deleted_at',
             render: function (data, type, row) {

@@ -772,6 +772,7 @@ class ProductController extends Controller
     {
         try {
             $products = Product::with([
+                    'correria' => fn($query) => $query->withTrashed(),
                     'clothing_line' => fn($query) => $query->withTrashed(),
                     'category' => fn($query) => $query->withTrashed(),
                     'subcategory' => fn($query) => $query->withTrashed(),
@@ -779,7 +780,7 @@ class ProductController extends Controller
                     'trademark' => fn($query) => $query->withTrashed(),
                     'colors_tones.color' => fn($query) => $query->withTrashed(),
                     'colors_tones.tone' => fn($query) => $query->withTrashed(),
-                    'sizes'
+                    'sizes' => fn($query) => $query->withTrashed(),
                 ])
                 ->get();
 

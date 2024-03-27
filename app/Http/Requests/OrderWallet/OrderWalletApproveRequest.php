@@ -20,7 +20,7 @@ class OrderWalletApproveRequest extends FormRequest
 
     protected function prepareForValidation()
     {
-        $order = Order::with('order_details.order_detail_quantities', 'client')->findOrFail($this->input('id'));
+        $order = Order::with('order_details.order_detail_quantities', 'client.client_type')->findOrFail($this->input('id'));
         $order_value = 0;
         $quota_available = $order->client->quota - $order->client->debt;
 

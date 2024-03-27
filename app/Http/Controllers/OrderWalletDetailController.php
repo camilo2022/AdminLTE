@@ -287,11 +287,10 @@ class OrderWalletDetailController extends Controller
             $orderDetail->seller_observation = $request->input('seller_observation');
             $orderDetail->save();
             $order_detail_value = 0;
-            $order_detail_value_discount = $orderDetail->status = 'Revision' ? $orderDetail->order_detail_quantities->pluck('quantity') : 0;
+            $order_detail_value_discount = $orderDetail->status == 'Aprobado' ? $orderDetail->order_detail_quantities->pluck('quantity') : 0;
 
             if(in_array($orderDetail->status, ['Revision', 'Aprobado'])) {
                 foreach($orderDetail->order_detail_quantities as $quantity) {
-                    $order_detail_value += $quantity->quantity * $orderDetail->price;
                     $inventory = Inventory::with('warehouse')
                         ->whereHas('warehouse', fn($subQuery) => $subQuery->where('to_discount', true))
                         ->where('product_id', $orderDetail->product_id)
@@ -335,6 +334,7 @@ class OrderWalletDetailController extends Controller
                 }
 
                 if($boolean){
+                    $order_detail_value = $orderDetail->status == 'Aprobado' ? $orderDetail->order_detail_quantities->pluck('quantity') : 0;
                     foreach($orderDetail->order_detail_quantities as $quantity) {
                         $order_detail_value += $quantity->quantity * $orderDetail->price;
                         $inventory = Inventory::with('warehouse')
@@ -365,6 +365,9 @@ class OrderWalletDetailController extends Controller
                             break;
                     }
                 } else {
+                    if($orderDetail->status == 'Aprobado') {
+                        $orderDetail->order->client->debt = $orderDetail->order->client->debt - $order_detail_value < 0 ? 0 : $orderDetail->order->client->debt - $order_detail_value;
+                    }
                     $orderDetail->status = 'Agotado';
                 }
 
@@ -416,7 +419,7 @@ class OrderWalletDetailController extends Controller
             $orderDetail->save();
             
             if($orderDetail->order->client->client_type->require_quota) {
-                $orderDetail->order->client->debt += $orderDetail->order_detail_quantities->pluck('quantity');
+                $orderDetail->order->client->debt += $orderDetail->price * $orderDetail->order_detail_quantities->pluck('quantity')->sum();
                 $orderDetail->order->client->save();
             }
 
@@ -617,7 +620,7 @@ class OrderWalletDetailController extends Controller
     public function decline(OrderWalletDetailDeclineRequest $request)
     {
         try {
-            $orderDetail = OrderDetail::with('order_detail_quantities')->findOrFail($request->input('id'));
+            $orderDetail = OrderDetail::with('order.client.client_type', 'order_detail_quantities')->findOrFail($request->input('id'));
 
             foreach($orderDetail->order_detail_quantities as $quantity) {
                 $inventory = Inventory::with('warehouse')
@@ -633,6 +636,12 @@ class OrderWalletDetailController extends Controller
             }
             $orderDetail->status = 'Rechazado';
             $orderDetail->save();
+
+            if($orderDetail->order->client->client_type->require_quota) {
+                $order_value = $orderDetail->price * $orderDetail->order_detail_quantities->pluck('quantity')->sum();
+                $orderDetail->order->client->debt = $orderDetail->order->client->debt - $order_value < 0 ? 0 : $orderDetail->order->client->debt - $order_value;
+                $orderDetail->order->client->save();
+            }
 
             DB::statement('CALL order_wallet_status(?)', [$orderDetail->order->id]);
 

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as Auditing;
@@ -43,6 +44,11 @@ class ClientBranch extends Model implements Auditable
         'telephone_number_first',
         'telephone_number_second',
     ];
+
+    public function orders() : HasMany
+    {
+        return $this->hasMany(Order::class, 'client_branch_id');
+    }
 
     public function client() : BelongsTo
     {

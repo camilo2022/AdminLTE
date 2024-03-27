@@ -50,6 +50,11 @@ class Client extends Model implements Auditable
         'quota'
     ];
 
+    public function orders() : HasMany
+    {
+        return $this->hasMany(Order::class, 'client_id');
+    }
+
     public function person() : MorphOne
     {
         return $this->morphOne(Person::class, 'model');

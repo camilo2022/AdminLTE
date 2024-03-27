@@ -25,7 +25,7 @@ class OrderWalletDetailUpdateRequest extends FormRequest
         $product = Product::findOrFail($this->input('product_id'));
         $orderDetail = OrderDetail::with('order.client.client_type', 'order_detail_quantities')->findOrFail($this->input('id'));
         $order_value = 0;
-        $quota_available = $orderDetail->order->client->quota;
+        $quota_available = $orderDetail->order->client->quota + ($orderDetail->order_detail_quantities->pluck('quantity')->sum() * $orderDetail->price) - $orderDetail->order->client->debt;
 
         $order_detail_quantities = $this->input('order_detail_quantities')  ? $this->input('order_detail_quantities') : [];
         $updated_order_details = [];
@@ -126,7 +126,7 @@ class OrderWalletDetailUpdateRequest extends FormRequest
             'order_detail_quantities.*.quantity.numeric' => 'El campo Cantidad de unidades debe ser un valor numérico.',
             'order_detail_quantities.*.quantity.max' => 'El campo Cantidad de unidades no debe exceder los :max unidades.',
             'order_detail_quantities.*.quantity.min' => 'El campo Cantidad de unidades debe tener al menos :min unidades.',
-            'quota_available.min' => 'El cliente tiene un cupo disponible actual de ' . number_format($this->input('quota_available'), 0, ',', '.') . '. El valor del detalle del pedido es de ' . number_format($this->input('order_value'), 0, ',', '.') . '. No se puede aprobar el detalle del pedido hasta que el cliente tengo cupo disponible.',
+            'quota_available.min' => 'El cliente tiene un cupo disponible actual de ' . number_format($this->input('quota_available'), 0, ',', '.') . '. El valor del detalle del pedido es de ' . number_format($this->input('order_value'), 0, ',', '.') . '. No se puede actualizar el detalle del pedido hasta que el cliente tengo cupo disponible.',
         ];
     }
 }

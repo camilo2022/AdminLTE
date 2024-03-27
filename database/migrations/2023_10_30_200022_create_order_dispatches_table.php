@@ -120,8 +120,7 @@ return new class extends Migration
                 IF order_dispatch_id > 0 THEN
                 	IF (totalOrdenDetallesFiltrado = totalOrdenDespachoDetalles) AND (totalOrdenDetallesAprobadoRevisionPendiente = 0) THEN
                     	UPDATE order_dispatches SET dispatch_status = "Aprobado" WHERE id = order_dispatch_id;
-                    ELSE
-                    	UPDATE order_dispatches SET dispatch_status = "Parcialmente Aprobado" WHERE id = order_dispatch_id;
+                        UPDATE order_dispatch_details SET status = "Aprobado" WHERE order_dispatch_details.order_dispatch_id = order_dispatch_id;
                 	END IF;
                 END IF;
             END

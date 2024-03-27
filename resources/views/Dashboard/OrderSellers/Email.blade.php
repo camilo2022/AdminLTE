@@ -77,11 +77,11 @@
                                     <td class="bodycopy">
                                         <p>Espero que este mensaje te encuentre bien. Queremos agradecerte por confiar en <b>MARIANGEL FULL MODA SAS</b> para tus necesidades de moda.</p>
 
-                                        <p>Nos complace informarte que hemos recibido tu pedido con éxito. Adjunto a este correo electrónico, encontrarás un documento PDF que contiene los detalles completos de tu pedido, incluyendo los artículos seleccionados, cantidades, tamaños, colores y precios correspondientes.</p>
+                                        <p>Nos complace informarte que hemos recibido tu pedido con éxito. Adjunto a este correo electrónico, encontrarás un documento PDF que contiene los detalles completos de tu pedido, incluyendo los artículos seleccionados, cantidades, tallas, colores y precios correspondientes.</p>
 
                                         <p>Revisaremos cuidadosamente la información proporcionada para garantizar la precisión de tu pedido.</p>
 
-                                        <p>Sin embargo, si encuentras algún error o necesitas realizar algún cambio, te pedimos que nos contactes de inmediato a través de las siguientes vías:</p>
+                                        <p>Sin embargo, si encuentras algún error o necesitas realizar algún cambio, te pedimos que nos contactes de inmediato a través de las siguientes medios:</p>
                                         
                                         <ul class="contact-info">
                                             <li>Teléfono: <b>5834481 - 3118800104 - 3114374088 - 3138092414</b></li>

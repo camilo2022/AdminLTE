@@ -69,7 +69,7 @@ class OrderSellerApproveRequest extends FormRequest
         return [
             'id.required' => 'El campo Pedido es requerido.',
             'id.exists' => 'El Identificador del pedido no es valido.',
-            'quota_available.gte' => 'El cliente tiene un cupo disponible actual de ' . number_format($this->input('quota_available'), 0, ',', '.') . '. El valor del pedido es de ' . number_format($this->input('order_value'), 0, ',', '.') . '. En caso de haber realizado pagos y no se vean reflejados en el cupo disponible o solicitar la ampliacion del cupo, comunicarse de cartera para actualizacion de cupo o estudio de ampliacion de este.',
+            'quota_available.gte' => 'El cliente tiene un cupo disponible actual de ' . number_format($this->input('quota_available'), 0, ',', '.') . '. El valor del pedido es de ' . number_format($this->input('order_value'), 0, ',', '.') . '. En caso de haber realizado pagos y estos no se vean reflejados en el cupo disponible o solicitar la ampliacion del cupo, comunicarse con cartera para actualizacion de cupo o estudio de ampliacion de este.',
         ];
     }
 }

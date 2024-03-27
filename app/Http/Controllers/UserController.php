@@ -498,7 +498,7 @@ class UserController extends Controller
             $user->givePermissionTo($request->input('permissions'));
             return $this->successResponse(
                 $user,
-                'El rol y los permiso fueron asignados al usuario exitosamente.',
+                'El rol y los permisos fueron asignados al usuario exitosamente.',
                 200
             );
         } catch (ModelNotFoundException $e) {
