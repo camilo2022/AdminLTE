@@ -50,7 +50,7 @@ class Client extends Model implements Auditable
         'quota'
     ];
 
-    public function orders() : HasMany
+    public function client_orders() : HasMany
     {
         return $this->hasMany(Order::class, 'client_id');
     }

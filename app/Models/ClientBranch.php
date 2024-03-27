@@ -45,7 +45,7 @@ class ClientBranch extends Model implements Auditable
         'telephone_number_second',
     ];
 
-    public function orders() : HasMany
+    public function client_branch_orders() : HasMany
     {
         return $this->hasMany(Order::class, 'client_branch_id');
     }

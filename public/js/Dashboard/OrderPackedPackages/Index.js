@@ -20,7 +20,7 @@ function IndexOrderPackedDetail(order_packing_id) {
 
 function IndexOrderPackedDetailCleaned(packages) {
     $('#orderPackages').html('');
-
+    
     let orderPackages = '';
     
     $.each(packages, function(i, package) {

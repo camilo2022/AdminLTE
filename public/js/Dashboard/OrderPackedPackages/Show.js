@@ -21,7 +21,7 @@ function ShowOrderPackage(order_package_id) {
 
 function ShowOrderPackageCleaned(packageDetails) {
     $('#orderPackageDetails').html('');
-
+console.log(packageDetails);
     let orderPackageDetails = '';
     
     $.each(packageDetails.order_packing.order_dispatch.order_dispatch_details, function(i, packageDetail) {
@@ -128,6 +128,7 @@ function DetailOrderPackageDetail(id, referencia, order_package_id, order_dispat
         toastr.error('La cantidad ingresada no es valida.')
     } else {
         ShowOrderPackageDetail(id, event, quantity, referencia, order_package_id, order_dispatch_detail_id, false);
+        $('#DetailOrderPackageDetailModal').modal('hide');
     }
 }
 

@@ -19,7 +19,7 @@ class WalletIndexQueryCollection extends ResourceCollection
             'wallets' => $this->collection->map(function ($wallet) {
                 return [
                     'id' => $wallet->id,
-                    'orders' => $wallet->orders,
+                    'order_dispatches' => $wallet->client_branch_orders->pluck('order_dispatches')->flatten(),
                     'client_id' => $wallet->client_id,
                     'client' => $wallet->client,
                     'name' => $wallet->name,

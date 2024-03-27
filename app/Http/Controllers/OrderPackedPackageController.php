@@ -37,6 +37,9 @@ class OrderPackedPackageController extends Controller
                 return Redirect::route('Dashboard.Orders.Packed.Package.Show', ['id' => $orderPackage->id]);
             }
             $orderPacked = OrderPacking::with('order_dispatch')->findOrFail($id);
+            if($orderPacked->packing_status == 'Finalizado') {
+                return Redirect::route('Dashboard.Orders.Packed.Index');
+            }
             $packageTypes = PackageType::all();
             return view('Dashboard.OrderPackedPackages.Index', compact('orderPacked', 'packageTypes'));
         } catch (ModelNotFoundException $e) {
@@ -393,12 +396,13 @@ class OrderPackedPackageController extends Controller
     public function delete(OrderPackedPackageDeleteRequest $request)
     {
         try {
-            $orderPackage = OrderPackage::findOrFail($request->input('id'))->delete();
+            $orderPackage = OrderPackage::findOrFail($request->input('id'));
+            $order_packing_id = $orderPackage->order_packing_id;
 
             return $this->successResponse(
                 [
-                    'url' => URL::route('Dashboard.Orders.Packed.Package.Index', ['id' => $request->input('order_packing_id')]),
-                    'orderPackage' => $orderPackage
+                    'url' => URL::route('Dashboard.Orders.Packed.Package.Index', ['id' => $order_packing_id]),
+                    'orderPackage' => $orderPackage->delete()
                 ],
                 'El empaque fue eliminado exitosamente.',
                 204

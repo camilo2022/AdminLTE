@@ -11,7 +11,6 @@ use App\Traits\ApiResponser;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\QueryException;
-use Illuminate\Http\Request;
 
 class WalletController extends Controller
 {
@@ -21,14 +20,6 @@ class WalletController extends Controller
     public function index()
     {
         try {
-            /* return $clientBranches = ClientBranch::with([
-                'client.orders.order_dispatches' => fn($query) => $query->where('dispatch_status', 'Despachado')->whereIn('payment_status', ['Pendiente de Pago', 'Parcialmente Pagado']),
-                'client.orders.order_dispatches.invoices',
-                'client.orders.order_dispatches.payments',
-                'orders.order_dispatches' => fn($query) => $query->where('dispatch_status', 'Despachado')->whereIn('payment_status', ['Pendiente de Pago', 'Parcialmente Pagado']),
-                'orders.order_dispatches.invoices',
-                'orders.order_dispatches.payments',
-            ])->get(); */
             return view('Dashboard.Wallets.Index');
         } catch (Exception $e) {
             return back()->with('danger', 'Ocurrió un error al cargar la vista: ' . $e->getMessage());
@@ -42,12 +33,14 @@ class WalletController extends Controller
             $end_date = Carbon::parse($request->input('end_date'))->endOfDay();
             //Consulta por nombre
             $clientBranches = ClientBranch::with([
-                    'client.orders.order_dispatches' => fn($query) => $query->where('dispatch_status', 'Despachado')->whereIn('payment_status', ['Pendiente de Pago', 'Parcialmente Pagado']),
-                    'client.orders.order_dispatches.invoices',
-                    'client.orders.order_dispatches.payments',
-                    'orders.order_dispatches' => fn($query) => $query->where('dispatch_status', 'Despachado')->whereIn('payment_status', ['Pendiente de Pago', 'Parcialmente Pagado']),
-                    'orders.order_dispatches.invoices',
-                    'orders.order_dispatches.payments',
+                    'client.client_type',
+                    'client.client_orders.order_dispatches' => fn($query) => $query->where('dispatch_status', 'Despachado')->whereIn('payment_status', ['Pendiente de Pago', 'Parcialmente Pagado']),
+                    'client.client_orders.order_dispatches.invoices',
+                    'client.client_orders.order_dispatches.payments',
+                    'client_branch_orders.order_dispatches' => fn($query) => $query->where('dispatch_status', 'Despachado')->whereIn('payment_status', ['Pendiente de Pago', 'Parcialmente Pagado']),
+                    'client_branch_orders.order_dispatches.invoices',
+                    'client_branch_orders.order_dispatches.payments',
+                    'client_branch_orders.order_dispatches.invoice_user',
                 ])
                 ->when($request->filled('search'),
                     function ($query) use ($request) {
@@ -59,6 +52,9 @@ class WalletController extends Controller
                         $query->filterByDate($start_date, $end_date);
                     }
                 )
+                ->whereHas('client.client_type', function ($query) {
+                    $query->where('require_quota', true);
+                })
                 ->orderBy($request->input('column'), $request->input('dir'))
                 ->paginate($request->input('perPage'));
 

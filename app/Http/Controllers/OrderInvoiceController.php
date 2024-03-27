@@ -15,6 +15,7 @@ use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
@@ -111,7 +112,9 @@ class OrderInvoiceController extends Controller
     public function store(OrderInvoiceStoreRequest $request)
     {
         try {
-            $orderDispatch = OrderDispatch::findOrFail($request->input('order_dispatch_id'));
+            $orderDispatch = OrderDispatch::with('order.client.client_type', 'order_dispatch_details.order_detail.order_detail_quantities')->findOrFail($request->input('order_dispatch_id'));
+            $order_value_old = 0;
+            $order_value_new = 0;
 
             foreach($request->input('invoices') as $index => $invoice){
                 $invoiceNew = new Invoice();
@@ -121,7 +124,8 @@ class OrderInvoiceController extends Controller
                 $invoiceNew->reference = $invoice['reference'];
                 $invoiceNew->date = Carbon::parse($invoice['date'])->format('Y-m-d H:i:s');
                 $invoiceNew->save();
-    
+                $order_value_new += $invoice['value'];
+
                 foreach($request->invoices[$index]['supports'] as $support) {
                     $file = new File();
                     $file->model_type = Invoice::class;
@@ -138,9 +142,26 @@ class OrderInvoiceController extends Controller
             }     
             
             $orderDispatch->invoice_user_id = Auth::user()->id;
+            $orderDispatch->dispatch_date = Carbon::now()->format('Y-m-d H:i:s');
             $orderDispatch->invoice_date = Carbon::now()->format('Y-m-d H:i:s');
             $orderDispatch->dispatch_status = 'Despachado';
             $orderDispatch->save();
+
+            foreach($orderDispatch->order_dispatch_details as $orderDispatchDetail) {
+                $orderDispatchDetail->status = 'Despachado';
+                $orderDispatchDetail->save();
+                $orderDispatchDetail->order_detail->status = 'Despachado';
+                $orderDispatchDetail->order_detail->save();
+
+                $order_value_old += $orderDispatchDetail->order_detail->order_detail_quantities->pluck('quantity') * $orderDispatchDetail->order_detail->price;
+            }
+
+            if($orderDispatch->order->client->client_type->require_quota) {
+                $orderDispatch->order->client->debt -= ($order_value_old - $order_value_new);
+                $orderDispatch->order->client->save();
+            }
+
+            DB::statement('CALL order_dispatch_status(?,?)', [0, $orderDispatch->order_id]);
 
             return $this->successResponse(
                 [
@@ -190,7 +211,7 @@ class OrderInvoiceController extends Controller
                     'order.client.document_type' => fn($query) => $query->withTrashed(),
                     'order.client_branch' => fn($query) => $query->withTrashed(),
                     'order.client_branch.country', 'order.client_branch.departament', 'order.client_branch.city',
-                    'order.seller_user' => fn($query) => $query->withTrashed(), 'files',
+                    'order.seller_user' => fn($query) => $query->withTrashed(),
                     'order_packing.order_packages.package_type',
                     'order_packing.order_packages.order_package_details.order_package_detail_quantities.order_dispatch_detail_quantity.order_detail_quantity.size'
                 ])
