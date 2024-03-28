@@ -22,7 +22,6 @@ function CancelOrderDispatch(id, status = true) {
                     CancelOrderDispatchAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    status ? tableOrderDispatches.ajax.reload() : location.reload() ;
                     CancelOrderDispatchAjaxError(xhr);
                 }
             });

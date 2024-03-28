@@ -22,7 +22,6 @@ function DeleteClient(id) {
                     DeleteClientAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableClients.ajax.reload();
                     DeleteClientAjaxError(xhr);
                 }
             });

@@ -22,7 +22,6 @@ function RestoreUser(id) {
                     RestoreUserAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableUsers.ajax.reload();
                     RestoreUserAjaxError(xhr);
                 }
             });

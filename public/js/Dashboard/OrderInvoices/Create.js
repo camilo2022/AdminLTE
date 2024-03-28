@@ -64,7 +64,6 @@ function CreateOrderInvoice(order_dispatch_id) {
                     CreateOrderInvoiceAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableOrderInvoices.ajax.reload();
                     CreateOrderInvoiceAjaxError(xhr);
                     console.log(xhr);
                 }

@@ -22,7 +22,6 @@ function RestoreClient(id) {
                     RestoreClientAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableClients.ajax.reload();
                     RestoreClientAjaxError(xhr);
                 }
             });

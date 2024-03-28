@@ -8,6 +8,9 @@ function ApproveOrderSeller(id, status = true) {
         confirmButtonColor: '#3085d6',
         confirmButtonText: 'Si, aprobar!',
         cancelButtonText: 'No, cancelar!',
+        html: `<div class="icheck-primary"><input type="checkbox" id="email_a" name="email_a"><label for="email_a">¿Enviar correo electronico?</label></div>
+        <div class="icheck-primary"><input type="checkbox" id="download_a" name="download_a"><label for="download_a">¿Descargar pdf del pedido?</label></div>`,
+        footer: '<div class="text-center">Puedes notificar via correo electronico al correo registrado del cliente y de la surcursal la confirmacion del pedido. Ademas puedes descargarlo en formato pdf para enviarselo por whatsapp.</div>'
     }).then((result) => {
         if (result.value) {
             $.ajax({
@@ -15,14 +18,21 @@ function ApproveOrderSeller(id, status = true) {
                 type: 'PUT',
                 data: {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
-                    'id': id
+                    'id': id,
+                    'email': $('#email_a').is(':checked'),
+                    'download': $('#download_a').is(':checked')
                 },
                 success: function(response) {
                     status ? tableOrderSellers.ajax.reload() : location.reload() ;
+                    if(response.data.urlEmail !== null) {
+                        window.location.href = response.data.urlEmail;
+                    }
+                    if(response.data.urlDownload !== null) {
+                        window.open(response.data.urlDownload, '_blank');
+                    }
                     ApproveOrderSellerAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    status ? tableOrderSellers.ajax.reload() : '' ;
                     ApproveOrderSellerAjaxError(xhr);
                 }
             });

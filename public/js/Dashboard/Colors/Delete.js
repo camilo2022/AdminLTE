@@ -22,7 +22,6 @@ function DeleteColor(id) {
                     DeleteColorAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableColors.ajax.reload();
                     DeleteColorAjaxError(xhr);
                 }
             });

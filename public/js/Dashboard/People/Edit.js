@@ -6,7 +6,6 @@ function EditPersonModal(id, client_id) {
             '_token': $('meta[name="csrf-token"]').attr('content')
         },
         success: function (response) {
-            tableClients.ajax.reload();
             EditPersonModalCleaned(response.data.person);
             EditPersonModalDocumentType(response.data.documentTypes);
             EditPersonModalCountry(response.data.countries);
@@ -15,7 +14,6 @@ function EditPersonModal(id, client_id) {
             $('#EditPersonModal').modal('show');
         },
         error: function (xhr, textStatus, errorThrown) {
-            tableClients.ajax.reload();
             EditPersonAjaxError(xhr);
         }
     });
@@ -180,7 +178,6 @@ function EditPerson(id) {
                     EditPersonAjaxSuccess(response);
                 },
                 error: function (xhr, textStatus, errorThrown) {
-                    tableClients.ajax.reload();
                     EditPersonAjaxError(xhr);
                 }
             });

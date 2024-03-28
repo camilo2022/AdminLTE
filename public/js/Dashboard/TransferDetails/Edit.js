@@ -6,7 +6,6 @@ function EditTransferDetailModal(id) {
             '_token': $('meta[name="csrf-token"]').attr('content')
         },
         success: function (response) {
-            tableTransferDetails.ajax.reload();
             EditTransferDetailModalCleaned(response.data);
             EditTransferDetailModalProduct(response.data.product);
             EditTransferDetailModalColorTone(response.data);
@@ -15,7 +14,6 @@ function EditTransferDetailModal(id) {
             $('#EditTransferDetailModal').modal('show');
         },
         error: function (xhr, textStatus, errorThrown) {
-            tableTransferDetails.ajax.reload();
             EditTransferDetailAjaxError(xhr);
         }
     });
@@ -106,7 +104,6 @@ function EditTransferDetail(id) {
                     EditTransferDetailAjaxSuccess(response);
                 },
                 error: function (xhr, textStatus, errorThrown) {
-                    tableTransferDetails.ajax.reload();
                     EditTransferDetailAjaxError(xhr);
                 }
             });

@@ -51,7 +51,6 @@ function CreateBank() {
                     CreateBankAjaxSuccess(response);
                 },
                 error: function (xhr, textStatus, errorThrown) {
-                    tableBanks.ajax.reload();
                     CreateBankAjaxError(xhr);
                 }
             });

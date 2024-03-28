@@ -51,7 +51,6 @@ function CreateClientType() {
                     CreateClientTypeAjaxSuccess(response);
                 },
                 error: function (xhr, textStatus, errorThrown) {
-                    tableClientTypes.ajax.reload();
                     CreateClientTypeAjaxError(xhr);
                 }
             });

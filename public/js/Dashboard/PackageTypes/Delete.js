@@ -22,7 +22,6 @@ function DeletePackageType(id) {
                     DeletePackageTypeAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tablePackageTypes.ajax.reload();
                     DeletePackageTypeAjaxError(xhr);
                 }
             });

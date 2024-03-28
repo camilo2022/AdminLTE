@@ -22,7 +22,6 @@ function DeleteClothingLine(id) {
                     DeleteClothingLineAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableClothingLines.ajax.reload();
                     DeleteClothingLineAjaxError(xhr);
                 }
             });

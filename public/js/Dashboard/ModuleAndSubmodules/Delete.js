@@ -22,7 +22,6 @@ function DeleteModuleAndSubmodules(id) {
                     DeleteModuleAndSubmodulesAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableModulesAndSubmodules.ajax.reload();
                     DeleteModuleAndSubmodulesAjaxError(xhr);
                 }
             });

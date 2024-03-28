@@ -6,13 +6,11 @@ function ShowSaleChannelModal(id) {
             '_token': $('meta[name="csrf-token"]').attr('content')
         },
         success: function (response) {
-            tableSaleChannels.ajax.reload();
             ShowSaleChannelModalCleaned(response.data);
             ShowSaleChannelAjaxSuccess(response);
             $('#ShowSaleChannelModal').modal('show');
         },
         error: function (xhr, textStatus, errorThrown) {
-            tableSaleChannels.ajax.reload();
             ShowSaleChannelAjaxError(xhr);
         }
     });
@@ -63,7 +61,6 @@ function ShowSaleChannelAssignReturnType(returnType, saleChannel) {
             ShowSaleChannelAjaxSuccess(response);
         },
         error: function (xhr, textStatus, errorThrown) {
-            tableSaleChannels.ajax.reload();
             ShowSaleChannelAjaxError(xhr);
         }
     });
@@ -83,7 +80,6 @@ function ShowSaleChannelRemoveReturnType(returnType, saleChannel) {
             ShowSaleChannelAjaxSuccess(response);
         },
         error: function (xhr, textStatus, errorThrown) {
-            tableSaleChannels.ajax.reload();
             ShowSaleChannelAjaxError(xhr);
         }
     });

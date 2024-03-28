@@ -49,7 +49,6 @@ function CreateSaleChannel() {
                     CreateSaleChannelAjaxSuccess(response);
                 },
                 error: function (xhr, textStatus, errorThrown) {
-                    tableSaleChannels.ajax.reload();
                     CreateSaleChannelAjaxError(xhr);
                 }
             });

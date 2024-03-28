@@ -22,7 +22,6 @@ function PendingOrderSeller(id, status = true) {
                     PendingOrderSellerAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    status ? tableOrderSellers.ajax.reload() : location.reload() ;
                     PendingOrderSellerAjaxError(xhr);
                 }
             });

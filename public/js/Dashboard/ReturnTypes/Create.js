@@ -48,7 +48,6 @@ function CreateReturnType() {
                     CreateReturnTypeAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableReturnTypes.ajax.reload();
                     CreateReturnTypeAjaxError(xhr);
                 }
             });

@@ -22,7 +22,6 @@ function RestoreClothingLine(id) {
                     RestoreClothingLineAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableClothingLines.ajax.reload();
                     RestoreClothingLineAjaxError(xhr);
                 }
             });

@@ -6,13 +6,11 @@ function EditCorreriaAndCollectionModal(id) {
             '_token': $('meta[name="csrf-token"]').attr('content')
         },
         success: function(response) {
-            tableCorreriasAndCollections.ajax.reload();
             EditCorreriaAndCollectionModalCleaned(response.data);
             EditCorreriaAndCollectionAjaxSuccess(response);
             $('#EditCorreriaAndCollectionModal').modal('show');
         },
         error: function(xhr, textStatus, errorThrown) {
-            tableCorreriasAndCollections.ajax.reload();
             EditCorreriaAndCollectionAjaxError(xhr);
         }
     });
@@ -66,7 +64,6 @@ function EditCorreriaAndCollection(id) {
                     EditCorreriaAndCollectionAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableCorreriasAndCollections.ajax.reload();
                     EditCorreriaAndCollectionAjaxError(xhr);
                 }
             });

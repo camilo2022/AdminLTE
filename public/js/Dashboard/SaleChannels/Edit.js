@@ -6,13 +6,11 @@ function EditSaleChannelModal(id) {
             '_token': $('meta[name="csrf-token"]').attr('content')
         },
         success: function (response) {
-            tableSaleChannels.ajax.reload();
             EditSaleChannelModalCleaned(response.data);
             EditSaleChannelAjaxSuccess(response);
             $('#EditSaleChannelModal').modal('show');
         },
         error: function (xhr, textStatus, errorThrown) {
-            tableSaleChannels.ajax.reload();
             EditSaleChannelAjaxError(xhr);
         }
     });
@@ -53,7 +51,6 @@ function EditSaleChannel(id, require_verify_wallet) {
                     EditSaleChannelAjaxSuccess(response);
                 },
                 error: function (xhr, textStatus, errorThrown) {
-                    tableSaleChannels.ajax.reload();
                     EditSaleChannelAjaxError(xhr);
                 }
             });

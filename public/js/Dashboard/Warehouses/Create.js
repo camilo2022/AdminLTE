@@ -53,7 +53,6 @@ function CreateWarehouse() {
                     CreateWarehouseAjaxSuccess(response);
                 },
                 error: function (xhr, textStatus, errorThrown) {
-                    tableWarehouses.ajax.reload();
                     CreateWarehouseAjaxError(xhr);
                 }
             });

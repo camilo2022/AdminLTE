@@ -6,13 +6,11 @@ function EditPaymentTypeModal(id) {
             '_token': $('meta[name="csrf-token"]').attr('content')
         },
         success: function(response) {
-            tablePaymentTypes.ajax.reload();
             EditPaymentTypeModalCleaned(response.data);
             EditPaymentTypeAjaxSuccess(response);
             $('#EditPaymentTypeModal').modal('show');
         },
         error: function(xhr, textStatus, errorThrown) {
-            tablePaymentTypes.ajax.reload();
             EditPaymentTypeAjaxError(xhr);
         }
     });
@@ -54,7 +52,6 @@ function EditPaymentType(id, require_banks) {
                     EditPaymentTypeAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tablePaymentTypes.ajax.reload();
                     EditPaymentTypeAjaxError(xhr);
                 }
             });

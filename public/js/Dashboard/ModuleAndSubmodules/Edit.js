@@ -6,14 +6,12 @@ function EditModuleAndSubmodulesModal(id) {
             '_token': $('meta[name="csrf-token"]').attr('content'),
         },
         success: function(response) {
-            tableModulesAndSubmodules.ajax.reload();
             EditModuleAndSubmodulesModalCleaned(response.data);
             EditModuleAndSubmodulesQueryRoles(response.data.roles, false);
             EditModuleAndSubmodulesAjaxSuccess(response);
             $('#EditModuleAndSubmodulesModal').modal('show');
         },
         error: function(xhr, textStatus, errorThrown) {
-            tableModulesAndSubmodules.ajax.reload();
             EditModuleAndSubmodulesAjaxError(xhr);
         }
     });
@@ -72,7 +70,6 @@ function EditModuleAndSubmodules(id) {
                     EditModuleAndSubmodulesAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableModulesAndSubmodules.ajax.reload();
                     EditModuleAndSubmodulesAjaxError(xhr);
                 }
             });

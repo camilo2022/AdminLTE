@@ -22,7 +22,6 @@ function DeleteClientType(id) {
                     DeleteClientTypeAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableClientTypes.ajax.reload();
                     DeleteClientTypeAjaxError(xhr);
                 }
             });

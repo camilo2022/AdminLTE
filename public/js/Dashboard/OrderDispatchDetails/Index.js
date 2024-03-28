@@ -212,8 +212,6 @@ function IndexOrderDispatchDetailModalCleaned(details, sizes) {
     });
 
     foot += `<th>${totalSum.toLocaleString('es-CO', { style: 'currency', currency: 'COP' })} COP</th>
-            <th>${quantitySum}</th>
-            <th>-</th>
             <th>-</th>
             <th>-</th>
             <th>-</th>`;
@@ -226,7 +224,9 @@ function IndexOrderDispatchDetailModalCleaned(details, sizes) {
         foot += `<th>${sizeSum}</th>`;
     });
 
-    foot += `<th>-</th>
+    foot += `<th>${quantitySum}</th>
+            <th>-</th>
+            <th>-</th>
             <th>-</th>
         </tr>`;
 

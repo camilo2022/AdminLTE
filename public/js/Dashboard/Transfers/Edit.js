@@ -7,14 +7,12 @@ function EditTransferModal(id) {
         },
         success: function (response) {
             console.log(response);
-            tableTransfers.ajax.reload();
             EditTransferModalCleaned(response.data.transfer);
             EditTransfersModalFromWarehose(response.data.transfer.from_warehouse);
             EditTransferAjaxSuccess(response);
             $('#EditTransferModal').modal('show');
         },
         error: function (xhr, textStatus, errorThrown) {
-            tableTransfers.ajax.reload();
             EditTransferAjaxError(xhr);
         }
     });
@@ -110,7 +108,6 @@ function EditTransfer(id) {
                     EditTransferAjaxSuccess(response);
                 },
                 error: function (xhr, textStatus, errorThrown) {
-                    tableTransfers.ajax.reload();
                     EditTransferAjaxError(xhr);
                 }
             });

@@ -22,7 +22,6 @@ function DeletePaymentType(id) {
                     DeletePaymentTypeAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tablePaymentTypes.ajax.reload();
                     DeletePaymentTypeAjaxError(xhr);
                 }
             });

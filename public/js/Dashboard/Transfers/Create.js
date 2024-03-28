@@ -6,14 +6,12 @@ function CreateTransferModal() {
             '_token': $('meta[name="csrf-token"]').attr('content')
         },
         success: function (response) {
-            tableTransfers.ajax.reload();
             CreateTransferModalCleaned();
             CreateTransfersModalFromWarehose(response.data);
             CreateTransferAjaxSuccess(response);
             $('#CreateTransferModal').modal('show');
         },
         error: function (xhr, textStatus, errorThrown) {
-            tableTransfers.ajax.reload();
             CreateTransferAjaxError(xhr);
         }
     });
@@ -94,7 +92,6 @@ function CreateTransfer() {
                     CreateTransferAjaxSuccess(response);
                 },
                 error: function (xhr, textStatus, errorThrown) {
-                    tableTransfers.ajax.reload();
                     CreateTransferAjaxError(xhr);
                 }
             });

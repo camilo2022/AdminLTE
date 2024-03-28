@@ -6,13 +6,11 @@ function EditTrademarkModal(id) {
             '_token': $('meta[name="csrf-token"]').attr('content')
         },
         success: function (response) {
-            tableTrademarks.ajax.reload();
             EditTrademarkModalCleaned(response.data);
             EditTrademarkAjaxSuccess(response);
             $('#EditTrademarkModal').modal('show');
         },
         error: function (xhr, textStatus, errorThrown) {
-            tableTrademarks.ajax.reload();
             EditTrademarkAjaxError(xhr);
         }
     });
@@ -68,7 +66,6 @@ function EditTrademark(id) {
                     EditTrademarkAjaxSuccess(response);
                 },
                 error: function (xhr, textStatus, errorThrown) {
-                    tableTrademarks.ajax.reload();
                     EditTrademarkAjaxError(xhr);
                 }
             });

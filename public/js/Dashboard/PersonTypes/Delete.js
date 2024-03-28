@@ -22,7 +22,6 @@ function DeletePersonType(id) {
                     DeletePersonTypeAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tablePersonTypes.ajax.reload();
                     DeletePersonTypeAjaxError(xhr);
                 }
             });

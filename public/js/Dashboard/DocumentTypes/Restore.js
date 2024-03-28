@@ -22,7 +22,6 @@ function RestoreDocumentType(id) {
                     RestoreDocumentTypeAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableDocumentType.ajax.reload();
                     RestoreDocumentTypeAjaxError(xhr);
                 }
             });

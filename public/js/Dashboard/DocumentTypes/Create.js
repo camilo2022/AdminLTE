@@ -49,7 +49,6 @@ function CreateDocumentType() {
                     CreateDocumentTypeAjaxSuccess(response);
                 },
                 error: function (xhr, textStatus, errorThrown) {
-                    tableDocumentTypes.ajax.reload();
                     CreateDocumentTypeAjaxError(xhr);
                 }
             });

@@ -22,7 +22,6 @@ function RestoreBusiness(id) {
                     RestoreBusinessAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableBusinesses.ajax.reload();
                     RestoreBusinessAjaxError(xhr);
                 }
             });

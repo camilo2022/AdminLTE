@@ -57,7 +57,6 @@ function CreateCorreriaAndCollection() {
                     CreateCorreriaAndCollectionAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableCorreriasAndCollections.ajax.reload();
                     CreateCorreriaAndCollectionAjaxError(xhr);
                 }
             });

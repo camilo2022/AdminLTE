@@ -22,7 +22,6 @@ function RestoreTrademark(id) {
                     RestoreTrademarkAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableTrademarks.ajax.reload();
                     RestoreTrademarkAjaxError(xhr);
                 }
             });

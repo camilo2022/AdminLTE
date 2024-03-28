@@ -22,7 +22,6 @@ function ApproveOrderDispatch(id, status = true) {
                     ApproveOrderDispatchAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    status ? tableOrderDispatches.ajax.reload() : location.reload() ;
                     ApproveOrderDispatchAjaxError(xhr);
                 }
             });

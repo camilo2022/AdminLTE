@@ -43,7 +43,6 @@ function UploadProduct() {
                     $('#loading').remove();
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableProducts.ajax.reload();
                     UploadProductAjaxError(xhr);
                     $('#loading').remove();
                 }

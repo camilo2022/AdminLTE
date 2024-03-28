@@ -6,7 +6,6 @@ function EditProductModal(id) {
             '_token': $('meta[name="csrf-token"]').attr('content')
         },
         success: function(response) {
-            tableProducts.ajax.reload();
             EditProductModalCleaned(response.data.product);
             EditProductModalCorreria(response.data.correrias);
             EditProductModalModel(response.data.models);
@@ -16,7 +15,6 @@ function EditProductModal(id) {
             $('#EditProductModal').modal('show');
         },
         error: function(xhr, textStatus, errorThrown) {
-            tableProducts.ajax.reload();
             EditProductAjaxError(xhr);
         }
     });
@@ -200,7 +198,6 @@ function EditProduct(id) {
                     EditProductAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableProducts.ajax.reload();
                     EditProductAjaxError(xhr);
                 }
             });

@@ -22,7 +22,6 @@ function DeletePersonReference(id) {
                     DeletePersonReferenceAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tablePersonReferences.ajax.reload();
                     DeletePersonReferenceAjaxError(xhr);
                 }
             });

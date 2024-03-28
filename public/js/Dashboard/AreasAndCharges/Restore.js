@@ -22,7 +22,6 @@ function RestoreAreaAndCharges(id) {
                     RestoreAreaAndChargesAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableAreasAndCharges.ajax.reload();
                     RestoreAreaAndChargesAjaxError(xhr);
                 }
             });

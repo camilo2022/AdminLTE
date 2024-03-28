@@ -7,7 +7,6 @@ function IndexPersonReferenceModal(person_id) {
             'person_id': person_id
         },
         success: function (response) {
-            tableClients.ajax.reload();
             IndexPersonReferenceModalCleaned(response.data);
             tablePersonReferences.ajax.reload();
             IndexPersonReferenceAjaxSuccess(response);

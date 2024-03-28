@@ -6,13 +6,11 @@ function EditSizeModal(id) {
             '_token': $('meta[name="csrf-token"]').attr('content')
         },
         success: function (response) {
-            tableSizes.ajax.reload();
             EditSizeModalCleaned(response.data);
             EditSizeAjaxSuccess(response);
             $('#EditSizeModal').modal('show');
         },
         error: function (xhr, textStatus, errorThrown) {
-            tableSizes.ajax.reload();
             EditSizeAjaxError(xhr);
         }
     });
@@ -53,7 +51,6 @@ function EditSize(id) {
                     EditSizeAjaxSuccess(response);
                 },
                 error: function (xhr, textStatus, errorThrown) {
-                    tableSizes.ajax.reload();
                     EditSizeAjaxError(xhr);
                 }
             });

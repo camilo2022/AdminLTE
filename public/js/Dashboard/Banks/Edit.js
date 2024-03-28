@@ -6,13 +6,11 @@ function EditBankModal(id) {
             '_token': $('meta[name="csrf-token"]').attr('content')
         },
         success: function (response) {
-            tableBanks.ajax.reload();
             EditBankModalCleaned(response.data);
             EditBankAjaxSuccess(response);
             $('#EditBankModal').modal('show');
         },
         error: function (xhr, textStatus, errorThrown) {
-            tableBanks.ajax.reload();
             EditBankAjaxError(xhr);
         }
     });
@@ -55,7 +53,6 @@ function EditBank(id) {
                     EditBankAjaxSuccess(response);
                 },
                 error: function (xhr, textStatus, errorThrown) {
-                    tableBanks.ajax.reload();
                     EditBankAjaxError(xhr);
                 }
             });
@@ -70,7 +67,7 @@ function EditBankAjaxSuccess(response) {
         toastr.info(response.message);
         $('#EditBankModal').modal('hide');
     }
-    
+
     if (response.status === 200) {
         toastr.success(response.message);
         $('#EditBankModal').modal('hide');

@@ -23,7 +23,6 @@ function DeleteRoleAndPermissions(id, permission) {
                     DeleteRoleAndPermissionsAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableRolesAndPermissions.ajax.reload();
                     DeleteRoleAndPermissionsAjaxError(xhr);
                 }
             });

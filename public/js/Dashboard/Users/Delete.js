@@ -22,7 +22,6 @@ function DeleteUser(id) {
                     DeleteUserAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableUsers.ajax.reload();
                     DeleteUserAjaxError(xhr);
                 }
             });

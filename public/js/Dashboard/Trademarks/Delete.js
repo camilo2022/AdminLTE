@@ -22,7 +22,6 @@ function DeleteTrademark(id) {
                     DeleteTrademarkAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableTrademarks.ajax.reload();
                     DeleteTrademarkAjaxError(xhr);
                 }
             });

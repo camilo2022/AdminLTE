@@ -6,7 +6,6 @@ function CreateProductModal() {
             '_token': $('meta[name="csrf-token"]').attr('content')
         },
         success: function(response) {
-            tableProducts.ajax.reload();
             CreateProductModalCleaned();
             CreateProductModalCorreria(response.data.correrias);
             CreateProductModalModel(response.data.models);
@@ -16,7 +15,6 @@ function CreateProductModal() {
             $('#CreateProductModal').modal('show');
         },
         error: function(xhr, textStatus, errorThrown) {
-            tableProducts.ajax.reload();
             CreateProductAjaxError(xhr);
         }
     });

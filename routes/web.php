@@ -506,6 +506,8 @@ Route::middleware(['auth'])->group(function () {
             Route::controller(WalletController::class)->group(function () {
                 Route::get('/Index', 'index')->middleware('can:Dashboard.Wallets.Index')->name('Dashboard.Wallets.Index');
                 Route::post('/Index/Query', 'indexQuery')->middleware('can:Dashboard.Wallets.Index.Query')->name('Dashboard.Wallets.Index.Query');
+                Route::post('/AssignPayment/Query', 'assignPaymentQuery')->middleware('can:Dashboard.Wallets.AssignPayment.Query')->name('Dashboard.Wallets.AssignPayment.Query');
+                Route::post('/AssignPayment', 'assignPayment')->middleware('can:Dashboard.Wallets.AssignPayment')->name('Dashboard.Wallets.AssignPayment');
             });
         });
 

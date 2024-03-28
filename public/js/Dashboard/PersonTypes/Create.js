@@ -51,7 +51,6 @@ function CreatePersonType() {
                     CreatePersonTypeAjaxSuccess(response);
                 },
                 error: function (xhr, textStatus, errorThrown) {
-                    tablePersonTypes.ajax.reload();
                     CreatePersonTypeAjaxError(xhr);
                 }
             });

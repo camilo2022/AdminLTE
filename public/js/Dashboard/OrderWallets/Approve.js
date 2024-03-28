@@ -22,7 +22,6 @@ function ApproveOrderWallet(id, status = true) {
                     ApproveOrderWalletAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    status ? tableOrderWallets.ajax.reload() : '' ;
                     ApproveOrderWalletAjaxError(xhr);
                 }
             });

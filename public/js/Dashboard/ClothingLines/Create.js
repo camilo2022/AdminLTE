@@ -51,7 +51,6 @@ function CreateClothingLine() {
                     CreateClothingLineAjaxSuccess(response);
                 },
                 error: function (xhr, textStatus, errorThrown) {
-                    tableClothingLines.ajax.reload();
                     CreateClothingLineAjaxError(xhr);
                 }
             });

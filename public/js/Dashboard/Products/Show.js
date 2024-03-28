@@ -6,12 +6,10 @@ function ShowProductModal(id) {
             '_token': $('meta[name="csrf-token"]').attr('content')
         },
         success: function(response) {
-            tableProducts.ajax.reload();
             ShowProductModalCleaned(response.data);
             $('#ShowProductModal').modal('show');
         },
         error: function(xhr, textStatus, errorThrown) {
-            tableProducts.ajax.reload();
             ShowProductAjaxError(xhr);
         }
     });

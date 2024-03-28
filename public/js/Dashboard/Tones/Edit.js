@@ -6,13 +6,11 @@ function EditToneModal(id) {
             '_token': $('meta[name="csrf-token"]').attr('content')
         },
         success: function (response) {
-            tableTones.ajax.reload();
             EditToneModalCleaned(response.data);
             EditToneAjaxSuccess(response);
             $('#EditToneModal').modal('show');
         },
         error: function (xhr, textStatus, errorThrown) {
-            tableTones.ajax.reload();
             EditToneAjaxError(xhr);
         }
     });
@@ -51,7 +49,6 @@ function EditTone(id) {
                     EditToneAjaxSuccess(response);
                 },
                 error: function (xhr, textStatus, errorThrown) {
-                    tableTones.ajax.reload();
                     EditToneAjaxError(xhr);
                 }
             });

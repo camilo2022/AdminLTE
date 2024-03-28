@@ -6,7 +6,6 @@ function CreatePersonModal(client_id) {
             '_token': $('meta[name="csrf-token"]').attr('content')
         },
         success: function (response) {
-            tableClients.ajax.reload();
             CreatePersonModalCleaned();
             CreatePersonModalDocumentType(response.data.documentTypes);
             CreatePersonModalCountry(response.data.countries);
@@ -15,7 +14,6 @@ function CreatePersonModal(client_id) {
             $('#CreatePersonModal').modal('show');
         },
         error: function (xhr, textStatus, errorThrown) {
-            tableClients.ajax.reload();
             CreatePersonAjaxError(xhr);
         }
     });
@@ -147,7 +145,6 @@ function CreatePerson() {
                     CreatePersonAjaxSuccess(response);
                 },
                 error: function (xhr, textStatus, errorThrown) {
-                    tableClients.ajax.reload();
                     CreatePersonAjaxError(xhr);
                 }
             });

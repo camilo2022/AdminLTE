@@ -22,7 +22,6 @@ function CancelTransferDetail(id) {
                     CancelTransferDetailAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableTransferDetails.ajax.reload();
                     CancelTransferDetailAjaxError(xhr);
                 }
             });

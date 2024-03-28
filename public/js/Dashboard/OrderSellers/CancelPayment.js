@@ -22,7 +22,6 @@ function CancelPaymentOrderSeller(id, status = true) {
                     CancelPaymentOrderSellerAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    status ? tableOrderSellers.ajax.reload() : location.reload() ;
                     CancelPaymentOrderSellerAjaxError(xhr);
                 }
             });

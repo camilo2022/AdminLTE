@@ -7,14 +7,12 @@ function CreateTransferDetailModal() {
             'from_warehouse_id': $('#ShowTransferButton').attr('data-from_warehouse_id')
         },
         success: function (response) {
-            tableTransferDetails.ajax.reload();
             CreateTransferDetailModalCleaned();
             CreateTransferDetailModalProduct(response.data);
             CreateTransferDetailAjaxSuccess(response);
             $('#CreateTransferDetailModal').modal('show');
         },
         error: function (xhr, textStatus, errorThrown) {
-            tableTransferDetails.ajax.reload();
             CreateTransferDetailAjaxError(xhr);
         }
     });
@@ -141,7 +139,6 @@ function CreateTransferDetail() {
                     RemoveIsInvalidClassCreateTransferDetail();
                 },
                 error: function (xhr, textStatus, errorThrown) {
-                    tableTransferDetails.ajax.reload();
                     CreateTransferDetailAjaxError(xhr);
                 }
             });

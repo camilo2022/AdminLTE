@@ -70,7 +70,6 @@ function CreateRoleAndPermissions() {
                     CreateRoleAndPermissionsAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableRolesAndPermissions.ajax.reload();
                     CreateRoleAndPermissionsAjaxError(xhr);
                 }
             });

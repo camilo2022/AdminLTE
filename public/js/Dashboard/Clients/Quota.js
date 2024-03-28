@@ -6,13 +6,11 @@ function QuotaClientModal(id) {
             '_token': $('meta[name="csrf-token"]').attr('content')
         },
         success: function (response) {
-            tableClients.ajax.reload();
             QuotaClientModalCleaned(response.data);
             QuotaClientAjaxSuccess(response);
             $('#QuotaClientModal').modal('show');
         },
         error: function (xhr, textStatus, errorThrown) {
-            tableClients.ajax.reload();
             QuotaClientAjaxError(xhr);
         }
     });
@@ -54,7 +52,6 @@ function QuotaClient(id) {
                     QuotaClientAjaxSuccess(response);
                 },
                 error: function (xhr, textStatus, errorThrown) {
-                    tableClients.ajax.reload();
                     QuotaClientAjaxError(xhr);
                 }
             });

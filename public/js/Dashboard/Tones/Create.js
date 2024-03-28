@@ -47,7 +47,6 @@ function CreateTone() {
                     CreateToneAjaxSuccess(response);
                 },
                 error: function (xhr, textStatus, errorThrown) {
-                    tableTones.ajax.reload();
                     CreateToneAjaxError(xhr);
                 }
             });

@@ -49,7 +49,6 @@ function CreatePackageType() {
                     CreatePackageTypeAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tablePackageTypes.ajax.reload();
                     CreatePackageTypeAjaxError(xhr);
                 }
             });

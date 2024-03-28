@@ -22,7 +22,6 @@ function RestoreClientBranch(id) {
                     RestoreClientBranchAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableClientBranches.ajax.reload();
                     RestoreClientBranchAjaxError(xhr);
                 }
             });

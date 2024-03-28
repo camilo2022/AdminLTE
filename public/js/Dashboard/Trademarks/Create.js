@@ -58,7 +58,6 @@ function CreateTrademark() {
                     CreateTrademarkAjaxSuccess(response);
                 },
                 error: function (xhr, textStatus, errorThrown) {
-                    tableTrademarks.ajax.reload();
                     CreateTrademarkAjaxError(xhr);
                 }
             });

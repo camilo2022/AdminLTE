@@ -6,7 +6,6 @@ function CreatePersonReferenceModal() {
             '_token': $('meta[name="csrf-token"]').attr('content')
         },
         success: function (response) {
-            tablePersonReferences.ajax.reload();
             CreatePersonReferenceModalCleaned();
             CreatePersonReferenceModalDocumentType(response.data.documentTypes);
             CreatePersonReferenceModalCountry(response.data.countries);
@@ -14,7 +13,6 @@ function CreatePersonReferenceModal() {
             $('#CreatePersonReferenceModal').modal('show');
         },
         error: function (xhr, textStatus, errorThrown) {
-            tablePersonReferences.ajax.reload();
             CreatePersonReferenceAjaxError(xhr);
         }
     });
@@ -146,7 +144,6 @@ function CreatePersonReference() {
                     CreatePersonReferenceAjaxSuccess(response);
                 },
                 error: function (xhr, textStatus, errorThrown) {
-                    tablePersonReferences.ajax.reload();
                     CreatePersonReferenceAjaxError(xhr);
                 }
             });

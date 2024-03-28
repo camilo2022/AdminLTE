@@ -22,7 +22,6 @@ function PendingOrderDispatch(id, status = true) {
                     PendingOrderDispatchAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    status ? tableOrderDispatches.ajax.reload() : location.reload() ;
                     PendingOrderDispatchAjaxError(xhr);
                 }
             });

@@ -22,7 +22,6 @@ function PartiallyApproveOrderWallet(id, status = true) {
                     PartiallyApproveOrderWalletAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    status ? tableOrderWallets.ajax.reload() : location.reload() ;
                     PartiallyApproveOrderWalletAjaxError(xhr);
                 }
             });

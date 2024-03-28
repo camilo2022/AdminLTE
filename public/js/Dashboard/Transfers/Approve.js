@@ -29,7 +29,6 @@ function ApproveTransfer(id) {
                     ApproveTransferAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableTransfers.ajax.reload();
                     ApproveTransferAjaxError(xhr);
                 }
             });

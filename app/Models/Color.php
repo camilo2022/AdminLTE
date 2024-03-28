@@ -32,8 +32,7 @@ class Color extends Model implements Auditable
     public function scopeSearch($query, $search)
     {
         return $query->where('name', 'like', '%' . $search . '%')
-        ->orWhere('code', 'like', '%' . $search . '%')
-        ->orWhere('value', 'like', '%' . $search . '%');
+        ->orWhere('code', 'like', '%' . $search . '%');
     }
 
     public function scopeFilterByDate($query, $start_date, $end_date)

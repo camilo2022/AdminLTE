@@ -6,13 +6,11 @@ function EditTransporterModal(id) {
             '_token': $('meta[name="csrf-token"]').attr('content')
         },
         success: function(response) {
-            tableTransporters.ajax.reload();
             EditTransporterModalCleaned(response.data);
             EditTransporterAjaxSuccess(response);
             $('#EditTransporterModal').modal('show');
         },
         error: function(xhr, textStatus, errorThrown) {
-            tableTransporters.ajax.reload();
             EditTransporterAjaxError(xhr);
         }
     });
@@ -57,7 +55,6 @@ function EditTransporter(id) {
                     EditTransporterAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableTransporters.ajax.reload();
                     EditTransporterAjaxError(xhr);
                 }
             });

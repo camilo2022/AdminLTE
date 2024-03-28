@@ -105,7 +105,6 @@ function CreateUser() {
                     CreateUserAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableUsers.ajax.reload();
                     CreateUserAjaxError(xhr);
                 }
             });

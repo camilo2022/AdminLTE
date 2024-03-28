@@ -7,7 +7,6 @@ function RemoveRoleAndPermissionUserModal(id, email) {
             'id': id
         },
         success: function(response) {
-            tableUsers.ajax.reload();
             if($('meta[name="user-id"]').attr('content') == id) {
                 toastr.warning('Cuidado, vas a remover el rol y los permisos de tu usuario.');
             }
@@ -133,7 +132,6 @@ function RemoveRoleAndPermissionUserModal(id, email) {
             });
         },
         error: function(xhr, textStatus, errorThrown) {
-            tableUsers.ajax.reload();
             RemoveRoleAndPermissionUserAjaxError(xhr);
         }
     });
@@ -169,7 +167,6 @@ function RemoveRoleAndPermissionUser(id, role, permissions, email) {
                     RemoveRoleAndPermissionUserModal(id, email);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableUsers.ajax.reload();
                     RemoveRoleAndPermissionUserAjaxError(xhr);
                 }
             });

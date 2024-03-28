@@ -22,7 +22,6 @@ function RemovePaymentOrderSeller(id) {
                     RemovePaymentOrderSellerAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableOrderSellerPayments.ajax.reload();
                     RemovePaymentOrderSellerAjaxError(xhr);
                 }
             });

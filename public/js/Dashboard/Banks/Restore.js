@@ -22,7 +22,6 @@ function RestoreBank(id) {
                     RestoreBankAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableBank.ajax.reload();
                     RestoreBankAjaxError(xhr);
                 }
             });

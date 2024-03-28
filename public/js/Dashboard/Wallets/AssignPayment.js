@@ -1,27 +1,28 @@
-function AssignPaymentOrderSellerModal(id) {
+function AssignPaymentWalletModal(id) {
     $.ajax({
-        url: `/Dashboard/Orders/Seller/AssignPayment/Query`,
+        url: `/Dashboard/Wallets/AssignPayment/Query`,
         type: 'POST',
         data: {
             '_token': $('meta[name="csrf-token"]').attr('content'),
-            'order_id': id
+            'order_dispatch_id': id
         },
         success: function (response) {
-            AssignPaymentOrderSellerModalCleaned();
-            AssignPaymentOrderSellerModalPaymentType(response.data.paymentTypes);
-            AssignPaymentOrderSellerAjaxSuccess(response);
-            $('#AssignPaymentOrderSellerModal').modal('show');
+            AssignPaymentWalletModalCleaned(id);
+            AssignPaymentWalletModalPaymentType(response.data.paymentTypes);
+            AssignPaymentWalletAjaxSuccess(response);
+            $('#AssignPaymentWalletModal').modal('show');
         },
         error: function (xhr, textStatus, errorThrown) {
-            AssignPaymentOrderSellerAjaxError(xhr);
+            AssignPaymentWalletAjaxError(xhr);
         }
     });
 }
 
-function AssignPaymentOrderSellerModalCleaned() {
-    AssignPaymentOrderSellerModalResetSelect('payment_type_id_a');
-    RemoveIsValidClassAssignPaymentOrderSeller();
-    RemoveIsInvalidClassAssignPaymentOrderSeller();
+function AssignPaymentWalletModalCleaned(order_dispatch_id) {
+    AssignPaymentWalletModalResetSelect('payment_type_id_a');
+    RemoveIsValidClassAssignPaymentWallet();
+    RemoveIsInvalidClassAssignPaymentWallet();
+    $('#AssignPaymentWalletButton').attr('data-id', order_dispatch_id)
 
     $('#value_a').val('');
     $('#reference_a').val('');
@@ -31,29 +32,29 @@ function AssignPaymentOrderSellerModalCleaned() {
     $('#supports_c').dropify().data('dropify').init();
 }
 
-function AssignPaymentOrderSellerModalResetSelect(id) {
+function AssignPaymentWalletModalResetSelect(id) {
     $(`#${id}`).html('')
     $(`#${id}`).append(new Option('Seleccione', '', false, false));
     $(`#${id}`).trigger('change');
 }
 
-function AssignPaymentOrderSellerModalPaymentType(paymentTypes) {
+function AssignPaymentWalletModalPaymentType(paymentTypes) {
     paymentTypes.forEach(paymentType => {
         $('#payment_type_id_a').append(new Option(paymentType.name, paymentType.id, false, false));
     });
 }
 
-function AssignPaymentOrderSellerModalPaymentTypeGetBank(select) {
+function AssignPaymentWalletModalPaymentTypeGetBank(select) {
     if($(select).val() == '') {
-        AssignPaymentOrderSellerModalResetSelect('bank_id_a');
+        AssignPaymentWalletModalResetSelect('bank_id_a');
         $('#div_bank_id_a').hide();
     } else {
         $.ajax({
-            url: `/Dashboard/Orders/Seller/AssignPayment/Query`,
+            url: `/Dashboard/Wallets/AssignPayment/Query`,
             type: 'POST',
             data: {
                 '_token': $('meta[name="csrf-token"]').attr('content'),
-                'order_id': $('#IndexOrderSellerDetail').attr('data-id'),
+                'order_dispatch_id': $('#AssignPaymentWalletButton').attr('data-id'),
                 'payment_type_id': $(select).val()
             },
             success: function(response) {
@@ -61,27 +62,27 @@ function AssignPaymentOrderSellerModalPaymentTypeGetBank(select) {
                     $('#div_bank_id_a').hide();
                 } else {
                     $('#div_bank_id_a').show();
-                    AssignPaymentOrderSellerModalResetSelect('bank_id_aphp ');
-                    AssignPaymentOrderSellerModalBank(response.data);
+                    AssignPaymentWalletModalResetSelect('bank_id_a');
+                    AssignPaymentWalletModalBank(response.data);
                 }
             },
             error: function(xhr, textStatus, errorThrown) {
-                AssignPaymentOrderSellerAjaxError(xhr);
+                AssignPaymentWalletAjaxError(xhr);
             }
         });
     }
 }
 
-function AssignPaymentOrderSellerModalBank(banks) {
+function AssignPaymentWalletModalBank(banks) {
     banks.forEach(bank => {
         $('#bank_id_a').append(new Option(bank.name, bank.id, false, false));
     });
 }
 
-function AssignPaymentOrderSeller() {
+function AssignPaymentWallet() {
     let formData = new FormData();
     formData.append('_token', $('meta[name="csrf-token"]').attr('content'));
-    formData.append('order_id', $('#IndexOrderSellerDetail').attr('data-id'));
+    formData.append('order_dispatch_id', $('#AssignPaymentWalletButton').attr('data-id'));
     formData.append('value', $('#value_a').val());
     formData.append('reference', $('#reference_a').val());
     formData.append('date', $('#date_a').val());
@@ -92,8 +93,8 @@ function AssignPaymentOrderSeller() {
     }
 
     Swal.fire({
-        title: '¿Desea asignar el pago al pedido?',
-        text: 'El pago será asignado al pedido.',
+        title: '¿Desea asignar el pago a la orden de despacho?',
+        text: 'El pago será asignado a la orden de despacho.',
         icon: 'warning',
         showCancelButton: true,
         cancelButtonColor: '#DD6B55',
@@ -103,72 +104,72 @@ function AssignPaymentOrderSeller() {
     }).then((result) => {
         if (result.value) {
             $.ajax({
-                url: `/Dashboard/Orders/Seller/AssignPayment`,
+                url: `/Dashboard/Wallets/AssignPayment`,
                 type: 'POST',
                 data: formData,
                 processData: false,
                 contentType: false,
                 success: function (response) {
-                    tableOrderSellerPayments.ajax.reload();
-                    AssignPaymentOrderSellerAjaxSuccess(response);
+                    tableWallets.ajax.reload();
+                    AssignPaymentWalletAjaxSuccess(response);
                 },
                 error: function (xhr, textStatus, errorThrown) {
-                    AssignPaymentOrderSellerAjaxError(xhr);
+                    AssignPaymentWalletAjaxError(xhr);
                 }
             });
         } else {
-            toastr.info('El pago no fue asignado al pedido.')
+            toastr.info('El pago no fue asignado a la orden de despacho.')
         }
     });
 }
 
-function AssignPaymentOrderSellerAjaxSuccess(response) {
+function AssignPaymentWalletAjaxSuccess(response) {
     if (response.status === 204) {
         toastr.info(response.message);
-        $('#AssignPaymentOrderSellerModal').modal('hide');
+        $('#AssignPaymentWalletModal').modal('hide');
     }
 
     if (response.status === 201) {
         toastr.success(response.message);
-        $('#AssignPaymentOrderSellerModal').modal('hide');
+        $('#AssignPaymentWalletModal').modal('hide');
     }
 }
 
-function AssignPaymentOrderSellerAjaxError(xhr) {
+function AssignPaymentWalletAjaxError(xhr) {
     if (xhr.status === 403) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
-        $('#AssignPaymentOrderSellerModal').modal('hide');
+        $('#AssignPaymentWalletModal').modal('hide');
     }
 
     if (xhr.status === 404) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
-        $('#AssignPaymentOrderSellerModal').modal('hide');
+        $('#AssignPaymentWalletModal').modal('hide');
     }
 
     if (xhr.status === 419) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
-        $('#AssignPaymentOrderSellerModal').modal('hide');
+        $('#AssignPaymentWalletModal').modal('hide');
     }
 
     if (xhr.status === 422) {
-        RemoveIsValidClassAssignPaymentOrderSeller();
-        RemoveIsInvalidClassAssignPaymentOrderSeller();
+        RemoveIsValidClassAssignPaymentWallet();
+        RemoveIsInvalidClassAssignPaymentWallet();
         $.each(xhr.responseJSON.errors, function (field, messages) {
-            AddIsInvalidClassAssignPaymentOrderSeller(field);
+            AddIsInvalidClassAssignPaymentWallet(field);
             $.each(messages, function (index, message) {
                 toastr.error(message);
             });
         });
-        AddIsValidClassAssignPaymentOrderSeller();
+        AddIsValidClassAssignPaymentWallet();
     }
 
     if (xhr.status === 500) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
-        $('#AssignPaymentOrderSellerModal').modal('hide');
+        $('#AssignPaymentWalletModal').modal('hide');
     }
 }
 
-function AddIsValidClassAssignPaymentOrderSeller() {
+function AddIsValidClassAssignPaymentWallet() {
     if (!$('#value_a').hasClass('is-invalid')) {
         $('#value_a').addClass('is-valid');
     }
@@ -186,7 +187,7 @@ function AddIsValidClassAssignPaymentOrderSeller() {
     }
 }
 
-function RemoveIsValidClassAssignPaymentOrderSeller() {
+function RemoveIsValidClassAssignPaymentWallet() {
     $('#value_a').removeClass('is-valid');
     $('#reference_a').removeClass('is-valid');
     $('#date_a').removeClass('is-valid');
@@ -194,7 +195,7 @@ function RemoveIsValidClassAssignPaymentOrderSeller() {
     $('span[aria-labelledby="select2-bank_id_a-container"]').removeClass('is-valid');
 }
 
-function AddIsInvalidClassAssignPaymentOrderSeller(input) {
+function AddIsInvalidClassAssignPaymentWallet(input) {
     if (!$(`#${input}_a`).hasClass('is-valid')) {
         $(`#${input}_a`).addClass('is-invalid');
     }
@@ -203,7 +204,7 @@ function AddIsInvalidClassAssignPaymentOrderSeller(input) {
     }
 }
 
-function RemoveIsInvalidClassAssignPaymentOrderSeller() {
+function RemoveIsInvalidClassAssignPaymentWallet() {
     $('#value_a').removeClass('is-invalid');
     $('#reference_a').removeClass('is-invalid');
     $('#date_a').removeClass('is-invalid');

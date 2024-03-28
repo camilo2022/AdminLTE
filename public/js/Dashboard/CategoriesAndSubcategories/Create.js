@@ -75,7 +75,6 @@ function CreateCategoryAndSubcategories() {
                     CreateCategoryAndSubcategoriesAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableCategoriesAndSubcategories.ajax.reload();
                     CreateCategoryAndSubcategoriesAjaxError(xhr);
                 }
             });

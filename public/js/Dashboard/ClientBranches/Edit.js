@@ -6,14 +6,12 @@ function EditClientBranchModal(id) {
             '_token': $('meta[name="csrf-token"]').attr('content')
         },
         success: function (response) {
-            tableClientBranches.ajax.reload();
             EditClientBranchModalCleaned(response.data.clientBranch);
             EditClientBranchModalCountry(response.data.countries);
             EditClientBranchAjaxSuccess(response);
             $('#EditClientBranchModal').modal('show');
         },
         error: function (xhr, textStatus, errorThrown) {
-            tableClientBranches.ajax.reload();
             EditClientBranchAjaxError(xhr);
         }
     });
@@ -163,7 +161,6 @@ function EditClientBranch(id) {
                     EditClientBranchAjaxSuccess(response);
                 },
                 error: function (xhr, textStatus, errorThrown) {
-                    tableClientBranches.ajax.reload();
                     EditClientBranchAjaxError(xhr);
                 }
             });

@@ -22,7 +22,6 @@ function RestoreReturnType(id) {
                     RestoreReturnTypeAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableReturnTypes.ajax.reload();
                     RestoreReturnTypeAjaxError(xhr);
                 }
             });

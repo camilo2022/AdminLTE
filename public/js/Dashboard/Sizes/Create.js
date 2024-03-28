@@ -49,7 +49,6 @@ function CreateSize() {
                     CreateSizeAjaxSuccess(response);
                 },
                 error: function (xhr, textStatus, errorThrown) {
-                    tableSizes.ajax.reload();
                     CreateSizeAjaxError(xhr);
                 }
             });

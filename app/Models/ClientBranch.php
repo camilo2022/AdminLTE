@@ -72,13 +72,14 @@ class ClientBranch extends Model implements Auditable
 
     public function scopeSearch($query, $search)
     {
-        return $query->wereHas('client',
+        return $query->whereHas('client',
             function ($subQuery) use ($search) {
-                $subQuery->where('name', 'like', '%' . $search . '%');
+                $subQuery->where('name', 'like', '%' . $search . '%')
+                    ->orWhere('document_number', 'like', '%' . $search . '%');
             }
         )
+        ->orWhere('name', 'like', '%' . $search . '%')
         ->orWhere('code', 'like', '%' . $search . '%')
-        ->orWhere('document_number', 'like', '%' . $search . '%')
         ->orWhereHas('country',
             function ($subQuery) use ($search) {
                 $subQuery->where('name', 'like', '%' . $search . '%');

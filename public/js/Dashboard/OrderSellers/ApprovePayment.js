@@ -22,7 +22,6 @@ function ApprovePaymentOrderSeller(id, status = true) {
                     ApprovePaymentOrderSellerAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    status ? tableOrderSellers.ajax.reload() : location.reload() ;
                     ApprovePaymentOrderSellerAjaxError(xhr);
                 }
             });

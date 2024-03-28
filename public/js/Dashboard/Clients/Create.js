@@ -6,7 +6,6 @@ function CreateClientModal() {
             '_token': $('meta[name="csrf-token"]').attr('content')
         },
         success: function (response) {
-            tableClients.ajax.reload();
             CreateClientModalCleaned();
             CreateClientModalClientType(response.data.clientTypes);
             CreateClientModalPersonType(response.data.personTypes);
@@ -15,7 +14,6 @@ function CreateClientModal() {
             $('#CreateClientModal').modal('show');
         },
         error: function (xhr, textStatus, errorThrown) {
-            tableClients.ajax.reload();
             CreateClientAjaxError(xhr);
         }
     });
@@ -181,7 +179,6 @@ function CreateClient() {
                     CreateClientAjaxSuccess(response);
                 },
                 error: function (xhr, textStatus, errorThrown) {
-                    tableClients.ajax.reload();
                     CreateClientAjaxError(xhr);
                 }
             });

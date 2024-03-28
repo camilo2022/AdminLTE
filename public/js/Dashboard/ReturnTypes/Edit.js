@@ -6,13 +6,11 @@ function EditReturnTypeModal(id) {
             '_token': $('meta[name="csrf-token"]').attr('content')
         },
         success: function(response) {
-            tableReturnTypes.ajax.reload();
             EditReturnTypeModalCleaned(response.data);
             EditReturnTypeAjaxSuccess(response);
             $('#EditReturnTypeModal').modal('show');
         },
         error: function(xhr, textStatus, errorThrown) {
-            tableReturnTypes.ajax.reload();
             EditReturnTypeAjaxError(xhr);
         }
     });
@@ -53,7 +51,6 @@ function EditReturnType(id) {
                     EditReturnTypeAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableReturnTypes.ajax.reload();
                     EditReturnTypeAjaxError(xhr);
                 }
             });

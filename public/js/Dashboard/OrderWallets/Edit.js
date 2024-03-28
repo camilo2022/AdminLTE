@@ -6,14 +6,12 @@ function EditOrderSellerModal(id) {
             '_token': $('meta[name="csrf-token"]').attr('content')
         },
         success: function (response) {
-            tableOrderSellers.ajax.reload();
             EditOrderSellerModalCleaned(response.data.order);
             EditOrderSellerModalClient(response.data.clients);
             EditOrderSellerAjaxSuccess(response);
             $('#EditOrderSellerModal').modal('show');
         },
         error: function (xhr, textStatus, errorThrown) {
-            tableOrderSellers.ajax.reload();
             EditOrderSellerAjaxError(xhr);
         }
     });
@@ -124,7 +122,6 @@ function EditOrderSeller(id) {
                     EditOrderSellerAjaxSuccess(response);
                 },
                 error: function (xhr, textStatus, errorThrown) {
-                    tableOrderSellers.ajax.reload();
                     EditOrderSellerAjaxError(xhr);
                 }
             });

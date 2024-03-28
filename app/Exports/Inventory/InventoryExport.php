@@ -29,8 +29,13 @@ class InventoryExport implements FromArray, Responsable, WithHeadings, WithTitle
             'size_code',
             'warehouse_id',
             'warehouse_code',
+            'warehouse_name',
             'color_id',
             'color_code',
+            'color_name',
+            'tone_id',
+            'tone_code',
+            'tone_name',
             'quantity'
         ];
     }
@@ -54,10 +59,13 @@ class InventoryExport implements FromArray, Responsable, WithHeadings, WithTitle
                     'size_code' => $inventory->size->code,
                     'warehouse_id' => $inventory->warehouse_id,
                     'warehouse_code' => $inventory->warehouse->code,
+                    'warehouse_name' => $inventory->warehouse->name,
                     'color_id' => $inventory->color_id,
                     'color_code' => $inventory->color->code,
+                    'color_name' => $inventory->color->name,
                     'tone_id' => $inventory->tone_id,
-                    'tone' => $inventory->tone->name,
+                    'tone_code' => $inventory->tone->code,
+                    'tone_name' => $inventory->tone->name,
                     'quantity' => $inventory->quantity
                 ]);
                 $i++;

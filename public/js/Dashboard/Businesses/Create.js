@@ -170,7 +170,6 @@ function CreateBusiness() {
                     CreateBusinessAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableBusinesses.ajax.reload();
                     CreateBusinessAjaxError(xhr);
                 }
             });

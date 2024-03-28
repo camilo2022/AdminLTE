@@ -22,7 +22,6 @@ function DeleteSize(id) {
                     DeleteSizeAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableSizes.ajax.reload();
                     DeleteSizeAjaxError(xhr);
                 }
             });

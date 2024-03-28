@@ -22,7 +22,6 @@ function RestoreProduct(id) {
                     RestoreProductAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableProducts.ajax.reload();
                     RestoreProductAjaxError(xhr);
                 }
             });

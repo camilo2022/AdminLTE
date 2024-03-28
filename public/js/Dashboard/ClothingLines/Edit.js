@@ -6,13 +6,11 @@ function EditClothingLineModal(id) {
             '_token': $('meta[name="csrf-token"]').attr('content')
         },
         success: function (response) {
-            tableClothingLines.ajax.reload();
             EditClothingLineModalCleaned(response.data);
             EditClothingLineAjaxSuccess(response);
             $('#EditClothingLineModal').modal('show');
         },
         error: function (xhr, textStatus, errorThrown) {
-            tableClothingLines.ajax.reload();
             EditClothingLineAjaxError(xhr);
         }
     });
@@ -55,7 +53,6 @@ function EditClothingLine(id) {
                     EditClothingLineAjaxSuccess(response);
                 },
                 error: function (xhr, textStatus, errorThrown) {
-                    tableClothingLines.ajax.reload();
                     EditClothingLineAjaxError(xhr);
                 }
             });

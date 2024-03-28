@@ -22,7 +22,6 @@ function DeleteProduct(id) {
                     DeleteProductAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableProducts.ajax.reload();
                     DeleteProductAjaxError(xhr);
                 }
             });

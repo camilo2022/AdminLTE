@@ -153,7 +153,7 @@ class OrderInvoiceController extends Controller
                 $orderDispatchDetail->order_detail->status = 'Despachado';
                 $orderDispatchDetail->order_detail->save();
 
-                $order_value_old += $orderDispatchDetail->order_detail->order_detail_quantities->pluck('quantity') * $orderDispatchDetail->order_detail->price;
+                $order_value_old += $orderDispatchDetail->order_detail->order_detail_quantities->pluck('quantity')->sum() * $orderDispatchDetail->order_detail->price;
             }
 
             if($orderDispatch->order->client->client_type->require_quota) {

@@ -6,14 +6,12 @@ function EditCategoryAndSubcategoriesModal(id) {
             '_token': $('meta[name="csrf-token"]').attr('content'),
         },
         success: function(response) {
-            tableCategoriesAndSubcategories.ajax.reload();
             EditCategoryAndSubcategoriesModalCleaned(response.data.category);
             EditCategoryAndSubcategoriesModalClothingLines(response.data.clothingLines);
             EditCategoryAndSubcategoriesAjaxSuccess(response);
             $('#EditCategoryAndSubcategoriesModal').modal('show');
         },
         error: function(xhr, textStatus, errorThrown) {
-            tableCategoriesAndSubcategories.ajax.reload();
             EditCategoryAndSubcategoriesAjaxError(xhr);
         }
     });
@@ -92,7 +90,6 @@ function EditCategoryAndSubcategories(id) {
                     EditCategoryAndSubcategoriesAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableCategoriesAndSubcategories.ajax.reload();
                     EditCategoryAndSubcategoriesAjaxError(xhr);
                 }
             });

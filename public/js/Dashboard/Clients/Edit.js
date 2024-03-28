@@ -6,7 +6,6 @@ function EditClientModal(id) {
             '_token': $('meta[name="csrf-token"]').attr('content')
         },
         success: function (response) {
-            tableClients.ajax.reload();
             EditClientModalCleaned(response.data.client);
             EditClientModalClientType(response.data.clientTypes);
             EditClientModalPersonType(response.data.personTypes);
@@ -15,7 +14,6 @@ function EditClientModal(id) {
             $('#EditClientModal').modal('show');
         },
         error: function (xhr, textStatus, errorThrown) {
-            tableClients.ajax.reload();
             EditClientAjaxError(xhr);
         }
     });
@@ -229,7 +227,6 @@ function EditClient(id) {
                     EditClientAjaxSuccess(response);
                 },
                 error: function (xhr, textStatus, errorThrown) {
-                    tableClients.ajax.reload();
                     EditClientAjaxError(xhr);
                 }
             });

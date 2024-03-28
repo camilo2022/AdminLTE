@@ -22,7 +22,6 @@ function DeleteAreaAndCharges(id) {
                     DeleteAreaAndChargesAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableAreasAndCharges.ajax.reload();
                     DeleteAreaAndChargesAjaxError(xhr);
                 }
             });

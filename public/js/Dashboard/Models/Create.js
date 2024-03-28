@@ -51,7 +51,6 @@ function CreateModel() {
                     CreateModelAjaxSuccess(response);
                 },
                 error: function (xhr, textStatus, errorThrown) {
-                    tableModels.ajax.reload();
                     CreateModelAjaxError(xhr);
                 }
             });

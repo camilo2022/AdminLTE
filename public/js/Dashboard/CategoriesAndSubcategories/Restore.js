@@ -22,7 +22,6 @@ function RestoreCategoryAndSubcategories(id) {
                     RestoreCategoryAndSubcategoriesAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableCategoriesAndSubcategories.ajax.reload();
                     RestoreCategoryAndSubcategoriesAjaxError(xhr);
                 }
             });

@@ -22,7 +22,6 @@ function DeleteBank(id) {
                     DeleteBankAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableBanks.ajax.reload();
                     DeleteBankAjaxError(xhr);
                 }
             });

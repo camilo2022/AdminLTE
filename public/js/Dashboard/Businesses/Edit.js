@@ -6,7 +6,6 @@ function EditBusinessModal(id) {
             '_token': $('meta[name="csrf-token"]').attr('content')
         },
         success: function(response) {
-            tableBusinesses.ajax.reload();
             EditBusinessModalCleaned(response.data.business);
             EditBusinessModalCountry(response.data.countries);
             EditBusinessModalPersonType(response.data.personTypes);
@@ -14,7 +13,6 @@ function EditBusinessModal(id) {
             $('#EditBusinessModal').modal('show');
         },
         error: function(xhr, textStatus, errorThrown) {
-            tableBusinesses.ajax.reload();
             EditBusinessAjaxError(xhr);
         }
     });
@@ -207,7 +205,6 @@ function EditBusiness(id) {
                     EditBusinessAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableBusinesses.ajax.reload();
                     EditBusinessAjaxError(xhr);
                 }
             });

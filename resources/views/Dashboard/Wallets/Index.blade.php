@@ -82,8 +82,10 @@
                 </div>
             </div>
         </div>
+        @include('Dashboard.Wallets.AssignPayment')
     </section>
 @endsection
 @section('script')
 <script src="{{ asset('js/Dashboard/Wallets/DataTableIndex.js') }}"></script>
+<script src="{{ asset('js/Dashboard/Wallets/AssignPayment.js') }}"></script>
 @endsection

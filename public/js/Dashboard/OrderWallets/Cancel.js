@@ -22,7 +22,6 @@ function CancelOrderWallet(id, status = true) {
                     CancelOrderWalletAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    status ? tableOrderWallets.ajax.reload() : location.reload() ;
                     CancelOrderWalletAjaxError(xhr);
                 }
             });

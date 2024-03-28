@@ -6,13 +6,11 @@ function ShowPersonTypeModal(id) {
             '_token': $('meta[name="csrf-token"]').attr('content')
         },
         success: function (response) {
-            tablePersonTypes.ajax.reload();
             ShowPersonTypeModalCleaned(response.data);
             ShowPersonTypeAjaxSuccess(response);
             $('#ShowPersonTypeModal').modal('show');
         },
         error: function (xhr, textStatus, errorThrown) {
-            tablePersonTypes.ajax.reload();
             ShowPersonTypeAjaxError(xhr);
         }
     });
@@ -63,7 +61,6 @@ function ShowPersonTypeAssignDocumentType(document_type_id, person_type_id) {
             ShowPersonTypeAjaxSuccess(response);
         },
         error: function (xhr, textStatus, errorThrown) {
-            tablePersonTypes.ajax.reload();
             ShowPersonTypeAjaxError(xhr);
         }
     });
@@ -83,7 +80,6 @@ function ShowPersonTypeRemoveDocumentType(document_type_id, person_type_id) {
             ShowPersonTypeAjaxSuccess(response);
         },
         error: function (xhr, textStatus, errorThrown) {
-            tablePersonTypes.ajax.reload();
             ShowPersonTypeAjaxError(xhr);
         }
     });

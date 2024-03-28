@@ -22,7 +22,6 @@ function DeleteWarehouse(id) {
                     DeleteWarehouseAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableWarehouses.ajax.reload();
                     DeleteWarehouseAjaxError(xhr);
                 }
             });

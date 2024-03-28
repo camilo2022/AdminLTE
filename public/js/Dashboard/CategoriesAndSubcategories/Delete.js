@@ -22,7 +22,6 @@ function DeleteCategoryAndSubcategories(id) {
                     DeleteCategoryAndSubcategoriesAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableCategoriesAndSubcategories.ajax.reload();
                     DeleteCategoryAndSubcategoriesAjaxError(xhr);
                 }
             });

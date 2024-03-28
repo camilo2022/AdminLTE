@@ -6,14 +6,12 @@ function ShowTransferModal(id) {
             '_token': $('meta[name="csrf-token"]').attr('content')
         },
         success: function (response) {
-            tableTransfers.ajax.reload();
             ShowTransferModalCleaned(response.data);
             tableTransferDetails.ajax.reload();
             ShowTransferAjaxSuccess(response);
             $('#ShowTransferModal').modal('show');
         },
         error: function (xhr, textStatus, errorThrown) {
-            tableTransfers.ajax.reload();
             ShowTransferAjaxError(xhr);
         }
     });

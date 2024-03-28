@@ -22,7 +22,6 @@ function DeleteTransporter(id) {
                     DeleteTransporterAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableTransporters.ajax.reload();
                     DeleteTransporterAjaxError(xhr);
                 }
             });

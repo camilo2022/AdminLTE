@@ -40,6 +40,7 @@ use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 
 class OrderSellerController extends Controller
@@ -358,7 +359,11 @@ class OrderSellerController extends Controller
             $order->save();
 
             return $this->successResponse(
-                $order,
+                [
+                    'order' => $order,
+                    'urlEmail' => $request->input('email') ? URL::route('Dashboard.Orders.Seller.Email', ['id' => $order->id]) : null,
+                    'urlDownload' => $request->input('download') ? URL::route('Dashboard.Orders.Seller.Download', ['id' => $order->id]) : null
+                ],
                 'El pedido fue aprobado por el asesor exitosamente.',
                 200
             );
@@ -834,8 +839,7 @@ class OrderSellerController extends Controller
 
             /* return view('Dashboard.OrderSellers.Email')->with('order', $order)->with('logoname', $imageBase64); */
             Mail::to($recipientEmails)->send(new EmailWithAttachment($order, $filePath, $imageBase64)); 
-            return redirect()->route('Dashboard.Orders.Seller.Index')->with('success', 'El correo electronico de confirmacion de orden de pedido con id de registro ' . $order->id . ' fue enviado y notificado al cliente via correo electronico anexado el pdf con la informacion del pedido solicitado y registrado.');
-        
+            return Redirect::route('Dashboard.Orders.Seller.Index')->with('success', 'El correo electronico de confirmacion de orden de pedido con id de registro ' . $order->id . ' fue enviado y notificado al cliente via correo electronico anexado el pdf con la informacion del pedido solicitado y registrado.');
         } catch (Exception $e) {
             return back()->with('danger', 'Ocurrió un error al cargar la vista: ' . $e->getMessage());
         }

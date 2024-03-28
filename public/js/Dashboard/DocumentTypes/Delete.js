@@ -22,7 +22,6 @@ function DeleteDocumentType(id) {
                     DeleteDocumentTypeAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableDocumentTypes.ajax.reload();
                     DeleteDocumentTypeAjaxError(xhr);
                 }
             });

@@ -22,7 +22,6 @@ function RestoreSize(id) {
                     RestoreSizeAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableSize.ajax.reload();
                     RestoreSizeAjaxError(xhr);
                 }
             });

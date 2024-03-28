@@ -22,7 +22,6 @@ function RestoreModel(id) {
                     RestoreModelAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableModels.ajax.reload();
                     RestoreModelAjaxError(xhr);
                 }
             });

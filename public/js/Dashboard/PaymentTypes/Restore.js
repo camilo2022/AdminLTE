@@ -22,7 +22,6 @@ function RestorePaymentType(id) {
                     RestorePaymentTypeAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tablePaymentTypes.ajax.reload();
                     RestorePaymentTypeAjaxError(xhr);
                 }
             });

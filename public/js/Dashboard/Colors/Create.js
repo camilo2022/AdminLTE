@@ -49,7 +49,6 @@ function CreateColor() {
                     CreateColorAjaxSuccess(response);
                 },
                 error: function (xhr, textStatus, errorThrown) {
-                    tableColors.ajax.reload();
                     CreateColorAjaxError(xhr);
                 }
             });

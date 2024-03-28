@@ -57,7 +57,6 @@ function CreateAreaAndCharges() {
                     CreateAreaAndChargesAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableAreasAndCharges.ajax.reload();
                     CreateAreaAndChargesAjaxError(xhr);
                 }
             });

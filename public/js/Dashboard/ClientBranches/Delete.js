@@ -22,7 +22,6 @@ function DeleteClientBranch(id) {
                     DeleteClientBranchAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableClientBranches.ajax.reload();
                     DeleteClientBranchAjaxError(xhr);
                 }
             });

@@ -22,7 +22,6 @@ function RestoreSaleChannel(id) {
                     RestoreSaleChannelAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableSaleChannels.ajax.reload();
                     RestoreSaleChannelAjaxError(xhr);
                 }
             });

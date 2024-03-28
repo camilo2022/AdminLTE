@@ -53,7 +53,6 @@ function CreateTransporter() {
                     CreateTransporterAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableTransporters.ajax.reload();
                     CreateTransporterAjaxError(xhr);
                 }
             });

@@ -22,7 +22,6 @@ function RestoreTransporter(id) {
                     RestoreTransporterAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableTransporters.ajax.reload();
                     RestoreTransporterAjaxError(xhr);
                 }
             });

@@ -22,7 +22,6 @@ function DeleteCorreriaAndCollection(id) {
                     DeleteCorreriaAndCollectionAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableCorreriasAndCollections.ajax.reload();
                     DeleteCorreriaAndCollectionAjaxError(xhr);
                 }
             });

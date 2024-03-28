@@ -6,13 +6,11 @@ function EditDocumentTypeModal(id) {
             '_token': $('meta[name="csrf-token"]').attr('content')
         },
         success: function (response) {
-            tableDocumentTypes.ajax.reload();
             EditDocumentTypeModalCleaned(response.data);
             EditDocumentTypeAjaxSuccess(response);
             $('#EditDocumentTypeModal').modal('show');
         },
         error: function (xhr, textStatus, errorThrown) {
-            tableDocumentTypes.ajax.reload();
             EditDocumentTypeAjaxError(xhr);
         }
     });
@@ -53,7 +51,6 @@ function EditDocumentType(id) {
                     EditDocumentTypeAjaxSuccess(response);
                 },
                 error: function (xhr, textStatus, errorThrown) {
-                    tableDocumentTypes.ajax.reload();
                     EditDocumentTypeAjaxError(xhr);
                 }
             });

@@ -6,13 +6,11 @@ function EditClientTypeModal(id) {
             '_token': $('meta[name="csrf-token"]').attr('content')
         },
         success: function (response) {
-            tableClientTypes.ajax.reload();
             EditClientTypeModalCleaned(response.data);
             EditClientTypeAjaxSuccess(response);
             $('#EditClientTypeModal').modal('show');
         },
         error: function (xhr, textStatus, errorThrown) {
-            tableClientTypes.ajax.reload();
             EditClientTypeAjaxError(xhr);
         }
     });
@@ -55,7 +53,6 @@ function EditClientType(id, require_quota) {
                     EditClientTypeAjaxSuccess(response);
                 },
                 error: function (xhr, textStatus, errorThrown) {
-                    tableClientTypes.ajax.reload();
                     EditClientTypeAjaxError(xhr);
                 }
             });
@@ -70,7 +67,7 @@ function EditClientTypeAjaxSuccess(response) {
         toastr.info(response.message);
         $('#EditClientTypeModal').modal('hide');
     }
-    
+
     if (response.status === 200) {
         toastr.success(response.message);
         $('#EditClientTypeModal').modal('hide');

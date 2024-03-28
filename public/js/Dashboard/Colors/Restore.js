@@ -22,7 +22,6 @@ function RestoreColor(id) {
                     RestoreColorAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableColor.ajax.reload();
                     RestoreColorAjaxError(xhr);
                 }
             });

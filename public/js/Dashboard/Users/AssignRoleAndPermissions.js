@@ -7,7 +7,6 @@ function AssignRoleAndPermissionUserModal(id, email) {
             'id': id
         },
         success: function(response) {
-            tableUsers.ajax.reload();
             if (response.data.length === 0) {
                 $('#AssignRoleAndPermissionUserModal').modal('hide');
                 toastr.info('Tiene todos los roles y permisos ya asignados.');
@@ -128,7 +127,6 @@ function AssignRoleAndPermissionUserModal(id, email) {
             });
         },
         error: function(xhr, textStatus, errorThrown) {
-            tableUsers.ajax.reload();
             AssignRoleAndPermissionUserAjaxError(xhr);
         }
     });
@@ -161,7 +159,6 @@ function AssignRoleAndPermissionUser(id, role, permissions, email) {
                     AssignRoleAndPermissionUserModal(id, email);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableUsers.ajax.reload();
                     AssignRoleAndPermissionUserAjaxError(xhr);
                 }
             });

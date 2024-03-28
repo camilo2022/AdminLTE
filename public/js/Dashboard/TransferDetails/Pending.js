@@ -22,7 +22,6 @@ function PendingTransferDetail(id) {
                     PendingTransferDetailAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableTransferDetails.ajax.reload();
                     PendingTransferDetailAjaxError(xhr);
                 }
             });

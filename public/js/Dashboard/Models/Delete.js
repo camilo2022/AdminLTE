@@ -22,7 +22,6 @@ function DeleteModel(id) {
                     DeleteModelAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableModels.ajax.reload();
                     DeleteModelAjaxError(xhr);
                 }
             });

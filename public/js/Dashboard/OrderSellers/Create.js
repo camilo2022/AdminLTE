@@ -6,7 +6,6 @@ function CreateOrderSellerModal() {
             '_token': $('meta[name="csrf-token"]').attr('content')
         },
         success: function (response) {
-            tableOrderSellers.ajax.reload();
             CreateOrderSellerModalCleaned();
             CreateOrderSellerModalClient(response.data.clients);
             CreateOrderSellerModalTransporter(response.data.transporters);
@@ -16,7 +15,6 @@ function CreateOrderSellerModal() {
             $('#CreateOrderSellerModal').modal('show');
         },
         error: function (xhr, textStatus, errorThrown) {
-            tableOrderSellers.ajax.reload();
             CreateOrderSellerAjaxError(xhr);
         }
     });
@@ -139,7 +137,6 @@ function CreateOrderSeller() {
                     CreateOrderSellerAjaxSuccess(response);
                 },
                 error: function (xhr, textStatus, errorThrown) {
-                    tableOrderSellers.ajax.reload();
                     CreateOrderSellerAjaxError(xhr);
                 }
             });

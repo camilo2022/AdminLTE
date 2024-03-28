@@ -22,7 +22,6 @@ function CreateOrderPacked(order_dispatch_id) {
                     CreateOrderPackedAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableOrderPackings.ajax.reload();
                     CreateOrderPackedAjaxError(xhr);
                 }
             });

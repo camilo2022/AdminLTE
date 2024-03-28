@@ -6,13 +6,11 @@ function EditPersonTypeModal(id) {
             '_token': $('meta[name="csrf-token"]').attr('content')
         },
         success: function (response) {
-            tablePersonTypes.ajax.reload();
             EditPersonTypeModalCleaned(response.data);
             EditPersonTypeAjaxSuccess(response);
             $('#EditPersonTypeModal').modal('show');
         },
         error: function (xhr, textStatus, errorThrown) {
-            tablePersonTypes.ajax.reload();
             EditPersonTypeAjaxError(xhr);
         }
     });
@@ -55,7 +53,6 @@ function EditPersonType(id, require_people) {
                     EditPersonTypeAjaxSuccess(response);
                 },
                 error: function (xhr, textStatus, errorThrown) {
-                    tablePersonTypes.ajax.reload();
                     EditPersonTypeAjaxError(xhr);
                 }
             });

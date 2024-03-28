@@ -49,7 +49,6 @@ function CreatePaymentType() {
                     CreatePaymentTypeAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tablePaymentTypes.ajax.reload();
                     CreatePaymentTypeAjaxError(xhr);
                 }
             });

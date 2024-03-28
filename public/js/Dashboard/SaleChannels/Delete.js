@@ -22,7 +22,6 @@ function DeleteSaleChannel(id) {
                     DeleteSaleChannelAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableSaleChannels.ajax.reload();
                     DeleteSaleChannelAjaxError(xhr);
                 }
             });

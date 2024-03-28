@@ -6,13 +6,11 @@ function ShowWarehouseModal(id) {
             '_token': $('meta[name="csrf-token"]').attr('content')
         },
         success: function (response) {
-            tableWarehouses.ajax.reload();
             ShowWarehouseModalCleaned(response.data);
             ShowWarehouseAjaxSuccess(response);
             $('#ShowWarehouseModal').modal('show');
         },
         error: function (xhr, textStatus, errorThrown) {
-            tableWarehouses.ajax.reload();
             ShowWarehouseAjaxError(xhr);
         }
     });
@@ -63,7 +61,6 @@ function ShowWarehouseAssignGestor(user, warehouse) {
             ShowWarehouseAjaxSuccess(response);
         },
         error: function (xhr, textStatus, errorThrown) {
-            tableWarehouses.ajax.reload();
             ShowWarehouseAjaxError(xhr);
         }
     });
@@ -83,7 +80,6 @@ function ShowWarehouseRemoveGestor(user, warehouse) {
             ShowWarehouseAjaxSuccess(response);
         },
         error: function (xhr, textStatus, errorThrown) {
-            tableWarehouses.ajax.reload();
             ShowWarehouseAjaxError(xhr);
         }
     });

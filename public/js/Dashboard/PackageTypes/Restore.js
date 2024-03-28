@@ -22,7 +22,6 @@ function RestorePackageType(id) {
                     RestorePackageTypeAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tablePackageTypes.ajax.reload();
                     RestorePackageTypeAjaxError(xhr);
                 }
             });

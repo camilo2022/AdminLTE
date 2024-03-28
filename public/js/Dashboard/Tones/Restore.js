@@ -22,7 +22,6 @@ function RestoreTone(id) {
                     RestoreToneAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableTone.ajax.reload();
                     RestoreToneAjaxError(xhr);
                 }
             });

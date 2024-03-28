@@ -43,7 +43,6 @@ function UploadInventory() {
                     $('#loading').remove();
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableInventories.ajax.reload();
                     UploadInventoryAjaxError(xhr);
                     $('#loading').remove();
                 }

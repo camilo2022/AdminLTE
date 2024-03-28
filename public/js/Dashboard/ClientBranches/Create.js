@@ -6,14 +6,12 @@ function CreateClientBranchModal() {
             '_token': $('meta[name="csrf-token"]').attr('content'),
         },
         success: function (response) {
-            tableClientBranches.ajax.reload();
             CreateClientBranchModalCleaned();
             CreateClientBranchModalCountry(response.data);
             CreateClientBranchAjaxSuccess(response);
             $('#CreateClientBranchModal').modal('show');
         },
         error: function (xhr, textStatus, errorThrown) {
-            tableClientBranches.ajax.reload();
             CreateClientBranchAjaxError(xhr);
         }
     });
@@ -139,7 +137,6 @@ function CreateClientBranch() {
                     RemoveIsInvalidClassCreateClientBranch();
                 },
                 error: function (xhr, textStatus, errorThrown) {
-                    tableClientBranches.ajax.reload();
                     CreateClientBranchAjaxError(xhr);
                 }
             });

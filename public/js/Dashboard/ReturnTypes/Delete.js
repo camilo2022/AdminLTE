@@ -22,7 +22,6 @@ function DeleteReturnType(id) {
                     DeleteReturnTypeAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableReturnTypes.ajax.reload();
                     DeleteReturnTypeAjaxError(xhr);
                 }
             });

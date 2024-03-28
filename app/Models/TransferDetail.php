@@ -92,7 +92,9 @@ class TransferDetail extends Model implements Auditable
                 $subQuery->where('id', 'like',  '%' . $search . '%')
                 ->orWhere('name', 'like',  '%' . $search . '%');
             }
-        );
+        )
+        ->orWhere('quantity', 'like',  '%' . $search . '%')
+        ->orWhere('status', 'like',  '%' . $search . '%');
     }
 
     public function scopeFilterByDate($query, $start_date, $end_date)

@@ -22,7 +22,6 @@ function RestorePersonType(id) {
                     RestorePersonTypeAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tablePersonType.ajax.reload();
                     RestorePersonTypeAjaxError(xhr);
                 }
             });

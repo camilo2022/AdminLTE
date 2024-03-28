@@ -22,7 +22,6 @@ function RestoreWarehouse(id) {
                     RestoreWarehouseAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableWarehouses.ajax.reload();
                     RestoreWarehouseAjaxError(xhr);
                 }
             });

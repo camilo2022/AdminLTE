@@ -6,13 +6,11 @@ function EditPackageTypeModal(id) {
             '_token': $('meta[name="csrf-token"]').attr('content')
         },
         success: function(response) {
-            tablePackageTypes.ajax.reload();
             EditPackageTypeModalCleaned(response.data);
             EditPackageTypeAjaxSuccess(response);
             $('#EditPackageTypeModal').modal('show');
         },
         error: function(xhr, textStatus, errorThrown) {
-            tablePackageTypes.ajax.reload();
             EditPackageTypeAjaxError(xhr);
         }
     });
@@ -54,7 +52,6 @@ function EditPackageType(id) {
                     EditPackageTypeAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tablePackageTypes.ajax.reload();
                     EditPackageTypeAjaxError(xhr);
                 }
             });

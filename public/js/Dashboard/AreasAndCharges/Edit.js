@@ -6,13 +6,11 @@ function EditAreaAndChargesModal(id) {
             '_token': $('meta[name="csrf-token"]').attr('content'),
         },
         success: function(response) {
-            tableAreasAndCharges.ajax.reload();
             EditAreaAndChargesModalCleaned(response.data);
             EditAreaAndChargesAjaxSuccess(response);
             $('#EditAreaAndChargesModal').modal('show');
         },
         error: function(xhr, textStatus, errorThrown) {
-            tableAreasAndCharges.ajax.reload();
             EditAreaAndChargesAjaxError(xhr);
         }
     });
@@ -68,7 +66,6 @@ function EditAreaAndCharges(id) {
                     EditAreaAndChargesAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableAreasAndCharges.ajax.reload();
                     EditAreaAndChargesAjaxError(xhr);
                 }
             });

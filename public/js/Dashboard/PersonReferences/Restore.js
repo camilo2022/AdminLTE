@@ -22,7 +22,6 @@ function RestorePersonReference(id) {
                     RestorePersonReferenceAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tablePersonReferences.ajax.reload();
                     RestorePersonReferenceAjaxError(xhr);
                 }
             });

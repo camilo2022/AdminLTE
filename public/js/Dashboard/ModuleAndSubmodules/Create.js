@@ -64,7 +64,6 @@ function CreateModuleAndSubmodules() {
                     CreateModuleAndSubmodulesAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableModulesAndSubmodules.ajax.reload();
                     CreateModuleAndSubmodulesAjaxError(xhr);
                 }
             });

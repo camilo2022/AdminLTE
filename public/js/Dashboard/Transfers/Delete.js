@@ -22,7 +22,6 @@ function DeleteTransfer(id) {
                     DeleteTransferAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableTransfers.ajax.reload();
                     DeleteTransferAjaxError(xhr);
                 }
             });

@@ -22,7 +22,6 @@ function DeleteBusiness(id) {
                     DeleteBusinessAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    tableBusinesses.ajax.reload();
                     DeleteBusinessAjaxError(xhr);
                 }
             });
