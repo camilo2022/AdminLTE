@@ -334,5 +334,13 @@ class ModulesAndSubmodulesSeeder extends Seeder
             'module_id' => $Reportes->id,
             'permission_id' => 366
         ]);
+
+        Submodule::create([
+            'name' => 'Carteras',
+            'url' => '/Dashboard/Reports/Wallets/Index',
+            'icon' => 'fas fa-hand-holding-medical',
+            'module_id' => $Reportes->id,
+            'permission_id' => 369
+        ]);
     }
 }

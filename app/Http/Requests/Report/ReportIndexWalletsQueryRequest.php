@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\ReportProductions;
+namespace App\Http\Requests\Report;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ReportProductionsIndexQueryRequest extends FormRequest
+class ReportIndexWalletsQueryRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

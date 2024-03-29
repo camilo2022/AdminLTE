@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\ReportDispatches;
+namespace App\Http\Requests\Report;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ReportDispatchesDownloadRequest extends FormRequest
+class ReportIndexSalesQueryRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

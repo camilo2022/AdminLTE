@@ -476,12 +476,11 @@ class RolesAndPermissionSeeder extends Seeder
 
         Permission::create(['name' => 'Dashboard.Reports.Sales.Index'])->syncRoles([$Reports]);
         Permission::create(['name' => 'Dashboard.Reports.Sales.Index.Query'])->syncRoles([$Reports]);
-        Permission::create(['name' => 'Dashboard.Reports.Sales.Download'])->syncRoles([$Reports]);
         Permission::create(['name' => 'Dashboard.Reports.Dispatches.Index'])->syncRoles([$Reports]);
         Permission::create(['name' => 'Dashboard.Reports.Dispatches.Index.Query'])->syncRoles([$Reports]);
-        Permission::create(['name' => 'Dashboard.Reports.Dispatches.Download'])->syncRoles([$Reports]);
         Permission::create(['name' => 'Dashboard.Reports.Productions.Index'])->syncRoles([$Reports]);
         Permission::create(['name' => 'Dashboard.Reports.Productions.Index.Query'])->syncRoles([$Reports]);
-        Permission::create(['name' => 'Dashboard.Reports.Productions.Download'])->syncRoles([$Reports]);
+        Permission::create(['name' => 'Dashboard.Reports.Wallets.Index'])->syncRoles([$Reports]);
+        Permission::create(['name' => 'Dashboard.Reports.Wallets.Index.Query'])->syncRoles([$Reports]);
     }
 }

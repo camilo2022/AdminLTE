@@ -31,6 +31,7 @@ use App\Http\Controllers\PersonController;
 use App\Http\Controllers\PersonReferenceController;
 use App\Http\Controllers\PersonTypeController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ReturnTypeController;
 use App\Http\Controllers\RolesAndPermissionsController;
 use App\Http\Controllers\SaleChannelController;
@@ -630,6 +631,15 @@ Route::middleware(['auth'])->group(function () {
                 });
             });
 
+        });
+
+        Route::prefix('/Reports')->group(function () {
+            Route::controller(ReportController::class)->group(function () {
+                Route::prefix('/Sales')->group(function () {
+                    Route::get('/Index', 'indexSales')->middleware('can:Dashboard.Reports.Sales.Index')->name('Dashboard.Reports.Sales.Index');
+                    Route::post('/Index/Query', 'indexSalesQuery')->middleware('can:Dashboard.Reports.Sales.Index.Query')->name('Dashboard.Reports.Sales.Index.Query');
+                });
+            });
         });
 
     });

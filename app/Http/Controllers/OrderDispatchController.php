@@ -71,12 +71,14 @@ class OrderDispatchController extends Controller
                 )
                 ->where(function ($query) {
                     $query->whereIn('seller_status', ['Aprobado'])
-                        ->orWhereIn('wallet_status', ['Aprobado', 'Parcialmente Aprobado'])
-                        ->orWhereIn('dispatched_status', ['Pendiente', 'Parcialmente Aprobado', 'Aprobado', 'Parcialmente Despachado']);
+                        ->where(function ($query) {
+                            $query->whereIn('wallet_status', ['Aprobado', 'Parcialmente Aprobado'])
+                                ->orWhereIn('dispatched_status', ['Pendiente', 'Parcialmente Aprobado', 'Aprobado', 'Parcialmente Empacado', 'Empacado', 'Parcialmente Despachado', 'Despachado']);
+                        });
                 })
                 ->where(function ($query) {
                     $query->whereHas('order_details', function ($query) {
-                        $query->where('status', 'Aprobado');
+                        $query->whereIn('status', ['Aprobado', 'Filtrado', 'Empacado', 'Despachado']);
                     })
                     ->orWhereHas('order_dispatches', function ($query) {
                         $query->whereIn('dispatch_status', ['Pendiente', 'Aprobado', 'Empacado', 'Despachado']);
