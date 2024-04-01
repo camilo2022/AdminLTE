@@ -22,7 +22,7 @@ class TrademarkIndexQueryCollection extends ResourceCollection
                     'name' => $trademark->name,
                     'code' => $trademark->code,
                     'description' => $trademark->description,
-                    'logo' =>  asset('storage/' . $trademark->logo),
+                    'logo' =>  is_null($trademark->logo) ? '' : asset('storage/' . $trademark->logo->path),
                     'created_at' => $this->formatDate($trademark->created_at),
                     'updated_at' => $this->formatDate($trademark->updated_at),
                     'deleted_at' => $trademark->deleted_at

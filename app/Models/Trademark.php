@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as Auditing;
@@ -17,16 +18,19 @@ class Trademark extends Model implements Auditable
     protected $fillable = [
         'name',
         'code',
-        'description',
-        'logo'
+        'description'
     ];
 
     protected $auditInclude = [
         'name',
         'code',
-        'description',
-        'logo'
+        'description'
     ];
+
+    public function logo() : MorphOne
+    {
+      return $this->morphOne(File::class, 'model');
+    }
 
     public function products() : HasMany
     {

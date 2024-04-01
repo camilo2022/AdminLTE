@@ -28,7 +28,7 @@
                 <a class="h1"><b>Siver</b></a>
             </div>
             <div class="card-body">
-                <p class="login-box-msg">Sign in to start your session</p>
+                <p class="login-box-msg">Logeate para iniciar sesión</p>
                 <form method="POST" action="{{ route('login') }}">
                     @csrf
                     <div class="input-group mb-3">
@@ -63,7 +63,7 @@
                             <div class="icheck-primary">
                                 <input type="checkbox" id="remember">
                                 <label for="remember">
-                                    Remember Me
+                                    Recordarme
                                 </label>
                             </div>
                         </div>
@@ -76,7 +76,7 @@
                 </form>
 
                 <p class="mb-1">
-                <a href="{{ route('password.request') }}">I forgot my password</a>
+                <a href="{{ route('password.request') }}">Recuperar contraseña</a>
                 </p>
             </div>
 

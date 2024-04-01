@@ -44,6 +44,7 @@ function EditTrademark(id) {
     formData.append('code', $('#code_e').val());
     formData.append('description', $('#description_e').val());
     formData.append('logo', $('#logo_e')[0].files[0] != undefined ? $('#logo_e')[0].files[0] : null );
+    
     Swal.fire({
         title: '¿Desea actualizar la marca de producto?',
         text: 'La marca de producto se actualizara.',

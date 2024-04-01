@@ -21,6 +21,8 @@ use App\Http\Controllers\OrderDispatchDetailController;
 use App\Http\Controllers\OrderInvoiceController;
 use App\Http\Controllers\OrderPackedController;
 use App\Http\Controllers\OrderPackedPackageController;
+use App\Http\Controllers\OrderReturnController;
+use App\Http\Controllers\OrderReturnDetailController;
 use App\Http\Controllers\OrderSellerController;
 use App\Http\Controllers\OrderSellerDetailController;
 use App\Http\Controllers\OrderWalletController;
@@ -376,7 +378,7 @@ Route::middleware(['auth'])->group(function () {
                 Route::post('/Create', 'create')->middleware('can:Dashboard.Colors.Create')->name('Dashboard.Colors.Create');
                 Route::post('/Store', 'store')->middleware('can:Dashboard.Colors.Store')->name('Dashboard.Colors.Store');
                 Route::post('/Edit/{id}', 'edit')->middleware('can:Dashboard.Colors.Edit')->name('Dashboard.Colors.Edit');
-                Route::put('/Update/{id}', 'update')->middleware('can:Dashboard.Colors.Update')->name('Dashboard.Colors.Update');
+                Route::post('/Update/{id}', 'update')->middleware('can:Dashboard.Colors.Update')->name('Dashboard.Colors.Update');
                 Route::delete('/Delete', 'delete')->middleware('can:Dashboard.Colors.Delete')->name('Dashboard.Colors.Delete');
                 Route::put('/Restore', 'restore')->middleware('can:Dashboard.Colors.Restore')->name('Dashboard.Colors.Restore');
             });
@@ -628,6 +630,25 @@ Route::middleware(['auth'])->group(function () {
                     Route::post('/Create', 'create')->middleware('can:Dashboard.Orders.Invoice.Create')->name('Dashboard.Orders.Invoice.Create');
                     Route::post('/Store', 'store')->middleware('can:Dashboard.Orders.Invoice.Store')->name('Dashboard.Orders.Invoice.Store');
                     Route::get('/Download/{id}', 'download')->middleware('can:Dashboard.Orders.Invoice.Download')->name('Dashboard.Orders.Invoice.Download');
+                });
+            });
+            Route::prefix('/Return')->group(function () {
+                Route::controller(OrderReturnController::class)->group(function () {
+                    Route::get('/Index', 'index')->middleware('can:Dashboard.Orders.Return.Index')->name('Dashboard.Orders.Return.Index');
+                    Route::post('/Index/Query', 'indexQuery')->middleware('can:Dashboard.Orders.Return.Index.Query')->name('Dashboard.Orders.Return.Index.Query');
+                    Route::post('/Create', 'create')->middleware('can:Dashboard.Orders.Return.Create')->name('Dashboard.Orders.Return.Create');
+                    Route::post('/Store', 'store')->middleware('can:Dashboard.Orders.Return.Store')->name('Dashboard.Orders.Return.Store');
+                    Route::put('/Approve', 'approve')->middleware('can:Dashboard.Orders.Return.Approve')->name('Dashboard.Orders.Return.Approve');
+                });
+                Route::prefix('/Details')->group(function () {
+                    Route::controller(OrderReturnDetailController::class)->group(function () {
+                        Route::get('/Index/{id}', 'index')->middleware('can:Dashboard.Orders.Return.Details.Index')->name('Dashboard.Orders.Return.Details.Index');
+                        Route::post('/Index/Query', 'indexQuery')->middleware('can:Dashboard.Orders.Return.Details.Index.Query')->name('Dashboard.Orders.Return.Details.Index.Query');
+                        Route::post('/Create', 'create')->middleware('can:Dashboard.Orders.Return.Details.Create')->name('Dashboard.Orders.Return.Details.Create');
+                        Route::post('/Store', 'store')->middleware('can:Dashboard.Orders.Return.Details.Store')->name('Dashboard.Orders.Return.Details.Store');
+                        Route::post('/Edit/{id}', 'edit')->middleware('can:Dashboard.Orders.Return.Details.Edit')->name('Dashboard.Orders.Return.Details.Edit');
+                        Route::put('/Update/{id}', 'update')->middleware('can:Dashboard.Orders.Return.Details.Update')->name('Dashboard.Orders.Return.Details.Update');
+                    });
                 });
             });
 

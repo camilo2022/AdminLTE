@@ -22,9 +22,18 @@ function CreateColorModalCleaned() {
 
     $('#name_c').val('');
     $('#code_c').val('');
+    $('#sample_c').val('');
+    $('#sample_c').dropify().data('dropify').destroy();
+    $('#sample_c').dropify().data('dropify').init();
 }
 
 function CreateColor() {
+    let formData = new FormData();
+    formData.append('_token', $('meta[name="csrf-token"]').attr('content'));
+    formData.append('name', $('#name_c').val());
+    formData.append('code', $('#code_c').val());
+    formData.append('sample', $('#sample_c')[0].files[0]);
+
     Swal.fire({
         title: '¿Desea guardar el color?',
         text: 'El color será creado.',
@@ -39,11 +48,9 @@ function CreateColor() {
             $.ajax({
                 url: `/Dashboard/Colors/Store`,
                 type: 'POST',
-                data: {
-                    '_token': $('meta[name="csrf-token"]').attr('content'),
-                    'name': $('#name_c').val(),
-                    'code': $('#code_c').val()
-                },
+                data: formData,
+                processData: false,
+                contentType: false,
                 success: function (response) {
                     tableColors.ajax.reload();
                     CreateColorAjaxSuccess(response);

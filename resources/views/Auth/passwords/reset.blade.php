@@ -24,10 +24,10 @@
     <div class="login-box">
         <div class="card card-outline card-primary">
             <div class="card-header text-center">
-                <a href="../../index2.html" class="h1"><b>Admin</b>LTE</a>
+                <a class="h1"><b>Siver</b></a>
             </div>
             <div class="card-body">
-                <p class="login-box-msg">You are only one step a way from your new password, recover your password now.</p>
+                <p class="login-box-msg">Estás a sólo un paso de tu nueva contraseña, recupera tu contraseña ahora.</p>
                 <form method="POST" action="{{ route('password.update') }}">
                     @csrf
                     <input type="hidden" name="token" value="{{ $token }}">
@@ -68,7 +68,7 @@
                     </div>
                     <div class="row">
                         <div class="col-12">
-                            <button type="submit" class="btn btn-primary btn-block">Change password</button>
+                            <button type="submit" class="btn btn-primary btn-block">Cambiar contraseña</button>
                         </div>
                         <!-- /.col -->
                     </div>

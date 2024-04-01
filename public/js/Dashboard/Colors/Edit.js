@@ -24,9 +24,25 @@ function EditColorModalCleaned(color) {
 
     $("#name_e").val(color.name);
     $("#code_e").val(color.code);
+    var drEvent = $('#sample_e').dropify({
+        defaultFile: color.path
+    });
+    drEvent = drEvent.data('dropify');
+    drEvent.resetPreview();
+    drEvent.clearElement();
+    drEvent.settings.defaultFile = color.path;
+    drEvent.destroy();
+    drEvent.init();
+    $('#sample_e').val('');
 }
 
 function EditColor(id) {
+    let formData = new FormData();
+    formData.append('_token', $('meta[name="csrf-token"]').attr('content'));
+    formData.append('name', $('#name_e').val());
+    formData.append('code', $('#code_e').val());
+    formData.append('sample', $('#sample_e')[0].files[0] != undefined ? $('#sample_e')[0].files[0] : null );
+
     Swal.fire({
         title: '¿Desea actualizar el color?',
         text: 'El color se actualizara.',
@@ -40,12 +56,10 @@ function EditColor(id) {
         if (result.value) {
             $.ajax({
                 url: `/Dashboard/Colors/Update/${id}`,
-                type: 'PUT',
-                data: {
-                    '_token': $('meta[name="csrf-token"]').attr('content'),
-                    'name': $('#name_e').val(),
-                    'code': $('#code_e').val()
-                },
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
                 success: function (response) {
                     tableColors.ajax.reload();
                     EditColorAjaxSuccess(response);

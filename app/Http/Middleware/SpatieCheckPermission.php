@@ -36,7 +36,7 @@ class SpatieCheckPermission
             if ($redirectCount < 5) {
                 session(['redirect_count' => $redirectCount + 1]);
                 return back()->with('danger', $message);
-            } else {
+            } else if($redirectCount >= 5) {
                 session(['redirect_count' => 0]);
                 return redirect('/Dashboard');
             }

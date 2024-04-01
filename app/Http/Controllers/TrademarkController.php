@@ -8,6 +8,7 @@ use App\Http\Requests\Trademark\TrademarkRestoreRequest;
 use App\Http\Requests\Trademark\TrademarkStoreRequest;
 use App\Http\Requests\Trademark\TrademarkUpdateRequest;
 use App\Http\Resources\Trademark\TrademarkIndexQueryCollection;
+use App\Models\File;
 use App\Models\Trademark;
 use App\Traits\ApiMessage;
 use App\Traits\ApiResponser;
@@ -15,6 +16,7 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class TrademarkController extends Controller
@@ -37,7 +39,8 @@ class TrademarkController extends Controller
             $start_date = Carbon::parse($request->input('start_date'))->startOfDay();
             $end_date = Carbon::parse($request->input('end_date'))->endOfDay();
             //Consulta por nombre
-            $trademarks = Trademark::when($request->filled('search'),
+            $trademarks = Trademark::with('logo')
+                ->when($request->filled('search'),
                     function ($query) use ($request) {
                         $query->search($request->input('search'));
                     }
@@ -103,11 +106,21 @@ class TrademarkController extends Controller
             $trademark->name = $request->input('name');
             $trademark->code = $request->input('code');
             $trademark->description = $request->input('description');
-            if ($request->hasFile('logo')) {
-                $path = $request->file('logo')->store('Trademarks','public');
-                $trademark->logo = $path;
-            }
             $trademark->save();
+
+            if($request->hasFile('logo')) {
+                $file = new File();
+                $file->model_type = Trademark::class;
+                $file->model_id = $trademark->id;
+                $file->name = $request->file('logo')->getClientOriginalName();
+                $file->path = $request->file('logo')->store('Trademarks/' . $trademark->id, 'public');
+                $file->mime = $request->file('logo')->getMimeType();
+                $file->extension = $request->file('logo')->getClientOriginalExtension();
+                $file->size = $request->file('logo')->getSize();
+                $file->user_id = Auth::user()->id;
+                $file->metadata = json_encode((array) stat($request->file('logo')));
+                $file->save();
+            }
 
             return $this->successResponse(
                 $trademark,
@@ -147,8 +160,9 @@ class TrademarkController extends Controller
     public function edit($id)
     {
         try {
-            $trademark = Trademark::withTrashed()->findOrFail($id);
-            $trademark->path = asset('storage/' . $trademark->logo);
+            $trademark = Trademark::with('logo')->withTrashed()->findOrFail($id);
+            return $trademark->path = is_null($trademark->logo) ? $trademark->logo : asset('storage/' . $trademark->logo->path);
+            
             return $this->successResponse(
                 $trademark,
                 'La marca de producto fue encontrada exitosamente.',
@@ -176,18 +190,39 @@ class TrademarkController extends Controller
     public function update(TrademarkUpdateRequest $request, $id)
     {
         try {
-            $trademark = Trademark::withTrashed()->findOrFail($id);
+            $trademark = Trademark::with('logo')->withTrashed()->findOrFail($id);
             $trademark->name = $request->input('name');
             $trademark->code = $request->input('code');
             $trademark->description = $request->input('description');
-            if ($request->hasFile('logo')) {
-                if (Storage::disk('public')->exists($trademark->logo)) {
-                    Storage::disk('public')->delete($trademark->logo);
-                }
-                $path = $request->file('logo')->store('Trademarks','public');
-                $trademark->logo = $path;
-            }
             $trademark->save();
+
+            if ($request->hasFile('logo')) {
+                if(is_null($trademark->logo)) {
+                    $file = new File();
+                    $file->model_type = Trademark::class;
+                    $file->model_id = $trademark->id;
+                    $file->name = $request->file('logo')->getClientOriginalName();
+                    $file->path = $request->file('logo')->store('Trademarks/' . $trademark->id, 'public');
+                    $file->mime = $request->file('logo')->getMimeType();
+                    $file->extension = $request->file('logo')->getClientOriginalExtension();
+                    $file->size = $request->file('logo')->getSize();
+                    $file->user_id = Auth::user()->id;
+                    $file->metadata = json_encode((array) stat($request->file('logo')));
+                    $file->save();
+                } else {   
+                    if (Storage::disk('public')->exists($trademark->logo->path)) {
+                        Storage::disk('public')->delete($trademark->logo->path);
+                    }
+                    $trademark->logo->name = $request->file('logo')->getClientOriginalName();
+                    $trademark->logo->path = $request->file('logo')->store('Trademarks/' . $trademark->id, 'public');
+                    $trademark->logo->mime = $request->file('logo')->getMimeType();
+                    $trademark->logo->extension = $request->file('logo')->getClientOriginalExtension();
+                    $trademark->logo->size = $request->file('logo')->getSize();
+                    $trademark->logo->user_id = Auth::user()->id;
+                    $trademark->logo->metadata = json_encode((array) stat($request->file('logo')));
+                    $trademark->logo->save();
+                }
+            }
 
             return $this->successResponse(
                 $trademark,

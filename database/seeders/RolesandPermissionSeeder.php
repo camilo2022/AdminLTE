@@ -83,6 +83,8 @@ class RolesAndPermissionSeeder extends Seeder
 
         $OrderInvoices = Role::create(['name' => 'OrderInvoices']);
 
+        $OrderReturns = Role::create(['name' => 'OrderReturns']);
+
         $Reports = Role::create(['name' => 'Reports']);
 
         Permission::create(['name' => 'Dashboard'])->syncRoles([$Dashboard]);
@@ -473,6 +475,18 @@ class RolesAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Dashboard.Orders.Invoice.Create'])->syncRoles([$OrderInvoices]);
         Permission::create(['name' => 'Dashboard.Orders.Invoice.Store'])->syncRoles([$OrderInvoices]);
         Permission::create(['name' => 'Dashboard.Orders.Invoice.Download'])->syncRoles([$OrderInvoices]);
+
+        Permission::create(['name' => 'Dashboard.Orders.Return.Index'])->syncRoles([$OrderReturns]);
+        Permission::create(['name' => 'Dashboard.Orders.Return.Index.Query'])->syncRoles([$OrderReturns]);
+        Permission::create(['name' => 'Dashboard.Orders.Return.Create'])->syncRoles([$OrderReturns]);
+        Permission::create(['name' => 'Dashboard.Orders.Return.Store'])->syncRoles([$OrderReturns]);
+        Permission::create(['name' => 'Dashboard.Orders.Return.Approve'])->syncRoles([$OrderReturns]);
+        Permission::create(['name' => 'Dashboard.Orders.Return.Details.Index'])->syncRoles([$OrderReturns]);
+        Permission::create(['name' => 'Dashboard.Orders.Return.Details.Index.Query'])->syncRoles([$OrderReturns]);
+        Permission::create(['name' => 'Dashboard.Orders.Return.Details.Create'])->syncRoles([$OrderReturns]);
+        Permission::create(['name' => 'Dashboard.Orders.Return.Details.Store'])->syncRoles([$OrderReturns]);
+        Permission::create(['name' => 'Dashboard.Orders.Return.Details.Edit'])->syncRoles([$OrderReturns]);
+        Permission::create(['name' => 'Dashboard.Orders.Return.Details.Update'])->syncRoles([$OrderReturns]);
 
         Permission::create(['name' => 'Dashboard.Reports.Sales.Index'])->syncRoles([$Reports]);
         Permission::create(['name' => 'Dashboard.Reports.Sales.Index.Query'])->syncRoles([$Reports]);

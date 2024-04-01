@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as Auditing;
@@ -23,6 +24,11 @@ class Color extends Model implements Auditable
         'name',
         'code'
     ];
+
+    public function sample() : MorphOne
+    {
+      return $this->morphOne(File::class, 'model');
+    }
 
     public function products() : BelongsToMany
     {

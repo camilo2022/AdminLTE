@@ -16,127 +16,133 @@ class AreasAndChargesSeeder extends Seeder
      */
     public function run()
     {
-        Area::create(['name' => 'ADMINISTRACION']);
-
-        Area::create(['name' => 'COMERCIAL']);
-
-        Area::create(['name' => 'BODEGA']);
-
-        Area::create(['name' => 'DISEÑO']);
-
-        Area::create(['name' => 'SISTEMAS']);
+        Area::create(['name' => 'Administración']);
 
         Charge::create([
             'area_id' => 1,
-            'name' => 'GERENCIA',
+            'name' => 'Administrador',
             'description' => ''
         ]);
-        
+
         Charge::create([
             'area_id' => 1,
-            'name' => 'DIRECION ADMINISTRATIVA Y FINANCIERA',
+            'name' => 'Gerente Administrativo',
             'description' => ''
         ]);
-        
+
         Charge::create([
             'area_id' => 1,
-            'name' => 'CONTADOR',
+            'name' => 'Asistente Administrativo',
             'description' => ''
         ]);
-        
+
         Charge::create([
             'area_id' => 1,
-            'name' => 'AUXILIAR CONTABLE',
+            'name' => 'Coordinador Administrativo',
             'description' => ''
         ]);
-        
-        Charge::create([
-            'area_id' => 1,
-            'name' => 'AUXILIAR CARTERA',
-            'description' => ''
-        ]);
-        
+
+        Area::create(['name' => 'Contabilidad']);
+
         Charge::create([
             'area_id' => 2,
-            'name' => 'DIRECION COMERCIAL VENTA ASISTIDA',
+            'name' => 'Contador',
             'description' => ''
         ]);
-        
+
         Charge::create([
             'area_id' => 2,
-            'name' => 'ASESOR COMERCIAL',
+            'name' => 'Analista Contable',
             'description' => ''
         ]);
-        
+
         Charge::create([
             'area_id' => 2,
-            'name' => 'DIRECCION COMERCIAL VENTA NACIONAL',
+            'name' => 'Auditor Interno',
             'description' => ''
         ]);
-        
+
         Charge::create([
             'area_id' => 2,
-            'name' => 'COMISIONISTAS NACIONALES',
+            'name' => 'Auxiliar Contable',
             'description' => ''
         ]);
+
+        Area::create(['name' => 'Cartera']);
         
         Charge::create([
-            'area_id' => 2,
-            'name' => 'DIRECION COMERCIAL CALZADO',
-            'description' => ''
-        ]);
-        
-        Charge::create([
-            'area_id' => 2,
-            'name' => 'VENDEDOR NACIONAL',
-            'description' => ''
-        ]);
-        
-        Charge::create([
-            'area_id' => 2,
-            'name' => 'TALLERES SATELITE',
+            'area_id' => 3,
+            'name' => 'Analista de Cartera',
             'description' => ''
         ]);
         
         Charge::create([
             'area_id' => 3,
-            'name' => 'JEFE BODEGA',
+            'name' => 'Gestor de Cobranzas',
             'description' => ''
         ]);
         
         Charge::create([
             'area_id' => 3,
-            'name' => 'AUXILIAR BODEGA',
+            'name' => 'Analista de Crédito',
+            'description' => ''
+        ]);
+        
+        Charge::create([
+            'area_id' => 3,
+            'name' => 'Supervisor de Cartera',
+            'description' => ''
+        ]);
+
+        Area::create(['name' => 'Venta Asistida']);
+        
+        Charge::create([
+            'area_id' => 4,
+            'name' => 'Representante de Ventas',
             'description' => ''
         ]);
         
         Charge::create([
             'area_id' => 4,
-            'name' => 'DISEÑADOR Y JEFE DE PRODUCCION',
+            'name' => 'Asesor Comercial',
             'description' => ''
         ]);
         
         Charge::create([
             'area_id' => 4,
-            'name' => 'PERSONAL DE CORTE',
+            'name' => 'Ejecutivo de Ventas',
             'description' => ''
         ]);
         
         Charge::create([
             'area_id' => 4,
-            'name' => 'PERSONAL DE TERMINACION',
+            'name' => 'Coordinador de Ventas',
+            'description' => ''
+        ]);
+
+        Area::create(['name' => 'Bodega']);
+        
+        Charge::create([
+            'area_id' => 5,
+            'name' => 'Jefe de Almacén',
             'description' => ''
         ]);
         
         Charge::create([
-            'area_id' => 4,
-            'name' => 'LAVANDERIAS',
+            'area_id' => 5,
+            'name' => 'Auxiliar de Bodega',
             'description' => ''
         ]);
         
         Charge::create([
-            'area_id' => 4,
-            'name' => 'TALLER SATELITES',
+            'area_id' => 5,
+            'name' => 'Coordinador de Logística',
+            'description' => ''
+        ]);
+        
+        Charge::create([
+            'area_id' => 5,
+            'name' => 'Operario de Almacén',
             'description' => ''
         ]);
     }

@@ -36,6 +36,15 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-lg-12">
+                    <div class="form-group">
+                        <label for="sample">Muestra</label>
+                        <div class="input-group">
+                            <input type="file" class="form-control dropify" id="sample_e" name="sample"
+                            accept=".jpg, .jpeg, .png, .gif" data-default-file="">
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal" title="Cerrar ventana">

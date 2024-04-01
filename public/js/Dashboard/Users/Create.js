@@ -60,7 +60,7 @@ function CreateUserModalAreasGetCharge(select) {
                 CreateUserModalCharges(response.data);
             },
             error: function(xhr, textStatus, errorThrown) {
-                CreateBusinessAjaxError(xhr);
+                CreateUserAjaxError(xhr);
             }
         });
     }

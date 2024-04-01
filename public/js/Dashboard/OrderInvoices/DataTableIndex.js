@@ -258,7 +258,7 @@ function tableOrderInvoicesFiles(row) {
                     <tbody>`;
 
     $.each(row.invoices, function(index, invoice) {
-        let css = `<tr class="row-${index}" onmouseenter="CssRowOrderDispatch(true, 'row-${index}')" onmouseleave="CssRowOrderDispatch(false, 'row-${index}')">`;
+        let css = `<tr class="row-${index}${invoice.id}" onmouseenter="CssRowOrderDispatch(true, 'row-${index}${invoice.id}')" onmouseleave="CssRowOrderDispatch(false, 'row-${index}${invoice.id}')">`;
         table += `${css}
             <td rowspan="${invoice.files.length == 0 ? '1' : invoice.files.length }"> ${invoice.id} </td>
             <td rowspan="${invoice.files.length == 0 ? '1' : invoice.files.length }"> ${invoice.value.toLocaleString('es-CO', { style: 'currency', currency: 'COP' })} COP </td>

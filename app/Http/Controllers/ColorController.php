@@ -9,12 +9,15 @@ use App\Http\Requests\Color\ColorStoreRequest;
 use App\Http\Requests\Color\ColorUpdateRequest;
 use App\Http\Resources\Color\ColorIndexQueryCollection;
 use App\Models\Color;
+use App\Models\File;
 use App\Traits\ApiMessage;
 use App\Traits\ApiResponser;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class ColorController extends Controller
 {
@@ -36,7 +39,8 @@ class ColorController extends Controller
             $start_date = Carbon::parse($request->input('start_date'))->startOfDay();
             $end_date = Carbon::parse($request->input('end_date'))->endOfDay();
             //Consulta por nombre
-            $colors = Color::when($request->filled('search'),
+            $colors = Color::with('sample')
+                ->when($request->filled('search'),
                     function ($query) use ($request) {
                         $query->search($request->input('search'));
                     }
@@ -103,6 +107,20 @@ class ColorController extends Controller
             $color->code = $request->input('code');
             $color->save();
 
+            if ($request->hasFile('sample')) {
+                $file = new File();
+                $file->model_type = Color::class;
+                $file->model_id = $color->id;
+                $file->name = $request->file('sample')->getClientOriginalName();
+                $file->path = $request->file('sample')->store('Colors/' . $color->id, 'public');
+                $file->mime = $request->file('sample')->getMimeType();
+                $file->extension = $request->file('sample')->getClientOriginalExtension();
+                $file->size = $request->file('sample')->getSize();
+                $file->user_id = Auth::user()->id;
+                $file->metadata = json_encode((array) stat($request->file('sample')));
+                $file->save();
+            }
+
             return $this->successResponse(
                 $color,
                 'EL color de producto fue registrado exitosamente.',
@@ -141,8 +159,11 @@ class ColorController extends Controller
     public function edit($id)
     {
         try {
+            $color = Color::with('sample')->withTrashed()->findOrFail($id);
+            $color->path = is_null($color->sample) ? $color->sample : asset('storage/' . $color->sample->path);
+            
             return $this->successResponse(
-                Color::withTrashed()->findOrFail($id),
+                $color,
                 'El color de producto fue encontrado exitosamente.',
                 204
             );
@@ -168,10 +189,38 @@ class ColorController extends Controller
     public function update(ColorUpdateRequest $request, $id)
     {
         try {
-            $color = Color::withTrashed()->findOrFail($id);
+            $color = Color::with('sample')->withTrashed()->findOrFail($id);
             $color->name = $request->input('name');
             $color->code = $request->input('code');
             $color->save();
+
+            if($request->hasFile('sample')) {
+                if(is_null($color->sample)) {
+                    $file = new File();
+                    $file->model_type = Color::class;
+                    $file->model_id = $color->id;
+                    $file->name = $request->file('sample')->getClientOriginalName();
+                    $file->path = $request->file('sample')->store('Colors/' . $color->id, 'public');
+                    $file->mime = $request->file('sample')->getMimeType();
+                    $file->extension = $request->file('sample')->getClientOriginalExtension();
+                    $file->size = $request->file('sample')->getSize();
+                    $file->user_id = Auth::user()->id;
+                    $file->metadata = json_encode((array) stat($request->file('sample')));
+                    $file->save();
+                } else {   
+                    if (Storage::disk('public')->exists($color->sample->path)) {
+                        Storage::disk('public')->delete($color->sample->path);
+                    }
+                    $color->sample->name = $request->file('sample')->getClientOriginalName();
+                    $color->sample->path = $request->file('sample')->store('Colors/' . $color->id, 'public');
+                    $color->sample->mime = $request->file('sample')->getMimeType();
+                    $color->sample->extension = $request->file('sample')->getClientOriginalExtension();
+                    $color->sample->size = $request->file('sample')->getSize();
+                    $color->sample->user_id = Auth::user()->id;
+                    $color->sample->metadata = json_encode((array) stat($request->file('sample')));
+                    $color->sample->save();
+                }
+            }
 
             return $this->successResponse(
                 $color,
