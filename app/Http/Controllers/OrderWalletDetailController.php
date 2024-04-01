@@ -416,6 +416,8 @@ class OrderWalletDetailController extends Controller
         try {
             $orderDetail = OrderDetail::with('order.client.client_type', 'order_detail_quantities')->findOrFail($request->input('id'));
             $orderDetail->status = 'Aprobado';
+            $orderDetail->wallet_user_id = Auth::user()->id;
+            $orderDetail->wallet_date = Carbon::now()->format('Y-m-d H:i:s');
             $orderDetail->save();
             
             if($orderDetail->order->client->client_type->require_quota) {
@@ -463,6 +465,8 @@ class OrderWalletDetailController extends Controller
         try {
             $orderDetail = OrderDetail::findOrFail($request->input('id'));
             $orderDetail->status = 'Pendiente';
+            $orderDetail->wallet_user_id = Auth::user()->id;
+            $orderDetail->wallet_date = Carbon::now()->format('Y-m-d H:i:s');
             $orderDetail->save();
 
             DB::statement('CALL order_wallet_status(?)', [$orderDetail->order->id]);
@@ -540,6 +544,8 @@ class OrderWalletDetailController extends Controller
                 $orderDetail->status = 'Agotado';
             }
 
+            $orderDetail->wallet_user_id = Auth::user()->id;
+            $orderDetail->wallet_date = Carbon::now()->format('Y-m-d H:i:s');
             $orderDetail->save();
 
             return $this->successResponse(
@@ -580,6 +586,8 @@ class OrderWalletDetailController extends Controller
         try {
             $orderDetail = OrderDetail::findOrFail($request->input('id'));
             $orderDetail->status = 'Cancelado';
+            $orderDetail->wallet_user_id = Auth::user()->id;
+            $orderDetail->wallet_date = Carbon::now()->format('Y-m-d H:i:s');
             $orderDetail->save();
 
             DB::statement('CALL order_wallet_status(?)', [$orderDetail->order->id]);
@@ -635,6 +643,8 @@ class OrderWalletDetailController extends Controller
                 $inventory->save();
             }
             $orderDetail->status = 'Rechazado';
+            $orderDetail->wallet_user_id = Auth::user()->id;
+            $orderDetail->wallet_date = Carbon::now()->format('Y-m-d H:i:s');
             $orderDetail->save();
 
             if($orderDetail->order->client->client_type->require_quota) {

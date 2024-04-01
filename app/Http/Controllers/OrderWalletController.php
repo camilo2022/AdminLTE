@@ -140,6 +140,8 @@ class OrderWalletController extends Controller
             foreach($order->order_details->whereIn('status', ['Revision']) as $detail) {
                 $order_value += $detail->order_detail_quantities->pluck('quantity')->sum() * $detail->price;
                 $detail->status = 'Aprobado';
+                $detail->wallet_date = Carbon::now()->format('Y-m-d H:i:s');
+                $detail->wallet_user_id = Auth::user()->id;
                 $detail->save();
             }
 
@@ -235,6 +237,8 @@ class OrderWalletController extends Controller
 
             foreach($order->order_details->whereIn('status', ['Agotado', 'Rechazado']) as $detail) {
                 $detail->status = 'Pendiente';
+                $detail->wallet_date = Carbon::now()->format('Y-m-d H:i:s');
+                $detail->wallet_user_id = Auth::user()->id;
                 $detail->save();
             }
 
@@ -305,6 +309,8 @@ class OrderWalletController extends Controller
                 }
 
                 $detail->status = 'Rechazado';
+                $detail->wallet_user_id = Auth::user()->id;
+                $detail->wallet_date = Carbon::now()->format('Y-m-d H:i:s');
                 $detail->save();
             }
 
@@ -312,7 +318,6 @@ class OrderWalletController extends Controller
             $order->wallet_date = Carbon::now()->format('Y-m-d H:i:s');
             $order->wallet_user_id = Auth::user()->id;
             $order->dispatched_status = 'Cancelado';
-            $order->dispatched_date = Carbon::now()->format('Y-m-d H:i:s');
             $order->save();
 
             return $this->successResponse(

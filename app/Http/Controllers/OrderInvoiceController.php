@@ -151,6 +151,7 @@ class OrderInvoiceController extends Controller
                 $orderDispatchDetail->status = 'Despachado';
                 $orderDispatchDetail->save();
                 $orderDispatchDetail->order_detail->status = 'Despachado';
+                $orderDispatchDetail->order_detail->dispatched_date = Carbon::now()->format('Y-m-d H:i:s');
                 $orderDispatchDetail->order_detail->save();
 
                 $order_value_old += $orderDispatchDetail->order_detail->order_detail_quantities->pluck('quantity')->sum() * $orderDispatchDetail->order_detail->price;

@@ -280,6 +280,7 @@ class OrderDispatchController extends Controller
 
                 $orderDetail = OrderDetail::with('order_detail_quantities')->findOrFail($detail->id);
                 $orderDetail->status = 'Filtrado';
+                $orderDetail->dispatched_user_id = Auth::user()->id;
                 $orderDetail->save();
 
                 foreach($detail->quantities as $quantity) {

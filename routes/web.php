@@ -639,6 +639,18 @@ Route::middleware(['auth'])->group(function () {
                     Route::get('/Index', 'indexSales')->middleware('can:Dashboard.Reports.Sales.Index')->name('Dashboard.Reports.Sales.Index');
                     Route::post('/Index/Query', 'indexSalesQuery')->middleware('can:Dashboard.Reports.Sales.Index.Query')->name('Dashboard.Reports.Sales.Index.Query');
                 });
+                Route::prefix('/Dispatches')->group(function () {
+                    Route::get('/Index', 'indexDispatches')->middleware('can:Dashboard.Reports.Dispatches.Index')->name('Dashboard.Reports.Dispatches.Index');
+                    Route::post('/Index/Query', 'indexDispatchesQuery')->middleware('can:Dashboard.Reports.Dispatches.Index.Query')->name('Dashboard.Reports.Dispatches.Index.Query');
+                });
+                Route::prefix('/Productions')->group(function () {
+                    Route::get('/Index', 'indexProductions')->middleware('can:Dashboard.Reports.Productions.Index')->name('Dashboard.Reports.Productions.Index');
+                    Route::post('/Index/Query', 'indexProductionsQuery')->middleware('can:Dashboard.Reports.Productions.Index.Query')->name('Dashboard.Reports.Productions.Index.Query');
+                });
+                Route::prefix('/Wallets')->group(function () {
+                    Route::get('/Index', 'indexWallets')->middleware('can:Dashboard.Reports.Wallets.Index')->name('Dashboard.Reports.Wallets.Index');
+                    Route::post('/Index/Query', 'indexWalletsQuery')->middleware('can:Dashboard.Reports.Wallets.Index.Query')->name('Dashboard.Reports.Wallets.Index.Query');
+                });
             });
         });
 

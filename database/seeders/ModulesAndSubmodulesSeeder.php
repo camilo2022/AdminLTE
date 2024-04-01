@@ -324,7 +324,7 @@ class ModulesAndSubmodulesSeeder extends Seeder
             'url' => '/Dashboard/Reports/Dispatches/Index',
             'icon' => 'fas fa-hand-holding-box',
             'module_id' => $Reportes->id,
-            'permission_id' => 363
+            'permission_id' => 362
         ]);
 
         Submodule::create([
@@ -332,7 +332,7 @@ class ModulesAndSubmodulesSeeder extends Seeder
             'url' => '/Dashboard/Reports/Productions/Index',
             'icon' => 'fas fa-hand-holding-seedling',
             'module_id' => $Reportes->id,
-            'permission_id' => 366
+            'permission_id' => 364
         ]);
 
         Submodule::create([
@@ -340,7 +340,7 @@ class ModulesAndSubmodulesSeeder extends Seeder
             'url' => '/Dashboard/Reports/Wallets/Index',
             'icon' => 'fas fa-hand-holding-medical',
             'module_id' => $Reportes->id,
-            'permission_id' => 369
+            'permission_id' => 366
         ]);
     }
 }
