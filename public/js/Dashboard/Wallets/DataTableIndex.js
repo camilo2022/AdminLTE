@@ -261,7 +261,7 @@ function tableWalletOrderDispatches(row) {
 
         table += `<td class="text-center">
 
-            <a onclick="AssignPaymentWalletModal(${row.id})" type="button"
+            <a onclick="AssignPaymentWalletModal(${order_dispatch.id})" type="button"
             class="btn btn-primary btn-sm mr-2" title="Agregar pago a la deuda de la orden de despacho.">
                 <i class="fas fa-hand-holding-dollar text-white"></i>
             </a>`;
