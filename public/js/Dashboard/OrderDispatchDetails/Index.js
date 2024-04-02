@@ -143,7 +143,7 @@ function IndexOrderDispatchDetailModalCleaned(details, sizes) {
         });
 
         body += `<td>${quantities}</td>
-            <td>${detail.Dispatch_observation == null ? '' : detail.Dispatch_observation}</td>`;
+            <td>${detail.dispatch_observation == null ? '' : detail.dispatch_observation}</td>`;
 
         switch (detail.status) {
             case 'Pendiente':

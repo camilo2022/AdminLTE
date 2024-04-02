@@ -100,17 +100,20 @@ class Client extends Model implements Auditable
         return $query->where('name', 'like', '%' . $search . '%')
         ->orWhereHas('person_type',
             function ($subQuery) use ($search) {
-                $subQuery->where('name', 'like', '%' . $search . '%');
+                $subQuery->where('name', 'like', '%' . $search . '%')
+                ->orWhere('code', 'like', '%' . $search . '%');
             }
         )
         ->orWhereHas('client_type',
             function ($subQuery) use ($search) {
-                $subQuery->where('name', 'like', '%' . $search . '%');
+                $subQuery->where('name', 'like', '%' . $search . '%')
+                ->orWhere('code', 'like', '%' . $search . '%');
             }
         )
         ->orWhereHas('document_type',
             function ($subQuery) use ($search) {
-                $subQuery->where('name', 'like', '%' . $search . '%');
+                $subQuery->where('name', 'like', '%' . $search . '%')
+                ->orWhere('code', 'like', '%' . $search . '%');
             }
         )
         ->orWhere('document_number', 'like', '%' . $search . '%')

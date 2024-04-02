@@ -83,7 +83,7 @@ function EditOrderSellerModalClientGetClientBranch(select) {
 
 function EditOrderSellerModalClienteBranch(clientBranches) {
     clientBranches.forEach(clientBranch => {
-        $('#client_branch_id_e').append(new Option(`${clientBranch.name} - ${clientBranch.code}`, clientBranch.id, false, false));
+        $('#client_branch_id_e').append(new Option(`${clientBranch.name} - ${clientBranch.code} - ${clientBranch.departament.name} - ${clientBranch.city.name} - ${clientBranch.city.province.name} - ${clientBranch.address}`, clientBranch.id, false, false));
     });
 
     let client_branch_id = $('#EditOrderSellerButton').attr('data-client_branch_id');

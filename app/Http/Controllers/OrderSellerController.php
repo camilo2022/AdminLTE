@@ -122,7 +122,7 @@ class OrderSellerController extends Controller
         try {
             if($request->filled('client_id')) {
                 return $this->successResponse(
-                    ClientBranch::where('client_id', '=', $request->input('client_id'))->get(),
+                    ClientBranch::with('country', 'departament', 'city.province')->where('client_id', '=', $request->input('client_id'))->get(),
                     'Sucursales encontradas con exito.',
                     200
                 );
@@ -216,7 +216,7 @@ class OrderSellerController extends Controller
         try {
             if($request->filled('client_id')) {
                 return $this->successResponse(
-                    ClientBranch::where('client_id', '=', $request->input('client_id'))->get(),
+                    ClientBranch::with('country', 'departament', 'city.province')->where('client_id', '=', $request->input('client_id'))->get(),
                     'Sucursales encontradas con exito.',
                     200
                 );

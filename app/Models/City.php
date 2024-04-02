@@ -14,16 +14,23 @@ class City extends Model implements Auditable
 
     protected $table = 'cities';
     protected $fillable = [
+        'province_id',
         'departament_id',
         'name',
         'code'
     ];
 
     protected $auditInclude = [
+        'province_id',
         'departament_id',
         'name',
         'code'
     ];
+
+    public function province() : BelongsTo
+    {
+        return $this->belongsTo(Province::class, 'province_id');
+    }
 
     public function departament() : BelongsTo
     {

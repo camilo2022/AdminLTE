@@ -1,5 +1,5 @@
 <div class="modal" id="EditOrderSellerModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" data-backdrop="static" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable" role="document">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
         <div class="modal-content">
             <div class="modal-header w-100">
                 <div class="text-center w-100" style="background: white;">
@@ -13,7 +13,7 @@
                 <div class="form-group">
                     <label for="client_id_e">Cliente</label>
                     <div class="input-group">
-                        <select class="form-control select2" id="client_id_e" name="client_id" style="width: 90%" onchange="EditOrderSellerModalClientGetClientBranch(this)">
+                        <select class="form-control select2" id="client_id_e" name="client_id" style="width: 94%" onchange="EditOrderSellerModalClientGetClientBranch(this)">
                             <option value="">Seleccione</option>
                         </select>
                         <div class="input-group-append">
@@ -26,7 +26,7 @@
                 <div class="form-group">
                     <label for="client_branch_id_e">Sucursal</label>
                     <div class="input-group">
-                        <select class="form-control select2" id="client_branch_id_e" name="client_branch_id" style="width: 90%">
+                        <select class="form-control select2" id="client_branch_id_e" name="client_branch_id" style="width: 94%">
                             <option value="">Seleccione</option>
                         </select>
                         <div class="input-group-append">
@@ -39,7 +39,7 @@
                 <div class="form-group">
                     <label for="transporter_id_e">Transportadora</label>
                     <div class="input-group">
-                        <select class="form-control select2" id="transporter_id_e" name="transporter_id_e" style="width: 88%">
+                        <select class="form-control select2" id="transporter_id_e" name="transporter_id_e" style="width: 92%">
                             <option value="">Seleccione</option>
                         </select>
                         <div class="input-group-append">
@@ -52,7 +52,7 @@
                 <div class="form-group">
                     <label for="sale_channel_id_e">Canal de venta</label>
                     <div class="input-group">
-                        <select class="form-control select2" id="sale_channel_id_e" name="sale_channel_id" style="width: 90%">
+                        <select class="form-control select2" id="sale_channel_id_e" name="sale_channel_id" style="width: 94%">
                             <option value="">Seleccione</option>
                         </select>
                         <div class="input-group-append">

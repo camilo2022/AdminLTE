@@ -9,7 +9,7 @@ function ShowOrderPackage(order_package_id) {
             'order_package_id': order_package_id
         },
         success: function(response) {
-            
+
             response.data.url == null ? ShowOrderPackageCleaned(response.data.orderPackage) : window.location.href = response.data.url ;
             ShowOrderPackageAjaxSuccess(response);
         },
@@ -21,11 +21,11 @@ function ShowOrderPackage(order_package_id) {
 
 function ShowOrderPackageCleaned(packageDetails) {
     $('#orderPackageDetails').html('');
-console.log(packageDetails);
+
     let orderPackageDetails = '';
-    
+
     $.each(packageDetails.order_packing.order_dispatch.order_dispatch_details, function(i, packageDetail) {
-        
+
         if (i % 2 === 0) {
             orderPackageDetails += '<div class="row">';
         }
@@ -89,8 +89,8 @@ console.log(packageDetails);
                 </tr>`;
             }
         })
-        
-                        
+
+
         orderPackageDetails += `</tbody>
                     </table>
                 </div>
@@ -133,11 +133,14 @@ function DetailOrderPackageDetail(id, referencia, order_package_id, order_dispat
 }
 
 function ShowOrderPackageDetail(id, event, quantity, referencia, order_package_id, order_dispatch_detail_id, status = true) {
-
     if(event.which == 13){
         let value = $.trim($(`#${id}`).val()).toUpperCase();
+        let initialQuantity = quantity;
         if(status) {
             $(`#${id}`).val('');
+        }
+        if(quantity == null) {
+            quantity = 1;
         }
 
         if(value.substring(0, value.lastIndexOf('-')) == referencia) {
@@ -150,7 +153,7 @@ function ShowOrderPackageDetail(id, event, quantity, referencia, order_package_i
             let total = parseInt($(`#${value.substring(0, value.lastIndexOf('-'))}-TOTAL`).text());
             let badge = $(`#${value.substring(0, value.lastIndexOf('-'))}-BADGE`);
 
-            if(!status && (quantity > countDispatch - (countPicking - countPickingPackage) || quantity > countDispatch)){
+            if(!status && (parseInt(quantity) > countDispatch - (countPicking - countPickingPackage) || parseInt(quantity) > countDispatch)){
                 toastr.warning('La cantidad ingresada supera el maximo que puede empacar en este empaque.');
             } else if(isNaN(countPicking) || isNaN(countDispatch)) {
                 toastr.error('El codigo ingresado es erroneo. Revisar el valor que arroja el codigo.');
@@ -162,11 +165,11 @@ function ShowOrderPackageDetail(id, event, quantity, referencia, order_package_i
                     countPicking++;
                     countPickingPackage++;
                 } else {
-                    count = count - countPickingPackage + quantity;
-                    countPicking = countPicking - countPickingPackage + quantity;
-                    countPickingPackage = quantity;
+                    count = count - countPickingPackage + parseInt(quantity);
+                    countPicking = countPicking - countPickingPackage + parseInt(quantity);
+                    countPickingPackage = parseInt(quantity);
                 }
-                
+
                 $(`#${value.substring(0, value.lastIndexOf('-'))}-CONTAR`).text(count);
                 $(`#${value}-CP`).text(countPicking);
                 $(`#${value}-CP`).attr('data-countPickingPackage', countPickingPackage);
@@ -181,22 +184,22 @@ function ShowOrderPackageDetail(id, event, quantity, referencia, order_package_i
                         'color_id': parseInt($(`#${value}-DETAIL`).attr('data-color_id')),
                         'tone_id': parseInt($(`#${value}-DETAIL`).attr('data-tone_id')),
                         'size_id': parseInt($(`#${value}-DETAIL`).attr('data-size_id')),
-                        'order_package_id': order_package_id, 
+                        'order_package_id': order_package_id,
                         'order_dispatch_detail_id': order_dispatch_detail_id,
-                        'quantity': quantity
+                        'quantity': initialQuantity == null ? null : parseInt(quantity)
                     },
                     success: function(response) {
-                        
+
                     },
                     error: function(xhr, textStatus, errorThrown) {
                         ShowOrderPackageAjaxError(xhr);
                         if(status) {
-                            count = count - countPickingPackage + quantity;
-                            countPicking = countPicking - countPickingPackage + quantity;
-                            countPickingPackage = quantity;
+                            count = count - countPickingPackage + parseInt(quantity);
+                            countPicking = countPicking - countPickingPackage + parseInt(quantity);
+                            countPickingPackage = parseInt(quantity);
                         } else {
-                            count = count - quantity + countPickingPackageValue;
-                            countPicking = countPicking - quantity + countPickingPackageValue;
+                            count = count - parseInt(quantity) + countPickingPackageValue;
+                            countPicking = countPicking - parseInt(quantity) + countPickingPackageValue;
                             countPickingPackage = countPickingPackageValue;
                         }
 

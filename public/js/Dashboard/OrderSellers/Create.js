@@ -68,7 +68,7 @@ function CreateOrderSellerModalClientGetClientBranch(select) {
 
 function CreateOrderSellerModalClienteBranch(clientBranches) {
     clientBranches.forEach(clientBranch => {
-        $('#client_branch_id_c').append(new Option(`${clientBranch.name} - ${clientBranch.code}`, clientBranch.id, false, false));
+        $('#client_branch_id_c').append(new Option(`${clientBranch.name} - ${clientBranch.code} - ${clientBranch.departament.name} - ${clientBranch.city.name} - ${clientBranch.city.province.name} - ${clientBranch.address}`, clientBranch.id, false, false));
     });
 }
 

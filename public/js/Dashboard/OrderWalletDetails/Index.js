@@ -127,7 +127,7 @@ function IndexOrderWalletDetailModalCleaned(details, sizes) {
         });
 
         body += `<td>${quantities}</td>
-            <td>${detail.Wallet_observation == null ? '' : detail.Wallet_observation}</td>`;
+            <td>${detail.wallet_observation == null ? '' : detail.wallet_observation}</td>`;
 
         switch (detail.status) {
             case 'Pendiente':

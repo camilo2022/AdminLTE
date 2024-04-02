@@ -61,18 +61,18 @@
     <!-- Dropzone -->
     <link rel="stylesheet" href="{{ asset('css/plugins/dropzone/dropzone.min.css') }}">
     <style>
-        input[type=number]::-webkit-inner-spin-button, 
-        input[type=number]::-webkit-outer-spin-button { 
-            -webkit-appearance: none; 
-            margin: 0; 
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
         }
         .filterInputNumber{
             background: transparent !important;
             text-align: center;
             font-size: 15px;
             font-weight: bold;
-            border: 0; 
-            box-shadow: none; 
+            border: 0;
+            box-shadow: none;
             width: 100px;
         }
 
@@ -401,7 +401,7 @@
     <script src="https://cdn.datatables.net/buttons/1.7.0/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.7.0/js/buttons.print.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.7.0/js/buttons.colVis.min.js"></script>
-    
+
     <script src="{{ asset('js/select2/js/select2.full.min.js') }}"></script>
 
     <!-- Dropify -->
@@ -421,7 +421,7 @@
             showConfirmButton: false,
             timer: 3000
         });
-        
+
         $('.select2').select2();
         $('.dropify').dropify();
 
