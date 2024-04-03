@@ -356,14 +356,14 @@ function tableOrderDispatchesFilter(row) {
                 </a>`; */
                 break;
             case 'Empacado':
-                table += `<a onclick="InvoiceOrderDispatchModal(${order_dispatch.id})" type="button"
+                /* table += `<a onclick="InvoiceOrderDispatchModal(${order_dispatch.id})" type="button"
                 class="btn btn-sm mr-2" style="background: slateblue; color: white;" title="Facturar orden de despacho del pedido.">
                     <i class="fas fa-file-pdf text-white"></i>
-                </a>`;
+                </a>`; */
             case 'Despachado':
-                table += `<a onclick="PdfOrderDispatch(${order_dispatch.id})" type="button"
-                class="btn btn-sm mr-2" style="background: mediumvioletred; color: white;" title="Editar orden de despacho del pedido.">
-                    <i class="fas fa-pen text-white"></i>
+                table += `<a href="/Dashboard/Orders/Dispatch/Download/${order_dispatch.id}" target="_blank" type="button"
+                class="btn btn-sm mr-2" style="background: mediumvioletred; color: white;" title="PDF orden de despacho del pedido.">
+                    <i class="fas fa-file-pdf text-white"></i>
                 </a>`;
             default:
                 table += ``;

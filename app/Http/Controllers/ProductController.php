@@ -139,8 +139,8 @@ class ProductController extends Controller
                 [
                     'clothing_lines' => ClothingLine::all(),
                     'models' => Model::all(),
-                    'trademarks' => Trademark::withTrashed()->get(),
-                    'correrias' => Correria::withTrashed()->get(),
+                    'trademarks' => Trademark::all(),
+                    'correrias' => Correria::all(),
                 ],
                 'Ingrese los datos para hacer la validacion y registro.',
                 204
@@ -310,23 +310,48 @@ class ProductController extends Controller
             $colors = Color::all();
             $tones = Tone::all();
             $sizes = Size::with('products')->get();
-            $product = Product::with('colors_tones.files', 'sizes')->findOrFail($id);
+            $product = Product::with(['clothing_line', 'category', 'subcategory', 'model', 'trademark', 'colors_tones.files', 'sizes'])->findOrFail($id);
+            $colors_tones = collect([]);
 
-            foreach ($product->photos as $photo) {
-                $photo->path = asset('storage/' . $photo->path);
+            foreach ($product->colors_tones as $color_tone) {
+                foreach ($color_tone->files as $file) {
+                    $file->path = asset('storage/' . $file->path);
+                }
             }
 
             foreach ($sizes as $size) {
                 $productsId = $size->products->pluck('id')->all();
-                $sizes->admin = in_array($id, $productsId);
+                $size->admin = in_array($id, $productsId);
             }
 
+            foreach($colors as $color) {
+                foreach($tones as $tone) {
+                    $admin = false;
+
+                    foreach ($product->colors_tones as $color_tone) {
+                        if($color_tone->color->id == $color->id && $color_tone->tone->id == $tone->id) {
+                            $admin = true;
+                            break;
+                        }
+                    }
+
+                    $colors_tones->push([
+                        'color_id' => $color->id,
+                        'color_name' => $color->name,
+                        'color_code' => $color->code,
+                        'tone_id' => $tone->id,
+                        'tone_name' => $tone->name,
+                        'tone_code' => $tone->code,
+                        'admin' => $admin
+                    ]);
+                }
+            }
+            
             return $this->successResponse(
                 [
                     'product' => $product,
                     'sizes' => $sizes,
-                    'colors' => $colors,
-                    'tones' => $tones
+                    'colors_tones' => $colors_tones,
                 ],
                 'El producto fue encontrado exitosamente.',
                 204

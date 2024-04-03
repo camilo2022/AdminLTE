@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as Auditing;
@@ -22,6 +23,13 @@ class Size extends Model implements Auditable
         'name',
         'code'
     ];
+
+    public function products() : BelongsToMany
+    {
+        return $this->belongsToMany(Product::class, 'product_sizes', 'size_id', 'product_id')
+            ->withTimestamps()
+            ->whereNull('product_sizes.deleted_at');
+    }
 
     public function scopeSearch($query, $search)
     {

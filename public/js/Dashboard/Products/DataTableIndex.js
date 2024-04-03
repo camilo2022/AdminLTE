@@ -37,8 +37,18 @@ let tableProducts = $('#products').DataTable({
     columns: [
         { data: 'id' },
         { data: 'code' },
-        { data: 'cost' },
-        { data: 'price' },
+        {
+            data: 'cost',
+            render: function (data, type, row) {
+                return `${parseFloat(data).toLocaleString('es-CO', { style: 'currency', currency: 'COP' })}`;
+            }
+        },
+        {
+            data: 'price',
+            render: function (data, type, row) {
+                return `${parseFloat(data).toLocaleString('es-CO', { style: 'currency', currency: 'COP' })}`;
+            }
+        },
         {
             data: 'clothing_line',
             render: function (data, type, row) {

@@ -69,7 +69,7 @@ function ShowWarehouseAssignGestor(user, warehouse) {
 function ShowWarehouseRemoveGestor(user, warehouse) {
     $.ajax({
         url: `/Dashboard/Warehouses/RemoveGestor`,
-        type: 'POST',
+        type: 'DELETE',
         data: {
             '_token': $('meta[name="csrf-token"]').attr('content'),
             'user_id': user,
