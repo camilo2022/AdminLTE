@@ -50,6 +50,7 @@ function ShowProductModalCleaned(data) {
         currentRow.append(sizeDiv);
     });
 
+    $('#colors_tones_s').empty();
     $.each(data.colors_tones, function (index, color_tone) {
         let color_toneDiv = $('<div>').addClass('col-lg-6 pl-2 icheck-primary');
         
@@ -75,6 +76,104 @@ function ShowProductModalCleaned(data) {
         }
         currentRow.append(color_toneDiv);
     });
+
+    $('#accordion').empty();
+    $.each(data.product.colors_tones, function(i, color_tone) {
+        let cardPrimary = $('<div>').addClass('card card-primary');
+        let cardHeader = $('<div>').addClass('card-header');
+        let cardTitle = $('<h4>').addClass('card-title w-100').attr({
+            'data-toggle': 'collapse',
+            'data-parent': '#accordion',
+            'href': `#collapse${i}`
+        }).css({
+            'cursor': 'pointer'
+        });
+        let label = $('<label>').text(`${data.product.code.toUpperCase()} | ${color_tone.color.name} - ${color_tone.color.code} | ${color_tone.tone.name} - ${color_tone.tone.code}`).css({
+            'cursor': 'pointer'
+        });
+
+        cardTitle.append(label);
+        cardHeader.append(cardTitle);
+
+        let collapse= $('<div>').addClass('panel-collapse collapse in').attr({
+            'id': `collapse${i}`
+        });
+        let cardBody = $('<div>').addClass('card-body');
+        let divRow = $('<div>').addClass('row');
+        let divColFiles = $('<div>').addClass('col-lg-6').css({
+            'align-items': 'center'
+        });
+        let divColTable = $('<div>').addClass('col-lg-6');
+
+        collapse.append(cardBody);
+        
+        let filesForm = $('<div>').addClass('form-group').css({
+            'text-align': 'right'
+        });
+        let filesLabel = $('<label>').attr('for', '');
+        let filesInputGroup = $('<div>').addClass('input-group');
+        let filesInput = $('<input>').attr({
+            'type': 'file',
+            'id': `files${i}_s`,
+            'name': `files${i}_s`,
+            'class': 'form-control dropify files_c',
+            'accept': '.jpeg, .jpg, .png, .gif, .pdf, .txt, .docx, .xlsx, .xlsm, .xlsb, .xltx',
+            'multiple': true
+        });
+        let button = $('<button>').addClass('btn btn-primary mt-2 w-100').attr({
+            'id': `CreateProductColorToneFileButton${i}`,
+            'onclick': `CreateProductColorToneFile(${color_tone.id}, 'files${i}_s')`,
+            'title': `Anexar archivos al producto ${data.product.code.toUpperCase()} en el color ${color_tone.color.name} - ${color_tone.color.code} en el tono ${color_tone.tone.name} - ${color_tone.tone.code}.`
+        })
+        let icon = $('<i>').addClass('fas fa-floppy-disk');
+
+        button.append(icon);
+        filesInputGroup.append(filesInput);
+        filesForm.append(filesLabel, filesInputGroup, button);
+
+        let table = `<div class="table-responsive">
+            <table id="productFiles${i}" class="table table-bordered table-hover dataTable dtr-inline w-100">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>#</th>
+                        <th>Nombre</th>
+                        <th>Extension</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>`;
+        $.each(color_tone.files, function(j, file) {
+            table += `<tr>
+                    <td>${file.id}</td>
+                    <td>${file.name}</td>
+                    <td>${file.extension}</td>
+                    <td>
+                        <div class="text-center" style="width: 100px;">
+                            <a href="${file.path}" target="_blank"
+                            class="btn btn-info btn-sm mr-2" title="Ver archivo de producto.">
+                                <i class="fas fa-eye text-white"></i>
+                            </a>
+                            <a onclick="DeleteProductColorToneFile(${file.id})" type="button" 
+                            class="btn btn-danger btn-sm mr-2" title="Eliminar archivo de producto">
+                                <i class="fas fa-trash text-white"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>`;
+        })
+        table += `</tbody>
+            </table>
+        </div>`;
+
+        divColFiles.append(filesForm);
+        divColTable.append(table);
+        divRow.append(divColFiles, divColTable);
+        cardBody.append(divRow);
+        cardPrimary.append(cardHeader, collapse);
+        $('#accordion').append(cardPrimary);
+        $(`#files${i}_s`).dropify();
+        $(`#productFiles${i}`).DataTable();
+    })
 }
 
 function ShowProductSize(size, product, checkbox) {
@@ -97,6 +196,7 @@ function ShowProductAssignSize(size, product) {
         success: function (response) {
             tableProducts.ajax.reload();
             ShowProductAjaxSuccess(response);
+            ShowProductModal(product);
         },
         error: function (xhr, textStatus, errorThrown) {
             ShowProductAjaxError(xhr);
@@ -116,6 +216,7 @@ function ShowProductRemoveSize(size, product) {
         success: function (response) {
             tableProducts.ajax.reload();
             ShowProductAjaxSuccess(response);
+            ShowProductModal(product);
         },
         error: function (xhr, textStatus, errorThrown) {
             ShowProductAjaxError(xhr);
@@ -125,9 +226,9 @@ function ShowProductRemoveSize(size, product) {
 
 function ShowProductColorTone(color, tone, product, checkbox) {
     if ($(checkbox).prop('checked')) {
-        ShowProductAssignSize(color, tone, product);
+        ShowProductAssignColorTone(color, tone, product);
     } else {
-        ShowProductRemoveSize(color, tone, product);
+        ShowProductRemoveColorTone(color, tone, product);
     }
 }
 
@@ -144,6 +245,7 @@ function ShowProductAssignColorTone(color, tone, product) {
         success: function (response) {
             tableProducts.ajax.reload();
             ShowProductAjaxSuccess(response);
+            ShowProductModal(product);
         },
         error: function (xhr, textStatus, errorThrown) {
             ShowProductAjaxError(xhr);
@@ -164,6 +266,7 @@ function ShowProductRemoveColorTone(color, tone, product) {
         success: function (response) {
             tableProducts.ajax.reload();
             ShowProductAjaxSuccess(response);
+            ShowProductModal(product);
         },
         error: function (xhr, textStatus, errorThrown) {
             ShowProductAjaxError(xhr);

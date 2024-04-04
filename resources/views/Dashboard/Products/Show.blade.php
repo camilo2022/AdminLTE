@@ -57,48 +57,7 @@
                             <div class="card-body">
                                 <div id="accordion">
                                     <!-- we are adding the .class so bootstrap.js collapse plugin detects it -->
-                                    <div class="card card-primary">
-                                        <div class="card-header">
-                                            <h4 class="card-title">
-                                                <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
-                                                    Collapsible Group Item #1
-                                                </a>
-                                            </h4>
-                                        </div>
-                                        <div id="collapseOne" class="panel-collapse collapse in">
-                                            <div class="card-body">
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="card card-danger">
-                                        <div class="card-header">
-                                            <h4 class="card-title">
-                                                <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
-                                                    Collapsible Group Danger
-                                                </a>
-                                            </h4>
-                                        </div>
-                                        <div id="collapseTwo" class="panel-collapse collapse">
-                                            <div class="card-body">
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="card card-success">
-                                        <div class="card-header">
-                                            <h4 class="card-title">
-                                                <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
-                                                    Collapsible Group Success
-                                                </a>
-                                            </h4>
-                                        </div>
-                                        <div id="collapseThree" class="panel-collapse collapse">
-                                            <div class="card-body">
-
-                                            </div>
-                                        </div>
-                                    </div>
+                                    
                                 </div>
                             </div>
                         </div>
