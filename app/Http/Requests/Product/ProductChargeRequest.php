@@ -20,7 +20,7 @@ class ProductChargeRequest extends FormRequest
     protected function prepareForValidation()
     {
         $this->merge([
-            'photos' => json_decode($this->input('photos')),
+            'files' => json_decode($this->input('files')),
         ]);
     }
 
@@ -33,8 +33,8 @@ class ProductChargeRequest extends FormRequest
     {
         return [
             'product_color_tone_id' => ['required', 'exists:product_color_tone,id'],
-            'photos' => ['required', 'array'],
-            'photos.*' => ['mimes:jpeg,jpg,png,gif']
+            'files' => ['required', 'array'],
+            'files.*' => ['mimes:jpeg,jpg,png,gif,mp4,avi,wmv,mov,mkv,flv,webm,mpeg']
         ];
     }
 
@@ -43,8 +43,9 @@ class ProductChargeRequest extends FormRequest
         return [
             'product_color_tone_id.required' => 'El campo de la relacion Producto, Color y Tono es requerido.',
             'product_color_tone_id.exists' => 'El Identificador de la relacion Producto, Color y Tono no es valido.',
-            'photos.array' => 'El campo Fotos del producto debe ser un arreglo.',
-            'photos.*.mimes' => 'El Archivo debe tener una extensión válida (jpeg, jpg, png, gif).',
+            'files.required' => 'El campo Archivos del producto es requerido.',
+            'files.array' => 'El campo Archivos del producto debe ser un arreglo.',
+            'files.*.mimes' => 'El Archivo debe tener una extensión válida (jpeg, jpg, png, gif, mp4, avi, wmv, mov, mkv, flv, webm, mpeg).',
         ];
     }
 }

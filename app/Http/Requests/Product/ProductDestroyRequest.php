@@ -24,15 +24,15 @@ class ProductDestroyRequest extends FormRequest
     public function rules()
     {
         return [
-            'id' => ['required', 'exists:product_photos,id'],
+            'id' => ['required', 'exists:files,id'],
         ];
     }
 
     public function messages()
     {
         return [
-            'id.required' => 'El Identificador de la foto del producto es requerido.',
-            'id.exists' => 'El Identificador de la foto del producto no es válido.',
+            'id.required' => 'El Identificador del archivo del producto es requerido.',
+            'id.exists' => 'El Identificador del archivo del producto no es válido.',
         ];
     }
 }

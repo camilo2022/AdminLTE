@@ -549,22 +549,24 @@ class ProductController extends Controller
     public function charge(ProductChargeRequest $request)
     {
         try {
-            $photos = $request->file('photos');
-            foreach ($photos as $photo) {
-                $productPhoto = new File();
-                $productPhoto->model_type = ProductColorTone::class;
-                $productPhoto->model_id = $request->input('product_color_tone_id');
-                $productPhoto->name = $photo->getClientOriginalName();
-                $productPhoto->path = Storage::disk('public')->put('Products/' . $request->input('product_color_tone_id'), $photo);
-                $productPhoto->type = $photo->getClientOriginalExtension();
-                $productPhoto->size = $photo->getSize();
-                $productPhoto->user_id = Auth::user()->id;
-                $productPhoto->save();
+            $productColorTone = ProductColorTone::with('product')->findOrFail($request->input('product_color_tone_id'));
+            foreach ($request->file('files') as $archive) {
+                $file = new File();
+                $file->model_type = ProductColorTone::class;
+                $file->model_id = $request->input('product_color_tone_id');
+                $file->name = $archive->getClientOriginalName();
+                $file->path = $archive->store('Products/' . $productColorTone->product->id . '/' . $productColorTone->id, 'public');
+                $file->mime = $archive->getMimeType();
+                $file->extension = $archive->getClientOriginalExtension();
+                $file->size = $archive->getSize();
+                $file->user_id = Auth::user()->id;
+                $file->metadata = json_encode((array) stat($archive));
+                $file->save();
             }
             return $this->successResponse(
                 '',
-                'La imagen del producto fue cargada exitosamente.',
-                201
+                'Los archivos del producto fueron cargados exitosamente.',
+                200
             );
         } catch (ModelNotFoundException $e) {
             // Manejar la excepción de la base de datos
@@ -599,15 +601,16 @@ class ProductController extends Controller
     public function destroy(ProductDestroyRequest $request)
     {
         try {
-            $productPhoto = File::findOrFail($request->input('id'));
-            if (Storage::disk('public')->exists($productPhoto->path)) {
-                Storage::disk('public')->delete($productPhoto->path);
+            $file = File::findOrFail($request->input('id'));
+            if (Storage::disk('public')->exists($file->path)) {
+                Storage::disk('public')->delete($file->path);
             }
-            $productPhoto->delete();
+            $file->delete();
+
             return $this->successResponse(
-                $productPhoto,
+                $file,
                 'La imagen del producto fue eliminado exitosamente.',
-                204
+                200
             );
         } catch (ModelNotFoundException $e) {
             return $this->errorResponse(

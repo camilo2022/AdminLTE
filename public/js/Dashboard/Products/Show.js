@@ -117,12 +117,12 @@ function ShowProductModalCleaned(data) {
             'id': `files${i}_s`,
             'name': `files${i}_s`,
             'class': 'form-control dropify files_c',
-            'accept': '.jpeg, .jpg, .png, .gif, .pdf, .txt, .docx, .xlsx, .xlsm, .xlsb, .xltx',
+            'accept': '.jpeg, .jpg, .png, .gif, .mp4, .avi, .wmv, .mov, .mkv, .flv, .webm, .mpeg',
             'multiple': true
         });
         let button = $('<button>').addClass('btn btn-primary mt-2 w-100').attr({
-            'id': `CreateProductColorToneFileButton${i}`,
-            'onclick': `CreateProductColorToneFile(${color_tone.id}, 'files${i}_s')`,
+            'id': `ShowProductColorToneChargeFileChargeButton${i}`,
+            'onclick': `ShowProductColorToneFileCharge(${color_tone.id}, 'files${i}_s', ${data.product.id})`,
             'title': `Anexar archivos al producto ${data.product.code.toUpperCase()} en el color ${color_tone.color.name} - ${color_tone.color.code} en el tono ${color_tone.tone.name} - ${color_tone.tone.code}.`
         })
         let icon = $('<i>').addClass('fas fa-floppy-disk');
@@ -153,7 +153,7 @@ function ShowProductModalCleaned(data) {
                             class="btn btn-info btn-sm mr-2" title="Ver archivo de producto.">
                                 <i class="fas fa-eye text-white"></i>
                             </a>
-                            <a onclick="DeleteProductColorToneFile(${file.id})" type="button" 
+                            <a onclick="ShowProductColorToneFileDelete(${file.id}, ${data.product.id})" type="button" 
                             class="btn btn-danger btn-sm mr-2" title="Eliminar archivo de producto">
                                 <i class="fas fa-trash text-white"></i>
                             </a>
@@ -172,8 +172,85 @@ function ShowProductModalCleaned(data) {
         cardPrimary.append(cardHeader, collapse);
         $('#accordion').append(cardPrimary);
         $(`#files${i}_s`).dropify();
-        $(`#productFiles${i}`).DataTable();
+        $(`#productFiles${i}`).DataTable({
+            "lengthMenu": [ [3, 5, 7, 10], [3, 5, 7, 10] ],
+            "pageLength": 3
+        });
     })
+}
+
+function ShowProductColorToneFileCharge(product_color_tone_id, dropify, product) {
+    let formData = new FormData();
+    formData.append('_token', $('meta[name="csrf-token"]').attr('content'));
+    formData.append('product_color_tone_id', product_color_tone_id);
+    for (let i = 0; i < $(`#${dropify}`)[0].files.length; i++) {
+        formData.append('files[]', $(`#${dropify}`)[0].files[i]);
+    }
+
+    Swal.fire({
+        title: '¿Desea cargar los archivos al producto?',
+        text: 'Los archivos se cargaran al producto.',
+        icon: 'warning',
+        showCancelButton: true,
+        cancelButtonColor: '#DD6B55',
+        confirmButtonColor: '#3085d6',
+        confirmButtonText: 'Si, guardar!',
+        cancelButtonText: 'No, cancelar!',
+    }).then((result) => {
+        if (result.value) {
+            $.ajax({
+                url: `/Dashboard/Products/Charge`,
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    tableProducts.ajax.reload();
+                    ShowProductAjaxSuccess(response);
+                    ShowProductModal(product);
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    ShowProductAjaxError(xhr);
+                }
+            });
+        } else {
+            toastr.info('Los archivos no se cargaron al producto.')
+        }
+    });
+}
+
+function ShowProductColorToneFileDelete(id, product) {
+    Swal.fire({
+        title: '¿Desea eliminar el archivo del producto?',
+        text: 'El archivo del producto será eliminado.',
+        icon: 'warning',
+        showCancelButton: true,
+        cancelButtonColor: '#DD6B55',
+        confirmButtonColor: '#3085d6',
+        confirmButtonText: 'Si, eliminar!',
+        cancelButtonText: 'No, cancelar!',
+    }).then((result) => {
+        if (result.value) {
+            $.ajax({
+                url: `/Dashboard/Products/Destroy`,
+                type: 'DELETE',
+                data: {
+                    '_token': $('meta[name="csrf-token"]').attr('content'),
+                    'id': id
+                },
+                success: function(response) {
+                    tableProducts.ajax.reload();
+                    ShowProductAjaxSuccess(response);
+                    ShowProductModal(product);
+                },
+                error: function(xhr, textStatus, errorThrown) {
+                    ShowProductAjaxError(xhr);
+                }
+            });
+        } else {
+            toastr.info('El archivo del producto seleccionado no fue eliminado.');
+        }
+    });
 }
 
 function ShowProductSize(size, product, checkbox) {
