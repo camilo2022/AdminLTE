@@ -180,6 +180,11 @@ let tableOrderInvoices = $('#orderInvoices').DataTable({
                     class="btn btn-primary btn-sm mr-2 text-white" title="Agregar facturas a la orden de despacho.">
                         <i class="fas fa-file-invoice-dollar"></i>
                     </a>`;
+                } else if(row.dispatch_status == 'Despachado') {
+                    btn += `<a href="/Dashboard/Orders/Invoice/Download/${row.id}" target="_blank" type="button"
+                    class="btn btn-sm mr-2" style="background: mediumvioletred; color: white;" title="PDF rotulos de la orden de despacho del pedido.">
+                        <i class="fas fa-file-pdf text-white"></i>
+                    </a>`;
                 }
 
                 btn += `</div>`;

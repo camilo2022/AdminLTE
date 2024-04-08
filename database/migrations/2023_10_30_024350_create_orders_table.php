@@ -39,7 +39,9 @@ return new class extends Migration
             $table->enum('wallet_status', ['Pendiente', 'Cancelado', 'Parcialmente Aprobado', 'Aprobado'])->default('Pendiente')->comment('Estado de cartera.');
             $table->datetime('wallet_date')->nullable()->comment('Fecha de cartera');
             $table->string('wallet_observation')->nullable()->comment('Observacion de cartera');
+
             $table->enum('dispatched_status', ['Pendiente', 'Cancelado', 'Rechazado', 'Parcialmente Aprobado', 'Aprobado', 'Parcialmente Empacado', 'Empacado', 'Parcialmente Devuelto', 'Devuelto', 'Parcialmente Despachado', 'Despachado'])->default('Pendiente')->comment('Estado de despacho.');
+            
             $table->datetime('dispatched_date')->nullable()->comment('Fecha de despacho.');
             /* $table->unsignedBigInteger('correria_id')->comment('Identificador de la correria.'); */
             $table->foreignIdFor(Correria::class)->constrained()->onUpdate('cascade')->onDelete('cascade');

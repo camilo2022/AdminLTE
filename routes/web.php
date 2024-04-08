@@ -33,6 +33,7 @@ use App\Http\Controllers\PersonController;
 use App\Http\Controllers\PersonReferenceController;
 use App\Http\Controllers\PersonTypeController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\PublicController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ReturnTypeController;
 use App\Http\Controllers\RolesAndPermissionsController;
@@ -72,7 +73,13 @@ Route::get('/', function () {
 
 Route::get('reset-password/{id}/{token}', [ResetPasswordController::class, 'showResetForm']);
 
-Route::get('Packing/Package/Details/{id}', [ResetPasswordController::class, 'detailPackage'])->name('Packing.Package.Details');
+Route::prefix('/Public')->group(function () {
+    Route::controller(PublicController::class)->group(function () {
+        Route::prefix('/Packing')->group(function () {
+            Route::get('/Package/{token}/{id}/{package}', 'packingPackage')->name('Public.Packing.Package');
+        });
+    });
+});
 
 Auth::routes(['register' => false]);
 

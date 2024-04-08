@@ -50,7 +50,7 @@
         <div style="padding-top:1.8cm !important; padding-right: 1.8cm !important; padding-left: 15cm !important; text-align: center;">
             <b>ORDEN DE PEDIDO <br> N° {{ $order->id }}</b>
         </div>
-        <table style="padding-top:2cm !important; padding-left:1.5cm !important; padding-right:1.5cm !important;" class="table">
+        <table style="padding-top:1.2cm !important; padding-left:1.5cm !important; padding-right:1.5cm !important;" class="table">
             <thead>
                 <tr>
                     <th colspan="6" class="cell">

@@ -48,7 +48,7 @@ class OrderDispatchController extends Controller
             $start_date = Carbon::parse($request->input('start_date'))->startOfDay();
             $end_date = Carbon::parse($request->input('end_date'))->endOfDay();
             //Consulta por nombre
-            $orders = Order::with(['order_dispatches' => fn($query) => $query->whereDoesntHave('order_packing'),
+            $orders = Order::with(['order_dispatches'/* => fn($query) => $query->whereDoesntHave('order_packing')*/,
                     'order_dispatches.dispatch_user',
                     'order_details' => fn($query) => $query->whereIn('status', ['Aprobado']),
                     'client' => fn($query) => $query->withTrashed(),
