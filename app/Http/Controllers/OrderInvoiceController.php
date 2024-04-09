@@ -139,8 +139,8 @@ class OrderInvoiceController extends Controller
                     $file->metadata = json_encode((array) stat($support));
                     $file->save();
                 }
-            }     
-            
+            }
+
             $orderDispatch->invoice_user_id = Auth::user()->id;
             $orderDispatch->dispatch_date = Carbon::now()->format('Y-m-d H:i:s');
             $orderDispatch->invoice_date = Carbon::now()->format('Y-m-d H:i:s');
@@ -221,10 +221,10 @@ class OrderInvoiceController extends Controller
             $sizes = $orderDispatch->order_packing->order_packages->pluck('order_package_details')->flatten()->pluck('order_package_detail_quantities')->flatten()->pluck('order_dispatch_detail_quantity')->pluck('order_detail_quantity')->pluck('size')->unique()->sortBy('id')->values();
 
             foreach($orderDispatch->order_packing->order_packages as $index => $orderPackage) {
-                $url = URL::route('Public.Packing.Package', ['token' => csrf_token(), 'id' => $orderPackage->id, 'package' => $index + 1]);
+                $url = URL::route('Public.Packing.Package', ['package' => $orderPackage->id, 'number' => $index + 1]);
                 $orderPackage->qrCode = QrCode::size(200)->generate($url);
             }
-            
+
             $pdf = \PDF::loadView('Dashboard.OrderInvoices.PDF', compact('orderDispatch', 'sizes'))/* ->setPaper('a4', 'landscape') */->setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true]);
             /* $pdf = \PDF::loadView('Browser_public.pdfdocument', compact('queryic'))->output();
             return $pdf->download('pdfdocument.pdf'); */

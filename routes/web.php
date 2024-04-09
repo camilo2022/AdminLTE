@@ -62,13 +62,11 @@ use Illuminate\Support\Facades\Auth;
 */
 
 Route::get('/', function () {
-
     if (Auth::check()) {
         return redirect()->route('Dashboard');
     } else {
         return redirect('/login');
     }
-
 });
 
 Route::get('reset-password/{id}/{token}', [ResetPasswordController::class, 'showResetForm']);
@@ -76,7 +74,10 @@ Route::get('reset-password/{id}/{token}', [ResetPasswordController::class, 'show
 Route::prefix('/Public')->group(function () {
     Route::controller(PublicController::class)->group(function () {
         Route::prefix('/Packing')->group(function () {
-            Route::get('/Package/{token}/{id}/{package}', 'packingPackage')->name('Public.Packing.Package');
+            Route::get('/Package/{package}/{number}', 'packingPackage')->name('Public.Packing.Package');
+        });
+        Route::prefix('/Product')->group(function () {
+            Route::get('/View/{product}/{color}/{tone}', 'productView')->name('Public.Product.View');
         });
     });
 });
@@ -627,7 +628,7 @@ Route::middleware(['auth'])->group(function () {
                         Route::put('/Close', 'close')->middleware('can:Dashboard.Orders.Packed.Package.Close')->name('Dashboard.Orders.Packed.Package.Close');
                         Route::delete('/Delete', 'delete')->middleware('can:Dashboard.Orders.Packed.Package.Delete')->name('Dashboard.Orders.Packed.Package.Delete');
                     });
-                    
+
                 });
             });
             Route::prefix('/Invoice')->group(function () {

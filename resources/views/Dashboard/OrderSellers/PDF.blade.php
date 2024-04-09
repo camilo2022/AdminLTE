@@ -7,7 +7,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=Edge">
         <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
         <meta name="description" content="Responsive Bootstrap 4 and web Application ui kit.">
-        <title>{{ $order->id }}</title>
+        <title>{{ "{$order->id}-PEDIDO" }}</title>
         <link rel="icon" href="" type="image/x-icon"> <!-- Favicon-->
 
         <!-- CSRF Token -->
@@ -166,7 +166,7 @@
                 @endphp
                 @foreach ($order->order_details as $detail)
                     <tr>
-                        <td class="cell">{{ "{$detail->product->code}-{$detail->color->code}-{$detail->tone->code}" }}</td>
+                        <td class="cell"><a href="{{ route('Public.Product.View', ['product' => $detail->product_id, 'color' => $detail->color_id, 'tone' => $detail->tone_id]) }}" target="_blank"> {{ "{$detail->product->code}-{$detail->color->code}-{$detail->tone->code}" }} </a></td>
                         @foreach ($sizes as $size)
                         @php
                             $quantity = $detail->order_detail_quantities->where('size_id', $size->id)->first();

@@ -7,7 +7,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=Edge">
         <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
         <meta name="description" content="Responsive Bootstrap 4 and web Application ui kit.">
-        <title>{{ "{$orderPackage->order_packing->order_dispatch->consecutive}-{$orderPackage->package_type->name}-#{$package}" }}</title>
+        <title>{{ "{$orderPackage->order_packing->order_dispatch->consecutive}-{$orderPackage->package_type->name}-#{$number}" }}</title>
         <link rel="icon" href="" type="image/x-icon"> <!-- Favicon-->
 
         <!-- CSRF Token -->
@@ -109,7 +109,7 @@
                     <th class="cell">TIPO</th>
                     <td colspan="2" class="cell">{{ $orderPackage->package_type->name }}</td>
                     <th class="cell">N°</th>
-                    <td class="cell">{{ $package }}</td>
+                    <td class="cell">{{ $number }}</td>
                     <th class="cell">DE</th>
                     <td class="cell">{{ $orderPackage->order_packing->order_packages->count() }}</td>
                 </tr>

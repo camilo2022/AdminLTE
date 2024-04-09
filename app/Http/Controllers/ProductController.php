@@ -346,7 +346,7 @@ class ProductController extends Controller
                     ]);
                 }
             }
-            
+
             return $this->successResponse(
                 [
                     'product' => $product,
