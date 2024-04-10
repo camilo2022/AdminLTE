@@ -37,8 +37,10 @@ class PublicController extends Controller
 
             return $pdf->stream("{$orderPackage->order_packing->order_dispatch->consecutive}-{$orderPackage->package_type->name}-#{$number}.pdf");
         } catch (ModelNotFoundException $e) {
+            return $e->getMessage();
             return back()->with('danger', 'Ocurrió un error al cargar el pdf de la orden de despacho del pedidos: ' . $this->getMessage('ModelNotFoundException'));
         } catch (Exception $e) {
+            return $e->getMessage();
             return back()->with('danger', 'Ocurrió un error al cargar la vista: ' . $e->getMessage());
         }
     }

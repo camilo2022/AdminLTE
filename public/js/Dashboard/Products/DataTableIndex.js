@@ -90,7 +90,7 @@ let tableProducts = $('#products').DataTable({
             render: function(data, type, row) {
                 let div = `<div>`;
                 $.each(data, function(index, color_tone) {
-                    div += `<span class="badge mr-1">${color_tone.color.name} - ${color_tone.color.code} | ${color_tone.tone.name}</span>`;
+                    div += `<span class="badge mr-1">${color_tone.color.name} - ${color_tone.color.code} | ${color_tone.tone.name} - ${color_tone.tone.code}</span>`;
                 });
                 div += `</div>`;
 
