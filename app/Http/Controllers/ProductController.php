@@ -691,7 +691,7 @@ class ProductController extends Controller
     {
         try {
             $products = Excel::toCollection(new ProductImportSheets, $request->file('products'));
-
+            
             foreach($products['Products'] as $product) {
                 $product['clothingLine_category'] = $product['category_id'];
                 $product['category_subcategory'] = $product['subcategory_id'];
@@ -747,25 +747,29 @@ class ProductController extends Controller
                 $productNew->save();
 
                 // Map para sizes
-                $product->sizes = collect($product->sizes)->map(function ($productSizes) use ($productNew) {
-                    $productSizes = (object) $productSizes;
-                    $productSizesNew = new ProductSize();
-                    $productSizesNew->product_id = $productNew->id;
-                    $productSizesNew->size_id = $productSizes->size_id;
-                    $productSizesNew->save();
-                    return $productSizes;
-                });
+                if(isset($product->sizes)) {
+                    $product->sizes = collect($product->sizes)->map(function ($productSizes) use ($productNew) {
+                        $productSizes = (object) $productSizes;
+                        $productSizesNew = new ProductSize();
+                        $productSizesNew->product_id = $productNew->id;
+                        $productSizesNew->size_id = $productSizes->size_id;
+                        $productSizesNew->save();
+                        return $productSizes;
+                    });
+                }
 
                 // Map para colors_tones
-                $product->colors_tones = collect($product->colors_tones)->map(function ($productColorsTones) use ($productNew) {
-                    $productColorsTones = (object) $productColorsTones;
-                    $productColorsTonesNew = new ProductColorTone();
-                    $productColorsTonesNew->product_id = $productNew->id;
-                    $productColorsTonesNew->color_id = $productColorsTones->color_id;
-                    $productColorsTonesNew->tone_id = $productColorsTones->tone_id;
-                    $productColorsTonesNew->save();
-                    return $productColorsTones;
-                });
+                if(isset($product->colors_tones)) {
+                    $product->colors_tones = collect($product->colors_tones)->map(function ($productColorsTones) use ($productNew) {
+                        $productColorsTones = (object) $productColorsTones;
+                        $productColorsTonesNew = new ProductColorTone();
+                        $productColorsTonesNew->product_id = $productNew->id;
+                        $productColorsTonesNew->color_id = $productColorsTones->color_id;
+                        $productColorsTonesNew->tone_id = $productColorsTones->tone_id;
+                        $productColorsTonesNew->save();
+                        return $productColorsTones;
+                    });
+                }
 
                 return $product;
             });
