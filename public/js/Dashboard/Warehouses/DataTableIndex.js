@@ -10,7 +10,8 @@ let tableWarehouses = $('#warehouses').DataTable({
                 1: 'name',
                 2: 'code',
                 3: 'description',
-                4: 'deleted_at'
+                4: 'to_discount',
+                5: 'deleted_at'
             };
             request._token = $('meta[name="csrf-token"]').attr('content');
             request.perPage = request.length;
@@ -33,6 +34,16 @@ let tableWarehouses = $('#warehouses').DataTable({
         { data: 'name' },
         { data: 'code' },
         { data: 'description' },
+        {
+            data: 'to_discount' ,
+            render: function (data, type, row) {
+                if (data === 1) {
+                    return `<h5><span class="badge badge-pill badge-success"><i class="far fa-circle-check mr-2"></i>Si</span></h5>`;
+                } else {
+                    return `<h5><span class="badge badge-pill badge-danger"><i class="far fa-circle-xmark mr-2"></i>No</span></h5>`;
+                }
+            }
+        },
         {
             data: 'deleted_at',
             render: function (data, type, row) {
@@ -76,11 +87,11 @@ let tableWarehouses = $('#warehouses').DataTable({
     columnDefs: [
         {
             orderable: true,
-            targets: [0, 1, 2, 3, 4]
+            targets: [0, 1, 2, 3, 4, 5]
         },
         {
             orderable: false,
-            targets: [5]
+            targets: [6]
         }
     ],
     pagingType: 'full_numbers',

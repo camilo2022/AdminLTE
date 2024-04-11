@@ -5,6 +5,7 @@ namespace App\Http\Requests\OrderDispatch;
 use App\Models\Inventory;
 use App\Models\OrderDetail;
 use App\Models\OrderDetailQuantity;
+use Exception;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
@@ -29,7 +30,7 @@ class OrderDispatchStoreRequest extends FormRequest
             $updated_details[$i]['id'] = $detail['id'];
 
             foreach($detail['quantities'] as $quantity) {
-                if(!is_null($quantity['id'])) {
+                try{
                     $order_detail_quantity = OrderDetailQuantity::findOrFail($quantity['id']);
 
                     $inventory = Inventory::with('warehouse')
@@ -41,15 +42,15 @@ class OrderDispatchStoreRequest extends FormRequest
                         ->first();
 
                     $quantity['min'] = 0;
-                    $quantity['max'] = $inventory ? $inventory->quantity : 0;
-                } else {
-                    $quantity['min'] = 0;
-                    $quantity['max'] =  0;
+                    $quantity['max'] = $inventory ? $inventory->quantity + $order_detail_quantity->quantity : 0;
+
+                    $updated_details[$i]['quantities'][] = $quantity;
+                } catch(Exception $e) {
+
                 }
-                $updated_details[$i]['quantities'][] = $quantity;
             }
         }
-        
+
         $this->merge([
             'details' => $updated_details,
         ]);

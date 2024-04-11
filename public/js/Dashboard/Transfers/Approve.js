@@ -41,24 +41,24 @@ function ApproveTransfer(id) {
 function ApproveTransferAjaxSuccess(response) {
     if(response.status === 200) {
         toastr.success(response.message);
-        $('#CancelTransferModal').modal('hide');
+        $('#ApproveTransferModal').modal('hide');
     }
 }
 
 function ApproveTransferAjaxError(xhr) {
     if(xhr.status === 403) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
-        $('#CancelTransferModal').modal('hide');
+        $('#ApproveTransferModal').modal('hide');
     }
 
     if(xhr.status === 404) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
-        $('#CancelTransferModal').modal('hide');
+        $('#ApproveTransferModal').modal('hide');
     }
 
     if(xhr.status === 419) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
-        $('#CancelTransferModal').modal('hide');
+        $('#ApproveTransferModal').modal('hide');
     }
 
     if(xhr.status === 422){
@@ -71,6 +71,6 @@ function ApproveTransferAjaxError(xhr) {
 
     if(xhr.status === 500){
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
-        $('#CancelTransferModal').modal('hide');
+        $('#ApproveTransferModal').modal('hide');
     }
 }

@@ -22,7 +22,7 @@ return new class extends Migration
             $table->unsignedBigInteger('return_user_id');
             /* $table->unsignedBigInteger('return_type_id'); */
             $table->foreignIdFor(ReturnType::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
-            $table->enum('package_status', ['Pendiente', 'Aprobado'])->default('Pendiente');
+            $table->enum('return_status', ['Pendiente', 'Aprobado'])->default('Pendiente');
             $table->datetime('return_date');
             /* $table->foreign('order_id')->references('id')->on('orders')->onUpdate('cascade')->onDelete('cascade'); */
             $table->foreign('return_user_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');

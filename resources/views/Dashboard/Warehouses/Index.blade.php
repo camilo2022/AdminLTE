@@ -69,6 +69,7 @@
                                             <th>Nombre</th>
                                             <th>Codigo</th>
                                             <th>Descripcion</th>
+                                            <th>Descuenta</th>
                                             <th>Estado</th>
                                             <th>Acciones</th>
                                         </tr>

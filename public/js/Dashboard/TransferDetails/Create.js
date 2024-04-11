@@ -93,8 +93,8 @@ function CreateTransferDetailModalColorToneSizesGetQuantity() {
                 'size_id':  $('#size_id_c').val(),
             },
             success: function(response) {
-                $('#quantity_c').attr('max', response.data.quantity);
-                $('#message_quantity_c').text(`${response.data.quantity} unidades disponibles.`);
+                $('#quantity_c').attr('max', response.data ? response.data.quantity : 0);
+                $('#message_quantity_c').text(`${response.data ? response.data.quantity : 0} unidades disponibles.`);
             },
             error: function(xhr, textStatus, errorThrown) {
                 CreateTransferDetailAjaxError(xhr);

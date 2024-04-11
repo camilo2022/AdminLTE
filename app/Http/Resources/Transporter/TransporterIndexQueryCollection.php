@@ -21,7 +21,7 @@ class TransporterIndexQueryCollection extends ResourceCollection
                     'id' => $transporter->id,
                     'name' => $transporter->name,
                     'document_number' => $transporter->document_number,
-                    'telephone_number' => $transporter->name,
+                    'telephone_number' => $transporter->telephone_number,
                     'email' => $transporter->email,
                     'created_at' => $this->formatDate($transporter->created_at),
                     'updated_at' => $this->formatDate($transporter->updated_at),

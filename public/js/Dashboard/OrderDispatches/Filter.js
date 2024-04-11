@@ -204,6 +204,19 @@ function SubtractInputValueOrderDispatch(quantity, inventory, id, sizes) {
 }
 
 function FilterOrderDispatch() {
+    console.log($('#orderDetailsDispatch tbody tr').map(function() {
+        if ($(this).find('input[type="checkbox"]').prop('checked')) {
+            return {
+                id: $(this).find('input[type="checkbox"]').attr('id'),
+                quantities: $(this).find('.details').map(function() {
+                    return {
+                        id: $(this).attr('data-id'),
+                        quantity: parseInt($(this).val()) * -1
+                    };
+                }).get()
+            };
+        }
+    }).get());
     Swal.fire({
         title: '¿Desea filtrar los detalles del pedido?',
         text: 'Los detalles del pedido se filtrarán.',
