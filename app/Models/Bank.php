@@ -25,6 +25,13 @@ class Bank extends Model implements Auditable
         'entity_code'
     ];
 
+    protected $auditEvents = [
+        'created',
+        'updated',
+        'deleted',
+        'retored'
+    ];
+
     public function scopeSearch($query, $search)
     {
         return $query->where('id', 'like', '%' . $search . '%')

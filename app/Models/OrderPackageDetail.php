@@ -24,6 +24,13 @@ class OrderPackageDetail extends Model implements Auditable
         'order_dispatch_detail_id',
     ];
 
+    protected $auditEvents = [
+        'created',
+        'updated',
+        'deleted',
+        'retored'
+    ];
+
     public function order_package_detail_quantities() : HasMany
     {
         return $this->hasMany(OrderPackageDetailQuantity::class, 'order_package_detail_id');

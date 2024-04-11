@@ -29,6 +29,13 @@ class Module extends Model implements Auditable
         'icon'
     ];
 
+    protected $auditEvents = [
+        'created',
+        'updated',
+        'deleted',
+        'retored'
+    ];
+
     public function submodules() : HasMany
     {
         return $this->hasMany(Submodule::class, 'module_id');

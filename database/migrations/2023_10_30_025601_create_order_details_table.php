@@ -34,7 +34,7 @@ return new class extends Migration
             $table->datetime('wallet_date')->nullable()->comment('Fecha de cartera.');
             $table->unsignedBigInteger('dispatched_user_id')->nullable()->comment('Identificador del usuario de despacho.');
             $table->datetime('dispatched_date')->nullable()->comment('Fecha de despacho');
-            $table->enum('status', ['Pendiente', 'Cancelado', 'Revision', 'Aprobado', 'Agotado', 'Rechazado', 'Filtrado', 'Empacado', 'Devuelto', 'Despachado'])->default('Pendiente')->comment('Estado del detalle del pedido.');
+            $table->enum('status', ['Pendiente', 'Cancelado', 'Revision', 'Aprobado', 'Agotado', 'Rechazado', 'Filtrado', 'Empacado', 'Despachado', 'Parcialmente Devuelto', 'Devuelto'])->default('Pendiente')->comment('Estado del detalle del pedido.');
             /* $table->foreign('order_id')->references('id')->on('orders')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('product_id')->references('id')->on('products')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('color_id')->references('id')->on('colors')->onUpdate('cascade')->onDelete('cascade');

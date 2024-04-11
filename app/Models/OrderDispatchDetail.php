@@ -28,6 +28,13 @@ class OrderDispatchDetail extends Model implements Auditable
         'order_dispatch_detail_status'
     ];
 
+    protected $auditEvents = [
+        'created',
+        'updated',
+        'deleted',
+        'retored'
+    ];
+
     public function order_dispatch_detail_quantities() : HasMany
     {
         return $this->hasMany(OrderDispatchDetailQuantity::class, 'order_dispatch_detail_id');

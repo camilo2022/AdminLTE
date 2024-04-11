@@ -36,6 +36,13 @@ class Payment extends Model implements Auditable
         'bank_id'
     ];
 
+    protected $auditEvents = [
+        'created',
+        'updated',
+        'deleted',
+        'retored'
+    ];
+
     public function model() : MorphTo
     {
         return $this->morphTo();

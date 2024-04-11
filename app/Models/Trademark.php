@@ -27,6 +27,13 @@ class Trademark extends Model implements Auditable
         'description'
     ];
 
+    protected $auditEvents = [
+        'created',
+        'updated',
+        'deleted',
+        'retored'
+    ];
+
     public function logo() : MorphOne
     {
       return $this->morphOne(File::class, 'model');

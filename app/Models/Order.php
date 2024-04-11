@@ -5,9 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as Auditing;
 
@@ -54,6 +54,13 @@ class Order extends Model implements Auditable
         'dispatched_status',
         'dispatched_date',
         'correria_id'
+    ];
+
+    protected $auditEvents = [
+        'created',
+        'updated',
+        'deleted',
+        'retored'
     ];
 
     public function payments() : MorphMany
@@ -106,9 +113,9 @@ class Order extends Model implements Auditable
         return $this->belongsTo(Correria::class, 'correria_id');
     }
 
-    public function payment_types() : BelongsToMany
+    public function payment_types() : MorphToMany
     {
-        return $this->belongsToMany(PaymentType::class, 'order_payment_types', 'order_id', 'payment_type_id');
+        return $this->morphToMany(PaymentType::class, 'model', 'model_payment_types', 'model_id', 'payment_type_id');
     }
 
     public function scopeSearch($query, $search)

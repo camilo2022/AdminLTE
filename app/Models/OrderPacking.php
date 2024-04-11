@@ -28,6 +28,13 @@ class OrderPacking extends Model implements Auditable
         'packing_date',
     ];
 
+    protected $auditEvents = [
+        'created',
+        'updated',
+        'deleted',
+        'retored'
+    ];
+
     public function order_packages() : HasMany
     {
         return $this->hasMany(OrderPackage::class, 'order_packing_id');

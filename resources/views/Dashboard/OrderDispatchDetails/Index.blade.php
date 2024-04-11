@@ -175,35 +175,41 @@
                                         <td style="font-size:14px;">ESTADO DESPACHO:</td>
                                         <td style="font-size:14px;">
                                             @switch($orderDispatch->order->dispatched_status)
+                                                @case('Pendiente')
+                                                    <span class="badge badge-pill badge-info"><i class="fas fa-arrows-rotate mr-2"></i>Pendiente</span>
+                                                    @break
                                                 @case('Cancelado')
-                                                    <span class="badge badge-pill bg-orange text-white" id="dispatched_status" style="color:white !important;"><i class="fas fa-xmark mr-2 text-white"></i>Cancelado</span>
+                                                    <span class="badge badge-pill badge-orange text-white"><i class="fas fa-xmark mr-2 text-white"></i>Cancelado</span>
                                                     @break
                                                 @case('Rechazado')
-                                                    <span class="badge badge-pill badge-danger text-white" id="dispatched_status"><i class="fas fa-ban mr-2 text-white"></i>Rechazado</span>
-                                                    @break
-                                                @case('Pendiente')
-                                                    <span class="badge badge-pill badge-info" id="dispatched_status"><i class="fas fa-arrows-rotate mr-2"></i>Pendiente</span>
+                                                    <span class="badge badge-pill badge-danger text-white"><i class="fas fa-ban mr-2 text-white"></i>Rechazado</span>
                                                     @break
                                                 @case('Parcialmente Aprobado')
-                                                    <span class="badge badge-pill badge-warning text-white" id="dispatched_status"><i class="fas fa-check mr-2 text-white"></i>Parcialmente Aprobado</span>
+                                                    <span class="badge badge-pill badge-warning text-white"><i class="fas fa-check mr-2 text-white"></i>Parcialmente Aprobado</span>
                                                     @break
                                                 @case('Aprobado')
-                                                    <span class="badge badge-pill badge-success" id="dispatched_status"><i class="fas fa-check-double mr-2"></i>Aprobado</span>
+                                                    <span class="badge badge-pill badge-success"><i class="fas fa-check-double mr-2"></i>Aprobado</span>
                                                     @break
-                                                @case('Parcialmente Devuelto')
-                                                    <span class="badge badge-pill bg-gray" id="dispatched_status"><i class="fas fa-reply mr-2"></i>Parcialmente Devuelto</span>
+                                                @case('Parcialmente Empacado')
+                                                    <span class="badge badge-pill bg-gray"><i class="fas fa-box-open mr-2 text-white"></i>Empacado</span>
                                                     @break
-                                                @case('Devuelto')
-                                                    <span class="badge badge-pill bg-dark text-white" id="dispatched_status"><i class="fas fa-reply-all mr-2 text-white"></i>Devuelto</span>
+                                                @case('Empacado')
+                                                    <span class="badge badge-pill bg-darkgray"><i class="fas fa-box mr-2 text-white"></i>Empacado</span>
                                                     @break
                                                 @case('Parcialmente Despachado')
-                                                    <span class="badge badge-pill bg-purple text-white" id="dispatched_status" style="color:white !important;"><i class="fas fa-share mr-2 text-white"></i>Parcialmente Despachado</span>
+                                                    <span class="badge badge-pill bg-purple text-white" style="color:white !important;"><i class="fas fa-share mr-2 text-white"></i>Parcialmente Despachado</span>
                                                     @break
                                                 @case('Despachado')
-                                                    <span class="badge badge-pill badge-primary" id="dispatched_status"><i class="fas fa-share-all mr-2"></i>Despachado</span>
+                                                    <span class="badge badge-pill badge-primary"><i class="fas fa-share-all mr-2"></i>Despachado</span>
+                                                    @break
+                                                @case('Parcialmente Devuelto')
+                                                    <span class="badge badge-pill text-white" style="background:saddlebrown !important;"><i class="fas fa-reply mr-2 text-white"></i>Parcialmente Devuelto</span>
+                                                    @break
+                                                @case('Devuelto')
+                                                    <span class="badge badge-pill bg-dark text-white"><i class="fas fa-reply-all mr-2 text-white"></i>Devuelto</span>
                                                     @break
                                                 @default
-                                                    <span class="badge badge-pill badge-info" id="dispatched_status"><i class="fas fa-arrows-rotate mr-2"></i>Pendiente</span>
+                                                    <span class="badge badge-pill badge-info"><i class="fas fa-arrows-rotate mr-2"></i>Pendiente</span>
                                             @endswitch
                                         </td>
                                     </tr>
@@ -214,30 +220,21 @@
                                         <td style="font-size:14px;">{{ $orderDispatch->order->client_branch->telephone_number_second }}</td>
                                         <td style="font-size:14px;">ESTADO ORDEN:</td>
                                         <td style="font-size:14px;">
-                                            @switch($orderDispatch->dispatch_status)
-                                                @case('Cancelado')
-                                                    <span class="badge badge-pill bg-orange text-white" style="color:white !important;"><i class="fas fa-xmark mr-2 text-white"></i>Cancelado</span>
-                                                    @break
-                                                @case('Rechazado')
-                                                    <span class="badge badge-pill badge-danger text-white"><i class="fas fa-ban mr-2 text-white"></i>Rechazado</
-                                                    @brea
+                                            @switch($orderDispatch->dispatch_status)                                                
                                                 @case('Pendiente')
                                                     <span class="badge badge-pill badge-info"><i class="fas fa-arrows-rotate mr-2"></i>Pendiente</span>
                                                     @break
-                                                @case('Parcialmente Aprobado')
-                                                    <span class="badge badge-pill badge-warning text-white"><i class="fas fa-check mr-2 text-white"></i>Parcialmente Aprobado</span>
+                                                @case('Rechazado')
+                                                    <span class="badge badge-pill badge-danger text-white"><i class="fas fa-ban mr-2 text-white"></i>Rechazado</span>
+                                                    @break
+                                                @case('Cancelado')
+                                                    <span class="badge badge-pill bg-warning text-white" style="color:white !important;"><i class="fas fa-xmark mr-2 text-white"></i>Cancelado</span>
                                                     @break
                                                 @case('Aprobado')
                                                     <span class="badge badge-pill badge-success"><i class="fas fa-check-double mr-2"></i>Aprobado</span>
                                                     @break
-                                                @case('Parcialmente Devuelto')
-                                                    <span class="badge badge-pill bg-gray"><i class="fas fa-reply mr-2"></i>Parcialmente Devuelto</span>
-                                                    @break
-                                                @case('Devuelto')
-                                                    <span class="badge badge-pill bg-dark text-white"><i class="fas fa-reply-all mr-2 text-white"></i>Devuelto</span>
-                                                    @break
-                                                @case('Parcialmente Despachado')
-                                                    <span class="badge badge-pill bg-purple text-white" style="color:white !important;"><i class="fas fa-share mr-2 text-white"></i>Parcialmente Despachado</span>
+                                                @case('Empacado')
+                                                    <span class="badge badge-pill bg-darkgray"><i class="fas fa-box mr-2 text-white"></i>Empacado</span>
                                                     @break
                                                 @case('Despachado')
                                                     <span class="badge badge-pill badge-primary"><i class="fas fa-share-all mr-2"></i>Despachado</span>

@@ -109,7 +109,7 @@ function IndexOrderSellerDetailModalCleaned(details, sizes) {
                 body += `<td><span class="badge badge-pill badge-warning text-white"><i class="fas fa-xmark mr-2 text-white"></i>Cancelado</span></td>`;
                 break;
             case 'Revision':
-                body += `<td><span class="badge badge-pill badge-silver"><i class="fas fa-magnifying-glass mr-2"></i>Revision</span></td>`;
+                body += `<td><span class="badge badge-pill"><i class="fas fa-magnifying-glass mr-2"></i>Revision</span></td>`;
                 break;
             case 'Aprobado':
                 body += `<td><span class="badge badge-pill badge-success"><i class="fas fa-check mr-2"></i>Aprobado</span></td>`;
@@ -126,11 +126,14 @@ function IndexOrderSellerDetailModalCleaned(details, sizes) {
             case 'Empacado':
                 body += `<td><span class="badge badge-pill bg-gray" style="color:white !important;"><i class="fas fa-box mr-2 text-white"></i>Empacado</span></td>`;
                 break;
-            case 'Devuelto':
-                body += `<td><span class="badge badge-pill bg-dark text-white"><i class="fas fa-reply mr-2 text-white"></i>Devuelto</span></td>`;
-                break;
             case 'Despachado':
                 body += `<td><span class="badge badge-pill badge-primary"><i class="fas fa-share mr-2 text-white"></i>Despachado</span></td>`;
+                break;
+            case 'Parcialmente Devuelto':
+                body += `<td><span class="badge badge-pill text-white" style="background:saddlebrown !important;"><i class="fas fa-reply mr-2 text-white"></i>Parcialmente Devuelto</span></td>`;
+                break;
+            case 'Devuelto':
+                body += `<td><span class="badge badge-pill bg-dark text-white"><i class="fas fa-reply-all mr-2 text-white"></i>Devuelto</span></td>`;
                 break;
             default:
                 body += `<td><span class="badge badge-pill badge-info"><i class="fas fa-arrows-rotate mr-2"></i>Pendiente</span></td>`;

@@ -24,6 +24,13 @@ class Area extends Model implements Auditable
         'description'
     ];
 
+    protected $auditEvents = [
+        'created',
+        'updated',
+        'deleted',
+        'retored'
+    ];
+
     public function charges() : HasMany
     {
         return $this->hasMany(Charge::class, 'area_id');

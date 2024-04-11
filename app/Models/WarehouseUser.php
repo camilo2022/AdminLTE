@@ -23,6 +23,13 @@ class WarehouseUser extends Model implements Auditable
         'user_id'
     ];
 
+    protected $auditEvents = [
+        'created',
+        'updated',
+        'deleted',
+        'retored'
+    ];
+
     public function warehouse() : BelongsTo
     {
         return $this->belongsTo(Warehouse::class, 'warehouse_id');

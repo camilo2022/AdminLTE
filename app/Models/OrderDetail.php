@@ -45,6 +45,13 @@ class OrderDetail extends Model implements Auditable
         'status'
     ];
 
+    protected $auditEvents = [
+        'created',
+        'updated',
+        'deleted',
+        'retored'
+    ];
+
     public function order_detail_quantities() : HasMany
     {
         return $this->hasMany(OrderDetailQuantity::class, 'order_detail_id');

@@ -27,6 +27,13 @@ class Transporter extends Model implements Auditable
         'email'
     ];
 
+    protected $auditEvents = [
+        'created',
+        'updated',
+        'deleted',
+        'retored'
+    ];
+
     public function scopeSearch($query, $search)
     {
         return $query->where('name', 'like', '%' . $search . '%')

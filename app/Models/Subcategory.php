@@ -28,6 +28,13 @@ class Subcategory extends Model implements Auditable
         'description'
     ];
 
+    protected $auditEvents = [
+        'created',
+        'updated',
+        'deleted',
+        'retored'
+    ];
+
     public function category() : BelongsTo
     {
         return $this->belongsTo(Category::class, 'category_id');

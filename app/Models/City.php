@@ -27,6 +27,13 @@ class City extends Model implements Auditable
         'code'
     ];
 
+    protected $auditEvents = [
+        'created',
+        'updated',
+        'deleted',
+        'retored'
+    ];
+
     public function province() : BelongsTo
     {
         return $this->belongsTo(Province::class, 'province_id');

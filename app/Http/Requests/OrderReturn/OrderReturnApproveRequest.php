@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\OrderReturn;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class OrderReturnPendingRequest extends FormRequest
+class OrderReturnApproveRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

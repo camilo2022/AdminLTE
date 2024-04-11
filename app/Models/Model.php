@@ -26,6 +26,13 @@ class Model extends DBModel implements Auditable
         'description'
     ];
 
+    protected $auditEvents = [
+        'created',
+        'updated',
+        'deleted',
+        'retored'
+    ];
+
     public function products() : HasMany
     {
         return $this->hasMany(Product::class, 'model_id');

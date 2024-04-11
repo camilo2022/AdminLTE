@@ -45,6 +45,13 @@ class ClientBranch extends Model implements Auditable
         'telephone_number_second',
     ];
 
+    protected $auditEvents = [
+        'created',
+        'updated',
+        'deleted',
+        'retored'
+    ];
+
     public function client_branch_orders() : HasMany
     {
         return $this->hasMany(Order::class, 'client_branch_id');

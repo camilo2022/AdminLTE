@@ -25,6 +25,13 @@ class OrderDetailQuantity extends Model implements Auditable
         'quantity'
     ];
 
+    protected $auditEvents = [
+        'created',
+        'updated',
+        'deleted',
+        'retored'
+    ];
+
     public function order_detail() : BelongsTo
     {
         return $this->belongsTo(OrderDetail::class, 'order_detail_id');

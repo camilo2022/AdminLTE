@@ -25,8 +25,8 @@ use App\Models\Client;
 use App\Models\ClientBranch;
 use App\Models\File;
 use App\Models\Inventory;
+use App\Models\ModelPaymentType;
 use App\Models\Order;
-use App\Models\OrderPaymentType;
 use App\Models\Payment;
 use App\Models\PaymentType;
 use App\Models\SaleChannel;
@@ -167,8 +167,9 @@ class OrderSellerController extends Controller
             $order->save();
 
             foreach($request->input('payment_type_ids') as $payment_type_id) {
-                $order_payment_type = New OrderPaymentType();
-                $order_payment_type->order_id = $order->id;
+                $order_payment_type = new ModelPaymentType();
+                $order_payment_type->model_type = Order::class;
+                $order_payment_type->model_id = $order->id;
                 $order_payment_type->payment_type_id = $payment_type_id;
                 $order_payment_type->save();
             }
@@ -265,15 +266,18 @@ class OrderSellerController extends Controller
             $order->seller_observation = $request->input('seller_observation');
             $order->save();
 
-            OrderPaymentType::where('order_id', $order->id)->whereNotIn('payment_type_id', $request->input('payment_type_ids'))->delete();
+            ModelPaymentType::whereHasMorph('model', [Order::class], function ($query) use ($order) {
+                $query->where('model_id', $order->id);
+            })->whereNotIn('payment_type_id', $request->input('payment_type_ids'))->delete();
 
             $order->load('payment_types');
 
             $payment_type_ids = array_values(array_diff($request->input('payment_type_ids'), $order->payment_types->pluck('id')->toArray()));
 
             foreach($payment_type_ids as $payment_type_id) {
-                $order_payment_type = New OrderPaymentType();
-                $order_payment_type->order_id = $order->id;
+                $order_payment_type = new ModelPaymentType();
+                $order_payment_type->model_type = Order::class;
+                $order_payment_type->model_id = $order->id;
                 $order_payment_type->payment_type_id = $payment_type_id;
                 $order_payment_type->save();
             }

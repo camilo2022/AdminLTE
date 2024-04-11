@@ -70,16 +70,16 @@ let tableOrderPackings = $('#orderPackings').DataTable({
                         return `<h5><span class="badge badge-pill badge-danger text-white"><i class="fas fa-ban mr-2 text-white"></i>Rechazado</span></h5>`;
                         break;
                     case 'Cancelado':
-                        return `<h5><span class="badge badge-pill badge-warning text-white"><i class="fas fa-xmark mr-2 text-white"></i>Cancelado</span></h5>`;
+                        return `<h5><span class="badge badge-pill bg-warning text-white" style="color:white !important;"><i class="fas fa-xmark mr-2 text-white"></i>Cancelado</span></h5>`;
                         break;
                     case 'Aprobado':
-                        return `<h5><span class="badge badge-pill badge-success"><i class="fas fa-check mr-2"></i>Aprobado</span></h5>`;
+                        return `<h5><span class="badge badge-pill badge-success"><i class="fas fa-check-double mr-2"></i>Aprobado</span></h5>`;
                         break;
                     case 'Empacado':
-                        return `<h5><span class="badge badge-pill bg-gray" style="color:white !important;"><i class="fas fa-box mr-2 text-white"></i>Empacado</span></h5>`;
+                        return `<h5><span class="badge badge-pill bg-darkgray"><i class="fas fa-box mr-2 text-white"></i>Empacado</span></h5>`;
                         break;
                     case 'Despachado':
-                        return `<h5><span class="badge badge-pill badge-primary"><i class="fas fa-share mr-2 text-white"></i>Despachado</span></h5>`;
+                        return `<h5><span class="badge badge-pill badge-primary"><i class="fas fa-share-all mr-2"></i>Despachado</span></h5>`;
                         break;
                     default:
                         return `<h5><span class="badge badge-pill badge-info"><i class="fas fa-arrows-rotate mr-2"></i>Pendiente</span></h5>`;

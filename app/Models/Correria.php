@@ -29,6 +29,13 @@ class Correria extends Model implements Auditable
         'end_date'
     ];
 
+    protected $auditEvents = [
+        'created',
+        'updated',
+        'deleted',
+        'retored'
+    ];
+
     public function collection() : HasOne
     {
         return $this->hasOne(Collection::class, 'correria_id');

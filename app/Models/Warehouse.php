@@ -29,6 +29,13 @@ class Warehouse extends Model implements Auditable
         'to_discount'
     ];
 
+    protected $auditEvents = [
+        'created',
+        'updated',
+        'deleted',
+        'retored'
+    ];
+
     public function inventories() : HasMany
     {
         return $this->hasMany(Inventory::class, 'warehouse_id');

@@ -26,6 +26,13 @@ class PersonType extends Model implements Auditable
         'require_people'
     ];
 
+    protected $auditEvents = [
+        'created',
+        'updated',
+        'deleted',
+        'retored'
+    ];
+
     public function document_types() : BelongsToMany
     {
         return $this->belongsToMany(DocumentType::class, 'person_type_document_types', 'person_type_id', 'document_type_id');

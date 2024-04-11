@@ -42,6 +42,13 @@ class Business extends Model implements Auditable
         'description'
     ];
 
+    protected $auditEvents = [
+        'created',
+        'updated',
+        'deleted',
+        'retored'
+    ];
+
     public function person_type() : BelongsTo
     {
         return $this->belongsTo(PersonType::class, 'person_type_id');

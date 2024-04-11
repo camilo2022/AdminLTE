@@ -39,6 +39,13 @@ class File extends Model implements Auditable
         'metadata'
     ];
 
+    protected $auditEvents = [
+        'created',
+        'updated',
+        'deleted',
+        'retored'
+    ];
+
     public function model() : MorphTo
     {
         return $this->morphTo();

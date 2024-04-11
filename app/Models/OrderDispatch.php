@@ -38,6 +38,13 @@ class OrderDispatch extends Model implements Auditable
         'invoice_date'
     ];
 
+    protected $auditEvents = [
+        'created',
+        'updated',
+        'deleted',
+        'retored'
+    ];
+
     public function payments() : MorphMany
     {
       return $this->morphMany(Payment::class, 'model');

@@ -23,6 +23,13 @@ class ProductSize extends Model implements Auditable
         'size_id',
     ];
 
+    protected $auditEvents = [
+        'created',
+        'updated',
+        'deleted',
+        'retored'
+    ];
+
     public function product() : BelongsTo
     {
         return $this->belongsTo(Product::class, 'product_id');

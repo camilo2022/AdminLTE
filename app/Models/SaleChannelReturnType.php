@@ -23,6 +23,13 @@ class SaleChannelReturnType extends Model implements Auditable
         'return_type_id'
     ];
 
+    protected $auditEvents = [
+        'created',
+        'updated',
+        'deleted',
+        'retored'
+    ];
+
     public function sale_channel() : BelongsTo
     {
         return $this->belongsTo(SaleChannel::class, 'sale_channel_id');

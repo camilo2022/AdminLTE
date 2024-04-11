@@ -29,6 +29,13 @@ class Category extends Model implements Auditable
         'description'
     ];
 
+    protected $auditEvents = [
+        'created',
+        'updated',
+        'deleted',
+        'retored'
+    ];
+
     public function subcategories() : HasMany
     {
         return $this->hasMany(Subcategory::class, 'category_id');

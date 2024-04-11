@@ -34,6 +34,13 @@ class TransferDetail extends Model implements Auditable
         'status'
     ];
 
+    protected $auditEvents = [
+        'created',
+        'updated',
+        'deleted',
+        'retored'
+    ];
+
     public function transfer() : BelongsTo
     {
         return $this->belongsTo(Transfer::class, 'transfer_id');

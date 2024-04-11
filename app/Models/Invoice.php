@@ -30,6 +30,13 @@ class Invoice extends Model implements Auditable
         'date',
     ];
 
+    protected $auditEvents = [
+        'created',
+        'updated',
+        'deleted',
+        'retored'
+    ];
+
     public function model() : MorphTo
     {
         return $this->morphTo();

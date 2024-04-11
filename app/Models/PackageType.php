@@ -23,6 +23,13 @@ class PackageType extends Model implements Auditable
         'code'
     ];
 
+    protected $auditEvents = [
+        'created',
+        'updated',
+        'deleted',
+        'retored'
+    ];
+
     public function scopeSearch($query, $search)
     {
         return $query->where('name', 'like', '%' . $search . '%')

@@ -23,6 +23,13 @@ class PersonTypeDocumentType extends Model implements Auditable
         'document_type_id'
     ];
 
+    protected $auditEvents = [
+        'created',
+        'updated',
+        'deleted',
+        'retored'
+    ];
+
     public function person_type() : BelongsTo
     {
         return $this->belongsTo(PersonType::class, 'person_type_id');

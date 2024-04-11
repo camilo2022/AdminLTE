@@ -42,6 +42,13 @@ class Transfer extends Model implements Auditable
         'status'
     ];
 
+    protected $auditEvents = [
+        'created',
+        'updated',
+        'deleted',
+        'retored'
+    ];
+
     public function details() : HasMany
     {
         return $this->hasMany(TransferDetail::class, 'transfer_id');

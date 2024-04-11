@@ -26,6 +26,13 @@ class ClothingLine extends Model implements Auditable
         'description'
     ];
 
+    protected $auditEvents = [
+        'created',
+        'updated',
+        'deleted',
+        'retored'
+    ];
+
     public function categories() : HasMany
     {
         return $this->hasMany(Category::class, 'clothing_line_id');

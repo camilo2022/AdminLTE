@@ -26,6 +26,13 @@ class ProductColorTone extends Model implements Auditable
         'tone_id'
     ];
 
+    protected $auditEvents = [
+        'created',
+        'updated',
+        'deleted',
+        'retored'
+    ];
+
     public function files() : MorphMany
     {
       return $this->morphMany(File::class, 'model');

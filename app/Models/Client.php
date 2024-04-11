@@ -50,6 +50,13 @@ class Client extends Model implements Auditable
         'quota'
     ];
 
+    protected $auditEvents = [
+        'created',
+        'updated',
+        'deleted',
+        'retored'
+    ];
+
     public function client_orders() : HasMany
     {
         return $this->hasMany(Order::class, 'client_id');

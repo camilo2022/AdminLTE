@@ -25,6 +25,13 @@ class Country extends Model implements Auditable
         'country_code'
     ];
 
+    protected $auditEvents = [
+        'created',
+        'updated',
+        'deleted',
+        'retored'
+    ];
+
     public function departaments() : HasMany
     {
         return $this->hasMany(Departament::class, 'country_id');

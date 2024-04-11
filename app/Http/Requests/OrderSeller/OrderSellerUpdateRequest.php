@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\OrderSeller;
 
+use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
@@ -36,7 +37,7 @@ class OrderSellerUpdateRequest extends FormRequest
             'transporter_id' => ['required', 'exists:transporters,id'],
             'sale_channel_id' => ['required', 'exists:sale_channels,id'],
             'dispatch' => ['required', 'string', 'max:255'],
-            'dispatch_date' => ['required', 'date', 'after_or_equal:now'],
+            'dispatch_date' => ['required', 'date', 'after_or_equal:' . Carbon::now()->format('Y-m-d')],
             'seller_observation' => ['nullable', 'string', 'max:255'],
             'client_clientBranch' => ['exists:client_branches,id,client_id,' . $this->input('client_id')],
             'payment_type_ids' => ['required', 'array'],

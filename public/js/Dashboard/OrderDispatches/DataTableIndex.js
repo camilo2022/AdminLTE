@@ -145,14 +145,14 @@ let tableOrderDispatches = $('#orderDispatches').DataTable({
             data: 'dispatched_status',
             render: function (data, type, row) {
                 switch (data) {
-                    case 'Cancelado':
-                        return `<h5><span class="badge badge-pill bg-orange text-white" style="color:white !important;"><i class="fas fa-xmark mr-2 text-white"></i>Cancelado</span></h5>`;
-                        break;
-                    case 'Rechazado':
-                        return `<h5><span class="badge badge-pill badge-danger text-white" id="dispatched_status"><i class="fas fa-ban mr-2 text-white"></i>Rechazado</span></h5>`;
-                        break
                     case 'Pendiente':
                         return `<h5><span class="badge badge-pill badge-info"><i class="fas fa-arrows-rotate mr-2"></i>Pendiente</span></h5>`;
+                        break;
+                    case 'Cancelado':
+                        return `<h5><span class="badge badge-pill badge-orange text-white"><i class="fas fa-xmark mr-2 text-white"></i>Cancelado</span></h5>`;
+                        break;
+                    case 'Rechazado':
+                        return `<h5><span class="badge badge-pill badge-danger text-white"><i class="fas fa-ban mr-2 text-white"></i>Rechazado</span></h5>`;
                         break;
                     case 'Parcialmente Aprobado':
                         return `<h5><span class="badge badge-pill badge-warning text-white"><i class="fas fa-check mr-2 text-white"></i>Parcialmente Aprobado</span></h5>`;
@@ -161,22 +161,22 @@ let tableOrderDispatches = $('#orderDispatches').DataTable({
                         return `<h5><span class="badge badge-pill badge-success"><i class="fas fa-check-double mr-2"></i>Aprobado</span></h5>`;
                         break;
                     case 'Parcialmente Empacado':
-                        return `<h5><span class="badge badge-pill text-white" style="background: #795548;"><i class="fas fa-box-open-full mr-2"></i>Parcialmente Empacado</span></h5>`;
+                        return `<h5><span class="badge badge-pill bg-gray"><i class="fas fa-box-open mr-2 text-white"></i>Empacado</span></h5>`;
                         break;
                     case 'Empacado':
-                        return `<h5><span class="badge badge-pill text-black" style="background: #ffffff;"><i class="fas fa-box-taped mr-2 text-black"></i>Empacado</span></h5>`;
-                        break;
-                    case 'Parcialmente Devuelto':
-                        return `<h5><span class="badge badge-pill bg-gray"><i class="fas fa-reply mr-2"></i>Parcialmente Devuelto</span></h5>`;
-                        break;
-                    case 'Devuelto':
-                        return `<h5><span class="badge badge-pill bg-dark text-white"><i class="fas fa-reply-all mr-2 text-white"></i>Devuelto</span></h5>`;
+                        return `<h5><span class="badge badge-pill bg-darkgray"><i class="fas fa-box mr-2 text-white"></i>Empacado</span></h5>`;
                         break;
                     case 'Parcialmente Despachado':
                         return `<h5><span class="badge badge-pill bg-purple text-white" style="color:white !important;"><i class="fas fa-share mr-2 text-white"></i>Parcialmente Despachado</span></h5>`;
                         break;
                     case 'Despachado':
                         return `<h5><span class="badge badge-pill badge-primary"><i class="fas fa-share-all mr-2"></i>Despachado</span></h5>`;
+                        break;
+                    case 'Parcialmente Devuelto':
+                        return `<h5><span class="badge badge-pill text-white" style="background:saddlebrown !important;"><i class="fas fa-reply mr-2 text-white"></i>Parcialmente Devuelto</span></h5>`;
+                        break;
+                    case 'Devuelto':
+                        return `<h5><span class="badge badge-pill bg-dark text-white"><i class="fas fa-reply-all mr-2 text-white"></i>Devuelto</span></h5>`;
                         break;
                     default:
                         return `<h5><span class="badge badge-pill badge-info"><i class="fas fa-arrows-rotate mr-2"></i>Pendiente</span></h5>`;
@@ -300,13 +300,13 @@ function tableOrderDispatchesFilter(row) {
                 table += `<td><span class="badge badge-pill badge-danger text-white"><i class="fas fa-ban mr-2 text-white"></i>Rechazado</span></td>`;
                 break;
             case 'Cancelado':
-                table += `<td><span class="badge badge-pill badge-warning text-white"><i class="fas fa-xmark mr-2 text-white"></i>Cancelado</span></td>`;
+                table += `<td><span class="badge badge-pill badge-warning" style="color:white !important;"><i class="fas fa-xmark mr-2 text-white"></i>Cancelado</span></td>`;
                 break;
             case 'Aprobado':
                 table += `<td><span class="badge badge-pill badge-success"><i class="fas fa-check mr-2"></i>Aprobado</span></td>`;
                 break;
             case 'Empacado':
-                table += `<td><span class="badge badge-pill bg-gray" style="color:white !important;"><i class="fas fa-box mr-2 text-white"></i>Empacado</span></td>`;
+                table += `<td><span class="badge badge-pill bg-darkgray"><i class="fas fa-box mr-2 text-white"></i>Empacado</span></td>`;
                 break;
             case 'Despachado':
                 table += `<td><span class="badge badge-pill badge-primary"><i class="fas fa-share mr-2 text-white"></i>Despachado</span></td>`;

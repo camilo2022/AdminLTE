@@ -25,6 +25,13 @@ class Color extends Model implements Auditable
         'code'
     ];
 
+    protected $auditEvents = [
+        'created',
+        'updated',
+        'deleted',
+        'retored'
+    ];
+
     public function sample() : MorphOne
     {
       return $this->morphOne(File::class, 'model');

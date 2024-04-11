@@ -24,6 +24,13 @@ class Province extends Model implements Auditable
         'name'
     ];
 
+    protected $auditEvents = [
+        'created',
+        'updated',
+        'deleted',
+        'retored'
+    ];
+
     public function cities() : HasMany
     {
         return $this->hasMany(City::class, 'province_id');

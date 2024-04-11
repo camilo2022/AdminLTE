@@ -50,6 +50,13 @@ class Person extends Model implements Auditable
         'telephone_number_second',
     ];
 
+    protected $auditEvents = [
+        'created',
+        'updated',
+        'deleted',
+        'retored'
+    ];
+
     public function model() : MorphTo
     {
         return $this->morphTo();

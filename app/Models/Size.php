@@ -24,6 +24,13 @@ class Size extends Model implements Auditable
         'code'
     ];
 
+    protected $auditEvents = [
+        'created',
+        'updated',
+        'deleted',
+        'retored'
+    ];
+
     public function products() : BelongsToMany
     {
         return $this->belongsToMany(Product::class, 'product_sizes', 'size_id', 'product_id')

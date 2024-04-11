@@ -40,6 +40,13 @@ class Product extends DBModel implements Auditable
         'correria_id',
     ];
 
+    protected $auditEvents = [
+        'created',
+        'updated',
+        'deleted',
+        'retored'
+    ];
+
     public function inventories() : HasMany
     {
         return $this->hasMany(Inventory::class, 'product_id');

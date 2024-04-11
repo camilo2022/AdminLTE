@@ -51,6 +51,13 @@ class User extends Authenticatable implements Auditable
         'password'
     ];
 
+    protected $auditEvents = [
+        'created',
+        'updated',
+        'deleted',
+        'retored'
+    ];
+
     public function area() : BelongsTo
     {
         return $this->belongsTo(Area::class, 'area_id');

@@ -15,14 +15,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('order_payment_types', function (Blueprint $table) {
+        Schema::create('model_payment_types', function (Blueprint $table) {
             $table->id();
-            /* $table->unsignedBigInteger('order_id');
-            $table->unsignedBigInteger('return_type_id'); */
-            $table->foreignIdFor(Order::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
+            $table->morphs('model');
             $table->foreignIdFor(PaymentType::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
-            /* $table->foreign('order_id')->references('id')->on('orders')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreign('return_type_id')->references('id')->on('return_types')->onUpdate('cascade')->onDelete('cascade'); */
             $table->timestamps();
         });
     }
@@ -34,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('order_payment_types');
+        Schema::dropIfExists('model_payment_types');
     }
 };

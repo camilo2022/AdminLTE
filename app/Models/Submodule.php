@@ -32,6 +32,13 @@ class Submodule extends Model implements Auditable
         'permission_id'
     ];
 
+    protected $auditEvents = [
+        'created',
+        'updated',
+        'deleted',
+        'retored'
+    ];
+
     public function module() : BelongsTo
     {
         return $this->belongsTo(Module::class, 'module_id');

@@ -24,6 +24,13 @@ class Tone extends Model implements Auditable
         'code',
     ];
 
+    protected $auditEvents = [
+        'created',
+        'updated',
+        'deleted',
+        'retored'
+    ];
+
     public function products() : BelongsToMany
     {
         return $this->belongsToMany(Product::class, 'product_color_tone', 'tone_id', 'product_id');

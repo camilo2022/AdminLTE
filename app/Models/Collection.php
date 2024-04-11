@@ -29,6 +29,13 @@ class Collection extends Model implements Auditable
         'number_samples_include_suitcase'
     ];
 
+    protected $auditEvents = [
+        'created',
+        'updated',
+        'deleted',
+        'retored'
+    ];
+
     public function correria() : BelongsTo
     {
         return $this->belongsTo(Correria::class, 'correria_id');

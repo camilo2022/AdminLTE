@@ -23,6 +23,13 @@ class PaymentType extends Model implements Auditable
         'require_banks'
     ];
 
+    protected $auditEvents = [
+        'created',
+        'updated',
+        'deleted',
+        'retored'
+    ];
+
     public function scopeSearch($query, $search)
     {
         return $query->where('name', 'like', '%' . $search . '%');

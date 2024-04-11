@@ -31,6 +31,13 @@ class Inventory extends Model implements Auditable
         'quantity'
     ];
 
+    protected $auditEvents = [
+        'created',
+        'updated',
+        'deleted',
+        'retored'
+    ];
+
     public function product() : BelongsTo
     {
         return $this->belongsTo(Product::class, 'product_id');

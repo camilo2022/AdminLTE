@@ -24,6 +24,13 @@ class SaleChannel extends Model implements Auditable
         'require_verify_wallet'
     ];
 
+    protected $auditEvents = [
+        'created',
+        'updated',
+        'deleted',
+        'retored'
+    ];
+
     public function return_types() : BelongsToMany
     {
         return $this->belongsToMany(ReturnType::class, 'sale_channel_return_types', 'sale_channel_id', 'return_type_id');
