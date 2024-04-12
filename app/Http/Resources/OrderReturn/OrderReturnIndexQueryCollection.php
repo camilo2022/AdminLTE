@@ -39,6 +39,8 @@ class OrderReturnIndexQueryCollection extends ResourceCollection
                     'dispatched_date' => $orderReturn->dispatched_date,
                     'correria_id' => $orderReturn->correria_id,
                     'correria' => $orderReturn->correria,
+                    'order_return' => $orderReturn->order_return,
+                    'order_details' => $orderReturn->order_details,
                     'created_at' => $this->formatDate($orderReturn->created_at),
                     'updated_at' => $this->formatDate($orderReturn->updated_at),
                 ];

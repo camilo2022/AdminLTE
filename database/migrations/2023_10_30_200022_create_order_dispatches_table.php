@@ -94,9 +94,9 @@ return new class extends Migration
                 SELECT COUNT(*) INTO totalOrdenDespacho FROM order_dispatches WHERE order_dispatches.order_id = order_id;
 
                 IF totalDespachado = totalOrdenDespacho THEN
-                    UPDATE orders SET dispatched_status = "Despachado" WHERE id = order_id;
+                    UPDATE orders SET dispatched_status = "Despachado", dispatched_date = NOW() WHERE id = order_id;
                 ELSEIF totalDespachado >= 1 AND (totalPendiente + totalRechazado + totalCancelado + totalAprobado + totalEmpacado) >= 1 THEN
-                    UPDATE orders SET dispatched_status = "Parcialmente Despachado" WHERE id = order_id;
+                    UPDATE orders SET dispatched_status = "Parcialmente Despachado", dispatched_date = NOW() WHERE id = order_id;
                 ELSEIF totalEmpacado = totalOrdenDespacho THEN
                     UPDATE orders SET dispatched_status = "Empacado" WHERE id = order_id;
                 ELSEIF totalEmpacado >= 1 AND (totalRechazado + totalCancelado + totalAprobado) >= 1 AND totalPendiente = 0 THEN

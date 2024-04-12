@@ -54,7 +54,8 @@ class OrderReturnController extends Controller
                     'seller_user' => fn($query) => $query->withTrashed(),
                     'wallet_user' => fn($query) => $query->withTrashed(),
                     'sale_channel' => fn($query) => $query->withTrashed(),
-                    'correria' => fn($query) => $query->withTrashed()
+                    'correria' => fn($query) => $query->withTrashed(),
+                    'order_returns', 'order_details'
                 ])
                 ->when($request->filled('search'),
                     function ($query) use ($request) {
@@ -66,7 +67,7 @@ class OrderReturnController extends Controller
                         $query->filterByDate($start_date, $end_date);
                     }
                 )
-                ->where('dispatched_status', 'Despachado')
+                ->whereIn('dispatched_status', ['Parcialmente Despachado', 'Despachado', 'Parcialmente Devuelto', 'Devuelto'])
                 ->orderBy($request->input('column'), $request->input('dir'))
                 ->paginate($request->input('perPage'));
 

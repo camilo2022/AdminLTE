@@ -68,6 +68,11 @@ class Order extends Model implements Auditable
       return $this->morphMany(Payment::class, 'model');
     }
 
+    public function order_returns() : HasMany
+    {
+        return $this->hasMany(OrderReturn::class, 'order_id');
+    }
+
     public function order_details() : HasMany
     {
         return $this->hasMany(OrderDetail::class, 'order_id');
