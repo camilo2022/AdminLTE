@@ -135,6 +135,7 @@ class OrderReturnController extends Controller
     {
         try {
             $orderReturn = new OrderReturn();
+            $orderReturn->order_id = $request->input('order_id');
             $orderReturn->return_user_id = Auth::user()->id;
             $orderReturn->return_type_id = $request->input('return_type_id');
             $orderReturn->return_date = Carbon::now()->format('Y-m-d H:i:s');
@@ -262,8 +263,8 @@ class OrderReturnController extends Controller
     {
         try {
             $orderReturn = OrderReturn::with([
-                    'order_return_details.order_return_detail_quantities', 
-                    'order_return_details.order_detail.order_detail_quantities', 
+                    'order_return_details.order_return_detail_quantities',
+                    'order_return_details.order_detail.order_detail_quantities',
                     'order_return_detail_quantities.order_detail_quantity'
                 ])
                 ->findOrFail($request->input('id'));
@@ -290,7 +291,7 @@ class OrderReturnController extends Controller
                             $inventory->save();
                         }
                     }
-                    
+
                     $inventory->quantity += $quantity->quantity;
                     $inventory->save();
                 }
@@ -299,7 +300,7 @@ class OrderReturnController extends Controller
                 $detail->order_detail->save();
 
                 $detail->status = 'Aprobado';
-                $detail->save(); 
+                $detail->save();
             }
 
             $orderReturn->return_status = 'Aprobado';
@@ -344,8 +345,8 @@ class OrderReturnController extends Controller
     {
         try {
             $orderReturn = OrderReturn::with([
-                    'order_return_details.order_return_detail_quantities', 
-                    'order_return_details.order_detail.order_detail_quantities', 
+                    'order_return_details.order_return_detail_quantities',
+                    'order_return_details.order_detail.order_detail_quantities',
                     'order_return_detail_quantities.order_detail_quantity'
                 ])
                 ->findOrFail($request->input('id'));
@@ -395,8 +396,8 @@ class OrderReturnController extends Controller
     {
         try {
             $orderReturn = OrderReturn::with([
-                    'order_return_details.order_return_detail_quantities', 
-                    'order_return_details.order_detail.order_detail_quantities', 
+                    'order_return_details.order_return_detail_quantities',
+                    'order_return_details.order_detail.order_detail_quantities',
                     'order_return_detail_quantities.order_detail_quantity'
                 ])
                 ->findOrFail($request->input('id'));

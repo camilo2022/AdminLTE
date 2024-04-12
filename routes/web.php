@@ -646,7 +646,11 @@ Route::middleware(['auth'])->group(function () {
                     Route::post('/Index/Query', 'indexQuery')->middleware('can:Dashboard.Orders.Return.Index.Query')->name('Dashboard.Orders.Return.Index.Query');
                     Route::post('/Create', 'create')->middleware('can:Dashboard.Orders.Return.Create')->name('Dashboard.Orders.Return.Create');
                     Route::post('/Store', 'store')->middleware('can:Dashboard.Orders.Return.Store')->name('Dashboard.Orders.Return.Store');
+                    Route::post('/Edit/{id}', 'edit')->middleware('can:Dashboard.Orders.Return.Edit')->name('Dashboard.Orders.Return.Edit');
+                    Route::put('/Update/{id}', 'update')->middleware('can:Dashboard.Orders.Return.Update')->name('Dashboard.Orders.Return.Update');
                     Route::put('/Approve', 'approve')->middleware('can:Dashboard.Orders.Return.Approve')->name('Dashboard.Orders.Return.Approve');
+                    Route::put('/Pending', 'pending')->middleware('can:Dashboard.Orders.Return.Pending')->name('Dashboard.Orders.Return.Pending');
+                    Route::put('/Cancel', 'cancel')->middleware('can:Dashboard.Orders.Return.Cancel')->name('Dashboard.Orders.Return.Cancel');
                 });
                 Route::prefix('/Details')->group(function () {
                     Route::controller(OrderReturnDetailController::class)->group(function () {
@@ -656,6 +660,9 @@ Route::middleware(['auth'])->group(function () {
                         Route::post('/Store', 'store')->middleware('can:Dashboard.Orders.Return.Details.Store')->name('Dashboard.Orders.Return.Details.Store');
                         Route::post('/Edit/{id}', 'edit')->middleware('can:Dashboard.Orders.Return.Details.Edit')->name('Dashboard.Orders.Return.Details.Edit');
                         Route::put('/Update/{id}', 'update')->middleware('can:Dashboard.Orders.Return.Details.Update')->name('Dashboard.Orders.Return.Details.Update');
+                        Route::put('/Approve', 'approve')->middleware('can:Dashboard.Orders.Return.Details.Approve')->name('Dashboard.Orders.Return.Details.Approve');
+                        Route::put('/Pending', 'pending')->middleware('can:Dashboard.Orders.Return.Details.Pending')->name('Dashboard.Orders.Return.Details.Pending');
+                        Route::put('/Cancel', 'cancel')->middleware('can:Dashboard.Orders.Return.Details.Cancel')->name('Dashboard.Orders.Return.Details.Cancel');
                     });
                 });
             });

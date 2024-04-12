@@ -19,7 +19,7 @@ class OrderReturn extends Model implements Auditable
         'return_user_id',
         'return_type_id',
         'return_status',
-        'return_date',
+        'return_date'
     ];
 
     protected $auditInclude = [
@@ -27,7 +27,7 @@ class OrderReturn extends Model implements Auditable
         'return_user_id',
         'return_type_id',
         'return_status',
-        'return_date',
+        'return_date'
     ];
 
     protected $auditEvents = [
@@ -56,7 +56,7 @@ class OrderReturn extends Model implements Auditable
     {
         return $this->belongsTo(ReturnType::class, 'return_type_id');
     }
-    
+
     public function scopeSearch($query, $search)
     {
         return $query->where('return_status', 'like',  '%' . $search . '%')
