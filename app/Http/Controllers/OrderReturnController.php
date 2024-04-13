@@ -24,6 +24,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\URL;
 
 class OrderReturnController extends Controller
 {
@@ -55,7 +56,8 @@ class OrderReturnController extends Controller
                     'wallet_user' => fn($query) => $query->withTrashed(),
                     'sale_channel' => fn($query) => $query->withTrashed(),
                     'correria' => fn($query) => $query->withTrashed(),
-                    'order_returns', 'order_details'
+                    'order_returns.return_user' => fn($query) => $query->withTrashed(),
+                    'order_returns.return_type', 'order_details'
                 ])
                 ->when($request->filled('search'),
                     function ($query) use ($request) {
@@ -139,11 +141,15 @@ class OrderReturnController extends Controller
             $orderReturn->order_id = $request->input('order_id');
             $orderReturn->return_user_id = Auth::user()->id;
             $orderReturn->return_type_id = $request->input('return_type_id');
-            $orderReturn->return_date = Carbon::now()->format('Y-m-d H:i:s');
+            $orderReturn->return_date = Carbon::parse($request->input('return_date'))->format('Y-m-d H:i:s');
+            $orderReturn->return_observation = $request->input('return_observation');
             $orderReturn->save();
 
             return $this->successResponse(
-                $orderReturn,
+                [
+                    'url' => URL::route('Dashboard.Orders.Return.Details.Index', ['id' => $orderReturn->id]),
+                    'orderReturn' => $orderReturn
+                ],
                 'La orden de devolucion del pedido fue registrado exitosamente.',
                 201
             );
@@ -225,6 +231,8 @@ class OrderReturnController extends Controller
         try {
             $orderReturn = OrderReturn::findOrFail($id);
             $orderReturn->return_type_id = $request->input('return_type_id');
+            $orderReturn->return_date = Carbon::parse($request->input('return_date'))->format('Y-m-d H:i:s');
+            $orderReturn->return_observation = $request->input('return_observation');
             $orderReturn->save();
 
             return $this->successResponse(
@@ -271,7 +279,7 @@ class OrderReturnController extends Controller
                 ->findOrFail($request->input('id'));
 
             foreach($orderReturn->order_return_details->whereIn('status', ['Pendiente']) as $detail) {
-                foreach($detail->order_detail_quantities as $quantity) {
+                foreach($detail->order_detail->order_detail_quantities as $quantity) {
                     $inventory = Inventory::with('warehouse')
                         ->whereHas('warehouse', fn($subQuery) => $subQuery->where('to_discount', true))
                         ->where('product_id', $detail->order_detail->product_id)

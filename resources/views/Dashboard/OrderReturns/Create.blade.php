@@ -1,19 +1,24 @@
-<div class="modal fade" id="CreateOrderSellerModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" data-backdrop="static" aria-hidden="true">
+<div class="modal fade" id="CreateOrderReturnModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" data-backdrop="static" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
         <div class="modal-content">
             <div class="modal-header w-100">
                 <div class="text-center w-100" style="background: white;">
-                    <label style="font-size:20px;font-weight:bold;">Creacion de Pedido</label>
+                    <label style="font-size:20px;font-weight:bold;">Creacion Orden de Devolucion</label>
                 </div>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
             <div class="modal-body">
+                <div class="modal-header w-100">
+                    <div class="text-center w-100" style="background: white;">
+                        <label style="font-size:20px;font-weight:bold;">Informacion del Pedido</label>
+                    </div>
+                </div>
                 <div class="form-group">
                     <label for="client_id_c">Cliente</label>
                     <div class="input-group">
-                        <select class="form-control select2" id="client_id_c" name="client_id_c" style="width: 94%" onchange="CreateOrderSellerModalClientGetClientBranch(this)">
+                        <select class="form-control select2" id="client_id_c" name="client_id_c" style="width: 94%" onchange="CreateOrderReturnModalClientGetClientBranch(this)">
                             <option value="">Seleccione</option>
                         </select>
                         <div class="input-group-append">
@@ -76,7 +81,7 @@
                 <div class="form-group">
                     <label for="dispatch_c">Cuando despachar</label>
                     <div class="input-group">
-                        <select class="form-control" id="dispatch_c" name="dispatch_c" style="width: 94%" onchange="CreateOrderSellerModalDispatchGetDispatchDate(this)">
+                        <select class="form-control" id="dispatch_c" name="dispatch_c" style="width: 94%" onchange="CreateOrderReturnModalDispatchGetDispatchDate(this)">
                             <option value="">Seleccione</option>
                             <option value="De inmediato">De inmediato</option>
                             <option value="Antes de">Antes de</option>

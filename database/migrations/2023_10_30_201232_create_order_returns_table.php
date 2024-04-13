@@ -24,6 +24,7 @@ return new class extends Migration
             $table->foreignIdFor(ReturnType::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->enum('return_status', ['Pendiente', 'Aprobado', 'Cancelado'])->default('Pendiente');
             $table->datetime('return_date');
+            $table->string('return_observation')->nullable();
             /* $table->foreign('order_id')->references('id')->on('orders')->onUpdate('cascade')->onDelete('cascade'); */
             $table->foreign('return_user_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
             /* $table->foreign('return_type_id')->references('id')->on('return_types')->onUpdate('cascade')->onDelete('cascade'); */

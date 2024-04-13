@@ -7,11 +7,12 @@ let tableOrderReturns = $('#orderReturns').DataTable({
         data: function (request) {
             var columnMappings = {
                 0: 'id',
-                1: 'client_id',
-                2: 'client_branch_id',
-                8: 'seller_user_id',
-                9: 'dispatched_status',
-                10: 'correria_id'
+                1: 'id',
+                2: 'client_id',
+                3: 'client_branch_id',
+                9: 'seller_user_id',
+                10: 'dispatched_status',
+                11: 'correria_id'
             };
             request._token = $('meta[name="csrf-token"]').attr('content');
             request.perPage = request.length;
@@ -30,6 +31,16 @@ let tableOrderReturns = $('#orderReturns').DataTable({
         }
     },
     columns: [
+        {
+            data: 'order_returns',
+            render: function (data, type, row) {
+                let btn = '';
+                if(data.length > 0) {
+                    btn += '<button class="btn btn-sm btn-success dt-expand rounded-circle"><i class="fas fa-plus"></i</button>';
+                }
+                return btn;
+            },
+        },
         { data: 'id' },
         {
             data: 'client_id',
@@ -134,7 +145,7 @@ let tableOrderReturns = $('#orderReturns').DataTable({
             render: function (data, type, row) {
                 let btn = `<div class="text-center" style="width: 100%;">`;
 
-                if (data === 'Pendiente') {
+                if (row.order_details.map(item => item.status).includes('Despachado') || row.order_details.map(item => item.status).includes('Parcialmente Despachado')) {
                     btn += `<a onclick="CreateOrderReturnModal(${row.id})" type="button"
                     class="btn btn-primary btn-sm mr-2" title="Crear devolucion al pedido.">
                         <i class="fas fa-plus text-white"></i>
@@ -149,11 +160,11 @@ let tableOrderReturns = $('#orderReturns').DataTable({
     columnDefs: [
         {
             orderable: true,
-            targets: [0, 1, 2, 8, 9, 10]
+            targets: [0, 1, 2, 3, 9, 10, 11]
         },
         {
             orderable: false,
-            targets: [3, 4, 5, 6, 7, 11]
+            targets: [4, 5, 6, 7, 8, 12]
         }
     ],
     pagingType: 'full_numbers',
@@ -184,3 +195,93 @@ let tableOrderReturns = $('#orderReturns').DataTable({
     searching: true,
     autoWidth: true
 });
+
+tableOrderReturns.on('click', 'button.dt-expand', function (e) {
+    let tr = e.target.closest('tr');
+    let row = tableOrderReturns.row(tr);
+
+    let iconButton = $(this);
+
+    if (row.child.isShown()) {
+        row.child.hide();
+        iconButton.html('<i class="fas fa-plus"></i>').removeClass('btn-danger').addClass('btn-success');
+    } else {
+        row.child(tableOrderReturned(row.data())).show();
+        iconButton.html('<i class="fas fa-minus"></i>').removeClass('btn-success').addClass('btn-danger');
+        $(`#orderReturns${row.data().id}`).DataTable({});
+    }
+});
+
+function tableOrderReturnesFilter(row) {
+    let table = `<table class="table table-bordered table-hover dataTable dtr-inline nowrap w-100" id="orderReturns${row.id}">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Usuario</th>
+                            <th>Tipo de Devolucion</th>
+                            <th>Fecha de Devolucion</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>`;
+
+    $.each(row.order_returns, function(index, order_return) {
+        table += `<tr>
+            <td> ${order_return.id} </td>
+            <td> ${order_return.return_user.name + ' ' + order_return.return_user.last_name} </td>
+            <td> ${order_return.return_type.name} </td>
+            <td> ${order_return.return_date} </td>`;
+
+        switch (order_return.return_status) {
+            case 'Pendiente':
+                table += `<td><span class="badge badge-pill badge-info"><i class="fas fa-arrows-rotate mr-2"></i>Pendiente</span></td>`;
+                break;
+            case 'Cancelado':
+                table += `<td><span class="badge badge-pill badge-warning" style="color:white !important;"><i class="fas fa-xmark mr-2 text-white"></i>Cancelado</span></td>`;
+                break;
+            case 'Aprobado':
+                table += `<td><span class="badge badge-pill badge-success"><i class="fas fa-check mr-2"></i>Aprobado</span></td>`;
+                break;
+            default:
+                table += `<td><span class="badge badge-pill badge-info"><i class="fas fa-arrows-rotate mr-2"></i>Pendiente</span></td>`;
+                break;
+        };
+
+        table += `<td class="text-center">
+            <a href="/Dashboard/Orders/Return/Details/Index/${order_dispatch.id}" type="button"
+            class="btn btn-secondary btn-sm mr-2" title="Visualizar detalles de la orden de devolucion del pedido.">
+                <i class="fas fa-eye text-white"></i>
+            </a>`;
+
+        switch (order_dispatch.dispatch_status) {
+            case 'Pendiente':
+                table += `<a onclick="ApproveOrderReturn(${order_dispatch.id})" type="button"
+                class="btn btn-success btn-sm mr-2" title="Aprobar orden de devolucion del pedido.">
+                    <i class="fas fa-check text-white"></i>
+                </a>`;
+
+                table += `<a onclick="CancelOrderReturn(${order_dispatch.id})" type="button"
+                class="btn btn-warning btn-sm mr-2" title="Cancelar orden de devolucion del pedido.">
+                    <i class="fas fa-xmark text-white"></i>
+                </a>`;
+                break;
+            case 'Cancelado':
+                table += `<a onclick="PendingOrderReturn(${order_dispatch.id})" type="button"
+                class="btn btn-info btn-sm mr-2 text-white" title="Pendiente orden de devolucion del pedido.">
+                    <i class="fas fa-arrows-rotate text-white"></i>
+                </a>`;
+            default:
+                table += ``;
+                break;
+        };
+
+        table += `</td>
+            </tr>`;
+    });
+
+    table += `</tbody></table>`;
+
+
+    return table;
+}
