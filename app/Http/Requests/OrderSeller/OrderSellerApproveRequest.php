@@ -46,8 +46,8 @@ class OrderSellerApproveRequest extends FormRequest
         }
 
         $this->merge([
-            'order_value' => $order->client->client_type->require_quota ? $order_value : '',
-            'quota_available' => $order->client->client_type->require_quota ? $quota_available : '',
+            'order_value' => $order->client->client_type->require_quota ? $order_value : 0,
+            'quota_available' => $order->client->client_type->require_quota ? $quota_available : 0,
             'email' => $this->input('email') === 'true',
             'download' => $this->input('download') === 'true',
         ]);

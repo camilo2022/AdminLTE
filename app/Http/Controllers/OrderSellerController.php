@@ -695,13 +695,11 @@ class OrderSellerController extends Controller
     public function approvePayment(OrderSellerApprovePaymentRequest $request)
     {
         try {
-            $order = Order::with('details')->findOrFail($request->input('id'));
+            $order = Order::with('order_details')->findOrFail($request->input('id'));
 
-            foreach($order->details as $detail) {
-                if($detail->status == 'Revision') {
-                    $detail->status = 'Aprobado';
-                    $detail->save();
-                }
+            foreach($order->order_details->where('status', 'Revision') as $detail) {
+                $detail->status = 'Aprobado';
+                $detail->save();
             }
 
             $order->wallet_status = 'Parcialmente Aprobado';
@@ -745,22 +743,20 @@ class OrderSellerController extends Controller
     public function cancelPayment(OrderSellerCancelPaymentRequest $request)
     {
         try {
-            $order = Order::with('details.quantities')->findOrFail($request->input('id'));
+            $order = Order::with('order_details.order_detail_quantities')->findOrFail($request->input('id'));
 
-            foreach($order->details as $detail) {
-                if($detail->status == 'Revision') {
-                    foreach($detail->quantities as $quantity) {
-                        $inventory = Inventory::with('warehouse')
-                            ->whereHas('warehouse', fn($subQuery) => $subQuery->where('to_discount', true))
-                            ->where('product_id', $detail->product_id)
-                            ->where('size_id', $quantity->size_id)
-                            ->where('color_id', $detail->color_id)
-                            ->where('tone_id', $detail->tone_id)
-                            ->first();
+            foreach($order->order_details->where('status', 'Revision') as $detail) {
+                foreach($detail->order_detail_quantities as $quantity) {
+                    $inventory = Inventory::with('warehouse')
+                        ->whereHas('warehouse', fn($subQuery) => $subQuery->where('to_discount', true))
+                        ->where('product_id', $detail->product_id)
+                        ->where('size_id', $quantity->size_id)
+                        ->where('color_id', $detail->color_id)
+                        ->where('tone_id', $detail->tone_id)
+                        ->first();
 
-                        $inventory->quantity += $quantity->quantity;
-                        $inventory->save();
-                    }
+                    $inventory->quantity += $quantity->quantity;
+                    $inventory->save();
                 }
 
                 $detail->status = 'Rechazado';
@@ -807,7 +803,7 @@ class OrderSellerController extends Controller
         }
     }
 
-    public function email($id) 
+    public function email($id)
     {
         try {
             $order = Order::with([
@@ -821,7 +817,7 @@ class OrderSellerController extends Controller
                 ->findOrFail($id);
 
             $sizes = $order->order_details->pluck('order_detail_quantities')->flatten()->where('quantity', '>', 0)->pluck('size')->unique()->sortBy('id')->values();
-            
+
             $pdf = \PDF::loadView('Dashboard.OrderSellers.PDF', compact('order', 'sizes'))->setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true]);
 
             $path = "Orders/{$order->id}-PEDIDO.pdf";
@@ -830,25 +826,25 @@ class OrderSellerController extends Controller
                 Storage::disk('public')->delete($path);
             }
 
-            Storage::disk('public')->put($path, $pdf->output()); 
+            Storage::disk('public')->put($path, $pdf->output());
 
             $filePath = Storage::disk('public')->path($path);
-    
+
             $recipientEmails = [
                 $order->client->email,
                 $order->client_branch->email
             ];
-            
+
             $imageBase64 = base64_encode(file_get_contents(asset('images/logo-name.jpg')));
 
             /* return view('Dashboard.OrderSellers.Email')->with('order', $order)->with('logoname', $imageBase64); */
-            Mail::to($recipientEmails)->send(new EmailWithAttachment($order, $filePath, $imageBase64)); 
+            Mail::to($recipientEmails)->send(new EmailWithAttachment($order, $filePath, $imageBase64));
             return Redirect::route('Dashboard.Orders.Seller.Index')->with('success', 'El correo electronico de confirmacion de orden de pedido con id de registro ' . $order->id . ' fue enviado y notificado al cliente via correo electronico anexado el pdf con la informacion del pedido solicitado y registrado.');
         } catch (Exception $e) {
             return back()->with('danger', 'Ocurrió un error al cargar la vista: ' . $e->getMessage());
         }
     }
-    
+
     public function download($id)
     {
         try {
@@ -861,9 +857,9 @@ class OrderSellerController extends Controller
                     'client_branch.country', 'client_branch.departament', 'client_branch.city',
                 ])
                 ->findOrFail($id);
-            
+
             $sizes = $order->order_details->pluck('order_detail_quantities')->flatten()->where('quantity', '>', 0)->pluck('size')->unique()->sortBy('id')->values();
-            
+
             $pdf = \PDF::loadView('Dashboard.OrderSellers.PDF', compact('order', 'sizes'))->setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true]);
             /* $pdf = \PDF::loadView('Browser_public.pdfdocument', compact('queryic'))->output();
             return $pdf->download('pdfdocument.pdf'); */
