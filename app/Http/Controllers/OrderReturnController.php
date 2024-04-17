@@ -54,7 +54,6 @@ class OrderReturnController extends Controller
                     'sale_channel' => fn($query) => $query->withTrashed(),
                     'seller_user' => fn($query) => $query->withTrashed(),
                     'wallet_user' => fn($query) => $query->withTrashed(),
-                    'sale_channel' => fn($query) => $query->withTrashed(),
                     'correria' => fn($query) => $query->withTrashed(),
                     'order_returns.return_user' => fn($query) => $query->withTrashed(),
                     'order_returns.return_type', 'order_details'
@@ -103,13 +102,13 @@ class OrderReturnController extends Controller
         try {
             $order = Order::with([
                 'client' => fn($query) => $query->withTrashed(),
+                'client.document_type',
                 'client.country', 'client.departament', 'client.city',
                 'client_branch' => fn($query) => $query->withTrashed(),
                 'client_branch.country', 'client_branch.departament', 'client_branch.city',
                 'sale_channel' => fn($query) => $query->withTrashed(),
                 'seller_user' => fn($query) => $query->withTrashed(),
                 'wallet_user' => fn($query) => $query->withTrashed(),
-                'sale_channel' => fn($query) => $query->withTrashed(),
                 'correria' => fn($query) => $query->withTrashed()
             ])
             ->findOrFail($request->input('order_id'));
@@ -188,13 +187,13 @@ class OrderReturnController extends Controller
         try {
             $orderReturn = OrderReturn::with([
                 'order.client' => fn($query) => $query->withTrashed(),
+                'order.client.document_type',
                 'order.client.country', 'order.client.departament', 'order.client.city',
                 'order.client_branch' => fn($query) => $query->withTrashed(),
                 'order.client_branch.country', 'order.client_branch.departament', 'order.client_branch.city',
                 'order.sale_channel' => fn($query) => $query->withTrashed(),
                 'order.seller_user' => fn($query) => $query->withTrashed(),
                 'order.wallet_user' => fn($query) => $query->withTrashed(),
-                'order.sale_channel' => fn($query) => $query->withTrashed(),
                 'order.correria' => fn($query) => $query->withTrashed()
             ])
             ->findOrFail($id);

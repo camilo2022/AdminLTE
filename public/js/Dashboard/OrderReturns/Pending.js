@@ -1,7 +1,7 @@
-function PendingOrderSeller(id, status = true) {
+function PendingOrderReturn(id, status = true) {
     Swal.fire({
-        title: '¿Desea pendiente el pedido?',
-        text: 'El pedido será pendiente.',
+        title: '¿Desea pendiente la orden de devolucion del pedido?',
+        text: 'La orden de devolucion del pedido será pendiente.',
         icon: 'warning',
         showCancelButton: true,
         cancelButtonColor: '#DD6B55',
@@ -11,27 +11,27 @@ function PendingOrderSeller(id, status = true) {
     }).then((result) => {
         if (result.value) {
             $.ajax({
-                url: `/Dashboard/Orders/Seller/Pending`,
+                url: `/Dashboard/Orders/Return/Pending`,
                 type: 'PUT',
                 data: {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
                     'id': id
                 },
                 success: function(response) {
-                    status ? tableOrderSellers.ajax.reload() : location.reload() ;
-                    PendingOrderSellerAjaxSuccess(response);
+                    status ? tableOrderReturns.ajax.reload() : location.reload() ;
+                    PendingOrderReturnAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    PendingOrderSellerAjaxError(xhr);
+                    PendingOrderReturnAjaxError(xhr);
                 }
             });
         } else {
-            toastr.info('El pedido seleccionada no fue pendiente.')
+            toastr.info('La orden de devolucion del pedido seleccionada no fue pendiente.')
         }
     });
 }
 
-function PendingOrderSellerAjaxSuccess(response) {
+function PendingOrderReturnAjaxSuccess(response) {
     if(response.status === 200) {
         toastr.success(response.message);
     }
@@ -41,7 +41,7 @@ function PendingOrderSellerAjaxSuccess(response) {
     }
 }
 
-function PendingOrderSellerAjaxError(xhr) {
+function PendingOrderReturnAjaxError(xhr) {
     if(xhr.status === 403) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
     }

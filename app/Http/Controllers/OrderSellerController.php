@@ -71,7 +71,6 @@ class OrderSellerController extends Controller
                     'sale_channel' => fn($query) => $query->withTrashed(),
                     'seller_user' => fn($query) => $query->withTrashed(),
                     'wallet_user' => fn($query) => $query->withTrashed(),
-                    'sale_channel' => fn($query) => $query->withTrashed(),
                     'correria' => fn($query) => $query->withTrashed()
                 ])
                 ->when($request->filled('search'),

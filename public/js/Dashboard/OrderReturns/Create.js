@@ -19,11 +19,25 @@ function CreateOrderReturnModal(order_id) {
 }
 
 function CreateOrderReturnModalCleaned(order) {
-    console.log(order);
     CreateOrderReturnModalResetSelect('return_type_id_c');
     RemoveIsValidClassCreateOrderReturn();
     RemoveIsInvalidClassCreateOrderReturn();
 
+    $('#CreateOrderReturnButton').attr('onclick', `CreateOrderReturn(${order.id})`);
+    $('#CreateOrderReturnButton').attr('data-order_id', order.id);
+
+    $('#client_c').val(order.client.name);
+    $('#document_type_c').val(order.client.document_type.name);
+    $('#document_number_c').val(`${order.client.document_number}-${order.client_branch.code}`);
+    $('#client_branch_c').val(order.client_branch.name);
+    $('#address_c').val(order.client_branch.address);
+    $('#neighborhood_c').val(order.client_branch.neighborhood);
+    $('#sale_channel_c').val(order.sale_channel.name);
+    $('#seller_c').val(`${order.seller_user.name} ${order.seller_user.last_name}`);
+    $('#wallet_c').val(`${order.wallet_user.name} ${order.wallet_user.last_name}`);
+    $('#date_seller_c').val(order.seller_date);
+    $('#date_wallet_c').val(order.wallet_date);
+    $('#date_dispatched_c').val(order.dispatched_date);
     $('#return_date_c').val('');
     $('#return_observation_c').val('');
 }
@@ -40,7 +54,7 @@ function CreateOrderReturnModalReturnType(returnTypes) {
     });
 }
 
-function CreateOrderReturn() {
+function CreateOrderReturn(order_id) {
     Swal.fire({
         title: '¿Desea guardar la orden de devolucion del pedido?',
         text: 'La orden de devolucion del pedido será creado.',
@@ -57,8 +71,9 @@ function CreateOrderReturn() {
                 type: 'POST',
                 data: {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
+                    'order_id': order_id,
                     'return_type_id': $('#return_type_id_c').val(),
-                    'return_date': $('#return_date_c').val(),
+                    'return_date': new Date($('#return_date_c').val()).toISOString().slice(0, 19).replace('T', ' '),
                     'return_observation': $('#return_observation_c').val()
                 },
                 success: function (response) {
@@ -123,37 +138,21 @@ function CreateOrderReturnAjaxError(xhr) {
 }
 
 function AddIsValidClassCreateOrderReturn() {
-    if (!$('#Return_observation_c').hasClass('is-invalid')) {
-        $('#Return_observation_c').addClass('is-valid');
+    if (!$('#return_observation_c').hasClass('is-invalid')) {
+        $('#return_observation_c').addClass('is-valid');
     }
-    if (!$('#dispatch_c').hasClass('is-invalid')) {
-        $('#dispatch_c').addClass('is-valid');
+    if (!$('#return_date_c').hasClass('is-invalid')) {
+        $('#return_date_c').addClass('is-valid');
     }
-    if (!$('#dispatch_date_c').hasClass('is-invalid')) {
-        $('#dispatch_date_c').addClass('is-valid');
-    }
-    if (!$('span[aria-labelledby="select2-client_id_c-container"]').hasClass('is-invalid')) {
-        $('span[aria-labelledby="select2-client_id_c-container"]').addClass('is-valid');
-    }
-    if (!$('span[aria-labelledby="select2-client_branch_id_c-container"]').hasClass('is-invalid')) {
-        $('span[aria-labelledby="select2-client_branch_id_c-container"]').addClass('is-valid');
-    }
-    if (!$('span[aria-labelledby="select2-sale_channel_id_c-container"]').hasClass('is-invalid')) {
-        $('span[aria-labelledby="select2-sale_channel_id_c-container"]').addClass('is-valid');
-    }
-    if (!$('span[aria-labelledby="select2-transporter_id_c-container"]').hasClass('is-invalid')) {
-        $('span[aria-labelledby="select2-transporter_id_c-container"]').addClass('is-valid');
+    if (!$('span[aria-labelledby="select2-return_type_id_c-container"]').hasClass('is-invalid')) {
+        $('span[aria-labelledby="select2-return_type_id_c-container"]').addClass('is-valid');
     }
 }
 
 function RemoveIsValidClassCreateOrderReturn() {
-    $('#Return_observation_c').removeClass('is-valid');
-    $('#dispatch_c').removeClass('is-valid');
-    $('#dispatch_date_c').removeClass('is-valid');
-    $('span[aria-labelledby="select2-client_id_c-container"]').removeClass('is-valid');
-    $('span[aria-labelledby="select2-client_branch_id_c-container"]').removeClass('is-valid');
-    $('span[aria-labelledby="select2-sale_channel_id_c-container"]').removeClass('is-valid');
-    $('span[aria-labelledby="select2-transporter_id_c-container"]').removeClass('is-valid');
+    $('#return_observation_c').removeClass('is-valid');
+    $('#return_date_c').removeClass('is-valid');
+    $('span[aria-labelledby="select2-return_type_id_c-container"]').removeClass('is-valid');
 }
 
 function AddIsInvalidClassCreateOrderReturn(input) {
@@ -166,15 +165,7 @@ function AddIsInvalidClassCreateOrderReturn(input) {
 }
 
 function RemoveIsInvalidClassCreateOrderReturn() {
-    $('#Return_observation_c').removeClass('is-invalid');
-    $('#dispatch_c').removeClass('is-invalid');
-    $('#dispatch_date_c').removeClass('is-invalid');
-    $('span[aria-labelledby="select2-client_id_c-container"]').removeClass('is-invalid');
-    $('span[aria-labelledby="select2-client_branch_id_c-container"]').removeClass('is-invalid');
-    $('span[aria-labelledby="select2-sale_channel_id_c-container"]').removeClass('is-invalid');
-    $('span[aria-labelledby="select2-transporter_id_c-container"]').removeClass('is-invalid');
+    $('#return_observation_c').removeClass('is-invalid');
+    $('#return_date_c').removeClass('is-invalid');
+    $('span[aria-labelledby="select2-return_type_id_c-container"]').removeClass('is-invalid');
 }
-
-$('#dispatch_date_c').datetimepicker({
-    format: 'YYYY-MM-DD'
-});

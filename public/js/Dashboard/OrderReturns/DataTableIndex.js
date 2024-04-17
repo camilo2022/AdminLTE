@@ -145,7 +145,7 @@ let tableOrderReturns = $('#orderReturns').DataTable({
             render: function (data, type, row) {
                 let btn = `<div class="text-center" style="width: 100%;">`;
 
-                if (row.order_details.map(item => item.status).includes('Despachado') || row.order_details.map(item => item.status).includes('Parcialmente Despachado')) {
+                if ((row.order_details.map(item => item.status).includes('Despachado') || row.order_details.map(item => item.status).includes('Parcialmente Despachado')) && !row.order_returns.map(item => item.return_status).includes('Pendiente')) {
                     btn += `<a onclick="CreateOrderReturnModal(${row.id})" type="button"
                     class="btn btn-primary btn-sm mr-2" title="Crear devolucion al pedido.">
                         <i class="fas fa-plus text-white"></i>
@@ -212,7 +212,7 @@ tableOrderReturns.on('click', 'button.dt-expand', function (e) {
     }
 });
 
-function tableOrderReturnesFilter(row) {
+function tableOrderReturned(row) {
     let table = `<table class="table table-bordered table-hover dataTable dtr-inline nowrap w-100" id="orderReturns${row.id}">
                     <thead>
                         <tr>
@@ -220,6 +220,7 @@ function tableOrderReturnesFilter(row) {
                             <th>Usuario</th>
                             <th>Tipo de Devolucion</th>
                             <th>Fecha de Devolucion</th>
+                            <th>Observacion</th>
                             <th>Estado</th>
                             <th>Acciones</th>
                         </tr>
@@ -231,7 +232,8 @@ function tableOrderReturnesFilter(row) {
             <td> ${order_return.id} </td>
             <td> ${order_return.return_user.name + ' ' + order_return.return_user.last_name} </td>
             <td> ${order_return.return_type.name} </td>
-            <td> ${order_return.return_date} </td>`;
+            <td> ${order_return.return_date} </td>
+            <td> ${order_return.return_observation} </td>`;
 
         switch (order_return.return_status) {
             case 'Pendiente':
@@ -249,25 +251,30 @@ function tableOrderReturnesFilter(row) {
         };
 
         table += `<td class="text-center">
-            <a href="/Dashboard/Orders/Return/Details/Index/${order_dispatch.id}" type="button"
+            <a href="/Dashboard/Orders/Return/Details/Index/${order_return.id}" type="button"
             class="btn btn-secondary btn-sm mr-2" title="Visualizar detalles de la orden de devolucion del pedido.">
                 <i class="fas fa-eye text-white"></i>
             </a>`;
 
-        switch (order_dispatch.dispatch_status) {
+        switch (order_return.return_status) {
             case 'Pendiente':
-                table += `<a onclick="ApproveOrderReturn(${order_dispatch.id})" type="button"
+                table += `<a onclick="EditOrderReturnModal(${order_return.id})" type="button"
+                class="btn btn-primary btn-sm mr-2" title="Editar orden de devolucion del pedido.">
+                    <i class="fas fa-pen text-white"></i>
+                </a>`;
+
+                table += `<a onclick="ApproveOrderReturn(${order_return.id})" type="button"
                 class="btn btn-success btn-sm mr-2" title="Aprobar orden de devolucion del pedido.">
                     <i class="fas fa-check text-white"></i>
                 </a>`;
 
-                table += `<a onclick="CancelOrderReturn(${order_dispatch.id})" type="button"
-                class="btn btn-warning btn-sm mr-2" title="Cancelar orden de devolucion del pedido.">
+                table += `<a onclick="CancelOrderReturn(${order_return.id})" type="button"
+                class="btn btn-danger btn-sm mr-2" title="Cancelar orden de devolucion del pedido.">
                     <i class="fas fa-xmark text-white"></i>
                 </a>`;
                 break;
             case 'Cancelado':
-                table += `<a onclick="PendingOrderReturn(${order_dispatch.id})" type="button"
+                table += `<a onclick="PendingOrderReturn(${order_return.id})" type="button"
                 class="btn btn-info btn-sm mr-2 text-white" title="Pendiente orden de devolucion del pedido.">
                     <i class="fas fa-arrows-rotate text-white"></i>
                 </a>`;

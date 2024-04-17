@@ -91,10 +91,12 @@
                 </div>
                 <div class="form-group" id="div_dispatch_date_c">
                     <label for="dispatch_date_c">Fecha despachar</label>
-                    <div class="input-group date" id="dispatch_date" data-target-input="nearest">
-                        <input type="text" class="form-control datetimepicker-input" data-target="#dispatch_date_c" id="dispatch_date_c" name="dispatch_date_c">
-                        <div class="input-group-append" data-target="#dispatch_date_c" data-toggle="datetimepicker">
-                            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                    <div class="input-group date" id="dispatch_date">
+                        <input type="datetime-local" class="form-control" id="dispatch_date_c" name="dispatch_date_c">
+                        <div class="input-group-append">
+                            <span class="input-group-text">
+                                <i class="fa fa-calendar"></i>
+                            </span>
                         </div>
                     </div>
                 </div>

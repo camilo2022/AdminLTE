@@ -1,7 +1,7 @@
-function CancelOrderSeller(id, status = true) {
+function CancelOrderReturn(id, status = true) {
     Swal.fire({
-        title: '¿Desea cancelar el pedido?',
-        text: 'El pedido será cancelado.',
+        title: '¿Desea cancelar la orden de devolucion del pedido?',
+        text: 'La orden de devolucion del pedido será cancelado.',
         icon: 'warning',
         showCancelButton: true,
         cancelButtonColor: '#DD6B55',
@@ -11,27 +11,27 @@ function CancelOrderSeller(id, status = true) {
     }).then((result) => {
         if (result.value) {
             $.ajax({
-                url: `/Dashboard/Orders/Seller/Cancel`,
+                url: `/Dashboard/Orders/Return/Cancel`,
                 type: 'PUT',
                 data: {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
                     'id': id
                 },
                 success: function(response) {
-                    status ? tableOrderSellers.ajax.reload() : location.reload() ;
-                    CancelOrderSellerAjaxSuccess(response);
+                    status ? tableOrderReturns.ajax.reload() : location.reload() ;
+                    CancelOrderReturnAjaxSuccess(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    CancelOrderSellerAjaxError(xhr);
+                    CancelOrderReturnAjaxError(xhr);
                 }
             });
         } else {
-            toastr.info('El pedido seleccionada no fue cancelado.')
+            toastr.info('La orden de devolucion del pedido seleccionada no fue cancelado.')
         }
     });
 }
 
-function CancelOrderSellerAjaxSuccess(response) {
+function CancelOrderReturnAjaxSuccess(response) {
     if(response.status === 200) {
         toastr.success(response.message);
     }
@@ -41,7 +41,7 @@ function CancelOrderSellerAjaxSuccess(response) {
     }
 }
 
-function CancelOrderSellerAjaxError(xhr) {
+function CancelOrderReturnAjaxError(xhr) {
     if(xhr.status === 403) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
     }
