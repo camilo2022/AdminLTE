@@ -73,7 +73,7 @@ function CreateOrderReturn(order_id) {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
                     'order_id': order_id,
                     'return_type_id': $('#return_type_id_c').val(),
-                    'return_date': new Date($('#return_date_c').val()).toISOString().slice(0, 19).replace('T', ' '),
+                    'return_date': $('#return_date_c').val() == '' ? $('#return_date_c').val() : new Date($('#return_date_c').val()).toISOString().slice(0, 19).replace('T', ' '),
                     'return_observation': $('#return_observation_c').val()
                 },
                 success: function (response) {

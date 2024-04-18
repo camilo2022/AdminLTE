@@ -126,13 +126,12 @@ class OrderReturnDetailController extends Controller
             if($request->filled('order_return_id') && $request->filled('product_id') && $request->filled('color_id') && $request->filled('tone_id')) {
                 return $this->successResponse(
                     OrderReturn::with('order.order_details.order_detail_quantities.size')
-                        ->whereHas('order.order_details', function($query) use ($request) {
-                            $query->where('product_id', $request->input('product_id'))
-                                ->where('color_id', $request->input('color_id'))
-                                ->where('tone_id', $request->input('tone_id'))
-                                ->whereIn('status', ['Despachado', 'Parcialmente Devuelto']);
-                        })
-                        ->findOrFail($request->input('order_return_id'))->order->order_details->first(),
+                        ->findOrFail($request->input('order_return_id'))->order->order_details
+                        ->where('product_id', $request->input('product_id'))
+                        ->where('color_id', $request->input('color_id'))
+                        ->where('tone_id', $request->input('tone_id'))
+                        ->whereIn('status', ['Despachado', 'Parcialmente Devuelto'])
+                        ->first()->order_detail_quantities,
                     'Unidades del detalle del pedido encontrado con exito.',
                     200
                 );
@@ -141,11 +140,9 @@ class OrderReturnDetailController extends Controller
             if($request->filled('order_return_id') && $request->filled('product_id')) {
                 return $this->successResponse(
                     OrderReturn::with('order.order_details.color', 'order.order_details.tone')
-                        ->whereHas('order.order_details', function($query) use ($request) {
-                            $query->where('product_id', $request->input('product_id'))
-                                ->whereIn('status', ['Despachado', 'Parcialmente Devuelto']);
-                        })
-                        ->findOrFail($request->input('order_return_id'))->order->order_details,
+                        ->findOrFail($request->input('order_return_id'))->order->order_details
+                        ->where('product_id', $request->input('product_id'))
+                        ->whereIn('status', ['Despachado', 'Parcialmente Devuelto'])->values(),
                     'Colores y tonos del producto encontrados con exito.',
                     200
                 );

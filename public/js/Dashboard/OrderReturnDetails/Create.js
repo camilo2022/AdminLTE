@@ -81,6 +81,7 @@ function CreateOrderReturnDetailModalColorToneGetSizesQuantity() {
             type: 'POST',
             data: {
                 '_token': $('meta[name="csrf-token"]').attr('content'),
+                'order_return_id': $('#IndexOrderReturnDetail').attr('data-id'),
                 'product_id':  $('#product_id_c').val(),
                 'color_id':  $('#color_id_tone_id_c').val().split('-')[0],
                 'tone_id':  $('#color_id_tone_id_c').val().split('-')[1],
@@ -98,6 +99,7 @@ function CreateOrderReturnDetailModalColorToneGetSizesQuantity() {
 }
 
 function CreateOrderReturnDetailModalSizes(sizes) {
+    console.log(sizes);
     let inputs = '';
     $.each(sizes, function(index, size) {
         inputs += `<div class="form-group">
@@ -126,17 +128,17 @@ function CreateOrderReturnDetail() {
                 type: 'POST',
                 data: {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
-                    'order_id': $('#IndexOrderReturnDetail').attr('data-id'),
+                    'order_return_id': $('#IndexOrderReturnDetail').attr('data-id'),
                     'product_id':  $('#product_id_c').val(),
                     'color_id':  $('#color_id_tone_id_c').val().split('-')[0],
                     'tone_id':  $('#color_id_tone_id_c').val().split('-')[1],
-                    'order_detail_quantities': $('#sizes_c').find('div.form-group').map(function(index) {
+                    'order_return_detail_quantities': $('#sizes_c').find('div.form-group').map(function(index) {
                         return {
                             'quantity': $(this).find('input').val() == '' ? 0 : $(this).find('input').val(),
                             'size_id': $(this).find('input').attr('data-size_id')
                         };
                     }).get(),
-                    'Return_observation': $('#return_observation_c').val()
+                    'observation': $('#observation_c').val()
                 },
                 success: function (response) {
                     $('#IndexOrderReturnDetail').trigger('click');
