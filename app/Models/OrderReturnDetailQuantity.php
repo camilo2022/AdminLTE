@@ -34,7 +34,7 @@ class OrderReturnDetailQuantity extends Model implements Auditable
 
     public function order_return_detail() : BelongsTo
     {
-        return $this->belongsTo(OrderReturnDetail::class, 'order_return_detail_id');
+        return $this->belongsTo(OrderReturnDetail::class, 'order_return_id');
     }
 
     public function order_detail_quantity() : BelongsTo

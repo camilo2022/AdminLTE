@@ -22,6 +22,7 @@ return new class extends Migration
             $table->foreignIdFor(OrderDetail::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->foreignIdFor(Size::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->unsignedBigInteger('quantity')->default(0);
+            $table->index(['order_detail_id', 'size_id'])->unique();
             /* $table->foreign('order_detail_id')->references('id')->on('order_details')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('size_id')->references('id')->on('sizes')->onUpdate('cascade')->onDelete('cascade'); */
             $table->timestamps();

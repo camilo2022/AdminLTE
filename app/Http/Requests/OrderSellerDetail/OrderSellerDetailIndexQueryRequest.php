@@ -32,7 +32,7 @@ class OrderSellerDetailIndexQueryRequest extends FormRequest
     {
         return [
             'order_id.required' => 'El Identificador del pedido es requerido.',
-            'order_id.exists' => 'El Identificador del pedidp no es válido.',
+            'order_id.exists' => 'El Identificador del pedido no es válido.',
         ];
     }
 }

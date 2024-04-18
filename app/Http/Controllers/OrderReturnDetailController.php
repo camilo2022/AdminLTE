@@ -31,8 +31,8 @@ class OrderReturnDetailController extends Controller
     public function index($id)
     {
         try {
-            $order = OrderReturn::with('order.sale_channel', 'order.seller_user', 'order.client.document_type', 'order.client_branch.country', 'order.client_branch.departament', 'order.client_branch.city')->findOrFail($id);
-            return view('Dashboard.OrderReturnDetails.Index', compact('order'));
+            $orderReturn = OrderReturn::with('order.sale_channel', 'order.seller_user', 'order.client.document_type', 'order.client_branch.country', 'order.client_branch.departament', 'order.client_branch.city', 'order.correria')->findOrFail($id);
+            return view('Dashboard.OrderReturnDetails.Index', compact('orderReturn'));
         } catch (ModelNotFoundException $e) {
             return back()->with('danger', 'Ocurrió un error al cargar el pedido: ' . $this->getMessage('ModelNotFoundException'));
         } catch (Exception $e) {
@@ -93,8 +93,8 @@ class OrderReturnDetailController extends Controller
 
             return $this->successResponse(
                 [
-                    'orderReturn' => OrderReturn::findOrFail($request->input('order_id')),
-                    'orderDetails' => $orderReturnDetails,
+                    'orderReturn' => OrderReturn::findOrFail($request->input('order_return_id')),
+                    'orderReturnDetails' => $orderReturnDetails,
                     'sizes' => $orderReturnDetailQuantitySizes->pluck('order_detail_quantity')->pluck('size')->unique()->values()
                 ],
                 $this->getMessage('Success'),
@@ -123,33 +123,38 @@ class OrderReturnDetailController extends Controller
     public function create(OrderReturnDetailCreateRequest $request)
     {
         try {
-            if($request->filled('order_detail_id')) {
+            if($request->filled('order_return_id') && $request->filled('product_id') && $request->filled('color_id') && $request->filled('tone_id')) {
                 return $this->successResponse(
-                    OrderDetail::with('order_detail_quantities.size')->findOrFail($request->input('order_detail_id')),
+                    OrderReturn::with('order.order_details.order_detail_quantities.size')
+                        ->whereHas('order.order_details', function($query) use ($request) {
+                            $query->where('product_id', $request->input('product_id'))
+                                ->where('color_id', $request->input('color_id'))
+                                ->where('tone_id', $request->input('tone_id'))
+                                ->whereIn('status', ['Despachado', 'Parcialmente Devuelto']);
+                        })
+                        ->findOrFail($request->input('order_return_id'))->order->order_details->first(),
                     'Unidades del detalle del pedido encontrado con exito.',
                     200
                 );
             }
 
-            if($request->filled('product_id') && $request->filled('order_return_id')) {
+            if($request->filled('order_return_id') && $request->filled('product_id')) {
                 return $this->successResponse(
-                    OrderReturnDetail::with('order_detail.product', 'order_detail.color', 'order_detail.tone')
-                        ->where('order_return_id', $request->input('order_return_id'))
-                        ->whereHas('order_detail', function($query) use ($request) {
+                    OrderReturn::with('order.order_details.color', 'order.order_details.tone')
+                        ->whereHas('order.order_details', function($query) use ($request) {
                             $query->where('product_id', $request->input('product_id'))
                                 ->whereIn('status', ['Despachado', 'Parcialmente Devuelto']);
                         })
-                        ->get(),
+                        ->findOrFail($request->input('order_return_id'))->order->order_details,
                     'Colores y tonos del producto encontrados con exito.',
                     200
                 );
             }
 
             return $this->successResponse(
-                OrderReturnDetail::with('order_detail.product')
-                    ->where('order_return_id', $request->input('order_return_id'))
-                    ->whereHas('order_detail', fn($query) => $query->whereIn('status', ['Despachado', 'Parcialmente Devuelto']))
-                    ->get()->pluck('order_detail')->pluck('product')->unique()->all(),
+                OrderReturn::with('order.order_details.product')
+                    ->whereHas('order.order_details', fn($query) => $query->whereIn('status', ['Despachado', 'Parcialmente Devuelto']))
+                    ->findOrFail($request->input('order_return_id'))->order->order_details->pluck('product')->unique()->values(),
                 'Ingrese los datos para hacer la validacion y registro.',
                 204
             );
@@ -171,7 +176,7 @@ class OrderReturnDetailController extends Controller
             $orderReturnDetail = new OrderReturnDetail();
             $orderReturnDetail->order_return_id = $request->input('order_return_id');
             $orderReturnDetail->order_detail_id = $request->input('order_detail_id');
-            $orderReturnDetail->return_observation = $request->input('return_observation');
+            $orderReturnDetail->observation = $request->input('observation');
             $orderReturnDetail->save();
 
             collect($request->order_return_detail_quantities)->map(function ($orderReturnDetailQuantity) use ($orderReturnDetail) {
@@ -279,7 +284,7 @@ class OrderReturnDetailController extends Controller
             $orderReturnDetail = OrderReturnDetail::with('order_return_detail_quantities')->findOrFail($id);
             $orderReturnDetail->order_return_id = $request->input('order_return_id');
             $orderReturnDetail->order_detail_id = $request->input('order_detail_id');
-            $orderReturnDetail->return_observation = $request->input('return_observation');
+            $orderReturnDetail->observation = $request->input('observation');
             $orderReturnDetail->save();
 
             collect($request->order_return_detail_quantities)->map(function ($orderReturnDetailQuantity) use ($orderReturnDetail) {

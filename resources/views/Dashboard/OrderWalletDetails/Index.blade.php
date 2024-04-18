@@ -62,41 +62,41 @@
                             </li>
                             @if($order->seller_status == 'Aprobado' && $order->wallet_status == 'Cancelado')
                                 <li class="nav-item ml-auto">
-                                    <a class="btn btn-info text-white" type="button" onclick="PendingOrderWallet({{ $order->id }}, false)" title="Pedido pendiente para cartera.">
+                                    <a class="btn btn-info text-white" type="button" onclick="PendingOrderWallet({{ $order->id }}, false)" title="Pendiente orden de pedido.">
                                         <i class="fas fa-arrows-rotate"></i>
                                     </a>
                                 </li>
                             @endif
                             @if($order->seller_status == 'Aprobado' && $order->wallet_status == 'Pendiente')
                                 <li class="nav-item ml-auto">
-                                    <a class="btn btn-info text-white" type="button" onclick="PendingOrderSeller({{ $order->id }}, false)" title="Pedido pendiente para vendedor.">
+                                    <a class="btn btn-info text-white" type="button" onclick="PendingOrderSeller({{ $order->id }}, false)" title="Devolver orden de pedido.">
                                         <i class="fas fa-arrows-rotate"></i>
                                     </a>
                                 </li>
                                 <li class="nav-item ml-2">
-                                    <a class="btn btn-success text-white" type="button" onclick="ApproveOrderWallet({{ $order->id }}, false)" title="Pedido aprobado para cartera.">
+                                    <a class="btn btn-success text-white" type="button" onclick="ApproveOrderWallet({{ $order->id }}, false)" title="Aprobar orden de pedido.">
                                         <i class="fas fa-check-double"></i>
                                     </a>
                                 </li>
                                 <li class="nav-item ml-2">
-                                    <a class="btn btn-warning text-white" type="button" onclick="PartiallyApproveOrderWallet({{ $order->id }}, false)" title="Pedido parcialmente aprobado para cartera.">
+                                    <a class="btn btn-warning text-white" type="button" onclick="PartiallyApproveOrderWallet({{ $order->id }}, false)" title="Aprobar parcialmente orden de pedido.">
                                         <i class="fas fa-check"></i>
                                     </a>
                                 </li>
                                 <li class="nav-item ml-2">
-                                    <a class="btn btn-danger text-white" type="button" onclick="CancelOrderWallet({{ $order->id }}, false)" title="Pedido cancelado para cartera.">
+                                    <a class="btn btn-danger text-white" type="button" onclick="CancelOrderWallet({{ $order->id }}, false)" title="Cancelar orden de pedido.">
                                         <i class="fas fa-xmark"></i>
                                     </a>
                                 </li>
                             @endif
                             @if($order->seller_status == 'Aprobado' && $order->wallet_status == 'Parcialmente Aprobado')
                                 <li class="nav-item ml-auto">
-                                    <a class="btn btn-success text-white" type="button" onclick="ApproveOrderWallet({{ $order->id }}, false)" title="Pedido aprobado para cartera.">
+                                    <a class="btn btn-success text-white" type="button" onclick="ApproveOrderWallet({{ $order->id }}, false)" title="Aprobar orden de pedido.">
                                         <i class="fas fa-check-double"></i>
                                     </a>
                                 </li>
                                 <li class="nav-item ml-2">
-                                    <a class="btn btn-danger text-white" type="button" onclick="CancelOrderWallet({{ $order->id }}, false)" title="Pedido cancelado para cartera.">
+                                    <a class="btn btn-danger text-white" type="button" onclick="CancelOrderWallet({{ $order->id }}, false)" title="Cancelar orden de pedido.">
                                         <i class="fas fa-xmark"></i>
                                     </a>
                                 </li>

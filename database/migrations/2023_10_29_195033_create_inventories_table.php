@@ -31,6 +31,7 @@ return new class extends Migration
             $table->unsignedBigInteger('color_id');
             $table->unsignedBigInteger('tone_id'); */
             $table->unsignedBigInteger('quantity')->default(0);
+            $table->index(['product_id', 'size_id', 'warehouse_id', 'color_id', 'tone_id'])->unique();
             /* $table->foreign('product_id')->references('id')->on('products')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('size_id')->references('id')->on('sizes')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('warehouse_id')->references('id')->on('warehouses')->onUpdate('cascade')->onDelete('cascade');

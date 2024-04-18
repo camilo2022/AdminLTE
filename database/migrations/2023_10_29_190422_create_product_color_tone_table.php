@@ -21,6 +21,7 @@ return new class extends Migration
             $table->foreignIdFor(Product::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->foreignIdFor(Color::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->foreignIdFor(Tone::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
+            $table->index(['product_id', 'color_id', 'tone_id'])->unique();
             /* $table->unsignedBigInteger('product_id')->comment('Identificador del prodcuto.');
             $table->unsignedBigInteger('color_id')->comment('Identificador del color.');
             $table->unsignedBigInteger('tone_id')->comment('Identificador del tono.');

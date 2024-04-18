@@ -19,6 +19,8 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(SaleChannel::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->foreignIdFor(ReturnType::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
+
+            $table->index(['sale_channel_id', 'return_type_id'])->unique();
             /* $table->unsignedBigInteger('sale_channel_id')->comment('Identificador de la bodega.');
             $table->unsignedBigInteger('return_type_id')->comment('Identificador del usuario.');
             $table->foreign('sale_channel_id')->references('id')->on('sale_channels')->onUpdate('cascade')->onDelete('cascade');

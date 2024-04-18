@@ -19,6 +19,7 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(Warehouse::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->foreignIdFor(User::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
+            $table->index(['warehouse_id', 'user_id'])->unique();
             /* $table->unsignedBigInteger('warehouse_id')->comment('Identificador de la bodega.');
             $table->unsignedBigInteger('user_id')->comment('Identificador del usuario.');
             $table->foreign('warehouse_id')->references('id')->on('warehouses')->onUpdate('cascade')->onDelete('cascade');
