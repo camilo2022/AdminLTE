@@ -107,6 +107,7 @@ function EditOrderSellerDetailModalColorToneGetSizesQuantity() {
                 'size_id':  $('#size_id_e').val(),
             },
             success: function(response) {
+                toastr.info('Inventario por talla cargado, ingrese las cantidades.');
                 EditOrderSellerDetailModalSizes(response.data);
             },
             error: function(xhr, textStatus, errorThrown) {

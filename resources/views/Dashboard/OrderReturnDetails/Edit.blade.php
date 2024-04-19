@@ -1,4 +1,4 @@
-<div class="modal" id="EditOrderSellerDetailModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" data-backdrop="static" aria-hidden="true">
+<div class="modal" id="EditOrderReturnDetailModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" data-backdrop="static" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable" role="document">
         <div class="modal-content">
             <div class="modal-header w-100">
@@ -13,7 +13,7 @@
                 <div class="form-group">
                     <label for="product_id_e">Productos</label>
                     <div class="input-group">
-                        <select class="form-control select2" id="product_id_e" name="product_id" style="width: 90%" onchange="EditOrderSellerDetailModalProductGetColorTone(this)">
+                        <select class="form-control select2" id="product_id_e" name="product_id" style="width: 90%" onchange="EditOrderReturnDetailModalProductGetColorTone(this)">
                             <option value="">Seleccione</option>
                         </select>
                         <div class="input-group-append">
@@ -26,7 +26,7 @@
                 <div class="form-group">
                     <label for="color_id_tone_id_e">Colores y Tonos</label>
                     <div class="input-group">
-                        <select class="form-control select2" id="color_id_tone_id_e" name="color_id_tone_id" style="width: 90%" onchange="EditOrderSellerDetailModalColorToneGetSizesQuantity()">
+                        <select class="form-control select2" id="color_id_tone_id_e" name="color_id_tone_id" style="width: 90%" onchange="EditOrderReturnDetailModalColorToneGetSizesQuantity()">
                             <option value="">Seleccione</option>
                         </select>
                         <div class="input-group-append">
@@ -40,9 +40,9 @@
 
                 </div>
                 <div class="form-group">
-                    <label for="seller_observation_e">Observacion</label>
+                    <label for="observation_e">Observacion</label>
                     <div class="input-group">
-                        <textarea class="form-control" id="seller_observation_e" name="seller_observation_e" cols="30" rows="3"></textarea>
+                        <textarea class="form-control" id="observation_e" name="observation_e" cols="30" rows="3"></textarea>
                         <div class="input-group-append">
                             <span class="input-group-text">
                                 <i class="fas fa-text-size"></i>
@@ -55,7 +55,7 @@
                 <button type="button" class="btn btn-secondary" data-dismiss="modal" title="Cerrar ventana">
                     <i class="fas fa-xmark"></i>
                 </button>
-                <button type="button" class="btn btn-primary" id="EditOrderSellerDetailButton" onclick="" title="Actualizar pedido.">
+                <button type="button" class="btn btn-primary" id="EditOrderReturnDetailButton" onclick="" title="Actualizar pedido.">
                     <i class="fas fa-floppy-disk"></i>
                 </button>
             </div>

@@ -7,13 +7,13 @@ use App\Http\Requests\OrderReturn\OrderReturnApproveRequest;
 use App\Http\Requests\OrderReturn\OrderReturnCancelRequest;
 use App\Http\Requests\OrderReturn\OrderReturnCreateRequest;
 use App\Http\Requests\OrderReturn\OrderReturnIndexQueryRequest;
-use App\Http\Requests\OrderReturn\OrderReturnPendingRequest;
 use App\Http\Requests\OrderReturn\OrderReturnStoreRequest;
 use App\Http\Requests\OrderReturn\OrderReturnUpdateRequest;
 use App\Http\Resources\OrderReturn\OrderReturnIndexQueryCollection;
 use App\Models\Inventory;
 use App\Models\Order;
 use App\Models\OrderReturn;
+use App\Models\OrderReturnDetail;
 use App\Models\ReturnType;
 use App\Models\Warehouse;
 use App\Traits\ApiMessage;
@@ -271,14 +271,13 @@ class OrderReturnController extends Controller
     {
         try {
             $orderReturn = OrderReturn::with([
-                    'order_return_details.order_return_detail_quantities',
+                    'order_return_details.order_return_detail_quantities.order_detail_quantity',
                     'order_return_details.order_detail.order_detail_quantities',
-                    'order_return_detail_quantities.order_detail_quantity'
                 ])
                 ->findOrFail($request->input('id'));
 
             foreach($orderReturn->order_return_details->whereIn('status', ['Pendiente']) as $detail) {
-                foreach($detail->order_detail->order_detail_quantities as $quantity) {
+                foreach($detail->order_return_detail_quantities as $quantity) {
                     $inventory = Inventory::with('warehouse')
                         ->whereHas('warehouse', fn($subQuery) => $subQuery->where('to_discount', true))
                         ->where('product_id', $detail->order_detail->product_id)
@@ -304,11 +303,13 @@ class OrderReturnController extends Controller
                     $inventory->save();
                 }
 
-                $detail->order_detail->status = $detail->order_detail_quantities->pluck('quantity')->sum() == $detail->order_detail->order_detail_quantities->pluck('quantity')->sum() ? 'Devuelto' : 'Parcialmente Devuelto' ;
-                $detail->order_detail->save();
-
                 $detail->status = 'Aprobado';
                 $detail->save();
+
+                $orderReturnDetail = OrderReturnDetail::with('order_return_detail_quantities')->where('order_detail_id', $detail->order_detail_id)->get();
+
+                $detail->order_detail->status = $orderReturnDetail->pluck('order_return_detail_quantities')->flatten()->pluck('quantity')->sum() == $detail->order_detail->order_detail_quantities->pluck('quantity')->sum() ? 'Devuelto' : 'Parcialmente Devuelto' ;
+                $detail->order_detail->save();
             }
 
             $orderReturn->return_status = 'Aprobado';
@@ -319,57 +320,6 @@ class OrderReturnController extends Controller
             return $this->successResponse(
                 $orderReturn,
                 'La orden de devolucion del pedido fue aprobado exitosamente.',
-                200
-            );
-        } catch (ModelNotFoundException $e) {
-            return $this->errorResponse(
-                [
-                    'message' => $this->getMessage('ModelNotFoundException'),
-                    'error' => $e->getMessage()
-                ],
-                404
-            );
-        } catch (QueryException $e) {
-            // Manejar la excepción de la base de datos
-            return $this->errorResponse(
-                [
-                    'message' => $this->getMessage('QueryException'),
-                    'error' => $e->getMessage()
-                ],
-                500
-            );
-        } catch (Exception $e) {
-            return $this->errorResponse(
-                [
-                    'message' => $this->getMessage('Exception'),
-                    'error' => $e->getMessage()
-                ],
-                500
-            );
-        }
-    }
-
-    public function pending(OrderReturnPendingRequest $request)
-    {
-        try {
-            $orderReturn = OrderReturn::with([
-                    'order_return_details.order_return_detail_quantities',
-                    'order_return_details.order_detail.order_detail_quantities',
-                    'order_return_detail_quantities.order_detail_quantity'
-                ])
-                ->findOrFail($request->input('id'));
-
-            foreach($orderReturn->order_return_details->whereIn('status', ['Cancelado']) as $detail) {
-                $detail->status = 'Pendiente';
-                $detail->save();
-            }
-
-            $orderReturn->return_status = 'Aprobado';
-            $orderReturn->save();
-
-            return $this->successResponse(
-                $orderReturn,
-                'La orden de devolucion del pedido fue pendiente exitosamente.',
                 200
             );
         } catch (ModelNotFoundException $e) {

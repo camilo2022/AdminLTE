@@ -98,5 +98,4 @@
 <script src="{{ asset('js/Dashboard/OrderReturns/Edit.js') }}"></script>
 <script src="{{ asset('js/Dashboard/OrderReturns/Approve.js') }}"></script>
 <script src="{{ asset('js/Dashboard/OrderReturns/Cancel.js') }}"></script>
-<script src="{{ asset('js/Dashboard/OrderReturns/Pending.js') }}"></script>
 @endsection

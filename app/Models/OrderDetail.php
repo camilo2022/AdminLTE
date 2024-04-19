@@ -57,9 +57,14 @@ class OrderDetail extends Model implements Auditable
         return $this->hasMany(OrderDetailQuantity::class, 'order_detail_id');
     }
 
-    public function dispatch_detail() : HasMany
+    public function order_dispatch_detail() : HasMany
     {
         return $this->hasMany(OrderDispatchDetail::class, 'order_detail_id');
+    }
+
+    public function order_return_detail() : HasMany
+    {
+        return $this->hasMany(OrderReturnDetail::class, 'order_detail_id');
     }
 
     public function order() : BelongsTo

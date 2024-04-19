@@ -145,7 +145,7 @@ let tableOrderReturns = $('#orderReturns').DataTable({
             render: function (data, type, row) {
                 let btn = `<div class="text-center" style="width: 100%;">`;
 
-                if ((row.order_details.map(item => item.status).includes('Despachado') || row.order_details.map(item => item.status).includes('Parcialmente Despachado')) && !row.order_returns.map(item => item.return_status).includes('Pendiente')) {
+                if ((row.order_details.map(item => item.status).includes('Despachado') || row.order_details.map(item => item.status).includes('Parcialmente Devuelto')) && !row.order_returns.map(item => item.return_status).includes('Pendiente')) {
                     btn += `<a onclick="CreateOrderReturnModal(${row.id})" type="button"
                     class="btn btn-primary btn-sm mr-2" title="Crear devolucion al pedido.">
                         <i class="fas fa-plus text-white"></i>
@@ -233,7 +233,7 @@ function tableOrderReturned(row) {
             <td> ${order_return.return_user.name + ' ' + order_return.return_user.last_name} </td>
             <td> ${order_return.return_type.name} </td>
             <td> ${order_return.return_date} </td>
-            <td> ${order_return.return_observation} </td>`;
+            <td> ${order_return.return_observation ?? ''} </td>`;
 
         switch (order_return.return_status) {
             case 'Pendiente':
@@ -273,11 +273,6 @@ function tableOrderReturned(row) {
                     <i class="fas fa-xmark text-white"></i>
                 </a>`;
                 break;
-            case 'Cancelado':
-                table += `<a onclick="PendingOrderReturn(${order_return.id})" type="button"
-                class="btn btn-info btn-sm mr-2 text-white" title="Pendiente orden de devolucion del pedido.">
-                    <i class="fas fa-arrows-rotate text-white"></i>
-                </a>`;
             default:
                 table += ``;
                 break;

@@ -7,7 +7,6 @@ function CreateOrderReturnDetailModal() {
             'order_return_id': $('#IndexOrderReturnDetail').attr('data-id'),
         },
         success: function (response) {
-            console.log(response);
             $('#IndexOrderReturnDetail').trigger('click');
             CreateOrderReturnDetailModalCleaned();
             CreateOrderReturnDetailModalProduct(response.data);
@@ -88,7 +87,7 @@ function CreateOrderReturnDetailModalColorToneGetSizesQuantity() {
                 'size_id':  $('#size_id_c').val(),
             },
             success: function(response) {
-                toastr.info('Inventario por talla cargado, ingrese las cantidades.');
+                toastr.info('Unidades por talla cargado, ingrese las cantidades.');
                 CreateOrderReturnDetailModalSizes(response.data);
             },
             error: function(xhr, textStatus, errorThrown) {
@@ -99,7 +98,6 @@ function CreateOrderReturnDetailModalColorToneGetSizesQuantity() {
 }
 
 function CreateOrderReturnDetailModalSizes(sizes) {
-    console.log(sizes);
     let inputs = '';
     $.each(sizes, function(index, size) {
         inputs += `<div class="form-group">
@@ -113,8 +111,8 @@ function CreateOrderReturnDetailModalSizes(sizes) {
 
 function CreateOrderReturnDetail() {
     Swal.fire({
-        title: '¿Desea guardar el detalle del pedido?',
-        text: 'El detalle del pedido será creado.',
+        title: '¿Desea guardar el detalle de la orden de devolucion del pedido?',
+        text: 'El detalle de la orden de devolucion del pedido será creado.',
         icon: 'warning',
         showCancelButton: true,
         cancelButtonColor: '#DD6B55',
@@ -150,7 +148,7 @@ function CreateOrderReturnDetail() {
                 }
             });
         } else {
-            toastr.info('El detalle del pedido no fue creado.')
+            toastr.info('El detalle de la orden de devolucion del pedido no fue creado.')
         }
     });
 }

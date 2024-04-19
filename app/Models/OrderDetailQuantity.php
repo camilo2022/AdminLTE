@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as Auditing;
 
@@ -40,5 +41,10 @@ class OrderDetailQuantity extends Model implements Auditable
     public function size() : BelongsTo
     {
         return $this->belongsTo(Size::class, 'size_id');
+    }
+
+    public function order_return_detail_quantity() : HasMany
+    {
+        return $this->hasMany(OrderReturnDetailQuantity::class, 'order_detail_quantity_id');
     }
 }

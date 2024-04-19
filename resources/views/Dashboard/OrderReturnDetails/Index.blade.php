@@ -62,20 +62,13 @@
                             </li>
                             @if($orderReturn->return_status == 'Pendiente')
                                 <li class="nav-item ml-auto">
-                                    <a class="btn btn-success text-white" type="button" onclick="ApproveOrderReturn({{ $orderReturn->order->id }}, false)" title="Aprobar orden de devolucion.">
+                                    <a class="btn btn-success text-white" type="button" onclick="ApproveOrderReturn({{ $orderReturn->id }}, false)" title="Aprobar orden de devolucion.">
                                         <i class="fas fa-check"></i>
                                     </a>
                                 </li>
                                 <li class="nav-item ml-2">
-                                    <a class="btn btn-danger text-white" type="button" onclick="CancelOrderReturn({{ $orderReturn->order->id }}, false)" title="Cancelar orden de devolucion.">
+                                    <a class="btn btn-danger text-white" type="button" onclick="CancelOrderReturn({{ $orderReturn->id }}, false)" title="Cancelar orden de devolucion.">
                                         <i class="fas fa-xmark"></i>
-                                    </a>
-                                </li>
-                            @endif
-                            @if($orderReturn->return_status == 'Cancelado')
-                                <li class="nav-item ml-auto">
-                                    <a class="btn btn-success text-white" type="button" onclick="PendingOrderReturn({{ $orderReturn->order->id }}, false)" title="Pendiente orden de devolucion.">
-                                        <i class="fas fa-check"></i>
                                     </a>
                                 </li>
                             @endif
@@ -287,10 +280,8 @@
 <script src="{{ asset('js/Dashboard/OrderReturnDetails/Index.js') }}"></script>
 <script src="{{ asset('js/Dashboard/OrderReturnDetails/Create.js') }}"></script>
 <script src="{{ asset('js/Dashboard/OrderReturnDetails/Edit.js') }}"></script>
-<script src="{{ asset('js/Dashboard/OrderReturnDetails/Pending.js') }}"></script>
 <script src="{{ asset('js/Dashboard/OrderReturnDetails/Cancel.js') }}"></script>
 
 <script src="{{ asset('js/Dashboard/OrderReturns/Approve.js') }}"></script>
-<script src="{{ asset('js/Dashboard/OrderReturns/Pending.js') }}"></script>
 <script src="{{ asset('js/Dashboard/OrderReturns/Cancel.js') }}"></script>
 @endsection

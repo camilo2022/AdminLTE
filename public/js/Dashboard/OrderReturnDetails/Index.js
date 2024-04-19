@@ -66,12 +66,6 @@ function IndexOrderReturnDetailModalCleaned(order, details, sizes) {
                     <i class="fas fa-xmark text-white"></i>
                 </a>`;
                 break;
-            case 'Cancelado':
-                btn += `<a onclick="PendingOrderReturnDetail(${detail.id})" type="button"
-                class="btn btn-info btn-sm mr-2" title="Pendiente detalle de pedido.">
-                    <i class="fas fa-arrows-rotate text-white"></i>
-                </a>`;
-                break;
             default:
                 btn += ``;
                 break;

@@ -31,16 +31,17 @@ class OrderReturnDetailStoreRequest extends FormRequest
             ->whereIn('status', ['Despachado', 'Parcialmente Devuelto'])
             ->first();
 
-        $order_return_detail = OrderReturnDetail::with('order_return_detail_quantities.order_detail_quantity')
+        $order_return_details = OrderReturnDetail::with('order_return_detail_quantities.order_detail_quantity')
             ->where('order_detail_id', $order_detail->id)
+            ->whereIn('status', ['Pendiente', 'Aprobado'])
             ->get()->pluck('order_return_detail_quantities');
 
         foreach($order_return_detail_quantities as $order_return_detail_quantity) {
             $order_detail_quantity = $order_detail->order_detail_quantities->where('size_id', $order_return_detail_quantity['size_id'])->first();
 
             $order_return_detail_quantity['min'] = 0;
-            $order_return_detail_quantity['max'] = $order_detail_quantity ? $order_detail_quantity->quantity - $order_return_detail->where('order_detail_quantity.size_id', $order_return_detail_quantity['size_id'])->pluck('quantity')->sum() : 0;
-            $order_return_detail_quantity['order_detail_quantity_id'] = $order_detail_quantity['id'];
+            $order_return_detail_quantity['max'] = $order_detail_quantity ? $order_detail_quantity->quantity - $order_return_details->flatten()->where('order_detail_quantity.size_id', $order_return_detail_quantity['size_id'])->pluck('quantity')->sum() : 0;
+            $order_return_detail_quantity['order_detail_quantity_id'] = $order_detail_quantity->id;
 
             $updated_order_return_details[] = $order_return_detail_quantity;
         }

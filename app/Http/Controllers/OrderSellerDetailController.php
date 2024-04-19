@@ -287,7 +287,7 @@ class OrderSellerDetailController extends Controller
 
             collect($request->order_detail_quantities)->map(function ($orderDetailQuantity) use ($orderDetail) {
                 $orderDetailQuantity = (object) $orderDetailQuantity;
-                $orderDetailQuantityNew = OrderDetailQuantity::where('order_detail_id', $orderDetail->id)->where('size_id', $orderDetailQuantity->size_id)->first();
+                $orderDetailQuantityNew = $orderDetail->order_detail_quantities->where('order_detail_id', $orderDetail->id)->where('size_id', $orderDetailQuantity->size_id)->first();
                 if(!$orderDetailQuantityNew) {
                     $orderDetailQuantityNew = new OrderDetailQuantity();
                 }
