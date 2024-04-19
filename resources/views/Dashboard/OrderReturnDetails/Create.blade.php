@@ -40,9 +40,9 @@
 
                 </div>
                 <div class="form-group">
-                    <label for="return_observation_c">Observacion</label>
+                    <label for="observation_c">Observacion</label>
                     <div class="input-group">
-                        <textarea class="form-control" id="return_observation_c" name="return_observation_c" cols="30" rows="3"></textarea>
+                        <textarea class="form-control" id="observation_c" name="observation_c" cols="30" rows="3"></textarea>
                         <div class="input-group-append">
                             <span class="input-group-text">
                                 <i class="fas fa-text-size"></i>

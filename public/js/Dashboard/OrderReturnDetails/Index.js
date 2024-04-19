@@ -77,7 +77,7 @@ function IndexOrderReturnDetailModalCleaned(order, details, sizes) {
                 break;
         };
 
-        body += `<td><div class="text-center">${detail.order.return_status == 'Pendiente' ? btn : ''}</div></td>`;
+        body += `<td><div class="text-center">${detail.order_return.return_status == 'Pendiente' ? btn : ''}</div></td>`;
 
         let quantities = 0;
 

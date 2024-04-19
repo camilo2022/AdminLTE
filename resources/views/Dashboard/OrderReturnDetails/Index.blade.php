@@ -57,7 +57,7 @@
                         <ul class="nav nav-pills">
                             <li class="nav-item">
                                 <a class="btn btn-info text-white" id="IndexOrderReturnDetail" data-id="{{ $orderReturn->id }}" onclick="IndexOrderReturnDetail({{ $orderReturn->id }})" type="button" title="Orden de devolucion del pedido.">
-                                    ORDEN DE PEDIDO: {{ $orderReturn->id }}
+                                    ORDEN DE DEVOLUCION: {{ $orderReturn->id }}
                                 </a>
                             </li>
                             @if($orderReturn->return_status == 'Pendiente')

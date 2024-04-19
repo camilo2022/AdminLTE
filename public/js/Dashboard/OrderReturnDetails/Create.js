@@ -25,7 +25,7 @@ function CreateOrderReturnDetailModalCleaned() {
     CreateOrderReturnDetailModalResetSelect('product_id_c');
     RemoveIsValidClassCreateOrderReturnDetail();
     RemoveIsInvalidClassCreateOrderReturnDetail();
-    $('#return_observation_c').val('');
+    $('#observation_c').val('');
     $('#sizes_c').html('');
 }
 
@@ -202,8 +202,8 @@ function CreateOrderReturnDetailAjaxError(xhr) {
 }
 
 function AddIsValidClassCreateOrderReturnDetail() {
-    if (!$('#return_observation_c').hasClass('is-invalid')) {
-        $('#return_observation_c').addClass('is-valid');
+    if (!$('#observation_c').hasClass('is-invalid')) {
+        $('#observation_c').addClass('is-valid');
     }
     if (!$('span[aria-labelledby="select2-product_id_c-container"]').hasClass('is-invalid')) {
         $('span[aria-labelledby="select2-product_id_c-container"]').addClass('is-valid');
@@ -219,7 +219,7 @@ function AddIsValidClassCreateOrderReturnDetail() {
 }
 
 function RemoveIsValidClassCreateOrderReturnDetail() {
-    $('#return_observation_c').removeClass('is-valid');
+    $('#observation_c').removeClass('is-valid');
     $(`span[aria-labelledby="select2-product_id_c-container"]`).removeClass('is-valid');
     $(`span[aria-labelledby="select2-color_id_tone_id_c-container"]`).removeClass('is-valid');
     $('#sizes_c').find('input').each(function() {
@@ -240,14 +240,14 @@ function AddIsInvalidClassCreateOrderReturnDetail(input) {
         $(`span[aria-labelledby="select2-${input}_c-container"]`).addClass('is-invalid');
     }
     $('#sizes_c').find('input').each(function(index) {
-        if(input === `order_detail_quantities.${index}.quantity`) {
+        if(input === `order_return_detail_quantities.${index}.quantity`) {
             $(this).addClass('is-invalid');
         }
     });
 }
 
 function RemoveIsInvalidClassCreateOrderReturnDetail() {
-    $('#return_observation_c').removeClass('is-invalid');
+    $('#observation_c').removeClass('is-invalid');
     $(`span[aria-labelledby="select2-product_id_c-container"]`).removeClass('is-invalid');
     $(`span[aria-labelledby="select2-color_id_tone_id_c-container"]`).removeClass('is-invalid');
     $('#sizes_c').find('input').each(function() {

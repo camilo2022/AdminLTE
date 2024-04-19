@@ -58,35 +58,33 @@ class OrderReturnDetailController extends Controller
                 ->whereHas('order_return_detail', fn($subQuery) => $subQuery->where('order_return_id', $request->input('order_return_id')))
                 ->get();
 
-            $orderReturnDetails = $orderReturnDetails->map(function ($orderDetail) use ($orderReturnDetailQuantitySizes) {
+            $orderReturnDetails = $orderReturnDetails->map(function ($orderReturnDetail) use ($orderReturnDetailQuantitySizes) {
 
-                $orderDetailSizes = $orderDetail->order_detail_quantities->pluck('size_id')->unique();
+                $orderDetailSizes = $orderReturnDetail->order_return_detail_quantities->pluck('order_detail_quantity')->pluck('size_id')->unique();
                 $missingSizes = $orderReturnDetailQuantitySizes->pluck('order_detail_quantity')->pluck('size_id')->unique()->values()->diff($orderDetailSizes)->values();
 
-                $quantities = collect($orderDetail->order_detail_quantities)->mapWithKeys(function ($quantity) {
+                $quantities = collect($orderReturnDetail->order_return_detail_quantities->pluck('order_detail_quantity'))->mapWithKeys(function ($quantity) {
                     return [$quantity['size']->id => [
                         'order_detail_id' => $quantity['order_detail_id'],
                         'quantity' => $quantity['quantity'],
                     ]];
                 });
 
-                $missingSizes->each(function ($missingSize) use ($quantities, $orderDetail) {
+                $missingSizes->each(function ($missingSize) use ($quantities, $orderReturnDetail) {
                     $quantities[$missingSize] = [
-                        'order_detail_id' => $orderDetail->id,
+                        'order_detail_id' => $orderReturnDetail->id,
                         'quantity' => 0,
                     ];
                 });
 
                 return [
-                    'id' => $orderDetail->id,
-                    'order_return' => $orderDetail->order_return,
-                    'product' => $orderDetail->product,
-                    'color' => $orderDetail->color,
-                    'tone' => $orderDetail->tone,
-                    'price' => $orderDetail->price,
-                    'seller_date' => $orderDetail->seller_date,
-                    'seller_observation' => $orderDetail->seller_observation,
-                    'status' => $orderDetail->status,
+                    'id' => $orderReturnDetail->id,
+                    'order_return' => $orderReturnDetail->order_return,
+                    'product' => $orderReturnDetail->order_detail->product,
+                    'color' => $orderReturnDetail->order_detail->color,
+                    'tone' => $orderReturnDetail->order_detail->tone,
+                    'observation' => $orderReturnDetail->observation,
+                    'status' => $orderReturnDetail->status,
                     'quantities' => $quantities,
                 ];
             });
@@ -179,7 +177,7 @@ class OrderReturnDetailController extends Controller
             collect($request->order_return_detail_quantities)->map(function ($orderReturnDetailQuantity) use ($orderReturnDetail) {
                 $orderReturnDetailQuantity = (object) $orderReturnDetailQuantity;
                 $orderReturnDetailQuantityNew = new OrderReturnDetailQuantity();
-                $orderReturnDetailQuantityNew->order_return_detail = $orderReturnDetail->id;
+                $orderReturnDetailQuantityNew->order_return_detail_id = $orderReturnDetail->id;
                 $orderReturnDetailQuantityNew->order_detail_quantity_id = $orderReturnDetail->order_detail_quantity_id;
                 $orderReturnDetailQuantityNew->quantity = $orderReturnDetail->quantity;
                 $orderReturnDetailQuantityNew->save();
