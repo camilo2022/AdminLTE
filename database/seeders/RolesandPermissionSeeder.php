@@ -481,7 +481,6 @@ class RolesAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Dashboard.Orders.Return.Create'])->syncRoles([$OrderReturns]);
         Permission::create(['name' => 'Dashboard.Orders.Return.Store'])->syncRoles([$OrderReturns]);
         Permission::create(['name' => 'Dashboard.Orders.Return.Approve'])->syncRoles([$OrderReturns]);
-        Permission::create(['name' => 'Dashboard.Orders.Return.Pending'])->syncRoles([$OrderReturns]);
         Permission::create(['name' => 'Dashboard.Orders.Return.Cancel'])->syncRoles([$OrderReturns]);
         Permission::create(['name' => 'Dashboard.Orders.Return.Details.Index'])->syncRoles([$OrderReturns]);
         Permission::create(['name' => 'Dashboard.Orders.Return.Details.Index.Query'])->syncRoles([$OrderReturns]);
@@ -489,7 +488,6 @@ class RolesAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Dashboard.Orders.Return.Details.Store'])->syncRoles([$OrderReturns]);
         Permission::create(['name' => 'Dashboard.Orders.Return.Details.Edit'])->syncRoles([$OrderReturns]);
         Permission::create(['name' => 'Dashboard.Orders.Return.Details.Update'])->syncRoles([$OrderReturns]);
-        Permission::create(['name' => 'Dashboard.Orders.Return.Details.Pending'])->syncRoles([$OrderReturns]);
         Permission::create(['name' => 'Dashboard.Orders.Return.Details.Cancel'])->syncRoles([$OrderReturns]);
 
         Permission::create(['name' => 'Dashboard.Reports.Sales.Index'])->syncRoles([$Reports]);

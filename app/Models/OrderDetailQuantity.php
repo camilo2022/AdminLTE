@@ -33,6 +33,11 @@ class OrderDetailQuantity extends Model implements Auditable
         'retored'
     ];
 
+    public function order_return_detail_quantity() : HasMany
+    {
+        return $this->hasMany(OrderReturnDetailQuantity::class, 'order_detail_quantity_id');
+    }
+
     public function order_detail() : BelongsTo
     {
         return $this->belongsTo(OrderDetail::class, 'order_detail_id');
@@ -41,10 +46,5 @@ class OrderDetailQuantity extends Model implements Auditable
     public function size() : BelongsTo
     {
         return $this->belongsTo(Size::class, 'size_id');
-    }
-
-    public function order_return_detail_quantity() : HasMany
-    {
-        return $this->hasMany(OrderReturnDetailQuantity::class, 'order_detail_quantity_id');
     }
 }
