@@ -17,11 +17,12 @@ return new class extends Migration
     {
         Schema::create('person_type_document_types', function (Blueprint $table) {
             $table->id();
+            /* $table->unsignedBigInteger('person_type_id')->comment('Identificador del tipo de persona.');
+            $table->unsignedBigInteger('document_type_id')->comment('Identificador del tipo de documento.'); */
             $table->foreignIdFor(PersonType::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->foreignIdFor(DocumentType::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
-            /* $table->unsignedBigInteger('person_type_id')->comment('Identificador del tipo de persona.');
-            $table->unsignedBigInteger('document_type_id')->comment('Identificador del tipo de documento.');
-            $table->foreign('person_type_id')->references('id')->on('person_types')->onUpdate('cascade')->onDelete('cascade');
+            $table->unique(['person_type_id', 'document_type_id']);
+            /* $table->foreign('person_type_id')->references('id')->on('person_types')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('document_type_id')->references('id')->on('document_types')->onUpdate('cascade')->onDelete('cascade'); */
             $table->timestamps();
         });
