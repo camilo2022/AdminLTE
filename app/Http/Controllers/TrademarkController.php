@@ -106,6 +106,7 @@ class TrademarkController extends Controller
             $trademark->name = $request->input('name');
             $trademark->code = $request->input('code');
             $trademark->description = $request->input('description');
+            $trademark->is_internal = $request->input('is_internal');
             $trademark->save();
 
             if($request->hasFile('logo')) {
@@ -194,6 +195,7 @@ class TrademarkController extends Controller
             $trademark->name = $request->input('name');
             $trademark->code = $request->input('code');
             $trademark->description = $request->input('description');
+            $trademark->is_internal = $request->input('is_internal');
             $trademark->save();
 
             if ($request->hasFile('logo')) {

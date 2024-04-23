@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('name')->unique();
             $table->string('code')->unique();
             $table->string('description')->nullable();
+            $table->boolean('is_internal')->default(false);
             $table->timestamps();
             $table->softDeletes();
         });

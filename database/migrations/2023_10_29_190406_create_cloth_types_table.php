@@ -13,9 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('technical_datasheets', function (Blueprint $table) {
+        Schema::create('cloth_types', function (Blueprint $table) {
             $table->id();
+            $table->string('name')->unique();
+            $table->string('code')->unique();
+            $table->string('description')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -26,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('technical_datasheets');
+        Schema::dropIfExists('cloth_types');
     }
 };

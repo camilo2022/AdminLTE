@@ -18,13 +18,15 @@ class Trademark extends Model implements Auditable
     protected $fillable = [
         'name',
         'code',
-        'description'
+        'description',
+        'is_internal'
     ];
 
     protected $auditInclude = [
         'name',
         'code',
-        'description'
+        'description',
+        'is_internal'
     ];
 
     protected $auditEvents = [

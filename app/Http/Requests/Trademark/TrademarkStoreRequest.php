@@ -8,11 +8,6 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 
 class TrademarkStoreRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
     protected function failedValidation(Validator $validator)
     {
         // Lanzar una excepción de validación con los errores de validación obtenidos
@@ -21,31 +16,29 @@ class TrademarkStoreRequest extends FormRequest
             'errors' => $validator->errors()
         ], 422));
     }
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
+
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'is_internal' => $this->input('is_internal') === 'true',
+        ]);
+    }
+    
     public function authorize()
     {
         return true;
     }
-
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, mixed>
-     */
+    
     public function rules()
     {
         return [
             'name' => ['required', 'string', 'unique:trademarks,name', 'max:255'],
             'code' => ['required', 'string', 'unique:trademarks,code', 'max:255'],
             'description' => ['nullable', 'string', 'max:255'],
+            'is_internal' => ['required', 'boolean'],
             'logo' => ['nullable', 'mimes:jpeg,jpg,png,gif', 'max:2048']
         ];
     }
-
 
     public function messages()
     {
@@ -60,6 +53,8 @@ class TrademarkStoreRequest extends FormRequest
             'code.max' => 'El campo Nombre de la marca no debe tener mas de 255 caracteres.',
             'description.string' => 'El campo Descripcion de la marca debe ser una cadena de texto.',
             'description.max' => 'El campo Descripcion de la marca no debe tener mas de 255 caracteres.',
+            'is_internal.required' => 'El campo Marca interna de la empresa es requerido.',
+            'is_internal.boolean' => 'El campo Marca interna de la empresa debe ser true o false.',
             'logo.mimes' => 'El campo archivo de Logo de la marca debe tener una extensión válida (jpeg, jpg, png, gif).',
             'logo.max' => 'El campo archivo de Logo de la marca no debe superar los 2 MB (2048 KB).',
         ];

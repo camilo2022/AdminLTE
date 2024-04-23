@@ -13,9 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('cloth_types', function (Blueprint $table) {
+        Schema::create('banks', function (Blueprint $table) {
             $table->id();
+            $table->string('name')->unique();
+            $table->string('sector_code');
+            $table->string('entity_code');
+            $table->index(['sector_code', 'entity_code'])->unique();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -26,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('cloth_types');
+        Schema::dropIfExists('banks');
     }
 };
