@@ -49,6 +49,20 @@ class RolesAndPermissionSeeder extends Seeder
 
         $SaleChannels = Role::create(['name' => 'SaleChannels']);
 
+        $Workshops = Role::create(['name' => 'Workshops']);
+
+        $Suppliers = Role::create(['name' => 'Suppliers']);
+
+        $SupplyTypes = Role::create(['name' => 'SupplyTypes']);
+
+        $ClothTypes = Role::create(['name' => 'ClothTypes']);
+
+        $ClothCompositions = Role::create(['name' => 'ClothCompositions']);
+
+        $MeasurementUnits = Role::create(['name' => 'MeasurementUnits']);
+
+        $Supplies = Role::create(['name' => 'Supplies']);
+
         $Sizes = Role::create(['name' => 'Sizes']);
 
         $Trademarks = Role::create(['name' => 'Trademarks']);
@@ -246,6 +260,82 @@ class RolesAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Dashboard.SaleChannels.RemoveReturnType'])->syncRoles([$SaleChannels]);
         Permission::create(['name' => 'Dashboard.SaleChannels.Delete'])->syncRoles([$SaleChannels]);
         Permission::create(['name' => 'Dashboard.SaleChannels.Restore'])->syncRoles([$SaleChannels]);
+
+        Permission::create(['name' => 'Dashboard.Workshops.Index'])->syncRoles([$Workshops]);
+        Permission::create(['name' => 'Dashboard.Workshops.Index.Query'])->syncRoles([$Workshops]);
+        Permission::create(['name' => 'Dashboard.Workshops.Create'])->syncRoles([$Workshops]);
+        Permission::create(['name' => 'Dashboard.Workshops.Store'])->syncRoles([$Workshops]);
+        Permission::create(['name' => 'Dashboard.Workshops.Edit'])->syncRoles([$Workshops]);
+        Permission::create(['name' => 'Dashboard.Workshops.Update'])->syncRoles([$Workshops]);
+        Permission::create(['name' => 'Dashboard.Workshops.Show'])->syncRoles([$Workshops]);
+        Permission::create(['name' => 'Dashboard.Workshops.AssignAccount'])->syncRoles([$Workshops]);
+        Permission::create(['name' => 'Dashboard.Workshops.RemoveAccount'])->syncRoles([$SaleChannels]);
+        Permission::create(['name' => 'Dashboard.Workshops.AssignProccess'])->syncRoles([$Workshops]);
+        Permission::create(['name' => 'Dashboard.Workshops.RemoveProccess'])->syncRoles([$SaleChannels]);
+        Permission::create(['name' => 'Dashboard.Workshops.Delete'])->syncRoles([$Workshops]);
+        Permission::create(['name' => 'Dashboard.Workshops.Restore'])->syncRoles([$Workshops]);
+
+        Permission::create(['name' => 'Dashboard.Suppliers.Index'])->syncRoles([$Suppliers]);
+        Permission::create(['name' => 'Dashboard.Suppliers.Index.Query'])->syncRoles([$Suppliers]);
+        Permission::create(['name' => 'Dashboard.Suppliers.Create'])->syncRoles([$Suppliers]);
+        Permission::create(['name' => 'Dashboard.Suppliers.Store'])->syncRoles([$Suppliers]);
+        Permission::create(['name' => 'Dashboard.Suppliers.Edit'])->syncRoles([$Suppliers]);
+        Permission::create(['name' => 'Dashboard.Suppliers.Update'])->syncRoles([$Suppliers]);
+        Permission::create(['name' => 'Dashboard.Suppliers.Show'])->syncRoles([$Suppliers]);
+        Permission::create(['name' => 'Dashboard.Suppliers.AssignAccount'])->syncRoles([$Suppliers]);
+        Permission::create(['name' => 'Dashboard.Suppliers.RemoveAccount'])->syncRoles([$Suppliers]);
+        Permission::create(['name' => 'Dashboard.Suppliers.Delete'])->syncRoles([$Suppliers]);
+        Permission::create(['name' => 'Dashboard.Suppliers.Restore'])->syncRoles([$Suppliers]);
+
+        Permission::create(['name' => 'Dashboard.SupplyTypes.Index'])->syncRoles([$SupplyTypes]);
+        Permission::create(['name' => 'Dashboard.SupplyTypes.Index.Query'])->syncRoles([$SupplyTypes]);
+        Permission::create(['name' => 'Dashboard.SupplyTypes.Create'])->syncRoles([$SupplyTypes]);
+        Permission::create(['name' => 'Dashboard.SupplyTypes.Store'])->syncRoles([$SupplyTypes]);
+        Permission::create(['name' => 'Dashboard.SupplyTypes.Edit'])->syncRoles([$SupplyTypes]);
+        Permission::create(['name' => 'Dashboard.SupplyTypes.Update'])->syncRoles([$SupplyTypes]);
+        Permission::create(['name' => 'Dashboard.SupplyTypes.Delete'])->syncRoles([$SupplyTypes]);
+        Permission::create(['name' => 'Dashboard.SupplyTypes.Restore'])->syncRoles([$SupplyTypes]);
+
+        Permission::create(['name' => 'Dashboard.ClothTypes.Index'])->syncRoles([$ClothTypes]);
+        Permission::create(['name' => 'Dashboard.ClothTypes.Index.Query'])->syncRoles([$ClothTypes]);
+        Permission::create(['name' => 'Dashboard.ClothTypes.Create'])->syncRoles([$ClothTypes]);
+        Permission::create(['name' => 'Dashboard.ClothTypes.Store'])->syncRoles([$ClothTypes]);
+        Permission::create(['name' => 'Dashboard.ClothTypes.Edit'])->syncRoles([$ClothTypes]);
+        Permission::create(['name' => 'Dashboard.ClothTypes.Update'])->syncRoles([$ClothTypes]);
+        Permission::create(['name' => 'Dashboard.ClothTypes.Delete'])->syncRoles([$ClothTypes]);
+        Permission::create(['name' => 'Dashboard.ClothTypes.Restore'])->syncRoles([$ClothTypes]);
+
+        Permission::create(['name' => 'Dashboard.ClothCompositions.Index'])->syncRoles([$ClothCompositions]);
+        Permission::create(['name' => 'Dashboard.ClothCompositions.Index.Query'])->syncRoles([$ClothCompositions]);
+        Permission::create(['name' => 'Dashboard.ClothCompositions.Create'])->syncRoles([$ClothCompositions]);
+        Permission::create(['name' => 'Dashboard.ClothCompositions.Store'])->syncRoles([$ClothCompositions]);
+        Permission::create(['name' => 'Dashboard.ClothCompositions.Edit'])->syncRoles([$ClothCompositions]);
+        Permission::create(['name' => 'Dashboard.ClothCompositions.Update'])->syncRoles([$ClothCompositions]);
+        Permission::create(['name' => 'Dashboard.ClothCompositions.Delete'])->syncRoles([$ClothCompositions]);
+        Permission::create(['name' => 'Dashboard.ClothCompositions.Restore'])->syncRoles([$ClothCompositions]);
+
+        Permission::create(['name' => 'Dashboard.MeasurementUnits.Index'])->syncRoles([$MeasurementUnits]);
+        Permission::create(['name' => 'Dashboard.MeasurementUnits.Index.Query'])->syncRoles([$MeasurementUnits]);
+        Permission::create(['name' => 'Dashboard.MeasurementUnits.Create'])->syncRoles([$MeasurementUnits]);
+        Permission::create(['name' => 'Dashboard.MeasurementUnits.Store'])->syncRoles([$MeasurementUnits]);
+        Permission::create(['name' => 'Dashboard.MeasurementUnits.Edit'])->syncRoles([$MeasurementUnits]);
+        Permission::create(['name' => 'Dashboard.MeasurementUnits.Update'])->syncRoles([$MeasurementUnits]);
+        Permission::create(['name' => 'Dashboard.MeasurementUnits.Delete'])->syncRoles([$MeasurementUnits]);
+        Permission::create(['name' => 'Dashboard.MeasurementUnits.Restore'])->syncRoles([$MeasurementUnits]);
+
+        Permission::create(['name' => 'Dashboard.Supplies.Index'])->syncRoles([$Supplies]);
+        Permission::create(['name' => 'Dashboard.Supplies.Index.Query'])->syncRoles([$Supplies]);
+        Permission::create(['name' => 'Dashboard.Supplies.Create'])->syncRoles([$Supplies]);
+        Permission::create(['name' => 'Dashboard.Supplies.Store'])->syncRoles([$Supplies]);
+        Permission::create(['name' => 'Dashboard.Supplies.Edit'])->syncRoles([$Supplies]);
+        Permission::create(['name' => 'Dashboard.Supplies.Update'])->syncRoles([$Supplies]);
+        Permission::create(['name' => 'Dashboard.Supplies.Show'])->syncRoles([$Supplies]);
+        Permission::create(['name' => 'Dashboard.Supplies.Charge'])->syncRoles([$Supplies]);
+        Permission::create(['name' => 'Dashboard.Supplies.Destroy'])->syncRoles([$Supplies]);
+        Permission::create(['name' => 'Dashboard.Supplies.Delete'])->syncRoles([$Supplies]);
+        Permission::create(['name' => 'Dashboard.Supplies.Restore'])->syncRoles([$Supplies]);
+        Permission::create(['name' => 'Dashboard.Supplies.Upload'])->syncRoles([$Supplies]);
+        Permission::create(['name' => 'Dashboard.Supplies.Download'])->syncRoles([$Supplies]);
 
         Permission::create(['name' => 'Dashboard.Sizes.Index'])->syncRoles([$Sizes]);
         Permission::create(['name' => 'Dashboard.Sizes.Index.Query'])->syncRoles([$Sizes]);

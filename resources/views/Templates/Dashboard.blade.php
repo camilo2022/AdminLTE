@@ -256,7 +256,7 @@
                         data-accordion="false">
 
                         <li class="nav-item">
-                            <a href="/Dashboard" class="nav-link active">
+                            <a href="/Dashboard" class="nav-link {{ Request::route()->getName() === 'Dashboard' ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
                                 <p>
                                     Dashboard
@@ -266,7 +266,7 @@
 
                         @foreach ($items as $item)
                             <li class="nav-item has-treeview">
-                                <a href="#" class="nav-link">
+                                <a href="#" class="nav-link {{  in_array(Request::route()->getName(), $item->submodules->pluck('permission')->toArray())  ? 'active' : '' }}">
                                     <i class="{{ 'nav-icon '.$item->icon }}"></i>
                                     <p>
                                         {{ $item->name }}
@@ -276,7 +276,7 @@
                                 <ul class="nav nav-treeview">
                                     @foreach ($item->submodules as $subitem)
                                     <li class="nav-item">
-                                        <a href="{{ $subitem->url }}" class="nav-link">
+                                        <a href="{{ $subitem->url }}" class="nav-link {{ Request::route()->getName() === $subitem->permission ? 'active' : '' }}">
                                             <i class="{{ 'nav-icon '.$subitem->icon }}"></i>
                                             <p>{{ $subitem->name }}</p>
                                         </a>

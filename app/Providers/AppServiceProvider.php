@@ -51,6 +51,7 @@ class AppServiceProvider extends ServiceProvider
                                         'name' => $submodule->name,
                                         'url' => $submodule->url,
                                         'icon' => $submodule->icon,
+                                        'permission' => $submodule->permission->name
                                     ];
                                 }),
                             ]);
