@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as Auditing;
@@ -50,6 +52,16 @@ class Workshop extends Model implements Auditable
         'deleted',
         'retored'
     ];
+
+    public function accounts() : MorphMany
+    {
+      return $this->morphMany(Account::class, 'model');
+    }
+
+    public function processes() : MorphToMany
+    {
+        return $this->morphToMany(Process::class, 'model', 'model_processes', 'model_id', 'process_id');
+    }
 
     public function person_type() : BelongsTo
     {

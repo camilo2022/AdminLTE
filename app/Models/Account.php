@@ -9,21 +9,23 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as Auditing;
 
-class ModelProcess extends Model implements Auditable
+class Account extends Model implements Auditable
 {
     use HasFactory, Auditing;
 
-    protected $table = 'model_processes';
+    protected $table = 'accounts';
     protected $fillable = [
         'model_type',
         'model_id',
-        'process_id'
+        'account',
+        'bank_id'
     ];
 
     protected $auditInclude = [
         'model_type',
         'model_id',
-        'process_id'
+        'account',
+        'bank_id'
     ];
 
     protected $auditEvents = [
@@ -38,8 +40,8 @@ class ModelProcess extends Model implements Auditable
         return $this->morphTo();
     }
 
-    public function process() : BelongsTo
+    public function bank() : BelongsTo
     {
-        return $this->belongsTo(Process::class, 'process_id');
+        return $this->belongsTo(Bank::class, 'bank_id');
     }
 }

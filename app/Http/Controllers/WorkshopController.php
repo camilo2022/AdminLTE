@@ -3,19 +3,27 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Workshop\WorkshopAssignAccountRequest;
+use App\Http\Requests\Workshop\WorkshopAssignProccessRequest;
 use App\Http\Requests\Workshop\WorkshopCreateRequest;
 use App\Http\Requests\Workshop\WorkshopDeleteRequest;
 use App\Http\Requests\Workshop\WorkshopEditRequest;
 use App\Http\Requests\Workshop\WorkshopIndexQueryRequest;
+use App\Http\Requests\Workshop\WorkshopRemoveAccountRequest;
+use App\Http\Requests\Workshop\WorkshopRemoveProccessRequest;
 use App\Http\Requests\Workshop\WorkshopRestoreRequest;
 use App\Http\Requests\Workshop\WorkshopStoreRequest;
 use App\Http\Requests\Workshop\WorkshopUpdateRequest;
 use App\Http\Resources\Workshop\WorkshopIndexQueryCollection;
+use App\Models\Account;
+use App\Models\Bank;
 use App\Models\City;
 use App\Models\Country;
 use App\Models\Departament;
 use App\Models\DocumentType;
+use App\Models\ModelProcess;
 use App\Models\PersonType;
+use App\Models\Process;
 use App\Models\Workshop;
 use App\Traits\ApiMessage;
 use App\Traits\ApiResponser;
@@ -283,6 +291,222 @@ class WorkshopController extends Controller
                 500
             );
         } catch (Exception $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('Exception'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        }
+    }
+
+    public function show($id)
+    {
+        try {
+            $processes = Process::with('workshops')->get();
+            $workshop = Workshop::findOrFail($id);
+
+            foreach ($processes as $process) {
+                $workshopsId = $process->workshops->pluck('id')->all();
+                $process->push([
+                    'admin' => in_array($id, $workshopsId)
+                ]);
+            }
+
+            return $this->successResponse(
+                [
+                    'banks' => Bank::withTrashed()->get(),
+                    'workshop' => $workshop,
+                    'admins' => $processes
+                ],
+                'La bodega fue encontrada exitosamente.',
+                204
+            );
+        } catch (ModelNotFoundException $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('ModelNotFoundException'),
+                    'error' => $e->getMessage()
+                ],
+                404
+            );
+        } catch (Exception $e) {
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('Exception'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        }
+    }
+
+    public function assignAccount(WorkshopAssignAccountRequest $request)
+    {
+        try {
+            $account = new Account();
+            $account->model_type = Workshop::class;
+            $account->model_id = $request->input('workshop_id');
+            $account->account = $request->input('account');
+            $account->bank_id = $request->input('bank_id');
+            $account->save();
+
+            return $this->successResponse(
+                $account,
+                'Cuenta de pago asignado exitosamente.',
+                200
+            );
+        } catch (ModelNotFoundException $e) {
+            // Manejar la excepción de la base de datos
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('ModelNotFoundException'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        } catch (QueryException $e) {
+            // Manejar la excepción de la base de datos
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('QueryException'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        } catch (Exception $e) {
+            // Devolver una respuesta de error en caso de excepción
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('Exception'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        }
+    }
+
+    public function removeAccount(WorkshopRemoveAccountRequest $request)
+    {
+        try {
+            $account = Account::findOrFail($request->input('account_id'))->delete();
+
+            return $this->successResponse(
+                $account,
+                'Cuenta de pago removido exitosamente.',
+                200
+            );
+        } catch (ModelNotFoundException $e) {
+            // Manejar la excepción de la base de datos
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('ModelNotFoundException'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        } catch (QueryException $e) {
+            // Manejar la excepción de la base de datos
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('QueryException'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        } catch (Exception $e) {
+            // Devolver una respuesta de error en caso de excepción
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('Exception'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        }
+    }
+
+    public function assignProccess(WorkshopAssignProccessRequest $request)
+    {
+        try {
+            $model_processes = new ModelProcess();
+            $model_processes->model_type = Workshop::class;
+            $model_processes->model_id = $request->input('workshop_id');
+            $model_processes->process_id = $request->input('process_id');
+            $model_processes->save();
+
+            return $this->successResponse(
+                $model_processes,
+                'Cuenta de pago asignado exitosamente.',
+                200
+            );
+        } catch (ModelNotFoundException $e) {
+            // Manejar la excepción de la base de datos
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('ModelNotFoundException'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        } catch (QueryException $e) {
+            // Manejar la excepción de la base de datos
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('QueryException'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        } catch (Exception $e) {
+            // Devolver una respuesta de error en caso de excepción
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('Exception'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        }
+    }
+
+    public function removeProccess(WorkshopRemoveProccessRequest $request)
+    {
+        try {
+            $model_processes = ModelProcess::whereHasMorph('model', [Workshop::class],
+                    function ($query) use ($request) {
+                        $query->where('model_id', $request->input('workshop_id'));
+                    }
+                )
+                ->where('process_id', $request->input('process_id'))
+                ->delete();
+
+            return $this->successResponse(
+                $model_processes,
+                'Cuenta de pago removido exitosamente.',
+                200
+            );
+        } catch (ModelNotFoundException $e) {
+            // Manejar la excepción de la base de datos
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('ModelNotFoundException'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        } catch (QueryException $e) {
+            // Manejar la excepción de la base de datos
+            return $this->errorResponse(
+                [
+                    'message' => $this->getMessage('QueryException'),
+                    'error' => $e->getMessage()
+                ],
+                500
+            );
+        } catch (Exception $e) {
+            // Devolver una respuesta de error en caso de excepción
             return $this->errorResponse(
                 [
                     'message' => $this->getMessage('Exception'),

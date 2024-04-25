@@ -23,7 +23,6 @@ return new class extends Migration
             $table->unique(['model_id', 'model_type', 'account', 'bank_id'])->unique();
             /* $table->foreign('bank_id')->references('id')->on('banks')->onUpdate('cascade')->onDelete('cascade'); */
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 

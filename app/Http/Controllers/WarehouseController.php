@@ -222,7 +222,9 @@ class WarehouseController extends Controller
 
             foreach ($users as $user) {
                 $warehousesId = $user->warehouses->pluck('id')->all();
-                $user->admin = in_array($id, $warehousesId);
+                $user->push([
+                    'admin' => in_array($id, $warehousesId)
+                ]);
             }
 
             return $this->successResponse(
@@ -299,7 +301,8 @@ class WarehouseController extends Controller
     {
         try {
             $warehouse_users = WarehouseUser::where('user_id', $request->input('user_id'))
-            ->where('warehouse_id', $request->input('warehouse_id'))->delete();
+                ->where('warehouse_id', $request->input('warehouse_id'))
+                ->delete();
 
             return $this->successResponse(
                 $warehouse_users,
