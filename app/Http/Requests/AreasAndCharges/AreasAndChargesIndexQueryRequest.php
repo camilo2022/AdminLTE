@@ -20,7 +20,7 @@ class AreasAndChargesIndexQueryRequest extends FormRequest
     {
         return true;
     }
-    
+
     public function rules()
     {
         return [
@@ -29,7 +29,6 @@ class AreasAndChargesIndexQueryRequest extends FormRequest
             'perPage' => ['required', 'numeric'],
         ];
     }
-
 
     public function messages()
     {

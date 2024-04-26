@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Requests\Warehouse;
+namespace App\Http\Requests\ClothType;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class WarehouseDeleteRequest extends FormRequest
+class ClothTypeRestoreRequest extends FormRequest
 {
     protected function failedValidation(Validator $validator)
     {
@@ -24,15 +24,15 @@ class WarehouseDeleteRequest extends FormRequest
     public function rules()
     {
         return [
-            'id' => ['required', 'exists:warehouses,id'],
+            'id' => ['required', 'exists:cloth_types,id'],
         ];
     }
 
     public function messages()
     {
         return [
-            'id.required' => 'El Identificador de la bodega es requerido.',
-            'id.exists' => 'El Identificador de la bodega no es valido.',
+            'id.required' => 'El Identificador del tipo de tela es requerido.',
+            'id.exists' => 'El Identificador del tipo de tela no es valido.',
         ];
     }
 }

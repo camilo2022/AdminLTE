@@ -9,14 +9,8 @@ use Illuminate\Validation\Rule;
 
 class WarehouseUpdateRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
     protected function failedValidation(Validator $validator)
     {
-        // Lanzar una excepción de validación con los errores de validación obtenidos
         throw new HttpResponseException(response()->json([
             'message' => 'Error de validación.',
             'errors' => $validator->errors()
@@ -29,7 +23,7 @@ class WarehouseUpdateRequest extends FormRequest
             'to_discount' => $this->input('to_discount') === 'true',
         ]);
     }
-    
+
     public function authorize()
     {
         return true;

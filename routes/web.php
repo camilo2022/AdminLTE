@@ -8,7 +8,9 @@ use App\Http\Controllers\CategoriesAndSubcategoriesController;
 use App\Http\Controllers\ClientBranchController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ClientTypeController;
+use App\Http\Controllers\ClothCompositionController;
 use App\Http\Controllers\ClothingLineController;
+use App\Http\Controllers\ClothTypeController;
 use App\Http\Controllers\CorreriasAndCollectionsController;
 use App\Http\Controllers\ColorController;
 use App\Http\Controllers\DocumentTypeController;
@@ -39,6 +41,9 @@ use App\Http\Controllers\ReturnTypeController;
 use App\Http\Controllers\RolesAndPermissionsController;
 use App\Http\Controllers\SaleChannelController;
 use App\Http\Controllers\SizeController;
+use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\SupplyController;
+use App\Http\Controllers\SupplyTypeController;
 use App\Http\Controllers\ToneController;
 use App\Http\Controllers\TrademarkController;
 use App\Http\Controllers\TransferController;
@@ -47,6 +52,7 @@ use App\Http\Controllers\TransporterController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WalletController;
 use App\Http\Controllers\WarehouseController;
+use App\Http\Controllers\WorkshopController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -308,9 +314,97 @@ Route::middleware(['auth'])->group(function () {
                 Route::put('/Update/{id}', 'update')->middleware('can:Dashboard.SaleChannels.Update')->name('Dashboard.SaleChannels.Update');
                 Route::post('/Show/{id}', 'show')->middleware('can:Dashboard.SaleChannels.Show')->name('Dashboard.SaleChannels.Show');
                 Route::post('/AssignReturnType', 'assignReturnType')->middleware('can:Dashboard.SaleChannels.AssignReturnType')->name('Dashboard.SaleChannels.AssignReturnType');
-                Route::post('/RemoveReturnType', 'removeReturnType')->middleware('can:Dashboard.SaleChannels.RemoveReturnType')->name('Dashboard.SaleChannels.RemoveReturnType');
+                Route::delete('/RemoveReturnType', 'removeReturnType')->middleware('can:Dashboard.SaleChannels.RemoveReturnType')->name('Dashboard.SaleChannels.RemoveReturnType');
                 Route::delete('/Delete', 'delete')->middleware('can:Dashboard.SaleChannels.Delete')->name('Dashboard.SaleChannels.Delete');
                 Route::put('/Restore', 'restore')->middleware('can:Dashboard.SaleChannels.Restore')->name('Dashboard.SaleChannels.Restore');
+            });
+        });
+
+        Route::prefix('/Workshops')->group(function () {
+            Route::controller(WorkshopController::class)->group(function () {
+                Route::get('/Index', 'index')->middleware('can:Dashboard.Workshops.Index')->name('Dashboard.Workshops.Index');
+                Route::post('/Index/Query', 'indexQuery')->middleware('can:Dashboard.Workshops.Index.Query')->name('Dashboard.Workshops.Index.Query');
+                Route::post('/Create', 'create')->middleware('can:Dashboard.Workshops.Create')->name('Dashboard.Workshops.Create');
+                Route::post('/Store', 'store')->middleware('can:Dashboard.Workshops.Store')->name('Dashboard.Workshops.Store');
+                Route::post('/Edit/{id}', 'edit')->middleware('can:Dashboard.Workshops.Edit')->name('Dashboard.Workshops.Edit');
+                Route::put('/Update/{id}', 'update')->middleware('can:Dashboard.Workshops.Update')->name('Dashboard.Workshops.Update');
+                Route::post('/Show/{id}', 'show')->middleware('can:Dashboard.Workshops.Show')->name('Dashboard.Workshops.Show');
+                Route::post('/AssignAccount', 'assignAccount')->middleware('can:Dashboard.Workshops.AssignAccount')->name('Dashboard.Workshops.AssignAccount');
+                Route::delete('/RemoveAccount', 'removeAccount')->middleware('can:Dashboard.Workshops.RemoveAccount')->name('Dashboard.Workshops.RemoveAccount');
+                Route::post('/AssignProcess', 'assignProcess')->middleware('can:Dashboard.Workshops.AssignProcess')->name('Dashboard.Workshops.AssignProcess');
+                Route::delete('/RemoveProcess', 'removeProcess')->middleware('can:Dashboard.Workshops.RemoveProcess')->name('Dashboard.Workshops.RemoveProcess');
+                Route::delete('/Delete', 'delete')->middleware('can:Dashboard.Workshops.Delete')->name('Dashboard.Workshops.Delete');
+                Route::put('/Restore', 'restore')->middleware('can:Dashboard.Workshops.Restore')->name('Dashboard.Workshops.Restore');
+            });
+        });
+
+        Route::prefix('/Suppliers')->group(function () {
+            Route::controller(SupplierController::class)->group(function () {
+                Route::get('/Index', 'index')->middleware('can:Dashboard.Suppliers.Index')->name('Dashboard.Suppliers.Index');
+                Route::post('/Index/Query', 'indexQuery')->middleware('can:Dashboard.Suppliers.Index.Query')->name('Dashboard.Suppliers.Index.Query');
+                Route::post('/Create', 'create')->middleware('can:Dashboard.Suppliers.Create')->name('Dashboard.Suppliers.Create');
+                Route::post('/Store', 'store')->middleware('can:Dashboard.Suppliers.Store')->name('Dashboard.Suppliers.Store');
+                Route::post('/Edit/{id}', 'edit')->middleware('can:Dashboard.Suppliers.Edit')->name('Dashboard.Suppliers.Edit');
+                Route::put('/Update/{id}', 'update')->middleware('can:Dashboard.Suppliers.Update')->name('Dashboard.Suppliers.Update');
+                Route::delete('/Delete', 'delete')->middleware('can:Dashboard.Suppliers.Delete')->name('Dashboard.Suppliers.Delete');
+                Route::put('/Restore', 'restore')->middleware('can:Dashboard.Suppliers.Restore')->name('Dashboard.Suppliers.Restore');
+            });
+        });
+
+        Route::prefix('/SupplyTypes')->group(function () {
+            Route::controller(SupplyTypeController::class)->group(function () {
+                Route::get('/Index', 'index')->middleware('can:Dashboard.SupplyTypes.Index')->name('Dashboard.SupplyTypes.Index');
+                Route::post('/Index/Query', 'indexQuery')->middleware('can:Dashboard.SupplyTypes.Index.Query')->name('Dashboard.SupplyTypes.Index.Query');
+                Route::post('/Create', 'create')->middleware('can:Dashboard.SupplyTypes.Create')->name('Dashboard.SupplyTypes.Create');
+                Route::post('/Store', 'store')->middleware('can:Dashboard.SupplyTypes.Store')->name('Dashboard.SupplyTypes.Store');
+                Route::post('/Edit/{id}', 'edit')->middleware('can:Dashboard.SupplyTypes.Edit')->name('Dashboard.SupplyTypes.Edit');
+                Route::put('/Update/{id}', 'update')->middleware('can:Dashboard.SupplyTypes.Update')->name('Dashboard.SupplyTypes.Update');
+                Route::delete('/Delete', 'delete')->middleware('can:Dashboard.SupplyTypes.Delete')->name('Dashboard.SupplyTypes.Delete');
+                Route::put('/Restore', 'restore')->middleware('can:Dashboard.SupplyTypes.Restore')->name('Dashboard.SupplyTypes.Restore');
+            });
+        });
+
+        Route::prefix('/ClothTypes')->group(function () {
+            Route::controller(ClothTypeController::class)->group(function () {
+                Route::get('/Index', 'index')->middleware('can:Dashboard.ClothTypes.Index')->name('Dashboard.ClothTypes.Index');
+                Route::post('/Index/Query', 'indexQuery')->middleware('can:Dashboard.ClothTypes.Index.Query')->name('Dashboard.ClothTypes.Index.Query');
+                Route::post('/Create', 'create')->middleware('can:Dashboard.ClothTypes.Create')->name('Dashboard.ClothTypes.Create');
+                Route::post('/Store', 'store')->middleware('can:Dashboard.ClothTypes.Store')->name('Dashboard.ClothTypes.Store');
+                Route::post('/Edit/{id}', 'edit')->middleware('can:Dashboard.ClothTypes.Edit')->name('Dashboard.ClothTypes.Edit');
+                Route::put('/Update/{id}', 'update')->middleware('can:Dashboard.ClothTypes.Update')->name('Dashboard.ClothTypes.Update');
+                Route::delete('/Delete', 'delete')->middleware('can:Dashboard.ClothTypes.Delete')->name('Dashboard.ClothTypes.Delete');
+                Route::put('/Restore', 'restore')->middleware('can:Dashboard.ClothTypes.Restore')->name('Dashboard.ClothTypes.Restore');
+            });
+        });
+
+        Route::prefix('/ClothCompositions')->group(function () {
+            Route::controller(ClothCompositionController::class)->group(function () {
+                Route::get('/Index', 'index')->middleware('can:Dashboard.ClothCompositions.Index')->name('Dashboard.ClothCompositions.Index');
+                Route::post('/Index/Query', 'indexQuery')->middleware('can:Dashboard.ClothCompositions.Index.Query')->name('Dashboard.ClothCompositions.Index.Query');
+                Route::post('/Create', 'create')->middleware('can:Dashboard.ClothCompositions.Create')->name('Dashboard.ClothCompositions.Create');
+                Route::post('/Store', 'store')->middleware('can:Dashboard.ClothCompositions.Store')->name('Dashboard.ClothCompositions.Store');
+                Route::post('/Edit/{id}', 'edit')->middleware('can:Dashboard.ClothCompositions.Edit')->name('Dashboard.ClothCompositions.Edit');
+                Route::put('/Update/{id}', 'update')->middleware('can:Dashboard.ClothCompositions.Update')->name('Dashboard.ClothCompositions.Update');
+                Route::delete('/Delete', 'delete')->middleware('can:Dashboard.ClothCompositions.Delete')->name('Dashboard.ClothCompositions.Delete');
+                Route::put('/Restore', 'restore')->middleware('can:Dashboard.ClothCompositions.Restore')->name('Dashboard.ClothCompositions.Restore');
+            });
+        });
+
+        Route::prefix('/Supplies')->group(function () {
+            Route::controller(SupplyController::class)->group(function () {
+                Route::get('/Index', 'index')->middleware('can:Dashboard.Supplies.Index')->name('Dashboard.Supplies.Index');
+                Route::post('/Index/Query', 'indexQuery')->middleware('can:Dashboard.Supplies.Index.Query')->name('Dashboard.Supplies.Index.Query');
+                Route::post('/Create', 'create')->middleware('can:Dashboard.Supplies.Create')->name('Dashboard.Supplies.Create');
+                Route::post('/Store', 'store')->middleware('can:Dashboard.Supplies.Store')->name('Dashboard.Supplies.Store');
+                Route::post('/Edit/{id}', 'edit')->middleware('can:Dashboard.Supplies.Edit')->name('Dashboard.Supplies.Edit');
+                Route::put('/Update/{id}', 'update')->middleware('can:Dashboard.Supplies.Update')->name('Dashboard.Supplies.Update');
+                Route::post('/Show/{id}', 'show')->middleware('can:Dashboard.Workshops.Show')->name('Dashboard.Workshops.Show');
+                Route::post('/Charge', 'charge')->middleware('can:Dashboard.Workshops.Charge')->name('Dashboard.Workshops.Charge');
+                Route::delete('/Destroy', 'destroy')->middleware('can:Dashboard.Workshops.Destroy')->name('Dashboard.Workshops.Destroy');
+                Route::delete('/Delete', 'delete')->middleware('can:Dashboard.Supplies.Delete')->name('Dashboard.Supplies.Delete');
+                Route::put('/Restore', 'restore')->middleware('can:Dashboard.Supplies.Restore')->name('Dashboard.Supplies.Restore');
+                Route::post('/Upload', 'upload')->middleware('can:Dashboard.Supplies.Upload')->name('Dashboard.Supplies.Upload');
+                Route::post('/Download', 'download')->middleware('can:Dashboard.Supplies.Download')->name('Dashboard.Supplies.Download');
             });
         });
 

@@ -30,7 +30,6 @@ class CategoriesAndSubcategoriesIndexQueryRequest extends FormRequest
         ];
     }
 
-
     public function messages()
     {
         return [

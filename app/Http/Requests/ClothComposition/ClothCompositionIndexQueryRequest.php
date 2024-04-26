@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Requests\Bank;
+namespace App\Http\Requests\ClothComposition;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class BankIndexQueryRequest extends FormRequest
+class ClothCompositionIndexQueryRequest extends FormRequest
 {
     protected function failedValidation(Validator $validator)
     {

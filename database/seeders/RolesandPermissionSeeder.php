@@ -59,8 +59,6 @@ class RolesAndPermissionSeeder extends Seeder
 
         $ClothCompositions = Role::create(['name' => 'ClothCompositions']);
 
-        $MeasurementUnits = Role::create(['name' => 'MeasurementUnits']);
-
         $Supplies = Role::create(['name' => 'Supplies']);
 
         $Sizes = Role::create(['name' => 'Sizes']);
@@ -270,8 +268,8 @@ class RolesAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Dashboard.Workshops.Show'])->syncRoles([$Workshops]);
         Permission::create(['name' => 'Dashboard.Workshops.AssignAccount'])->syncRoles([$Workshops]);
         Permission::create(['name' => 'Dashboard.Workshops.RemoveAccount'])->syncRoles([$SaleChannels]);
-        Permission::create(['name' => 'Dashboard.Workshops.AssignProccess'])->syncRoles([$Workshops]);
-        Permission::create(['name' => 'Dashboard.Workshops.RemoveProccess'])->syncRoles([$SaleChannels]);
+        Permission::create(['name' => 'Dashboard.Workshops.AssignProcess'])->syncRoles([$Workshops]);
+        Permission::create(['name' => 'Dashboard.Workshops.RemoveProcess'])->syncRoles([$SaleChannels]);
         Permission::create(['name' => 'Dashboard.Workshops.Delete'])->syncRoles([$Workshops]);
         Permission::create(['name' => 'Dashboard.Workshops.Restore'])->syncRoles([$Workshops]);
 
@@ -282,8 +280,6 @@ class RolesAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Dashboard.Suppliers.Edit'])->syncRoles([$Suppliers]);
         Permission::create(['name' => 'Dashboard.Suppliers.Update'])->syncRoles([$Suppliers]);
         Permission::create(['name' => 'Dashboard.Suppliers.Show'])->syncRoles([$Suppliers]);
-        Permission::create(['name' => 'Dashboard.Suppliers.AssignAccount'])->syncRoles([$Suppliers]);
-        Permission::create(['name' => 'Dashboard.Suppliers.RemoveAccount'])->syncRoles([$Suppliers]);
         Permission::create(['name' => 'Dashboard.Suppliers.Delete'])->syncRoles([$Suppliers]);
         Permission::create(['name' => 'Dashboard.Suppliers.Restore'])->syncRoles([$Suppliers]);
 
@@ -313,15 +309,6 @@ class RolesAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Dashboard.ClothCompositions.Update'])->syncRoles([$ClothCompositions]);
         Permission::create(['name' => 'Dashboard.ClothCompositions.Delete'])->syncRoles([$ClothCompositions]);
         Permission::create(['name' => 'Dashboard.ClothCompositions.Restore'])->syncRoles([$ClothCompositions]);
-
-        Permission::create(['name' => 'Dashboard.MeasurementUnits.Index'])->syncRoles([$MeasurementUnits]);
-        Permission::create(['name' => 'Dashboard.MeasurementUnits.Index.Query'])->syncRoles([$MeasurementUnits]);
-        Permission::create(['name' => 'Dashboard.MeasurementUnits.Create'])->syncRoles([$MeasurementUnits]);
-        Permission::create(['name' => 'Dashboard.MeasurementUnits.Store'])->syncRoles([$MeasurementUnits]);
-        Permission::create(['name' => 'Dashboard.MeasurementUnits.Edit'])->syncRoles([$MeasurementUnits]);
-        Permission::create(['name' => 'Dashboard.MeasurementUnits.Update'])->syncRoles([$MeasurementUnits]);
-        Permission::create(['name' => 'Dashboard.MeasurementUnits.Delete'])->syncRoles([$MeasurementUnits]);
-        Permission::create(['name' => 'Dashboard.MeasurementUnits.Restore'])->syncRoles([$MeasurementUnits]);
 
         Permission::create(['name' => 'Dashboard.Supplies.Index'])->syncRoles([$Supplies]);
         Permission::create(['name' => 'Dashboard.Supplies.Index.Query'])->syncRoles([$Supplies]);

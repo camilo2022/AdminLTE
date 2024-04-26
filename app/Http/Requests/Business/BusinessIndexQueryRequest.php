@@ -30,7 +30,6 @@ class BusinessIndexQueryRequest extends FormRequest
         ];
     }
 
-
     public function messages()
     {
         return [

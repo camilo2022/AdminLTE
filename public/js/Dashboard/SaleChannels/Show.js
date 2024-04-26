@@ -69,7 +69,7 @@ function ShowSaleChannelAssignReturnType(returnType, saleChannel) {
 function ShowSaleChannelRemoveReturnType(returnType, saleChannel) {
     $.ajax({
         url: `/Dashboard/SaleChannels/RemoveReturnType`,
-        type: 'POST',
+        type: 'DELETE',
         data: {
             '_token': $('meta[name="csrf-token"]').attr('content'),
             'return_type_id': returnType,
