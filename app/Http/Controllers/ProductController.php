@@ -139,7 +139,7 @@ class ProductController extends Controller
                 [
                     'clothing_lines' => ClothingLine::all(),
                     'models' => Model::all(),
-                    'trademarks' => Trademark::all(),
+                    'trademarks' => Trademark::where('is_internal', true)->get(),
                     'correrias' => Correria::all(),
                 ],
                 'Ingrese los datos para hacer la validacion y registro.',
@@ -231,7 +231,7 @@ class ProductController extends Controller
                     'product' => Product::findOrFail($id),
                     'clothing_lines' => ClothingLine::all(),
                     'models' => Model::all(),
-                    'trademarks' => Trademark::withTrashed()->get(),
+                    'trademarks' => Trademark::withTrashed()->where('is_internal', true)->get->get(),
                     'correrias' => Correria::withTrashed()->get(),
                 ],
                 'El producto fue encontrado exitosamente.',
@@ -321,7 +321,9 @@ class ProductController extends Controller
 
             foreach ($sizes as $size) {
                 $productsId = $size->products->pluck('id')->all();
-                $size->admin = in_array($id, $productsId);
+                $size->push([
+                    'admin' => in_array($id, $productsId)
+                ]);
             }
 
             foreach($colors as $color) {
@@ -691,7 +693,7 @@ class ProductController extends Controller
     {
         try {
             $products = Excel::toCollection(new ProductImportSheets, $request->file('products'));
-            
+
             foreach($products['Products'] as $product) {
                 $product['clothingLine_category'] = $product['category_id'];
                 $product['category_subcategory'] = $product['subcategory_id'];

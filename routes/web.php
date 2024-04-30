@@ -398,9 +398,9 @@ Route::middleware(['auth'])->group(function () {
                 Route::post('/Store', 'store')->middleware('can:Dashboard.Supplies.Store')->name('Dashboard.Supplies.Store');
                 Route::post('/Edit/{id}', 'edit')->middleware('can:Dashboard.Supplies.Edit')->name('Dashboard.Supplies.Edit');
                 Route::put('/Update/{id}', 'update')->middleware('can:Dashboard.Supplies.Update')->name('Dashboard.Supplies.Update');
-                Route::post('/Show/{id}', 'show')->middleware('can:Dashboard.Workshops.Show')->name('Dashboard.Workshops.Show');
-                Route::post('/Charge', 'charge')->middleware('can:Dashboard.Workshops.Charge')->name('Dashboard.Workshops.Charge');
-                Route::delete('/Destroy', 'destroy')->middleware('can:Dashboard.Workshops.Destroy')->name('Dashboard.Workshops.Destroy');
+                Route::post('/Show/{id}', 'show')->middleware('can:Dashboard.Supplies.Show')->name('Dashboard.Supplies.Show');
+                Route::post('/Charge', 'charge')->middleware('can:Dashboard.Supplies.Charge')->name('Dashboard.Supplies.Charge');
+                Route::delete('/Destroy', 'destroy')->middleware('can:Dashboard.Supplies.Destroy')->name('Dashboard.Supplies.Destroy');
                 Route::delete('/Delete', 'delete')->middleware('can:Dashboard.Supplies.Delete')->name('Dashboard.Supplies.Delete');
                 Route::put('/Restore', 'restore')->middleware('can:Dashboard.Supplies.Restore')->name('Dashboard.Supplies.Restore');
                 Route::post('/Upload', 'upload')->middleware('can:Dashboard.Supplies.Upload')->name('Dashboard.Supplies.Upload');
