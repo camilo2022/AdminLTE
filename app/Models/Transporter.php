@@ -36,10 +36,10 @@ class Transporter extends Model implements Auditable
 
     public function scopeSearch($query, $search)
     {
-        return $query->where('name', 'like', '%' . $search . '%')
-        ->orWhere('document_number', 'like', '%' . $search . '%')
-        ->orWhere('telephone_number', 'like', '%' . $search . '%')
-        ->orWhere('email', 'like', '%' . $search . '%');
+        return $query->where('name', 'LIKE', '%' . $search . '%')
+        ->orWhere('document_number', 'LIKE', '%' . $search . '%')
+        ->orWhere('telephone_number', 'LIKE', '%' . $search . '%')
+        ->orWhere('email', 'LIKE', '%' . $search . '%');
     }
 
     public function scopeFilterByDate($query, $start_date, $end_date)

@@ -68,40 +68,41 @@ class TransferDetail extends Model implements Auditable
 
     public function scopeSearch($query, $search)
     {
-        return $query->whereHas('transfer',
+        return $query->where('id', 'LIKE', '%' . $search . '%')
+        ->orWhereHas('transfer',
             function ($subQuery) use ($search) {
-                $subQuery->where('id', 'like',  '%' . $search . '%')
-                ->orWhere('consecutive', 'like',  '%' . $search . '%');
+                $subQuery->where('id', 'LIKE',  '%' . $search . '%')
+                ->orWhere('consecutive', 'LIKE',  '%' . $search . '%');
             }
         )
         ->orWhereHas('product',
             function ($subQuery) use ($search) {
-                $subQuery->where('id', 'like',  '%' . $search . '%')
-                ->orWhere('code', 'like',  '%' . $search . '%');
+                $subQuery->where('id', 'LIKE',  '%' . $search . '%')
+                ->orWhere('code', 'LIKE',  '%' . $search . '%');
             }
         )
         ->orWhereHas('size',
             function ($subQuery) use ($search) {
-                $subQuery->where('id', 'like',  '%' . $search . '%')
-                ->orWhere('name', 'like',  '%' . $search . '%')
-                ->orWhere('code', 'like',  '%' . $search . '%');
+                $subQuery->where('id', 'LIKE',  '%' . $search . '%')
+                ->orWhere('name', 'LIKE',  '%' . $search . '%')
+                ->orWhere('code', 'LIKE',  '%' . $search . '%');
             }
         )
         ->orWhereHas('color',
             function ($subQuery) use ($search) {
-                $subQuery->where('id', 'like',  '%' . $search . '%')
-                ->orWhere('name', 'like',  '%' . $search . '%')
-                ->orWhere('code', 'like',  '%' . $search . '%');
+                $subQuery->where('id', 'LIKE',  '%' . $search . '%')
+                ->orWhere('name', 'LIKE',  '%' . $search . '%')
+                ->orWhere('code', 'LIKE',  '%' . $search . '%');
             }
         )
         ->orWhereHas('tone',
             function ($subQuery) use ($search) {
-                $subQuery->where('id', 'like',  '%' . $search . '%')
-                ->orWhere('name', 'like',  '%' . $search . '%');
+                $subQuery->where('id', 'LIKE',  '%' . $search . '%')
+                ->orWhere('name', 'LIKE',  '%' . $search . '%');
             }
         )
-        ->orWhere('quantity', 'like',  '%' . $search . '%')
-        ->orWhere('status', 'like',  '%' . $search . '%');
+        ->orWhere('quantity', 'LIKE',  '%' . $search . '%')
+        ->orWhere('status', 'LIKE',  '%' . $search . '%');
     }
 
     public function scopeFilterByDate($query, $start_date, $end_date)

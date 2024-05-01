@@ -12,7 +12,7 @@ use OwenIt\Auditing\Auditable as Auditing;
 class Invoice extends Model implements Auditable
 {
     use HasFactory, Auditing;
-    
+
     protected $table = 'invoices';
     protected $fillable = [
         'model_id',
@@ -49,10 +49,10 @@ class Invoice extends Model implements Auditable
 
     public function scopeSearch($query, $search)
     {
-        return $query->where('id', 'like', '%' . $search . '%')
-        ->orWhere('value', 'like', '%' . $search . '%')
-        ->orWhere('reference', 'like', '%' . $search . '%')
-        ->orWhere('date', 'like', '%' . $search . '%');
+        return $query->where('id', 'LIKE', '%' . $search . '%')
+        ->orWhere('value', 'LIKE', '%' . $search . '%')
+        ->orWhere('reference', 'LIKE', '%' . $search . '%')
+        ->orWhere('date', 'LIKE', '%' . $search . '%');
     }
 
     public function scopeFilterByDate($query, $start_date, $end_date)

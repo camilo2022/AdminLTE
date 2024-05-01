@@ -48,27 +48,27 @@ class Module extends Model implements Auditable
 
     public function scopeSearch($query, $search)
     {
-        return $query->where('id', 'like',  '%' . $search . '%')
-        ->orWhere('name', 'like',  '%' . $search . '%')
-        ->orWhere('icon', 'like', '%' . $search . '%')
+        return $query->where('id', 'LIKE',  '%' . $search . '%')
+        ->orWhere('name', 'LIKE',  '%' . $search . '%')
+        ->orWhere('icon', 'LIKE', '%' . $search . '%')
         ->orWhereHas('roles',
             function ($subQuery) use ($search) {
-                $subQuery->where('id', 'like',  '%' . $search . '%')
-                ->orWhere('name', 'like',  '%' . $search . '%');
+                $subQuery->where('id', 'LIKE',  '%' . $search . '%')
+                ->orWhere('name', 'LIKE',  '%' . $search . '%');
             }
         )
         ->orWhereHas('submodules',
             function ($subQuery) use ($search) {
-                $subQuery->where('id', 'like',  '%' . $search . '%')
-                ->orWhere('name', 'like',  '%' . $search . '%')
-                ->orWhere('url', 'like',  '%' . $search . '%')
-                ->orWhere('icon', 'like',  '%' . $search . '%');
+                $subQuery->where('id', 'LIKE',  '%' . $search . '%')
+                ->orWhere('name', 'LIKE',  '%' . $search . '%')
+                ->orWhere('url', 'LIKE',  '%' . $search . '%')
+                ->orWhere('icon', 'LIKE',  '%' . $search . '%');
             }
         )
         ->orWhereHas('submodules.permission',
             function ($subQuery) use ($search) {
-                $subQuery->where('id', 'like',  '%' . $search . '%')
-                ->orWhere('name', 'like',  '%' . $search . '%');
+                $subQuery->where('id', 'LIKE',  '%' . $search . '%')
+                ->orWhere('name', 'LIKE',  '%' . $search . '%');
             }
         );
     }

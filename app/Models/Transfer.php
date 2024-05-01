@@ -76,40 +76,41 @@ class Transfer extends Model implements Auditable
 
     public function scopeSearch($query, $search)
     {
-        return $query->where('consecutive', 'like', '%' . $search . '%')
+        return $query->where('id', 'LIKE', '%' . $search . '%')
+        ->orWhere('consecutive', 'LIKE', '%' . $search . '%')
         ->orWhereHas('from_warehouse',
             function ($subQuery) use ($search) {
-                $subQuery->where('id', 'like',  '%' . $search . '%')
-                ->orWhere('name', 'like',  '%' . $search . '%')
-                ->orWhere('code', 'like',  '%' . $search . '%');
+                $subQuery->where('id', 'LIKE',  '%' . $search . '%')
+                ->orWhere('name', 'LIKE',  '%' . $search . '%')
+                ->orWhere('code', 'LIKE',  '%' . $search . '%');
             }
         )
         ->orWhereHas('from_user',
             function ($subQuery) use ($search) {
-                $subQuery->where('id', 'like',  '%' . $search . '%')
-                ->orWhere('name', 'like',  '%' . $search . '%')
-                ->orWhere('last_name', 'like',  '%' . $search . '%');
+                $subQuery->where('id', 'LIKE',  '%' . $search . '%')
+                ->orWhere('name', 'LIKE',  '%' . $search . '%')
+                ->orWhere('last_name', 'LIKE',  '%' . $search . '%');
             }
         )
-        ->orWhere('from_date', 'like', '%' . $search . '%')
-        ->orWhere('from_observation', 'like', '%' . $search . '%')
+        ->orWhere('from_date', 'LIKE', '%' . $search . '%')
+        ->orWhere('from_observation', 'LIKE', '%' . $search . '%')
         ->orWhereHas('to_warehouse',
             function ($subQuery) use ($search) {
-                $subQuery->where('id', 'like',  '%' . $search . '%')
-                ->orWhere('name', 'like',  '%' . $search . '%')
-                ->orWhere('code', 'like',  '%' . $search . '%');
+                $subQuery->where('id', 'LIKE',  '%' . $search . '%')
+                ->orWhere('name', 'LIKE',  '%' . $search . '%')
+                ->orWhere('code', 'LIKE',  '%' . $search . '%');
             }
         )
         ->orWhereHas('to_user',
             function ($subQuery) use ($search) {
-                $subQuery->where('id', 'like',  '%' . $search . '%')
-                ->orWhere('name', 'like',  '%' . $search . '%')
-                ->orWhere('last_name', 'like',  '%' . $search . '%');
+                $subQuery->where('id', 'LIKE',  '%' . $search . '%')
+                ->orWhere('name', 'LIKE',  '%' . $search . '%')
+                ->orWhere('last_name', 'LIKE',  '%' . $search . '%');
             }
         )
-        ->orWhere('to_date', 'like', '%' . $search . '%')
-        ->orWhere('to_observation', 'like', '%' . $search . '%')
-        ->orWhere('status', 'like', '%' . $search . '%');
+        ->orWhere('to_date', 'LIKE', '%' . $search . '%')
+        ->orWhere('to_observation', 'LIKE', '%' . $search . '%')
+        ->orWhere('status', 'LIKE', '%' . $search . '%');
     }
 
     public function scopeFilterByDate($query, $start_date, $end_date)

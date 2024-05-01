@@ -3,28 +3,37 @@
 namespace App\Http\Requests\Supply;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class SupplyUploadRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
+    protected function failedValidation(Validator $validator)
     {
-        return false;
+        throw new HttpResponseException(response()->json([
+            'message' => 'Error de validación',
+            'errors' => $validator->errors()
+        ], 422));
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, mixed>
-     */
+    public function authorize()
+    {
+        return true;
+    }
+
     public function rules()
     {
         return [
-            //
+            'supplies' => ['required', 'file', 'mimes:csv,xls,xlsx'],
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'supplies.required' => 'El campo Archivo de insumos es requerido.',
+            'supplies.file' => 'El campo Archivo de insumos debe ser un archivo.',
+            'supplies.mimes' => 'El Archivo de insumos debe tener una extensión válida (csv, xls, xlsx).',
         ];
     }
 }

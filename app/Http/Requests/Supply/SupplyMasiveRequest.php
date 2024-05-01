@@ -2,7 +2,10 @@
 
 namespace App\Http\Requests\Supply;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Validation\Rule;
 
 class SupplyMasiveRequest extends FormRequest
 {

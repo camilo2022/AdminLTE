@@ -125,59 +125,59 @@ class Order extends Model implements Auditable
 
     public function scopeSearch($query, $search)
     {
-        return $query->where('id', 'like', '%' . $search . '%')
+        return $query->where('id', 'LIKE', '%' . $search . '%')
         ->orWhereHas('client',
             function ($subQuery) use ($search) {
-                $subQuery->where('id', 'like', '%' . $search . '%')
-                ->orWhere('name', 'like',  '%' . $search . '%')
-                ->orWhere('document_number', 'like',  '%' . $search . '%');
+                $subQuery->where('id', 'LIKE', '%' . $search . '%')
+                ->orWhere('name', 'LIKE',  '%' . $search . '%')
+                ->orWhere('document_number', 'LIKE',  '%' . $search . '%');
             }
         )
         ->orWhereHas('client_branch',
             function ($subQuery) use ($search) {
-                $subQuery->where('id', 'like', '%' . $search . '%')
-                ->orWhere('name', 'like',  '%' . $search . '%')
-                ->orWhere('code', 'like',  '%' . $search . '%');
+                $subQuery->where('id', 'LIKE', '%' . $search . '%')
+                ->orWhere('name', 'LIKE',  '%' . $search . '%')
+                ->orWhere('code', 'LIKE',  '%' . $search . '%');
             }
         )
         ->orWhereHas('transporter',
             function ($subQuery) use ($search) {
-                $subQuery->where('id', 'like', '%' . $search . '%')
-                ->orWhere('name', 'like',  '%' . $search . '%');
+                $subQuery->where('id', 'LIKE', '%' . $search . '%')
+                ->orWhere('name', 'LIKE',  '%' . $search . '%');
             }
         )
         ->orWhereHas('sale_channel',
             function ($subQuery) use ($search) {
-                $subQuery->where('id', 'like', '%' . $search . '%')
-                ->orWhere('name', 'like',  '%' . $search . '%');
+                $subQuery->where('id', 'LIKE', '%' . $search . '%')
+                ->orWhere('name', 'LIKE',  '%' . $search . '%');
             }
         )
-        ->orWhere('dispatch', 'like', '%' . $search . '%')
-        ->orWhere('dispatch_date', 'like', '%' . $search . '%')
+        ->orWhere('dispatch', 'LIKE', '%' . $search . '%')
+        ->orWhere('dispatch_date', 'LIKE', '%' . $search . '%')
         ->orWhereHas('seller_user',
             function ($subQuery) use ($search) {
-                $subQuery->where('id', 'like', '%' . $search . '%')
-                ->orWhere('name', 'like',  '%' . $search . '%');
+                $subQuery->where('id', 'LIKE', '%' . $search . '%')
+                ->orWhere('name', 'LIKE',  '%' . $search . '%');
             }
         )
-        ->orWhere('seller_status', 'like', '%' . $search . '%')
-        ->orWhere('seller_date', 'like', '%' . $search . '%')
-        ->orWhere('seller_observation', 'like', '%' . $search . '%')
+        ->orWhere('seller_status', 'LIKE', '%' . $search . '%')
+        ->orWhere('seller_date', 'LIKE', '%' . $search . '%')
+        ->orWhere('seller_observation', 'LIKE', '%' . $search . '%')
         ->orWhereHas('wallet_user',
             function ($subQuery) use ($search) {
-                $subQuery->where('id', 'like', '%' . $search . '%')
-                ->orWhere('name', 'like',  '%' . $search . '%');
+                $subQuery->where('id', 'LIKE', '%' . $search . '%')
+                ->orWhere('name', 'LIKE',  '%' . $search . '%');
             }
         )
-        ->orWhere('wallet_status', 'like', '%' . $search . '%')
-        ->orWhere('wallet_date', 'like', '%' . $search . '%')
-        ->orWhere('wallet_observation', 'like', '%' . $search . '%')
-        ->orWhere('dispatched_status', 'like', '%' . $search . '%')
-        ->orWhere('dispatched_date', 'like', '%' . $search . '%')
+        ->orWhere('wallet_status', 'LIKE', '%' . $search . '%')
+        ->orWhere('wallet_date', 'LIKE', '%' . $search . '%')
+        ->orWhere('wallet_observation', 'LIKE', '%' . $search . '%')
+        ->orWhere('dispatched_status', 'LIKE', '%' . $search . '%')
+        ->orWhere('dispatched_date', 'LIKE', '%' . $search . '%')
         ->orWhereHas('correria',
             function ($subQuery) use ($search) {
-                $subQuery->where('id', 'like', '%' . $search . '%')
-                ->orWhere('name', 'like',  '%' . $search . '%');
+                $subQuery->where('id', 'LIKE', '%' . $search . '%')
+                ->orWhere('name', 'LIKE',  '%' . $search . '%');
             }
         );
     }

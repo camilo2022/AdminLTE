@@ -65,20 +65,20 @@ class Payment extends Model implements Auditable
 
     public function scopeSearch($query, $search)
     {
-        return $query->where('id', 'like', '%' . $search . '%')
-        ->orWhere('value', 'like', '%' . $search . '%')
-        ->orWhere('reference', 'like', '%' . $search . '%')
-        ->orWhere('date', 'like', '%' . $search . '%')
+        return $query->where('id', 'LIKE', '%' . $search . '%')
+        ->orWhere('value', 'LIKE', '%' . $search . '%')
+        ->orWhere('reference', 'LIKE', '%' . $search . '%')
+        ->orWhere('date', 'LIKE', '%' . $search . '%')
         ->orWhereHas('payment_type_id',
             function ($subQuery) use ($search) {
-                $subQuery->where('id', 'like', '%' . $search . '%')
-                ->orWhere('name', 'like',  '%' . $search . '%');
+                $subQuery->where('id', 'LIKE', '%' . $search . '%')
+                ->orWhere('name', 'LIKE',  '%' . $search . '%');
             }
         )
         ->orWhereHas('bank_id',
             function ($subQuery) use ($search) {
-                $subQuery->where('id', 'like', '%' . $search . '%')
-                ->orWhere('name', 'like',  '%' . $search . '%');
+                $subQuery->where('id', 'LIKE', '%' . $search . '%')
+                ->orWhere('name', 'LIKE',  '%' . $search . '%');
             }
         );
     }

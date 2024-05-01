@@ -38,12 +38,14 @@ class Area extends Model implements Auditable
 
     public function scopeSearch($query, $search)
     {
-        return $query->where('name', 'like', '%' . $search . '%')
-        ->orWhere('description', 'like', '%' . $search . '%')
+        return $query->where('id', 'LIKE', '%' . $search . '%')
+        ->orWhere('name', 'LIKE', '%' . $search . '%')
+        ->orWhere('description', 'LIKE', '%' . $search . '%')
         ->orWhereHas('charges',
             function ($subQuery) use ($search) {
-                $subQuery->where('name', 'like', '%' . $search . '%')
-                ->orWhere('description', 'like', '%' . $search . '%');
+                $subQuery->where('id', 'LIKE', '%' . $search . '%')
+                ->orWhere('name', 'LIKE', '%' . $search . '%')
+                ->orWhere('description', 'LIKE', '%' . $search . '%');
             }
         );
     }

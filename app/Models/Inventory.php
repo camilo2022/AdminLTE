@@ -65,32 +65,32 @@ class Inventory extends Model implements Auditable
 
     public function scopeSearch($query, $search)
     {
-        return $query->where('quantity', 'like', '%' . $search . '%')
+        return $query->where('quantity', 'LIKE', '%' . $search . '%')
         ->orWhereHas('product',
             function ($subQuery) use ($search) {
-                $subQuery->where('code', 'like',  '%' . $search . '%');
+                $subQuery->where('code', 'LIKE',  '%' . $search . '%');
             }
         )
         ->orWhereHas('size',
             function ($subQuery) use ($search) {
-                $subQuery->where('code', 'like',  '%' . $search . '%');
+                $subQuery->where('code', 'LIKE',  '%' . $search . '%');
             }
         )
         ->orWhereHas('warehouse',
             function ($subQuery) use ($search) {
-                $subQuery->where('name', 'like',  '%' . $search . '%')
-                ->orWhere('code', 'like',  '%' . $search . '%');
+                $subQuery->where('name', 'LIKE',  '%' . $search . '%')
+                ->orWhere('code', 'LIKE',  '%' . $search . '%');
             }
         )
         ->orWhereHas('color',
             function ($subQuery) use ($search) {
-                $subQuery->where('name', 'like',  '%' . $search . '%')
-                ->orWhere('code', 'like',  '%' . $search . '%');
+                $subQuery->where('name', 'LIKE',  '%' . $search . '%')
+                ->orWhere('code', 'LIKE',  '%' . $search . '%');
             }
         )
         ->orWhereHas('tone',
             function ($subQuery) use ($search) {
-                $subQuery->where('name', 'like',  '%' . $search . '%');
+                $subQuery->where('name', 'LIKE',  '%' . $search . '%');
             }
         );
     }

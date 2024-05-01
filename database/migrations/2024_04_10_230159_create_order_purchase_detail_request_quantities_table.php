@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\OrderPurchaseDetail;
+use App\Models\Size;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -15,6 +17,10 @@ return new class extends Migration
     {
         Schema::create('order_purchase_detail_request_quantities', function (Blueprint $table) {
             $table->id();
+            $table->foreignIdFor(OrderPurchaseDetail::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignIdFor(Size::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
+            $table->unsignedBigInteger('quantity')->default(0);
+            $table->index(['order_purchase_detail_id', 'size_id'])->unique();
             $table->timestamps();
         });
     }

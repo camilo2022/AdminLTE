@@ -94,34 +94,39 @@ class Person extends Model implements Auditable
 
     public function scopeSearch($query, $search)
     {
-        return $query->where('name', 'like', '%' . $search . '%')
-        ->orWhere('last_name', 'like', '%' . $search . '%')
+        return $query->where('id', 'LIKE', '%' . $search . '%')
+        ->orWhere('name', 'LIKE', '%' . $search . '%')
+        ->orWhere('last_name', 'LIKE', '%' . $search . '%')
         ->orWhereHas('document_type',
             function ($subQuery) use ($search) {
-                $subQuery->where('name', 'like', '%' . $search . '%');
+                $subQuery->where('id', 'LIKE', '%' . $search . '%')
+                ->orWhere('name', 'LIKE', '%' . $search . '%');
             }
         )
-        ->orWhere('document_number', 'like', '%' . $search . '%')
+        ->orWhere('document_number', 'LIKE', '%' . $search . '%')
         ->orWhereHas('country',
             function ($subQuery) use ($search) {
-                $subQuery->where('name', 'like', '%' . $search . '%');
+                $subQuery->where('id', 'LIKE', '%' . $search . '%')
+                ->orWhere('name', 'LIKE', '%' . $search . '%');
             }
         )
         ->orWhereHas('departament',
             function ($subQuery) use ($search) {
-                $subQuery->where('name', 'like', '%' . $search . '%');
+                $subQuery->where('id', 'LIKE', '%' . $search . '%')
+                ->orWhere('name', 'LIKE', '%' . $search . '%');
             }
         )
         ->orWhereHas('city',
             function ($subQuery) use ($search) {
-                $subQuery->where('name', 'like', '%' . $search . '%');
+                $subQuery->where('id', 'LIKE', '%' . $search . '%')
+                ->orWhere('name', 'LIKE', '%' . $search . '%');
             }
         )
-        ->orWhere('address', 'like', '%' . $search . '%')
-        ->orWhere('neighborhood', 'like', '%' . $search . '%')
-        ->orWhere('email', 'like', '%' . $search . '%')
-        ->orWhere('telephone_number_first', 'like', '%' . $search . '%')
-        ->orWhere('telephone_number_second', 'like', '%' . $search . '%');
+        ->orWhere('address', 'LIKE', '%' . $search . '%')
+        ->orWhere('neighborhood', 'LIKE', '%' . $search . '%')
+        ->orWhere('email', 'LIKE', '%' . $search . '%')
+        ->orWhere('telephone_number_first', 'LIKE', '%' . $search . '%')
+        ->orWhere('telephone_number_second', 'LIKE', '%' . $search . '%');
     }
 
     public function scopeFilterByDate($query, $start_date, $end_date)

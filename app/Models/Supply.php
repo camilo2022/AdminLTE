@@ -103,8 +103,65 @@ class Supply extends Model implements Auditable
     public function scopeSearch($query, $search)
     {
         return $query->where('id', 'LIKE', '%' . $search . '%')
-            ->orWhere('name', 'LIKE', '%' . $search . '%')
-            ->orWhere('code', 'LIKE', '%' . $search . '%');
+        ->orWhere('name', 'LIKE', '%' . $search . '%')
+        ->orWhereHas('supplier',
+            function ($subQuery) use ($search) {
+                $subQuery->where('id', 'LIKE', '%' . $search . '%')
+                ->orWhere('name', 'LIKE', '%' . $search . '%');
+            }
+        )
+        ->orWhereHas('supply_type',
+            function ($subQuery) use ($search) {
+                $subQuery->where('id', 'LIKE', '%' . $search . '%')
+                ->orWhere('name', 'LIKE', '%' . $search . '%')
+                ->orWhere('code', 'LIKE', '%' . $search . '%');
+            }
+        )
+        ->orWhereHas('cloth_type',
+            function ($subQuery) use ($search) {
+                $subQuery->where('id', 'LIKE', '%' . $search . '%')
+                ->orWhere('name', 'LIKE', '%' . $search . '%')
+                ->orWhere('code', 'LIKE', '%' . $search . '%')
+                ->orWhere('description', 'LIKE', '%' . $search . '%');
+            }
+        )
+        ->orWhereHas('cloth_composition',
+            function ($subQuery) use ($search) {
+                $subQuery->where('id', 'LIKE', '%' . $search . '%')
+                ->orWhere('name', 'LIKE', '%' . $search . '%')
+                ->orWhere('description', 'LIKE', '%' . $search . '%');
+            }
+        )
+        ->orWhere('code', 'LIKE', '%' . $search . '%')
+        ->orWhere('description', 'LIKE', '%' . $search . '%')
+        ->orWhere('quantity', 'LIKE', '%' . $search . '%')
+        ->orWhere('quality', 'LIKE', '%' . $search . '%')
+        ->orWhere('width', 'LIKE', '%' . $search . '%')
+        ->orWhere('length', 'LIKE', '%' . $search . '%')
+        ->orWhereHas('measurement_unit',
+            function ($subQuery) use ($search) {
+                $subQuery->where('id', 'LIKE', '%' . $search . '%')
+                ->orWhere('name', 'LIKE', '%' . $search . '%')
+                ->orWhere('code', 'LIKE', '%' . $search . '%');
+            }
+        )
+        ->orWhereHas('color',
+            function ($subQuery) use ($search) {
+                $subQuery->where('id', 'LIKE', '%' . $search . '%')
+                ->orWhere('name', 'LIKE', '%' . $search . '%')
+                ->orWhere('code', 'LIKE', '%' . $search . '%');
+            }
+        )
+        ->orWhereHas('trademark',
+            function ($subQuery) use ($search) {
+                $subQuery->where('id', 'LIKE', '%' . $search . '%')
+                ->orWhere('name', 'LIKE', '%' . $search . '%')
+                ->orWhere('code', 'LIKE', '%' . $search . '%')
+                ->orWhere('description', 'LIKE', '%' . $search . '%');
+            }
+        )
+        ->orWhere('price_with_vat', 'LIKE', '%' . $search . '%')
+        ->orWhere('price_without_vat', 'LIKE', '%' . $search . '%');
     }
 
     public function scopeFilterByDate($query, $start_date, $end_date)

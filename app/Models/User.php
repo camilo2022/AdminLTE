@@ -75,27 +75,27 @@ class User extends Authenticatable implements Auditable
 
     public function scopeSearch($query, $search)
     {
-        return $query->where('id', 'like', '%' . $search . '%')
-        ->orWhere('name', 'like', '%' . $search . '%')
-        ->orWhere('last_name', 'like', '%' . $search . '%')
-        ->orWhere('address', 'like', '%' . $search . '%')
-        ->orWhere('email', 'like', '%' . $search . '%')
+        return $query->where('id', 'LIKE', '%' . $search . '%')
+        ->orWhere('name', 'LIKE', '%' . $search . '%')
+        ->orWhere('last_name', 'LIKE', '%' . $search . '%')
+        ->orWhere('address', 'LIKE', '%' . $search . '%')
+        ->orWhere('email', 'LIKE', '%' . $search . '%')
         ->orWhereHas('area',
             function ($subQuery) use ($search) {
-                $subQuery->where('id', 'like',  '%' . $search . '%')
-                ->orWhere('name', 'like',  '%' . $search . '%')
-                ->orWhere('description', 'like',  '%' . $search . '%');
+                $subQuery->where('id', 'LIKE',  '%' . $search . '%')
+                ->orWhere('name', 'LIKE',  '%' . $search . '%')
+                ->orWhere('description', 'LIKE',  '%' . $search . '%');
             }
         )
         ->orWhereHas('charge',
             function ($subQuery) use ($search) {
-                $subQuery->where('id', 'like',  '%' . $search . '%')
-                ->orWhere('name', 'like',  '%' . $search . '%')
-                ->orWhere('description', 'like',  '%' . $search . '%');
+                $subQuery->where('id', 'LIKE',  '%' . $search . '%')
+                ->orWhere('name', 'LIKE',  '%' . $search . '%')
+                ->orWhere('description', 'LIKE',  '%' . $search . '%');
             }
         )
-        ->orWhere('document_number', 'like', '%' . $search . '%')
-        ->orWhere('phone_number', 'like', '%' . $search . '%');
+        ->orWhere('document_number', 'LIKE', '%' . $search . '%')
+        ->orWhere('phone_number', 'LIKE', '%' . $search . '%');
     }
 
     public function scopeFilterByDate($query, $start_date, $end_date)

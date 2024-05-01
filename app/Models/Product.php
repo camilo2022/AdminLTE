@@ -96,37 +96,44 @@ class Product extends DBModel implements Auditable
 
     public function scopeSearch($query, $search)
     {
-        return $query->where('code', 'like', '%' . $search . '%')
-        ->orWhere('price', 'like', '%' . $search . '%')
-        ->orWhere('cost', 'like', '%' . $search . '%')
+        return $query->where('id', 'LIKE', '%' . $search . '%')
+        ->orWhere('code', 'LIKE', '%' . $search . '%')
+        ->orWhere('price', 'LIKE', '%' . $search . '%')
+        ->orWhere('cost', 'LIKE', '%' . $search . '%')
         ->orWhereHas('clothing_line',
             function ($subQuery) use ($search) {
-                $subQuery->where('name', 'like',  '%' . $search . '%');
+                $subQuery->where('id', 'LIKE', '%' . $search . '%')
+                ->orWhere('name', 'LIKE',  '%' . $search . '%');
             }
         )
         ->orWhereHas('category',
             function ($subQuery) use ($search) {
-                $subQuery->where('name', 'like',  '%' . $search . '%');
+                $subQuery->where('id', 'LIKE', '%' . $search . '%')
+                ->orWhere('name', 'LIKE',  '%' . $search . '%');
             }
         )
         ->orWhereHas('subcategory',
             function ($subQuery) use ($search) {
-                $subQuery->where('name', 'like',  '%' . $search . '%');
+                $subQuery->where('id', 'LIKE', '%' . $search . '%')
+                ->orWhere('name', 'LIKE',  '%' . $search . '%');
             }
         )
         ->orWhereHas('model',
             function ($subQuery) use ($search) {
-                $subQuery->where('name', 'like',  '%' . $search . '%');
+                $subQuery->where('id', 'LIKE', '%' . $search . '%')
+                ->orWhere('name', 'LIKE',  '%' . $search . '%');
             }
         )
         ->orWhereHas('trademark',
             function ($subQuery) use ($search) {
-                $subQuery->where('name', 'like',  '%' . $search . '%');
+                $subQuery->where('id', 'LIKE', '%' . $search . '%')
+                ->orWhere('name', 'LIKE',  '%' . $search . '%');
             }
         )
         ->orWhereHas('correria',
             function ($subQuery) use ($search) {
-                $subQuery->where('name', 'like',  '%' . $search . '%');
+                $subQuery->where('id', 'LIKE', '%' . $search . '%')
+                ->orWhere('name', 'LIKE',  '%' . $search . '%');
             }
         );
     }
