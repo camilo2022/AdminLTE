@@ -77,6 +77,8 @@ class RolesAndPermissionSeeder extends Seeder
 
         $Products = Role::create(['name' => 'Products']);
 
+        $OrderPurchases = Role::create(['name' => 'OrderPurchases']);
+
         $Inventories = Role::create(['name' => 'Inventories']);
 
         $Transfers = Role::create(['name' => 'Transfers']);
@@ -404,6 +406,38 @@ class RolesAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Dashboard.Products.Restore'])->syncRoles([$Products]);
         Permission::create(['name' => 'Dashboard.Products.Upload'])->syncRoles([$Products]);
         Permission::create(['name' => 'Dashboard.Products.Download'])->syncRoles([$Products]);
+
+        Permission::create(['name' => 'Dashboard.Orders.Purchase.Index'])->syncRoles([$OrderPurchases]);
+        Permission::create(['name' => 'Dashboard.Orders.Purchase.Index.Query'])->syncRoles([$OrderPurchases]);
+        Permission::create(['name' => 'Dashboard.Orders.Purchase.Create'])->syncRoles([$OrderPurchases]);
+        Permission::create(['name' => 'Dashboard.Orders.Purchase.Store'])->syncRoles([$OrderPurchases]);
+        Permission::create(['name' => 'Dashboard.Orders.Purchase.Edit'])->syncRoles([$OrderPurchases]);
+        Permission::create(['name' => 'Dashboard.Orders.Purchase.Update'])->syncRoles([$OrderPurchases]);
+        Permission::create(['name' => 'Dashboard.Orders.Purchase.Approve'])->syncRoles([$OrderPurchases]);
+        Permission::create(['name' => 'Dashboard.Orders.Purchase.Pending'])->syncRoles([$OrderPurchases]);
+        Permission::create(['name' => 'Dashboard.Orders.Purchase.Cancel'])->syncRoles([$OrderPurchases]);
+        Permission::create(['name' => 'Dashboard.Orders.Purchase.Receive'])->syncRoles([$OrderPurchases]);
+        Permission::create(['name' => 'Dashboard.Orders.Purchase.Payments.Query'])->syncRoles([$OrderPurchases]);
+        Permission::create(['name' => 'Dashboard.Orders.Purchase.AssignPayment.Query'])->syncRoles([$OrderPurchases]);
+        Permission::create(['name' => 'Dashboard.Orders.Purchase.AssignPayment'])->syncRoles([$OrderPurchases]);
+        Permission::create(['name' => 'Dashboard.Orders.Purchase.RemovePayment'])->syncRoles([$OrderPurchases]);
+        Permission::create(['name' => 'Dashboard.Orders.Purchase.ApprovePayment'])->syncRoles([$OrderPurchases]);
+        Permission::create(['name' => 'Dashboard.Orders.Purchase.CancelPayment'])->syncRoles([$OrderPurchases]);
+        Permission::create(['name' => 'Dashboard.Orders.Purchase.Download'])->syncRoles([$OrderPurchases]);
+        Permission::create(['name' => 'Dashboard.Orders.Purchase.Details.Request.Index'])->syncRoles([$OrderPurchases]);
+        Permission::create(['name' => 'Dashboard.Orders.Purchase.Details.Request.Index.Query'])->syncRoles([$OrderPurchases]);
+        Permission::create(['name' => 'Dashboard.Orders.Purchase.Details.Request.Create'])->syncRoles([$OrderPurchases]);
+        Permission::create(['name' => 'Dashboard.Orders.Purchase.Details.Request.Store'])->syncRoles([$OrderPurchases]);
+        Permission::create(['name' => 'Dashboard.Orders.Purchase.Details.Request.Edit'])->syncRoles([$OrderPurchases]);
+        Permission::create(['name' => 'Dashboard.Orders.Purchase.Details.Request.Update'])->syncRoles([$OrderPurchases]);
+        Permission::create(['name' => 'Dashboard.Orders.Purchase.Details.Request.Pending'])->syncRoles([$OrderPurchases]);
+        Permission::create(['name' => 'Dashboard.Orders.Purchase.Details.Request.Cancel'])->syncRoles([$OrderPurchases]);
+        Permission::create(['name' => 'Dashboard.Orders.Purchase.Details.Receive.Index'])->syncRoles([$OrderPurchases]);
+        Permission::create(['name' => 'Dashboard.Orders.Purchase.Details.Receive.Index.Query'])->syncRoles([$OrderPurchases]);
+        Permission::create(['name' => 'Dashboard.Orders.Purchase.Details.Receive.Create'])->syncRoles([$OrderPurchases]);
+        Permission::create(['name' => 'Dashboard.Orders.Purchase.Details.Receive.Store'])->syncRoles([$OrderPurchases]);
+        Permission::create(['name' => 'Dashboard.Orders.Purchase.Details.Receive.Edit'])->syncRoles([$OrderPurchases]);
+        Permission::create(['name' => 'Dashboard.Orders.Purchase.Details.Receive.Update'])->syncRoles([$OrderPurchases]);
 
         Permission::create(['name' => 'Dashboard.Inventories.Index'])->syncRoles([$Inventories]);
         Permission::create(['name' => 'Dashboard.Inventories.Index.Query'])->syncRoles([$Inventories]);

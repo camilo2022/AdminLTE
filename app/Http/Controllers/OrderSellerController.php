@@ -121,7 +121,7 @@ class OrderSellerController extends Controller
         try {
             if($request->filled('client_id')) {
                 return $this->successResponse(
-                    ClientBranch::with('country', 'departament', 'city.province')->where('client_id', '=', $request->input('client_id'))->get(),
+                    ClientBranch::with('country', 'departament', 'city.province')->where('client_id', $request->input('client_id'))->get(),
                     'Sucursales encontradas con exito.',
                     200
                 );
@@ -166,11 +166,11 @@ class OrderSellerController extends Controller
             $order->save();
 
             foreach($request->input('payment_type_ids') as $payment_type_id) {
-                $order_payment_type = new ModelPaymentType();
-                $order_payment_type->model_type = Order::class;
-                $order_payment_type->model_id = $order->id;
-                $order_payment_type->payment_type_id = $payment_type_id;
-                $order_payment_type->save();
+                $orderPaymentType = new ModelPaymentType();
+                $orderPaymentType->model_type = Order::class;
+                $orderPaymentType->model_id = $order->id;
+                $orderPaymentType->payment_type_id = $payment_type_id;
+                $orderPaymentType->save();
             }
 
             return $this->successResponse(
@@ -216,7 +216,7 @@ class OrderSellerController extends Controller
         try {
             if($request->filled('client_id')) {
                 return $this->successResponse(
-                    ClientBranch::with('country', 'departament', 'city.province')->where('client_id', '=', $request->input('client_id'))->get(),
+                    ClientBranch::with('country', 'departament', 'city.province')->where('client_id', $request->input('client_id'))->get(),
                     'Sucursales encontradas con exito.',
                     200
                 );
@@ -274,11 +274,11 @@ class OrderSellerController extends Controller
             $payment_type_ids = array_values(array_diff($request->input('payment_type_ids'), $order->payment_types->pluck('id')->toArray()));
 
             foreach($payment_type_ids as $payment_type_id) {
-                $order_payment_type = new ModelPaymentType();
-                $order_payment_type->model_type = Order::class;
-                $order_payment_type->model_id = $order->id;
-                $order_payment_type->payment_type_id = $payment_type_id;
-                $order_payment_type->save();
+                $orderPaymentType = new ModelPaymentType();
+                $orderPaymentType->model_type = Order::class;
+                $orderPaymentType->model_id = $order->id;
+                $orderPaymentType->payment_type_id = $payment_type_id;
+                $orderPaymentType->save();
             }
 
             return $this->successResponse(

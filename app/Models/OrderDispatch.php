@@ -47,12 +47,12 @@ class OrderDispatch extends Model implements Auditable
 
     public function payments() : MorphMany
     {
-      return $this->morphMany(Payment::class, 'model');
+        return $this->morphMany(Payment::class, 'model');
     }
 
     public function invoices() : MorphMany
     {
-      return $this->morphMany(Invoice::class, 'model');
+        return $this->morphMany(Invoice::class, 'model');
     }
 
     public function order_packing() : HasOne
@@ -163,5 +163,11 @@ class OrderDispatch extends Model implements Auditable
                 );
             }
         );
+    }
+
+    public function scopeFilterByDate($query, $start_date, $end_date)
+    {
+        // Filtro por rango de fechas entre 'start_date' y 'end_date' en el campo 'created_at'
+        return $query->whereBetween('created_at', [$start_date, $end_date]);
     }
 }

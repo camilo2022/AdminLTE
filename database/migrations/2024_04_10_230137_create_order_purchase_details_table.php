@@ -4,6 +4,7 @@ use App\Models\Color;
 use App\Models\OrderPurchase;
 use App\Models\Product;
 use App\Models\Tone;
+use App\Models\User;
 use App\Models\Warehouse;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -27,6 +28,7 @@ return new class extends Migration
             $table->foreignIdFor(Tone::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->float('price', 8, 2);
             $table->datetime('date');
+            $table->foreignIdFor(User::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->string('observation')->nullable();
             $table->enum('status', ['Pendiente', 'Cancelado', 'Aprobado', 'Parcialmente Recibido', 'Recibido'])->default('Pendiente');
             $table->index(['order_purchase_id', 'warehouse_id', 'product_id', 'color_id', 'tone_id'])->unique();
