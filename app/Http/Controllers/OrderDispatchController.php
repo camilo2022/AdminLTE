@@ -634,9 +634,9 @@ class OrderDispatchController extends Controller
             $pdf = \PDF::loadView('Dashboard.OrderDispatches.PDF', compact('orderDispatch', 'sizes'))->setPaper('a4', 'landscape')->setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true]);
             /* $pdf = \PDF::loadView('Browser_public.pdfdocument', compact('queryic'))->output();
             return $pdf->download('pdfdocument.pdf'); */
-            return $pdf->stream("{$orderDispatch->consecutive}.pdf");
+            return $pdf->stream("{$orderDispatch->consecutive}-ORDEN-DESPACHO.pdf");
         } catch (ModelNotFoundException $e) {
-            return back()->with('danger', 'Ocurrió un error al cargar el pdf de la orden de despacho del pedidos: ' . $this->getMessage('ModelNotFoundException'));
+            return back()->with('danger', 'Ocurrió un error al cargar el pdf de la orden de despacho del pedido: ' . $this->getMessage('ModelNotFoundException'));
         } catch (Exception $e) {
             return back()->with('danger', 'Ocurrió un error al cargar la vista: ' . $e->getMessage());
         }

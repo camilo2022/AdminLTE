@@ -23,6 +23,8 @@ use App\Http\Controllers\OrderDispatchDetailController;
 use App\Http\Controllers\OrderInvoiceController;
 use App\Http\Controllers\OrderPackedController;
 use App\Http\Controllers\OrderPackedPackageController;
+use App\Http\Controllers\OrderPurchaseController;
+use App\Http\Controllers\OrderPurchaseDetailController;
 use App\Http\Controllers\OrderReturnController;
 use App\Http\Controllers\OrderReturnDetailController;
 use App\Http\Controllers\OrderSellerController;
@@ -617,6 +619,42 @@ Route::middleware(['auth'])->group(function () {
         });
 
         Route::prefix('/Orders')->group(function () {
+            Route::prefix('/Purchase')->group(function () {
+                Route::controller(OrderPurchaseController::class)->group(function () {
+                    Route::get('/Index', 'index')->middleware('can:Dashboard.Orders.Purchase.Index')->name('Dashboard.Orders.Purchase.Index');
+                    Route::post('/Index/Query', 'indexQuery')->middleware('can:Dashboard.Orders.Purchase.Index.Query')->name('Dashboard.Orders.Purchase.Index.Query');
+                    Route::post('/Create', 'create')->middleware('can:Dashboard.Orders.Purchase.Create')->name('Dashboard.Orders.Purchase.Create');
+                    Route::post('/Store', 'store')->middleware('can:Dashboard.Orders.Purchase.Store')->name('Dashboard.Orders.Purchase.Store');
+                    Route::post('/Edit/{id}', 'edit')->middleware('can:Dashboard.Orders.Purchase.Edit')->name('Dashboard.Orders.Purchase.Edit');
+                    Route::put('/Update/{id}', 'update')->middleware('can:Dashboard.Orders.Purchase.Update')->name('Dashboard.Orders.Purchase.Update');
+                    Route::put('/Approve', 'approve')->middleware('can:Dashboard.Orders.Purchase.Approve')->name('Dashboard.Orders.Purchase.Approve');
+                    Route::put('/Pending', 'pending')->middleware('can:Dashboard.Orders.Purchase.Pending')->name('Dashboard.Orders.Purchase.Pending');
+                    Route::put('/Cancel', 'cancel')->middleware('can:Dashboard.Orders.Purchase.Cancel')->name('Dashboard.Orders.Purchase.Cancel');
+                    Route::post('/Receive', 'receive')->middleware('can:Dashboard.Orders.Purchase.Receive')->name('Dashboard.Orders.Purchase.Receive');
+                    Route::post('/Payments/Query', 'paymentQuery')->middleware('can:Dashboard.Orders.Purchase.Payments.Query')->name('Dashboard.Orders.Purchase.Payments.Query');
+                    Route::post('/AssignPayment/Query', 'assignPaymentQuery')->middleware('can:Dashboard.Orders.Purchase.AssignPayment.Query')->name('Dashboard.Orders.Purchase.AssignPayment.Query');
+                    Route::post('/AssignPayment', 'assignPayment')->middleware('can:Dashboard.Orders.Purchase.AssignPayment')->name('Dashboard.Orders.Purchase.AssignPayment');
+                    Route::delete('/RemovePayment', 'removePayment')->middleware('can:Dashboard.Orders.Purchase.RemovePayment')->name('Dashboard.Orders.Purchase.RemovePayment');
+                    Route::get('/Download/{id}', 'download')->middleware('can:Dashboard.Orders.Purchase.Download')->name('Dashboard.Orders.Purchase.Download');
+                });
+                Route::prefix('/Details')->group(function () {
+                    Route::controller(OrderPurchaseDetailController::class)->group(function () {
+                        Route::get('/Index/{id}', 'index')->middleware('can:Dashboard.Orders.Purchase.Details.Index')->name('Dashboard.Orders.Purchase.Details.Index');
+                        Route::post('/Index/Request/Query', 'indexRequestQuery')->middleware('can:Dashboard.Orders.Purchase.Details.Index.Request.Query')->name('Dashboard.Orders.Purchase.Details.Index.Request.Query');
+                        Route::post('/Index/Receive/Query', 'indexReceiveQuery')->middleware('can:Dashboard.Orders.Purchase.Details.Index.Receive.Query')->name('Dashboard.Orders.Purchase.Details.Index.Receive.Query');
+                        Route::post('/Create', 'create')->middleware('can:Dashboard.Orders.Purchase.Details.Create')->name('Dashboard.Orders.Purchase.Details.Create');
+                        Route::post('/Store', 'store')->middleware('can:Dashboard.Orders.Purchase.Details.Store')->name('Dashboard.Orders.Purchase.Details.Store');
+                        Route::post('/Edit/{id}', 'edit')->middleware('can:Dashboard.Orders.Purchase.Details.Edit')->name('Dashboard.Orders.Purchase.Details.Edit');
+                        Route::put('/Update/{id}', 'update')->middleware('can:Dashboard.Orders.Purchase.Details.Update')->name('Dashboard.Orders.Purchase.Details.Update');
+                        Route::put('/Pending', 'pending')->middleware('can:Dashboard.Orders.Purchase.Details.Pending')->name('Dashboard.Orders.Purchase.Details.Pending');
+                        Route::put('/Cancel', 'cancel')->middleware('can:Dashboard.Orders.Purchase.Details.Cancel')->name('Dashboard.Orders.Purchase.Details.Cancel');
+                        Route::post('/Receive', 'receive')->middleware('can:Dashboard.Orders.Purchase.Details.Receive')->name('Dashboard.Orders.Purchase.Details.Receive');
+                        Route::post('/PartiallyReceive', 'partiallyReceive')->middleware('can:Dashboard.Orders.Purchase.Details.PartiallyReceive')->name('Dashboard.Orders.Purchase.Details.PartiallyReceive');
+                        Route::post('/PartiallyReceive/Query', 'partiallyReceiveQuery')->middleware('can:Dashboard.Orders.Purchase.Details.PartiallyReceive.Query')->name('Dashboard.Orders.Purchase.Details.PartiallyReceive.Query');
+                    });
+                });
+            });
+
             Route::prefix('/Seller')->group(function () {
                 Route::controller(OrderSellerController::class)->group(function () {
                     Route::get('/Index', 'index')->middleware('can:Dashboard.Orders.Seller.Index')->name('Dashboard.Orders.Seller.Index');
@@ -650,6 +688,7 @@ Route::middleware(['auth'])->group(function () {
                     });
                 });
             });
+
             Route::prefix('/Wallet')->group(function () {
                 Route::controller(OrderWalletController::class)->group(function () {
                     Route::get('/Index', 'index')->middleware('can:Dashboard.Orders.Wallet.Index')->name('Dashboard.Orders.Wallet.Index');
@@ -677,6 +716,7 @@ Route::middleware(['auth'])->group(function () {
                     });
                 });
             });
+
             Route::prefix('/Dispatch')->group(function () {
                 Route::controller(OrderDispatchController::class)->group(function () {
                     Route::get('/Index', 'index')->middleware('can:Dashboard.Orders.Dispatch.Index')->name('Dashboard.Orders.Dispatch.Index');
@@ -702,6 +742,7 @@ Route::middleware(['auth'])->group(function () {
                     });
                 });
             });
+
             Route::prefix('/Packed')->group(function () {
                 Route::controller(OrderPackedController::class)->group(function () {
                     Route::get('/Index', 'index')->middleware('can:Dashboard.Orders.Packed.Index')->name('Dashboard.Orders.Packed.Index');
@@ -725,6 +766,7 @@ Route::middleware(['auth'])->group(function () {
 
                 });
             });
+
             Route::prefix('/Invoice')->group(function () {
                 Route::controller(OrderInvoiceController::class)->group(function () {
                     Route::get('/Index', 'index')->middleware('can:Dashboard.Orders.Invoice.Index')->name('Dashboard.Orders.Invoice.Index');
@@ -734,6 +776,7 @@ Route::middleware(['auth'])->group(function () {
                     Route::get('/Download/{id}', 'download')->middleware('can:Dashboard.Orders.Invoice.Download')->name('Dashboard.Orders.Invoice.Download');
                 });
             });
+
             Route::prefix('/Return')->group(function () {
                 Route::controller(OrderReturnController::class)->group(function () {
                     Route::get('/Index', 'index')->middleware('can:Dashboard.Orders.Return.Index')->name('Dashboard.Orders.Return.Index');

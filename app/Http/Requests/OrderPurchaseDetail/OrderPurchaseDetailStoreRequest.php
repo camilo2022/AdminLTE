@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\OrderPurchase;
+namespace App\Http\Requests\OrderPurchaseDetail;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class OrderPurchaseCancelPaymentRequest extends FormRequest
+class OrderPurchaseDetailStoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

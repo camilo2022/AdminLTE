@@ -862,7 +862,7 @@ class OrderSellerController extends Controller
             $pdf = \PDF::loadView('Dashboard.OrderSellers.PDF', compact('order', 'sizes'))->setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true]);
             /* $pdf = \PDF::loadView('Browser_public.pdfdocument', compact('queryic'))->output();
             return $pdf->download('pdfdocument.pdf'); */
-            return $pdf->stream("{$order->id}-PEDIDO.pdf");
+            return $pdf->stream("{$order->id}-ORDEN-PEDIDO.pdf");
         } catch (ModelNotFoundException $e) {
             return back()->with('danger', 'Ocurrió un error al cargar el pdf de la orden de despacho del pedidos: ' . $this->getMessage('ModelNotFoundException'));
         } catch (Exception $e) {
