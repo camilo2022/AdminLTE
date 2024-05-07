@@ -12,6 +12,7 @@ use App\Http\Requests\OrderPurchaseDetail\OrderPurchaseDetailPendingRequest;
 use App\Http\Requests\OrderPurchaseDetail\OrderPurchaseDetailStoreRequest;
 use App\Http\Requests\OrderPurchaseDetail\OrderPurchaseDetailUpdateRequest;
 use App\Models\OrderPurchase;
+use App\Models\OrderPurchaseDetailReceivedQuantity;
 use App\Models\OrderPurchaseDetailRequestQuantity;
 use App\Models\Product;
 use App\Models\Warehouse;
@@ -22,6 +23,7 @@ use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class OrderPurchaseDetailController extends Controller
 {
@@ -60,26 +62,26 @@ class OrderPurchaseDetailController extends Controller
 
             $orderPurchaseDetails = $orderPurchaseDetails->map(function ($orderPurchaseDetail) use ($orderPurchaseDetailQuantitySizes) {
 
-                $orderPurchaseDetailSizes = $orderPurchaseDetail->order_detail_quantities->pluck('size_id')->unique();
+                $orderPurchaseDetailSizes = $orderPurchaseDetail->order_purchase_detail_request_quantities->pluck('size_id')->unique();
                 $missingSizes = $orderPurchaseDetailQuantitySizes->pluck('size_id')->unique()->values()->diff($orderPurchaseDetailSizes)->values();
 
-                $quantities = collect($orderPurchaseDetail->order_detail_quantities)->mapWithKeys(function ($quantity) {
+                $quantities = collect($orderPurchaseDetail->order_purchase_detail_request_quantities)->mapWithKeys(function ($quantity) {
                     return [$quantity['size']->id => [
-                        'order_detail_id' => $quantity['order_detail_id'],
+                        'order_purchase_detail_id' => $quantity['order_purchase_detail_id'],
                         'quantity' => $quantity['quantity'],
                     ]];
                 });
 
                 $missingSizes->each(function ($missingSize) use ($quantities, $orderPurchaseDetail) {
                     $quantities[$missingSize] = [
-                        'order_detail_id' => $orderPurchaseDetail->id,
+                        'order_purchase_detail_id' => $orderPurchaseDetail->id,
                         'quantity' => 0,
                     ];
                 });
 
                 return [
                     'id' => $orderPurchaseDetail->id,
-                    'order' => $orderPurchaseDetail->order,
+                    'orderPurchase' => $orderPurchaseDetail->order,
                     'product' => $orderPurchaseDetail->product,
                     'color' => $orderPurchaseDetail->color,
                     'tone' => $orderPurchaseDetail->tone,
@@ -123,59 +125,58 @@ class OrderPurchaseDetailController extends Controller
     public function indexReceiveQuery(OrderPurchaseDetailIndexReceiveQueryRequest $request)
     {
         try {
-            $orderDetails = OrderDetail::with([
-                    'order', 'order_detail_quantities.size',
+            $orderPurchaseDetails = OrderPurchaseDetail::with([
+                    'order_purchase', 'order_purchase_detail_request_quantities.size',
+                    'order_purchase_detail_request_quantities.order_purchase_detail_received_quantities',
+                    'warehouse' => fn($query) => $query->withTrashed(),
                     'product' => fn($query) => $query->withTrashed(),
                     'color' => fn($query) => $query->withTrashed(),
                     'tone' => fn($query) => $query->withTrashed(),
-                    'wallet_user' => fn($query) => $query->withTrashed(),
-                    'dispatched_user' => fn($query) => $query->withTrashed(),
+                    'user' => fn($query) => $query->withTrashed()
                 ])
-                ->where('order_id', $request->input('order_id'))
+                ->where('order_purchase_id', $request->input('order_purchase_id'))
                 ->get();
 
-            $orderDetailQuantitySizes = OrderDetailQuantity::with('order_detail', 'size')
-                ->whereHas('order_detail', fn($subQuery) => $subQuery->where('order_id', $request->input('order_id')))
+            $orderPurchaseDetailQuantitySizes = OrderPurchaseDetailReceivedQuantity::with('order_purchase_detail', 'order_purchase_detail_request_quantity.size')
+                ->whereHas('order_purchase_detail_request_quantity.order_purchase_detail', fn($subQuery) => $subQuery->where('order_purchase_id', $request->input('order_purchase_id')))
                 ->get();
 
-            $orderDetails = $orderDetails->map(function ($orderDetail) use ($orderDetailQuantitySizes) {
-
-                $orderDetailSizes = $orderDetail->order_detail_quantities->pluck('size_id')->unique();
-                $missingSizes = $orderDetailQuantitySizes->pluck('size_id')->unique()->values()->diff($orderDetailSizes)->values();
-
-                $quantities = collect($orderDetail->order_detail_quantities)->mapWithKeys(function ($quantity) {
+            $orderPurchaseDetails = $orderPurchaseDetails->map(function ($orderPurchaseDetail) use ($orderPurchaseDetailQuantitySizes) {
+                $orderPurchaseDetailSizes = $orderPurchaseDetail->order_purchase_detail_request_quantities->pluck('size_id')->unique();
+                $missingSizes = $orderPurchaseDetailQuantitySizes->pluck('order_purchase_detail_request_quantity')->pluck('size_id')->unique()->values()->diff($orderPurchaseDetailSizes)->values();
+                $quantities = collect($orderPurchaseDetail->order_purchase_detail_received_quantities)->mapWithKeys(function ($quantity) {
                     return [$quantity['size']->id => [
                         'order_detail_id' => $quantity['order_detail_id'],
                         'quantity' => $quantity['quantity'],
                     ]];
                 });
 
-                $missingSizes->each(function ($missingSize) use ($quantities, $orderDetail) {
+                $missingSizes->each(function ($missingSize) use ($quantities, $orderPurchaseDetail) {
                     $quantities[$missingSize] = [
-                        'order_detail_id' => $orderDetail->id,
+                        'order_purchase_detail_id' => $orderPurchaseDetail->id,
                         'quantity' => 0,
                     ];
                 });
 
                 return [
-                    'id' => $orderDetail->id,
-                    'order' => $orderDetail->order,
-                    'product' => $orderDetail->product,
-                    'color' => $orderDetail->color,
-                    'tone' => $orderDetail->tone,
-                    'price' => $orderDetail->price,
-                    'seller_date' => $orderDetail->seller_date,
-                    'seller_observation' => $orderDetail->seller_observation,
-                    'status' => $orderDetail->status,
+                    'id' => $orderPurchaseDetail->id,
+                    'orderPurchase' => $orderPurchaseDetail->order,
+                    'product' => $orderPurchaseDetail->product,
+                    'color' => $orderPurchaseDetail->color,
+                    'tone' => $orderPurchaseDetail->tone,
+                    'price' => $orderPurchaseDetail->price,
+                    'seller_date' => $orderPurchaseDetail->seller_date,
+                    'seller_observation' => $orderPurchaseDetail->seller_observation,
+                    'status' => $orderPurchaseDetail->status,
                     'quantities' => $quantities,
                 ];
             });
 
             return $this->successResponse(
                 [
-                    'order' => OrderPurchase::findOrFail($request->input('order_id')),
-                    'orderDetails' => $orderDetails,
-                    'sizes' => $orderDetailQuantitySizes->pluck('size')->unique()->values()
+                    'orderPurchase' => OrderPurchase::findOrFail($request->input('order_purchase_id')),
+                    'orderPurchaseDetails' => $orderPurchaseDetails,
+                    'sizes' => $orderPurchaseDetailQuantitySizes->pluck('size')->unique()->values()
                 ],
                 $this->getMessage('Success'),
                 200
@@ -234,27 +235,29 @@ class OrderPurchaseDetailController extends Controller
     public function store(OrderPurchaseDetailStoreRequest $request)
     {
         try {
-            $orderDetail = new OrderPurchaseDetail();
-            $orderDetail->order_id = $request->input('order_id');
-            $orderDetail->product_id = $request->input('product_id');
-            $orderDetail->color_id = $request->input('color_id');
-            $orderDetail->tone_id = $request->input('tone_id');
-            $orderDetail->price = $request->input('price');
-            $orderDetail->seller_date = Carbon::now()->format('Y-m-d H:i:s');
-            $orderDetail->seller_observation = $request->input('seller_observation');
-            $orderDetail->save();
+            $orderPurchaseDetail = new OrderPurchaseDetail();
+            $orderPurchaseDetail->order_purchase_id = $request->input('order_purchase_id');
+            $orderPurchaseDetail->warehouse_id = $request->input('warehouse_id');
+            $orderPurchaseDetail->product_id = $request->input('product_id');
+            $orderPurchaseDetail->color_id = $request->input('color_id');
+            $orderPurchaseDetail->tone_id = $request->input('tone_id');
+            $orderPurchaseDetail->price = $request->input('price');
+            $orderPurchaseDetail->date = Carbon::now()->format('Y-m-d H:i:s');
+            $orderPurchaseDetail->user_id = Auth::user()->id;
+            $orderPurchaseDetail->observation = $request->input('observation');
+            $orderPurchaseDetail->save();
 
-            collect($request->order_detail_quantities)->map(function ($orderDetailQuantity) use ($orderDetail) {
-                $orderDetailQuantity = (object) $orderDetailQuantity;
-                $orderDetailQuantityNew = new OrderPurchaseDetailRequestQuantity();
-                $orderDetailQuantityNew->order_detail_id = $orderDetail->id;
-                $orderDetailQuantityNew->size_id = $orderDetailQuantity->size_id;
-                $orderDetailQuantityNew->quantity = $orderDetailQuantity->quantity;
-                $orderDetailQuantityNew->save();
+            collect($request->order_purchase_detail_request_quantities)->map(function ($orderPurchaseDetailRequestQuantity) use ($orderPurchaseDetail) {
+                $orderPurchaseDetailRequestQuantity = (object) $orderPurchaseDetailRequestQuantity;
+                $orderPurchaseDetailRequestQuantityNew = new OrderPurchaseDetailRequestQuantity();
+                $orderPurchaseDetailRequestQuantityNew->order_purchase_detail_id = $orderPurchaseDetail->id;
+                $orderPurchaseDetailRequestQuantityNew->size_id = $orderPurchaseDetailRequestQuantity->size_id;
+                $orderPurchaseDetailRequestQuantityNew->quantity = $orderPurchaseDetailRequestQuantity->quantity;
+                $orderPurchaseDetailRequestQuantityNew->save();
             });
 
             return $this->successResponse(
-                $orderDetail,
+                $orderPurchaseDetail,
                 'El detalle de la orden de compra fue registrado exitosamente.',
                 201
             );
@@ -291,19 +294,6 @@ class OrderPurchaseDetailController extends Controller
     public function edit(OrderPurchaseDetailCreateRequest $request, $id)
     {
         try {
-            if($request->filled('product_id') && $request->filled('color_id') && $request->filled('tone_id')) {
-                return $this->successResponse(
-                    Inventory::with('product', 'warehouse', 'color', 'tone', 'size')
-                        ->whereHas('product', fn($subQuery) => $subQuery->where('id', $request->input('product_id')))
-                        ->whereHas('warehouse', fn($subQuery) => $subQuery->where('to_discount', true))
-                        ->whereHas('color', fn($subQuery) => $subQuery->where('id', $request->input('color_id')))
-                        ->whereHas('tone', fn($subQuery) => $subQuery->where('id', $request->input('tone_id')))
-                        ->get(),
-                    'Inventario encontrado con exito.',
-                    200
-                );
-            }
-
             if($request->filled('product_id')) {
                 return $this->successResponse(
                     Product::with('colors_tones.color', 'colors_tones.tone')->findOrFail($request->input('product_id')),
@@ -314,12 +304,11 @@ class OrderPurchaseDetailController extends Controller
 
             return $this->successResponse(
                 [
-                    'products' => Product::with('inventories.warehouse')
-                    ->whereHas('inventories.warehouse', fn($subQuery) => $subQuery->where('to_discount', true))
-                    ->get(),
-                    'orderDetail' => OrderDetail::with('order_detail_quantities')->findOrFail($id)
+                    'orderPurchaseDetail' => OrderPurchaseDetail::with('order_purchase_detail_request_quantities')->findOrFail($id),
+                    'products' => Product::all(),
+                    'warehouses' => Warehouse::all()
                 ],
-                'El detalle del pedido fue encontrado exitosamente.',
+                'El detalle de la orden de compra fue encontrado exitosamente.',
                 204
             );
         } catch (ModelNotFoundException $e) {
@@ -344,31 +333,33 @@ class OrderPurchaseDetailController extends Controller
     public function update(OrderPurchaseDetailUpdateRequest $request, $id)
     {
         try {
-            $orderDetail = OrderDetail::with('order_detail_quantities')->findOrFail($id);
-            $orderDetail->order_id = $request->input('order_id');
-            $orderDetail->product_id = $request->input('product_id');
-            $orderDetail->color_id = $request->input('color_id');
-            $orderDetail->tone_id = $request->input('tone_id');
-            $orderDetail->seller_observation = $request->input('seller_observation');
-            $orderDetail->save();
+            $orderPurchaseDetail = OrderPurchaseDetail::with('order_purchase_detail_request_quantities')->findOrFail($id);
+            $orderPurchaseDetail->order_purchase_id = $request->input('order_purchase_id');
+            $orderPurchaseDetail->warehouse_id = $request->input('warehouse_id');
+            $orderPurchaseDetail->product_id = $request->input('product_id');
+            $orderPurchaseDetail->color_id = $request->input('color_id');
+            $orderPurchaseDetail->tone_id = $request->input('tone_id');
+            $orderPurchaseDetail->price = $request->input('price');
+            $orderPurchaseDetail->observation = $request->input('observation');
+            $orderPurchaseDetail->save();
 
-            /* $orderDetail->order_detail_quantities()->delete(); */
+            /* $orderDetail->order_purchase_detail_request_quantities()->delete(); */
 
-            collect($request->order_detail_quantities)->map(function ($orderDetailQuantity) use ($orderDetail) {
-                $orderDetailQuantity = (object) $orderDetailQuantity;
-                $orderDetailQuantityNew = $orderDetail->order_detail_quantities->where('order_detail_id', $orderDetail->id)->where('size_id', $orderDetailQuantity->size_id)->first();
-                if(!$orderDetailQuantityNew) {
-                    $orderDetailQuantityNew = new OrderDetailQuantity();
+            collect($request->order_purchase_detail_request_quantities)->map(function ($orderPurchaseDetailRequestQuantity) use ($orderPurchaseDetail) {
+                $orderPurchaseDetailRequestQuantity = (object) $orderPurchaseDetailRequestQuantity;
+                $orderPurchaseDetailRequestQuantityNew = $orderPurchaseDetail->order_purchase_detail_request_quantities->where('order_purchase_detail_id', $orderPurchaseDetail->id)->where('size_id', $orderPurchaseDetailRequestQuantity->size_id)->first();
+                if(!$orderPurchaseDetailRequestQuantityNew) {
+                    $orderPurchaseDetailRequestQuantityNew = new OrderPurchaseDetailRequestQuantity();
                 }
-                $orderDetailQuantityNew->order_detail_id = $orderDetail->id;
-                $orderDetailQuantityNew->size_id = $orderDetailQuantity->size_id;
-                $orderDetailQuantityNew->quantity = $orderDetailQuantity->quantity;
-                $orderDetailQuantityNew->save();
+                $orderPurchaseDetailRequestQuantityNew->order_detail_id = $orderPurchaseDetail->id;
+                $orderPurchaseDetailRequestQuantityNew->size_id = $orderPurchaseDetailRequestQuantity->size_id;
+                $orderPurchaseDetailRequestQuantityNew->quantity = $orderPurchaseDetailRequestQuantity->quantity;
+                $orderPurchaseDetailRequestQuantityNew->save();
             });
 
             return $this->successResponse(
-                $orderDetail,
-                'El detalle del pedido fue actualizado por el asesor exitosamente.',
+                $orderPurchaseDetail,
+                'El detalle de la orden de compra fue actualizado exitosamente.',
                 200
             );
         } catch (ModelNotFoundException $e) {
@@ -402,13 +393,13 @@ class OrderPurchaseDetailController extends Controller
     public function pending(OrderPurchaseDetailPendingRequest $request)
     {
         try {
-            $orderDetail = OrderDetail::findOrFail($request->input('id'));
-            $orderDetail->status = 'Pendiente';
-            $orderDetail->save();
+            $orderPurchaseDetail = OrderPurchaseDetail::findOrFail($request->input('id'));
+            $orderPurchaseDetail->status = 'Pendiente';
+            $orderPurchaseDetail->save();
 
             return $this->successResponse(
-                $orderDetail,
-                'El detalle del pedido fue pendiente por el asesor exitosamente.',
+                $orderPurchaseDetail,
+                'El detalle de la orden de compra fue pendiente exitosamente.',
                 200
             );
         } catch (ModelNotFoundException $e) {
@@ -442,15 +433,13 @@ class OrderPurchaseDetailController extends Controller
     public function cancel(OrderPurchaseDetailCancelRequest $request)
     {
         try {
-            $orderDetail = OrderDetail::findOrFail($request->input('id'));
-            $orderDetail->status = 'Cancelado';
-            $orderDetail->save();
-
-            DB::statement('CALL order_seller_status(?)', [$orderDetail->order->id]);
+            $orderPurchaseDetail = OrderPurchaseDetail::findOrFail($request->input('id'));
+            $orderPurchaseDetail->status = 'Cancelado';
+            $orderPurchaseDetail->save();
 
             return $this->successResponse(
-                $orderDetail,
-                'El detalle del pedido fue cancelado por el asesor exitosamente.',
+                $orderPurchaseDetail,
+                'El detalle de la orden de compra fue cancelado exitosamente.',
                 200
             );
         } catch (ModelNotFoundException $e) {

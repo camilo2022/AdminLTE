@@ -53,6 +53,7 @@ class OrderPurchaseController extends Controller
             $end_date = Carbon::parse($request->input('end_date'))->endOfDay();
             //Consulta por nombre
             $orderPurchases = OrderPurchase::with([
+                    'invoices', 'payments',
                     'workshop' => fn($query) => $query->withTrashed(),
                     'workshop.country', 'workshop.departament', 'workshop.city',
                     'purchase_user' => fn($query) => $query->withTrashed()
@@ -393,7 +394,7 @@ class OrderPurchaseController extends Controller
 
     public function receive(OrderPurchaseReceiveRequest $request)
     {
-        
+
     }
 
     public function paymentQuery(OrderPurchasePaymentIndexQueryRequest $request)

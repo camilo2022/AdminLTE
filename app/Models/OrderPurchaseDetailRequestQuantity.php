@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Http\Requests\OrderPurchaseDetail\OrderPurchaseDetailReceiveRequest;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -35,7 +36,7 @@ class OrderPurchaseDetailRequestQuantity extends Model implements Auditable
 
     public function order_purchase_detail_received_quantities() : HasMany
     {
-        return $this->hasMany(OrderPurchaseDetailRequestQuantity::class, 'order_purchase_detail_request_quantity_id');
+        return $this->hasMany(OrderPurchaseDetailReceivedQuantity::class, 'order_purchase_detail_request_quantity_id');
     }
 
     public function order_purchase_detail() : BelongsTo
