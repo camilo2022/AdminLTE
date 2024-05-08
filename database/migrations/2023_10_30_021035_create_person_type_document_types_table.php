@@ -21,7 +21,7 @@ return new class extends Migration
             $table->unsignedBigInteger('document_type_id')->comment('Identificador del tipo de documento.'); */
             $table->foreignIdFor(PersonType::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->foreignIdFor(DocumentType::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
-            $table->unique(['person_type_id', 'document_type_id']);
+            /* $table->unique(['person_type_id', 'document_type_id']); */
             /* $table->foreign('person_type_id')->references('id')->on('person_types')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('document_type_id')->references('id')->on('document_types')->onUpdate('cascade')->onDelete('cascade'); */
             $table->timestamps();

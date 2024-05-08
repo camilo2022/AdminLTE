@@ -24,7 +24,7 @@ return new class extends Migration
             $table->enum('technical_datasheet_status', ['En curso', 'Cancelado', 'Finalizado'])->default('En curso');
             $table->datetime('technical_datasheet_date')->nullable()->comment('Fecha de cartera');
             $table->string('technical_datasheet_observation')->nullable()->comment('Observacion de cartera');
-            $table->json('cutting_process')->default(json_encode([
+            $table->json('cutting_process')/* ->default([
                 'stroke_length' => (object) [
                     'value' => null,
                     'measurement_unit_id' => null
@@ -56,17 +56,17 @@ return new class extends Migration
                     ],
                 ],
                 'cutting_curve' => [
-                    
+
                 ],
                 'cloth_ids' => [
-                    
+
                 ],
                 'cutting_cost' => null
-            ]));
-            $table->json('special_service_process')->default(false);
-            $table->json('laundry_process')->default(false);
-            $table->json('decoration_process')->default(false);
-            $table->json('termination_process')->default(false);
+            ]) */;
+            $table->json('special_service_process');
+            $table->json('laundry_process');
+            $table->json('decoration_process');
+            $table->json('termination_process');
             /* $table->foreign('product_id')->references('id')->on('products')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade'); */
             $table->timestamps();

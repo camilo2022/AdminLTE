@@ -32,7 +32,7 @@ return new class extends Migration
             $table->unsignedBigInteger('tone_id'); */
             $table->unsignedBigInteger('quantity')->default(0);
             $table->enum('status', ['Pendiente', 'Cancelado', 'Aprobado', 'Eliminado'])->default('Pendiente');
-            $table->index(['transfer_id', 'product_id', 'size_id', 'color_id', 'tone_id'])->unique();
+            /* $table->index(['transfer_id', 'product_id', 'size_id', 'color_id', 'tone_id'])->unique(); */
             /* $table->foreign('transfer_id')->references('id')->on('transfers')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('product_id')->references('id')->on('products')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('size_id')->references('id')->on('sizes')->onUpdate('cascade')->onDelete('cascade');

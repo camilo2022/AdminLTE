@@ -31,7 +31,7 @@ return new class extends Migration
             $table->foreignIdFor(User::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->string('observation')->nullable();
             $table->enum('status', ['Pendiente', 'Cancelado', 'Aprobado', 'Parcialmente Recibido', 'Recibido'])->default('Pendiente');
-            $table->index(['order_purchase_id', 'warehouse_id', 'product_id', 'color_id', 'tone_id'])->unique();
+            /* $table->index(['order_purchase_id', 'warehouse_id', 'product_id', 'color_id', 'tone_id'])->unique(); */
             $table->timestamps();
         });
     }

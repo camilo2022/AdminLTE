@@ -17,10 +17,12 @@ return new class extends Migration
     {
         Schema::create('order_purchase_detail_request_quantities', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(OrderPurchaseDetail::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
+            $table->unsignedBigInteger('order_purchase_detail_id');
+            /* $table->foreignIdFor(OrderPurchaseDetail::class)->constrained()->onUpdate('cascade')->onDelete('cascade'); */
             $table->foreignIdFor(Size::class)->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->unsignedBigInteger('quantity')->default(0);
-            $table->index(['order_purchase_detail_id', 'size_id'])->unique();
+            /* $table->index(['order_purchase_detail_id', 'size_id'])->unique(); */
+            $table->foreign('order_purchase_detail_id', 'order_purchase_detail_req_quantities_purchase_detail_id_fk')->references('id')->on('order_return_details')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });
     }

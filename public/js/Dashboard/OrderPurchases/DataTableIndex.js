@@ -7,14 +7,14 @@ let tableOrderPurchases = $('#orderPurchases').DataTable({
         data: function (request) {
             var columnMappings = {
                 0: 'id',
-                1: 'workshop_id',
-                2: 'client_branch_id',
-                8: 'Purchase_date',
-                9: 'Purchase_user_id',
-                10: 'Purchase_status',
-                11: 'wallet_status',
-                12: 'dispatched_status',
-                13: 'correria_id'
+                1: 'id',
+                2: 'workshop_id',
+                3: 'workshop_id',
+                9: 'purchase_date',
+                10: 'purchase_user_id',
+                11: 'purchase_status',
+                12: 'purchase_observation',
+                13: 'payment_status'
             };
             request._token = $('meta[name="csrf-token"]').attr('content');
             request.perPage = request.length;
@@ -118,7 +118,6 @@ let tableOrderPurchases = $('#orderPurchases').DataTable({
                 }
             }
         },
-        { data: 'purchase_date' },
         { data: 'purchase_observation' },
         {
             data: 'payment_status',
@@ -177,11 +176,11 @@ let tableOrderPurchases = $('#orderPurchases').DataTable({
     columnDefs: [
         {
             orderable: true,
-            targets: [0, 1, 2, 8, 9, 10, 11, 12, 13]
+            targets: [0, 1, 2, 3, 9, 10, 11, 12, 13]
         },
         {
             orderable: false,
-            targets: [3, 4, 5, 6, 7, 14]
+            targets: [4, 5, 6, 7, 8, 14]
         }
     ],
     pagingType: 'full_numbers',

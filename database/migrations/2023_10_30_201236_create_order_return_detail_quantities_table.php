@@ -22,7 +22,7 @@ return new class extends Migration
             /* $table->foreignIdFor(OrderReturnDetail::class)->constrained()->onUpdate('cascade')->onDelete('cascade')->name('order_return_detail_quantities_return_detail_id_fk');
             $table->foreignIdFor(OrderDetailQuantity::class)->constrained()->onUpdate('cascade')->onDelete('cascade')->name('order_return_detail_quantities_detail_quantity_id_fk'); */
             $table->unsignedBigInteger('quantity')->default(0);
-            $table->index(['order_return_detail_id', 'order_detail_quantity_id'])->unique();
+            /* $table->index(['order_return_detail_id', 'order_detail_quantity_id'])->unique(); */
             $table->foreign('order_return_detail_id', 'order_return_detail_quantities_return_detail_id_fk')->references('id')->on('order_return_details')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('order_detail_quantity_id', 'order_return_detail_quantities_detail_quantity_id_fk')->references('id')->on('order_detail_quantities')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
