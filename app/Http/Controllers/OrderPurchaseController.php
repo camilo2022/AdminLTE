@@ -101,7 +101,8 @@ class OrderPurchaseController extends Controller
         try {
             return $this->successResponse(
                 [
-                    'workshops' => Workshop::all()
+                    'workshops' => Workshop::all(),
+                    'paymentTypes' => PaymentType::all()
                 ],
                 'Ingrese los datos para hacer la validacion y registro.',
                 204

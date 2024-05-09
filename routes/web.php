@@ -631,7 +631,7 @@ Route::middleware(['auth'])->group(function () {
                     Route::put('/Pending', 'pending')->middleware('can:Dashboard.Orders.Purchase.Pending')->name('Dashboard.Orders.Purchase.Pending');
                     Route::put('/Cancel', 'cancel')->middleware('can:Dashboard.Orders.Purchase.Cancel')->name('Dashboard.Orders.Purchase.Cancel');
                     Route::post('/Receive', 'receive')->middleware('can:Dashboard.Orders.Purchase.Receive')->name('Dashboard.Orders.Purchase.Receive');
-                    Route::post('/Payments/Query', 'paymentQuery')->middleware('can:Dashboard.Orders.Purchase.Payments.Query')->name('Dashboard.Orders.Purchase.Payments.Query');
+                    Route::post('/Payments/Query', 'paymentQuery')->middleware('can:|Dashboard.Orders.Purchase.Payments.Query')->name('Dashboard.Orders.Purchase.Payments.Query');
                     Route::post('/AssignPayment/Query', 'assignPaymentQuery')->middleware('can:Dashboard.Orders.Purchase.AssignPayment.Query')->name('Dashboard.Orders.Purchase.AssignPayment.Query');
                     Route::post('/AssignPayment', 'assignPayment')->middleware('can:Dashboard.Orders.Purchase.AssignPayment')->name('Dashboard.Orders.Purchase.AssignPayment');
                     Route::delete('/RemovePayment', 'removePayment')->middleware('can:Dashboard.Orders.Purchase.RemovePayment')->name('Dashboard.Orders.Purchase.RemovePayment');

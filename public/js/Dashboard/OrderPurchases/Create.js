@@ -1,90 +1,45 @@
-function CreateOrderSellerModal() {
+function CreateOrderPurchaseModal() {
     $.ajax({
-        url: `/Dashboard/Orders/Seller/Create`,
+        url: `/Dashboard/Orders/Purchase/Create`,
         type: 'POST',
         data: {
             '_token': $('meta[name="csrf-token"]').attr('content')
         },
         success: function (response) {
-            CreateOrderSellerModalCleaned();
-            CreateOrderSellerModalClient(response.data.clients);
-            CreateOrderSellerModalTransporter(response.data.transporters);
-            CreateOrderSellerModalSaleChannel(response.data.saleChannels);
-            CreateOrderSellerModalPaymentType(response.data.paymentTypes);
-            CreateOrderSellerAjaxSuccess(response);
-            $('#CreateOrderSellerModal').modal('show');
+            CreateOrderPurchaseModalCleaned();
+            CreateOrderPurchaseModalWorkshop(response.data.workshops);
+            CreateOrderPurchaseModalPaymentType(response.data.paymentTypes);
+            CreateOrderPurchaseAjaxSuccess(response);
+            $('#CreateOrderPurchaseModal').modal('show');
         },
         error: function (xhr, textStatus, errorThrown) {
-            CreateOrderSellerAjaxError(xhr);
+            CreateOrderPurchaseAjaxError(xhr);
         }
     });
 }
 
-function CreateOrderSellerModalCleaned() {
-    CreateOrderSellerModalResetSelect('client_id_c');
-    CreateOrderSellerModalResetSelect('transporter_id_c');
-    CreateOrderSellerModalResetSelect('sale_channel_id_c');
-    RemoveIsValidClassCreateOrderSeller();
-    RemoveIsInvalidClassCreateOrderSeller();
+function CreateOrderPurchaseModalCleaned() {
+    CreateOrderPurchaseModalResetSelect('workshop_id_c');
+    RemoveIsValidClassCreateOrderPurchase();
+    RemoveIsInvalidClassCreateOrderPurchase();
 
     $('#payment_types_c').empty();
-    $('#dispatch_c').val('').trigger('change');
     $('#seller_observation_c').val('');
 }
 
-function CreateOrderSellerModalResetSelect(id) {
+function CreateOrderPurchaseModalResetSelect(id) {
     $(`#${id}`).html('')
     $(`#${id}`).append(new Option('Seleccione', '', false, false));
     $(`#${id}`).trigger('change');
 }
 
-function CreateOrderSellerModalClient(clients) {
-    clients.forEach(client => {
-        $('#client_id_c').append(new Option(`${client.name} - ${client.document_number}`, client.id, false, false));
+function CreateOrderPurchaseModalWorkshop(workshops) {
+    workshops.forEach(workshop => {
+        $('#workshop_id_c').append(new Option(`${workshop.name} - ${workshop.document_number}`, workshop.id, false, false));
     });
 }
 
-function CreateOrderSellerModalClientGetClientBranch(select) {
-    if($(select).val() == '') {
-        CreateOrderSellerModalResetSelect('client_branch_id_c');
-    } else {
-        $.ajax({
-            url: `/Dashboard/Orders/Seller/Create`,
-            type: 'POST',
-            data: {
-                '_token': $('meta[name="csrf-token"]').attr('content'),
-                'client_id':  $(select).val()
-            },
-            success: function(response) {
-                CreateOrderSellerModalResetSelect('client_branch_id_c');
-                CreateOrderSellerModalClienteBranch(response.data);
-            },
-            error: function(xhr, textStatus, errorThrown) {
-                CreateOrderSellerAjaxError(xhr);
-            }
-        });
-    }
-}
-
-function CreateOrderSellerModalClienteBranch(clientBranches) {
-    clientBranches.forEach(clientBranch => {
-        $('#client_branch_id_c').append(new Option(`${clientBranch.name} - ${clientBranch.code} - ${clientBranch.departament.name} - ${clientBranch.city.name} - ${clientBranch.city.province.name} - ${clientBranch.address}`, clientBranch.id, false, false));
-    });
-}
-
-function CreateOrderSellerModalTransporter(transporters) {
-    transporters.forEach(transporter => {
-        $('#transporter_id_c').append(new Option(transporter.name, transporter.id, false, false));
-    });
-}
-
-function CreateOrderSellerModalSaleChannel(saleChannels) {
-    saleChannels.forEach(saleChannel => {
-        $('#sale_channel_id_c').append(new Option(saleChannel.name, saleChannel.id, false, false));
-    });
-}
-
-function CreateOrderSellerModalPaymentType(paymentTypes) {
+function CreateOrderPurchaseModalPaymentType(paymentTypes) {
     paymentTypes.forEach(paymentType => {
         let check = `<div class="icheck-primary">
                         <input type="checkbox" id="payment_type_${paymentType.id}_c" name="payment_type_${paymentType.id}_c" data-id="${paymentType.id}">
@@ -94,19 +49,10 @@ function CreateOrderSellerModalPaymentType(paymentTypes) {
     });
 }
 
-function CreateOrderSellerModalDispatchGetDispatchDate(select) {
-    if($(select).val() == '' || $(select).val() == 'De inmediato') {
-        $('#div_dispatch_date_c').hide();
-        $('#dispatch_date_c').val(new Date().toISOString().split('T')[0]);
-    } else {
-        $('#div_dispatch_date_c').show();
-    }
-}
-
-function CreateOrderSeller() {
+function CreateOrderPurchase() {
     Swal.fire({
-        title: '¿Desea guardar el pedido?',
-        text: 'El pedido será creado.',
+        title: '¿Desea guardar la orden de compra?',
+        text: 'La orden de compra será creado.',
         icon: 'warning',
         showCancelButton: true,
         cancelButtonColor: '#DD6B55',
@@ -116,117 +62,92 @@ function CreateOrderSeller() {
     }).then((result) => {
         if (result.value) {
             $.ajax({
-                url: `/Dashboard/Orders/Seller/Store`,
+                url: `/Dashboard/Orders/Purchase/Store`,
                 type: 'POST',
                 data: {
                     '_token': $('meta[name="csrf-token"]').attr('content'),
-                    'client_id': $('#client_id_c').val(),
-                    'client_branch_id': $('#client_branch_id_c').val(),
-                    'transporter_id': $('#transporter_id_c').val(),
-                    'sale_channel_id': $('#sale_channel_id_c').val(),
-                    'seller_observation': $('#seller_observation_c').val(),
-                    'dispatch': $('#dispatch_c').val(),
-                    'dispatch_date': $('#dispatch_c').val() == 'De inmediato' ? new Date().toISOString().split('T')[0] : $('#dispatch_date_c').val(),
+                    'workshop_id': $('#workshop_id_c').val(),
+                    'purchase_observation': $('#purchase_observation_c').val(),
                     'payment_type_ids': $('#payment_types_c input[type="checkbox"]:checked').map(function() {
                         return $(this).attr('data-id');
                     }).get()
                 },
                 success: function (response) {
                     window.location.href = response.data.url;
-                    tableOrderSellers.ajax.reload();
-                    CreateOrderSellerAjaxSuccess(response);
+                    tableOrderPurchases.ajax.reload();
+                    CreateOrderPurchaseAjaxSuccess(response);
                 },
                 error: function (xhr, textStatus, errorThrown) {
-                    CreateOrderSellerAjaxError(xhr);
+                    CreateOrderPurchaseAjaxError(xhr);
                 }
             });
         } else {
-            toastr.info('El pedido no fue creado.')
+            toastr.info('La orden de compra no fue creado.')
         }
     });
 }
 
-function CreateOrderSellerAjaxSuccess(response) {
+function CreateOrderPurchaseAjaxSuccess(response) {
     if (response.status === 204) {
         toastr.info(response.message);
-        $('#CreateOrderSellerModal').modal('hide');
+        $('#CreateOrderPurchaseModal').modal('hide');
     }
 
     if (response.status === 201) {
         toastr.success(response.message);
-        $('#CreateOrderSellerModal').modal('hide');
+        $('#CreateOrderPurchaseModal').modal('hide');
     }
 }
 
-function CreateOrderSellerAjaxError(xhr) {
+function CreateOrderPurchaseAjaxError(xhr) {
     if (xhr.status === 403) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
-        $('#CreateOrderSellerModal').modal('hide');
+        $('#CreateOrderPurchaseModal').modal('hide');
     }
 
     if (xhr.status === 404) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
-        $('#CreateOrderSellerModal').modal('hide');
+        $('#CreateOrderPurchaseModal').modal('hide');
     }
 
     if (xhr.status === 419) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
-        $('#CreateOrderSellerModal').modal('hide');
+        $('#CreateOrderPurchaseModal').modal('hide');
     }
 
     if (xhr.status === 422) {
-        RemoveIsValidClassCreateOrderSeller();
-        RemoveIsInvalidClassCreateOrderSeller();
+        RemoveIsValidClassCreateOrderPurchase();
+        RemoveIsInvalidClassCreateOrderPurchase();
         $.each(xhr.responseJSON.errors, function (field, messages) {
-            AddIsInvalidClassCreateOrderSeller(field);
+            AddIsInvalidClassCreateOrderPurchase(field);
             $.each(messages, function (index, message) {
                 toastr.error(message);
             });
         });
-        AddIsValidClassCreateOrderSeller();
+        AddIsValidClassCreateOrderPurchase();
     }
 
     if (xhr.status === 500) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
-        $('#CreateOrderSellerModal').modal('hide');
+        $('#CreateOrderPurchaseModal').modal('hide');
     }
 }
 
-function AddIsValidClassCreateOrderSeller() {
-    if (!$('#seller_observation_c').hasClass('is-invalid')) {
-        $('#seller_observation_c').addClass('is-valid');
-    }
-    if (!$('#dispatch_c').hasClass('is-invalid')) {
-        $('#dispatch_c').addClass('is-valid');
-    }
-    if (!$('#dispatch_date_c').hasClass('is-invalid')) {
-        $('#dispatch_date_c').addClass('is-valid');
+function AddIsValidClassCreateOrderPurchase() {
+    if (!$('#purchase_observation_c').hasClass('is-invalid')) {
+        $('#purchase_observation_c').addClass('is-valid');
     }
     if (!$('span[aria-labelledby="select2-client_id_c-container"]').hasClass('is-invalid')) {
         $('span[aria-labelledby="select2-client_id_c-container"]').addClass('is-valid');
     }
-    if (!$('span[aria-labelledby="select2-client_branch_id_c-container"]').hasClass('is-invalid')) {
-        $('span[aria-labelledby="select2-client_branch_id_c-container"]').addClass('is-valid');
-    }
-    if (!$('span[aria-labelledby="select2-sale_channel_id_c-container"]').hasClass('is-invalid')) {
-        $('span[aria-labelledby="select2-sale_channel_id_c-container"]').addClass('is-valid');
-    }
-    if (!$('span[aria-labelledby="select2-transporter_id_c-container"]').hasClass('is-invalid')) {
-        $('span[aria-labelledby="select2-transporter_id_c-container"]').addClass('is-valid');
-    }
 }
 
-function RemoveIsValidClassCreateOrderSeller() {
-    $('#seller_observation_c').removeClass('is-valid');
-    $('#dispatch_c').removeClass('is-valid');
-    $('#dispatch_date_c').removeClass('is-valid');
+function RemoveIsValidClassCreateOrderPurchase() {
+    $('#purchase_observation_c').removeClass('is-valid');
     $('span[aria-labelledby="select2-client_id_c-container"]').removeClass('is-valid');
-    $('span[aria-labelledby="select2-client_branch_id_c-container"]').removeClass('is-valid');
-    $('span[aria-labelledby="select2-sale_channel_id_c-container"]').removeClass('is-valid');
-    $('span[aria-labelledby="select2-transporter_id_c-container"]').removeClass('is-valid');
 }
 
-function AddIsInvalidClassCreateOrderSeller(input) {
+function AddIsInvalidClassCreateOrderPurchase(input) {
     if (!$(`#${input}_c`).hasClass('is-valid')) {
         $(`#${input}_c`).addClass('is-invalid');
     }
@@ -235,16 +156,7 @@ function AddIsInvalidClassCreateOrderSeller(input) {
     }
 }
 
-function RemoveIsInvalidClassCreateOrderSeller() {
-    $('#seller_observation_c').removeClass('is-invalid');
-    $('#dispatch_c').removeClass('is-invalid');
-    $('#dispatch_date_c').removeClass('is-invalid');
+function RemoveIsInvalidClassCreateOrderPurchase() {
+    $('#purchase_observation_c').removeClass('is-invalid');
     $('span[aria-labelledby="select2-client_id_c-container"]').removeClass('is-invalid');
-    $('span[aria-labelledby="select2-client_branch_id_c-container"]').removeClass('is-invalid');
-    $('span[aria-labelledby="select2-sale_channel_id_c-container"]').removeClass('is-invalid');
-    $('span[aria-labelledby="select2-transporter_id_c-container"]').removeClass('is-invalid');
 }
-
-$('#dispatch_date_c').datetimepicker({
-    format: 'YYYY-MM-DD'
-});
