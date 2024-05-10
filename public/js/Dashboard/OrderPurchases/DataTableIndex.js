@@ -122,7 +122,7 @@ let tableOrderPurchases = $('#orderPurchases').DataTable({
         {
             data: 'payment_status',
             render: function (data, type, row) {
-                switch (order_dispatch.payment_status) {
+                switch (data) {
                     case 'Pendiente de Pago':
                         return `<h5><span class="badge badge-pill badge-warning text-white"><i class="fas fa-circle-exclamation mr-2 text-white"></i>Pendiente de Pago</span></h5>`;
                         break;
@@ -146,7 +146,7 @@ let tableOrderPurchases = $('#orderPurchases').DataTable({
             render: function (data, type, row) {
                 let btn = `<div class="text-center" style="width: 100%;">`;
 
-                btn += `<a href="/Dashboard/Orders/Purchases/Details/Index/${row.id}" type="button"
+                btn += `<a href="/Dashboard/Orders/Purchase/Details/Index/${row.id}" type="button"
                 class="btn btn-info btn-sm mr-2" title="Visualizar detalles de la orden de compra.">
                     <i class="fas fa-eye text-white"></i>
                 </a>`;

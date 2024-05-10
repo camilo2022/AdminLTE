@@ -125,7 +125,7 @@ class OrderPurchaseController extends Controller
             $orderPurchase = new OrderPurchase();
             $orderPurchase->workshop_id = $request->input('workshop_id');
             $orderPurchase->purchase_user_id = Auth::user()->id;
-            $orderPurchase->purchase_date = Carbon::now()->format('Y-m-d');
+            $orderPurchase->purchase_date = Carbon::now()->format('Y-m-d H:i:s');
             $orderPurchase->purchase_observation = $request->input('purchase_observation');
             $orderPurchase->save();
 
@@ -210,7 +210,7 @@ class OrderPurchaseController extends Controller
         try {
             $orderPurchase = OrderPurchase::findOrFail($id);
             $orderPurchase->workshop_id = $request->input('workshop_id');
-            $orderPurchase->purchase_date = Carbon::now()->format('Y-m-d');
+            $orderPurchase->purchase_date = Carbon::now()->format('Y-m-d H:i:s');
             $orderPurchase->purchase_observation = $request->input('purchase_observation');
             $orderPurchase->save();
 
