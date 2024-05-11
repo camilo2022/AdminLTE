@@ -56,6 +56,7 @@ class WorkshopStoreRequest extends FormRequest
             'name.string' => 'El campo Nombre del taller debe ser una cadena de caracteres.',
             'name.max' => 'El campo Nombre del taller no debe exceder los 255 caracteres.',
             'person_type_id.required' => 'El campo Tipo de persona es requerido.',
+            'document_type_id.exists' => 'El Identificador Tipo de persona no es valido.',
             'document_type_id.required' => 'El campo Tipo de documento del taller es requerido.',
             'document_type_id.exists' => 'El Identificador del tipo de documento del taller no es valido.',
             'document_number.required' => 'El campo Numero de documento del taller es requerido.',

@@ -1,91 +1,90 @@
-function ShowWarehouseModal(id) {
+function ShowWorkshopModal(id) {
     $.ajax({
-        url: `/Dashboard/Warehouses/Show/${id}`,
+        url: `/Dashboard/Workshops/Show/${id}`,
         type: 'POST',
         data: {
             '_token': $('meta[name="csrf-token"]').attr('content')
         },
         success: function (response) {
-            ShowWarehouseModalCleaned(response.data);
-            ShowWarehouseAjaxSuccess(response);
-            $('#ShowWarehouseModal').modal('show');
+            ShowWorkshopModalCleaned(response.data);
+            ShowWorkshopAjaxSuccess(response);
+            $('#ShowWorkshopModal').modal('show');
         },
         error: function (xhr, textStatus, errorThrown) {
-            ShowWarehouseAjaxError(xhr);
+            ShowWorkshopAjaxError(xhr);
         }
     });
 }
 
-function ShowWarehouseModalCleaned(data) {
-    $("#name_s").val(data.warehouse.name);
-    $("#code_s").val(data.warehouse.code);
-    $('#users_s').empty();
-    $.each(data.admins, function (index, user) {
-        let userDiv = $('<div>').addClass('row pl-2 icheck-primary');
-        let userCheckbox = $(`<input>`).attr({
+function ShowWorkshopModalCleaned(data) {
+    $("#name_s").val(data.workshop.name);
+    $('#process_s').empty();
+    $.each(data.processes, function (index, process) {
+        let processDiv = $('<div>').addClass('row pl-2 icheck-primary');
+        let processCheckbox = $(`<input>`).attr({
             'type': 'checkbox',
-            'id': user.id,
-            'checked': user.admin,
-            'onchange': `ShowWarehouse(${user.id}, ${data.warehouse.id}, this)`
+            'id': process.id,
+            'checked': process.admin,
+            'onchange': `ShowWorkshop(${process.id}, ${data.workshop.id}, this)`
         });
-        let userLabel = $('<label>').text(`${user.name} ${user.last_name}`).attr({
-            'for': user.id,
+        let processLabel = $('<label>').text(process.name).attr({
+            'for': process.id,
             'class': 'mt-3 ml-3'
         });
         // Agregar elementos al cardBody
-        userDiv.append(userCheckbox);
-        userDiv.append(userLabel);
-        $('#users_s').append(userDiv);
+        processDiv.append(processCheckbox);
+        processDiv.append(processLabel);
+        $('#process_s').append(processDiv);
     });
 }
 
-function ShowWarehouse(user, warehouse, checkbox) {
+function ShowWorkshop(process, workshop, checkbox) {
     if ($(checkbox).prop('checked')) {
-        ShowWarehouseAssignGestor(user, warehouse);
+        ShowWorkshopAssignProcess(process, workshop);
     } else {
-        ShowWarehouseRemoveGestor(user, warehouse);
+        ShowWorkshopRemoveProcess(process, workshop);
     }
 }
 
-function ShowWarehouseAssignGestor(user, warehouse) {
+function ShowWorkshopAssignProcess(process, workshop) {
     $.ajax({
-        url: `/Dashboard/Warehouses/AssignGestor`,
+        url: `/Dashboard/Workshops/AssignProcess`,
         type: 'POST',
         data: {
             '_token': $('meta[name="csrf-token"]').attr('content'),
-            'user_id': user,
-            'warehouse_id': warehouse,
+            'process_id': process,
+            'workshop_id': workshop,
         },
         success: function (response) {
-            tableWarehouses.ajax.reload();
-            ShowWarehouseAjaxSuccess(response);
+            tableWorkshops.ajax.reload();
+            ShowWorkshopAjaxSuccess(response);
         },
         error: function (xhr, textStatus, errorThrown) {
-            ShowWarehouseAjaxError(xhr);
+            ShowWorkshopAjaxError(xhr);
         }
     });
 }
 
-function ShowWarehouseRemoveGestor(user, warehouse) {
+function ShowWorkshopRemoveProcess(process, workshop) {
     $.ajax({
-        url: `/Dashboard/Warehouses/RemoveGestor`,
+        url: `/Dashboard/Workshops/RemoveProcess`,
         type: 'DELETE',
         data: {
             '_token': $('meta[name="csrf-token"]').attr('content'),
-            'user_id': user,
-            'warehouse_id': warehouse,
+            'process_id': process,
+            'workshop_id': workshop,
         },
         success: function (response) {
-            tableWarehouses.ajax.reload();
-            ShowWarehouseAjaxSuccess(response);
+            tableWorkshops.ajax.reload();
+            ShowWorkshopAjaxSuccess(response);
         },
         error: function (xhr, textStatus, errorThrown) {
-            ShowWarehouseAjaxError(xhr);
+            ShowWorkshopAjaxError(xhr);
         }
     });
 }
 
-function ShowWarehouseAjaxSuccess(response) {
+function ShowWorkshopAjaxSuccess(response) {
     if(response.status === 200) {
         toastr.success(response.message);
     }
@@ -95,7 +94,7 @@ function ShowWarehouseAjaxSuccess(response) {
     }
 }
 
-function ShowWarehouseAjaxError(xhr) {
+function ShowWorkshopAjaxError(xhr) {
     if (xhr.status === 403) {
         toastr.error(xhr.responseJSON.error ? xhr.responseJSON.error.message : xhr.responseJSON.message);
     }

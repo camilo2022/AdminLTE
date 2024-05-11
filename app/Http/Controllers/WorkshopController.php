@@ -4,13 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Workshop\WorkshopAssignAccountRequest;
-use App\Http\Requests\Workshop\WorkshopAssignProccessRequest;
+use App\Http\Requests\Workshop\WorkshopAssignProcessRequest;
 use App\Http\Requests\Workshop\WorkshopCreateRequest;
 use App\Http\Requests\Workshop\WorkshopDeleteRequest;
 use App\Http\Requests\Workshop\WorkshopEditRequest;
 use App\Http\Requests\Workshop\WorkshopIndexQueryRequest;
 use App\Http\Requests\Workshop\WorkshopRemoveAccountRequest;
-use App\Http\Requests\Workshop\WorkshopRemoveProccessRequest;
+use App\Http\Requests\Workshop\WorkshopRemoveProcessRequest;
 use App\Http\Requests\Workshop\WorkshopRestoreRequest;
 use App\Http\Requests\Workshop\WorkshopStoreRequest;
 use App\Http\Requests\Workshop\WorkshopUpdateRequest;
@@ -309,16 +309,14 @@ class WorkshopController extends Controller
 
             foreach ($processes as $process) {
                 $workshopsId = $process->workshops->pluck('id')->all();
-                $process->push([
-                    'admin' => in_array($id, $workshopsId)
-                ]);
+                $process->admin = in_array($id, $workshopsId);
             }
 
             return $this->successResponse(
                 [
                     'banks' => Bank::withTrashed()->get(),
                     'workshop' => $workshop,
-                    'admins' => $processes
+                    'processes' => $processes
                 ],
                 'La bodega fue encontrada exitosamente.',
                 204
@@ -427,7 +425,7 @@ class WorkshopController extends Controller
         }
     }
 
-    public function assignProccess(WorkshopAssignProccessRequest $request)
+    public function assignProcess(WorkshopAssignProcessRequest $request)
     {
         try {
             $model_processes = new ModelProcess();
@@ -438,7 +436,7 @@ class WorkshopController extends Controller
 
             return $this->successResponse(
                 $model_processes,
-                'Cuenta de pago asignado exitosamente.',
+                'Proceso asignado al taller exitosamente.',
                 200
             );
         } catch (ModelNotFoundException $e) {
@@ -471,7 +469,7 @@ class WorkshopController extends Controller
         }
     }
 
-    public function removeProccess(WorkshopRemoveProccessRequest $request)
+    public function removeProcess(WorkshopRemoveProcessRequest $request)
     {
         try {
             $model_processes = ModelProcess::whereHasMorph('model', [Workshop::class],
@@ -484,7 +482,7 @@ class WorkshopController extends Controller
 
             return $this->successResponse(
                 $model_processes,
-                'Cuenta de pago removido exitosamente.',
+                'Proceso removido al taller exitosamente.',
                 200
             );
         } catch (ModelNotFoundException $e) {
