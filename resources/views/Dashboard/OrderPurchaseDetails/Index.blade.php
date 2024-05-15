@@ -123,15 +123,13 @@
                                         <td style="font-size:14px;">{{ $orderPurchase->workshop->city->name }}</td>
                                         <td style="font-size:14px;">N° TELEFONO:</td>
                                         <td style="font-size:14px;">{{ $orderPurchase->workshop->telephone_number_second }}</td>
-                                        <td style="font-size:14px;" rowspan="2">OBSERVACION:</td>
-                                        <td style="font-size:14px;" rowspan="2">{{ $orderPurchase->purchase_observation }}</td>
+                                        <td style="font-size:14px;">USUARIO:</td>
+                                        <td style="font-size:14px;">{{ $orderPurchase->purchase_user->name . ' ' . $orderPurchase->purchase_user->last_name }}</td>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td style="font-size:14px;">USUARIO:</td>
-                                        <td style="font-size:14px;">{{ $orderPurchase->purchase_user->name . ' ' . $orderPurchase->purchase_user->last_name }}</td>
-                                        <td style="font-size:14px;">FECHA CREACION:</td>
-                                        <td style="font-size:14px;">{{ Carbon::parse($orderPurchase->created_at)->format('Y-m-d H:i:s') }}</td>
+                                        <td style="font-size:14px;">OBSERVACION:</td>
+                                        <td style="font-size:14px;" colspan="5">{{ $orderPurchase->purchase_observation }}</td>
                                     </tr>
                                 </tbody>
                             </table>
